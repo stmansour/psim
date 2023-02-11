@@ -62,7 +62,31 @@ func (r DiscountRateRecords) GetRecord(date time.Time) (DiscountRateRecord, erro
 	return DiscountRateRecord{}, fmt.Errorf("record not found for date %s", date.Format("2006-01-02"))
 }
 
+// FindDiscountRateRecord returns the record associated with the input date
+//
+// INPUTS
+//
+//	dt = date of record to return
+//
+// RETURNS
+//
+//	pointer to the record on the supplied date
+//	nil - record was not found
+//
+// ---------------------------------------------------------------------------
+func FindDiscountRateRecord(dt time.Time) *DiscountRateRecord {
+	// Perform a binary search to find the record with the specified dt
+	index := sort.Search(len(DR.DRRecs), func(i int) bool {
+		return DR.DRRecs[i].Date.After(dt) || DR.DRRecs[i].Date.Equal(dt)
+	})
+	if index == len(DR.DRRecs) || DR.DRRecs[index].Date.After(dt) {
+		return nil
+	}
+	return &DR.DRRecs[index]
+}
+
 // DRInit - initialize this subsystem
+// ---------------------------------------------------------------------------
 func DRInit() {
 	file, err := os.Open("data/dr.csv")
 	if err != nil {
@@ -122,3 +146,14 @@ func DRInit() {
 
 	sort.Sort(DR.DRRecs)
 }
+
+/*
+
+create a golang program to read a csv file named er.csv, containing these fields:
+Symbol string, Date time.Time, Open,High,Low,Close are float64.
+The date can be parsed in this format '1/2/2006'.
+Store the records in a global array sorted by date.  Provide an access function where the input parameter
+is a date (only day, month, and year are relevant), and it returns the associated record. Since the
+array is ordered by date, use an efficient algorithm to search for the date.
+
+*/
