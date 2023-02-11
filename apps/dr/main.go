@@ -32,11 +32,17 @@ func main() {
 	//------------------------------------------------------------
 	// Just make sure everything looks OK before starting...
 	//------------------------------------------------------------
-	rec, err := data.DR.DRRecs.GetRecord(time.Date(2022, 2, 10, 0, 0, 0, 0, time.UTC))
-	if err != nil {
-		fmt.Println(err)
+	// rec, err := data.DR.DRRecs.GetRecord(time.Date(2022, 2, 10, 0, 0, 0, 0, time.UTC))
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	os.Exit(1)
+	// }
+	rec := data.FindDiscountRateRecord(time.Date(2022, 2, 10, 0, 0, 0, 0, time.UTC))
+	if rec == nil {
+		fmt.Println("ExchangeRate Record not found.")
 		os.Exit(1)
 	}
+
 	if !rec.Date.Equal(time.Date(2022, 2, 10, 0, 0, 0, 0, time.UTC)) {
 		fmt.Printf("date did not match!\n")
 		os.Exit(1)

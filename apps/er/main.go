@@ -30,10 +30,8 @@ func main() {
 
 	// Example usage of FindExchangeRateRecord
 	record := data.FindExchangeRateRecord(time.Date(2018, 4, 10, 0, 0, 0, 0, time.UTC))
-	if record != nil {
-		fmt.Println("Record found:", record)
-	} else {
-		fmt.Println("Record not found.")
+	if record == nil {
+		fmt.Println("ExchangeRate Record not found.")
 	}
 
 	i = data.ER.ERRecs.Len()
@@ -45,7 +43,3 @@ func main() {
 	fmt.Printf("   Beginning:\t%s\n", dt1.Format("Jan 2, 2006"))
 	fmt.Printf("   Ending:\t%s\n", dt2.Format("Jan 2, 2006"))
 }
-
-// func generateProbabilities() {
-
-// }
