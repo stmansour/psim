@@ -1,0 +1,44 @@
+We’re designing a system to help us predict when to buy and sell currencies.
+We want to develop a prediction engine that can look at different types of historical
+data and current events and from that make a prediction about when we should buy or
+sell a currency.  In order to see how well our predictive engine works, we want to
+develop a simulator that has access to historical data and we can try our predictive
+engine using historical data to see how it does.  The predictive engine will be based
+on two major object types: an Investor and an Influencer.  The first object type is
+an influencer. Influencer is a base class from which many other classes will be
+derived.  Two examples of Influencers are: DiscountRate and Unemployment.
+These influencer subclasses will examine a specific datum. Its prediction method
+must be called with a date for which it makes a prediction regarding a particular
+currency. The prediction is one of 3 actions:  "Buy", "Hold", or "Sell".
+Along with the predicted action, it returns a probability between 0 and 1 that
+represents how certain it is of its prediction.  Each derived Influencer class will
+have its own internal variables that must be tuned to provide the most accurate
+predictions. Many tests will need to be performed with
+different values for these internal variables to determine the values that maximize the
+accuracy of its predictions. The second object type is an Investor, which buys and
+sells a particular currency type.  Its purpose is to make as much money as possible.
+To do this,
+it will have a collection of one or more Influencers. Given a particular date, an
+Investor will ask its Influencers for a prediction, then it will do its own weighting
+on the predictions they make and decide whether it will (a) Buy a currency and how much
+it will buy, or (b) Sell a currency and decide how much it will sell, or (c) hold 
+the currency that it has. It will develop its own strategy on whether to buy, hold,
+or sell a currency based on its Influencers predictions. Investors also have internal variables
+that can be adjusted to affect its decisions on when to buy, hold, and sell. Each
+Investor will have one or more Influencers as well as other variables whose values
+affect how well it performs at making more money. Thus, a unique Investor is defined
+by its Influencers and the variable values of 
+itself and its influencers.  This makes it possible to have an almost infinite number of
+unique Investors. We will need to try many unique Investors to determine what Influencers
+and variable values result in making the most money. We want to build a simulation program
+to test as many unique
+investors as we can to find the best ones. The success of a unique Investor is
+determined by how well its predictions lead to profitable currency trading.  That
+is, as currencies are bought and sold using its predictions, the Investors that
+generate the most profit in trading currencies are considered to be the best.  If
+an Investor’s prediction generate a loss, it is considered a bad Investor. Since
+the number of combinations of different Investors is, for all practical purposes,
+infinite, we want to use a Genetic algorithm to find the best ones. We would run
+simulations cycles and successive generations that hopefully become better and
+better investors. I would like you to help me design this simulator. 
+
