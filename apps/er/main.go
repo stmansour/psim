@@ -28,8 +28,8 @@ func main() {
 	fmt.Printf("   Beginning:\t%s\n", dt1.Format("Jan 2, 2006"))
 	fmt.Printf("   Ending:\t%s\n", dt2.Format("Jan 2, 2006"))
 
-	// Example usage of FindExchangeRateRecord
-	record := data.FindExchangeRateRecord(time.Date(2018, 4, 10, 0, 0, 0, 0, time.UTC))
+	// Example usage of ERFindRecord
+	record := data.ERFindRecord(time.Date(2018, 4, 10, 0, 0, 0, 0, time.UTC))
 	if record == nil {
 		fmt.Println("ExchangeRate Record not found.")
 	}

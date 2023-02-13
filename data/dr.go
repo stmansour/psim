@@ -21,9 +21,17 @@ type DiscountRateRecord struct {
 // DiscountRateRecords is a type for an array of DR records
 type DiscountRateRecords []DiscountRateRecord
 
+// DRInfo is meta information about the discount rate data
+type DRInfo struct {
+	DtStart time.Time // earliest date with data
+	DtStop  time.Time // latest date with data
+}
+
 // DR is a structure of data used by all the DR routines
 var DR struct {
-	DRRecs DiscountRateRecords
+	DRRecs  DiscountRateRecords // all records... temporary, until we have database
+	DtStart time.Time           // earliest date with data
+	DtStop  time.Time           // latest date with data
 }
 
 // Len returns the length of the supplied DiscountRateRecords array
@@ -62,7 +70,7 @@ func (r DiscountRateRecords) GetRecord(date time.Time) (DiscountRateRecord, erro
 	return DiscountRateRecord{}, fmt.Errorf("record not found for date %s", date.Format("2006-01-02"))
 }
 
-// FindDiscountRateRecord returns the record associated with the input date
+// DRFindRecord returns the record associated with the input date
 //
 // INPUTS
 //
@@ -74,7 +82,7 @@ func (r DiscountRateRecords) GetRecord(date time.Time) (DiscountRateRecord, erro
 //	nil - record was not found
 //
 // ---------------------------------------------------------------------------
-func FindDiscountRateRecord(dt time.Time) *DiscountRateRecord {
+func DRFindRecord(dt time.Time) *DiscountRateRecord {
 	// Perform a binary search to find the record with the specified dt
 	index := sort.Search(len(DR.DRRecs), func(i int) bool {
 		return DR.DRRecs[i].Date.After(dt) || DR.DRRecs[i].Date.Equal(dt)
@@ -83,6 +91,23 @@ func FindDiscountRateRecord(dt time.Time) *DiscountRateRecord {
 		return nil
 	}
 	return &DR.DRRecs[index]
+}
+
+// DRGetDataInfo returns meta information about the data
+//
+// # INPUTS
+//
+// RETURNS
+//
+//	{ dtStart, dtStop}
+//
+// ---------------------------------------------------------------------------
+func DRGetDataInfo() DRInfo {
+	rec := DRInfo{
+		DtStart: DR.DtStart,
+		DtStop:  DR.DtStop,
+	}
+	return rec
 }
 
 // DRInit - initialize this subsystem
@@ -143,8 +168,10 @@ func DRInit() {
 	}
 
 	DR.DRRecs = records
-
 	sort.Sort(DR.DRRecs)
+	l := DR.DRRecs.Len()
+	DR.DtStart = DR.DRRecs[0].Date
+	DR.DtStop = DR.DRRecs[l-1].Date
 }
 
 /*

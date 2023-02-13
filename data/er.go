@@ -22,6 +22,12 @@ type ExchangeRateRecord struct {
 // ExchangeRateRecords is a slice of ExchangeRateRecord structures
 type ExchangeRateRecords []ExchangeRateRecord
 
+// ERInfo is meta information about the exchange rate data
+type ERInfo struct {
+	DtStart time.Time // earliest date with data
+	DtStop  time.Time // latest date with data
+}
+
 func (r ExchangeRateRecords) Len() int {
 	return len(r)
 }
@@ -38,10 +44,12 @@ func (r ExchangeRateRecords) Swap(i, j int) {
 
 // ER is a structure of data used by all the ER routines
 var ER struct {
-	ERRecs ExchangeRateRecords
+	ERRecs  ExchangeRateRecords
+	DtStart time.Time // earliest date with data
+	DtStop  time.Time // latest date with data
 }
 
-// FindExchangeRateRecord returns the record associated with the input date
+// ERFindRecord returns the record associated with the input date
 //
 // INPUTS
 //
@@ -49,10 +57,11 @@ var ER struct {
 //
 // RETURNS
 //
-//	pointer to the record on the supplied date
+//		pointer to the record on the supplied date
+//	 nil - record was not found
 //
 // ---------------------------------------------------------------------------
-func FindExchangeRateRecord(dt time.Time) *ExchangeRateRecord {
+func ERFindRecord(dt time.Time) *ExchangeRateRecord {
 	// Perform a binary search to find the record with the specified dt
 	index := sort.Search(len(ER.ERRecs), func(i int) bool {
 		return ER.ERRecs[i].Date.After(dt) || ER.ERRecs[i].Date.Equal(dt)
@@ -61,6 +70,23 @@ func FindExchangeRateRecord(dt time.Time) *ExchangeRateRecord {
 		return nil
 	}
 	return &ER.ERRecs[index]
+}
+
+// ERGetDataInfo returns meta information about the data
+//
+// # INPUTS
+//
+// RETURNS
+//
+//	{ dtStart, dtStop }    // date of first and last record
+//
+// ---------------------------------------------------------------------------
+func ERGetDataInfo() ERInfo {
+	rec := ERInfo{
+		DtStart: ER.DtStart,
+		DtStop:  ER.DtStop,
+	}
+	return rec
 }
 
 // ERInit initialize the ExchangeRate data subsystem
@@ -127,13 +153,16 @@ func ERInit() {
 	// Sort the records by date
 	sort.Sort(records)
 	ER.ERRecs = records
+	l := len(records)
+	ER.DtStart = ER.ERRecs[0].Date
+	ER.DtStop = ER.ERRecs[l-1].Date
 }
 
 // func main() {
 // 	ERInit()
 
-// 	// Example usage of FindExchangeRateRecord
-// 	record := FindExchangeRateRecord(time.Date(2018, 4, 10, 0, 0, 0, 0, time.UTC))
+// 	// Example usage of ERFindRecord
+// 	record := ERFindRecord(time.Date(2018, 4, 10, 0, 0, 0, 0, time.UTC))
 // 	if record != nil {
 // 		fmt.Println("Record found:", record)
 // 	} else {

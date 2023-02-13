@@ -2,6 +2,7 @@ package core
 
 import "time"
 
+// Simulator is a simulator object
 type Simulator struct {
 	startDate   time.Time  // processing begins on this date
 	stopDate    time.Time  // processing ends on this date
@@ -40,7 +41,7 @@ func (s *Simulator) runGeneration() {
 // runSimulation - run all generations
 //
 // -------------------------------------------------------------------------------
-func (s *Simulator) runSimulation() []Investor {
+func (s *Simulator) runSimulation() {
 	s.initializePopulation()
 
 	// loop: run the generations until stop criteria is met

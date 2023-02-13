@@ -1,5 +1,6 @@
 package core
 
+// Investor is the definition of the Exchange rate  investor
 type Investor struct {
 	influencers []Influencer
 	weights     []float64
