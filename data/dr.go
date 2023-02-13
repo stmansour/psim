@@ -83,14 +83,32 @@ func (r DiscountRateRecords) GetRecord(date time.Time) (DiscountRateRecord, erro
 //
 // ---------------------------------------------------------------------------
 func DRFindRecord(dt time.Time) *DiscountRateRecord {
-	// Perform a binary search to find the record with the specified dt
-	index := sort.Search(len(DR.DRRecs), func(i int) bool {
-		return DR.DRRecs[i].Date.After(dt) || DR.DRRecs[i].Date.Equal(dt)
-	})
-	if index == len(DR.DRRecs) || DR.DRRecs[index].Date.After(dt) {
-		return nil
+	// 	// Perform a binary search to find the record with the specified dt
+	// 	index := sort.Search(len(DR.DRRecs), func(i int) bool {
+	// 		return DR.DRRecs[i].Date.After(dt) || DR.DRRecs[i].Date.Equal(dt)
+	// 	})
+	// 	if index == len(DR.DRRecs) || DR.DRRecs[index].Date.After(dt) {
+	// 		return nil
+	// 	}
+	// 	return &DR.DRRecs[index]
+	// }
+	// func searchRecords(dt time.Time) *DiscountRateRecord {
+
+	left := 0
+	right := len(DR.DRRecs) - 1
+
+	for left <= right {
+		mid := left + (right-left)/2
+		if DR.DRRecs[mid].Date.Year() == dt.Year() && DR.DRRecs[mid].Date.Month() == dt.Month() && DR.DRRecs[mid].Date.Day() == dt.Day() {
+			return &DR.DRRecs[mid]
+		} else if DR.DRRecs[mid].Date.Before(dt) {
+			left = mid + 1
+		} else {
+			right = mid - 1
+		}
 	}
-	return &DR.DRRecs[index]
+
+	return nil
 }
 
 // DRGetDataInfo returns meta information about the data

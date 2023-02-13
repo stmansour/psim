@@ -19,6 +19,11 @@ import (
 	"time"
 )
 
+var app struct {
+	dri data.DRInfo
+	eri data.ERInfo
+}
+
 func displayStats() (data.DRInfo, data.ERInfo) {
 	drinfo := data.DRGetDataInfo()
 	fmt.Printf("Discount Rate Info:\n")
@@ -38,7 +43,7 @@ func displayStats() (data.DRInfo, data.ERInfo) {
 func checkDR(t3 time.Time) {
 	rec := data.DRFindRecord(t3)
 	if rec == nil {
-		fmt.Println("ExchangeRate Record not found.")
+		fmt.Println("DiscountRate Record not found.")
 		os.Exit(1)
 	}
 
@@ -46,23 +51,30 @@ func checkDR(t3 time.Time) {
 		fmt.Printf("date did not match!\n")
 		os.Exit(1)
 	}
-	if rec.USJPDRRatio != -2.5 {
-		fmt.Printf("USJPDRRatio did not match!\n")
+	if rec.USJPDRRatio != -15.0 {
+		fmt.Printf("USJPDRRatio did not match!  Read %7.4f, looking for: -15 \n", rec.USJPDRRatio)
 		os.Exit(1)
 	}
-	if rec.USDiscountRate != 0.0025 {
-		fmt.Printf("USDiscountRate did not match!\n")
+	if rec.USDiscountRate != 0.015 {
+		fmt.Printf("USDiscountRate did not match!  Read %7.4f, looking for: 0.015 \n", rec.USDiscountRate)
 		os.Exit(1)
 	}
 	if rec.JPDiscountRate != -0.001 {
-		fmt.Printf("JPDiscountRate did not match!\n")
+		fmt.Printf("JPDiscountRate did not match!  Read %7.4f, looking for: -0.001 \n", rec.JPDiscountRate)
 		os.Exit(1)
 	}
 }
 
 func main() {
 	data.Init()
-	_, erinfo := displayStats()
+	checkDR(time.Date(2018, 2, 14, 0, 0, 0, 0, time.UTC)) // Just make sure everything looks OK before starting...
+
+	//-------------------------------------
+	// Now set up the boundaries...
+	//-------------------------------------
+	drinfo, erinfo := displayStats()
+	app.dri = drinfo
+	app.eri = erinfo
 
 	//--------------------------------------------------------------------------
 	// We must insure that the date range for which we calculate probabilities
@@ -71,12 +83,19 @@ func main() {
 	//--------------------------------------------------------------------------
 	dtStart := erinfo.DtStart.AddDate(0, 0, -core.DR.T1min)
 	dtStop := erinfo.DtStop.AddDate(0, 0, -core.DR.T4max)
+
+	//--------------------------------------------------------------------------
+	// Adjust these dates if the DR data does not yet exist...
+	//--------------------------------------------------------------------------
+	if dtStop.After(drinfo.DtStop) {
+		dtStop = drinfo.DtStop
+	}
+	if drinfo.DtStart.After(dtStart) {
+		dtStart = drinfo.DtStart
+	}
+
 	dtEnd := dtStop.AddDate(0, 0, 1)
-
-	t3 := time.Date(2022, 2, 10, 0, 0, 0, 0, time.UTC)
-	checkDR(t3) // Just make sure everything looks OK before starting...
-
-	fmt.Printf("Probs from %s to %s\n", dtStart.Format("Jan 2, 2006"), dtStop.Format("Jan 2, 2006"))
+	fmt.Printf("Probs from %s to %s\n", dtStart.Format("Jan 2, 2006"), dtEnd.Format("Jan 2, 2006"))
 
 	fmt.Printf("t1,t2,t3,t4, dt1, dt2, dt4, drr, err, prediction, actual\n")
 	for dt := dtStart; dtEnd.After(dt); dt = dt.AddDate(0, 0, 1) {
@@ -87,8 +106,15 @@ func main() {
 }
 
 func generateProbabilities(t3 time.Time) {
+
+	//--------------------------------------------------------
+	// Start the simulation on core.DR.T1min days after t3
+	//--------------------------------------------------------
+	dtPriorStudyStart := t3.AddDate(0, 0, core.DR.T1min)
+	dtPriorStudyStop := t3.AddDate(0, 0, 1+core.DR.T1max)
+
 	t1a := core.DR.T1min // range for t1 relative to t3
-	t1b := core.DR.T1max
+	// t1b := core.DR.T1max
 
 	t2a := core.DR.T2min // range for t2 relative to t3
 	t2b := core.DR.T2max
@@ -101,12 +127,18 @@ func generateProbabilities(t3 time.Time) {
 	dt1 := t1a
 
 	n := 0
-	for t1 := t3.AddDate(0, 0, t1a); t1.Before(t3.AddDate(0, 0, t1b+1)); t1 = t1.AddDate(0, 0, 1) {
+	//------------------------------------------------------------------------------
+	// t1 defines how far back to examine Exchange Rates prior to t3
+	//------------------------------------------------------------------------------
+	for t1 := dtPriorStudyStart; t1.Before(dtPriorStudyStop); t1 = t1.AddDate(0, 0, 1) {
 		dt2 = t2a
+		//------------------------------------------------------------------------------
+		// t2 defines how far back to examine Exchange Rates prior to t3
+		//------------------------------------------------------------------------------
 		for t2 := t3.AddDate(0, 0, t2a); t2.Before(t3.AddDate(0, 0, t2b+1)); t2 = t2.AddDate(0, 0, 1) {
 			if t2.After(t1.AddDate(0, 0, 1)) {
 				dt4 = t4a
-				for t4 := t3.AddDate(0, 0, t4a); t4.Before(t3.AddDate(0, 0, t4b+1)); t4 = t4.AddDate(0, 0, 1) {
+				for t4 := t3.AddDate(0, 0, t4a); t4.Before(t3.AddDate(0, 0, t4b-1)); t4 = t4.AddDate(0, 0, 1) {
 					//-------------------------------------------------------------
 					// Determine DRR = (DiscountRate at t1) - (DiscountRate at t2)
 					//-------------------------------------------------------------
