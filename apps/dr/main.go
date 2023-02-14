@@ -117,7 +117,7 @@ func main() {
 			for k := core.DR.T4min; k <= core.DR.T4max; k++ {
 				s := fmt.Sprintf("%d,%d,%d", i, j, k)
 				v := app.probMap[s]
-				fmt.Printf("%s :  %d  ->  %7.4f\n", s, v.count, v.prob)
+				fmt.Printf("%s : %d / %d  ->  %7.4f\n", s, v.correct, v.count, v.prob)
 			}
 		}
 	}
@@ -194,36 +194,45 @@ func generateProbabilities(t3 time.Time) {
 					}
 
 					//-------------------------------------------------------------------------------
-					// Determine deltaERR (dERR) = (ExchangeRateRatio at t1) - (ExchangeRateRatio at t2)
+					// Determine deltaER (dER) =
+					//         (ExchangeRateRatio at t3) - (ExchangeRateRatio at t4)
 					//-------------------------------------------------------------------------------
-					er1 := data.ERFindRecord(t1)
+					er1 := data.ERFindRecord(t3)
 					if er1 == nil {
-						fmt.Printf("ExchangeRate Record for %s not found.\n", t1.Format("1/2/2006"))
+						fmt.Printf("ExchangeRate Record for %s not found.\n", t3.Format("1/2/2006"))
 						os.Exit(1)
 					}
-					er2 := data.ERFindRecord(t2)
+					er2 := data.ERFindRecord(t4)
 					if er2 == nil {
-						fmt.Printf("ExchangeRate Record for %s not found.\n", t2.Format("1/2/2006"))
+						fmt.Printf("ExchangeRate Record for %s not found.\n", t4.Format("1/2/2006"))
 						os.Exit(1)
 					}
-					dERR := er1.Close - er2.Close
+					dER := er1.Close - er2.Close
 
 					//-------------------------------------------------------------------------------
-					// Check to see if the prediction is correct. If dERR > 0 AND dDRR > 0 then
+					// Check to see if the prediction is correct. If dDRR > 0 AND dER > 0 then
 					// then the prediction was correct.
 					//-------------------------------------------------------------------------------
 					predictionResult := false
-					if dERR > 0 && dDRR > 0 {
+					if dER > 0 && dDRR > 0 {
 						predictionResult = true
 					}
 
+					//-------------------------------------------------------------------------------
+					// Record the correctness.  A unique DiscountRateInfluencer type is defined by its
+					// t1, t2, and t4 values.  Record the correctness (predictionResult) for each
+					// DiscountInfluencer type
+					//-------------------------------------------------------------------------------
 					addToProbabilities(dt1, dt2, dt4, predictionResult)
 
+					//-------------------------------------------------------------------------------
+					// Print out for manual checking...
+					//-------------------------------------------------------------------------------
 					fmt.Printf("%s,%s,%s,%s,%d,%d,%d,%6.2f,%6.2f,%s,%t\n",
 						t1.Format("01/02/2006"), t2.Format("01/02/2006"),
 						t3.Format("01/02/2006"), t4.Format("01/02/2006"),
 						dt1, dt2, dt4,
-						dDRR, dERR,
+						dDRR, dER,
 						prediction,
 						predictionResult,
 					)
