@@ -12,6 +12,7 @@ package main
 //            As of this writing its range is [1,5].
 //---------------------------------------------------------------------------
 import (
+	"flag"
 	"fmt"
 	"os"
 	"psim/core"
@@ -26,23 +27,30 @@ type probInfo struct {
 }
 
 var app struct {
-	dri     data.DRInfo
-	eri     data.ERInfo
-	probMap map[string]probInfo
+	dri         data.DRInfo
+	eri         data.ERInfo
+	probMap     map[string]probInfo
+	showInfo    bool
+	showAllRecs bool
+	showResults bool
 }
 
 func displayStats() (data.DRInfo, data.ERInfo) {
 	drinfo := data.DRGetDataInfo()
-	fmt.Printf("Discount Rate Info:\n")
-	fmt.Printf("   Records:\t%d\n", data.DR.DRRecs.Len())
-	fmt.Printf("   Beginning:\t%s\n", drinfo.DtStart.Format("Jan 2, 2006"))
-	fmt.Printf("   Ending:\t%s\n", drinfo.DtStop.Format("Jan 2, 2006"))
+	if app.showInfo {
+		fmt.Printf("Discount Rate Info:\n")
+		fmt.Printf("   Records:\t%d\n", data.DR.DRRecs.Len())
+		fmt.Printf("   Beginning:\t%s\n", drinfo.DtStart.Format("Jan 2, 2006"))
+		fmt.Printf("   Ending:\t%s\n", drinfo.DtStop.Format("Jan 2, 2006"))
+	}
 
 	erinfo := data.ERGetDataInfo()
-	fmt.Printf("Exchange Rate Info:\n")
-	fmt.Printf("   Records:\t%d\n", data.ER.ERRecs.Len())
-	fmt.Printf("   Beginning:\t%s\n", erinfo.DtStart.Format("Jan 2, 2006"))
-	fmt.Printf("   Ending:\t%s\n", erinfo.DtStop.Format("Jan 2, 2006"))
+	if app.showInfo {
+		fmt.Printf("Exchange Rate Info:\n")
+		fmt.Printf("   Records:\t%d\n", data.ER.ERRecs.Len())
+		fmt.Printf("   Beginning:\t%s\n", erinfo.DtStart.Format("Jan 2, 2006"))
+		fmt.Printf("   Ending:\t%s\n", erinfo.DtStop.Format("Jan 2, 2006"))
+	}
 
 	return drinfo, erinfo
 }
@@ -72,8 +80,18 @@ func checkDR(t3 time.Time) {
 	}
 }
 
+func readCommandLineArgs() {
+	infoPtr := flag.Bool("i", false, "show info about the probability data range")
+	allRecsPtr := flag.Bool("a", false, "output all records used in the analysis")
+	flag.Parse()
+	app.showInfo = *infoPtr
+	app.showAllRecs = *allRecsPtr
+	app.showResults = !app.showAllRecs
+}
+
 func main() {
 	app.probMap = map[string]probInfo{}
+	readCommandLineArgs()
 
 	data.Init()
 	checkDR(time.Date(2018, 2, 14, 0, 0, 0, 0, time.UTC)) // Just make sure everything looks OK before starting...
@@ -107,26 +125,31 @@ func main() {
 	fmt.Printf("Probs from %s to %s\n", dtStart.Format("Jan 2, 2006"), dtEnd.Format("Jan 2, 2006"))
 
 	// CSV column headings
-	fmt.Printf("t1,t2,t3,t4, dt1, dt2, dt4, dDRR, dERR, prediction, actual\n")
+	if app.showAllRecs {
+		fmt.Printf("t1,t2,t3,t4, dt1, dt2, dt4, dDRR, dERR, prediction, actual\n")
+	}
 
 	for dt := dtStart; dtEnd.After(dt); dt = dt.AddDate(0, 0, 1) {
 		genProbs(dt)
 	}
 
+	//----------------------------------------------------------------------------------
 	// Now we need to compute the accuracy.  That is, when the prediction was "buy" how
 	// often was it right.
 	// TODO: how often was it correct when it said to hold?  This might be worth knowing
 	//----------------------------------------------------------------------------------
-	fmt.Printf("Sig1,Sig2,Sig3,Correct Predictions,Total Predictions, Correct Pct\n")
-	for i := core.DR.T1min; i <= core.DR.T1max; i++ {
-		for j := core.DR.T2min; j <= core.DR.T2max; j++ {
-			if i == j {
-				continue
-			}
-			for k := core.DR.T4min; k <= core.DR.T4max; k++ {
-				s := fmt.Sprintf("%d,%d,%d", i, j, k)
-				v := app.probMap[s]
-				fmt.Printf("%s, %d, %d, %5.1f%%\n", s, v.correct, v.count, 100.0*v.prob)
+	if app.showResults {
+		fmt.Printf("Sig1,Sig2,Sig3,Correct Predictions,Total Predictions, Correct Pct\n")
+		for i := core.DR.T1min; i <= core.DR.T1max; i++ {
+			for j := core.DR.T2min; j <= core.DR.T2max; j++ {
+				if i == j {
+					continue
+				}
+				for k := core.DR.T4min; k <= core.DR.T4max; k++ {
+					s := fmt.Sprintf("%d,%d,%d", i, j, k)
+					v := app.probMap[s]
+					fmt.Printf("%s, %d, %d, %5.1f%%\n", s, v.correct, v.count, 100.0*v.prob)
+				}
 			}
 		}
 	}
@@ -228,14 +251,16 @@ func computeDRProbability(t1, t2, t3, t4 time.Time, dt1, dt2, dt4 int) {
 	//-------------------------------------------------------------------------------
 	// Print out for manual checking...
 	//-------------------------------------------------------------------------------
-	fmt.Printf("%s,%s,%s,%s,%d,%d,%d,%6.2f,%6.2f,%s,%t\n",
-		t1.Format("01/02/2006"), t2.Format("01/02/2006"),
-		t3.Format("01/02/2006"), t4.Format("01/02/2006"),
-		dt1, dt2, dt4,
-		dDRR, dER,
-		prediction,
-		predictionResult,
-	)
+	if app.showAllRecs {
+		fmt.Printf("%s,%s,%s,%s,%d,%d,%d,%6.2f,%6.2f,%s,%t\n",
+			t1.Format("01/02/2006"), t2.Format("01/02/2006"),
+			t3.Format("01/02/2006"), t4.Format("01/02/2006"),
+			dt1, dt2, dt4,
+			dDRR, dER,
+			prediction,
+			predictionResult,
+		)
+	}
 
 }
 
