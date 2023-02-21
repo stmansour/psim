@@ -21,18 +21,22 @@ import (
 )
 
 type probInfo struct {
-	count   int64
-	correct int64
-	prob    float64
+	count       int64
+	correct     int64
+	prob        float64
+	holdCount   int64
+	holdCorrect int64
+	holdProb    float64
 }
 
 var app struct {
-	dri         data.DRInfo
-	eri         data.ERInfo
-	probMap     map[string]probInfo
-	showInfo    bool
-	showAllRecs bool
-	showResults bool
+	dri             data.DRInfo
+	eri             data.ERInfo
+	probMap         map[string]probInfo
+	showInfo        bool
+	showAllRecs     bool
+	showResults     bool
+	showHoldResults bool
 }
 
 func displayStats() (data.DRInfo, data.ERInfo) {
@@ -83,10 +87,15 @@ func checkDR(t3 time.Time) {
 func readCommandLineArgs() {
 	infoPtr := flag.Bool("i", false, "show info about the probability data range")
 	allRecsPtr := flag.Bool("a", false, "output all records used in the analysis")
+	holdProbPtr := flag.Bool("hold", false, "show probs of hold predictions")
 	flag.Parse()
 	app.showInfo = *infoPtr
 	app.showAllRecs = *allRecsPtr
 	app.showResults = !app.showAllRecs
+	app.showHoldResults = *holdProbPtr
+	if app.showHoldResults {
+		app.showResults = false
+	}
 }
 
 func main() {
@@ -153,6 +162,26 @@ func main() {
 			}
 		}
 	}
+
+	//---------------------------------------------
+	// if requested show the hold statistics...
+	//---------------------------------------------
+	if app.showHoldResults {
+		fmt.Printf("Hold Statistics\n")
+		fmt.Printf("Sig1,Sig2,Sig3,Correct Predictions,Total Predictions, Correct Pct\n")
+		for i := core.DR.T1min; i <= core.DR.T1max; i++ {
+			for j := core.DR.T2min; j <= core.DR.T2max; j++ {
+				if i == j {
+					continue
+				}
+				for k := core.DR.T4min; k <= core.DR.T4max; k++ {
+					s := fmt.Sprintf("%d,%d,%d", i, j, k)
+					v := app.probMap[s]
+					fmt.Printf("%s, %d, %d, %5.1f%%\n", s, v.holdCorrect, v.holdCount, 100.0*v.holdProb)
+				}
+			}
+		}
+	}
 }
 
 func genProbs(t3 time.Time) {
@@ -169,25 +198,28 @@ func genProbs(t3 time.Time) {
 				l++
 				// fmt.Printf("%d:  %d,%d,%d:   t1: %s, t2: %s, t4: %s\n", l, i, j, k, t1.Format("Jan 2, 2006"), t2.Format("Jan 2, 2006"), t4.Format("Jan 2, 2006"))
 				computeDRProbability(t1, t2, t3, t4, i, j, k)
-
 			}
 		}
 	}
 }
 
-// computeDRProbability
+// computeDRProbability given t1, t2, t3, and t4 -- apply the formulat and
+//
+//	keep track of what worked what didn't
 //
 // INPUTS
 //
-//			t1 - first date of DRR analysis
-//		    t2 - last date of DRR analysis
-//		    t3 - check date, that is the date of buy or hold
-//		    t4 - sell date if the prediction is to buy
-//		    dt1, dt2, dt4 - these 3 numbers form the unique signature of a
-//		         DiscountRate Influencer.  Their meanings are:
-//	             * # days prior to check date to start analysis
-//	             * # days prior to check date to stop analysis
-//	             * # days after check date to sell (if the prediction is to buy)
+//				t1 - first date of DRR analysis
+//			    t2 - last date of DRR analysis
+//			    t3 - initial exchange date, that is the date of buy or hold --
+//	              exchange C1 for C2
+//			    t4 - exit exchange date, i.e., sell date if the prediction is to buy --
+//				     exchange C2 for C1
+//			    dt1, dt2, dt4 - these 3 numbers form the unique signature of a
+//			         DiscountRate Influencer.  Their meanings are:
+//		             * # days prior to check date to start analysis
+//		             * # days prior to check date to stop analysis
+//		             * # days after check date to sell (if the prediction is to buy)
 //
 // --------------------------------------------------------------------------------
 func computeDRProbability(t1, t2, t3, t4 time.Time, dt1, dt2, dt4 int) {
@@ -218,7 +250,7 @@ func computeDRProbability(t1, t2, t3, t4 time.Time, dt1, dt2, dt4 int) {
 
 	//-------------------------------------------------------------------------------
 	// Determine deltaER (dER) =
-	//         (ExchangeRateRatio at t3) - (ExchangeRateRatio at t4)
+	//         (ExchangeRate at t3) - (ExchangeRate at t4)
 	//-------------------------------------------------------------------------------
 	er1 := data.ERFindRecord(t3)
 	if er1 == nil {
@@ -233,11 +265,12 @@ func computeDRProbability(t1, t2, t3, t4 time.Time, dt1, dt2, dt4 int) {
 	dER := er1.Close - er2.Close
 
 	//-------------------------------------------------------------------------------
-	// Check to see if the prediction is correct. If dDRR > 0 AND dER > 0 then
-	// then the prediction was correct.
+	// Check to see if the prediction is correct.
+	// If dDRR > 0 (that is, the change in discount rate ratios) is positive
+	// AND the ER at t3 - ER at t4 is positive, then the prediction was correct.
 	//-------------------------------------------------------------------------------
 	predictionResult := false
-	if dER > 0 && dDRR > 0 {
+	if prediction == "buy" && dER > 0 {
 		predictionResult = true
 	}
 
@@ -269,9 +302,12 @@ func addToProbabilities(i, j, k int, prediction string, predWasCorrect bool) {
 	v, ok := app.probMap[s]
 	if !ok {
 		v = probInfo{
-			count:   0,
-			correct: 0,
-			prob:    0.0,
+			count:       0,
+			correct:     0,
+			prob:        0.0,
+			holdCount:   0,
+			holdCorrect: 0,
+			holdProb:    0.0,
 		}
 	}
 	if prediction == "buy" {
@@ -280,6 +316,12 @@ func addToProbabilities(i, j, k int, prediction string, predWasCorrect bool) {
 			v.correct++
 		}
 		v.prob = float64(v.correct) / float64(v.count)
+	} else {
+		v.holdCount++
+		if !predWasCorrect {
+			v.holdCorrect++
+		}
+		v.holdProb = float64(v.holdCorrect) / float64(v.holdCount)
 	}
 	app.probMap[s] = v
 }
