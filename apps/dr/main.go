@@ -34,8 +34,8 @@ var app struct {
 	eri             data.ERInfo
 	probMap         map[string]probInfo
 	showInfo        bool
-	showAllRecs     bool
-	showResults     bool
+	showAccuracy    bool
+	showRawData     bool
 	showHoldResults bool
 }
 
@@ -85,17 +85,21 @@ func checkDR(t3 time.Time) {
 }
 
 func readCommandLineArgs() {
-	infoPtr := flag.Bool("i", false, "show info about the probability data range")
-	allRecsPtr := flag.Bool("a", false, "output all records used in the analysis")
-	holdProbPtr := flag.Bool("hold", false, "show probs of hold predictions")
+	infoPtr := flag.Bool("i", false, "info - show info about the probability data range")
+	allRecsPtr := flag.Bool("r", false, "rawdata - output all records used in the analysis")
+	holdProbPtr := flag.Bool("n", false, "noAction - generate Hold Accuracy Report: probs of hold predictions")
+
 	flag.Parse()
+
 	app.showInfo = *infoPtr
-	app.showAllRecs = *allRecsPtr
-	app.showResults = !app.showAllRecs
+	app.showRawData = *allRecsPtr
 	app.showHoldResults = *holdProbPtr
-	if app.showHoldResults {
-		app.showResults = false
-	}
+
+	//-------------------------------------------------------------------------------
+	// The typical output will be to show the prediction accuracy of the unique
+	// influencers. So, there's no command line arg when that is the desired output.
+	//-------------------------------------------------------------------------------
+	app.showAccuracy = !(app.showRawData || app.showHoldResults || app.showInfo)
 }
 
 func main() {
@@ -131,10 +135,14 @@ func main() {
 	}
 
 	dtEnd := dtStop.AddDate(0, 0, 1)
-	fmt.Printf("Probs from %s to %s\n", dtStart.Format("Jan 2, 2006"), dtEnd.Format("Jan 2, 2006"))
+	if app.showInfo {
+		fmt.Printf("Simulation date range: %s - %s\n", dtStart.Format("Jan 02, 2006"), dtEnd.AddDate(0, 0, -1).Format("Jan 02, 2006"))
+		os.Exit(0)
+	}
 
 	// CSV column headings
-	if app.showAllRecs {
+	if app.showRawData {
+		fmt.Printf("RAW DATA REPORT\n")
 		fmt.Printf("t1,t2,t3,t4, dt1, dt2, dt4, dDRR, dERR, prediction, actual\n")
 	}
 
@@ -147,8 +155,9 @@ func main() {
 	// often was it right.
 	// TODO: how often was it correct when it said to hold?  This might be worth knowing
 	//----------------------------------------------------------------------------------
-	if app.showResults {
-		fmt.Printf("Sig1,Sig2,Sig3,Correct Predictions,Total Predictions, Correct Pct\n")
+	if app.showAccuracy {
+		fmt.Printf("ACCURACY REPORT\n")
+		fmt.Printf("Sig1,Sig2,Sig3,Correct Predictions,Total Predictions, Accuracy\n")
 		for i := core.DR.T1min; i <= core.DR.T1max; i++ {
 			for j := core.DR.T2min; j <= core.DR.T2max; j++ {
 				if i == j {
@@ -167,7 +176,7 @@ func main() {
 	// if requested show the hold statistics...
 	//---------------------------------------------
 	if app.showHoldResults {
-		fmt.Printf("Hold Statistics\n")
+		fmt.Printf("HOLD ACCURACY\n")
 		fmt.Printf("Sig1,Sig2,Sig3,Correct Predictions,Total Predictions, Correct Pct\n")
 		for i := core.DR.T1min; i <= core.DR.T1max; i++ {
 			for j := core.DR.T2min; j <= core.DR.T2max; j++ {
@@ -272,6 +281,8 @@ func computeDRProbability(t1, t2, t3, t4 time.Time, dt1, dt2, dt4 int) {
 	predictionResult := false
 	if prediction == "buy" && dER > 0 {
 		predictionResult = true
+	} else if prediction == "hold" && dER <= 0 {
+		predictionResult = true
 	}
 
 	//-------------------------------------------------------------------------------
@@ -282,9 +293,9 @@ func computeDRProbability(t1, t2, t3, t4 time.Time, dt1, dt2, dt4 int) {
 	addToProbabilities(dt1, dt2, dt4, prediction, predictionResult)
 
 	//-------------------------------------------------------------------------------
-	// Print out for manual checking...
+	// Print out RAW DATA if requested
 	//-------------------------------------------------------------------------------
-	if app.showAllRecs {
+	if app.showRawData {
 		fmt.Printf("%s,%s,%s,%s,%d,%d,%d,%6.2f,%6.2f,%s,%t\n",
 			t1.Format("01/02/2006"), t2.Format("01/02/2006"),
 			t3.Format("01/02/2006"), t4.Format("01/02/2006"),
@@ -294,9 +305,19 @@ func computeDRProbability(t1, t2, t3, t4 time.Time, dt1, dt2, dt4 int) {
 			predictionResult,
 		)
 	}
-
 }
 
+// addToProbabilities - keep track of the accuracy of the predictions for
+// both buying and holding
+//
+// INPUTS
+//
+//	i,j,k          = the unique signature of the discount rate influencer
+//	prediction     = "buy"  or  "hold"
+//	predWasCorrect = true if the "buy" or "hold" prediction was the
+//	                 correct thing to do
+//
+// --------------------------------------------------------------------------
 func addToProbabilities(i, j, k int, prediction string, predWasCorrect bool) {
 	s := fmt.Sprintf("%d,%d,%d", i, j, k)
 	v, ok := app.probMap[s]
@@ -316,9 +337,9 @@ func addToProbabilities(i, j, k int, prediction string, predWasCorrect bool) {
 			v.correct++
 		}
 		v.prob = float64(v.correct) / float64(v.count)
-	} else {
+	} else if prediction == "hold" {
 		v.holdCount++
-		if !predWasCorrect {
+		if predWasCorrect {
 			v.holdCorrect++
 		}
 		v.holdProb = float64(v.holdCorrect) / float64(v.holdCount)
