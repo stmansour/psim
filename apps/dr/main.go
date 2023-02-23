@@ -37,6 +37,12 @@ var app struct {
 	showAccuracy    bool
 	showRawData     bool
 	showHoldResults bool
+	T1max           int
+	T1min           int
+	T2max           int
+	T2min           int
+	T4min           int
+	T4max           int
 }
 
 func displayStats() (data.DRInfo, data.ERInfo) {
@@ -89,11 +95,27 @@ func readCommandLineArgs() {
 	allRecsPtr := flag.Bool("r", false, "rawdata - output all records used in the analysis")
 	holdProbPtr := flag.Bool("n", false, "noAction - generate Hold Accuracy Report: probs of hold predictions")
 
+	t1minptr := flag.Int("t1min", core.DR.T1min, "t1(min) - most days prior to t3 to begin analysis")
+	t1maxptr := flag.Int("t1max", core.DR.T1max, "t1(max) - fewest days prior to t3 to begin analysis")
+
+	t2minptr := flag.Int("t2min", core.DR.T2min, "t2(min) - most days prior to t3 to end analysis")
+	t2maxptr := flag.Int("t2max", core.DR.T2max, "t2(max) - fewest days prior to t3 to end analysis")
+
+	t4minptr := flag.Int("t4min", core.DR.T4min, "t4(min) - fewest days after to t3 to sell after buying")
+	t4maxptr := flag.Int("t4max", core.DR.T4max, "t4(max) - most days after to t3 to sell after buying")
+
 	flag.Parse()
 
 	app.showInfo = *infoPtr
 	app.showRawData = *allRecsPtr
 	app.showHoldResults = *holdProbPtr
+
+	app.T1min = *t1minptr
+	app.T1max = *t1maxptr
+	app.T2min = *t2minptr
+	app.T2max = *t2maxptr
+	app.T4min = *t4minptr
+	app.T4max = *t4maxptr
 
 	//-------------------------------------------------------------------------------
 	// The typical output will be to show the prediction accuracy of the unique
@@ -134,9 +156,12 @@ func main() {
 		dtStart = drinfo.DtStart
 	}
 
+	// End date is "up to" but not "including"
 	dtEnd := dtStop.AddDate(0, 0, 1)
 	if app.showInfo {
 		fmt.Printf("Simulation date range: %s - %s\n", dtStart.Format("Jan 02, 2006"), dtEnd.AddDate(0, 0, -1).Format("Jan 02, 2006"))
+		fmt.Printf("t1: %d => %d,   t2: %d => %d, t3: %d => %d\n",
+			app.T1min, app.T1max, app.T2min, app.T2max, app.T4min, app.T4max)
 		os.Exit(0)
 	}
 
