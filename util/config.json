@@ -1,0 +1,19 @@
+{
+    "DtStart": "2022-01-01",
+    "DtStop": "2022-12-31",
+    "PopulationSize": 1,
+    "C1": "USD",
+    "C2": "YEN",
+    "ER": "USDJPY",
+    "MaxInf": 1,
+    "MinInf": 1,
+    "InitFunds": 1000.00,
+    "Generations": 1,
+    "MinDelta1": -30,
+    "MaxDelta1": -2,
+    "MinDelta2": -5,
+    "MaxDelta2": -1,
+    "MinDelta4":  1, 
+    "MaxDelta4":  5
+  }
+  

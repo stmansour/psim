@@ -14,9 +14,10 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
-	"psim/core"
 	"psim/data"
+	"psim/util"
 	"time"
 )
 
@@ -30,6 +31,7 @@ type probInfo struct {
 }
 
 var app struct {
+	cfg             *util.AppConfig
 	dri             data.DRInfo
 	eri             data.ERInfo
 	probMap         map[string]probInfo
@@ -95,14 +97,14 @@ func readCommandLineArgs() {
 	allRecsPtr := flag.Bool("r", false, "rawdata - output all records used in the analysis")
 	holdProbPtr := flag.Bool("n", false, "noAction - generate Hold Accuracy Report: probs of hold predictions")
 
-	t1minptr := flag.Int("t1min", core.DR.T1min, "t1(min) - most days prior to t3 to begin analysis")
-	t1maxptr := flag.Int("t1max", core.DR.T1max, "t1(max) - fewest days prior to t3 to begin analysis")
+	t1minptr := flag.Int("t1min", app.cfg.MinDelta1, "t1(min) - most days prior to t3 to begin analysis")
+	t1maxptr := flag.Int("t1max", app.cfg.MaxDelta1, "t1(max) - fewest days prior to t3 to begin analysis")
 
-	t2minptr := flag.Int("t2min", core.DR.T2min, "t2(min) - most days prior to t3 to end analysis")
-	t2maxptr := flag.Int("t2max", core.DR.T2max, "t2(max) - fewest days prior to t3 to end analysis")
+	t2minptr := flag.Int("t2min", app.cfg.MinDelta2, "t2(min) - most days prior to t3 to end analysis")
+	t2maxptr := flag.Int("t2max", app.cfg.MaxDelta2, "t2(max) - fewest days prior to t3 to end analysis")
 
-	t4minptr := flag.Int("t4min", core.DR.T4min, "t4(min) - fewest days after to t3 to sell after buying")
-	t4maxptr := flag.Int("t4max", core.DR.T4max, "t4(max) - most days after to t3 to sell after buying")
+	t4minptr := flag.Int("t4min", app.cfg.MinDelta4, "t4(min) - fewest days after to t3 to sell after buying")
+	t4maxptr := flag.Int("t4max", app.cfg.MaxDelta4, "t4(max) - most days after to t3 to sell after buying")
 
 	flag.Parse()
 
@@ -125,6 +127,12 @@ func readCommandLineArgs() {
 }
 
 func main() {
+	util.Init()
+	cfg, err := util.LoadConfig()
+	if err != nil {
+		log.Fatalf("could not load config file:  %s\n", err.Error())
+	}
+	app.cfg = &cfg
 	app.probMap = map[string]probInfo{}
 	readCommandLineArgs()
 
@@ -143,8 +151,8 @@ func main() {
 	// is such that data exists.  Now that we know how much data we have, make
 	// any adjustments necessary.
 	//--------------------------------------------------------------------------
-	dtStart := erinfo.DtStart.AddDate(0, 0, -core.DR.T1min)
-	dtStop := erinfo.DtStop.AddDate(0, 0, -core.DR.T4max-1)
+	dtStart := erinfo.DtStart.AddDate(0, 0, -app.cfg.MinDelta1)
+	dtStop := erinfo.DtStop.AddDate(0, 0, -app.cfg.MaxDelta4-1)
 
 	//--------------------------------------------------------------------------
 	// Adjust these dates if the DR data does not yet exist...
@@ -156,7 +164,9 @@ func main() {
 		dtStart = drinfo.DtStart
 	}
 
+	//--------------------------------------------
 	// End date is "up to" but not "including"
+	//--------------------------------------------
 	dtEnd := dtStop.AddDate(0, 0, 1)
 	if app.showInfo {
 		fmt.Printf("Simulation date range: %s - %s\n", dtStart.Format("Jan 02, 2006"), dtEnd.AddDate(0, 0, -1).Format("Jan 02, 2006"))
@@ -165,12 +175,21 @@ func main() {
 		os.Exit(0)
 	}
 
+	//-----------------------
 	// CSV column headings
+	//-----------------------
 	if app.showRawData {
 		fmt.Printf("RAW DATA REPORT\n")
-		fmt.Printf("t1,t2,t3,t4, dt1, dt2, dt4, dDRR, dERR, prediction, actual\n")
+		fmt.Printf("Rule:  if dDDR at t3 > 0 then buy at t3 then sell at t4\n")
+		fmt.Printf("Check: If prediction is \"buy\"  and dER  > 0 then the prediction is correct\n")
+		fmt.Printf("       If prediction is \"hold\" and dER <= 0 then the prediction is correct\n")
+		fmt.Printf("\n")
+		fmt.Printf("t1,t2,t3,t4, dt1, dt2, dt4, dDRR, dERR, action, correct\n")
 	}
 
+	//---------------------
+	// MAIN LOOP OF WORK
+	//---------------------
 	for dt := dtStart; dtEnd.After(dt); dt = dt.AddDate(0, 0, 1) {
 		genProbs(dt)
 	}
@@ -183,12 +202,12 @@ func main() {
 	if app.showAccuracy {
 		fmt.Printf("ACCURACY REPORT\n")
 		fmt.Printf("Sig1,Sig2,Sig3,Correct Predictions,Total Predictions, Accuracy\n")
-		for i := core.DR.T1min; i <= core.DR.T1max; i++ {
-			for j := core.DR.T2min; j <= core.DR.T2max; j++ {
+		for i := app.cfg.MinDelta1; i <= app.cfg.MaxDelta1; i++ {
+			for j := app.cfg.MinDelta2; j <= app.cfg.MaxDelta2; j++ {
 				if i == j {
 					continue
 				}
-				for k := core.DR.T4min; k <= core.DR.T4max; k++ {
+				for k := app.cfg.MinDelta4; k <= app.cfg.MaxDelta4; k++ {
 					s := fmt.Sprintf("%d,%d,%d", i, j, k)
 					v := app.probMap[s]
 					fmt.Printf("%s, %d, %d, %5.1f%%\n", s, v.correct, v.count, 100.0*v.prob)
@@ -203,12 +222,12 @@ func main() {
 	if app.showHoldResults {
 		fmt.Printf("HOLD ACCURACY\n")
 		fmt.Printf("Sig1,Sig2,Sig3,Correct Predictions,Total Predictions, Correct Pct\n")
-		for i := core.DR.T1min; i <= core.DR.T1max; i++ {
-			for j := core.DR.T2min; j <= core.DR.T2max; j++ {
+		for i := app.cfg.MinDelta1; i <= app.cfg.MaxDelta1; i++ {
+			for j := app.cfg.MinDelta2; j <= app.cfg.MaxDelta2; j++ {
 				if i == j {
 					continue
 				}
-				for k := core.DR.T4min; k <= core.DR.T4max; k++ {
+				for k := app.cfg.MinDelta4; k <= app.cfg.MaxDelta4; k++ {
 					s := fmt.Sprintf("%d,%d,%d", i, j, k)
 					v := app.probMap[s]
 					fmt.Printf("%s, %d, %d, %5.1f%%\n", s, v.holdCorrect, v.holdCount, 100.0*v.holdProb)
@@ -220,14 +239,14 @@ func main() {
 
 func genProbs(t3 time.Time) {
 	l := 0
-	for i := core.DR.T1min; i <= core.DR.T1max; i++ {
+	for i := app.cfg.MinDelta1; i <= app.cfg.MaxDelta1; i++ {
 		t1 := t3.AddDate(0, 0, i)
-		for j := core.DR.T2min; j <= core.DR.T2max; j++ {
+		for j := app.cfg.MinDelta2; j <= app.cfg.MaxDelta2; j++ {
 			if i == j {
 				continue
 			}
 			t2 := t3.AddDate(0, 0, j)
-			for k := core.DR.T4min; k <= core.DR.T4max; k++ {
+			for k := app.cfg.MinDelta4; k <= app.cfg.MaxDelta4; k++ {
 				t4 := t3.AddDate(0, 0, k)
 				l++
 				// fmt.Printf("%d:  %d,%d,%d:   t1: %s, t2: %s, t4: %s\n", l, i, j, k, t1.Format("Jan 2, 2006"), t2.Format("Jan 2, 2006"), t4.Format("Jan 2, 2006"))

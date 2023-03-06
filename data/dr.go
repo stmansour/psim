@@ -191,14 +191,3 @@ func DRInit() {
 	DR.DtStart = DR.DRRecs[0].Date
 	DR.DtStop = DR.DRRecs[l-1].Date
 }
-
-/*
-
-create a golang program to read a csv file named er.csv, containing these fields:
-Symbol string, Date time.Time, Open,High,Low,Close are float64.
-The date can be parsed in this format '1/2/2006'.
-Store the records in a global array sorted by date.  Provide an access function where the input parameter
-is a date (only day, month, and year are relevant), and it returns the associated record. Since the
-array is ordered by date, use an efficient algorithm to search for the date.
-
-*/

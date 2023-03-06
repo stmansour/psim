@@ -1,52 +1,71 @@
 package core
 
-import "time"
+import (
+	"fmt"
+	"psim/util"
+	"time"
+)
 
 // Simulator is a simulator object
 type Simulator struct {
-	startDate   time.Time  // processing begins on this date
-	stopDate    time.Time  // processing ends on this date
-	popSize     int        // how many investors are in this population
-	maxInf      int        // maximum number of influencers for any Investor
-	minInf      int        // minimum number of influencers for any Investor
-	funds       float64    // amount of funds each Investor is "staked" at the outset of the simulation
-	tradingDay  int        // this needs to be completely re-thought -- it's like a recurrence rule
-	tradingTime time.Time  // time of day when buy/sell is executed
-	generations int        // current generation in the simulator
-	Investors   []Investor // the population of the current generation
-
+	cfg       *util.AppConfig // system-wide configuration info
+	Investors []Investor      // the population of the current generation
 }
 
-// initializePopulation - create a population of investors with random settings
-//
-// -------------------------------------------------------------------------------
-func (s *Simulator) initializePopulation() {
+// Init initializes the simulation system, it also creates Investors and
+// calls their init functions.
+// ----------------------------------------------------------------------------
+func (s *Simulator) Init(cfg *util.AppConfig) error {
+	s.cfg = cfg
 
+	//------------------------------------------------------------------------
+	// Create an initial population of investors with just 1 investor for now
+	//------------------------------------------------------------------------
+	var i Investor
+	i.Init(s.cfg)
+	s.Investors = append(s.Investors, i)
+
+	//------------------------------------------------------------------------
+	// Initialize all Investors...
+	//------------------------------------------------------------------------
+	for i := 0; i < len(s.Investors); i++ {
+		s.Investors[i].Init(cfg)
+	}
+	return nil
 }
 
-// runGeneration - run the current generation from start to stop date
-//
-// RETURNS
-//
-//	nil       - no problems, the generation ran to completion without error
-//	otherwise - reason the generation did not run or that the run was stopped
-//	              * stopDate has been exceeded
-//	              * all Investors are out of funds
-//
-// -------------------------------------------------------------------------------
-func (s *Simulator) runGeneration() {
-	// evaluate the fitness of each investor at the end of the generation
-}
+// Run loops through the simulation day by day, first handling any conversions
+// from C2 to C1 on that day, and then having each Investor consult its
+// Influencers and deciding whether or not to convert C1 to C2. At the end
+// of each day it prints out a message indicating where it is at in the
+// simulation and some indicators as to how things are progressing.
+// ----------------------------------------------------------------------------
+func (s *Simulator) Run() {
+	dt := time.Time(s.cfg.DtStart)
+	dtStop := time.Time(s.cfg.DtStop)
 
-// runSimulation - run all generations
-//
-// -------------------------------------------------------------------------------
-func (s *Simulator) runSimulation() {
-	s.initializePopulation()
+	it := 0
+	for dt.Before(dtStop) || dt.Equal(dtStop) {
+		it++
+		// Call SellConversion for each investor
+		for _, inv := range s.Investors {
+			inv.SellConversion(dt)
+		}
 
-	// loop: run the generations until stop criteria is met
-	// stop criteria:
-	//		1. stopDate reached
-	//		2. no Investors have any funds remaining
+		// Call BuyConversion for each investor
+		for _, inv := range s.Investors {
+			inv.BuyConversion(dt)
+		}
 
+		// Print out iteration number, date, and count of investors with balance > 0
+		var count int
+		for _, inv := range s.Investors {
+			if inv.BalanceC1 > 0 {
+				count++
+			}
+		}
+		fmt.Printf("Iteration %d: Date: %s, Investors with balance > 0: %d\n", it, dt.Format("2006-01-02"), count)
+
+		dt = dt.AddDate(0, 0, 1)
+	}
 }

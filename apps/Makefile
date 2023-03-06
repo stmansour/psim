@@ -1,4 +1,4 @@
-DIRS=dr er
+DIRS=dr er simulator
 
 apps:
 	for dir in $(DIRS); do make -C $$dir;done

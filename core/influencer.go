@@ -1,13 +1,23 @@
 package core
 
-import "time"
+import (
+	"psim/util"
+	"time"
+)
 
-// Influencer is the interface for all Influencers
+// InfluencerPrediction describes a prediction from an influencer
+type InfluencerPrediction struct {
+	Prediction   string
+	Probability  float64
+	InfluencerID string
+}
+
+// Influencer is a base class / struct definition for the types of objects that will
+//
+//	use a particular type of data to make a prediction to buy or hold currency.
+//
+// ------------------------------------------------------------------------------------------
 type Influencer interface {
-	// Returns the prediction made by the influencer for a specific date
-	Predict(date time.Time) (string, float64, error)
-	// Returns the influencer's identifier
-	ID() string
-	// Updates the influencer's settings
-	SetSettings(settings map[string]interface{}) error
+	Init(cfg *util.AppConfig, delta4 int)
+	GetPrediction(t3 time.Time) (string, float64, error)
 }

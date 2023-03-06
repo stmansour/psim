@@ -1,4 +1,4 @@
-DIRS=data apps
+DIRS=util data apps
 DIST=dist
 
 .PHONY: test
