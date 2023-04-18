@@ -1,15 +1,6 @@
 package main
 
-// This app is used to calculate the correctness probabilities for all the
-// Discount Rate data.  Within the Influencer for DiscountRate there are
-// 3 variables.  Based on a purchase date, t3, they are:
-//
-//		dt1 = number of days prior to t3 where data research begins.
-//            As of this writing its range is [2,30].
-//      dt2 = number of days prior to t3 where data research stops
-//            As of this writing its range is [1,5].
-//		dt4 = number of days after t3 when the purchased currency is sold.
-//            As of this writing its range is [1,5].
+// EXCHANGE RATE - data access - test program.
 //---------------------------------------------------------------------------
 import (
 	"fmt"
@@ -20,8 +11,8 @@ import (
 func main() {
 	data.Init()
 	i := data.DR.DRRecs.Len()
-	dt1 := data.DR.DRRecs[0].Date
-	dt2 := data.DR.DRRecs[i-1].Date
+	dt1 := data.DR.DtStart
+	dt2 := data.DR.DtStop
 
 	fmt.Printf("Discount Rate Info:\n")
 	fmt.Printf("   Records:\t%d\n", i)
@@ -35,8 +26,8 @@ func main() {
 	}
 
 	i = data.ER.ERRecs.Len()
-	dt1 = data.ER.ERRecs[0].Date
-	dt2 = data.ER.ERRecs[i-1].Date
+	dt1 = data.ER.DtStart
+	dt2 = data.ER.DtStop
 
 	fmt.Printf("Exchange Rate Info:\n")
 	fmt.Printf("   Records:\t%d\n", i)

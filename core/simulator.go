@@ -22,7 +22,6 @@ func (s *Simulator) Init(cfg *util.AppConfig) error {
 	// Create an initial population of investors with just 1 investor for now
 	//------------------------------------------------------------------------
 	var i Investor
-	i.Init(s.cfg)
 	s.Investors = append(s.Investors, i)
 
 	//------------------------------------------------------------------------
@@ -44,28 +43,66 @@ func (s *Simulator) Run() {
 	dt := time.Time(s.cfg.DtStart)
 	dtStop := time.Time(s.cfg.DtStop)
 
-	it := 0
+	iteration := 0
 	for dt.Before(dtStop) || dt.Equal(dtStop) {
-		it++
+		iteration++
 		// Call SellConversion for each investor
-		for _, inv := range s.Investors {
-			inv.SellConversion(dt)
+		for j := 0; j < len(s.Investors); j++ {
+			s.Investors[j].SellConversion(dt)
 		}
 
 		// Call BuyConversion for each investor
-		for _, inv := range s.Investors {
-			inv.BuyConversion(dt)
-		}
-
-		// Print out iteration number, date, and count of investors with balance > 0
-		var count int
-		for _, inv := range s.Investors {
-			if inv.BalanceC1 > 0 {
-				count++
+		check := false
+		for j := 0; j < len(s.Investors); j++ {
+			s.Investors[j].BuyConversion(dt)
+			if len(s.Investors[j].Investments) > 0 {
+				check = true
 			}
 		}
-		fmt.Printf("Iteration %d: Date: %s, Investors with balance > 0: %d\n", it, dt.Format("2006-01-02"), count)
+		if check {
+			x := 0
+			for j := 0; j < len(s.Investors); j++ {
+				x += len(s.Investors[j].Investments)
+			}
+		}
+
+		// debug
+		count := 0
+		txns := 0
+		for j := 0; j < len(s.Investors); j++ {
+			if s.Investors[j].BalanceC1 > 0 {
+				count++
+			}
+			txns += len(s.Investors[j].Investments)
+		}
+		fmt.Printf("%4d. Date: %s, investors remaining: %d, investments pending: %d\n", iteration, dt.Format("2006-Jan-02"), count, txns)
 
 		dt = dt.AddDate(0, 0, 1)
 	}
+}
+
+// ShowTopInvestor - dumps the top investor to a file after the simulation.
+//
+// RETURNS
+//
+//	nil = success
+//	otherwise = error encountered
+//
+// ----------------------------------------------------------------------------
+func (s *Simulator) ShowTopInvestor() error {
+	if len(s.Investors) < 1 {
+		return fmt.Errorf("Simulator has 0 Investors")
+	}
+	topBalance := s.Investors[0].BalanceC1
+	topInvestorIdx := 0
+	for i := 1; i < len(s.Investors); i++ {
+		if s.Investors[i].BalanceC1 > topBalance {
+			topBalance = s.Investors[i].BalanceC1
+			topInvestorIdx = i
+		}
+	}
+	if err := s.Investors[topInvestorIdx].InvestorProfile(); err != nil {
+		return err
+	}
+	return s.Investors[topInvestorIdx].OutputInvestments()
 }

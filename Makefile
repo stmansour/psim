@@ -1,3 +1,4 @@
+# test comment
 DIRS=util data apps
 DIST=dist
 

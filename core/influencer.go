@@ -20,4 +20,5 @@ type InfluencerPrediction struct {
 type Influencer interface {
 	Init(cfg *util.AppConfig, delta4 int)
 	GetPrediction(t3 time.Time) (string, float64, error)
+	ProfileString() string
 }

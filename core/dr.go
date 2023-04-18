@@ -76,10 +76,23 @@ func (p *DRInfluencer) SetID(x string) {
 // Init - initializes a DRInfluencer
 func (p *DRInfluencer) Init(cfg *util.AppConfig, delta4 int) {
 	p.cfg = cfg
-	p.Delta1 = util.RandomInRange(cfg.MinDelta1, cfg.MaxDelta1)
-	p.Delta2 = util.RandomInRange(cfg.MinDelta2, cfg.MaxDelta2)
-	p.Delta4 = delta4
-	p.ID = fmt.Sprintf("DRInfluencer-%d-%d-%d//%s", p.Delta1, p.Delta2, p.Delta4, util.GenerateRefNo())
+	p.Delta1 = -30
+	p.Delta2 = -1
+	p.Delta4 = 3
+	fmt.Printf("*** NOTICE ***  Influencer: DR - T1, T2, and T4 are set to hardcoded test values\n")
+	// p.Delta1 = util.RandomInRange(cfg.MinDelta1, cfg.MaxDelta1)
+	// p.Delta2 = util.RandomInRange(cfg.MinDelta2, cfg.MaxDelta2)
+	// p.Delta4 = delta4
+	p.ID = fmt.Sprintf("DRInfluencer|%d|%d|%d|%s", p.Delta1, p.Delta2, p.Delta4, util.GenerateRefNo())
+}
+
+// ProfileString - a quick description of the type of Influencer and
+//
+//	its key attributes.
+//
+// ----------------------------------------------------------------------------
+func (p *DRInfluencer) ProfileString() string {
+	return p.ID + fmt.Sprintf(" (Discount Rate, T1 = %d, T2 = %d, T4 = %d)", p.Delta1, p.Delta2, p.Delta4)
 }
 
 // GetPrediction - using the supplied date, it researches data and makes
@@ -118,7 +131,10 @@ func (p *DRInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
 	prediction := "hold"
 	if dDRR > 0 {
 		prediction = "buy"
+		// util.DPrintf("dt1 = %s, dt2 = %s, ratio1 = %6.3f, ratio2 = %6.3f, dDRR = %6.3f, prediction: %s\n",
+		// 	t1.Format("1/2/2006"), t2.Format("1/2/2006"), rec1.USJPDRRatio, rec2.USJPDRRatio, dDRR, prediction)
 	}
+
 	// todo - return proper probability
 	return prediction, 0.5, nil
 }

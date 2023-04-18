@@ -1,5 +1,6 @@
 package main
 
+// DISCOUNT RATE - Calculate correctness
 // This app is used to calculate the correctness probabilities for all the
 // Discount Rate data.  Within the Influencer for DiscountRate there are
 // 3 variables.  Based on a purchase date, t3, they are:
@@ -208,9 +209,9 @@ func main() {
 					continue
 				}
 				for k := app.cfg.MinDelta4; k <= app.cfg.MaxDelta4; k++ {
-					s := fmt.Sprintf("%d,%d,%d", i, j, k)
+					s := fmt.Sprintf("%d,%d,%d", i, j, k) // key for the map
 					v := app.probMap[s]
-					fmt.Printf("%s, %d, %d, %5.1f%%\n", s, v.correct, v.count, 100.0*v.prob)
+					fmt.Printf("%3d, %3d, %3d, %3d, %3d, %7.1f%%\n", i, j, k, v.correct, v.count, 100.0*v.prob)
 				}
 			}
 		}
@@ -221,16 +222,16 @@ func main() {
 	//---------------------------------------------
 	if app.showHoldResults {
 		fmt.Printf("HOLD ACCURACY\n")
-		fmt.Printf("Sig1,Sig2,Sig3,Correct Predictions,Total Predictions, Correct Pct\n")
+		fmt.Printf("Sig1,Sig2,Sig3,Correct Predictions,Total Predictions, Buys, Correct Buys, Correct Pct\n")
 		for i := app.cfg.MinDelta1; i <= app.cfg.MaxDelta1; i++ {
 			for j := app.cfg.MinDelta2; j <= app.cfg.MaxDelta2; j++ {
 				if i == j {
 					continue
 				}
 				for k := app.cfg.MinDelta4; k <= app.cfg.MaxDelta4; k++ {
-					s := fmt.Sprintf("%d,%d,%d", i, j, k)
+					s := fmt.Sprintf("%4d,%d4,%4d", i, j, k)
 					v := app.probMap[s]
-					fmt.Printf("%s, %d, %d, %5.1f%%\n", s, v.holdCorrect, v.holdCount, 100.0*v.holdProb)
+					fmt.Printf("%s, %4d, %4d, %6.1f%%\n", s, v.holdCorrect, v.holdCount, 100.0*v.holdProb)
 				}
 			}
 		}
