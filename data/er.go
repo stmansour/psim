@@ -62,14 +62,42 @@ var ER struct {
 //
 // ---------------------------------------------------------------------------
 func ERFindRecord(dt time.Time) *ExchangeRateRecord {
-	// Perform a binary search to find the record with the specified dt
-	index := sort.Search(len(ER.ERRecs), func(i int) bool {
-		return ER.ERRecs[i].Date.After(dt) || ER.ERRecs[i].Date.Equal(dt)
-	})
-	if index == len(ER.ERRecs) || ER.ERRecs[index].Date.After(dt) {
-		return nil
+	for i := 0; i < len(ER.ERRecs); i++ {
+		if ER.ERRecs[i].Date.Equal(dt) {
+			return &ER.ERRecs[i]
+		}
 	}
-	return &ER.ERRecs[index]
+	return nil
+
+	// Perform a binary search to find the record with the specified dt
+	// index := sort.Search(len(ER.ERRecs), func(i int) bool {
+	// 	return ER.ERRecs[i].Date.After(dt) || ER.ERRecs[i].Date.Equal(dt)
+	// })
+	// if index == len(ER.ERRecs) || ER.ERRecs[index].Date.After(dt) {
+	// 	return nil
+	// }
+	//   min       i      dt                                   mx
+	//   ---------------------------------------------------------
+	//
+
+	// mx := (len(ER.ERRecs) - 1)
+	// min := 0
+
+	// var found = bool(false)
+	// var i int
+	// for found = false; !found; {
+	// 	i = (mx + min/2)
+	// 	if ER.ERRecs[i].DtS {
+	// 		mx = i
+	// 	} else if yec == y && m == mec && dec == d {
+	// 		found = true
+	// 	} else {
+	// 		min = i
+	// 	}
+	// }
+	// if found {
+	// 	return &ER.ERRecs[index]
+	// }
 }
 
 // ERGetDataInfo returns meta information about the data

@@ -4,6 +4,6 @@ import "fmt"
 
 // DPrintf is the debug logger
 func DPrintf(format string, a ...interface{}) {
-	fmt.Printf("*** DEBUG *** ")
+	fmt.Printf("**DBG** ")
 	fmt.Printf(format, a...)
 }
