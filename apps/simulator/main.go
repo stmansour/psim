@@ -38,6 +38,7 @@ func displaySimulationDetails(cfg *util.AppConfig) {
 	fmt.Printf("**********  S I M U L A T I O N   D E T A I L S  **********\n")
 	a := time.Time(cfg.DtStart)
 	b := time.Time(cfg.DtStop)
+	c := b.AddDate(0, 0, 1)
 	fmt.Printf("Start:    %s\tvalid: %s\n", a.Format("Jan 2, 2006"), dateIsInDataRange(a))
 	fmt.Printf("Stop:     %s\tvalid: %s\n", b.Format("Jan 2, 2006"), dateIsInDataRange(b))
 
@@ -45,7 +46,7 @@ func displaySimulationDetails(cfg *util.AppConfig) {
 		fmt.Printf("*** ERROR *** Start date is after Stop ")
 		os.Exit(2)
 	}
-	fmt.Printf("Duration: %s\n", util.DateDiffString(a, b))
+	fmt.Printf("Duration: %s\n", util.DateDiffString(a, c))
 	fmt.Printf("***********************************************************\n\n")
 }
 

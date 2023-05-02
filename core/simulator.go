@@ -46,12 +46,17 @@ func (s *Simulator) Run() {
 	dt := time.Time(s.cfg.DtStart)
 	dtStop := time.Time(s.cfg.DtStop)
 
+	//-------------------------------------------------------------------------
+	// Iterate day-by-day through the simulation.
+	//-------------------------------------------------------------------------
 	iteration := 0
 	for dtStop.After(dt) || dtStop.Equal(dt) {
 		iteration++
 		SellCount := 0
 		BuyCount := 0
+		//-----------------------------------------
 		// Call SellConversion for each investor
+		//-----------------------------------------
 		for j := 0; j < len(s.Investors); j++ {
 			x, sc, err := (&s.Investors[j]).SellConversion(dt)
 			if err != nil {

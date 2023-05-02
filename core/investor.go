@@ -137,21 +137,16 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 		if er3 == nil {
 			return BuyCount, fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found", inv.T3.Format("1/2/2006"))
 		}
-		inv.ERT3 = er3.Close            // exchange rate on T3
-		inv.BuyC2 = inv.T3C1 * inv.ERT3 // amount of C2 we purchased on T3
-		i.Investments = append(i.Investments, inv)
-		i.BalanceC1 -= inv.T3C1  // we spent this much C1...
-		i.BalanceC2 += inv.BuyC2 // to purchase this much more C2
+		inv.ERT3 = er3.Close                       // exchange rate on T3
+		inv.BuyC2 = inv.T3C1 * inv.ERT3            // amount of C2 we purchased on T3
+		i.Investments = append(i.Investments, inv) // add it to the list of investments
+		i.BalanceC1 -= inv.T3C1                    // we spent this much C1...
+		i.BalanceC2 += inv.BuyC2                   // to purchase this much more C2
 		// util.DPrintf("New $100 investment, exchange date: %s, total pending = %d, C1 Bal: %8.2f %s, C2 Bal: %8.2f %s\n",
-		// 	inv.T4.Format("1/2/2006"), len(i.Investments), i.BalanceC1, i.cfg.C1, i.BalanceC2, i.cfg.C2)
+		// 	            inv.T4.Format("1/2/2006"), len(i.Investments), i.BalanceC1, i.cfg.C1, i.BalanceC2, i.cfg.C2)
 	}
 	return BuyCount, nil
 }
-
-// func (i *Investor) SellConversion(t4 time.Time) error {
-// 	i.BalanceC1 += 5 // just a debug thing...
-// 	return nil
-// }
 
 // SellConversion scans the Investment table for any Investment that concludes on
 // the supplied t4.  When one is found, it converts C2 back to C1 and updates the
@@ -166,15 +161,32 @@ func (i *Investor) SellConversion(t4 time.Time) (Investor, int, error) {
 	// Look for investments to sell on t4
 	jlen := len(i.Investments)
 	for j := 0; j < jlen; j++ {
-		dtSell := time.Time(i.Investments[j].T4)  // date on which we bought C2
+		//-------------------------------
+		// Skip completed investments...
+		//-------------------------------
+		if i.Investments[j].Completed {
+			continue
+		}
+
+		//------------------------------------------------
+		// Check to see if the sell date has arrived...
+		//------------------------------------------------
+		dtSell := time.Time(i.Investments[j].T4)  // date on which we need to sell (convert) C2
 		if t4.Equal(dtSell) || t4.After(dtSell) { // if the sell date has arrived...
+
+			//-----------------------------------------------------------
+			// The time has arrived. Get the exchange rate for today...
+			//-----------------------------------------------------------
 			er4 := data.ERFindRecord(t4) // get the exchange rate on t4
 			if er4 == nil {
-				err = fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found", t4.Format("1/2/2006"))
+				err = fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found; Investment marked as completed", t4.Format("1/2/2006"))
+				fmt.Printf("%s\n", err.Error())
+				i.Investments[j].Completed = true
 				continue
 			}
 
 			// util.DPrintf("SellConversion -- BEFORE Txn:  C1 Balance: %8.2f %s,  C2 Balance: %8.2f %s\n", i.BalanceC1, i.cfg.C1, i.BalanceC2, i.cfg.C2)
+			// util.DPrintf("SellConversion -- Exchange Rate on %s :  %8.2f\n", t4.Format("Jan 2, 2006"), er4.Close)
 
 			i.Investments[j].ERT4 = er4.Close                                           // exchange rate on T4
 			i.Investments[j].SellC2 = i.Investments[j].BuyC2                            // sell exactly what we bought on the associated T3
@@ -186,11 +198,11 @@ func (i *Investor) SellConversion(t4 time.Time) (Investor, int, error) {
 			SellCount += 1
 
 			// util.DPrintf("SellConversion -- AFTER Txn: C1 Balance: %8.2f %s,  C2 Balance: %8.2f %s\n",
-			// 	i.BalanceC1, i.cfg.C1, i.BalanceC2, i.cfg.C2)
+			// 	            i.BalanceC1, i.cfg.C1, i.BalanceC2, i.cfg.C2)
 		}
 	}
 	// util.DPrintf("SellConversion -- @RETURN: C1 Balance: %8.2f %s,  C2 Balance: %8.2f %s\n",
-	// 	i.BalanceC1, i.cfg.C1, i.BalanceC2, i.cfg.C2)
+	// 	            i.BalanceC1, i.cfg.C1, i.BalanceC2, i.cfg.C2)
 	return (*i), SellCount, err
 }
 
