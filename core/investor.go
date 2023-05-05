@@ -69,6 +69,16 @@ func (i *Investor) Init(cfg *util.AppConfig) {
 	i.Influencers = append(i.Influencers, inf)
 }
 
+// ProfileString returns a string containing descriptions all its influencers
+// ----------------------------------------------------------------------------
+func (i *Investor) ProfileString() string {
+	s := ""
+	for j := 0; j < len(i.Influencers); j++ {
+		s += i.Influencers[j].ProfileString()
+	}
+	return s
+}
+
 // BuyConversion spins through all the influencers and asks for recommendations
 // on whether to buy or hold on T3. Then the Investor decides whether to buy
 // or hold.  If a "buy" is made, then an entry is added to the Investments
@@ -209,8 +219,8 @@ func (i *Investor) SellConversion(t4 time.Time) (Investor, int, error) {
 // OutputInvestments dumps the Investments table to a .csv file
 // named investments.csv
 // ------------------------------------------------------------------------------------
-func (i *Investor) OutputInvestments() error {
-	fname := fmt.Sprintf("Investments%03d.csv", i.OutputIdx)
+func (i *Investor) OutputInvestments(j int) error {
+	fname := fmt.Sprintf("Investments%03d.csv", j)
 	i.OutputIdx++
 	file, err := os.Create(fname)
 	if err != nil {

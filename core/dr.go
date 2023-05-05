@@ -2,6 +2,7 @@ package core
 
 import (
 	"fmt"
+	"math/rand"
 	"psim/data"
 	"psim/util"
 	"time"
@@ -76,10 +77,10 @@ func (p *DRInfluencer) SetID(x string) {
 // Init - initializes a DRInfluencer
 func (p *DRInfluencer) Init(cfg *util.AppConfig, delta4 int) {
 	p.cfg = cfg
-	p.Delta1 = -30
+	p.Delta1 = rand.Intn(30) - 30
 	p.Delta2 = -1
 	p.Delta4 = 3
-	fmt.Printf("*** NOTICE ***  Influencer: DR - T1, T2, and T4 are set to hardcoded test values\n")
+	// fmt.Printf("*** NOTICE ***  Influencer: DR - T1, T2, and T4 are set to hardcoded test values\n")
 	// p.Delta1 = util.RandomInRange(cfg.MinDelta1, cfg.MaxDelta1)
 	// p.Delta2 = util.RandomInRange(cfg.MinDelta2, cfg.MaxDelta2)
 	// p.Delta4 = delta4

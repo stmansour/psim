@@ -54,6 +54,7 @@ func (s *Simulator) Run() {
 		iteration++
 		SellCount := 0
 		BuyCount := 0
+
 		//-----------------------------------------
 		// Call SellConversion for each investor
 		//-----------------------------------------
@@ -65,9 +66,7 @@ func (s *Simulator) Run() {
 			SellCount += sc
 			// util.DPrintf("Simulator.Run -- SellConversion returned:C1 Bal: %8.2f %s, C2 Bal: %8.2f %s\n", x.BalanceC1, x.cfg.C1, x.BalanceC2, x.cfg.C2)
 			s.Investors[j] = x
-			// util.DPrintf("Simulator.Run -- AFTER SellConversion Investor[0] info: C1 Bal: %8.2f %s, C2 Bal: %8.2f %s\n",
-			// 	s.Investors[j].BalanceC1, s.Investors[j].cfg.C1,
-			// 	s.Investors[j].BalanceC2, s.Investors[j].cfg.C2)
+			// util.DPrintf("Simulator.Run -- AFTER SellConversion Investor[0] info: C1 Bal: %8.2f %s, C2 Bal: %8.2f %s\n",	s.Investors[j].BalanceC1, s.Investors[j].cfg.C1, s.Investors[j].BalanceC2, s.Investors[j].cfg.C2)
 		}
 
 		// Call BuyConversion for each investor
@@ -89,7 +88,7 @@ func (s *Simulator) Run() {
 			}
 		}
 
-		// debug --------------------------------------------------------
+		//============== DEBUG --------------------------------------------------------
 		if s.dayByDay {
 			count := 0
 			txns := 0
@@ -105,13 +104,13 @@ func (s *Simulator) Run() {
 			// 	s.Investors[0].BalanceC1, s.Investors[0].cfg.C1,
 			// 	s.Investors[0].BalanceC2, s.Investors[0].cfg.C2)
 		}
+		//============== DEBUG --------------------------------------------------------
 
 		if s.invTable {
 			for j := 0; j < len(s.Investors); j++ {
-				s.Investors[j].OutputInvestments()
+				s.Investors[j].OutputInvestments(j)
 			}
 		}
-		// debug --------------------------------------------------------
 
 		dt = dt.AddDate(0, 0, 1)
 	}
@@ -140,15 +139,30 @@ func (s *Simulator) ShowTopInvestor() error {
 	if err := s.Investors[topInvestorIdx].InvestorProfile(); err != nil {
 		return err
 	}
-	return s.Investors[topInvestorIdx].OutputInvestments()
+	return s.Investors[topInvestorIdx].OutputInvestments(topInvestorIdx)
 }
 
+// ResultsByInvestor - dumps results of each investor
+//
+// RETURNS
+//
+//	nothing at this time
+//
+// ----------------------------------------------------------------------------
 func (s *Simulator) ResultsByInvestor() {
 	for i := 0; i < len(s.Investors); i++ {
-		fmt.Printf("%s\n", s.ResultsForInvestor(i, &s.Investors[i]))
+		fmt.Printf("Investor %3d: %s\n", i, s.Investors[i].ProfileString())
+		fmt.Printf("              %s\n", s.ResultsForInvestor(i, &s.Investors[i]))
 	}
 }
 
+// ResultsForInvestor - dumps results of investor [i]
+//
+// RETURNS
+//
+//	nothing at this time
+//
+// ----------------------------------------------------------------------------
 func (s *Simulator) ResultsForInvestor(i int, v *Investor) string {
 	c1Amt := float64(0)
 	dt := time.Time(s.cfg.DtStop)
@@ -183,7 +197,6 @@ func (s *Simulator) ResultsForInvestor(i int, v *Investor) string {
 	endingC1Balance := c1Amt + v.BalanceC1
 	netGain := endingC1Balance - s.cfg.InitFunds
 	pctGain := netGain / s.cfg.InitFunds
-	str += fmt.Sprintf("                Initial Balance: %8.2f,   Ending Balance: %8.2f,    Net Gain:  %8.2f   (%3.1f%%)\n",
-		s.cfg.InitFunds, endingC1Balance, netGain, pctGain)
+	str += fmt.Sprintf("                Net Gain:  %8.2f   (%3.1f%%)\n", netGain, pctGain)
 	return str
 }
