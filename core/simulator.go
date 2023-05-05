@@ -24,8 +24,10 @@ func (s *Simulator) Init(cfg *util.AppConfig, dayByDay, invTable bool) error {
 	//------------------------------------------------------------------------
 	// Create an initial population of investors with just 1 investor for now
 	//------------------------------------------------------------------------
-	var i Investor
-	s.Investors = append(s.Investors, i)
+	for i := 0; i < 2; i++ {
+		var v Investor
+		s.Investors = append(s.Investors, v)
+	}
 
 	//------------------------------------------------------------------------
 	// Initialize all Investors...
@@ -59,14 +61,11 @@ func (s *Simulator) Run() {
 		// Call SellConversion for each investor
 		//-----------------------------------------
 		for j := 0; j < len(s.Investors); j++ {
-			x, sc, err := (&s.Investors[j]).SellConversion(dt)
+			sc, err := (&s.Investors[j]).SellConversion(dt)
 			if err != nil {
 				fmt.Printf("SellConversion returned: %s\n", err.Error())
 			}
 			SellCount += sc
-			// util.DPrintf("Simulator.Run -- SellConversion returned:C1 Bal: %8.2f %s, C2 Bal: %8.2f %s\n", x.BalanceC1, x.cfg.C1, x.BalanceC2, x.cfg.C2)
-			s.Investors[j] = x
-			// util.DPrintf("Simulator.Run -- AFTER SellConversion Investor[0] info: C1 Bal: %8.2f %s, C2 Bal: %8.2f %s\n",	s.Investors[j].BalanceC1, s.Investors[j].cfg.C1, s.Investors[j].BalanceC2, s.Investors[j].cfg.C2)
 		}
 
 		// Call BuyConversion for each investor
@@ -100,17 +99,8 @@ func (s *Simulator) Run() {
 			}
 			fmt.Printf("%4d. Date: %s, Buys: %d, Sells %d,\n      investors remaining: %d, investments pending: %d\n",
 				iteration, dt.Format("2006-Jan-02"), BuyCount, SellCount, count, txns)
-			// util.DPrintf("Simulator.Run -- Investor[0] info: C1 Bal: %8.2f %s, C2 Bal: %8.2f %s\n",
-			// 	s.Investors[0].BalanceC1, s.Investors[0].cfg.C1,
-			// 	s.Investors[0].BalanceC2, s.Investors[0].cfg.C2)
 		}
 		//============== DEBUG --------------------------------------------------------
-
-		if s.invTable {
-			for j := 0; j < len(s.Investors); j++ {
-				s.Investors[j].OutputInvestments(j)
-			}
-		}
 
 		dt = dt.AddDate(0, 0, 1)
 	}
@@ -153,17 +143,23 @@ func (s *Simulator) ResultsByInvestor() {
 	for i := 0; i < len(s.Investors); i++ {
 		fmt.Printf("Investor %3d: %s\n", i, s.Investors[i].ProfileString())
 		fmt.Printf("              %s\n", s.ResultsForInvestor(i, &s.Investors[i]))
+		s.Investors[i].OutputInvestments(i)
 	}
 }
 
 // ResultsForInvestor - dumps results of investor [i]
+//
+// INPUTS
+//
+//	n =      The index of this investor in the list
+//	inv =    Pointer to the investor
 //
 // RETURNS
 //
 //	nothing at this time
 //
 // ----------------------------------------------------------------------------
-func (s *Simulator) ResultsForInvestor(i int, v *Investor) string {
+func (s *Simulator) ResultsForInvestor(n int, v *Investor) string {
 	c1Amt := float64(0)
 	dt := time.Time(s.cfg.DtStop)
 	pending := len(v.Investments)
@@ -177,7 +173,7 @@ func (s *Simulator) ResultsForInvestor(i int, v *Investor) string {
 			amt += v.Investments[j].BuyC2
 		}
 	}
-	str := fmt.Sprintf("Investor %3d.   C1: %8.2f,  C2 %8.2f\n", i, v.BalanceC1, v.BalanceC2)
+	str := fmt.Sprintf("Investor %3d.   C1: %8.2f,  C2 %8.2f\n", n, v.BalanceC1, v.BalanceC2)
 
 	//-------------------------------------------------------------------------
 	// Convert amt to C1 currency on the day of the simulation end...
@@ -192,11 +188,23 @@ func (s *Simulator) ResultsForInvestor(i int, v *Investor) string {
 		c1Amt = amt / er4.Close
 		str += fmt.Sprintf("                Pending Investments: %d, value: %8.2f %s  =  %8.2f %s\n", pending, amt, s.cfg.C2, c1Amt, s.cfg.C1)
 	}
-	str += fmt.Sprintf("                Initial Stake: %8.2f %s,  End Balance: %8.2f\n", s.cfg.InitFunds, s.cfg.C1, v.BalanceC1+c1Amt)
+	str += fmt.Sprintf("                Initial Stake: %8.2f %s,  End Balance: %8.2f %s\n", s.cfg.InitFunds, s.cfg.C1, v.BalanceC1+c1Amt, s.cfg.C1)
 
 	endingC1Balance := c1Amt + v.BalanceC1
 	netGain := endingC1Balance - s.cfg.InitFunds
 	pctGain := netGain / s.cfg.InitFunds
-	str += fmt.Sprintf("                Net Gain:  %8.2f   (%3.1f%%)\n", netGain, pctGain)
+	str += fmt.Sprintf("                Net Gain:  %8.2f %s  (%3.3f%%)\n", netGain, s.cfg.C1, pctGain)
+
+	//-------------------------------------------------------------------------
+	// When this investor made a buy prediction, how often was it correct...
+	//-------------------------------------------------------------------------
+	m := 0 // number of times the prediction was "correct" (resulted in a profit)
+	for i := 0; i < len(v.Investments); i++ {
+		if v.Investments[i].Profitable {
+			m++
+		}
+	}
+	str += fmt.Sprintf("                Prediction Accuracy:  %d / %d  = %3.3f%%\n", m, len(v.Investments), (float64(m*100) / float64(len(v.Investments))))
+
 	return str
 }

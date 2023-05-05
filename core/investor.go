@@ -18,7 +18,6 @@ type Investor struct {
 	Delta4      int // t4 = t3 + Delta4 - must be the same Delta4 for all influencers in this investor
 	Investments []Investment
 	Influencers []Influencer
-	OutputIdx   int
 }
 
 // Recommendation holds the recommendations from Influencers. Based on a list
@@ -39,17 +38,18 @@ type Recommendation struct {
 // to a CSV file for analysis.
 // ----------------------------------------------------------------------------
 type Investment struct {
-	id        string    // investment id
-	T3        time.Time // date on which purchase of C2 was made
-	T4        time.Time // date on which C2 will be exchanged for C1
-	T3C1      float64   // amount of C2 to purchase at T3
-	BuyC2     float64   // the amount of currency in C2 that C1 purchased on T3
-	SellC2    float64   // for now, this is always going to be the same as BuyC2
-	ERT3      float64   // the exchange rate on T3
-	ERT4      float64   // the exchange rate on T4
-	ResultC1  float64   // amount of currency C1 we were able to purchase with C2 on T4 at exchange rate ERT4
-	Delta4    int       // t4 = t3 + Delta4 - "sell" date
-	Completed bool      // true when the investmnet has been exchanged C2 for C1
+	id         string    // investment id
+	T3         time.Time // date on which purchase of C2 was made
+	T4         time.Time // date on which C2 will be exchanged for C1
+	T3C1       float64   // amount of C2 to purchase at T3
+	BuyC2      float64   // the amount of currency in C2 that C1 purchased on T3
+	SellC2     float64   // for now, this is always going to be the same as BuyC2
+	ERT3       float64   // the exchange rate on T3
+	ERT4       float64   // the exchange rate on T4
+	T4C1       float64   // amount of currency C1 we were able to purchase with C2 on T4 at exchange rate ERT4
+	Delta4     int       // t4 = t3 + Delta4 - "sell" date
+	Completed  bool      // true when the investmnet has been exchanged C2 for C1
+	Profitable bool      // was this a profitable investment?
 }
 
 // Init is called during Generation 1 to get things started.  All settable
@@ -152,8 +152,6 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 		i.Investments = append(i.Investments, inv) // add it to the list of investments
 		i.BalanceC1 -= inv.T3C1                    // we spent this much C1...
 		i.BalanceC2 += inv.BuyC2                   // to purchase this much more C2
-		// util.DPrintf("New $100 investment, exchange date: %s, total pending = %d, C1 Bal: %8.2f %s, C2 Bal: %8.2f %s\n",
-		// 	            inv.T4.Format("1/2/2006"), len(i.Investments), i.BalanceC1, i.cfg.C1, i.BalanceC2, i.cfg.C2)
 	}
 	return BuyCount, nil
 }
@@ -162,8 +160,15 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 // the supplied t4.  When one is found, it converts C2 back to C1 and updates the
 // Investments table withe the results of the conversion. Balances of C1 and C2
 // are made after the conversion is completed.
+//
+// RETURNS:
+//
+//	The Investor
+//	Number of investments sold
+//	any error encountered, or nil if no errors were found
+//
 // ----------------------------------------------------------------------------------
-func (i *Investor) SellConversion(t4 time.Time) (Investor, int, error) {
+func (i *Investor) SellConversion(t4 time.Time) (int, error) {
 	var err error
 	SellCount := 0
 	err = nil
@@ -183,7 +188,6 @@ func (i *Investor) SellConversion(t4 time.Time) (Investor, int, error) {
 		//------------------------------------------------
 		dtSell := time.Time(i.Investments[j].T4)  // date on which we need to sell (convert) C2
 		if t4.Equal(dtSell) || t4.After(dtSell) { // if the sell date has arrived...
-
 			//-----------------------------------------------------------
 			// The time has arrived. Get the exchange rate for today...
 			//-----------------------------------------------------------
@@ -195,33 +199,37 @@ func (i *Investor) SellConversion(t4 time.Time) (Investor, int, error) {
 				continue
 			}
 
-			// util.DPrintf("SellConversion -- BEFORE Txn:  C1 Balance: %8.2f %s,  C2 Balance: %8.2f %s\n", i.BalanceC1, i.cfg.C1, i.BalanceC2, i.cfg.C2)
-			// util.DPrintf("SellConversion -- Exchange Rate on %s :  %8.2f\n", t4.Format("Jan 2, 2006"), er4.Close)
-
+			//-----------------------------------------------------------
+			// Document this specific investment...
+			//-----------------------------------------------------------
 			i.Investments[j].ERT4 = er4.Close                                           // exchange rate on T4
 			i.Investments[j].SellC2 = i.Investments[j].BuyC2                            // sell exactly what we bought on the associated T3
-			i.Investments[j].ResultC1 = i.Investments[j].SellC2 / i.Investments[j].ERT4 // amount of C1 we got back by selling SellC2 on T4 at the exchange rate on T4
+			i.Investments[j].T4C1 = i.Investments[j].SellC2 / i.Investments[j].ERT4     // amount of C1 we got back by selling SellC2 on T4 at the exchange rate on T4
+			i.Investments[j].Profitable = i.Investments[j].T4C1 > i.Investments[j].T3C1 // did we make money on this trade?
+			i.Investments[j].Completed = true                                           // this investment is now completed
 
-			i.BalanceC1 += i.Investments[j].ResultC1 // we recovered this much C1...
-			i.BalanceC2 -= i.Investments[j].SellC2   // by selling this C2
-			i.Investments[j].Completed = true
+			//-------------------------------------------------------------
+			// Update Investor's totals having concluded the investment...
+			//-------------------------------------------------------------
+			i.BalanceC1 += i.Investments[j].T4C1   // we recovered this much C1...
+			i.BalanceC2 -= i.Investments[j].SellC2 // by selling this C2
+
 			SellCount += 1
-
-			// util.DPrintf("SellConversion -- AFTER Txn: C1 Balance: %8.2f %s,  C2 Balance: %8.2f %s\n",
-			// 	            i.BalanceC1, i.cfg.C1, i.BalanceC2, i.cfg.C2)
 		}
 	}
-	// util.DPrintf("SellConversion -- @RETURN: C1 Balance: %8.2f %s,  C2 Balance: %8.2f %s\n",
-	// 	            i.BalanceC1, i.cfg.C1, i.BalanceC2, i.cfg.C2)
-	return (*i), SellCount, err
+	return SellCount, err
 }
 
 // OutputInvestments dumps the Investments table to a .csv file
 // named investments.csv
+//
+// RETURNS
+//
+//	any error encountered or nil if no error
+//
 // ------------------------------------------------------------------------------------
 func (i *Investor) OutputInvestments(j int) error {
 	fname := fmt.Sprintf("Investments%03d.csv", j)
-	i.OutputIdx++
 	file, err := os.Create(fname)
 	if err != nil {
 		return err
@@ -229,12 +237,12 @@ func (i *Investor) OutputInvestments(j int) error {
 	defer file.Close()
 
 	// write header row
-	fmt.Fprintf(file, "id,T3,T4,T3C1,ERT3,BuyC2,SellC2,ERT4,ResultC1,Completed\n")
+	fmt.Fprintf(file, "id,T3,T4,T3C1,ERT3,BuyC2,SellC2,ERT4,T4C1,Completed,Profitable\n")
 
 	// write investment rows
 	for _, inv := range i.Investments {
-		//                  1  2  3      4     5      6      7     8      9 10
-		fmt.Fprintf(file, "%s,%s,%s,%10.2f,%6.2f,%10.2f,%10.2f,%6.2f,%10.2f,%v\n",
+		//                  1  2  3      4     5      6      7     8      9 10 11
+		fmt.Fprintf(file, "%s,%s,%s,%10.2f,%6.2f,%10.2f,%10.2f,%6.2f,%10.2f,%v,%v\n",
 			inv.id,                      //1 s
 			inv.T3.Format("01/02/2006"), //2 s
 			inv.T4.Format("01/02/2006"), //3 s
@@ -243,14 +251,20 @@ func (i *Investor) OutputInvestments(j int) error {
 			inv.BuyC2,                   //6 f
 			inv.SellC2,                  //7 f
 			inv.ERT4,                    //8 f
-			inv.ResultC1,                //9 f
-			inv.Completed)               //10 b
+			inv.T4C1,                    //9 f
+			inv.Completed,               //10 b
+			inv.Profitable)              //11 b
 	}
 	return nil
 }
 
 // InvestorProfile outputs information about this investor and its influencers
 // to a file named "investorProfile.txt"
+//
+// RETURNS
+//
+//	any error encountered or nil if no error
+//
 // ------------------------------------------------------------------------------------
 func (i *Investor) InvestorProfile() error {
 	file, err := os.Create("investorProfile.txt")
@@ -273,6 +287,8 @@ func (i *Investor) InvestorProfile() error {
 	return nil
 }
 
+// ToString simply returns a printable version of the Investment struct as a string.
+// ------------------------------------------------------------------------------------
 func (i *Investment) ToString() string {
 	s := fmt.Sprintf("    id		= %s\n", i.id)
 	s += fmt.Sprintf("    T3		= %s\n", i.T3)
@@ -282,7 +298,7 @@ func (i *Investment) ToString() string {
 	s += fmt.Sprintf("    SellC2	= %8.2f\n", i.SellC2)
 	s += fmt.Sprintf("    ERT3		= %8.2f\n", i.ERT3)
 	s += fmt.Sprintf("    ERT4		= %8.2f\n", i.ERT4)
-	s += fmt.Sprintf("    ResultC1	= %8.2f\n", i.ResultC1)
+	s += fmt.Sprintf("    T4C1	= %8.2f\n", i.T4C1)
 	s += fmt.Sprintf("    Delta4	= %d\n", i.Delta4)
 	return s
 }

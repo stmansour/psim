@@ -8,13 +8,6 @@ import (
 	"time"
 )
 
-// DiscountRate is the DR Influencer
-// type DiscountRate struct {
-// 	T1 time.Time
-// 	T2 time.Time
-// 	T4 time.Time
-// }
-
 // DRInfluencer is the Influencer that predicts based on DiscountRate
 type DRInfluencer struct {
 	cfg    *util.AppConfig
@@ -77,13 +70,12 @@ func (p *DRInfluencer) SetID(x string) {
 // Init - initializes a DRInfluencer
 func (p *DRInfluencer) Init(cfg *util.AppConfig, delta4 int) {
 	p.cfg = cfg
-	p.Delta1 = rand.Intn(30) - 30
-	p.Delta2 = -1
-	p.Delta4 = 3
-	// fmt.Printf("*** NOTICE ***  Influencer: DR - T1, T2, and T4 are set to hardcoded test values\n")
-	// p.Delta1 = util.RandomInRange(cfg.MinDelta1, cfg.MaxDelta1)
-	// p.Delta2 = util.RandomInRange(cfg.MinDelta2, cfg.MaxDelta2)
-	// p.Delta4 = delta4
+	p.Delta1 = rand.Intn(30) - 30 // -30 to -1
+	for found := false; !found; {
+		p.Delta2 = -1 - rand.Intn(6)
+		found = p.Delta2 > p.Delta1 // make sure that T1 occurs prior to T2
+	}
+	p.Delta4 = 1 + rand.Intn(14)
 	p.ID = fmt.Sprintf("DRInfluencer|%d|%d|%d|%s", p.Delta1, p.Delta2, p.Delta4, util.GenerateRefNo())
 }
 
@@ -132,8 +124,6 @@ func (p *DRInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
 	prediction := "hold"
 	if dDRR > 0 {
 		prediction = "buy"
-		// util.DPrintf("dt1 = %s, dt2 = %s, ratio1 = %6.3f, ratio2 = %6.3f, dDRR = %6.3f, prediction: %s\n",
-		// 	t1.Format("1/2/2006"), t2.Format("1/2/2006"), rec1.USJPDRRatio, rec2.USJPDRRatio, dDRR, prediction)
 	}
 
 	// todo - return proper probability
