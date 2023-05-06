@@ -35,23 +35,24 @@ func dateIsInDataRange(a time.Time) string {
 }
 
 func displaySimulationDetails(cfg *util.AppConfig) {
-	fmt.Printf("**********  S I M U L A T I O N   D E T A I L S  **********\n")
+	fmt.Printf("**************  S I M U L A T I O N   D E T A I L S  **************\n")
 	a := time.Time(cfg.DtStart)
 	b := time.Time(cfg.DtStop)
 	c := b.AddDate(0, 0, 1)
-	fmt.Printf("Start:    %s\tvalid: %s\n", a.Format("Jan 2, 2006"), dateIsInDataRange(a))
-	fmt.Printf("Stop:     %s\tvalid: %s\n", b.Format("Jan 2, 2006"), dateIsInDataRange(b))
+	fmt.Printf("Start:           %s\tvalid: %s\n", a.Format("Jan 2, 2006"), dateIsInDataRange(a))
+	fmt.Printf("Stop:            %s\tvalid: %s\n", b.Format("Jan 2, 2006"), dateIsInDataRange(b))
 
 	if a.After(b) {
 		fmt.Printf("*** ERROR *** Start date is after Stop ")
 		os.Exit(2)
 	}
-	fmt.Printf("Duration: %s\n", util.DateDiffString(a, c))
-	fmt.Printf("***********************************************************\n\n")
+	fmt.Printf("Duration:        %s\n", util.DateDiffString(a, c))
+	fmt.Printf("Population Size: %d\n", cfg.PopulationSize)
+	fmt.Printf("*******************************************************************\n\n")
 }
 
 func displaySimulationResults(cfg *util.AppConfig) {
-	fmt.Printf("\n**********  S I M U L A T I O N   R E S U L T S  **********\n")
+	fmt.Printf("\n**************  S I M U L A T I O N   R E S U L T S  **************\n")
 	(&app.sim).ResultsByInvestor()
 
 }

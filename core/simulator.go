@@ -20,11 +20,13 @@ type Simulator struct {
 // ----------------------------------------------------------------------------
 func (s *Simulator) Init(cfg *util.AppConfig, dayByDay, invTable bool) error {
 	s.cfg = cfg
+	s.dayByDay = dayByDay
+	s.invTable = invTable
 
 	//------------------------------------------------------------------------
 	// Create an initial population of investors with just 1 investor for now
 	//------------------------------------------------------------------------
-	for i := 0; i < 2; i++ {
+	for i := 0; i < s.cfg.PopulationSize; i++ {
 		var v Investor
 		s.Investors = append(s.Investors, v)
 	}
@@ -90,15 +92,19 @@ func (s *Simulator) Run() {
 		//============== DEBUG --------------------------------------------------------
 		if s.dayByDay {
 			count := 0
-			txns := 0
+			invPending := 0
 			for j := 0; j < len(s.Investors); j++ {
 				if s.Investors[j].BalanceC1 > 0 {
 					count++
 				}
-				txns += len(s.Investors[j].Investments)
+				for k := 0; k < len(s.Investors[j].Investments); k++ {
+					if !s.Investors[j].Investments[k].Completed {
+						invPending++
+					}
+				}
 			}
 			fmt.Printf("%4d. Date: %s, Buys: %d, Sells %d,\n      investors remaining: %d, investments pending: %d\n",
-				iteration, dt.Format("2006-Jan-02"), BuyCount, SellCount, count, txns)
+				iteration, dt.Format("2006-Jan-02"), BuyCount, SellCount, count, invPending)
 		}
 		//============== DEBUG --------------------------------------------------------
 
@@ -140,10 +146,15 @@ func (s *Simulator) ShowTopInvestor() error {
 //
 // ----------------------------------------------------------------------------
 func (s *Simulator) ResultsByInvestor() {
+	var err error
 	for i := 0; i < len(s.Investors); i++ {
 		fmt.Printf("Investor %3d: %s\n", i, s.Investors[i].ProfileString())
 		fmt.Printf("              %s\n", s.ResultsForInvestor(i, &s.Investors[i]))
-		s.Investors[i].OutputInvestments(i)
+		if s.invTable {
+			if err = s.Investors[i].OutputInvestments(i); err != nil {
+				fmt.Printf("*** ERROR *** outputting investments for Investor[%d]: %s\n", i, err.Error())
+			}
+		}
 	}
 }
 

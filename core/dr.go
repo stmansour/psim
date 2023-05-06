@@ -10,16 +10,41 @@ import (
 
 // DRInfluencer is the Influencer that predicts based on DiscountRate
 type DRInfluencer struct {
-	cfg    *util.AppConfig
-	Delta1 int
-	Delta2 int
-	Delta4 int
-	ID     string
+	cfg           *util.AppConfig
+	Delta1        int
+	Delta2        int
+	Delta4        int
+	ID            string
+	MyPredictions []Prediction
 }
 
-// GetAppConfig - get cfg
+// AppendPrediction - add a new buy prediction
 func (p *DRInfluencer) GetAppConfig() *util.AppConfig {
 	return p.cfg
+}
+
+// AppendPrediction - append a new prediction to the list of buy predictions
+func (p *DRInfluencer) AppendPrediction(pr Prediction) {
+	p.MyPredictions = append(p.MyPredictions, pr)
+}
+
+// FinalizPrediction - finalize the results of this prediction
+func (p *DRInfluencer) FinalizePrediction(t3, t4 time.Time, profitable bool) {
+	for i := 0; i < len(p.MyPredictions); i++ {
+		if p.MyPredictions[i].Completed {
+			continue
+		}
+		if t3.Equal(p.MyPredictions[i].T3) && t4.Equal(p.MyPredictions[i].T4) {
+			p.MyPredictions[i].Correct = profitable
+			p.MyPredictions[i].Completed = true
+			return
+		}
+	}
+}
+
+// GetID - get ID string
+func (p *DRInfluencer) GetID() string {
+	return p.ID
 }
 
 // SetAppConfig - set cfg
@@ -55,11 +80,6 @@ func (p *DRInfluencer) GetDelta4() int {
 // SetDelta4 - set Delta4
 func (p *DRInfluencer) SetDelta4(x int) {
 	p.Delta4 = x
-}
-
-// GetID - get ID
-func (p *DRInfluencer) GetID() string {
-	return p.ID
 }
 
 // SetID - set ID
@@ -128,4 +148,48 @@ func (p *DRInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
 
 	// todo - return proper probability
 	return prediction, 0.5, nil
+}
+
+// FitnessScore - Discount Rate Fitness Score.
+//
+//		   The purpose of a fitness score in a genetic algorithm is to evaluate how well
+//		   a potential solution, represented by an individual in the population, solves
+//		   the problem at hand. The fitness score is used to guide the selection, crossover,
+//		   and mutation operations of the algorithm, as individuals with higher fitness
+//		   scores are more likely to be selected for reproduction and to contribute to the
+//		   next generation.
+//
+//		   I'm thinking that the Fitness Score for an Influencer should be based on
+//		   (a) the percentage of time its "buy" predictions are "correct" and penalized
+//	    for the incorrect predictions, and (b) the total number of predictions it made
+//	    For example, let's consider 2 DiscountRate
+//		   Influencers, let's call them DR-A and DR-B. Suppose that DR-A makes 100 "buy"
+//		   predictions during the course of a simulation, and 80% of its predictions turn
+//		   out to be correct.  During the same simulation, DR-B makes only 2 "buy"
+//		   predictions, and both of them turn out to be correct.  In this case, I would
+//		   say that 80 out of 100 predictions correct is a
+//		   little more reliable than 2 out of 2.  I would have more confidence in DR-A than
+//		   DR-B.  It is true that DR-B got 100% correct results, but it only made 2
+//		   predictions... it doesn't feel like there's enough history to know if it
+//		   just got lucky or if it really knows better.
+//
+//		   So, I think the form of the Fitness Score for an Influencer is:
+//
+//				cp = correct "buy" predictions
+//				tp = total "buy" predictions
+//		        ic = incorrect "buy" predictions = tp - cp
+//
+//		        fitness = (cp/tp) * (cp - ic)
+//		                  (cp/tp) * (cp - (tp-cp))
+//				          (cp/tp) * (2cp - tp)
+//
+// RETURNS
+//
+//	any error encountered or nil if no error
+//
+// ------------------------------------------------------------------------------------
+func (p *DRInfluencer) FitnessScore(cp, tp int) float64 {
+	c := float64(cp)
+	t := float64(tp)
+	return (c / t) * (2*c - t)
 }

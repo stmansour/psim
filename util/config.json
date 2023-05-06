@@ -1,7 +1,7 @@
 {
     "DtStart": "2022-01-01",
     "DtStop": "2022-12-31",
-    "PopulationSize": 1,
+    "PopulationSize": 10,
     "C1": "USD",
     "C2": "YEN",
     "ER": "USDJPY",

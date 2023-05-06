@@ -9,7 +9,8 @@ import (
 	"time"
 )
 
-// Investor is the class definition
+// Investor is the class that manages one or more influencers to pursue an
+// investment strategy in currency exchange.
 // =---------------------------------------------------------------------------
 type Investor struct {
 	cfg         *util.AppConfig // program wide configuration values
@@ -18,16 +19,6 @@ type Investor struct {
 	Delta4      int // t4 = t3 + Delta4 - must be the same Delta4 for all influencers in this investor
 	Investments []Investment
 	Influencers []Influencer
-}
-
-// Recommendation holds the recommendations from Influencers. Based on a list
-// of these recommendations, the Investor will decide whether to "buy" or
-// "hold".
-// ----------------------------------------------------------------------------
-type Recommendation struct {
-	Action      string
-	Probability float64
-	IType       string
 }
 
 // Investment describes a full transaction when the Investor decides to buy.
@@ -85,24 +76,30 @@ func (i *Investor) ProfileString() string {
 // list so that it can be completed when T4 arrives.  Currency C2 is purchased
 // using C1.  If there are no remaining funds, the function returns immediately.
 // Balances of C1 and C2 are adjusted whenever a conversion is done.
-// ----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
+	T4 := T3.AddDate(0, 0, i.Delta4) // here if we need it
 	BuyCount := 0
 	if i.BalanceC1 <= 0.0 {
 		return BuyCount, nil // we cannot do anything else, we have no C1 left
 	}
 
-	var recs []Recommendation
-	for _, influencer := range i.Influencers {
+	var recs []Prediction
+	for j := 0; j < len(i.Influencers); j++ {
+		influencer := i.Influencers[j]
 		prediction, probability, err := influencer.GetPrediction(T3)
 		if err != nil {
 			return BuyCount, err
 		}
 		recs = append(recs,
-			Recommendation{
+			Prediction{
+				T3:          T3,
+				T4:          T4,
 				Action:      prediction,
 				Probability: probability,
 				IType:       reflect.TypeOf(influencer).String(),
+				ID:          influencer.GetID(),
+				Correct:     false, // don't know yet
 			})
 	}
 
@@ -112,7 +109,7 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 	//        strategy, which is probably not a good approach.
 	//------------------------------------------------------------------------------
 	if len(recs) < 1 {
-		return BuyCount, fmt.Errorf("No recommendations found")
+		return BuyCount, fmt.Errorf("No predictions found")
 	}
 	buyVotes := 0
 	holdVotes := 0
@@ -142,7 +139,7 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 			inv.T3C1 = i.BalanceC1
 		}
 		inv.T3 = T3
-		inv.T4 = T3.AddDate(0, 0, i.Delta4) // we sell in Delta4 days
+		inv.T4 = T4 // we sell in Delta4 days
 		er3 := data.ERFindRecord(inv.T3)
 		if er3 == nil {
 			return BuyCount, fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found", inv.T3.Format("1/2/2006"))
@@ -152,6 +149,13 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 		i.Investments = append(i.Investments, inv) // add it to the list of investments
 		i.BalanceC1 -= inv.T3C1                    // we spent this much C1...
 		i.BalanceC2 += inv.BuyC2                   // to purchase this much more C2
+
+		//-----------------------------------------------------------
+		// we need to update each of the Influencers predictions...
+		//-----------------------------------------------------------
+		for j := 0; j < len(i.Influencers); j++ {
+			i.Influencers[j].AppendPrediction(recs[j])
+		}
 	}
 	return BuyCount, nil
 }
@@ -213,6 +217,13 @@ func (i *Investor) SellConversion(t4 time.Time) (int, error) {
 			//-------------------------------------------------------------
 			i.BalanceC1 += i.Investments[j].T4C1   // we recovered this much C1...
 			i.BalanceC2 -= i.Investments[j].SellC2 // by selling this C2
+
+			//-------------------------------------------------------------
+			// Update each Influencer's predictions...
+			//-------------------------------------------------------------
+			for k := 0; k < len(i.Influencers); k++ {
+				i.Influencers[k].FinalizePrediction(i.Investments[j].T3, t4, i.Investments[j].Profitable)
+			}
 
 			SellCount += 1
 		}
@@ -301,4 +312,10 @@ func (i *Investment) ToString() string {
 	s += fmt.Sprintf("    T4C1	= %8.2f\n", i.T4C1)
 	s += fmt.Sprintf("    Delta4	= %d\n", i.Delta4)
 	return s
+}
+
+// FitnessScore
+// ------------------------------------------------------------------------------------
+func (i *Investment) FitnessScore() {
+	//
 }
