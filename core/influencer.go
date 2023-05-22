@@ -30,7 +30,9 @@ type Influencer interface {
 	Init(cfg *util.AppConfig, delta4 int)
 	GetID() string
 	GetPrediction(t3 time.Time) (string, float64, error)
-	ProfileString() string
+	DNA() string
 	AppendPrediction(pr Prediction)
 	FinalizePrediction(t3, t4 time.Time, profitable bool)
+	FitnessScore() float64
+	Subclass() string
 }

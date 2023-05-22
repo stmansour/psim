@@ -110,6 +110,10 @@ func (s *Simulator) Run() {
 
 		dt = dt.AddDate(0, 0, 1)
 	}
+
+	// now that the simulation is complete... compute the numbers that will
+	// be needed for Fitness Score calculations...
+	//----------------------------------------------------------------------
 }
 
 // ShowTopInvestor - dumps the top investor to a file after the simulation.
@@ -145,11 +149,22 @@ func (s *Simulator) ShowTopInvestor() error {
 //	nothing at this time
 //
 // ----------------------------------------------------------------------------
+func (s *Simulator) CalculateFitness() {
+
+}
+
+// ResultsByInvestor - dumps results of each investor
+//
+// RETURNS
+//
+//	nothing at this time
+//
+// ----------------------------------------------------------------------------
 func (s *Simulator) ResultsByInvestor() {
 	var err error
 	for i := 0; i < len(s.Investors); i++ {
-		fmt.Printf("Investor %3d: %s\n", i, s.Investors[i].ProfileString())
-		fmt.Printf("              %s\n", s.ResultsForInvestor(i, &s.Investors[i]))
+		fmt.Printf("Investor %3d: %s\n", i, s.Investors[i].DNA())
+		fmt.Printf("%s\n", s.ResultsForInvestor(i, &s.Investors[i]))
 		if s.invTable {
 			if err = s.Investors[i].OutputInvestments(i); err != nil {
 				fmt.Printf("*** ERROR *** outputting investments for Investor[%d]: %s\n", i, err.Error())
@@ -184,7 +199,8 @@ func (s *Simulator) ResultsForInvestor(n int, v *Investor) string {
 			amt += v.Investments[j].BuyC2
 		}
 	}
-	str := fmt.Sprintf("Investor %3d.   C1: %8.2f,  C2 %8.2f\n", n, v.BalanceC1, v.BalanceC2)
+
+	str := ""
 
 	//-------------------------------------------------------------------------
 	// Convert amt to C1 currency on the day of the simulation end...
@@ -197,14 +213,14 @@ func (s *Simulator) ResultsForInvestor(n int, v *Investor) string {
 			return err.Error()
 		}
 		c1Amt = amt / er4.Close
-		str += fmt.Sprintf("                Pending Investments: %d, value: %8.2f %s  =  %8.2f %s\n", pending, amt, s.cfg.C2, c1Amt, s.cfg.C1)
+		str += fmt.Sprintf("Pending Investments: %d, value: %8.2f %s  =  %8.2f %s\n", pending, amt, s.cfg.C2, c1Amt, s.cfg.C1)
 	}
-	str += fmt.Sprintf("                Initial Stake: %8.2f %s,  End Balance: %8.2f %s\n", s.cfg.InitFunds, s.cfg.C1, v.BalanceC1+c1Amt, s.cfg.C1)
+	str += fmt.Sprintf("\t\tInitial Stake: %8.2f %s,  End Balance: %8.2f %s\n", s.cfg.InitFunds, s.cfg.C1, v.BalanceC1+c1Amt, s.cfg.C1)
 
 	endingC1Balance := c1Amt + v.BalanceC1
 	netGain := endingC1Balance - s.cfg.InitFunds
 	pctGain := netGain / s.cfg.InitFunds
-	str += fmt.Sprintf("                Net Gain:  %8.2f %s  (%3.3f%%)\n", netGain, s.cfg.C1, pctGain)
+	str += fmt.Sprintf("\t\tNet Gain:  %8.2f %s  (%3.3f%%)\n", netGain, s.cfg.C1, pctGain)
 
 	//-------------------------------------------------------------------------
 	// When this investor made a buy prediction, how often was it correct...
@@ -215,7 +231,13 @@ func (s *Simulator) ResultsForInvestor(n int, v *Investor) string {
 			m++
 		}
 	}
-	str += fmt.Sprintf("                Prediction Accuracy:  %d / %d  = %3.3f%%\n", m, len(v.Investments), (float64(m*100) / float64(len(v.Investments))))
+	str += fmt.Sprintf("\t\tPrediction Accuracy:  %d / %d  = %3.3f%%\n", m, len(v.Investments), (float64(m*100) / float64(len(v.Investments))))
+
+	str += fmt.Sprintf("\t\tFitness Score:       %6.2f\n", v.FitnessScore())
+	str += fmt.Sprintf("\t\tInfluencer Fitness Scores:\n")
+	for i := 0; i < len(v.Influencers); i++ {
+		str += fmt.Sprintf("\t\t    %d: [%s] %6.2f\n", i, v.Influencers[i].DNA(), v.Influencers[i].FitnessScore())
+	}
 
 	return str
 }

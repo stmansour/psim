@@ -60,13 +60,17 @@ func (i *Investor) Init(cfg *util.AppConfig) {
 	i.Influencers = append(i.Influencers, inf)
 }
 
-// ProfileString returns a string containing descriptions all its influencers
+// DNA returns a string containing descriptions all its influencers
 // ----------------------------------------------------------------------------
-func (i *Investor) ProfileString() string {
-	s := ""
+func (i *Investor) DNA() string {
+	s := fmt.Sprintf("{Investor,%d,[", i.Delta4)
 	for j := 0; j < len(i.Influencers); j++ {
-		s += i.Influencers[j].ProfileString()
+		s += i.Influencers[j].Subclass()
+		if j+1 < len(i.Influencers) {
+			s += ","
+		}
 	}
+	s += "]}"
 	return s
 }
 
@@ -247,10 +251,10 @@ func (i *Investor) OutputInvestments(j int) error {
 	}
 	defer file.Close()
 
-	// write header row
+	// the header row
 	fmt.Fprintf(file, "id,T3,T4,T3C1,ERT3,BuyC2,SellC2,ERT4,T4C1,Completed,Profitable\n")
 
-	// write investment rows
+	// investment rows
 	for _, inv := range i.Investments {
 		//                  1  2  3      4     5      6      7     8      9 10 11
 		fmt.Fprintf(file, "%s,%s,%s,%10.2f,%6.2f,%10.2f,%10.2f,%6.2f,%10.2f,%v,%v\n",
@@ -292,7 +296,7 @@ func (i *Investor) InvestorProfile() error {
 	fmt.Fprintf(file, "\nInvluencers:\n")
 
 	for j := 0; j < len(i.Influencers); j++ {
-		fmt.Fprintf(file, "%d. %s\n", j+1, i.Influencers[j].ProfileString())
+		fmt.Fprintf(file, "%d. %s\n", j+1, i.Influencers[j].DNA())
 	}
 
 	return nil
@@ -314,8 +318,34 @@ func (i *Investment) ToString() string {
 	return s
 }
 
-// FitnessScore
+// FitnessScore calculates the fitness score for an Investor.
+//
+// The score depends  on the final amount of C1 the investor has at the end of the
+// simulation. If the investor ends up with less C1 than it started with, a low or
+// even zero fitness score makes sense. If it has more, then it did something right
+// and should be rewarded.
+//
+// The approach will be to combine the amount of profit made and the correctness of
+// its decisions, with the majority of the weight on the profit.  So, the formula
+// would be:
+//
+//	fitnessScore = w1 * (finalC1 = initialC1) / maxProfit  +  w2 * correctness
+//
+// initialC1   - the amount of C1 the investor started with.
+// finalC1     - the amount of C1 the investor has at the end of the simulation.
+// maxProfit   - the maximum profit made by any investor. This is used to normalize
+//
+//	the profit made by the investor.
+//
+// correctness - the percentage of correct investment decisions made by the investor.
+// w1 and w2   - weights that determine the relative importance of profit and correctness.
+//
+//	w1 is used to normalized profit. w2 rewards investors for making
+//	correct decisions, even if those decisions didn't necessarily lead
+//	to the highest profit.
+//
 // ------------------------------------------------------------------------------------
-func (i *Investment) FitnessScore() {
-	//
+func (i *Investor) FitnessScore() float64 {
+	// fitnessScore := w1 * (finalC1 - initialC1) / maxProfit + w2 * correctness
+	return 0
 }

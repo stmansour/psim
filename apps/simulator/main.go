@@ -78,10 +78,10 @@ func main() {
 	data.Init()
 
 	displaySimulationDetails(&cfg)
-
 	app.sim.Init(&cfg, app.dayByDayResults, app.dumpInvestmentTable)
 	app.sim.Run()
 
+	app.sim.CalculateFitness()
 	displaySimulationResults(&cfg)
 
 	if app.showTopInvestor {

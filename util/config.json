@@ -5,8 +5,6 @@
     "C1": "USD",
     "C2": "YEN",
     "ER": "USDJPY",
-    "MaxInf": 1,
-    "MinInf": 1,
     "InitFunds": 1000.00,
     "Generations": 1,
     "MinDelta1": -30,
