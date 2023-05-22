@@ -27,7 +27,7 @@ type Prediction struct {
 //
 // ------------------------------------------------------------------------------------------
 type Influencer interface {
-	Init(cfg *util.AppConfig, delta4 int)
+	Init(i *Investor, cfg *util.AppConfig, delta4 int)
 	GetID() string
 	GetPrediction(t3 time.Time) (string, float64, error)
 	DNA() string
@@ -35,4 +35,5 @@ type Influencer interface {
 	FinalizePrediction(t3, t4 time.Time, profitable bool)
 	FitnessScore() float64
 	Subclass() string
+	GetLenMyPredictions() int
 }

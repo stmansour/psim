@@ -18,12 +18,20 @@ type DRInfluencer struct {
 	FitnessIsCalculated bool
 	FitnessIsNormalized bool
 	Fitness             float64
+	W1                  float64 // fitness score -- correction weighting
+	W2                  float64 // fitness score -- profit rating
 	MyPredictions       []Prediction
+	MyInvestor          *Investor // my parent, the investor that holds me
 }
 
-// AppendPrediction - add a new buy prediction
+// GetAppConfig - add a new buy prediction
 func (p *DRInfluencer) GetAppConfig() *util.AppConfig {
 	return p.cfg
+}
+
+// GetLenMyPredictions - add a new buy prediction
+func (p *DRInfluencer) GetLenMyPredictions() int {
+	return len(p.MyPredictions)
 }
 
 // AppendPrediction - append a new prediction to the list of buy predictions
@@ -91,7 +99,11 @@ func (p *DRInfluencer) SetID(x string) {
 }
 
 // Init - initializes a DRInfluencer
-func (p *DRInfluencer) Init(cfg *util.AppConfig, delta4 int) {
+func (p *DRInfluencer) Init(i *Investor, cfg *util.AppConfig, delta4 int) {
+	p.W1 = float64(0.3)
+	p.W2 = 1 - p.W1
+	p.MyInvestor = i
+
 	p.cfg = cfg
 	p.Delta1 = -4 - rand.Intn(26) // -30 to -4
 	l2 := 6
@@ -197,10 +209,10 @@ func (p *DRInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
 //
 //					cp = count of correct "buy" predictions
 //					tp = total number of "buy" predictions
-//	             mp = maximum number of buy predictions by any Influencer in the subclass
+//	                mp = maximum number of buy predictions by any Influencer in the subclass
 //
 //					w1 = weighting factor for correctness
-//	             w2 = weighting factor for
+//	                w2 = weighting factor for
 //
 //			        fitness = w1 * (cp/tp) + w2 * cp/mp
 //
@@ -220,7 +232,6 @@ func (p *DRInfluencer) FitnessScore() float64 {
 
 	// MaxPredictions is the maximum number of predictions made by any influencer of the same subclass
 	// MaxPredictions := getMaxPredictions(subclass)
-	// FitnessScore := w1*Correctness + w2*(float64(TotalPredictions)/float64(MaxPredictions+1))
 
 	t := float64(len(p.MyPredictions))
 	if t == 0 {
@@ -233,7 +244,10 @@ func (p *DRInfluencer) FitnessScore() float64 {
 		}
 	}
 	c := float64(cp)
-	p.Fitness = (c / t) * c
+
+	// FitnessScore := W1 * Correctness  +  W2 * TotalPredictions/(MaxPredictions+1)    --- NOTE: we add 1 to MaxPredictions to prevent division by 0
+	p.Fitness = p.W1*(c/t) + p.W2*(t/float64(1+p.MyInvestor.maxPredictions[p.Subclass()]))
 	p.FitnessIsCalculated = true
+
 	return p.Fitness
 }

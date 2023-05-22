@@ -13,12 +13,18 @@ import (
 // investment strategy in currency exchange.
 // =---------------------------------------------------------------------------
 type Investor struct {
-	cfg         *util.AppConfig // program wide configuration values
-	BalanceC1   float64
-	BalanceC2   float64
-	Delta4      int // t4 = t3 + Delta4 - must be the same Delta4 for all influencers in this investor
-	Investments []Investment
-	Influencers []Influencer
+	cfg               *util.AppConfig // program wide configuration values
+	BalanceC1         float64
+	BalanceC2         float64
+	Delta4            int // t4 = t3 + Delta4 - must be the same Delta4 for all influencers in this investor
+	Investments       []Investment
+	Influencers       []Influencer
+	maxProfit         float64        // maximum profit of ALL Investors during this simulation cycle, set by simulator at the end of each simulation cycle
+	maxPredictions    map[string]int // max predictions indexed by Influncer subclass, set by simulator at the end of each simulation cycle
+	W1                float64        // weight for profit in Fitness Score
+	W2                float64        // weight for correctness
+	FitnessCalculated bool           // true after fitness score is calculated and stored in Fitness
+	Fitness           float64        // Fitness score calculated at the end of a simulation cycle
 }
 
 // Investment describes a full transaction when the Investor decides to buy.
@@ -50,13 +56,15 @@ func (i *Investor) Init(cfg *util.AppConfig) {
 	i.cfg = cfg
 	i.BalanceC1 = cfg.InitFunds
 	i.Delta4 = util.RandomInRange(cfg.MinDelta4, cfg.MaxDelta4) // all Influencers will be constrained to this
+	i.W1 = 0.7
+	i.W2 = 1 - i.W1
 
 	//------------------------------------------------------------------
 	// Create a team of influencers.  For now, we're just going to add
 	// one influencer to get things compiling and running.
 	//------------------------------------------------------------------
 	var inf Influencer = &DRInfluencer{}
-	inf.Init(cfg, i.Delta4)
+	inf.Init(i, cfg, i.Delta4)
 	i.Influencers = append(i.Influencers, inf)
 }
 
@@ -88,6 +96,9 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 		return BuyCount, nil // we cannot do anything else, we have no C1 left
 	}
 
+	//----------------------------------------------------------------------------
+	// Have each Influencer make their prediction. Hold the predictions in recs[]
+	//----------------------------------------------------------------------------
 	var recs []Prediction
 	for j := 0; j < len(i.Influencers); j++ {
 		influencer := i.Influencers[j]
@@ -154,9 +165,10 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 		i.BalanceC1 -= inv.T3C1                    // we spent this much C1...
 		i.BalanceC2 += inv.BuyC2                   // to purchase this much more C2
 
-		//-----------------------------------------------------------
+		//----------------------------------------------------------------
 		// we need to update each of the Influencers predictions...
-		//-----------------------------------------------------------
+		//         *** ONLY THE BUY PREDICTIONS ARE SAVED ***
+		//----------------------------------------------------------------
 		for j := 0; j < len(i.Influencers); j++ {
 			i.Influencers[j].AppendPrediction(recs[j])
 		}
@@ -346,6 +358,29 @@ func (i *Investment) ToString() string {
 //
 // ------------------------------------------------------------------------------------
 func (i *Investor) FitnessScore() float64 {
-	// fitnessScore := w1 * (finalC1 - initialC1) / maxProfit + w2 * correctness
-	return 0
+	if i.FitnessCalculated {
+		return i.Fitness
+	}
+
+	// Calculate correctness...
+	correct := 0
+	total := 0
+	jlen := len(i.Investments)
+	for j := 0; j < jlen; j++ {
+		total++
+		if i.Investments[j].Completed && i.Investments[j].Profitable {
+			correct++
+		}
+	}
+	correctness := float64(float64(correct) / float64(total))
+
+	// And now the fitness score
+	i.Fitness = float64(i.W1*(i.BalanceC1-i.cfg.InitFunds)/i.maxProfit) + float64(i.W2*correctness)
+	i.FitnessCalculated = true
+
+	// util.DPrintf("W1 = %3.1f, BalanceC1 = %6.2f, InitFunds = %6.2f, maxProfit = %6.2f, W2 = %3.1f, correctness = %d / %d = %6.2f  ",
+	// 	i.W1, i.BalanceC1, i.cfg.InitFunds, i.maxProfit, i.W2, correct, total, correctness)
+	// util.DPrintf("Fitness = %6.3f\n", i.Fitness)
+
+	return i.Fitness
 }

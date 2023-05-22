@@ -9,10 +9,12 @@ import (
 
 // Simulator is a simulator object
 type Simulator struct {
-	cfg       *util.AppConfig // system-wide configuration info
-	Investors []Investor      // the population of the current generation
-	dayByDay  bool            // show day by day results, debug feature
-	invTable  bool            // dump the investment table at the end of the simulation
+	cfg              *util.AppConfig // system-wide configuration info
+	Investors        []Investor      // the population of the current generation
+	dayByDay         bool            // show day by day results, debug feature
+	invTable         bool            // dump the investment table at the end of the simulation
+	maxProfitThisRun float64         // the largest profit made by any investor during this simulation run
+	maxPredictions   map[string]int  // max predictions indexed by subclass
 }
 
 // Init initializes the simulation system, it also creates Investors and
@@ -70,7 +72,9 @@ func (s *Simulator) Run() {
 			SellCount += sc
 		}
 
+		//-----------------------------------------
 		// Call BuyConversion for each investor
+		//-----------------------------------------
 		check := false
 		for j := 0; j < len(s.Investors); j++ {
 			bc, err := (&s.Investors[j]).BuyConversion(dt)
@@ -111,9 +115,104 @@ func (s *Simulator) Run() {
 		dt = dt.AddDate(0, 0, 1)
 	}
 
-	// now that the simulation is complete... compute the numbers that will
-	// be needed for Fitness Score calculations...
 	//----------------------------------------------------------------------
+	// Compute fitness scores...
+	//----------------------------------------------------------------------
+	s.CalculateMaxVals()
+
+	//====================== DEBUG =========================================
+	util.DPrintf("maxProfitThisRun = %8.2f\n", s.maxProfitThisRun)
+	util.DPrintf("Max Buy Predictions by subclass:\n")
+	for key, value := range s.maxPredictions {
+		util.DPrintf("\t%20s: %6d\n", key, value)
+	}
+	//====================== DEBUG =========================================
+
+	s.CalculateInvestorFitnessScores()
+
+}
+
+// CalculateInvestorFitnessScores - calculates values over all the Influncers and Investors
+//
+//	that are needed to compute FitnesScores.
+//
+// RETURNS
+//
+//	nothing at this time
+//
+// ----------------------------------------------------------------------------
+func (s *Simulator) CalculateInvestorFitnessScores() {
+	//----------------------------------------------------
+	// Investor fitness scores
+	//----------------------------------------------------
+	util.DPrintf("Investor Fitness Scores\n")
+	for i := 0; i < len(s.Investors); i++ {
+		score := s.Investors[i].FitnessScore()
+		util.DPrintf("%3d.  %5.3f\n", i, score)
+		for j := 0; j < len(s.Investors[i].Influencers); j++ {
+			iscore := s.Investors[i].Influencers[j].FitnessScore()
+			util.DPrintf("      %s: %5.3f\n", s.Investors[i].Influencers[j].Subclass(), iscore)
+		}
+	}
+}
+
+// CalculateMaxVals - calculates values over all the Influncers and Investors
+//
+//	that are needed to compute FitnesScores.
+//
+// RETURNS
+//
+//	nothing at this time
+//
+// ----------------------------------------------------------------------------
+func (s *Simulator) CalculateMaxVals() {
+
+	//----------------------------------------------------
+	// Max investor profit needed for normalization...
+	//----------------------------------------------------
+	maxInvestorProfit := float64(-100000000) // a large negative amount
+	for i := 0; i < len(s.Investors); i++ {
+		profit := s.Investors[i].BalanceC1 - s.cfg.InitFunds
+		if profit > maxInvestorProfit {
+			maxInvestorProfit = profit
+		}
+	}
+	s.maxProfitThisRun = maxInvestorProfit
+
+	//-------------------------------------------------------
+	// Max number of buy recommendations that can be indexed
+	// by Influencer subclass...
+	// a map where keys are strings and values are float64
+	//-------------------------------------------------------
+	maxBuyRecommendations := make(map[string]int)
+	for i := 0; i < len(s.Investors); i++ {
+		for j := 0; j < len(s.Investors[i].Influencers); j++ {
+			subclass := s.Investors[i].Influencers[j].Subclass()                  // subclass of this investor
+			buyPredictions := s.Investors[i].Influencers[j].GetLenMyPredictions() // only "buy" predictions are saved
+			if value, exists := maxBuyRecommendations[subclass]; exists {
+				// value exists, see if buyPredictions is larger
+				if buyPredictions > value {
+					maxBuyRecommendations[subclass] = buyPredictions // this is the largest so far
+				}
+			} else {
+				maxBuyRecommendations[subclass] = buyPredictions // this is the initial value in the map
+			}
+		}
+
+	}
+	s.maxPredictions = maxBuyRecommendations
+
+	//---------------------------------------------------------------------------
+	// We need to let all the Investors know the maximum # of buy
+	// recommendations during this cycle so that they can calculate their
+	// fitness scores.  Additionally, they need the maxPredictions by subclass
+	// so that their Influencers can calculate their fitness.
+	// Here is where we give them that information...
+	//---------------------------------------------------------------------------
+	for i := 0; i < len(s.Investors); i++ {
+		s.Investors[i].maxProfit = s.maxProfitThisRun
+		s.Investors[i].maxPredictions = s.maxPredictions
+	}
 }
 
 // ShowTopInvestor - dumps the top investor to a file after the simulation.
