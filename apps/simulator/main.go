@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 	"psim/core"
 	"psim/data"
@@ -74,6 +75,7 @@ func main() {
 		log.Fatalf("failed to read config file: %v", err)
 	}
 	readCommandLineArgs()
+	rand.Seed(time.Now().UnixNano())
 
 	data.Init()
 
