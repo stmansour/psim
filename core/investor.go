@@ -63,8 +63,13 @@ func (i *Investor) Init(cfg *util.AppConfig) {
 	// Create a team of influencers.  For now, we're just going to add
 	// one influencer to get things compiling and running.
 	//------------------------------------------------------------------
-	var inf Influencer = &DRInfluencer{}
-	inf.Init(i, cfg, i.Delta4)
+	// var inf Influencer = &DRInfluencer{}
+	inf, err := NewInfluencer("{DRInfluencer}") // create with minimal DNA -- this causes random values to be generated where needed
+	if err != nil {
+		fmt.Printf("*** ERROR ***  From Influencer Factory: %s\n", err.Error())
+		return
+	}
+	inf.Init(i, cfg, i.Delta4) // regardless of the influencer's sell date offset is, we need to force it to this one so that all are consistent
 	i.Influencers = append(i.Influencers, inf)
 }
 

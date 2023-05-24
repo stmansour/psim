@@ -2,7 +2,6 @@ package core
 
 import (
 	"fmt"
-	"math/rand"
 	"psim/data"
 	"psim/util"
 	"time"
@@ -100,21 +99,24 @@ func (p *DRInfluencer) SetID(x string) {
 
 // Init - initializes a DRInfluencer
 func (p *DRInfluencer) Init(i *Investor, cfg *util.AppConfig, delta4 int) {
-	p.W1 = float64(0.3)
-	p.W2 = 1 - p.W1
+	p.W1 = float64(0.6) // Correctness
+	p.W2 = 1 - p.W1     // Number of predictions
 	p.MyInvestor = i
 
 	p.cfg = cfg
-	p.Delta1 = -4 - rand.Intn(26) // -30 to -4
-	l2 := 6
-	if (-p.Delta1) < l2 {
-		l2 = (-p.Delta1) - 2
-	}
-	for found := false; !found; {
-		p.Delta2 = -1 - rand.Intn(l2)
-		found = p.Delta2 > p.Delta1 // make sure that T1 occurs prior to T2
-	}
-	p.Delta4 = 1 + rand.Intn(14)
+
+	//  This is now handled by the factory
+	// p.Delta1 = -4 - rand.Intn(26) // -30 to -4
+	// l2 := 6
+	// if (-p.Delta1) < l2 {
+	// 	l2 = (-p.Delta1) - 2
+	// }
+	// for found := false; !found; {
+	// 	p.Delta2 = -1 - rand.Intn(l2)
+	// 	found = p.Delta2 > p.Delta1 // make sure that T1 occurs prior to T2
+	// }
+	// p.Delta4 = 1 + rand.Intn(14)
+
 	p.ID = fmt.Sprintf("DRInfluencer|%d|%d|%d|%s", p.Delta1, p.Delta2, p.Delta4, util.GenerateRefNo())
 }
 

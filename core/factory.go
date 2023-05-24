@@ -5,21 +5,24 @@ import (
 	"math/rand"
 	"strconv"
 	"strings"
-	"time"
 )
 
-var InfluencerSubclasses = []string{"DRInfluencer", "URInfluencer", "IRInfluencer"}
+var InfluencerSubclasses = []string{
+	"DRInfluencer",
+	"URInfluencer",
+	"IRInfluencer",
+}
 
 // NewInfluencer creates and returns a new influencer of the specified subclass.
 // It can initialize the objects either randomly or from supplied DNA
 //
 // INPUTS
 //
-//		    DNA - a string with configuration information.
-//	          It will be parsed for its subclass.
-//	          successfully parsed for a subclass, then it is used as the DNA.
-//	          DNA is of the form:   {subclass,val1,val2,...}.  If the subclass
-//	          is found but no values are present, then it will be crate
+//			    DNA - a string with configuration information.
+//		          It will be parsed for its subclass, then it is used as the DNA.
+//		          DNA is of the form:   {subclass,var1=val1,var2=val2,...}.
+//				  If the subclass is found but no values are present, then it
+//	           	  will be created and randomly generated values will be assigned
 //
 // RETURNS
 //
@@ -28,96 +31,119 @@ var InfluencerSubclasses = []string{"DRInfluencer", "URInfluencer", "IRInfluence
 //
 // --------------------------------------------------------------------------------
 func NewInfluencer(DNA string) (Influencer, error) {
-	parsedDNA, err := ParseDNA(DNA)
+	subclass, values, err := ParseDNA(DNA)
 	if err != nil {
 		return nil, err
 	}
-	rand.Seed(time.Now().UnixNano())
 
-	var Delta1, Delta2, Delta4 int
-	if len(parsedDNA) > 1 {
-		// If DNA provides deltas, use them
-		Delta1 = parsedDNA[1].(int)
-		Delta2 = parsedDNA[2].(int)
-		Delta4 = parsedDNA[3].(int)
-	} else {
-		// Otherwise, generate random deltas
-		Delta1 = rand.Intn(27) - 30
-		Delta2 = rand.Intn(7) - 7
-		Delta4 = rand.Intn(14) + 1
-
-		// Ensure Delta1 < Delta2
-		for Delta1 >= Delta2 {
-			Delta1 = rand.Intn(27) - 30
-			Delta2 = rand.Intn(7) - 7
-		}
-	}
-
-	// Create the appropriate influencer based on the subclass
-	switch parsedDNA[0].(string) {
+	switch subclass {
 	case "DRInfluencer":
-		dri := DRInfluencer{
-			Delta1: Delta1,
-			Delta2: Delta2,
-			Delta4: Delta4,
+		dri := DRInfluencer{}
+		dri.Delta1, dri.Delta2, dri.Delta4, err = generateDeltas(values) // generates random values if none are provided in the DNA
+		if err != nil {
+			return nil, err
 		}
 		return &dri, nil
-	case "URInfluencer":
-		// Similarly create and return a URInfluencer
-	case "IRInfluencer":
-		// Similarly create and return an IRInfluencer
+		// handle other subclasses...
 	}
 
-	return nil, fmt.Errorf("unknown influencer subclass")
+	return nil, fmt.Errorf("unknown subclass: %s", subclass)
 }
 
 // ParseDNA does what you think
 //
 // RETURNS
 //
-//	a slice of interface{} values, strings and ints at this point
-//	any error found, nil if no errors
+//		a string representing the subclass
+//	 a map of interface{} values indexed by variable name
+//		any error found, nil if no errors
 //
 // --------------------------------------------------------------------------------
-func ParseDNA(DNA string) ([]interface{}, error) {
-	parts := strings.Split(strings.Trim(DNA, "{}"), ",")
-
-	if len(parts) == 0 {
-		return nil, fmt.Errorf("no data provided")
-	}
-
-	// Check if the first element is a valid subclass
-	isValidSubclass := false
-	for _, subclass := range InfluencerSubclasses {
-		if parts[0] == subclass {
-			isValidSubclass = true
-			break
-		}
-	}
-
-	if !isValidSubclass {
-		return nil, fmt.Errorf("first element is not a valid subclass")
-	}
-
-	result := make([]interface{}, len(parts))
-	for i, part := range parts {
-		// subclass?
+func ParseDNA(DNA string) (string, map[string]interface{}, error) {
+	values := make(map[string]interface{})
+	DNA = strings.Trim(DNA, "{}")
+	tokens := strings.Split(DNA, ",")
+	for i, token := range tokens {
 		if i == 0 {
-			result[i] = part
-			continue
+			found := false
+			for _, v := range InfluencerSubclasses {
+				if v == token {
+					found = true
+					break
+				}
+			}
+			if !found {
+				return "", nil, fmt.Errorf("unknown subclass: %s", token)
+			}
+		} else {
+			pair := strings.Split(token, "=")
+			if len(pair) != 2 {
+				return "", nil, fmt.Errorf("invalid variable assignment: %s", token)
+			}
+			if val, err := strconv.ParseInt(pair[1], 10, 64); err == nil {
+				values[pair[0]] = int(val)
+			} else if val, err := strconv.ParseFloat(pair[1], 64); err == nil {
+				values[pair[0]] = float64(val)
+			} else {
+				values[pair[0]] = pair[1]
+			}
 		}
-		// integer?
-		if val, err := strconv.Atoi(part); err == nil {
-			result[i] = val
-			continue
+	}
+	return tokens[0], values, nil
+}
+
+// generateDeltas creates values needed for Delta1, Delta2, and Delta4 based
+// on what was supplied in the DNA string.
+//
+// The current conditions on these values are:
+//
+// Delta1:  must be in the range -30 to -4
+// Delta2:  Delta1 < Delta2,  Delta2 < 0, Delta2 > -8
+// Delta4:  1 <= Delta4 <= 14
+//
+// RETURNS
+//
+//	Delta1, Delta2, and Delta4
+//
+// --------------------------------------------------------------------------------
+func generateDeltas(DNA map[string]interface{}) (Delta1 int, Delta2 int, Delta4 int, err error) {
+	// Generate or validate Delta1
+	if val, ok := DNA["Delta1"].(int); ok {
+		if val >= -30 && val <= -4 {
+			Delta1 = val
+		} else {
+			return 0, 0, 0, fmt.Errorf("invalid Delta1 value: %d, it must be in the range -30 to -4", val)
 		}
-		// float?
-		if val, err := strconv.ParseFloat(part, 64); err == nil {
-			result[i] = val
-			continue
-		}
-		result[i] = part // gotta be a string
+	} else {
+		Delta1 = rand.Intn(27) - 30 // -30 to -4
 	}
 
-	return result, nil
+	// Generate or validate Delta2
+	if val, ok := DNA["Delta2"].(int); ok {
+		if val > Delta1 && val < 0 && val > -8 {
+			Delta2 = val
+		} else {
+			return 0, 0, 0, fmt.Errorf("invalid Delta2 value: %d, it must be less than 0, greater than Delta1, and greater than -8", val)
+		}
+	} else {
+		for {
+			Delta2 = rand.Intn(7) - 8 // -7 to -1
+			if Delta2 > Delta1 {
+				break
+			}
+		}
+	}
+
+	// Generate or validate Delta4
+	if val, ok := DNA["Delta4"].(int); ok {
+		if val >= 1 && val <= 14 {
+			Delta4 = val
+		} else {
+			return 0, 0, 0, fmt.Errorf("invalid Delta4 value: %d, it must be in the range 1 to 14", val)
+		}
+	} else {
+		Delta4 = rand.Intn(14) + 1 // 1 to 14
+	}
+
+	return Delta1, Delta2, Delta4, nil
 }
