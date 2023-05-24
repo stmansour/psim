@@ -119,17 +119,7 @@ func (s *Simulator) Run() {
 	// Compute fitness scores...
 	//----------------------------------------------------------------------
 	s.CalculateMaxVals()
-
-	//====================== DEBUG =========================================
-	util.DPrintf("maxProfitThisRun = %8.2f\n", s.maxProfitThisRun)
-	util.DPrintf("Max Buy Predictions by subclass:\n")
-	for key, value := range s.maxPredictions {
-		util.DPrintf("\t%20s: %6d\n", key, value)
-	}
-	//====================== DEBUG =========================================
-
 	s.CalculateInvestorFitnessScores()
-
 }
 
 // CalculateInvestorFitnessScores - calculates values over all the Influncers and Investors
@@ -261,6 +251,9 @@ func (s *Simulator) CalculateFitness() {
 // ----------------------------------------------------------------------------
 func (s *Simulator) ResultsByInvestor() {
 	var err error
+	largestBalance := -100000000.0 // a very low number
+	idx := -1
+
 	for i := 0; i < len(s.Investors); i++ {
 		fmt.Printf("Investor %3d: %s\n", i, s.Investors[i].DNA())
 		fmt.Printf("%s\n", s.ResultsForInvestor(i, &s.Investors[i]))
@@ -269,7 +262,13 @@ func (s *Simulator) ResultsByInvestor() {
 				fmt.Printf("*** ERROR *** outputting investments for Investor[%d]: %s\n", i, err.Error())
 			}
 		}
+		if s.Investors[i].BalanceC1 > largestBalance {
+			idx = i
+			largestBalance = s.Investors[i].BalanceC1
+		}
 	}
+	fmt.Printf("-------------------------------------------------------------------------\n")
+	fmt.Printf("Best Performer:  Investor %d.  Ending balance = %8.2f %s\n", idx, largestBalance, s.cfg.C1)
 }
 
 // ResultsForInvestor - dumps results of investor [i]
