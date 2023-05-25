@@ -12,6 +12,8 @@
     "MinDelta2": -5,
     "MaxDelta2": -1,
     "MinDelta4":  1, 
-    "MaxDelta4":  5
+    "MaxDelta4":  5,
+    "DRW1": 0.6,
+    "DRW2": 0.4
   }
   

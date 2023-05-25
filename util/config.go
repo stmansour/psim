@@ -51,6 +51,8 @@ type AppConfig struct {
 	MaxDelta2      int        // closest to t3 that t2 can be
 	MinDelta4      int        // closest to t3 that t4 can be
 	MaxDelta4      int        // furthest out from t3 that t4 can be
+	DRW1           float64    // weighting for correctness part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
+	DRW2           float64    // weighting for prediction count part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
 }
 
 // LoadConfig reads the configuration data from config.json into an

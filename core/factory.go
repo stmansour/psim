@@ -116,45 +116,13 @@ func (f *Factory) ParseDNA(DNA string) (string, map[string]interface{}, error) {
 // generateDeltas creates values needed for Delta1, Delta2, and Delta4 based
 // on what was supplied in the DNA string.
 //
-// The current conditions on these values are:
-//
-// Delta1:  must be in the range -30 to -4
-// Delta2:  Delta1 < Delta2,  Delta2 < 0, Delta2 > -8
-// Delta4:  1 <= Delta4 <= 14
+// # The ranges for Delta1, Delta2, and Delta4 are read from the config information
 //
 // RETURNS
 //
 //	Delta1, Delta2, and Delta4
 //
 // --------------------------------------------------------------------------------
-// func (f *Factory) GenerateDeltas(DNA map[string]interface{}) (Delta1 int, Delta2 int, Delta4 int, err error) {
-// 	var ok bool
-// 	Delta1, ok = DNA["Delta1"].(int)
-// 	if !ok {
-// 		util.DPrintf("f.cfg.MaxDelta1 = %d, f.cfg.MinDelta1 = %d\n", f.cfg.MaxDelta1, f.cfg.MinDelta1)
-// 		Delta1 = util.RandomInRange(f.cfg.MaxDelta1, f.cfg.MinDelta1)
-// 	}
-// 	Delta2, ok = DNA["Delta2"].(int)
-// 	if !ok {
-// 		Delta2 = util.RandomInRange(f.cfg.MaxDelta2, f.cfg.MinDelta2)
-// 		for Delta2 <= Delta1 {
-// 			Delta2 = util.RandomInRange(f.cfg.MaxDelta2, f.cfg.MinDelta2)
-// 		}
-// 	} else if Delta2 <= Delta1 || Delta2 > 0 {
-// 		return 0, 0, 0, errors.New("invalid DNA: Delta2 <= Delta1 or Delta2 > 0")
-// 	}
-// 	Delta4, ok = DNA["Delta4"].(int)
-// 	if !ok {
-// 		Delta4 = util.RandomInRange(f.cfg.MaxDelta4, f.cfg.MinDelta4)
-// 		for Delta4 >= Delta2 {
-// 			Delta4 = util.RandomInRange(f.cfg.MaxDelta4, f.cfg.MinDelta4)
-// 		}
-// 	} else if Delta4 >= Delta2 {
-// 		return 0, 0, 0, errors.New("invalid DNA: Delta4 >= Delta2")
-// 	}
-// 	return Delta1, Delta2, Delta4, nil
-// }
-
 func (f *Factory) GenerateDeltas(DNA map[string]interface{}) (Delta1 int, Delta2 int, Delta4 int, err error) {
 	// Generate or validate Delta1
 	if val, ok := DNA["Delta1"].(int); ok {
