@@ -23,5 +23,5 @@ test:
 
 package:
 	mkdir -p ${TOP}/dist
-	cp config.json ${TOP}/dist/
+	cp config.json5 ${TOP}/dist/
 	@echo "*** PACKAGE completed in ${THISDIR} ***"

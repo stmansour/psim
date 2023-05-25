@@ -1,11 +1,12 @@
 package util
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"time"
+
+	json5 "github.com/yosuke-furukawa/json5/encoding/json5"
 )
 
 // CustomDate is used so that unmarshaling a date will work with
@@ -40,6 +41,7 @@ type AppConfig struct {
 	DtStop         CustomDate // simulation ends on this date
 	PopulationSize int        // how many investors are in this population
 	InitFunds      float64    // amount of funds each Investor is "staked" at the outset of the simulation
+	StdInvestment  float64    // standard investment amount
 	TradingDay     int        // this needs to be completely re-thought -- it's like a recurrence rule
 	TradingTime    time.Time  // time of day when buy/sell is executed
 	Generations    int        // current generation in the simulator
@@ -61,7 +63,7 @@ type AppConfig struct {
 func LoadConfig() (AppConfig, error) {
 	var cfg AppConfig
 
-	configFile, err := os.Open("config.json")
+	configFile, err := os.Open("config.json5")
 	if err != nil {
 		return cfg, fmt.Errorf("failed to open config file: %v", err)
 	}
@@ -72,7 +74,7 @@ func LoadConfig() (AppConfig, error) {
 		return cfg, fmt.Errorf("failed to read config file: %v", err)
 	}
 
-	err = json.Unmarshal(byteValue, &cfg)
+	err = json5.Unmarshal(byteValue, &cfg)
 	if err != nil {
 		return cfg, fmt.Errorf("failed to unmarshal config data: %v", err)
 	}

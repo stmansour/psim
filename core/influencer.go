@@ -1,8 +1,9 @@
 package core
 
 import (
-	"psim/util"
 	"time"
+
+	"github.com/stmansour/psim/util"
 )
 
 // Prediction holds the predictions from Influencers. Based on a list

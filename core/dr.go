@@ -2,9 +2,11 @@ package core
 
 import (
 	"fmt"
-	"psim/data"
-	"psim/util"
 	"time"
+
+	"github.com/stmansour/psim/util"
+
+	"github.com/stmansour/psim/data"
 )
 
 // DRInfluencer is the Influencer that predicts based on DiscountRate

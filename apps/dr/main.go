@@ -17,9 +17,11 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"psim/data"
-	"psim/util"
 	"time"
+
+	"github.com/stmansour/psim/util"
+
+	"github.com/stmansour/psim/data"
 )
 
 type probInfo struct {

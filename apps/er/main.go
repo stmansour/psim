@@ -4,8 +4,9 @@ package main
 //---------------------------------------------------------------------------
 import (
 	"fmt"
-	"psim/data"
 	"time"
+
+	"github.com/stmansour/psim/data"
 )
 
 func main() {

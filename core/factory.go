@@ -4,9 +4,10 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
-	"psim/util"
 	"strconv"
 	"strings"
+
+	"github.com/stmansour/psim/util"
 )
 
 var InfluencerSubclasses = []string{

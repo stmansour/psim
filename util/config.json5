@@ -1,0 +1,23 @@
+//  PLATO SIMULATOR CONFIGURATION FILE
+//  JSON5 is being used primarily so that we can add comments to this file.
+//----------------------------------------------------------------------------------
+{
+    "DtStart": "2022-01-01",    // simulation start date for each generation
+    "DtStop": "2022-12-31",     // simulation stop date for each generation
+    "Generations": 1,           // how many generations should the simulator run
+    "PopulationSize": 10,       // Total number Investors in the population
+    "C1": "USD",                // main currency  (ISO 4217 code)
+    "C2": "YEN",                // currency that we will invest in (ISO 4217 code)
+    "ER": "USDJPY",             // forex conventional notation for Exchange Rate
+    "InitFunds": 1000.00,       // how much each Investor is funded at the start of a simulation cycle
+    "StdInvestment": 100.00,    // the "standard" investment amount if a decision is made to invest in C2
+    "MinDelta1": -30,           // greatest amount of time prior to T3 that T1 can be
+    "MaxDelta1": -2,            // least amount of time prior to T3 that T1 can be
+    "MinDelta2": -5,            // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "MaxDelta2": -1,            // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "MinDelta4":  1,            
+    "MaxDelta4":  5,
+    "DRW1": 0.6,
+    "DRW2": 0.4,
+  }
+  

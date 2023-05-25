@@ -3,10 +3,12 @@ package core
 import (
 	"fmt"
 	"os"
-	"psim/data"
-	"psim/util"
 	"reflect"
 	"time"
+
+	"github.com/stmansour/psim/util"
+
+	"github.com/stmansour/psim/data"
 )
 
 // Investor is the class that manages one or more influencers to pursue an

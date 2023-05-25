@@ -6,10 +6,13 @@ import (
 	"log"
 	"math/rand"
 	"os"
-	"psim/core"
-	"psim/data"
-	"psim/util"
 	"time"
+
+	"github.com/stmansour/psim/core"
+
+	"github.com/stmansour/psim/util"
+
+	"github.com/stmansour/psim/data"
 )
 
 var app struct {
@@ -73,6 +76,10 @@ func main() {
 	cfg, err := util.LoadConfig()
 	if err != nil {
 		log.Fatalf("failed to read config file: %v", err)
+	}
+	if err = core.ValidateConfig(&cfg); err != nil {
+		fmt.Printf("Please fix errors in the simulator configuration file, config.json5, and try again\n")
+		os.Exit(1)
 	}
 	readCommandLineArgs()
 	rand.Seed(time.Now().UnixNano())
