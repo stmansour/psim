@@ -1,8 +1,10 @@
 package core
 
 import (
+	"errors"
 	"fmt"
 	"math/rand"
+	"psim/util"
 	"strconv"
 	"strings"
 )
@@ -11,6 +13,19 @@ var InfluencerSubclasses = []string{
 	"DRInfluencer",
 	"URInfluencer",
 	"IRInfluencer",
+}
+
+// Factory contains methods to create objects based on a DNA string
+
+type Factory struct {
+	cfg *util.AppConfig // system-wide configuration info
+}
+
+// Init - initializes the factory
+//
+// --------------------------------------------------------------------------------
+func (f *Factory) Init(cfg *util.AppConfig) {
+	f.cfg = cfg
 }
 
 // NewInfluencer creates and returns a new influencer of the specified subclass.
@@ -30,24 +45,30 @@ var InfluencerSubclasses = []string{
 //	any error encountered
 //
 // --------------------------------------------------------------------------------
-func NewInfluencer(DNA string) (Influencer, error) {
-	subclass, values, err := ParseDNA(DNA)
+func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
+	subclassName, DNAmap, err := f.ParseDNA(DNA)
 	if err != nil {
 		return nil, err
 	}
 
-	switch subclass {
-	case "DRInfluencer":
-		dri := DRInfluencer{}
-		dri.Delta1, dri.Delta2, dri.Delta4, err = generateDeltas(values) // generates random values if none are provided in the DNA
-		if err != nil {
-			return nil, err
-		}
-		return &dri, nil
-		// handle other subclasses...
+	Delta1, Delta2, Delta4, err := f.GenerateDeltas(DNAmap)
+	if err != nil {
+		return nil, err
 	}
 
-	return nil, fmt.Errorf("unknown subclass: %s", subclass)
+	switch subclassName {
+	case "DRInfluencer":
+		dri := DRInfluencer{
+			Delta1: Delta1,
+			Delta2: Delta2,
+			Delta4: Delta4,
+			// more fields here...
+		}
+		return &dri, nil
+	//... other cases here
+	default:
+		return nil, errors.New("unknown subclass")
+	}
 }
 
 // ParseDNA does what you think
@@ -59,7 +80,7 @@ func NewInfluencer(DNA string) (Influencer, error) {
 //		any error found, nil if no errors
 //
 // --------------------------------------------------------------------------------
-func ParseDNA(DNA string) (string, map[string]interface{}, error) {
+func (f *Factory) ParseDNA(DNA string) (string, map[string]interface{}, error) {
 	values := make(map[string]interface{})
 	DNA = strings.Trim(DNA, "{}")
 	tokens := strings.Split(DNA, ",")
@@ -106,13 +127,42 @@ func ParseDNA(DNA string) (string, map[string]interface{}, error) {
 //	Delta1, Delta2, and Delta4
 //
 // --------------------------------------------------------------------------------
-func generateDeltas(DNA map[string]interface{}) (Delta1 int, Delta2 int, Delta4 int, err error) {
+// func (f *Factory) GenerateDeltas(DNA map[string]interface{}) (Delta1 int, Delta2 int, Delta4 int, err error) {
+// 	var ok bool
+// 	Delta1, ok = DNA["Delta1"].(int)
+// 	if !ok {
+// 		util.DPrintf("f.cfg.MaxDelta1 = %d, f.cfg.MinDelta1 = %d\n", f.cfg.MaxDelta1, f.cfg.MinDelta1)
+// 		Delta1 = util.RandomInRange(f.cfg.MaxDelta1, f.cfg.MinDelta1)
+// 	}
+// 	Delta2, ok = DNA["Delta2"].(int)
+// 	if !ok {
+// 		Delta2 = util.RandomInRange(f.cfg.MaxDelta2, f.cfg.MinDelta2)
+// 		for Delta2 <= Delta1 {
+// 			Delta2 = util.RandomInRange(f.cfg.MaxDelta2, f.cfg.MinDelta2)
+// 		}
+// 	} else if Delta2 <= Delta1 || Delta2 > 0 {
+// 		return 0, 0, 0, errors.New("invalid DNA: Delta2 <= Delta1 or Delta2 > 0")
+// 	}
+// 	Delta4, ok = DNA["Delta4"].(int)
+// 	if !ok {
+// 		Delta4 = util.RandomInRange(f.cfg.MaxDelta4, f.cfg.MinDelta4)
+// 		for Delta4 >= Delta2 {
+// 			Delta4 = util.RandomInRange(f.cfg.MaxDelta4, f.cfg.MinDelta4)
+// 		}
+// 	} else if Delta4 >= Delta2 {
+// 		return 0, 0, 0, errors.New("invalid DNA: Delta4 >= Delta2")
+// 	}
+// 	return Delta1, Delta2, Delta4, nil
+// }
+
+func (f *Factory) GenerateDeltas(DNA map[string]interface{}) (Delta1 int, Delta2 int, Delta4 int, err error) {
 	// Generate or validate Delta1
 	if val, ok := DNA["Delta1"].(int); ok {
-		if val >= -30 && val <= -4 {
+
+		if val >= f.cfg.MinDelta1 && val <= f.cfg.MaxDelta1 {
 			Delta1 = val
 		} else {
-			return 0, 0, 0, fmt.Errorf("invalid Delta1 value: %d, it must be in the range -30 to -4", val)
+			return 0, 0, 0, fmt.Errorf("invalid Delta1 value: %d, it must be in the range %d to %d", val, f.cfg.MinDelta1, f.cfg.MaxDelta2)
 		}
 	} else {
 		Delta1 = rand.Intn(27) - 30 // -30 to -4
@@ -120,16 +170,20 @@ func generateDeltas(DNA map[string]interface{}) (Delta1 int, Delta2 int, Delta4 
 
 	// Generate or validate Delta2
 	if val, ok := DNA["Delta2"].(int); ok {
-		if val > Delta1 && val < 0 && val > -8 {
+		if val > Delta1 && val <= f.cfg.MaxDelta2 && val >= f.cfg.MinDelta2 {
 			Delta2 = val
 		} else {
-			return 0, 0, 0, fmt.Errorf("invalid Delta2 value: %d, it must be less than 0, greater than Delta1, and greater than -8", val)
+			mn := f.cfg.MinDelta2 // assume the min value is the configured lower limit
+			if Delta1 > mn {      // if this is true, then Delta1's range can overlap Delta2
+				mn = Delta1
+			}
+			return 0, 0, 0, fmt.Errorf("invalid Delta2 value: %d, it must be in the range %d to %d", val, mn, f.cfg.MaxDelta2)
 		}
 	} else {
 		for {
-			Delta2 = rand.Intn(7) - 8 // -7 to -1
+			Delta2 = util.RandomInRange(f.cfg.MinDelta2, f.cfg.MaxDelta2)
 			if Delta2 > Delta1 {
-				break
+				break // if Delta2 is after Delta1, we're done. Otherwise we just keep trying
 			}
 		}
 	}
@@ -142,7 +196,7 @@ func generateDeltas(DNA map[string]interface{}) (Delta1 int, Delta2 int, Delta4 
 			return 0, 0, 0, fmt.Errorf("invalid Delta4 value: %d, it must be in the range 1 to 14", val)
 		}
 	} else {
-		Delta4 = rand.Intn(14) + 1 // 1 to 14
+		Delta4 = util.RandomInRange(f.cfg.MinDelta4, f.cfg.MaxDelta4)
 	}
 
 	return Delta1, Delta2, Delta4, nil

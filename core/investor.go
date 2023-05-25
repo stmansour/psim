@@ -14,6 +14,7 @@ import (
 // =---------------------------------------------------------------------------
 type Investor struct {
 	cfg               *util.AppConfig // program wide configuration values
+	factory           *Factory        // used to create Influencers
 	BalanceC1         float64
 	BalanceC2         float64
 	Delta4            int // t4 = t3 + Delta4 - must be the same Delta4 for all influencers in this investor
@@ -52,7 +53,7 @@ type Investment struct {
 // Init is called during Generation 1 to get things started.  All settable
 // fields are set to random values.
 // ----------------------------------------------------------------------------
-func (i *Investor) Init(cfg *util.AppConfig) {
+func (i *Investor) Init(cfg *util.AppConfig, f *Factory) {
 	i.cfg = cfg
 	i.BalanceC1 = cfg.InitFunds
 	i.Delta4 = util.RandomInRange(cfg.MinDelta4, cfg.MaxDelta4) // all Influencers will be constrained to this
@@ -64,7 +65,7 @@ func (i *Investor) Init(cfg *util.AppConfig) {
 	// one influencer to get things compiling and running.
 	//------------------------------------------------------------------
 	// var inf Influencer = &DRInfluencer{}
-	inf, err := NewInfluencer("{DRInfluencer}") // create with minimal DNA -- this causes random values to be generated where needed
+	inf, err := f.NewInfluencer("{DRInfluencer}") // create with minimal DNA -- this causes random values to be generated where needed
 	if err != nil {
 		fmt.Printf("*** ERROR ***  From Influencer Factory: %s\n", err.Error())
 		return

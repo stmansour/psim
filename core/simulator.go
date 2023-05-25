@@ -10,6 +10,7 @@ import (
 // Simulator is a simulator object
 type Simulator struct {
 	cfg              *util.AppConfig // system-wide configuration info
+	factory          Factory         // used to create Influencers
 	Investors        []Investor      // the population of the current generation
 	dayByDay         bool            // show day by day results, debug feature
 	invTable         bool            // dump the investment table at the end of the simulation
@@ -24,6 +25,7 @@ func (s *Simulator) Init(cfg *util.AppConfig, dayByDay, invTable bool) error {
 	s.cfg = cfg
 	s.dayByDay = dayByDay
 	s.invTable = invTable
+	s.factory.Init(s.cfg)
 
 	//------------------------------------------------------------------------
 	// Create an initial population of investors with just 1 investor for now
@@ -37,7 +39,7 @@ func (s *Simulator) Init(cfg *util.AppConfig, dayByDay, invTable bool) error {
 	// Initialize all Investors...
 	//------------------------------------------------------------------------
 	for i := 0; i < len(s.Investors); i++ {
-		s.Investors[i].Init(cfg)
+		s.Investors[i].Init(s.cfg, &s.factory)
 	}
 	return nil
 }
@@ -135,13 +137,10 @@ func (s *Simulator) CalculateInvestorFitnessScores() {
 	//----------------------------------------------------
 	// Investor fitness scores
 	//----------------------------------------------------
-	util.DPrintf("Investor Fitness Scores\n")
 	for i := 0; i < len(s.Investors); i++ {
-		score := s.Investors[i].FitnessScore()
-		util.DPrintf("%3d.  %5.3f\n", i, score)
+		s.Investors[i].FitnessScore()
 		for j := 0; j < len(s.Investors[i].Influencers); j++ {
-			iscore := s.Investors[i].Influencers[j].FitnessScore()
-			util.DPrintf("      %s: %5.3f\n", s.Investors[i].Influencers[j].Subclass(), iscore)
+			s.Investors[i].Influencers[j].FitnessScore()
 		}
 	}
 }
