@@ -63,5 +63,13 @@ func ValidateConfig(cfg *util.AppConfig) error {
 		fmt.Printf("** Configuration Error **  %s\n", err.Error())
 	}
 
+	//-------------------------------------------------
+	// Weighting validation
+	//-------------------------------------------------
+	if cfg.DRW1+cfg.DRW2 != float64(1.0) {
+		err = fmt.Errorf("DRW1 (%4.2f) plus DRW2 (%4.2f) must equal 1.0", cfg.DRW1, cfg.DRW2)
+		fmt.Printf("** Configuration Error **  %s\n", err.Error())
+	}
+
 	return err
 }
