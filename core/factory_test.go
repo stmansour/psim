@@ -29,14 +29,13 @@ func TestNewPopulation(t *testing.T) {
 	for i := 0; i < len(oldPopulationDNA); i++ {
 		inv := f.NewInvestor(oldPopulationDNA[i])
 		dna := inv.DNA()
-		util.DPrintf("NEW INVESTOR:  %s\n", dna)
+		// util.DPrintf("NEW INVESTOR:  %s\n", dna)
 		if dna != oldPopulationDNA[i] {
 			t.Errorf("DNA and newDNA differ:\n\tcreated: %s\n\texpected: %s", dna, oldPopulationDNA[i])
 		}
 		pop = append(pop, inv)
-
 	}
-	t.Fail()
+	// t.Fail()
 }
 
 func TestInvestorFromDNA(t *testing.T) {
@@ -85,10 +84,8 @@ func TestInvestorFromDNA(t *testing.T) {
 	population = append(population, parent1, parent2)
 
 	investor := f.BreedNewInvestor(&population, 0, 1)
-	newDNA := investor.DNA()
-	util.DPrintf("newDNA = %s\n", newDNA)
+	fmt.Printf("New Investor DNA = %s\n", investor.DNA())
 	// t.Fail()
-
 }
 
 // TestParseInvestorDNA - verify that the parser can correctly parse n Investor DNA string
@@ -102,9 +99,10 @@ func TestParseInvestorDNA(t *testing.T) {
 		{
 			"{invVar1=YesIDo;invVar2=34;Influencers=[{subclass1,var1=NotAtAll,var2=1.0}|{subclass2,var1=2,var2=2.0}];invVar3=3.1416}",
 			map[string]interface{}{
-				"invVar1": "YesIDo",
-				"invVar2": 34,
-				"invVar3": float64(3.1416),
+				"invVar1":     "YesIDo",
+				"invVar2":     34,
+				"Influencers": "[{subclass1,var1=NotAtAll,var2=1.0}|{subclass2,var1=2,var2=2.0}]",
+				"invVar3":     float64(3.1416),
 			},
 		},
 		// add more test cases here

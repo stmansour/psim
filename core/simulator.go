@@ -239,9 +239,9 @@ func (s *Simulator) ShowTopInvestor() error {
 //	nothing at this time
 //
 // ----------------------------------------------------------------------------
-func (s *Simulator) CalculateFitness() {
+// func (s *Simulator) CalculateFitness() {
 
-}
+// }
 
 // ResultsByInvestor - dumps results of each investor
 //

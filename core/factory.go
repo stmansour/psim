@@ -11,6 +11,9 @@ import (
 	"github.com/stmansour/psim/util"
 )
 
+// InfluencerSubclasses is an array of strings with all the subclasses of
+// Influencer that the factory knows how to create.
+// ---------------------------------------------------------------------------
 var InfluencerSubclasses = []string{
 	"DRInfluencer",
 	"URInfluencer",
@@ -18,11 +21,14 @@ var InfluencerSubclasses = []string{
 }
 
 // Factory contains methods to create objects based on a DNA string
-
 type Factory struct {
 	cfg *util.AppConfig // system-wide configuration info
 }
 
+// InfluencerDNA is a struct of information used during the process of
+// crossover when creating a new Investor based on the results from a
+// simulation cycle.
+// -----------------------------------------------------------------------
 type InfluencerDNA struct {
 	Subclass string // Influencer subclass
 	DNA1     string // DNA from one parent
@@ -122,9 +128,6 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		return newInvestor
 	}
 
-	util.DPrintf("map1 = %v\n", map1)
-	util.DPrintf("map2 = %v\n", map2)
-
 	maps := []map[string]interface{}{
 		map1,
 		map2,
@@ -210,7 +213,6 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 			if inf.Subclass() != selectedInfluencer.Subclass() {
 				tmp = append(tmp, inf) // we keep it if it's not the same subclass
 			} else {
-				util.DPrintf("DNA2 search:  inf.ID = %s, selectedInfluencer.ID = %s\n", inf.GetID(), selectedInfluencer.GetID())
 				if inf.GetID() != selectedInfluencer.GetID() {
 					newInfluencerDNA.DNA2 = inf.DNA() // save the second DNA if encountered it
 				}
@@ -228,7 +230,6 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	// crossover.  Otherwise, we'll just use the one DNA we have and assume it's dominant
 	//------------------------------------------------------------------------------------
 	for i := 0; i < len(newInfluencersDNA); i++ {
-		util.DPrintf("%d. newInfluencersDNA = %v\n", i, newInfluencersDNA[i])
 		dna1 := newInfluencersDNA[i].DNA1
 		subclass, map1, err := f.ParseInfluencerDNA(dna1)
 		if err != nil {
@@ -247,7 +248,6 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 				os.Exit(1) // this is fatal
 			}
 			m := []map[string]interface{}{map1, map2}
-			util.DPrintf("subclass = %s, m = %v\n", subclass, m)
 			//--------------------------------------------------------------------
 			// build a new DNA string that is a crossover blend of dna1 and dna2
 			//--------------------------------------------------------------------
@@ -268,7 +268,6 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		//-----------------------------------------------------------
 		// Create the new Influencer and add it to newInvestor...
 		//-----------------------------------------------------------
-		util.DPrintf("%d. FINAL New Influencer dna = %s\n", i, dna)
 		inf, err := f.NewInfluencer(dna)
 		if err != nil {
 			fmt.Printf("BreedNewInvestor:  Error from NewInfluencer(%s) : %s\n", dna, err.Error())
@@ -503,7 +502,7 @@ func (f *Factory) ParseInfluencerDNA(DNA string) (string, map[string]interface{}
 	return tokens[0], values, nil
 }
 
-// generateDeltas creates values needed for Delta1, Delta2, and Delta4 based
+// GenerateDeltas creates values needed for Delta1, Delta2, and Delta4 based
 // on what was supplied in the DNA string.
 //
 // # The ranges for Delta1, Delta2, and Delta4 are read from the config information

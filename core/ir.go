@@ -36,7 +36,7 @@ func (p *IRInfluencer) AppendPrediction(pr Prediction) {
 	p.MyPredictions = append(p.MyPredictions, pr)
 }
 
-// FinalizPrediction - finalize the results of this prediction
+// FinalizePrediction - finalize the results of this prediction
 func (p *IRInfluencer) FinalizePrediction(t3, t4 time.Time, profitable bool) {
 	for i := 0; i < len(p.MyPredictions); i++ {
 		if p.MyPredictions[i].Completed {

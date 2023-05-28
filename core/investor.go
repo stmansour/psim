@@ -255,7 +255,7 @@ func (i *Investor) SellConversion(t4 time.Time) (int, error) {
 				i.Influencers[k].FinalizePrediction(i.Investments[j].T3, t4, i.Investments[j].Profitable)
 			}
 
-			SellCount += 1
+			SellCount++
 		}
 	}
 	return SellCount, err
