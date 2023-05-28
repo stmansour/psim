@@ -23,12 +23,12 @@ type DRInfluencer struct {
 	MyInvestor          *Investor // my parent, the investor that holds me
 }
 
-// GetAppConfig - add a new buy prediction
+// GetAppConfig - return the config struct
 func (p *DRInfluencer) GetAppConfig() *util.AppConfig {
 	return p.cfg
 }
 
-// GetLenMyPredictions - add a new buy prediction
+// GetLenMyPredictions - how many buy predictions
 func (p *DRInfluencer) GetLenMyPredictions() int {
 	return len(p.MyPredictions)
 }
@@ -93,15 +93,16 @@ func (p *DRInfluencer) SetDelta4(x int) {
 }
 
 // SetID - set ID
-func (p *DRInfluencer) SetID(x string) {
-	p.ID = x
+func (p *DRInfluencer) SetID() {
+	rn := util.GenerateRefNo()
+	p.ID = fmt.Sprintf("DRInfluencer|%d|%d|%d|%s", p.Delta1, p.Delta2, p.Delta4, rn)
 }
 
 // Init - initializes a DRInfluencer
 func (p *DRInfluencer) Init(i *Investor, cfg *util.AppConfig, delta4 int) {
 	p.MyInvestor = i
 	p.cfg = cfg
-	p.ID = fmt.Sprintf("DRInfluencer|%d|%d|%d|%s", p.Delta1, p.Delta2, p.Delta4, util.GenerateRefNo())
+	p.SetID()
 }
 
 // Subclass - a method that returns the Influencer subclass of this object
@@ -115,7 +116,7 @@ func (p *DRInfluencer) Subclass() string {
 //
 // ----------------------------------------------------------------------------
 func (p *DRInfluencer) DNA() string {
-	return fmt.Sprintf("{%s,%d,%d,%d}", p.Subclass(), p.Delta1, p.Delta2, p.Delta4)
+	return fmt.Sprintf("{%s,Delta1=%d,Delta2=%d,Delta4=%d}", p.Subclass(), p.Delta1, p.Delta2, p.Delta4)
 }
 
 // GetPrediction - using the supplied date, it researches data and makes
@@ -162,45 +163,45 @@ func (p *DRInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
 
 // FitnessScore - Discount Rate Fitness Score.
 //
-//	         The purpose of a fitness score in a genetic algorithm is to evaluate how well
-//	         a potential solution, represented by an individual in the population, solves
-//	         the problem at hand. The fitness score is used to guide the selection, crossover,
-//	         and mutation operations of the algorithm, as individuals with higher fitness
-//	         scores are more likely to be selected for reproduction and to contribute to the
-//	         next generation.
+//		         The purpose of a fitness score in a genetic algorithm is to evaluate how well
+//		         a potential solution, represented by an individual in the population, solves
+//		         the problem at hand. The fitness score is used to guide the selection, crossover,
+//		         and mutation operations of the algorithm, as individuals with higher fitness
+//		         scores are more likely to be selected for reproduction and to contribute to the
+//		         next generation.
 //
-//	         I'm thinking that the Fitness Score for an Influencer should be based on
-//	         a) the percentage of time its "buy" predictions that are "correct", and
-//	         b) the total number of predictions it made
+//		         I'm thinking that the Fitness Score for an Influencer should be based on
+//		         a) the percentage of time its "buy" predictions that are "correct", and
+//		         b) the total number of predictions it made
 //
-//	         For example, let's consider 2 DiscountRate Influencers, DR-A
-//	         and DR-B. Suppose that DR-A makes 100 "buy" predictions during the course of
-//	         a simulation, and 80% of its predictions turn out to be correct.  During the
-//	         same simulation, DR-B makes only 2 "buy" predictions, and both of them turn
-//	         out to be correct.  In this case, I would say that 80 out of 100 predictions
-//	         correct is a little more reliable than 2 out of 2.  I would have more
-//	         confidence in DR-A than DR-B.  It is true that DR-B got 100% correct results,
-//	         but it only made 2 predictions... it doesn't feel like there's enough history
-//	         to know if it just got lucky or if it really knows better.
+//		         For example, let's consider 2 DiscountRate Influencers, DR-A
+//		         and DR-B. Suppose that DR-A makes 100 "buy" predictions during the course of
+//		         a simulation, and 80% of its predictions turn out to be correct.  During the
+//		         same simulation, DR-B makes only 2 "buy" predictions, and both of them turn
+//		         out to be correct.  In this case, I would say that 80 out of 100 predictions
+//		         correct is a little more reliable than 2 out of 2.  I would have more
+//		         confidence in DR-A than DR-B.  It is true that DR-B got 100% correct results,
+//		         but it only made 2 predictions... it doesn't feel like there's enough history
+//		         to know if it just got lucky or if it really knows better.
 //
-//				On the other hand, we don't want to overcompensate if an Influencer makes
-//		        many predictions, most of them are wrong, but it still scores better than
-//		        DR-B.  For example, suppose that DR-C made 200 "buy" predictions during that
-//		        simulation but its correctness is only 25%. We don't want its Fitness to be
-//		        far better than DR-B's.  So we probably need to attenuate the number of
-//		        correct predictions by the highest total of predictions made by any Influencer
-//		        of the same subclass.
+//		         On the other hand, we don't want to overcompensate if an Influencer makes
+//			     many predictions, most of them are wrong, but it still scores better than
+//			     DR-B.  For example, suppose that DR-C made 200 "buy" predictions during that
+//			     simulation but its correctness is only 25%. We don't want its Fitness to be
+//			     far better than DR-B's.  So we probably need to attenuate the number of
+//			     correct predictions by the highest total of predictions made by any Influencer
+//			     of the same subclass.
 //
-//				So, I think the form of the Fitness Score for an Influencer is:
+//	          So, I think the form of the Fitness Score for an Influencer is:
 //
-//						cp = count of correct "buy" predictions
-//						tp = total number of "buy" predictions
-//		                mp = maximum number of buy predictions by any Influencer in the subclass
+//	          cp = count of correct "buy" predictions
+//	          tp = total number of "buy" predictions
+//			     mp = maximum number of buy predictions by any Influencer in the subclass
 //
-//						w1 = weighting factor for correctness
-//		                w2 = weighting factor for number of prediction
+//	          w1 = weighting factor for correctness
+//	          w2 = weighting factor for number of prediction
 //
-//				        fitness = w1 * (cp/tp) + w2 * cp/mp
+//				 fitness = w1 * (cp/tp) + w2 * cp/mp
 //
 // RETURNS
 //

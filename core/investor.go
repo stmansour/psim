@@ -17,17 +17,18 @@ import (
 type Investor struct {
 	cfg               *util.AppConfig // program wide configuration values
 	factory           *Factory        // used to create Influencers
-	BalanceC1         float64
-	BalanceC2         float64
-	Delta4            int // t4 = t3 + Delta4 - must be the same Delta4 for all influencers in this investor
-	Investments       []Investment
-	Influencers       []Influencer
-	maxProfit         float64        // maximum profit of ALL Investors during this simulation cycle, set by simulator at the end of each simulation cycle
-	maxPredictions    map[string]int // max predictions indexed by Influncer subclass, set by simulator at the end of each simulation cycle
-	W1                float64        // weight for profit in Fitness Score
-	W2                float64        // weight for correctness
-	FitnessCalculated bool           // true after fitness score is calculated and stored in Fitness
-	Fitness           float64        // Fitness score calculated at the end of a simulation cycle
+	BalanceC1         float64         // total amount of currency C1
+	BalanceC2         float64         // total amount of currency C2
+	Delta4            int             // t4 = t3 + Delta4 - must be the same Delta4 for all influencers in this investor
+	Investments       []Investment    // a record of all investments made by this investor
+	Influencers       []Influencer    // all the influencerst that advise this Investor
+	maxProfit         float64         // maximum profit of ALL Investors during this simulation cycle, set by simulator at the end of each simulation cycle
+	maxPredictions    map[string]int  // max predictions indexed by Influncer subclass, set by simulator at the end of each simulation cycle
+	W1                float64         // weight for profit in Fitness Score
+	W2                float64         // weight for correctness
+	FitnessCalculated bool            // true after fitness score is calculated and stored in Fitness
+	Fitness           float64         // Fitness score calculated at the end of a simulation cycle
+	CreatedByDNA      bool            // some init steps must be skipped if it's created from DNA
 }
 
 // Investment describes a full transaction when the Investor decides to buy.
@@ -58,15 +59,16 @@ type Investment struct {
 func (i *Investor) Init(cfg *util.AppConfig, f *Factory) {
 	i.cfg = cfg
 	i.BalanceC1 = cfg.InitFunds
-	i.Delta4 = util.RandomInRange(cfg.MinDelta4, cfg.MaxDelta4) // all Influencers will be constrained to this
-	i.W1 = 0.7
-	i.W2 = 1 - i.W1
+	if !i.CreatedByDNA {
+		i.Delta4 = util.RandomInRange(cfg.MinDelta4, cfg.MaxDelta4) // all Influencers will be constrained to this
+		i.W1 = i.cfg.InvW1
+		i.W2 = i.cfg.InvW2
+	}
 
 	//------------------------------------------------------------------
 	// Create a team of influencers.  For now, we're just going to add
 	// one influencer to get things compiling and running.
 	//------------------------------------------------------------------
-	// var inf Influencer = &DRInfluencer{}
 	inf, err := f.NewInfluencer("{DRInfluencer}") // create with minimal DNA -- this causes random values to be generated where needed
 	if err != nil {
 		fmt.Printf("*** ERROR ***  From Influencer Factory: %s\n", err.Error())
@@ -76,14 +78,18 @@ func (i *Investor) Init(cfg *util.AppConfig, f *Factory) {
 	i.Influencers = append(i.Influencers, inf)
 }
 
-// DNA returns a string containing descriptions all its influencers
+// DNA returns a string containing descriptions all its influencers.
+// Here is the format of a DNA string for an Investor:
+//
+//	Delta4=5;Influencers=[{subclass,var1=val1,var2=val2,...}|{subclass,var1=val1,var2=val2,...}|...]
+//
 // ----------------------------------------------------------------------------
 func (i *Investor) DNA() string {
-	s := fmt.Sprintf("{Investor,%d,[", i.Delta4)
+	s := fmt.Sprintf("{Investor;Delta4=%d;InvW1=%6.4f;InvW2=%6.4f;Influencers=[", i.Delta4, i.W1, i.W2)
 	for j := 0; j < len(i.Influencers); j++ {
-		s += i.Influencers[j].Subclass()
+		s += i.Influencers[j].DNA()
 		if j+1 < len(i.Influencers) {
-			s += ","
+			s += "|"
 		}
 	}
 	s += "]}"

@@ -123,10 +123,10 @@ func (s *Simulator) Run() {
 	// Compute fitness scores...
 	//----------------------------------------------------------------------
 	s.CalculateMaxVals()
-	s.CalculateInvestorFitnessScores()
+	s.CalculateAllFitnessScores()
 }
 
-// CalculateInvestorFitnessScores - calculates values over all the Influncers and Investors
+// CalculateAllFitnessScores - calculates values over all the Influncers and Investors
 //
 //	that are needed to compute FitnesScores.
 //
@@ -135,7 +135,7 @@ func (s *Simulator) Run() {
 //	nothing at this time
 //
 // ----------------------------------------------------------------------------
-func (s *Simulator) CalculateInvestorFitnessScores() {
+func (s *Simulator) CalculateAllFitnessScores() {
 	//----------------------------------------------------
 	// Investor fitness scores
 	//----------------------------------------------------

@@ -34,7 +34,7 @@ func (t *CustomDate) UnmarshalJSON(data []byte) error {
 // to all areas of code in this project
 // ---------------------------------------------------------------------------
 type AppConfig struct {
-	ExchRate       string     // the exchange rate that controls investing for this simulation
+	ExchangeRate   string     // the exchange rate that controls investing for this simulation
 	C1             string     // Currency1 - the currency that we're trying to maximize
 	C2             string     // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
 	DtStart        CustomDate // simulation begins on this date
@@ -55,6 +55,8 @@ type AppConfig struct {
 	MaxDelta4      int        // furthest out from t3 that t4 can be
 	DRW1           float64    // weighting for correctness part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
 	DRW2           float64    // weighting for prediction count part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
+	InvW1          float64    // weight for profit part of Investor FitnessScore
+	InvW2          float64    // weight for correctness part of Investor FitnessScore
 }
 
 // LoadConfig reads the configuration data from config.json into an

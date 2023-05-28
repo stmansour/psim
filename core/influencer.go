@@ -30,6 +30,7 @@ type Prediction struct {
 type Influencer interface {
 	Init(i *Investor, cfg *util.AppConfig, delta4 int)
 	GetID() string
+	SetID()
 	GetPrediction(t3 time.Time) (string, float64, error)
 	DNA() string
 	AppendPrediction(pr Prediction)
