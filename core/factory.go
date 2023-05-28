@@ -79,13 +79,13 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 			idxParent2 = f.rouletteSelect(population, fitnessSum)
 		}
 
-		newPopulation[i] = f.NewInvestor(&population, idxParent1, idxParent2)
+		newPopulation[i] = f.BreedNewInvestor(&population, idxParent1, idxParent2)
 	}
 
 	return newPopulation, nil
 }
 
-// NewInvestor creates a new Investor by going through the genetic
+// BreedNewInvestor creates a new Investor by going through the genetic
 // algorithm. It also creates the Investor's Influencers.  Here's how
 // we choose the next generation Influencers for the new Investor.
 //
@@ -102,7 +102,7 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 //	any error encountered
 //
 // -------------------------------------------------------------------------
-func (f *Factory) NewInvestor(population *[]Investor, idxParent1, idxParent2 int) Investor {
+func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent2 int) Investor {
 	newInvestor := Investor{
 		CreatedByDNA: true,
 	}
@@ -232,7 +232,7 @@ func (f *Factory) NewInvestor(population *[]Investor, idxParent1, idxParent2 int
 		dna1 := newInfluencersDNA[i].DNA1
 		subclass, map1, err := f.ParseInfluencerDNA(dna1)
 		if err != nil {
-			fmt.Printf("NewInvestor:  Error parsing Influencer DNA1 = %s : %s\n", dna1, err.Error())
+			fmt.Printf("BreedNewInvestor:  Error parsing Influencer DNA1 = %s : %s\n", dna1, err.Error())
 			os.Exit(1) // this is fatal
 		}
 		dna2 := newInfluencersDNA[i].DNA2
@@ -243,7 +243,7 @@ func (f *Factory) NewInvestor(population *[]Investor, idxParent1, idxParent2 int
 			//-------------------------------------
 			_, map2, err := f.ParseInfluencerDNA(dna2)
 			if err != nil {
-				fmt.Printf("NewInvestor:  Error parsing Influencer DNA2 = %s : %s\n", dna2, err.Error())
+				fmt.Printf("BreedNewInvestor:  Error parsing Influencer DNA2 = %s : %s\n", dna2, err.Error())
 				os.Exit(1) // this is fatal
 			}
 			m := []map[string]interface{}{map1, map2}
@@ -271,12 +271,63 @@ func (f *Factory) NewInvestor(population *[]Investor, idxParent1, idxParent2 int
 		util.DPrintf("%d. FINAL New Influencer dna = %s\n", i, dna)
 		inf, err := f.NewInfluencer(dna)
 		if err != nil {
-			fmt.Printf("NewInvestor:  Error from NewInfluencer(%s) : %s\n", dna, err.Error())
+			fmt.Printf("BreedNewInvestor:  Error from NewInfluencer(%s) : %s\n", dna, err.Error())
 			os.Exit(1) // this is fatal
 		}
+		//----------------------------------------------------------------------------------
+		// The influencer has control over its research period, however the Investor has
+		// control of the "sell" point. So, no matter what T4 the Influencer winds up with
+		// the T4 value must be set to that of the Investor
+		//----------------------------------------------------------------------------------
+		inf.SetDelta4(newInvestor.Delta4)
 		newInvestor.Influencers = append(newInvestor.Influencers, inf)
 	}
 	return newInvestor
+}
+
+// NewInvestor creates a new investor from supplied DNA
+//
+// -----------------------------------------------------------------------------
+func (f *Factory) NewInvestor(DNA string) Investor {
+	m, err := f.ParseInvestorDNA(DNA)
+	if err != nil {
+		fmt.Printf("*** ERROR *** ParseInvestorDNA returned: %s\n", err.Error())
+	}
+
+	inv := Investor{}
+	if val, ok := m["Delta4"].(int); ok {
+		if val >= f.cfg.MinDelta4 && val <= f.cfg.MaxDelta4 {
+			inv.Delta4 = val
+		} else {
+			fmt.Printf("invalid Delta4 value: %d, it must be in the range %d to %d\n", val, f.cfg.MinDelta4, f.cfg.MaxDelta4)
+			os.Exit(1)
+		}
+	} else {
+		inv.Delta4 = util.RandomInRange(f.cfg.MinDelta4, f.cfg.MaxDelta4)
+	}
+	if val, ok := m["InvW1"].(float64); ok {
+		inv.W1 = val
+	}
+	if val, ok := m["InvW2"].(float64); ok {
+		inv.W2 = val
+	}
+
+	infDNA, ok := m["Influencers"].(string)
+	if !ok {
+		fmt.Printf("*** ERROR *** no string available for Influencers from DNA\n")
+		os.Exit(1)
+	}
+	s := infDNA[1 : len(infDNA)-1]
+	sa := strings.Split(s, "|")
+	for i := 0; i < len(sa); i++ {
+		inf, err := f.NewInfluencer(sa[i])
+		if err != nil {
+			fmt.Printf("*** ERROR *** NeInfluencer(%s) returned error: %s\n", sa[i], err.Error())
+			os.Exit(1)
+		}
+		inv.Influencers = append(inv.Influencers, inf)
+	}
+	return inv
 }
 
 // ParseInvestorDNA parses an Investor DNA string. out the list of Influencers and returns
@@ -312,15 +363,12 @@ func (f *Factory) ParseInvestorDNA(DNA string) (map[string]interface{}, error) {
 		key := strings.TrimSpace(kv[0])
 		value := strings.TrimSpace(kv[1])
 
-		if key != "Influencers" {
-			// make it a float64, an int, or a string...
-			if val, err := strconv.ParseInt(value, 10, 64); err == nil {
-				investorVarMap[key] = int(val)
-			} else if val, err := strconv.ParseFloat(value, 64); err == nil {
-				investorVarMap[key] = float64(val)
-			} else {
-				investorVarMap[key] = value
-			}
+		if val, err := strconv.ParseInt(value, 10, 64); err == nil {
+			investorVarMap[key] = int(val)
+		} else if val, err := strconv.ParseFloat(value, 64); err == nil {
+			investorVarMap[key] = float64(val)
+		} else {
+			investorVarMap[key] = value
 		}
 	}
 

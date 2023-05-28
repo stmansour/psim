@@ -31,6 +31,7 @@ type Influencer interface {
 	Init(i *Investor, cfg *util.AppConfig, delta4 int)
 	GetID() string
 	SetID()
+	SetDelta4(d4 int)
 	GetPrediction(t3 time.Time) (string, float64, error)
 	DNA() string
 	AppendPrediction(pr Prediction)

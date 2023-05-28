@@ -253,15 +253,19 @@ func (s *Simulator) CalculateFitness() {
 func (s *Simulator) ResultsByInvestor() {
 	var err error
 	largestBalance := -100000000.0 // a very low number
+	profitable := 0                // count of profitable investors in this population
 	idx := -1
 
 	for i := 0; i < len(s.Investors); i++ {
-		fmt.Printf("Investor %3d: %s\n", i, s.Investors[i].DNA())
+		fmt.Printf("Investor %3d. DNA: %s\n", i, s.Investors[i].DNA())
 		fmt.Printf("%s\n", s.ResultsForInvestor(i, &s.Investors[i]))
 		if s.invTable {
 			if err = s.Investors[i].OutputInvestments(i); err != nil {
 				fmt.Printf("*** ERROR *** outputting investments for Investor[%d]: %s\n", i, err.Error())
 			}
+		}
+		if s.Investors[i].BalanceC1 > s.cfg.InitFunds {
+			profitable++
 		}
 		if s.Investors[i].BalanceC1 > largestBalance {
 			idx = i
@@ -269,6 +273,7 @@ func (s *Simulator) ResultsByInvestor() {
 		}
 	}
 	fmt.Printf("-------------------------------------------------------------------------\n")
+	fmt.Printf("Profitable Investors:  %d / %d  (%6.3f%%)\n", profitable, s.cfg.PopulationSize, float64(profitable*100)/float64(s.cfg.PopulationSize))
 	fmt.Printf("Best Performer:  Investor %d.  Ending balance = %8.2f %s\n", idx, largestBalance, s.cfg.C1)
 }
 

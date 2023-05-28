@@ -8,36 +8,35 @@ import (
 	"github.com/stmansour/psim/util"
 )
 
-// TestParseInvestorDNA - verify that the parser can correctly parse n Investor DNA string
-// ------------------------------------------------------------------------------------------
-func TestParseInvestorDNA(t *testing.T) {
+func TestNewPopulation(t *testing.T) {
+	var oldPopulationDNA = []string{
+		"{Investor;Delta4=14;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-20,Delta2=-5,Delta4=2}]}",
+		"{Investor;Delta4=12;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-27,Delta2=-5,Delta4=6}]}",
+		"{Investor;Delta4=9;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-21,Delta2=-1,Delta4=5}]}",
+		"{Investor;Delta4=4;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-7,Delta2=-4,Delta4=7}]}",
+		"{Investor;Delta4=10;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-11,Delta2=-5,Delta4=3}]}",
+		"{Investor;Delta4=10;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-30,Delta2=-1,Delta4=3}]}",
+		"{Investor;Delta4=2;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-29,Delta2=-3,Delta4=9}]}",
+		"{Investor;Delta4=13;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-23,Delta2=-5,Delta4=8}]}",
+		"{Investor;Delta4=9;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-4,Delta2=-3,Delta4=10}]}",
+		"{Investor;Delta4=2;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-21,Delta2=-5,Delta4=3}]}",
+	}
 	var f Factory
-	var tests = []struct {
-		input   string
-		wantMap map[string]interface{}
-	}{
-		{
-			"{invVar1=YesIDo;invVar2=34;Influencers=[{subclass1,var1=NotAtAll,var2=1.0}|{subclass2,var1=2,var2=2.0}];invVar3=3.1416}",
-			map[string]interface{}{
-				"invVar1": "YesIDo",
-				"invVar2": 34,
-				"invVar3": float64(3.1416),
-			},
-		},
-		// add more test cases here
-	}
+	util.Init()
+	f.Init(CreateTestingCFG())
+	pop := []Investor{}
 
-	for _, tt := range tests {
-		gotMap, err := f.ParseInvestorDNA(tt.input)
-		if err != nil {
-			fmt.Printf("Error returned by ParseInvestorDNA = %s\n", err.Error())
-			continue
+	for i := 0; i < len(oldPopulationDNA); i++ {
+		inv := f.NewInvestor(oldPopulationDNA[i])
+		dna := inv.DNA()
+		util.DPrintf("NEW INVESTOR:  %s\n", dna)
+		if dna != oldPopulationDNA[i] {
+			t.Errorf("DNA and newDNA differ:\n\tcreated: %s\n\texpected: %s", dna, oldPopulationDNA[i])
 		}
+		pop = append(pop, inv)
 
-		if !reflect.DeepEqual(gotMap, tt.wantMap) {
-			t.Errorf("parseInvestorDNA(%q) map = %v, want %v", tt.input, gotMap, tt.wantMap)
-		}
 	}
+	t.Fail()
 }
 
 func TestInvestorFromDNA(t *testing.T) {
@@ -85,11 +84,43 @@ func TestInvestorFromDNA(t *testing.T) {
 	population := []Investor{}
 	population = append(population, parent1, parent2)
 
-	investor := f.NewInvestor(&population, 0, 1)
+	investor := f.BreedNewInvestor(&population, 0, 1)
 	newDNA := investor.DNA()
 	util.DPrintf("newDNA = %s\n", newDNA)
-	t.Fail()
+	// t.Fail()
 
+}
+
+// TestParseInvestorDNA - verify that the parser can correctly parse n Investor DNA string
+// ------------------------------------------------------------------------------------------
+func TestParseInvestorDNA(t *testing.T) {
+	var f Factory
+	var tests = []struct {
+		input   string
+		wantMap map[string]interface{}
+	}{
+		{
+			"{invVar1=YesIDo;invVar2=34;Influencers=[{subclass1,var1=NotAtAll,var2=1.0}|{subclass2,var1=2,var2=2.0}];invVar3=3.1416}",
+			map[string]interface{}{
+				"invVar1": "YesIDo",
+				"invVar2": 34,
+				"invVar3": float64(3.1416),
+			},
+		},
+		// add more test cases here
+	}
+
+	for _, tt := range tests {
+		gotMap, err := f.ParseInvestorDNA(tt.input)
+		if err != nil {
+			fmt.Printf("Error returned by ParseInvestorDNA = %s\n", err.Error())
+			continue
+		}
+
+		if !reflect.DeepEqual(gotMap, tt.wantMap) {
+			t.Errorf("parseInvestorDNA(%q) map = %v, want %v", tt.input, gotMap, tt.wantMap)
+		}
+	}
 }
 
 func CreateTestingCFG() *util.AppConfig {
