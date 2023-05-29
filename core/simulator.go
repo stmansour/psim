@@ -2,6 +2,7 @@ package core
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/stmansour/psim/util"
@@ -18,6 +19,13 @@ type Simulator struct {
 	invTable         bool            // dump the investment table at the end of the simulation
 	maxProfitThisRun float64         // the largest profit made by any investor during this simulation run
 	maxPredictions   map[string]int  // max predictions indexed by subclass
+	GensCompleted    int             // the current count of the number of generations completed in the simulation
+}
+
+// SetAppConfig simply sets the simulators pointer to the AppConfig struct
+// -----------------------------------------------------------------------------
+func (s *Simulator) SetAppConfig(cfg *util.AppConfig) {
+	s.cfg = cfg
 }
 
 // Init initializes the simulation system, it also creates Investors and
@@ -32,17 +40,48 @@ func (s *Simulator) Init(cfg *util.AppConfig, dayByDay, invTable bool) error {
 	//------------------------------------------------------------------------
 	// Create an initial population of investors with just 1 investor for now
 	//------------------------------------------------------------------------
-	for i := 0; i < s.cfg.PopulationSize; i++ {
-		var v Investor
-		s.Investors = append(s.Investors, v)
+	var err error
+	if err = s.NewPopulation(); err != nil {
+		log.Panicf("*** ERROR ***  NewPopulation returned error: %s\n", err.Error())
 	}
 
-	//------------------------------------------------------------------------
-	// Initialize all Investors...
-	//------------------------------------------------------------------------
-	for i := 0; i < len(s.Investors); i++ {
-		s.Investors[i].Init(s.cfg, &s.factory)
+	return nil
+}
+
+// NewPopulation create a new population. If this is generation 0, it will be
+// a random population.  If
+//
+// ----------------------------------------------------------------------------
+func (s *Simulator) NewPopulation() error {
+	//----------------------------------
+	// First generation is random...
+	//----------------------------------
+	if s.GensCompleted == 0 {
+		for i := 0; i < s.cfg.PopulationSize; i++ {
+			var v Investor
+			s.Investors = append(s.Investors, v)
+		}
+		//------------------------------------------------------------------------
+		// Initialize all Investors...
+		//------------------------------------------------------------------------
+		for i := 0; i < len(s.Investors); i++ {
+			s.Investors[i].Init(s.cfg, &s.factory)
+		}
+		return nil
 	}
+
+	//-----------------------------------------------------------------------
+	// If we have run a full simulation cycle, the next generation is based
+	// on the genetic algorithm.
+	//-----------------------------------------------------------------------
+	var err error
+	var newPop []Investor
+	util.DPrintf("Simulator - verify Investors have influencers:  %s\n", s.Investors[0].DNA())
+	if newPop, err = s.factory.NewPopulation(s.Investors); err != nil {
+		log.Panicf("*** PANIC ERROR ***  NewPopulation returned error: %s\n", err)
+	}
+	s.Investors = newPop
+
 	return nil
 }
 
@@ -118,6 +157,8 @@ func (s *Simulator) Run() {
 
 		dt = dt.AddDate(0, 0, 1)
 	}
+
+	s.GensCompleted++ // we have just concluded another generation
 
 	//----------------------------------------------------------------------
 	// Compute fitness scores...

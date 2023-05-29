@@ -2,6 +2,7 @@ package core
 
 import (
 	"fmt"
+	"log"
 	"reflect"
 	"testing"
 
@@ -21,21 +22,44 @@ func TestNewPopulation(t *testing.T) {
 		"{Investor;Delta4=9;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-4,Delta2=-3,Delta4=10}]}",
 		"{Investor;Delta4=2;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-21,Delta2=-5,Delta4=3}]}",
 	}
-	var f Factory
 	util.Init()
-	f.Init(CreateTestingCFG())
-	pop := []Investor{}
+	var f Factory
+	cfg := CreateTestingCFG()
+	var sim Simulator
+	f.Init(cfg)
 
+	//----------------------------
+	// Build a population...
+	//----------------------------
+	pop := []Investor{}
 	for i := 0; i < len(oldPopulationDNA); i++ {
 		inv := f.NewInvestor(oldPopulationDNA[i])
 		dna := inv.DNA()
-		// util.DPrintf("NEW INVESTOR:  %s\n", dna)
 		if dna != oldPopulationDNA[i] {
 			t.Errorf("DNA and newDNA differ:\n\tcreated: %s\n\texpected: %s", dna, oldPopulationDNA[i])
 		}
+		inv.Fitness = float64(i)*1.35 - 0.35 // a random fitness score
+		inv.FitnessCalculated = true
 		pop = append(pop, inv)
 	}
-	// t.Fail()
+
+	//-----------------------------------------------------------------
+	// now let's create a new population from our test population...
+	//-----------------------------------------------------------------
+	sim.Init(cfg, false, false)
+	sim.Investors = pop   // put our population into the simulator
+	sim.GensCompleted = 1 // make it appear that a simulation cycle just completed
+	var err error
+	if err = sim.NewPopulation(); err != nil {
+		log.Panicf("*** PANIC ERROR ***  NewPopulation returned error: %s\n", err.Error())
+	}
+
+	fmt.Printf("\nTestNewPopulation - New Population:\n")
+	for i := 0; i < len(sim.Investors); i++ {
+		fmt.Printf("%d. %s\n", i, sim.Investors[i].DNA())
+	}
+
+	t.Fail()
 }
 
 func TestInvestorFromDNA(t *testing.T) {

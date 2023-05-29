@@ -3,8 +3,8 @@ package core
 import (
 	"errors"
 	"fmt"
+	"log"
 	"math/rand"
-	"os"
 	"strconv"
 	"strings"
 
@@ -47,13 +47,15 @@ func (f *Factory) Init(cfg *util.AppConfig) {
 //
 // INPUT
 //
-//	population - current population of investors
-//	cfg        - the app configuration file
+//		population - current population of Investors, it is assumed that this
+//	              population has just completed a simulation cycle.
+//
+//		cfg        - the app configuration file
 //
 // RETURN
 //
-//	new population
-//	any error encountered
+//	[]Investor - the population that just finished its simulation cycle
+//	error any error encountered
 //
 // -------------------------------------------------------------------------
 func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
@@ -139,11 +141,9 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	if val, ok := maps[util.RandomInRange(0, 1)]["Delta4"].(int); ok {
 		newInvestor.Delta4 = val
 	}
-
 	if val, ok := maps[util.RandomInRange(0, 1)]["InvW1"].(float64); ok {
 		newInvestor.W1 = val
 	}
-
 	if val, ok := maps[util.RandomInRange(0, 1)]["InvW2"].(float64); ok {
 		newInvestor.W2 = val
 	}
@@ -154,7 +154,6 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	//-----------------------------------------------------------------------
 	p1Influencers := parent1.Influencers
 	p2Influencers := parent2.Influencers
-	newInfCount := len(parents[util.RandomInRange(0, 1)].Influencers)
 
 	//-----------------------------------------------------------------------
 	// To generate new Investor's Influencers, we use a random, parental-based
@@ -189,11 +188,12 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		parentInfluencers = append(parentInfluencers, influencer)
 	}
 
-	//------------------------------------------------------
-	// Select influencers based on what the parents had...
-	//------------------------------------------------------
-
+	//-------------------------------------------------------------------
+	// Select influencers based on what the parents had.
+	// Build a list of InfluencerDNA structs that we'll create next
+	//-------------------------------------------------------------------
 	newInfluencersDNA := []InfluencerDNA{} // we're going to pick our Influencers now...
+	newInfCount := len(parents[util.RandomInRange(0, 1)].Influencers)
 	for i := 0; i < newInfCount && len(parentInfluencers) > 0; i++ {
 		//-----------------------------
 		// randomly select a subclass
@@ -204,7 +204,6 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 			DNA1:     parentInfluencers[idx].DNA(),
 		}
 		selectedInfluencer := parentInfluencers[idx]
-
 		//-----------------------------------------------------------------
 		// Remove all occurrences of the selected subclass from the list
 		//-----------------------------------------------------------------
@@ -233,10 +232,10 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		dna1 := newInfluencersDNA[i].DNA1
 		subclass, map1, err := f.ParseInfluencerDNA(dna1)
 		if err != nil {
-			fmt.Printf("BreedNewInvestor:  Error parsing Influencer DNA1 = %s : %s\n", dna1, err.Error())
-			os.Exit(1) // this is fatal
+			log.Panicf("*** PANIC ERROR ***  BreedNewInvestor:  Error parsing Influencer DNA1 = %s : %s\n", dna1, err.Error())
 		}
 		dna2 := newInfluencersDNA[i].DNA2
+
 		dna := ""
 		if len(dna2) > 0 {
 			//-------------------------------------
@@ -244,8 +243,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 			//-------------------------------------
 			_, map2, err := f.ParseInfluencerDNA(dna2)
 			if err != nil {
-				fmt.Printf("BreedNewInvestor:  Error parsing Influencer DNA2 = %s : %s\n", dna2, err.Error())
-				os.Exit(1) // this is fatal
+				log.Panicf("BreedNewInvestor:  Error parsing Influencer DNA2 = %s : %s\n", dna2, err.Error())
 			}
 			m := []map[string]interface{}{map1, map2}
 			//--------------------------------------------------------------------
@@ -270,8 +268,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		//-----------------------------------------------------------
 		inf, err := f.NewInfluencer(dna)
 		if err != nil {
-			fmt.Printf("BreedNewInvestor:  Error from NewInfluencer(%s) : %s\n", dna, err.Error())
-			os.Exit(1) // this is fatal
+			log.Panicf("*** PANIC ERROR ***  BreedNewInvestor:  Error from NewInfluencer(%s) : %s\n", dna, err.Error())
 		}
 		//----------------------------------------------------------------------------------
 		// The influencer has control over its research period, however the Investor has
@@ -290,7 +287,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 func (f *Factory) NewInvestor(DNA string) Investor {
 	m, err := f.ParseInvestorDNA(DNA)
 	if err != nil {
-		fmt.Printf("*** ERROR *** ParseInvestorDNA returned: %s\n", err.Error())
+		log.Panicf("*** PANIC ERROR *** ParseInvestorDNA returned: %s\n", err.Error())
 	}
 
 	inv := Investor{}
@@ -298,8 +295,7 @@ func (f *Factory) NewInvestor(DNA string) Investor {
 		if val >= f.cfg.MinDelta4 && val <= f.cfg.MaxDelta4 {
 			inv.Delta4 = val
 		} else {
-			fmt.Printf("invalid Delta4 value: %d, it must be in the range %d to %d\n", val, f.cfg.MinDelta4, f.cfg.MaxDelta4)
-			os.Exit(1)
+			log.Panicf("*** PANIC ERROR ***invalid Delta4 value: %d, it must be in the range %d to %d\n", val, f.cfg.MinDelta4, f.cfg.MaxDelta4)
 		}
 	} else {
 		inv.Delta4 = util.RandomInRange(f.cfg.MinDelta4, f.cfg.MaxDelta4)
@@ -313,16 +309,14 @@ func (f *Factory) NewInvestor(DNA string) Investor {
 
 	infDNA, ok := m["Influencers"].(string)
 	if !ok {
-		fmt.Printf("*** ERROR *** no string available for Influencers from DNA\n")
-		os.Exit(1)
+		log.Panicf("*** PANIC ERROR *** no string available for Influencers from DNA\n")
 	}
 	s := infDNA[1 : len(infDNA)-1]
 	sa := strings.Split(s, "|")
 	for i := 0; i < len(sa); i++ {
 		inf, err := f.NewInfluencer(sa[i])
 		if err != nil {
-			fmt.Printf("*** ERROR *** NeInfluencer(%s) returned error: %s\n", sa[i], err.Error())
-			os.Exit(1)
+			log.Panicf("*** PANIC ERROR *** NeInfluencer(%s) returned error: %s\n", sa[i], err.Error())
 		}
 		inv.Influencers = append(inv.Influencers, inf)
 	}
