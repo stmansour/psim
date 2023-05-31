@@ -59,54 +59,45 @@ func (f *Factory) Init(cfg *util.AppConfig) {
 //
 // -------------------------------------------------------------------------
 func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
-	util.DPrintf("Entered Factory.NewPopulation")
+	util.DPrintf("Entered Factory.NewPopulation\n")
 	if len(population) < 2 {
 		return nil, errors.New("population size must be at least 2")
 	}
 
-	util.DPrintf("Factory.NewPopulation: A\n")
 	newPopulation := make([]Investor, f.cfg.PopulationSize)
 	fitnessSum := float64(0.0)                              // used by rouletteSelect
 	influencerFitnessSums := make(map[string]float64)       // stores the fitness sum of each Influencer subclass
 	influencersBySubclass := make(map[string][]*Influencer) // stores pointers to each Influencer of each subclass
 
-	util.DPrintf("Factory.NewPopulation: B\n")
 	for i := 0; i < len(population); i++ {
-		util.DPrintf("Factory.NewPopulation: C\n")
 		fitnessSum += population[i].FitnessScore()
-		util.DPrintf("Factory.NewPopulation: C.1 fitnessSum = %8.2f\n", fitnessSum)
 		for j := range population[i].Influencers {
-			util.DPrintf("Factory.NewPopulation: D\n")
 			subclass := population[i].Influencers[j].Subclass()
 			influencerFitnessSums[subclass] += population[i].Influencers[j].FitnessScore()
 			influencersBySubclass[subclass] = append(influencersBySubclass[subclass], &population[i].Influencers[j])
 		}
-		util.DPrintf("Factory.NewPopulation: E\n")
 	}
-	util.DPrintf("Factory.NewPopulation: F\n")
+
 	// Build the new population... Select parents, create a new Investor
 	for i := 0; i < f.cfg.PopulationSize; i++ {
-		util.DPrintf("Factory.NewPopulation: G\n")
 		idxParent1 := f.rouletteSelect(population, fitnessSum) // parent 1
 		idxParent2 := f.rouletteSelect(population, fitnessSum) // parent 2
 
 		// ensure idxParent2 is different from idxParent1
 		dbgCounter := 0
 		for idxParent2 == idxParent1 {
-			util.DPrintf("Factory.NewPopulation: H. population size: %d\n", len(population))
 			idxParent2 = f.rouletteSelect(population, fitnessSum)
 			dbgCounter++
-			if idxParent2 == idxParent1 {
-				for j := 0; j < f.cfg.PopulationSize; j++ {
-					util.DPrintf("Factory.NewPopulation:  population[%d].FitnessScore = %6.2f\n", j, population[j].FitnessScore())
-				}
-			}
 			if dbgCounter > 2 {
+				util.DPrintf("--------------------------------------\n")
+				util.DPrintf("population len = %d\n", len(population))
+				for j := 0; j < len(population); j++ {
+					util.DPrintf("population[%d].DNA() = %s, FitnessCalculated = %v, Fitness = %6.2f\n", j, population[j].DNA(), population[j].FitnessCalculated, population[j].Fitness)
+				}
 				log.Panicf("Looks like we're stuck in the loop\n")
 			}
 		}
 
-		util.DPrintf("Factory.NewPopulation: I\n")
 		newPopulation[i] = f.BreedNewInvestor(&population, idxParent1, idxParent2)
 	}
 
@@ -287,7 +278,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		//-----------------------------------------------------------
 		// Create the new Influencer and add it to newInvestor...
 		//-----------------------------------------------------------
-		util.DPrintf("calling NewInfluencer(%q)\n", dna)
+		// util.DPrintf("calling NewInfluencer(%q)\n", dna)
 		inf, err := f.NewInfluencer(dna)
 		if err != nil {
 			log.Panicf("*** PANIC ERROR ***  BreedNewInvestor:  Error from NewInfluencer(%s) : %s\n", dna, err.Error())
@@ -593,10 +584,20 @@ func (f *Factory) GenerateDeltas(DNA map[string]interface{}) (Delta1 int, Delta2
 			Delta2 = val
 		} else {
 			mn := f.cfg.MinDelta2 // assume the min value is the configured lower limit
-			if Delta1 > mn {      // if this is true, then Delta1's range can overlap Delta2
-				mn = Delta1
+			if Delta1 >= mn {     // if this is true, then Delta1's range can overlap Delta2
+				//  MinDelta2       mn              MaxDelta2
+				//     |---------|--+-------------------|
+				//             Delta1
+				mn = Delta1 + 1            // see if we can move the minDelta2 value for this object to 1 greater than Delta1
+				if mn <= f.cfg.MaxDelta2 { // as long as mn is <= MaxDelta2, we're OK
+					Delta2 = mn
+				} else {
+					util.DPrintf("Current values: Delta1 = %d, Delta2 = %d, Delta4 = %d, cfg.MinDelta2 = %d, cfg.MaxDelta2 = %d", Delta1, Delta2, Delta4, f.cfg.MinDelta2, f.cfg.MaxDelta2)
+				}
+			} else {
+				util.DPrintf("Current values: Delta1 = %d, Delta2 = %d, Delta4 = %d, cfg.MinDelta2 = %d, cfg.MaxDelta2 = %d\n", Delta1, Delta2, Delta4, f.cfg.MinDelta2, f.cfg.MaxDelta2)
+				log.Panicf("Not exactly sure what to do here, val = %d\n", val)
 			}
-			return 0, 0, 0, fmt.Errorf("invalid Delta2 value: %d, it must be in the range %d to %d", val, mn, f.cfg.MaxDelta2)
 		}
 	} else {
 		for {

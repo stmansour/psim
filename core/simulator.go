@@ -62,6 +62,7 @@ func (s *Simulator) Init(cfg *util.AppConfig, dayByDay, invTable bool) error {
 // ----------------------------------------------------------------------------
 func (s *Simulator) NewPopulation() error {
 	util.DPrintf("Simulator.NewPopulation - A\n")
+
 	//----------------------------------
 	// First generation is random...
 	//----------------------------------
@@ -89,6 +90,7 @@ func (s *Simulator) NewPopulation() error {
 	//-----------------------------------------------------------------------
 	var err error
 	var newPop []Investor
+
 	util.DPrintf("Simulator.NewPopulation - calling s.factory.NewPopulation. len(s.Investors) = %d\n", len(s.Investors))
 	if newPop, err = s.factory.NewPopulation(s.Investors); err != nil {
 		log.Panicf("*** PANIC ERROR ***  NewPopulation returned error: %s\n", err)
@@ -116,15 +118,6 @@ func (s *Simulator) Run() {
 		dt := time.Time(s.cfg.DtStart)
 		dtStop := time.Time(s.cfg.DtStop)
 		util.DPrintf("INITIATING GENERATION %d\n", g)
-
-		util.DPrintf("searching for investors with nil cfg...\n")
-		nc := 0
-		for i := 0; i < len(s.Investors); i++ {
-			if s.Investors[i].cfg == nil {
-				nc++
-			}
-		}
-		util.DPrintf("scanned %d Investors, nil cfg count = %d\n", len(s.Investors), nc)
 
 		for dtStop.After(dt) || dtStop.Equal(dt) {
 			iteration++

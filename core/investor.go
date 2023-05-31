@@ -2,6 +2,8 @@ package core
 
 import (
 	"fmt"
+	"log"
+	"math"
 	"os"
 	"reflect"
 	"time"
@@ -59,6 +61,9 @@ type Investment struct {
 func (i *Investor) Init(cfg *util.AppConfig, f *Factory) {
 	i.cfg = cfg
 	i.BalanceC1 = cfg.InitFunds
+	i.FitnessCalculated = false
+	i.Fitness = float64(0)
+
 	if !i.CreatedByDNA {
 		i.Delta4 = util.RandomInRange(cfg.MinDelta4, cfg.MaxDelta4) // all Influencers will be constrained to this
 		i.W1 = i.cfg.InvW1
@@ -376,7 +381,8 @@ func (i *Investor) FitnessScore() float64 {
 		return i.Fitness
 	}
 
-	util.DPrintf("FitnessScore: enter\n")
+	util.DPrintf("FitnessScore: enter.\n")
+
 	// Calculate correctness...
 	correct := 0
 	total := 0
@@ -387,7 +393,10 @@ func (i *Investor) FitnessScore() float64 {
 			correct++
 		}
 	}
-	correctness := float64(float64(correct) / float64(total))
+	correctness := float64(0)
+	if total > 0 {
+		correctness = float64(float64(correct) / float64(total))
+	}
 
 	// And now the fitness score
 	util.DPrintf("FitnessScore:  Investor dna is %s\n", i.DNA())
@@ -396,8 +405,22 @@ func (i *Investor) FitnessScore() float64 {
 	util.DPrintf("i.cfg.InitFunds: %8.2f\n", i.cfg.InitFunds)
 
 	dda := i.BalanceC1 - i.cfg.InitFunds
-	ddb := float64(i.W1 * dda / i.maxProfit)
+	if math.IsNaN(dda) || math.IsInf(dda, 0) {
+		log.Panicf("Investor.FitnessSocre() is dda is invalid\n")
+	}
+
+	ddb := float64(0)
+	if i.maxProfit > 0 {
+		ddb = float64(i.W1 * dda / i.maxProfit)
+	}
+	if math.IsNaN(ddb) || math.IsInf(ddb, 0) {
+		log.Panicf("Investor.FitnessSocre() is ddb is invalid.  i.W1 = %4.2f, dda = %8.2f, i.maxProfit = %8.2f\n", i.W1, dda, i.maxProfit)
+	}
 	ddc := float64(i.W2 * correctness)
+
+	if math.IsNaN(ddc) || math.IsInf(ddc, 0) {
+		log.Panicf("Investor.FitnessSocre() is ddc is invalid\n")
+	}
 
 	i.Fitness = ddb + ddc
 	if i.Fitness < 0 {
@@ -410,6 +433,10 @@ func (i *Investor) FitnessScore() float64 {
 	// 	i.W1, i.BalanceC1, i.cfg.InitFunds, i.maxProfit, i.W2, correct, total, correctness)
 	// util.DPrintf("Fitness = %6.3f\n", i.Fitness)
 	util.DPrintf("FitnessScore: exit\n")
+
+	if math.IsNaN(i.Fitness) || math.IsInf(i.Fitness, 0) {
+		log.Panicf("Investor.FitnessSocre() is STORING AN INVALID FITNESS!!!!\n")
+	}
 
 	return i.Fitness
 }
