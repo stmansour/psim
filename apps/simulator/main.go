@@ -58,8 +58,11 @@ func displaySimulationDetails(cfg *util.AppConfig) {
 func displaySimulationResults(cfg *util.AppConfig) {
 	fmt.Printf("\n**************  S I M U L A T I O N   R E S U L T S  **************\n")
 	fmt.Printf("Number of generations: %d\n", app.sim.GensCompleted)
+	err := (&app.sim).DumpStats()
+	if err != nil {
+		fmt.Printf("Simulator DumpSimStats returned error: %s\n", err)
+	}
 	(&app.sim).ResultsByInvestor()
-
 }
 
 func readCommandLineArgs() {

@@ -59,37 +59,58 @@ func (f *Factory) Init(cfg *util.AppConfig) {
 //
 // -------------------------------------------------------------------------
 func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
+	util.DPrintf("Entered Factory.NewPopulation")
 	if len(population) < 2 {
 		return nil, errors.New("population size must be at least 2")
 	}
 
+	util.DPrintf("Factory.NewPopulation: A\n")
 	newPopulation := make([]Investor, f.cfg.PopulationSize)
 	fitnessSum := float64(0.0)                              // used by rouletteSelect
 	influencerFitnessSums := make(map[string]float64)       // stores the fitness sum of each Influencer subclass
 	influencersBySubclass := make(map[string][]*Influencer) // stores pointers to each Influencer of each subclass
 
-	for _, investor := range population {
-		fitnessSum += investor.FitnessScore()
-		for j := range investor.Influencers {
-			subclass := investor.Influencers[j].Subclass()
-			influencerFitnessSums[subclass] += investor.Influencers[j].FitnessScore()
-			influencersBySubclass[subclass] = append(influencersBySubclass[subclass], &investor.Influencers[j])
+	util.DPrintf("Factory.NewPopulation: B\n")
+	for i := 0; i < len(population); i++ {
+		util.DPrintf("Factory.NewPopulation: C\n")
+		fitnessSum += population[i].FitnessScore()
+		util.DPrintf("Factory.NewPopulation: C.1 fitnessSum = %8.2f\n", fitnessSum)
+		for j := range population[i].Influencers {
+			util.DPrintf("Factory.NewPopulation: D\n")
+			subclass := population[i].Influencers[j].Subclass()
+			influencerFitnessSums[subclass] += population[i].Influencers[j].FitnessScore()
+			influencersBySubclass[subclass] = append(influencersBySubclass[subclass], &population[i].Influencers[j])
 		}
+		util.DPrintf("Factory.NewPopulation: E\n")
 	}
-
+	util.DPrintf("Factory.NewPopulation: F\n")
 	// Build the new population... Select parents, create a new Investor
 	for i := 0; i < f.cfg.PopulationSize; i++ {
+		util.DPrintf("Factory.NewPopulation: G\n")
 		idxParent1 := f.rouletteSelect(population, fitnessSum) // parent 1
 		idxParent2 := f.rouletteSelect(population, fitnessSum) // parent 2
 
 		// ensure idxParent2 is different from idxParent1
+		dbgCounter := 0
 		for idxParent2 == idxParent1 {
+			util.DPrintf("Factory.NewPopulation: H. population size: %d\n", len(population))
 			idxParent2 = f.rouletteSelect(population, fitnessSum)
+			dbgCounter++
+			if idxParent2 == idxParent1 {
+				for j := 0; j < f.cfg.PopulationSize; j++ {
+					util.DPrintf("Factory.NewPopulation:  population[%d].FitnessScore = %6.2f\n", j, population[j].FitnessScore())
+				}
+			}
+			if dbgCounter > 2 {
+				log.Panicf("Looks like we're stuck in the loop\n")
+			}
 		}
 
+		util.DPrintf("Factory.NewPopulation: I\n")
 		newPopulation[i] = f.BreedNewInvestor(&population, idxParent1, idxParent2)
 	}
 
+	util.DPrintf("Factory.NewPopulation: J\n")
 	return newPopulation, nil
 }
 
@@ -195,17 +216,17 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	newInfluencersDNA := []InfluencerDNA{} // we're going to pick our Influencers now...
 	newInfCount := len(parents[util.RandomInRange(0, 1)].Influencers)
 	for i := 0; i < newInfCount && len(parentInfluencers) > 0; i++ {
-		//-----------------------------
-		// randomly select a subclass
-		//-----------------------------
-		idx := rand.Intn(len(parentInfluencers))
+		idx := rand.Intn(len(parentInfluencers)) // select a random subclass
 		newInfluencerDNA := InfluencerDNA{
 			Subclass: parentInfluencers[idx].Subclass(),
 			DNA1:     parentInfluencers[idx].DNA(),
 		}
 		selectedInfluencer := parentInfluencers[idx]
+
 		//-----------------------------------------------------------------
 		// Remove all occurrences of the selected subclass from the list
+		// because the Investor can only have one instance of a particular
+		// subclass
 		//-----------------------------------------------------------------
 		var tmp []Influencer
 		for _, inf := range parentInfluencers {
@@ -266,6 +287,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		//-----------------------------------------------------------
 		// Create the new Influencer and add it to newInvestor...
 		//-----------------------------------------------------------
+		util.DPrintf("calling NewInfluencer(%q)\n", dna)
 		inf, err := f.NewInfluencer(dna)
 		if err != nil {
 			log.Panicf("*** PANIC ERROR ***  BreedNewInvestor:  Error from NewInfluencer(%s) : %s\n", dna, err.Error())
@@ -278,7 +300,74 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		inf.SetDelta4(newInvestor.Delta4)
 		newInvestor.Influencers = append(newInvestor.Influencers, inf)
 	}
+	f.Mutate(&newInvestor)
+	newInvestor.cfg = f.cfg
+	newInvestor.factory = f
+	newInvestor.FitnessCalculated = false
+	newInvestor.Fitness = 0.0
+
 	return newInvestor
+}
+
+// Mutate - there's a one percent chance that something will get completely changed
+// ------------------------------------------------------------------------------------
+func (f *Factory) Mutate(inv *Investor) {
+	// if util.RandomInRange(1, 100) != 1 {
+	// 	return
+	// }
+	dna := inv.DNA()
+	m, err := f.ParseInvestorDNA(dna)
+	if err != nil {
+		log.Panicf("*** PANIC ERROR ***  Mutate:  Error from ParseInvestorDNA(%s) : %s\n", dna, err.Error())
+	}
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	randomKey := keys[rand.Intn(len(keys))]
+	// fmt.Printf("Random key: %s, value: %v\n", randomKey, m[randomKey])
+	switch randomKey {
+	case "Delta4":
+		d := 0
+		found := false
+		for !found {
+			d = util.RandomInRange(f.cfg.MinDelta4, f.cfg.MaxDelta4)
+			found = (d == inv.Delta4)
+		}
+		inv.Delta4 = d
+	case "InvW1":
+		w := float64(0)
+		found := false
+		for !found {
+			w = rand.Float64()
+			found = (w != inv.W1)
+		}
+		inv.W1 = w
+		inv.W2 = 1.0 - w
+	case "InvW2":
+		w := float64(0)
+		found := false
+		for !found {
+			w = rand.Float64()
+			found = (w != inv.W2)
+		}
+		inv.W2 = w
+		inv.W1 = 1.0 - w
+	case "Influencers":
+		idx := util.RandomInRange(0, len(InfluencerSubclasses)-1)
+		dna := fmt.Sprintf("{%s}", InfluencerSubclasses[idx])
+		idx = 0
+		if len(inv.Influencers) > 1 {
+			idx = util.RandomInRange(0, len(inv.Influencers)-1)
+		}
+		r, err := f.NewInfluencer(dna)
+		if err != nil {
+			log.Panicf("*** PANIC ERROR NewInfluncer(%q) returned error: %s\n", dna, err)
+		}
+		inv.Influencers[idx] = r
+	default:
+		log.Panicf("*** PANIC ERROR *** Unhandled key from DNA: %s\n", randomKey)
+	}
 }
 
 // NewInvestor creates a new investor from supplied DNA
@@ -320,6 +409,10 @@ func (f *Factory) NewInvestor(DNA string) Investor {
 		}
 		inv.Influencers = append(inv.Influencers, inf)
 	}
+	inv.cfg = f.cfg
+	inv.factory = f
+	inv.BalanceC1 = inv.cfg.InitFunds
+
 	return inv
 }
 
@@ -366,31 +459,6 @@ func (f *Factory) ParseInvestorDNA(DNA string) (map[string]interface{}, error) {
 	}
 
 	return investorVarMap, nil
-}
-
-// ParseInfluencerListDNA function accepts a string argument, strips off the
-// leading open bracket ([) and the trailing closing bracket (])
-// at the front of the string also removing whitespace, then splits the
-// remaining string on the character '|' and returns the resulting slice
-//
-// The form of the Influencer DNA is:
-//
-//	Influencers=[{subclass1,var1=NotAtAll,var2=1.0}|{subclass2,var1=2,var2=2.0}]
-//
-// This function is designed to parse and return the slice of the value
-// Influencers in the DNA string.
-//
-// RETURNS
-//
-//	a slice of individual Influencer DNA strings
-//
-// -------------------------------------------------------------------------------------
-func (f *Factory) ParseInfluencerListDNA(s string) []string {
-	s = strings.TrimSpace(s)
-	if s[0] == '[' && s[len(s)-1] == ']' {
-		s = strings.TrimSpace(s[1 : len(s)-1]) // Trim the leading '[' and trailing ']' and any surrounding whitespace
-	}
-	return strings.Split(s, "|") // Split the remaining string on the character '|'
 }
 
 // NewInfluencer creates and returns a new influencer of the specified subclass.

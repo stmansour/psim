@@ -3,6 +3,7 @@ package core
 import (
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/stmansour/psim/util"
@@ -10,16 +11,23 @@ import (
 	"github.com/stmansour/psim/data"
 )
 
+// SimulationStatistics contains relevant metrics for each generation simulated
+// ------------------------------------------------------------------
+type SimulationStatistics struct {
+	ProfitableInvestors int // number of Investors that were profitable in this generation
+}
+
 // Simulator is a simulator object
 type Simulator struct {
-	cfg              *util.AppConfig // system-wide configuration info
-	factory          Factory         // used to create Influencers
-	Investors        []Investor      // the population of the current generation
-	dayByDay         bool            // show day by day results, debug feature
-	invTable         bool            // dump the investment table at the end of the simulation
-	maxProfitThisRun float64         // the largest profit made by any investor during this simulation run
-	maxPredictions   map[string]int  // max predictions indexed by subclass
-	GensCompleted    int             // the current count of the number of generations completed in the simulation
+	cfg              *util.AppConfig        // system-wide configuration info
+	factory          Factory                // used to create Influencers
+	Investors        []Investor             // the population of the current generation
+	dayByDay         bool                   // show day by day results, debug feature
+	invTable         bool                   // dump the investment table at the end of the simulation
+	maxProfitThisRun float64                // the largest profit made by any investor during this simulation run
+	maxPredictions   map[string]int         // max predictions indexed by subclass
+	GensCompleted    int                    // the current count of the number of generations completed in the simulation
+	SimStats         []SimulationStatistics // keep track of what happened
 }
 
 // SetAppConfig simply sets the simulators pointer to the AppConfig struct
@@ -53,20 +61,25 @@ func (s *Simulator) Init(cfg *util.AppConfig, dayByDay, invTable bool) error {
 //
 // ----------------------------------------------------------------------------
 func (s *Simulator) NewPopulation() error {
+	util.DPrintf("Simulator.NewPopulation - A\n")
 	//----------------------------------
 	// First generation is random...
 	//----------------------------------
 	if s.GensCompleted == 0 {
+		util.DPrintf("Simulator.NewPopulation - B\n")
 		for i := 0; i < s.cfg.PopulationSize; i++ {
+			util.DPrintf("Simulator.NewPopulation - C\n")
 			var v Investor
 			s.Investors = append(s.Investors, v)
 		}
 		//------------------------------------------------------------------------
 		// Initialize all Investors...
 		//------------------------------------------------------------------------
+		util.DPrintf("Simulator.NewPopulation - D\n")
 		for i := 0; i < len(s.Investors); i++ {
 			s.Investors[i].Init(s.cfg, &s.factory)
 		}
+		util.DPrintf("Simulator.NewPopulation - E\n")
 		return nil
 	}
 
@@ -76,11 +89,14 @@ func (s *Simulator) NewPopulation() error {
 	//-----------------------------------------------------------------------
 	var err error
 	var newPop []Investor
-	util.DPrintf("Simulator - verify Investors have influencers:  %s\n", s.Investors[0].DNA())
+	util.DPrintf("Simulator.NewPopulation - calling s.factory.NewPopulation. len(s.Investors) = %d\n", len(s.Investors))
 	if newPop, err = s.factory.NewPopulation(s.Investors); err != nil {
 		log.Panicf("*** PANIC ERROR ***  NewPopulation returned error: %s\n", err)
 	}
+	util.DPrintf("Simulator.NewPopulation - G\n")
+	util.DPrintf("s.Investors size before new population: %d\n", len(s.Investors))
 	s.Investors = newPop
+	util.DPrintf("s.Investors size after new population: %d\n", len(s.Investors))
 
 	return nil
 }
@@ -92,79 +108,106 @@ func (s *Simulator) NewPopulation() error {
 // simulation and some indicators as to how things are progressing.
 // ----------------------------------------------------------------------------
 func (s *Simulator) Run() {
-	dt := time.Time(s.cfg.DtStart)
-	dtStop := time.Time(s.cfg.DtStop)
-
 	//-------------------------------------------------------------------------
 	// Iterate day-by-day through the simulation.
 	//-------------------------------------------------------------------------
 	iteration := 0
-	for dtStop.After(dt) || dtStop.Equal(dt) {
-		iteration++
-		SellCount := 0
-		BuyCount := 0
+	for g := 0; g < s.cfg.Generations; g++ {
+		dt := time.Time(s.cfg.DtStart)
+		dtStop := time.Time(s.cfg.DtStop)
+		util.DPrintf("INITIATING GENERATION %d\n", g)
 
-		//-----------------------------------------
-		// Call SellConversion for each investor
-		//-----------------------------------------
-		for j := 0; j < len(s.Investors); j++ {
-			sc, err := (&s.Investors[j]).SellConversion(dt)
-			if err != nil {
-				fmt.Printf("SellConversion returned: %s\n", err.Error())
+		util.DPrintf("searching for investors with nil cfg...\n")
+		nc := 0
+		for i := 0; i < len(s.Investors); i++ {
+			if s.Investors[i].cfg == nil {
+				nc++
 			}
-			SellCount += sc
 		}
+		util.DPrintf("scanned %d Investors, nil cfg count = %d\n", len(s.Investors), nc)
 
-		//-----------------------------------------
-		// Call BuyConversion for each investor
-		//-----------------------------------------
-		check := false
-		for j := 0; j < len(s.Investors); j++ {
-			bc, err := (&s.Investors[j]).BuyConversion(dt)
-			if err != nil {
-				fmt.Printf("BuyConversion returned: %s\n", err.Error())
-			}
-			if len(s.Investors[j].Investments) > 0 {
-				check = true
-			}
-			BuyCount += bc
-		}
-		if check {
-			x := 0
+		for dtStop.After(dt) || dtStop.Equal(dt) {
+			iteration++
+			SellCount := 0
+			BuyCount := 0
+
+			//-----------------------------------------
+			// Call SellConversion for each investor
+			//-----------------------------------------
 			for j := 0; j < len(s.Investors); j++ {
-				x += len(s.Investors[j].Investments)
-			}
-		}
-
-		//============== DEBUG --------------------------------------------------------
-		if s.dayByDay {
-			count := 0
-			invPending := 0
-			for j := 0; j < len(s.Investors); j++ {
-				if s.Investors[j].BalanceC1 > 0 {
-					count++
+				sc, err := (&s.Investors[j]).SellConversion(dt)
+				if err != nil {
+					fmt.Printf("SellConversion returned: %s\n", err.Error())
 				}
-				for k := 0; k < len(s.Investors[j].Investments); k++ {
-					if !s.Investors[j].Investments[k].Completed {
-						invPending++
+				SellCount += sc
+			}
+
+			//-----------------------------------------
+			// Call BuyConversion for each investor
+			//-----------------------------------------
+			check := false
+			for j := 0; j < len(s.Investors); j++ {
+				bc, err := (&s.Investors[j]).BuyConversion(dt)
+				if err != nil {
+					fmt.Printf("BuyConversion returned: %s\n", err.Error())
+				}
+				if len(s.Investors[j].Investments) > 0 {
+					check = true
+				}
+				BuyCount += bc
+			}
+			if check {
+				x := 0
+				for j := 0; j < len(s.Investors); j++ {
+					x += len(s.Investors[j].Investments)
+				}
+			}
+
+			//============== DEBUG --------------------------------------------------------
+			if s.dayByDay {
+				count := 0
+				invPending := 0
+				for j := 0; j < len(s.Investors); j++ {
+					if s.Investors[j].BalanceC1 > 0 {
+						count++
+					}
+					for k := 0; k < len(s.Investors[j].Investments); k++ {
+						if !s.Investors[j].Investments[k].Completed {
+							invPending++
+						}
 					}
 				}
+				fmt.Printf("%4d. Date: %s, Buys: %d, Sells %d,\n      investors remaining: %d, investments pending: %d\n",
+					iteration, dt.Format("2006-Jan-02"), BuyCount, SellCount, count, invPending)
 			}
-			fmt.Printf("%4d. Date: %s, Buys: %d, Sells %d,\n      investors remaining: %d, investments pending: %d\n",
-				iteration, dt.Format("2006-Jan-02"), BuyCount, SellCount, count, invPending)
+			//============== DEBUG --------------------------------------------------------
+
+			dt = dt.AddDate(0, 0, 1)
 		}
-		//============== DEBUG --------------------------------------------------------
+		util.DPrintf("COMPLETED GENERATION %d\n", g)
+		s.GensCompleted++ // we have just concluded another generation
 
-		dt = dt.AddDate(0, 0, 1)
+		//----------------------------------------------------------------------
+		// Compute fitness scores and create the next generation
+		//----------------------------------------------------------------------
+		util.DPrintf("s.GensCompleted: %d\n", s.GensCompleted)
+		s.CalculateMaxVals()
+		s.CalculateAllFitnessScores()
+
+		// stats...
+		s.SaveStats()
+
+		//---------------------------------------------------------
+		// Now replace current generation with next generation...
+		//---------------------------------------------------------
+		if err := s.NewPopulation(); err != nil {
+			log.Panicf("*** PANIC ERROR *** NewPopulation returned error: %s\n", err)
+		}
+		util.DPrintf("Simulator.Run - D\n")
+		s.maxPredictions = make(map[string]int, 0)
+		util.DPrintf("Simulator.Run - E\n")
 	}
-
-	s.GensCompleted++ // we have just concluded another generation
-
-	//----------------------------------------------------------------------
-	// Compute fitness scores...
-	//----------------------------------------------------------------------
-	s.CalculateMaxVals()
-	s.CalculateAllFitnessScores()
+	util.DPrintf("Simulator.Run - F\n")
 }
 
 // CalculateAllFitnessScores - calculates values over all the Influncers and Investors
@@ -247,6 +290,48 @@ func (s *Simulator) CalculateMaxVals() {
 	}
 }
 
+// SaveStats - dumps the top investor to a file after the simulation.
+//
+// RETURNS
+// ----------------------------------------------------------------------------
+func (s *Simulator) SaveStats() {
+	prof := 0
+	for i := 0; i < len(s.Investors); i++ {
+		if s.Investors[i].BalanceC1 > s.cfg.InitFunds {
+			prof++
+		}
+	}
+	ss := SimulationStatistics{
+		ProfitableInvestors: prof,
+	}
+	s.SimStats = append(s.SimStats, ss)
+}
+
+// DumpStats - dumps the top investor to a file after the simulation.
+//
+// RETURNS
+//
+//	any error encountered
+//
+// ----------------------------------------------------------------------------
+func (s *Simulator) DumpStats() error {
+	fname := fmt.Sprintf("SimStats.csv")
+	file, err := os.Create(fname)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	// the header row
+	fmt.Fprintf(file, "Generation,ProfitableInvestors\n")
+
+	// investment rows
+	for i := 0; i < len(s.SimStats); i++ {
+		fmt.Fprintf(file, "%d,%d\n", i, s.SimStats[i].ProfitableInvestors)
+	}
+	return nil
+}
+
 // ShowTopInvestor - dumps the top investor to a file after the simulation.
 //
 // RETURNS
@@ -272,17 +357,6 @@ func (s *Simulator) ShowTopInvestor() error {
 	}
 	return s.Investors[topInvestorIdx].OutputInvestments(topInvestorIdx)
 }
-
-// ResultsByInvestor - dumps results of each investor
-//
-// RETURNS
-//
-//	nothing at this time
-//
-// ----------------------------------------------------------------------------
-// func (s *Simulator) CalculateFitness() {
-
-// }
 
 // ResultsByInvestor - dumps results of each investor
 //

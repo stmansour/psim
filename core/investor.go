@@ -376,6 +376,7 @@ func (i *Investor) FitnessScore() float64 {
 		return i.Fitness
 	}
 
+	util.DPrintf("FitnessScore: enter\n")
 	// Calculate correctness...
 	correct := 0
 	total := 0
@@ -389,12 +390,26 @@ func (i *Investor) FitnessScore() float64 {
 	correctness := float64(float64(correct) / float64(total))
 
 	// And now the fitness score
-	i.Fitness = float64(i.W1*(i.BalanceC1-i.cfg.InitFunds)/i.maxProfit) + float64(i.W2*correctness)
+	util.DPrintf("FitnessScore:  Investor dna is %s\n", i.DNA())
+	util.DPrintf("i.Balance: %6.2f\n", i.BalanceC1)
+	util.DPrintf("i = %#v\n", *i)
+	util.DPrintf("i.cfg.InitFunds: %8.2f\n", i.cfg.InitFunds)
+
+	dda := i.BalanceC1 - i.cfg.InitFunds
+	ddb := float64(i.W1 * dda / i.maxProfit)
+	ddc := float64(i.W2 * correctness)
+
+	i.Fitness = ddb + ddc
+	if i.Fitness < 0 {
+		i.Fitness = 0
+	}
+	// i.Fitness = float64(i.W1*(i.BalanceC1-i.cfg.InitFunds)/i.maxProfit) + float64(i.W2*correctness)
 	i.FitnessCalculated = true
 
 	// util.DPrintf("W1 = %3.1f, BalanceC1 = %6.2f, InitFunds = %6.2f, maxProfit = %6.2f, W2 = %3.1f, correctness = %d / %d = %6.2f  ",
 	// 	i.W1, i.BalanceC1, i.cfg.InitFunds, i.maxProfit, i.W2, correct, total, correctness)
 	// util.DPrintf("Fitness = %6.3f\n", i.Fitness)
+	util.DPrintf("FitnessScore: exit\n")
 
 	return i.Fitness
 }

@@ -11,7 +11,7 @@ import (
 
 func TestNewPopulation(t *testing.T) {
 	var oldPopulationDNA = []string{
-		"{Investor;Delta4=14;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-20,Delta2=-5,Delta4=2}]}",
+		"{Investor;Delta4=14;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-20,Delta2=-5,Delta4=2}|{IRInfluencer,Delta1=-17,Delta2=-3,Delta4=4}]}",
 		"{Investor;Delta4=12;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-27,Delta2=-5,Delta4=6}]}",
 		"{Investor;Delta4=9;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-21,Delta2=-1,Delta4=5}]}",
 		"{Investor;Delta4=4;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-7,Delta2=-4,Delta4=7}]}",
@@ -27,6 +27,8 @@ func TestNewPopulation(t *testing.T) {
 	cfg := CreateTestingCFG()
 	var sim Simulator
 	f.Init(cfg)
+
+	t.Fail()
 
 	//----------------------------
 	// Build a population...
@@ -54,18 +56,34 @@ func TestNewPopulation(t *testing.T) {
 		log.Panicf("*** PANIC ERROR ***  NewPopulation returned error: %s\n", err.Error())
 	}
 
-	fmt.Printf("\nTestNewPopulation - New Population:\n")
+	// make sure they have Influencers
+	util.DPrintf("New Population:  Investor count: %d\n", len(sim.Investors))
+	nc := 0
+	nf := 0
 	for i := 0; i < len(sim.Investors); i++ {
-		fmt.Printf("%d. %s\n", i, sim.Investors[i].DNA())
+		util.DPrintf("Investor[%d] Influencer count: %d\n", i, len(sim.Investors[i].Influencers))
+		if len(sim.Investors[i].Influencers) == 0 {
+			t.Errorf("No influencers for Investor[%d]\n", i)
+		}
+		if sim.Investors[i].cfg == nil {
+			nc++
+		}
+		if sim.Investors[i].factory == nil {
+			nf++
+		}
+		util.DPrintf("sim.Investors[%d].FitnessCalculated = %v, .Fitness = %6.2f\n", i, sim.Investors[i].FitnessCalculated, sim.Investors[i].Fitness)
 	}
+	util.DPrintf("sim.Investors with nil cfg: %d\n", nc)
+	util.DPrintf("sim.Investors with nil factory: %d\n", nf)
 
-	t.Fail()
 }
 
 func TestInvestorFromDNA(t *testing.T) {
 	var f Factory
 	util.Init()
 	f.Init(CreateTestingCFG())
+
+	// t.Fail()
 
 	parent1 := Investor{
 		Delta4: 4,
@@ -109,7 +127,6 @@ func TestInvestorFromDNA(t *testing.T) {
 
 	investor := f.BreedNewInvestor(&population, 0, 1)
 	fmt.Printf("New Investor DNA = %s\n", investor.DNA())
-	// t.Fail()
 }
 
 // TestParseInvestorDNA - verify that the parser can correctly parse n Investor DNA string
