@@ -38,5 +38,6 @@ type Influencer interface {
 	FinalizePrediction(t3, t4 time.Time, profitable bool)
 	FitnessScore() float64
 	Subclass() string
+	MyInvestor() *Investor
 	GetLenMyPredictions() int
 }

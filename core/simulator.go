@@ -61,26 +61,21 @@ func (s *Simulator) Init(cfg *util.AppConfig, dayByDay, invTable bool) error {
 //
 // ----------------------------------------------------------------------------
 func (s *Simulator) NewPopulation() error {
-	util.DPrintf("Simulator.NewPopulation - A\n")
 
 	//----------------------------------
 	// First generation is random...
 	//----------------------------------
 	if s.GensCompleted == 0 {
-		util.DPrintf("Simulator.NewPopulation - B\n")
 		for i := 0; i < s.cfg.PopulationSize; i++ {
-			util.DPrintf("Simulator.NewPopulation - C\n")
 			var v Investor
 			s.Investors = append(s.Investors, v)
 		}
 		//------------------------------------------------------------------------
 		// Initialize all Investors...
 		//------------------------------------------------------------------------
-		util.DPrintf("Simulator.NewPopulation - D\n")
 		for i := 0; i < len(s.Investors); i++ {
 			s.Investors[i].Init(s.cfg, &s.factory)
 		}
-		util.DPrintf("Simulator.NewPopulation - E\n")
 		return nil
 	}
 
@@ -91,14 +86,10 @@ func (s *Simulator) NewPopulation() error {
 	var err error
 	var newPop []Investor
 
-	util.DPrintf("Simulator.NewPopulation - calling s.factory.NewPopulation. len(s.Investors) = %d\n", len(s.Investors))
 	if newPop, err = s.factory.NewPopulation(s.Investors); err != nil {
 		log.Panicf("*** PANIC ERROR ***  NewPopulation returned error: %s\n", err)
 	}
-	util.DPrintf("Simulator.NewPopulation - G\n")
-	util.DPrintf("s.Investors size before new population: %d\n", len(s.Investors))
 	s.Investors = newPop
-	util.DPrintf("s.Investors size after new population: %d\n", len(s.Investors))
 
 	return nil
 }
@@ -117,7 +108,6 @@ func (s *Simulator) Run() {
 	for g := 0; g < s.cfg.Generations; g++ {
 		dt := time.Time(s.cfg.DtStart)
 		dtStop := time.Time(s.cfg.DtStop)
-		util.DPrintf("INITIATING GENERATION %d\n", g)
 
 		for dtStop.After(dt) || dtStop.Equal(dt) {
 			iteration++
@@ -177,13 +167,16 @@ func (s *Simulator) Run() {
 
 			dt = dt.AddDate(0, 0, 1)
 		}
-		util.DPrintf("COMPLETED GENERATION %d\n", g)
 		s.GensCompleted++ // we have just concluded another generation
+		fmt.Printf("Completed generation %d\n", s.GensCompleted)
+
+		//------------------------------------------------------------
+		// DEBUG - check for all Investors having initial funds...
+		//------------------------------------------------------------
 
 		//----------------------------------------------------------------------
 		// Compute fitness scores and create the next generation
 		//----------------------------------------------------------------------
-		util.DPrintf("s.GensCompleted: %d\n", s.GensCompleted)
 		s.CalculateMaxVals()
 		s.CalculateAllFitnessScores()
 
@@ -196,11 +189,8 @@ func (s *Simulator) Run() {
 		if err := s.NewPopulation(); err != nil {
 			log.Panicf("*** PANIC ERROR *** NewPopulation returned error: %s\n", err)
 		}
-		util.DPrintf("Simulator.Run - D\n")
 		s.maxPredictions = make(map[string]int, 0)
-		util.DPrintf("Simulator.Run - E\n")
 	}
-	util.DPrintf("Simulator.Run - F\n")
 }
 
 // CalculateAllFitnessScores - calculates values over all the Influncers and Investors

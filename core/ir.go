@@ -18,7 +18,12 @@ type IRInfluencer struct {
 	FitnessIsNormalized bool
 	Fitness             float64
 	MyPredictions       []Prediction
-	MyInvestor          *Investor // my parent, the investor that holds me
+	myInvestor          *Investor // my parent, the investor that holds me
+}
+
+// MyInvestor returns a pointer to the investor object that holds this influencer
+func (p *IRInfluencer) MyInvestor() *Investor {
+	return p.myInvestor
 }
 
 // GetAppConfig - return cfg struct
@@ -97,7 +102,7 @@ func (p *IRInfluencer) SetID() {
 
 // Init - initializes a IRInfluencer
 func (p *IRInfluencer) Init(i *Investor, cfg *util.AppConfig, delta4 int) {
-	p.MyInvestor = i
+	p.myInvestor = i
 	p.cfg = cfg
 	p.SetID()
 }
@@ -226,7 +231,7 @@ func (p *IRInfluencer) FitnessScore() float64 {
 	c := float64(cp)
 
 	// FitnessScore := W1 * Correctness  +  W2 * TotalPredictions/(MaxPredictions+1)    --- NOTE: we add 1 to MaxPredictions to prevent division by 0
-	p.Fitness = p.cfg.DRW1*(c/t) + p.cfg.DRW2*(t/float64(1+p.MyInvestor.maxPredictions[p.Subclass()]))
+	p.Fitness = p.cfg.DRW1*(c/t) + p.cfg.DRW2*(t/float64(1+p.MyInvestor().maxPredictions[p.Subclass()]))
 	p.FitnessIsCalculated = true
 
 	return p.Fitness

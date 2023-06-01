@@ -59,7 +59,6 @@ func (f *Factory) Init(cfg *util.AppConfig) {
 //
 // -------------------------------------------------------------------------
 func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
-	util.DPrintf("Entered Factory.NewPopulation\n")
 	if len(population) < 2 {
 		return nil, errors.New("population size must be at least 2")
 	}
@@ -89,7 +88,6 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 			idxParent2 = f.rouletteSelect(population, fitnessSum)
 			dbgCounter++
 			if dbgCounter > 2 {
-				util.DPrintf("--------------------------------------\n")
 				util.DPrintf("population len = %d\n", len(population))
 				for j := 0; j < len(population); j++ {
 					util.DPrintf("population[%d].DNA() = %s, FitnessCalculated = %v, Fitness = %6.2f\n", j, population[j].DNA(), population[j].FitnessCalculated, population[j].Fitness)
@@ -101,7 +99,6 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 		newPopulation[i] = f.BreedNewInvestor(&population, idxParent1, idxParent2)
 	}
 
-	util.DPrintf("Factory.NewPopulation: J\n")
 	return newPopulation, nil
 }
 
@@ -278,24 +275,31 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		//-----------------------------------------------------------
 		// Create the new Influencer and add it to newInvestor...
 		//-----------------------------------------------------------
-		// util.DPrintf("calling NewInfluencer(%q)\n", dna)
 		inf, err := f.NewInfluencer(dna)
 		if err != nil {
 			log.Panicf("*** PANIC ERROR ***  BreedNewInvestor:  Error from NewInfluencer(%s) : %s\n", dna, err.Error())
 		}
-		//----------------------------------------------------------------------------------
-		// The influencer has control over its research period, however the Investor has
-		// control of the "sell" point. So, no matter what T4 the Influencer winds up with
-		// the T4 value must be set to that of the Investor
-		//----------------------------------------------------------------------------------
-		inf.SetDelta4(newInvestor.Delta4)
 		newInvestor.Influencers = append(newInvestor.Influencers, inf)
 	}
 	f.Mutate(&newInvestor)
+
+	//----------------------------------------------------------------------------------
+	// The influencer has control over its research period, however the Investor has
+	// control of the "sell" point. So, no matter what T4 the Influencers need the Delta4
+	// value of the Investor. Additionally, each Influencer must be initialized with
+	// a pointer back to its parent, and it needs the global config data...
+	//----------------------------------------------------------------------------------
+	for i := 0; i < len(newInvestor.Influencers); i++ {
+		if newInvestor.Influencers[i].MyInvestor() == nil {
+			newInvestor.Influencers[i].Init(&newInvestor, f.cfg, newInvestor.Delta4)
+		}
+	}
+
 	newInvestor.cfg = f.cfg
 	newInvestor.factory = f
 	newInvestor.FitnessCalculated = false
 	newInvestor.Fitness = 0.0
+	newInvestor.BalanceC1 = f.cfg.InitFunds
 
 	return newInvestor
 }
@@ -362,7 +366,6 @@ func (f *Factory) Mutate(inv *Investor) {
 }
 
 // NewInvestor creates a new investor from supplied DNA
-//
 // -----------------------------------------------------------------------------
 func (f *Factory) NewInvestor(DNA string) Investor {
 	m, err := f.ParseInvestorDNA(DNA)
@@ -487,7 +490,7 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 			Delta1: Delta1,
 			Delta2: Delta2,
 			Delta4: Delta4,
-			// more fields here...
+			cfg:    f.cfg,
 		}
 		return &dri, nil
 	case "IRInfluencer":
@@ -495,6 +498,7 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 			Delta1: Delta1,
 			Delta2: Delta2,
 			Delta4: Delta4,
+			cfg:    f.cfg,
 		}
 		return &iri, nil
 	case "URInfluencer":
@@ -502,6 +506,7 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 			Delta1: Delta1,
 			Delta2: Delta2,
 			Delta4: Delta4,
+			cfg:    f.cfg,
 		}
 		return &uri, nil
 	default:
@@ -592,10 +597,8 @@ func (f *Factory) GenerateDeltas(DNA map[string]interface{}) (Delta1 int, Delta2
 				if mn <= f.cfg.MaxDelta2 { // as long as mn is <= MaxDelta2, we're OK
 					Delta2 = mn
 				} else {
-					util.DPrintf("Current values: Delta1 = %d, Delta2 = %d, Delta4 = %d, cfg.MinDelta2 = %d, cfg.MaxDelta2 = %d", Delta1, Delta2, Delta4, f.cfg.MinDelta2, f.cfg.MaxDelta2)
 				}
 			} else {
-				util.DPrintf("Current values: Delta1 = %d, Delta2 = %d, Delta4 = %d, cfg.MinDelta2 = %d, cfg.MaxDelta2 = %d\n", Delta1, Delta2, Delta4, f.cfg.MinDelta2, f.cfg.MaxDelta2)
 				log.Panicf("Not exactly sure what to do here, val = %d\n", val)
 			}
 		}
