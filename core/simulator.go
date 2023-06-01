@@ -337,13 +337,19 @@ func (s *Simulator) DumpStats() error {
 	defer file.Close()
 
 	et, _ := s.GetSimulationRunTime()
+	a := time.Time(s.cfg.DtStart)
+	b := time.Time(s.cfg.DtStop)
+	c := b.AddDate(0, 0, 1)
 
 	// context information
 	fmt.Fprintf(file, "%q\n", "PLATO Simulator Results")
 	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
+	fmt.Fprintf(file, "\"Simulation Start Date: %s\"\n", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
+	fmt.Fprintf(file, "\"Simulation Stop Date: %s\"\n", c.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
+	fmt.Fprintf(file, "\"Simulation Time Duration: %s\"\n", util.DateDiffString(a, c))
 	fmt.Fprintf(file, "\"Generations: %d\"\n", s.GensCompleted)
 	fmt.Fprintf(file, "\"Population: %d\"\n", s.cfg.PopulationSize)
-	fmt.Fprintf(file, "\"Elapsed Time: %s\"\n", et)
+	fmt.Fprintf(file, "\"Elapsed Run Time: %s\"\n", et)
 	fmt.Fprintf(file, "\"\"\n")
 
 	// the header row
