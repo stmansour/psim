@@ -170,10 +170,6 @@ func (s *Simulator) Run() {
 		s.GensCompleted++ // we have just concluded another generation
 		fmt.Printf("Completed generation %d\n", s.GensCompleted)
 
-		//------------------------------------------------------------
-		// DEBUG - check for all Investors having initial funds...
-		//------------------------------------------------------------
-
 		//----------------------------------------------------------------------
 		// Compute fitness scores and create the next generation
 		//----------------------------------------------------------------------
@@ -183,13 +179,15 @@ func (s *Simulator) Run() {
 		// stats...
 		s.SaveStats()
 
-		//---------------------------------------------------------
-		// Now replace current generation with next generation...
-		//---------------------------------------------------------
-		if err := s.NewPopulation(); err != nil {
-			log.Panicf("*** PANIC ERROR *** NewPopulation returned error: %s\n", err)
+		//----------------------------------------------------------------------------------------------
+		// Now replace current generation with next generation unless this is the last generation...
+		//----------------------------------------------------------------------------------------------
+		if s.GensCompleted < s.cfg.Generations {
+			if err := s.NewPopulation(); err != nil {
+				log.Panicf("*** PANIC ERROR *** NewPopulation returned error: %s\n", err)
+			}
+			s.maxPredictions = make(map[string]int, 0)
 		}
-		s.maxPredictions = make(map[string]int, 0)
 	}
 }
 
