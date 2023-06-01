@@ -19,6 +19,7 @@ var app struct {
 	showTopInvestor     bool
 	dayByDayResults     bool
 	dumpInvestmentTable bool
+	showAllInvestors    bool // adds all investors to the output in the simulation results
 	sim                 core.Simulator
 }
 
@@ -58,21 +59,27 @@ func displaySimulationDetails(cfg *util.AppConfig) {
 func displaySimulationResults(cfg *util.AppConfig) {
 	fmt.Printf("\n**************  S I M U L A T I O N   R E S U L T S  **************\n")
 	fmt.Printf("Number of generations: %d\n", app.sim.GensCompleted)
+	s, _ := app.sim.GetSimulationRunTime()
+	fmt.Printf("Elapsed time: %s\n", s)
 	err := (&app.sim).DumpStats()
 	if err != nil {
 		fmt.Printf("Simulator DumpSimStats returned error: %s\n", err)
 	}
-	(&app.sim).ResultsByInvestor()
+	if app.showAllInvestors {
+		(&app.sim).ResultsByInvestor()
+	}
 }
 
 func readCommandLineArgs() {
-	stiptr := flag.Bool("i", false, "write top investor profile to investorProfile.txt and its investments to investments.csv")
 	dptr := flag.Bool("d", false, "show day-by-day results")
+	stiptr := flag.Bool("t", false, "write top investor profile to investorProfile.txt and its investments to investments.csv")
+	diptr := flag.Bool("i", false, "show all investors in the simulation results")
 	invptr := flag.Bool("v", false, "dump remaining Investments at simulation end")
 	flag.Parse()
 	app.showTopInvestor = *stiptr
 	app.dayByDayResults = *dptr
 	app.dumpInvestmentTable = *invptr
+	app.showAllInvestors = *diptr
 }
 
 func main() {

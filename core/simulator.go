@@ -15,8 +15,8 @@ import (
 // ------------------------------------------------------------------
 type SimulationStatistics struct {
 	ProfitableInvestors int     // number of Investors that were profitable in this generation
-	AvgProfit           float64 // avg profitablity on Investors of this generation
-	MaxProfit           float64 // largest profit Investor
+	AvgProfit           float64 // avg profitability for profitable Investors in this generation
+	MaxProfit           float64 // largest profit Investor in this generation
 	MaxProfigDNA        string  // DNA of the Investor making the highest profit this generation
 }
 
@@ -31,12 +31,28 @@ type Simulator struct {
 	maxPredictions   map[string]int         // max predictions indexed by subclass
 	GensCompleted    int                    // the current count of the number of generations completed in the simulation
 	SimStats         []SimulationStatistics // keep track of what happened
+	SimStart         time.Time              // timestamp for simulation start
+	SimStop          time.Time              // timestamp for simulation stop
+	StopTimeSet      bool                   // set to true once SimStop is set. If it's false either the simulation is still in progress or did not complete
 }
 
 // SetAppConfig simply sets the simulators pointer to the AppConfig struct
 // -----------------------------------------------------------------------------
 func (s *Simulator) SetAppConfig(cfg *util.AppConfig) {
 	s.cfg = cfg
+}
+
+// GetSimulationRunTime returns a printable string and a duration with the run
+// time for this simulation
+// ----------------------------------------------------------------------------
+func (s *Simulator) GetSimulationRunTime() (string, time.Duration) {
+	var elapsed time.Duration
+	if !s.StopTimeSet {
+		return "Simulation has not completed", elapsed
+	}
+	elapsed = s.SimStop.Sub(s.SimStart) // calculate elapsed time
+
+	return fmt.Sprintf("Simulation took %d hours, %d minutes and %d seconds", int(elapsed.Hours()), int(elapsed.Minutes())%60, int(elapsed.Seconds())%60), elapsed
 }
 
 // Init initializes the simulation system, it also creates Investors and
@@ -108,6 +124,7 @@ func (s *Simulator) Run() {
 	// Iterate day-by-day through the simulation.
 	//-------------------------------------------------------------------------
 	iteration := 0
+	s.SimStart = time.Now()
 	for g := 0; g < s.cfg.Generations; g++ {
 		dt := time.Time(s.cfg.DtStart)
 		dtStop := time.Time(s.cfg.DtStop)
@@ -174,12 +191,10 @@ func (s *Simulator) Run() {
 		fmt.Printf("Completed generation %d\n", s.GensCompleted)
 
 		//----------------------------------------------------------------------
-		// Compute fitness scores and create the next generation
+		// Compute scores and stats
 		//----------------------------------------------------------------------
 		s.CalculateMaxVals()
 		s.CalculateAllFitnessScores()
-
-		// stats...
 		s.SaveStats()
 
 		//----------------------------------------------------------------------------------------------
@@ -192,6 +207,8 @@ func (s *Simulator) Run() {
 			s.maxPredictions = make(map[string]int, 0)
 		}
 	}
+	s.SimStop = time.Now()
+	s.StopTimeSet = true
 }
 
 // CalculateAllFitnessScores - calculates values over all the Influncers and Investors
@@ -319,8 +336,18 @@ func (s *Simulator) DumpStats() error {
 	}
 	defer file.Close()
 
+	et, _ := s.GetSimulationRunTime()
+
+	// context information
+	fmt.Fprintf(file, "%q\n", "PLATO Simulator Results")
+	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
+	fmt.Fprintf(file, "\"Generations: %d\"\n", s.GensCompleted)
+	fmt.Fprintf(file, "\"Population: %d\"\n", s.cfg.PopulationSize)
+	fmt.Fprintf(file, "\"Elapsed Time: %s\"\n", et)
+	fmt.Fprintf(file, "\"\"\n")
+
 	// the header row
-	fmt.Fprintf(file, "Generation,ProfitableInvestors,AverageProfit,MaxProfit,MaxProfitDNA\n")
+	fmt.Fprintf(file, "%q,%q,%q,%q,%q\n", "Generation", "Profitable Investors", "Average Profit", "Max Profit", "Max Profit DNA")
 
 	// investment rows
 	for i := 0; i < len(s.SimStats); i++ {
