@@ -14,7 +14,10 @@ import (
 // SimulationStatistics contains relevant metrics for each generation simulated
 // ------------------------------------------------------------------
 type SimulationStatistics struct {
-	ProfitableInvestors int // number of Investors that were profitable in this generation
+	ProfitableInvestors int     // number of Investors that were profitable in this generation
+	AvgProfit           float64 // avg profitablity on Investors of this generation
+	MaxProfit           float64 // largest profit Investor
+	MaxProfigDNA        string  // DNA of the Investor making the highest profit this generation
 }
 
 // Simulator is a simulator object
@@ -277,13 +280,26 @@ func (s *Simulator) CalculateMaxVals() {
 // ----------------------------------------------------------------------------
 func (s *Simulator) SaveStats() {
 	prof := 0
+	maxProfit := float64(0)
+	avgProfit := float64(0)
+	maxProfitDNA := ""
 	for i := 0; i < len(s.Investors); i++ {
 		if s.Investors[i].BalanceC1 > s.cfg.InitFunds {
 			prof++
+			profit := s.Investors[i].BalanceC1 - s.cfg.InitFunds
+			avgProfit += profit
+			if profit > maxProfit {
+				maxProfit = profit
+				maxProfitDNA = s.Investors[i].DNA()
+			}
 		}
 	}
+	avgProfit = avgProfit / float64(prof) // average profit among the profitable
 	ss := SimulationStatistics{
 		ProfitableInvestors: prof,
+		AvgProfit:           avgProfit,
+		MaxProfit:           maxProfit,
+		MaxProfigDNA:        maxProfitDNA,
 	}
 	s.SimStats = append(s.SimStats, ss)
 }
@@ -304,11 +320,11 @@ func (s *Simulator) DumpStats() error {
 	defer file.Close()
 
 	// the header row
-	fmt.Fprintf(file, "Generation,ProfitableInvestors\n")
+	fmt.Fprintf(file, "Generation,ProfitableInvestors,AverageProfit,MaxProfit,MaxProfitDNA\n")
 
 	// investment rows
 	for i := 0; i < len(s.SimStats); i++ {
-		fmt.Fprintf(file, "%d,%d\n", i, s.SimStats[i].ProfitableInvestors)
+		fmt.Fprintf(file, "%d,%d,%8.2f,%8.2f,%q\n", i, s.SimStats[i].ProfitableInvestors, s.SimStats[i].AvgProfit, s.SimStats[i].MaxProfit, s.SimStats[i].MaxProfigDNA)
 	}
 	return nil
 }

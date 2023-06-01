@@ -168,8 +168,8 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 		BuyCount++
 		var inv Investment
 		inv.id = util.GenerateRefNo()
-		inv.T3C1 = 100.00 // assume $100
-		if i.BalanceC1 < 100.00 {
+		inv.T3C1 = i.cfg.StdInvestment
+		if i.BalanceC1 < i.cfg.StdInvestment {
 			inv.T3C1 = i.BalanceC1
 		}
 		inv.T3 = T3
