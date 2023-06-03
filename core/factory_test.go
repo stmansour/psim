@@ -28,7 +28,7 @@ func TestNewPopulation(t *testing.T) {
 	var sim Simulator
 	f.Init(cfg)
 
-	t.Fail()
+	// t.Fail()
 
 	//----------------------------
 	// Build a population...

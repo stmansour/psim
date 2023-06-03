@@ -81,8 +81,8 @@ func checkDR(t3 time.Time) {
 		fmt.Printf("date did not match!\n")
 		os.Exit(1)
 	}
-	if rec.USJPDRRatio != -15.0 {
-		fmt.Printf("USJPDRRatio did not match!  Read %7.4f, looking for: -15 \n", rec.USJPDRRatio)
+	if rec.USDJPRDRRatio != -15.0 {
+		fmt.Printf("USDJPRDRRatio did not match!  Read %7.4f, looking for: -15 \n", rec.USDJPRDRRatio)
 		os.Exit(1)
 	}
 	if rec.USDiscountRate != 0.015 {
@@ -292,7 +292,7 @@ func computeDRProbability(t1, t2, t3, t4 time.Time, dt1, dt2, dt4 int) {
 		fmt.Printf("ExchangeRate Record for %s not found.\n", t2.Format("1/2/2006"))
 		os.Exit(1)
 	}
-	dDRR := rec1.USJPDRRatio - rec2.USJPDRRatio
+	dDRR := rec1.USDJPRDRRatio - rec2.USDJPRDRRatio
 
 	//-------------------------------------------------------------------------------
 	// Prediction formula (based on the change in DiscountRateRatios):

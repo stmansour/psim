@@ -14,6 +14,7 @@ clean:
 	@echo "*** ${THISDIR}: completed clean ***"
 
 test:
+	go test github.com/stmansour/psim/core
 	@go test -coverprofile=coverage.out || (echo "*** ERROR ***  go test failed!" && exit 1)
 	@echo "*** ${THISDIR}: completed test ***"
 

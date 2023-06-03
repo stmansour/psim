@@ -150,7 +150,7 @@ func (p *DRInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
 		err := fmt.Errorf("ExchangeRate Record for %s not found", t2.Format("1/2/2006"))
 		return "hold", 0, err
 	}
-	dDRR := rec1.USJPDRRatio - rec2.USJPDRRatio
+	dDRR := rec1.USDJPRDRRatio - rec2.USDJPRDRRatio
 
 	//-------------------------------------------------------------------------------
 	// Prediction formula (based on the change in DiscountRateRatios):

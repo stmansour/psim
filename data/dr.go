@@ -15,7 +15,7 @@ type DiscountRateRecord struct {
 	Date           time.Time
 	USDiscountRate float64
 	JPDiscountRate float64
-	USJPDRRatio    float64
+	USDJPRDRRatio  float64
 }
 
 // DiscountRateRecords is a type for an array of DR records
@@ -171,7 +171,7 @@ func DRInit() {
 		}
 		jpDiscountRate /= 100
 
-		usJpdrRatio, err := strconv.ParseFloat(line[3], 64)
+		USDJPRDRRatio, err := strconv.ParseFloat(line[3], 64)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -181,7 +181,7 @@ func DRInit() {
 			Date:           date,
 			USDiscountRate: usDiscountRate,
 			JPDiscountRate: jpDiscountRate,
-			USJPDRRatio:    usJpdrRatio,
+			USDJPRDRRatio:  USDJPRDRRatio,
 		})
 	}
 
