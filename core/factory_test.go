@@ -57,11 +57,9 @@ func TestNewPopulation(t *testing.T) {
 	}
 
 	// make sure they have Influencers
-	util.DPrintf("New Population:  Investor count: %d\n", len(sim.Investors))
 	nc := 0
 	nf := 0
 	for i := 0; i < len(sim.Investors); i++ {
-		util.DPrintf("Investor[%d] Influencer count: %d\n", i, len(sim.Investors[i].Influencers))
 		if len(sim.Investors[i].Influencers) == 0 {
 			t.Errorf("No influencers for Investor[%d]\n", i)
 		}
@@ -71,11 +69,8 @@ func TestNewPopulation(t *testing.T) {
 		if sim.Investors[i].factory == nil {
 			nf++
 		}
-		util.DPrintf("sim.Investors[%d].FitnessCalculated = %v, .Fitness = %6.2f\n", i, sim.Investors[i].FitnessCalculated, sim.Investors[i].Fitness)
+		// USDJPRDRRatio%d].FitnessCalculated = %v, .Fitness = %6.2f\n", i, sim.Investors[i].FitnessCalculated, sim.Investors[i].Fitness)
 	}
-	util.DPrintf("sim.Investors with nil cfg: %d\n", nc)
-	util.DPrintf("sim.Investors with nil factory: %d\n", nf)
-
 }
 
 func TestInvestorFromDNA(t *testing.T) {
@@ -126,7 +121,9 @@ func TestInvestorFromDNA(t *testing.T) {
 	population = append(population, parent1, parent2)
 
 	investor := f.BreedNewInvestor(&population, 0, 1)
-	fmt.Printf("New Investor DNA = %s\n", investor.DNA())
+	if len(investor.Influencers) == 0 {
+		t.Errorf("BreedNewInvestor returned an investor with no Influencers")
+	}
 }
 
 // TestParseInvestorDNA - verify that the parser can correctly parse n Investor DNA string

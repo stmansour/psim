@@ -1,6 +1,7 @@
 TOP=..
 BINDIR=${TOP}/dist
 THISDIR="core"
+TEST_FAILURE_FILE = .tests_failed
 
 core: *.go
 	go vet
@@ -14,7 +15,8 @@ clean:
 	@echo "*** ${THISDIR}: completed clean ***"
 
 test:
-	go test github.com/stmansour/psim/core
+	touch $(TEST_FAILURE_FILE)
+	go test github.com/stmansour/psim/core && rm -f $(TEST_FAILURE_FILE)
 	@go test -coverprofile=coverage.out || (echo "*** ERROR ***  go test failed!" && exit 1)
 	@echo "*** ${THISDIR}: completed test ***"
 

@@ -139,7 +139,7 @@ func main() {
 	app.probMap = map[string]probInfo{}
 	readCommandLineArgs()
 
-	data.Init()
+	data.Init(app.cfg)
 	checkDR(time.Date(2018, 2, 14, 0, 0, 0, 0, time.UTC)) // Just make sure everything looks OK before starting...
 
 	//-------------------------------------

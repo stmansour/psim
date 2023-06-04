@@ -61,14 +61,14 @@ func (r DiscountRateRecords) Swap(i, j int) {
 //	an empty record and an error if something went wrong.
 //
 // ----------------------------------------------------------------------------------------------------
-func (r DiscountRateRecords) GetRecord(date time.Time) (DiscountRateRecord, error) {
-	for _, record := range r {
-		if record.Date.Equal(date) {
-			return record, nil
-		}
-	}
-	return DiscountRateRecord{}, fmt.Errorf("record not found for date %s", date.Format("2006-01-02"))
-}
+// func (r DiscountRateRecords) GetRecord(date time.Time) (DiscountRateRecord, error) {
+// 	for _, record := range r {
+// 		if record.Date.Equal(date) {
+// 			return record, nil
+// 		}
+// 	}
+// 	return DiscountRateRecord{}, fmt.Errorf("record not found for date %s", date.Format("2006-01-02"))
+// }
 
 // DRFindRecord returns the record associated with the input date
 //

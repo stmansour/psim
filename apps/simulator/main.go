@@ -95,7 +95,7 @@ func main() {
 	readCommandLineArgs()
 	rand.Seed(time.Now().UnixNano())
 
-	data.Init()
+	data.Init(&cfg)
 
 	displaySimulationDetails(&cfg)
 	app.sim.Init(&cfg, app.dayByDayResults, app.dumpInvestmentTable)

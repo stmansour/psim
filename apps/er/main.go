@@ -4,13 +4,20 @@ package main
 //---------------------------------------------------------------------------
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/stmansour/psim/data"
+	"github.com/stmansour/psim/util"
 )
 
 func main() {
-	data.Init()
+	util.Init()
+	cfg, err := util.LoadConfig()
+	if err != nil {
+		log.Fatalf("could not load config file:  %s\n", err.Error())
+	}
+	data.Init(&cfg)
 	i := data.DR.DRRecs.Len()
 	dt1 := data.DR.DtStart
 	dt2 := data.DR.DtStop
