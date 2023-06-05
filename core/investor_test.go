@@ -10,7 +10,7 @@ import (
 func TestInvestorDNA(t *testing.T) {
 	var f Factory
 	util.Init()
-	f.Init(CreateTestingCFG())
+	f.Init(util.CreateTestingCFG())
 
 	v := Investor{
 		Delta4: 4,

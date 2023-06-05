@@ -3,12 +3,16 @@ package data
 import (
 	"encoding/csv"
 	"fmt"
+	"log"
 	"os"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
 )
+
+// DRCSV is the csv data file that is used for Discount Rate information
+var DRCSV = string("data/dr.csv")
 
 // DiscountRateRecord is the basic structure of discount rate data
 type DiscountRateRecord struct {
@@ -83,17 +87,6 @@ func (r DiscountRateRecords) Swap(i, j int) {
 //
 // ---------------------------------------------------------------------------
 func DRFindRecord(dt time.Time) *DiscountRateRecord {
-	// 	// Perform a binary search to find the record with the specified dt
-	// 	index := sort.Search(len(DR.DRRecs), func(i int) bool {
-	// 		return DR.DRRecs[i].Date.After(dt) || DR.DRRecs[i].Date.Equal(dt)
-	// 	})
-	// 	if index == len(DR.DRRecs) || DR.DRRecs[index].Date.After(dt) {
-	// 		return nil
-	// 	}
-	// 	return &DR.DRRecs[index]
-	// }
-	// func searchRecords(dt time.Time) *DiscountRateRecord {
-
 	left := 0
 	right := len(DR.DRRecs) - 1
 
@@ -128,10 +121,52 @@ func DRGetDataInfo() DRInfo {
 	return rec
 }
 
-// DRInit - initialize this subsystem
+//****************************************************************************
+//
+//  Column naming and formatting conventions:
+//
+// Date,USD_DiscountRate,JPY_DiscountRate,USDJPY_DRRatio
+//
+//----------------------------------------------------------------------------
+//  COLUMN 1  =  DATE
+//----------------------------------------------------------------------------
+//  Date     - MM/DD/YYYY
+//
+//----------------------------------------------------------------------------
+//  COLUMN 2  =  DATATYPE RATIO
+//----------------------------------------------------------------------------
+//  The data type for C1 divided by the datatype for C2
+//
+//  For Currency, use the ISO 4217 naming conventions, 3-letter strings, the
+//  first two identify the country, the last is represents the currency name.
+//  Examples:  USD = United States Dollar,  JPY Japanese Yen
+//
+//  Exchange Rate - use the ISO 3-letter strings, list C1 first, followed by
+//                  C2.  So for example, for C1 = USD and C2 = JPY, the
+//                  ExchangeRate would be USDJPY
+//
+//  DataType - use a 2 letter identifier:
+//             DR = Discount Rate
+//             IR = Inflation Rate
+//             UR = Unemployment Rate
+//
+//  DataTypeRatio - use the exchange rate,
+//                  followed by the 2 letter datatype, followed by an R
+//                  For the USD JPY example, Discount Rate Ratio would be:
+//                  USDJPYDRR
+//
+//****************************************************************************
+
+// DRInit - initialize this subsystem.
+//  1. Determine whether the data will come from a CSV file, a SQL
+//     database, or an online service.  As of this writing we only have
+//     CSV file data implemented.
+//  2. If data source is CSV read it in and validate that we have the
+//     correct information.
+//
 // ---------------------------------------------------------------------------
 func DRInit() {
-	file, err := os.Open("data/dr.csv")
+	file, err := os.Open(DRCSV)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -148,7 +183,28 @@ func DRInit() {
 	records := DiscountRateRecords{}
 	for i, line := range lines {
 		if i == 0 {
-			continue
+			// handle the unicode case...
+			line[0] = HandleUTF8FileChars(line[0])
+
+			if line[0] != "Date" {
+				log.Panicf("Problem with %s, column 1 is labelled %q, it should be %q\n", DRCSV, line[0], "Date")
+			}
+			// search for the column containing the proper "DRRatio"
+			found := false
+			for j := 1; j < len(line) && !found; j++ {
+				if strings.HasSuffix(line[j], "DRRatio") {
+					myC1 := line[j][0:3]
+					myC2 := line[j][3:6]
+					if myC1 == DInfo.cfg.C1 && myC2 == DInfo.cfg.C2 {
+						found = true
+					}
+				}
+			}
+			if !found {
+				log.Panicf("No column in %s had label  %s%s%s, which is required for the current simulation configuration\n",
+					DRCSV, DInfo.cfg.C1, DInfo.cfg.C2, "DRRatio")
+			}
+			continue // continue to the next line now
 		}
 
 		date, err := time.Parse("1/2/2006", line[0])
@@ -171,7 +227,7 @@ func DRInit() {
 		}
 		jpDiscountRate /= 100
 
-		USDJPRDRRatio, err := strconv.ParseFloat(line[3], 64)
+		USDJPYDRRatio, err := strconv.ParseFloat(line[3], 64)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -181,7 +237,7 @@ func DRInit() {
 			Date:           date,
 			USDiscountRate: usDiscountRate,
 			JPDiscountRate: jpDiscountRate,
-			USDJPRDRRatio:  USDJPRDRRatio,
+			USDJPRDRRatio:  USDJPYDRRatio,
 		})
 	}
 

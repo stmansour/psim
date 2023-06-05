@@ -1,16 +1,72 @@
 package data
 
-import "github.com/stmansour/psim/util"
+import (
+	"bytes"
+
+	"github.com/stmansour/psim/util"
+)
 
 // DInfo maintains data needed by the data subsystem.
 // The primary need is the two currencies C1 & C2
-type DInfo struct {
+var DInfo struct {
 	cfg *util.AppConfig
+}
+
+// CurrencyInfo contains information about currencies used in this program
+type CurrencyInfo struct {
+	Country      string // name of the issuing country
+	CountryCode  string // two-letter designator for country
+	Currency     string // name of the currency
+	CurrencyCode string // typically the first char of the currency name
+}
+
+// Currencies is a list a CurrencyInfo for all the currencies supported by this program
+var Currencies = []CurrencyInfo{
+	{
+		Country:      "United States",
+		CountryCode:  "US",
+		Currency:     "Dollar",
+		CurrencyCode: "D",
+	},
+	{
+		Country:      "Japan",
+		CountryCode:  "JP",
+		Currency:     "Yen",
+		CurrencyCode: "Y",
+	},
+	{
+		Country:      "Great Britain",
+		CountryCode:  "GB",
+		Currency:     "Pound",
+		CurrencyCode: "P",
+	},
+	{
+		Country:      "Australia",
+		CountryCode:  "AU",
+		Currency:     "Dollar",
+		CurrencyCode: "D",
+	},
 }
 
 // Init calls the initialize routine for all data types
 // ------------------------------------------------------------
 func Init(cfg *util.AppConfig) {
+	DInfo.cfg = cfg
 	DRInit()
 	ERInit()
+}
+
+// HandleUTF8FileChars returns the first line of the file with
+// utf8 markers removed if they were there. Otherwise, it just
+// returns the input string.
+// ----------------------------------------------------------------
+func HandleUTF8FileChars(line string) string {
+	bom := []byte{0xEF, 0xBB, 0xBF}
+	strBytes := []byte(line)
+
+	if len(strBytes) >= len(bom) && bytes.Equal(strBytes[:len(bom)], bom) {
+		// If the line starts with BOM, remove it.
+		line = string(strBytes[len(bom):])
+	}
+	return line
 }

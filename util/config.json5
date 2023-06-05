@@ -7,7 +7,7 @@
     "Generations": 30,          // how many generations should the simulator run
     "PopulationSize": 100,      // Total number Investors in the population
     "C1": "USD",                // main currency  (ISO 4217 code)
-    "C2": "YEN",                // currency that we will invest in (ISO 4217 code)
+    "C2": "JPY",                // currency that we will invest in (ISO 4217 code)
     "ExchangeRate": "USDJPY",   // forex conventional notation for Exchange Rate
     "InitFunds": 100000.00,     // how much each Investor is funded at the start of a simulation cycle
     "StdInvestment": 10000.00,  // the "standard" investment amount if a decision is made to invest in C2

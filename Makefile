@@ -21,7 +21,9 @@ do_tests:
 	for dir in $(DIRS); do make -C $$dir test;done
 
 check_tests:
-	@echo "Checking tests..."
+	@echo "******************************************************************"
+	@echo "                      TESTS RESULTS"
+	@echo "******************************************************************"
 	@if test -n "$(shell find . -name .tests_failed)"; then \
 		echo "Tests have failed in the following directories:"; \
 		find . -name .tests_failed -exec dirname {} \; ; \
@@ -31,7 +33,7 @@ check_tests:
 	fi
 
 check_coverage:
-	@echo "Checking coverage..."
+	@echo "UNIT TEST CODE COVERAGE:"
 	@for dir in $(shell find . -name coverage.out); do \
 		coverage=$$(go tool cover -func=$$dir | grep total | awk '{print $$NF}') ; \
 		echo "`dirname $$dir` : $$coverage"; \
@@ -41,6 +43,6 @@ package:
 	for dir in $(DIRS); do make -C $$dir package;done
 
 all: clean psim package test
-	echo "Completed"
+	@echo "Completed"
 
 build: clean psim package

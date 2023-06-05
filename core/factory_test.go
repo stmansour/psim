@@ -24,7 +24,7 @@ func TestNewPopulation(t *testing.T) {
 	}
 	util.Init()
 	var f Factory
-	cfg := CreateTestingCFG()
+	cfg := util.CreateTestingCFG()
 	var sim Simulator
 	f.Init(cfg)
 
@@ -76,7 +76,7 @@ func TestNewPopulation(t *testing.T) {
 func TestInvestorFromDNA(t *testing.T) {
 	var f Factory
 	util.Init()
-	f.Init(CreateTestingCFG())
+	f.Init(util.CreateTestingCFG())
 
 	// t.Fail()
 
@@ -157,29 +157,4 @@ func TestParseInvestorDNA(t *testing.T) {
 			t.Errorf("parseInvestorDNA(%q) map = %v, want %v", tt.input, gotMap, tt.wantMap)
 		}
 	}
-}
-
-func CreateTestingCFG() *util.AppConfig {
-	cfg := util.AppConfig{
-		// DtStart: "2022-01-01", // simulation start date for each generation
-		// DtStop: "2022-12-31",  // simulation stop date for each generation
-		Generations:    1,        // how many generations should the simulator run
-		PopulationSize: 10,       // Total number Investors in the population
-		C1:             "USD",    // main currency  (ISO 4217 code)
-		C2:             "YEN",    // currency that we will invest in (ISO 4217 code)
-		ExchangeRate:   "USDJPY", // forex conventional notation for Exchange Rate
-		InitFunds:      1000.00,  // how much each Investor is funded at the start of a simulation cycle
-		StdInvestment:  100.00,   // the "standard" investment amount if a decision is made to invest in C2
-		MinDelta1:      -30,      // greatest amount of time prior to T3 that T1 can be
-		MaxDelta1:      -2,       // least amount of time prior to T3 that T1 can be
-		MinDelta2:      -5,       // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
-		MaxDelta2:      -1,       // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
-		MinDelta4:      1,        // shortest period of time after a "buy" on T3 that we can do a "sell"
-		MaxDelta4:      14,       // greatest period of time after a "buy" on T3 that we can do a "sell"
-		DRW1:           0.6,      // DRInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: DRW1 + DRW2 = 1.0
-		DRW2:           0.4,      // DRInfluencer Fitness Score weighting for number of predictions made. Constraint: DRW1 + DRW2 = 1.0
-		InvW1:          0.5,      // Investor Fitness Score weighting for "correctness" of predictions. Constraint: InvW1 + InvW2 = 1.0
-		InvW2:          0.5,      // Investor Fitness Score weighting for profit. Constraint: InvW1 + InvW2 = 1.0
-	}
-	return &cfg
 }

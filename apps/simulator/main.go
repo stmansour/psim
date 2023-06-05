@@ -73,7 +73,7 @@ func displaySimulationResults(cfg *util.AppConfig) {
 func readCommandLineArgs() {
 	dptr := flag.Bool("d", false, "show day-by-day results")
 	stiptr := flag.Bool("t", false, "write top investor profile to investorProfile.txt and its investments to investments.csv")
-	diptr := flag.Bool("i", false, "show all investors in the simulation results")
+	diptr := flag.Bool("i", false, "show 	all investors in the simulation results")
 	invptr := flag.Bool("v", false, "dump remaining Investments at simulation end")
 	flag.Parse()
 	app.showTopInvestor = *stiptr
