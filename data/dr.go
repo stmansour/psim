@@ -213,19 +213,19 @@ func DRInit() {
 			os.Exit(1)
 		}
 
-		usDiscountRate, err := strconv.ParseFloat(strings.TrimSuffix(line[1], "%"), 64)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		usDiscountRate /= 100
+		// usDiscountRate, err := strconv.ParseFloat(strings.TrimSuffix(line[1], "%"), 64)
+		// if err != nil {
+		// 	fmt.Println(err)
+		// 	os.Exit(1)
+		// }
+		// usDiscountRate /= 100
 
-		jpDiscountRate, err := strconv.ParseFloat(strings.TrimSuffix(line[2], "%"), 64)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		jpDiscountRate /= 100
+		// jpDiscountRate, err := strconv.ParseFloat(strings.TrimSuffix(line[2], "%"), 64)
+		// if err != nil {
+		// 	fmt.Println(err)
+		// 	os.Exit(1)
+		// }
+		// jpDiscountRate /= 100
 
 		USDJPYDRRatio, err := strconv.ParseFloat(line[3], 64)
 		if err != nil {
@@ -234,10 +234,10 @@ func DRInit() {
 		}
 
 		records = append(records, DiscountRateRecord{
-			Date:           date,
-			USDiscountRate: usDiscountRate,
-			JPDiscountRate: jpDiscountRate,
-			USDJPRDRRatio:  USDJPYDRRatio,
+			Date: date,
+			// USDiscountRate: usDiscountRate,
+			// JPDiscountRate: jpDiscountRate,
+			USDJPRDRRatio: USDJPYDRRatio,
 		})
 	}
 
