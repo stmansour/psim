@@ -63,6 +63,7 @@ func (i *Investor) Init(cfg *util.AppConfig, f *Factory) {
 	i.BalanceC1 = cfg.InitFunds
 	i.FitnessCalculated = false
 	i.Fitness = float64(0)
+	i.factory = f
 
 	if !i.CreatedByDNA {
 		i.Delta4 = util.RandomInRange(cfg.MinDelta4, cfg.MaxDelta4) // all Influencers will be constrained to this

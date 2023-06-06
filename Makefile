@@ -1,6 +1,6 @@
 # test comment
 DIRS=util data apps
-DIST=dist
+DIST=dist 
 TEST_FAILURE_FILE = .tests_failed
 
 .PHONY: test

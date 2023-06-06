@@ -105,6 +105,7 @@ func (p *IRInfluencer) Init(i *Investor, cfg *util.AppConfig, delta4 int) {
 	p.myInvestor = i
 	p.cfg = cfg
 	p.SetID()
+	p.Delta4 = delta4
 }
 
 // Subclass - a method that returns the Influencer subclass of this object

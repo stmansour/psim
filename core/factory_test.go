@@ -11,16 +11,16 @@ import (
 
 func TestNewPopulation(t *testing.T) {
 	var oldPopulationDNA = []string{
-		"{Investor;Delta4=14;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-20,Delta2=-5,Delta4=2}|{IRInfluencer,Delta1=-17,Delta2=-3,Delta4=4}]}",
-		"{Investor;Delta4=12;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-27,Delta2=-5,Delta4=6}]}",
-		"{Investor;Delta4=9;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-21,Delta2=-1,Delta4=5}]}",
-		"{Investor;Delta4=4;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-7,Delta2=-4,Delta4=7}]}",
-		"{Investor;Delta4=10;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-11,Delta2=-5,Delta4=3}]}",
-		"{Investor;Delta4=10;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-30,Delta2=-1,Delta4=3}]}",
-		"{Investor;Delta4=2;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-29,Delta2=-3,Delta4=9}]}",
-		"{Investor;Delta4=13;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-23,Delta2=-5,Delta4=8}]}",
-		"{Investor;Delta4=9;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-4,Delta2=-3,Delta4=10}]}",
-		"{Investor;Delta4=2;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-21,Delta2=-5,Delta4=3}]}",
+		"{Investor;Delta4=14;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-20,Delta2=-5,Delta4=14}|{IRInfluencer,Delta1=-17,Delta2=-3,Delta4=14}]}",
+		"{Investor;Delta4=12;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-27,Delta2=-5,Delta4=12}]}",
+		"{Investor;Delta4=9;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-21,Delta2=-1,Delta4=9}]}",
+		"{Investor;Delta4=4;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-7,Delta2=-4,Delta4=4}]}",
+		"{Investor;Delta4=10;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-11,Delta2=-5,Delta4=10}]}",
+		"{Investor;Delta4=10;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-30,Delta2=-1,Delta4=10}]}",
+		"{Investor;Delta4=2;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-29,Delta2=-3,Delta4=2}]}",
+		"{Investor;Delta4=13;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-23,Delta2=-5,Delta4=13}]}",
+		"{Investor;Delta4=9;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-4,Delta2=-3,Delta4=9}]}",
+		"{Investor;Delta4=2;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-21,Delta2=-5,Delta4=2}]}",
 	}
 	util.Init()
 	var f Factory
@@ -57,8 +57,10 @@ func TestNewPopulation(t *testing.T) {
 	}
 
 	// make sure they have Influencers
-	nc := 0
-	nf := 0
+	nc := 0  // bad cfg coung
+	nf := 0  // bad factory count
+	ni := 0  // no MyInvestor pointer
+	bd4 := 0 // bad Delta4 count
 	for i := 0; i < len(sim.Investors); i++ {
 		if len(sim.Investors[i].Influencers) == 0 {
 			t.Errorf("No influencers for Investor[%d]\n", i)
@@ -69,7 +71,28 @@ func TestNewPopulation(t *testing.T) {
 		if sim.Investors[i].factory == nil {
 			nf++
 		}
+		delta4 := sim.Investors[i].Delta4
+		bd4 = 0
+		for j := 0; j < len(sim.Investors[i].Influencers); j++ {
+			if sim.Investors[i].Influencers[j].MyInvestor() == nil {
+				ni++
+			} else if sim.Investors[i].Influencers[j].MyInvestor().Delta4 != delta4 {
+				bd4++
+			}
+		}
 		// USDJPRDRRatio%d].FitnessCalculated = %v, .Fitness = %6.2f\n", i, sim.Investors[i].FitnessCalculated, sim.Investors[i].Fitness)
+	}
+	if ni > 0 {
+		t.Errorf("NewPopulation return %d Influencers with nil pointer for MyInvestor", ni)
+	}
+	if bd4 > 0 {
+		t.Errorf("NewPopulation return %d Influencers with Delta4 that did not match their Investor delta4", bd4)
+	}
+	if nc > 0 {
+		t.Errorf("NewPopulation returned %d Investors with a nil cfg", nc)
+	}
+	if nf > 0 {
+		t.Errorf("NewPopulation returned T%d investors with a nil factory", nf)
 	}
 }
 

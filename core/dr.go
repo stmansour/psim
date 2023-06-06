@@ -108,6 +108,7 @@ func (p *DRInfluencer) Init(i *Investor, cfg *util.AppConfig, delta4 int) {
 	p.myInvestor = i
 	p.cfg = cfg
 	p.SetID()
+	p.Delta4 = delta4
 }
 
 // Subclass - a method that returns the Influencer subclass of this object
@@ -121,6 +122,14 @@ func (p *DRInfluencer) Subclass() string {
 //
 // ----------------------------------------------------------------------------
 func (p *DRInfluencer) DNA() string {
+	inv := p.MyInvestor()
+
+	if inv == nil {
+		util.DPrintf("YIPES!  Influencer's MyInvestor is nil!\n")
+	}
+	if p.Delta4 != inv.Delta4 {
+		util.DPrintf("YIPES!  Influencer Delta4 (%d) is not the same as Investor.Delta4 (%d)\n", p.Delta4, inv.Delta4)
+	}
 	return fmt.Sprintf("{%s,Delta1=%d,Delta2=%d,Delta4=%d}", p.Subclass(), p.Delta1, p.Delta2, p.Delta4)
 }
 

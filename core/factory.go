@@ -97,6 +97,9 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 		}
 
 		newPopulation[i] = f.BreedNewInvestor(&population, idxParent1, idxParent2)
+		if newPopulation[i].factory == nil {
+			log.Panicf("BreedNewInvestor returned a new Investor with a nil factory\n")
+		}
 	}
 
 	return newPopulation, nil
@@ -123,6 +126,11 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	newInvestor := Investor{
 		CreatedByDNA: true,
 	}
+	newInvestor.Init(f.cfg, f)
+	newInvestor.FitnessCalculated = false
+	newInvestor.Fitness = 0.0
+	newInvestor.BalanceC1 = f.cfg.InitFunds
+
 	parent1 := (*population)[idxParent1]
 	parent2 := (*population)[idxParent2]
 
@@ -281,7 +289,6 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		}
 		newInvestor.Influencers = append(newInvestor.Influencers, inf)
 	}
-	f.Mutate(&newInvestor)
 
 	//----------------------------------------------------------------------------------
 	// The influencer has control over its research period, however the Investor has
@@ -290,16 +297,10 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	// a pointer back to its parent, and it needs the global config data...
 	//----------------------------------------------------------------------------------
 	for i := 0; i < len(newInvestor.Influencers); i++ {
-		if newInvestor.Influencers[i].MyInvestor() == nil {
-			newInvestor.Influencers[i].Init(&newInvestor, f.cfg, newInvestor.Delta4)
-		}
+		newInvestor.Influencers[i].Init(&newInvestor, f.cfg, newInvestor.Delta4)
 	}
 
-	newInvestor.cfg = f.cfg
-	newInvestor.factory = f
-	newInvestor.FitnessCalculated = false
-	newInvestor.Fitness = 0.0
-	newInvestor.BalanceC1 = f.cfg.InitFunds
+	f.Mutate(&newInvestor) // mutate only after *everything* has been set
 
 	return newInvestor
 }
@@ -330,6 +331,12 @@ func (f *Factory) Mutate(inv *Investor) {
 			found = (d == inv.Delta4)
 		}
 		inv.Delta4 = d
+		//-------------------------------------------------------------------------------------
+		// if we mutate Delta4, we have to change ALL influencers to use the new Delta4 value
+		//-------------------------------------------------------------------------------------
+		for i := 0; i < len(inv.Influencers); i++ {
+			inv.Influencers[i].SetDelta4(inv.Delta4)
+		}
 	case "InvW1":
 		w := float64(0)
 		found := false
@@ -359,6 +366,7 @@ func (f *Factory) Mutate(inv *Investor) {
 		if err != nil {
 			log.Panicf("*** PANIC ERROR NewInfluncer(%q) returned error: %s\n", dna, err)
 		}
+		r.Init(inv, inv.cfg, inv.Delta4)
 		inv.Influencers[idx] = r
 	default:
 		log.Panicf("*** PANIC ERROR *** Unhandled key from DNA: %s\n", randomKey)
@@ -389,6 +397,9 @@ func (f *Factory) NewInvestor(DNA string) Investor {
 	if val, ok := m["InvW2"].(float64); ok {
 		inv.W2 = val
 	}
+	inv.cfg = f.cfg
+	inv.factory = f
+	inv.BalanceC1 = inv.cfg.InitFunds
 
 	infDNA, ok := m["Influencers"].(string)
 	if !ok {
@@ -401,11 +412,9 @@ func (f *Factory) NewInvestor(DNA string) Investor {
 		if err != nil {
 			log.Panicf("*** PANIC ERROR *** NeInfluencer(%s) returned error: %s\n", sa[i], err.Error())
 		}
+		inf.Init(&inv, f.cfg, inv.Delta4)
 		inv.Influencers = append(inv.Influencers, inf)
 	}
-	inv.cfg = f.cfg
-	inv.factory = f
-	inv.BalanceC1 = inv.cfg.InitFunds
 
 	return inv
 }
