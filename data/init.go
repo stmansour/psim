@@ -50,10 +50,13 @@ var Currencies = []CurrencyInfo{
 
 // Init calls the initialize routine for all data types
 // ------------------------------------------------------------
-func Init(cfg *util.AppConfig) {
+func Init(cfg *util.AppConfig) error {
 	DInfo.cfg = cfg
-	DRInit()
+	if err := DRInit(); err != nil {
+		return err
+	}
 	ERInit()
+	return nil
 }
 
 // HandleUTF8FileChars returns the first line of the file with

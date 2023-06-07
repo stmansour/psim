@@ -165,7 +165,7 @@ func DRGetDataInfo() DRInfo {
 //     correct information.
 //
 // ---------------------------------------------------------------------------
-func DRInit() {
+func DRInit() error {
 	file, err := os.Open(DRCSV)
 	if err != nil {
 		fmt.Println(err)
@@ -203,7 +203,7 @@ func DRInit() {
 				}
 			}
 			if !found {
-				log.Panicf("No column in %s had label  %s%s%s, which is required for the current simulation configuration\n",
+				return fmt.Errorf("No column in %s had label  %s%s%s, which is required for the current simulation configuration",
 					DRCSV, DInfo.cfg.C1, DInfo.cfg.C2, "DRRatio")
 			}
 			continue // continue to the next line now
@@ -248,4 +248,5 @@ func DRInit() {
 	l := DR.DRRecs.Len()
 	DR.DtStart = DR.DRRecs[0].Date
 	DR.DtStop = DR.DRRecs[l-1].Date
+	return nil
 }

@@ -15,9 +15,11 @@ func main() {
 	util.Init()
 	cfg, err := util.LoadConfig()
 	if err != nil {
-		log.Fatalf("could not load config file:  %s\n", err.Error())
+		log.Fatalf("could not load config file:  %s\n", err)
 	}
-	data.Init(&cfg)
+	if err = data.Init(&cfg); err != nil {
+		log.Fatalf("Error initilizing data subsystem: %s\n", err)
+	}
 	i := data.DR.DRRecs.Len()
 	dt1 := data.DR.DtStart
 	dt2 := data.DR.DtStop

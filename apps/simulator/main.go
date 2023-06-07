@@ -46,6 +46,8 @@ func displaySimulationDetails(cfg *util.AppConfig) {
 	c := b.AddDate(0, 0, 1)
 	fmt.Printf("Start:           %s\tvalid: %s\n", a.Format("Jan 2, 2006"), dateIsInDataRange(a))
 	fmt.Printf("Stop:            %s\tvalid: %s\n", b.Format("Jan 2, 2006"), dateIsInDataRange(b))
+	fmt.Printf("C1:              %s\n", cfg.C1)
+	fmt.Printf("C2:              %s\n", cfg.C2)
 
 	if a.After(b) {
 		fmt.Printf("*** ERROR *** Start date is after Stop ")
@@ -95,7 +97,9 @@ func main() {
 	readCommandLineArgs()
 	rand.Seed(time.Now().UnixNano())
 
-	data.Init(&cfg)
+	if err = data.Init(&cfg); err != nil {
+		log.Fatalf("Error initilizing data subsystem: %s\n", err)
+	}
 
 	displaySimulationDetails(&cfg)
 	app.sim.Init(&cfg, app.dayByDayResults, app.dumpInvestmentTable)

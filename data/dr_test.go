@@ -18,3 +18,13 @@ func TestDRCSVLoad(t *testing.T) {
 		t.Errorf("Date expected = 2020-Mar-15, got %s", drec.Date.Format("2006-Jan-02"))
 	}
 }
+
+func TestBadConfig(t *testing.T) {
+	util.Init()
+	cfg := util.CreateTestingCFG()
+	cfg.C1 = "XYZ"
+	err := Init(cfg)
+	if err == nil {
+		t.Errorf("Data subsystem did not return failure on bad currency configuration.")
+	}
+}
