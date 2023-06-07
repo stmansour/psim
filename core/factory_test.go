@@ -80,7 +80,7 @@ func TestNewPopulation(t *testing.T) {
 				bd4++
 			}
 		}
-		// USDJPRDRRatio%d].FitnessCalculated = %v, .Fitness = %6.2f\n", i, sim.Investors[i].FitnessCalculated, sim.Investors[i].Fitness)
+		// Ratio%d].FitnessCalculated = %v, .Fitness = %6.2f\n", i, sim.Investors[i].FitnessCalculated, sim.Investors[i].Fitness)
 	}
 	if ni > 0 {
 		t.Errorf("NewPopulation return %d Influencers with nil pointer for MyInvestor", ni)
