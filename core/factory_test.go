@@ -99,7 +99,8 @@ func TestNewPopulation(t *testing.T) {
 func TestInvestorFromDNA(t *testing.T) {
 	var f Factory
 	util.Init()
-	f.Init(util.CreateTestingCFG())
+	cfg := util.CreateTestingCFG()
+	f.Init(cfg)
 
 	// t.Fail()
 
@@ -111,14 +112,14 @@ func TestInvestorFromDNA(t *testing.T) {
 	dr := DRInfluencer{
 		Delta1: -30,
 		Delta2: -2,
-		Delta4: parent1.Delta4,
 	}
 	ir := IRInfluencer{
 		Delta1: -17,
 		Delta2: -3,
-		Delta4: parent1.Delta4,
 	}
+	dr.Init(&parent1, cfg, parent1.Delta4)
 	dr.SetID()
+	ir.Init(&parent1, cfg, parent1.Delta4)
 	ir.SetID()
 	parent1.Influencers = append(parent1.Influencers, &dr, &ir)
 
@@ -130,14 +131,14 @@ func TestInvestorFromDNA(t *testing.T) {
 	dr2 := DRInfluencer{
 		Delta1: -28,
 		Delta2: -3,
-		Delta4: parent2.Delta4,
 	}
 	ur2 := URInfluencer{
 		Delta1: -17,
 		Delta2: -3,
-		Delta4: parent2.Delta4,
 	}
+	dr2.Init(&parent2, cfg, parent2.Delta4)
 	dr2.SetID()
+	ur2.Init(&parent2, cfg, parent2.Delta4)
 	ur2.SetID()
 	parent2.Influencers = append(parent2.Influencers, &dr2, &ur2)
 	population := []Investor{}

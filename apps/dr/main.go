@@ -139,7 +139,9 @@ func main() {
 	app.probMap = map[string]probInfo{}
 	readCommandLineArgs()
 
-	data.Init(app.cfg)
+	if err = data.Init(app.cfg); err != nil {
+		log.Fatalf("Error initilizing data subsystem: %s\n", err)
+	}
 	checkDR(time.Date(2018, 2, 14, 0, 0, 0, 0, time.UTC)) // Just make sure everything looks OK before starting...
 
 	//-------------------------------------
