@@ -16,11 +16,11 @@ var DRCSV = string("data/dr.csv")
 
 // DiscountRateRecord is the basic structure of discount rate data
 type DiscountRateRecord struct {
-	Date           time.Time
-	USDiscountRate float64
-	JPDiscountRate float64
-	DRRatio        float64
-	EXClose        float64
+	Date time.Time
+	// USDiscountRate float64
+	// JPDiscountRate float64
+	DRRatio float64
+	EXClose float64
 }
 
 // DiscountRateRecords is a type for an array of DR records
@@ -237,17 +237,23 @@ func DRInit() error {
 		// }
 		// jpDiscountRate /= 100
 
-		USDJPYDRRatio, err := strconv.ParseFloat(line[DRRatioCol], 64)
+		DRRatio, err := strconv.ParseFloat(line[DRRatioCol], 64)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
 
+		EXClose, err := strconv.ParseFloat(line[DRRatioCol], 64)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
 		records = append(records, DiscountRateRecord{
 			Date: date,
 			// USDiscountRate: usDiscountRate,
 			// JPDiscountRate: jpDiscountRate,
-			DRRatio: USDJPYDRRatio,
+			DRRatio: DRRatio,
+			EXClose: EXClose,
 		})
 	}
 

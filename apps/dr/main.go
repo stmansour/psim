@@ -85,14 +85,14 @@ func checkDR(t3 time.Time) {
 		fmt.Printf("Ratio did not match!  Read %7.4f, looking for: -15 \n", rec.DRRatio)
 		os.Exit(1)
 	}
-	if rec.USDiscountRate != 0.015 {
-		fmt.Printf("USDiscountRate did not match!  Read %7.4f, looking for: 0.015 \n", rec.USDiscountRate)
-		os.Exit(1)
-	}
-	if rec.JPDiscountRate != -0.001 {
-		fmt.Printf("JPDiscountRate did not match!  Read %7.4f, looking for: -0.001 \n", rec.JPDiscountRate)
-		os.Exit(1)
-	}
+	// if rec.USDiscountRate != 0.015 {
+	// 	fmt.Printf("USDiscountRate did not match!  Read %7.4f, looking for: 0.015 \n", rec.USDiscountRate)
+	// 	os.Exit(1)
+	// }
+	// if rec.JPDiscountRate != -0.001 {
+	// 	fmt.Printf("JPDiscountRate did not match!  Read %7.4f, looking for: -0.001 \n", rec.JPDiscountRate)
+	// 	os.Exit(1)
+	// }
 }
 
 func readCommandLineArgs() {
