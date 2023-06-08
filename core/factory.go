@@ -22,7 +22,9 @@ var InfluencerSubclasses = []string{
 
 // Factory contains methods to create objects based on a DNA string
 type Factory struct {
-	cfg *util.AppConfig // system-wide configuration info
+	cfg         *util.AppConfig // system-wide configuration info
+	MutateCalls int64           // how many calls were made to Mutate()
+	Mutations   int64           // how many times did mutation happen
 }
 
 // InfluencerDNA is a struct of information used during the process of
@@ -308,9 +310,13 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 // Mutate - there's a one percent chance that something will get completely changed
 // ------------------------------------------------------------------------------------
 func (f *Factory) Mutate(inv *Investor) {
+	f.MutateCalls++ // this marks another call to Mutate
+
 	// if util.RandomInRange(1, 100) != 1 {
 	// 	return
 	// }
+
+	f.Mutations++ // if we hit this point, we're going to mutate
 	dna := inv.DNA()
 	m, err := f.ParseInvestorDNA(dna)
 	if err != nil {

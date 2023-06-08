@@ -3,6 +3,7 @@ package core
 import (
 	"fmt"
 	"log"
+	"math/rand"
 	"reflect"
 	"testing"
 
@@ -181,4 +182,62 @@ func TestParseInvestorDNA(t *testing.T) {
 			t.Errorf("parseInvestorDNA(%q) map = %v, want %v", tt.input, gotMap, tt.wantMap)
 		}
 	}
+}
+
+func TestMutation(t *testing.T) {
+	util.Init()
+	var f Factory
+	cfg := util.CreateTestingCFG()
+	cfg.PopulationSize = 1000
+	var sim Simulator
+	f.Init(cfg)
+	sim.Init(cfg, false, false)
+
+	//-----------------------------------------------------------------
+	// Create initial population... it will be random
+	//-----------------------------------------------------------------
+	var err error
+	if err = sim.NewPopulation(); err != nil {
+		log.Panicf("*** PANIC ERROR ***  NewPopulation returned error: %s\n", err.Error())
+	}
+
+	//-----------------------------------------------------------------
+	// Create initial population... it will be random
+	//-----------------------------------------------------------------
+	for i := 0; i < len(sim.Investors); i++ {
+		sim.Investors[i].BalanceC1 += float64(util.RandomInRange(1, 1000))/1000.00 - 500.00 // random result
+		if rand.Float64() > 0.7 {                                                           // add an investment 30% of the time
+			cm := util.RandomInRange(1, 100) > 25 // true 75% of the time
+			pr := util.RandomInRange(1, 100) > 30 // true 70% of the time
+			inv := Investment{
+				Completed:  cm,
+				Profitable: pr,
+			}
+			sim.Investors[i].Investments = append(sim.Investors[i].Investments, inv)
+			//----------------------------------------------
+			// add info for the Influencer's Predictions...
+			//----------------------------------------------
+			for j := 0; j < len(sim.Investors[i].Influencers); j++ {
+				ps := sim.Investors[i].Influencers[j].GetMyPredictions()
+				cm = util.RandomInRange(1, 100) > 25 // true 75% of the time
+				pr = util.RandomInRange(1, 100) > 30 // true 70% of the time
+				prd := Prediction{
+					Correct:   pr,
+					Completed: cm,
+				}
+				ps = append(ps, prd)
+				sim.Investors[i].Influencers[j].SetMyPredictions(ps)
+			}
+		}
+	}
+
+	//-----------------------------------------------------------------
+	// now let's create a new population from our test population...
+	//-----------------------------------------------------------------
+	sim.CalculateMaxVals()
+	sim.CalculateAllFitnessScores()
+	if err = sim.NewPopulation(); err != nil {
+		log.Panicf("*** PANIC ERROR *** NewPopulation returned error: %s\n", err)
+	}
+
 }

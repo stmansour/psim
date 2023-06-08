@@ -26,6 +26,17 @@ func (p *IRInfluencer) MyInvestor() *Investor {
 	return p.myInvestor
 }
 
+// SetMyPredictions is used primarily for testing and sets the Prediction
+// slice to the supplied value
+func (p *IRInfluencer) SetMyPredictions(ps []Prediction) {
+	p.MyPredictions = ps
+}
+
+// GetMyPredictions is used primarily for testing and returns MyPredictions
+func (p *IRInfluencer) GetMyPredictions() []Prediction {
+	return p.MyPredictions
+}
+
 // GetAppConfig - return cfg struct
 func (p *IRInfluencer) GetAppConfig() *util.AppConfig {
 	return p.cfg

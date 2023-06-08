@@ -40,4 +40,6 @@ type Influencer interface {
 	Subclass() string
 	MyInvestor() *Investor
 	GetLenMyPredictions() int
+	SetMyPredictions(ps []Prediction)
+	GetMyPredictions() []Prediction
 }
