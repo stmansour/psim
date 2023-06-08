@@ -42,6 +42,12 @@ func (s *Simulator) SetAppConfig(cfg *util.AppConfig) {
 	s.cfg = cfg
 }
 
+// GetFactory simply returns the simulator's factory
+// -----------------------------------------------------------------------------
+func (s *Simulator) GetFactory() *Factory {
+	return &s.factory
+}
+
 // GetSimulationRunTime returns a printable string and a duration with the run
 // time for this simulation
 // ----------------------------------------------------------------------------
@@ -347,8 +353,11 @@ func (s *Simulator) DumpStats() error {
 	fmt.Fprintf(file, "\"Simulation Start Date: %s\"\n", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Stop Date: %s\"\n", c.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Time Duration: %s\"\n", util.DateDiffString(a, c))
+	fmt.Fprintf(file, "\"C1: %s\"\n", s.cfg.C1)
+	fmt.Fprintf(file, "\"C2: %s\"\n", s.cfg.C2)
 	fmt.Fprintf(file, "\"Generations: %d\"\n", s.GensCompleted)
 	fmt.Fprintf(file, "\"Population: %d\"\n", s.cfg.PopulationSize)
+	fmt.Fprintf(file, "\"Observed Mutation Rate: %6.3f%%\"\n", 100.0*float64(s.factory.Mutations)/float64(s.factory.MutateCalls))
 	fmt.Fprintf(file, "\"Elapsed Run Time: %s\"\n", et)
 	fmt.Fprintf(file, "\"\"\n")
 

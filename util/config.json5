@@ -21,6 +21,7 @@
     "DRW2": 0.4,                // DRInfluencer Fitness Score weighting for number of predictions made. Constraint: DRW1 + DRW2 = 1.0
     "InvW1": 0.5,               // Investor Fitness Score weighting for "correctness" of predictions. Constraint: InvW1 + InvW2 = 1.0
     "InvW2": 0.5,               // Investor Fitness Score weighting for profit. Constraint: InvW1 + InvW2 = 1.0
+    "MutationRate": 1,          // number between 1 and 100, indicating the percentage of mutation
     "lastline": "ignore"
   }
   

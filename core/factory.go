@@ -312,9 +312,9 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 func (f *Factory) Mutate(inv *Investor) {
 	f.MutateCalls++ // this marks another call to Mutate
 
-	// if util.RandomInRange(1, 100) != 1 {
-	// 	return
-	// }
+	if util.RandomInRange(1, 100) != 1 { // implements a 1% mutation rate
+		return
+	}
 
 	f.Mutations++ // if we hit this point, we're going to mutate
 	dna := inv.DNA()

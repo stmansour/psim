@@ -59,8 +59,10 @@ func displaySimulationDetails(cfg *util.AppConfig) {
 }
 
 func displaySimulationResults(cfg *util.AppConfig) {
+	f := app.sim.GetFactory()
 	fmt.Printf("\n**************  S I M U L A T I O N   R E S U L T S  **************\n")
 	fmt.Printf("Number of generations: %d\n", app.sim.GensCompleted)
+	fmt.Printf("Observed Mutation Rate: %6.3f%%\n", 100.0*float64(f.Mutations)/float64(f.MutateCalls))
 	s, _ := app.sim.GetSimulationRunTime()
 	fmt.Printf("Elapsed time: %s\n", s)
 	err := (&app.sim).DumpStats()

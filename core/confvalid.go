@@ -14,7 +14,7 @@ import (
 // ---------------------------------------------------------------------------------------
 func ValidateConfig(cfg *util.AppConfig) error {
 	var err error
-	err = nil // assume everything is fine
+	err = nil // assume everything is fine.  It will be set if any error conditions are hit
 
 	//-----------------------------------------------------------------------------------
 	// Validate Influencer research time.
@@ -68,6 +68,14 @@ func ValidateConfig(cfg *util.AppConfig) error {
 	//-------------------------------------------------
 	if cfg.DRW1+cfg.DRW2 != float64(1.0) {
 		err = fmt.Errorf("DRW1 (%4.2f) plus DRW2 (%4.2f) must equal 1.0", cfg.DRW1, cfg.DRW2)
+		fmt.Printf("** Configuration Error **  %s\n", err.Error())
+	}
+
+	//-------------------------------------------------
+	// Ensure that mutation is in range 1 - 100
+	//-------------------------------------------------
+	if cfg.MutationRate < 1 || cfg.MutationRate > 100 {
+		err = fmt.Errorf("Mutation rate must be in the range 1 - 100, current value is: %d", cfg.MutationRate)
 		fmt.Printf("** Configuration Error **  %s\n", err.Error())
 	}
 

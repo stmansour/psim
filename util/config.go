@@ -57,6 +57,7 @@ type AppConfig struct {
 	DRW2           float64    // weighting for prediction count part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
 	InvW1          float64    // weight for profit part of Investor FitnessScore
 	InvW2          float64    // weight for correctness part of Investor FitnessScore
+	MutationRate   int        // 1 - 100 indicating the % of mutation
 }
 
 // LoadConfig reads the configuration data from config.json into an
