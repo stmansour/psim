@@ -19,7 +19,8 @@ type DiscountRateRecord struct {
 	Date           time.Time
 	USDiscountRate float64
 	JPDiscountRate float64
-	Ratio          float64
+	DRRatio        float64
+	EXClose        float64
 }
 
 // DiscountRateRecords is a type for an array of DR records
@@ -149,6 +150,7 @@ func DRGetDataInfo() DRInfo {
 //             DR = Discount Rate
 //             IR = Inflation Rate
 //             UR = Unemployment Rate
+//             EX = Exchange Rate -- can be appended with "Open", "Low", "High", "Close"
 //
 //  DataTypeRatio - use the exchange rate,
 //                  followed by the 2 letter datatype, followed by an R
@@ -180,7 +182,8 @@ func DRInit() error {
 		os.Exit(1)
 	}
 
-	ratioCol := -1
+	DRRatioCol := -1
+	EXCloseCol := -1
 	records := DiscountRateRecords{}
 	for i, line := range lines {
 		if i == 0 {
@@ -190,21 +193,26 @@ func DRInit() error {
 			if line[0] != "Date" {
 				log.Panicf("Problem with %s, column 1 is labelled %q, it should be %q\n", DRCSV, line[0], "Date")
 			}
-			// search for the column containing the proper "DRRatio"
-			found := false
-			for j := 1; j < len(line) && !found; j++ {
-				if strings.HasSuffix(line[j], "DRRatio") {
-					myC1 := line[j][0:3]
-					myC2 := line[j][3:6]
-					if myC1 == DInfo.cfg.C1 && myC2 == DInfo.cfg.C2 {
-						found = true
-						ratioCol = j
-					}
+			//---------------------------------------------------------
+			// Search for the columns of interest.
+			//---------------------------------------------------------
+			for j := 1; j < len(line); j++ {
+				validcpair := validCurrencyPair(line[j]) // do the first 6 chars make a currency pair that matches with the simulation configuation?
+				l := len(line[j])
+				if l == 13 && strings.HasSuffix(line[j], "DRRatio") && validcpair { // len("USDJPYDRRatio") = 13
+					DRRatioCol = j
+				}
+				if l == 13 && strings.HasSuffix(line[j], "EXClose") && validcpair { // len("USDJPYEXClose") = 13
+					EXCloseCol = j
 				}
 			}
-			if !found {
+			if DRRatioCol < 0 {
 				return fmt.Errorf("No column in %s had label  %s%s%s, which is required for the current simulation configuration",
 					DRCSV, DInfo.cfg.C1, DInfo.cfg.C2, "DRRatio")
+			}
+			if EXCloseCol < 0 {
+				return fmt.Errorf("No column in %s had label  %s%s%s, which is required for the current simulation configuration",
+					DRCSV, DInfo.cfg.C1, DInfo.cfg.C2, "EXClose")
 			}
 			continue // continue to the next line now
 		}
@@ -229,7 +237,7 @@ func DRInit() error {
 		// }
 		// jpDiscountRate /= 100
 
-		USDJPYDRRatio, err := strconv.ParseFloat(line[ratioCol], 64)
+		USDJPYDRRatio, err := strconv.ParseFloat(line[DRRatioCol], 64)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -239,7 +247,7 @@ func DRInit() error {
 			Date: date,
 			// USDiscountRate: usDiscountRate,
 			// JPDiscountRate: jpDiscountRate,
-			Ratio: USDJPYDRRatio,
+			DRRatio: USDJPYDRRatio,
 		})
 	}
 
@@ -249,4 +257,13 @@ func DRInit() error {
 	DR.DtStart = DR.DRRecs[0].Date
 	DR.DtStop = DR.DRRecs[l-1].Date
 	return nil
+}
+
+func validCurrencyPair(line string) bool {
+	if len(line) < 6 {
+		return false
+	}
+	myC1 := line[0:3]
+	myC2 := line[3:6]
+	return myC1 == DInfo.cfg.C1 && myC2 == DInfo.cfg.C2
 }

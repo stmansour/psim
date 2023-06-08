@@ -12,11 +12,12 @@ core: *.go
 
 clean:
 	go clean
+	rm -rf *.out
 	@echo "*** ${THISDIR}: completed clean ***"
 
 test:
 	touch $(TEST_FAILURE_FILE)
-	go test github.com/stmansour/psim/core && rm -f $(TEST_FAILURE_FILE)
+	@go test github.com/stmansour/psim/core && rm -f $(TEST_FAILURE_FILE)
 	@go test -coverprofile=coverage.out || (echo "*** ERROR ***  go test failed!" && exit 1)
 	@echo "*** ${THISDIR}: completed test ***"
 

@@ -1,6 +1,6 @@
 TOP=../..
 BINDIR=${TOP}/dist
-THISDIR="apps/dr"
+THISDIR="apps/er"
 
 dr: *.go
 	go vet
