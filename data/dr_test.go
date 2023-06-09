@@ -7,7 +7,7 @@ import (
 	"github.com/stmansour/psim/util"
 )
 
-func TestDRCSVLoad(t *testing.T) {
+func TestPLATODBLoad(t *testing.T) {
 	util.Init()
 	Init(util.CreateTestingCFG())
 
