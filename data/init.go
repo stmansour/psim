@@ -21,6 +21,18 @@ var DInfo struct {
 	DBRecs RatesAndRatiosRecords // all records... temporary, until we have database
 }
 
+// RatesAndRatiosRecord is the basic structure of discount rate data
+type RatesAndRatiosRecord struct {
+	Date time.Time
+	// USDiscountRate float64
+	// JPDiscountRate float64
+	DRRatio float64
+	EXClose float64
+}
+
+// PLATODB is the csv data file that is used for Discount Rate information
+var PLATODB = string("data/platodb.csv")
+
 // RatesAndRatiosRecords is a type for an array of DR records
 type RatesAndRatiosRecords []RatesAndRatiosRecord
 
@@ -60,24 +72,17 @@ var Currencies = []CurrencyInfo{
 	},
 }
 
-// PLATODB is the csv data file that is used for Discount Rate information
-var PLATODB = string("data/platodb.csv")
-
-// RatesAndRatiosRecord is the basic structure of discount rate data
-type RatesAndRatiosRecord struct {
-	Date time.Time
-	// USDiscountRate float64
-	// JPDiscountRate float64
-	DRRatio float64
-	EXClose float64
-}
-
 // Init calls the initialize routine for all data types
 // ------------------------------------------------------------
 func Init(cfg *util.AppConfig) error {
 	DInfo.cfg = cfg
-	if err := LoadCsvDB(); err != nil {
-		return err
+	switch DInfo.cfg.DBSource {
+	case "CSV":
+		if err := LoadCsvDB(); err != nil {
+			return err
+		}
+	default:
+		return fmt.Errorf("Unimplemented DBSource %s", DInfo.cfg.DBSource)
 	}
 	ERInit()
 	return nil

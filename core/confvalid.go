@@ -6,6 +6,9 @@ import (
 	"github.com/stmansour/psim/util"
 )
 
+// ValidDBSources contains the valid configuration choices for database
+var ValidDBSources = []string{"CSV", "Database", "OnlineService"}
+
 // ValidateConfig ensures that all the configuration file numbers are valid, that no
 //
 //	constraints are violated. If it finds problems it will print them out and
@@ -32,27 +35,27 @@ func ValidateConfig(cfg *util.AppConfig) error {
 	//-----------------------------------------------------------------------------------
 	if cfg.MinDelta2 >= 0 {
 		err = fmt.Errorf("MinDelta2 (%d) must be less than 0", cfg.MinDelta2)
-		fmt.Printf("** Configuration Error **  %s\n", err.Error())
+		fmt.Printf("** Configuration Error **  %s\n", err)
 	}
 	if cfg.MaxDelta2 <= cfg.MaxDelta1 {
 		err = fmt.Errorf("MaxDelta2 (%d) must be greater than MaxDelta1 (%d)", cfg.MaxDelta2, cfg.MaxDelta1)
-		fmt.Printf("** Configuration Error **  %s\n", err.Error())
+		fmt.Printf("** Configuration Error **  %s\n", err)
 	}
 	if cfg.MaxDelta1 < cfg.MinDelta1 {
 		err = fmt.Errorf("MaxDelta1 (%d) must be less than MinDelta1 (%d)", cfg.MaxDelta1, cfg.MinDelta1)
-		fmt.Printf("** Configuration Error **  %s\n", err.Error())
+		fmt.Printf("** Configuration Error **  %s\n", err)
 	}
 	if cfg.MaxDelta2 < cfg.MinDelta2 {
 		err = fmt.Errorf("MaxDelta2 (%d) must be less than MinDelta2 (%d)", cfg.MaxDelta2, cfg.MinDelta2)
-		fmt.Printf("** Configuration Error **  %s\n", err.Error())
+		fmt.Printf("** Configuration Error **  %s\n", err)
 	}
 	if cfg.MinDelta4 < 1 {
 		err = fmt.Errorf("MinDelta4 (%d) must be > 0", cfg.MinDelta4)
-		fmt.Printf("** Configuration Error **  %s\n", err.Error())
+		fmt.Printf("** Configuration Error **  %s\n", err)
 	}
 	if cfg.MinDelta4 >= cfg.MaxDelta4 {
 		err = fmt.Errorf("MinDelta4 (%d) must be less than MaxDelta4 (%d)", cfg.MinDelta4, cfg.MaxDelta4)
-		fmt.Printf("** Configuration Error **  %s\n", err.Error())
+		fmt.Printf("** Configuration Error **  %s\n", err)
 	}
 
 	//-------------------------------------------------
@@ -60,7 +63,7 @@ func ValidateConfig(cfg *util.AppConfig) error {
 	//-------------------------------------------------
 	if cfg.InitFunds/3.0 < cfg.StdInvestment {
 		err = fmt.Errorf("StdInvestment (%6.2f) cannot be greater than 1/3 of the InitFunds (%6.2f / 3 = %6.2f)", cfg.StdInvestment, cfg.InitFunds, float64(cfg.InitFunds/3.0))
-		fmt.Printf("** Configuration Error **  %s\n", err.Error())
+		fmt.Printf("** Configuration Error **  %s\n", err)
 	}
 
 	//-------------------------------------------------
@@ -68,7 +71,7 @@ func ValidateConfig(cfg *util.AppConfig) error {
 	//-------------------------------------------------
 	if cfg.DRW1+cfg.DRW2 != float64(1.0) {
 		err = fmt.Errorf("DRW1 (%4.2f) plus DRW2 (%4.2f) must equal 1.0", cfg.DRW1, cfg.DRW2)
-		fmt.Printf("** Configuration Error **  %s\n", err.Error())
+		fmt.Printf("** Configuration Error **  %s\n", err)
 	}
 
 	//-------------------------------------------------
@@ -76,7 +79,21 @@ func ValidateConfig(cfg *util.AppConfig) error {
 	//-------------------------------------------------
 	if cfg.MutationRate < 1 || cfg.MutationRate > 100 {
 		err = fmt.Errorf("Mutation rate must be in the range 1 - 100, current value is: %d", cfg.MutationRate)
-		fmt.Printf("** Configuration Error **  %s\n", err.Error())
+		fmt.Printf("** Configuration Error **  %s\n", err)
+	}
+
+	//--------------------------------------------------------------------
+	// Ensure that DBSource is one of {CSV | Database | OnlineService}
+	//--------------------------------------------------------------------
+	found := false
+	for i := 0; i < len(ValidDBSources) && !found; i++ {
+		if cfg.DBSource == ValidDBSources[i] {
+			found = true
+		}
+	}
+	if !found {
+		err = fmt.Errorf("Unrecognized DBSource: %s", cfg.DBSource)
+		fmt.Printf("** Configuration Error **  %s\n", err)
 	}
 
 	return err

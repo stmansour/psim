@@ -2,6 +2,7 @@ package core
 
 import (
 	"fmt"
+	"log"
 	"testing"
 
 	"github.com/stmansour/psim/util"
@@ -11,6 +12,9 @@ func TestInvestorDNA(t *testing.T) {
 	var f Factory
 	util.Init()
 	cfg := util.CreateTestingCFG()
+	if err := ValidateConfig(cfg); err != nil {
+		log.Panicf("*** PANIC ERROR ***  ValidateConfig returned error: %s\n", err)
+	}
 	f.Init(cfg)
 
 	v := Investor{}

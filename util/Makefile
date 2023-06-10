@@ -8,20 +8,20 @@ util: *.go
 	go build
 	go install
 	@rm -f fail
-	@echo "*** Completed in ${THISDIR} ***"
+	@echo "*** ${THISDIR}: completed compile ***"
 
 clean:
-	@echo "*** CLEAN completed in ${THISDIR} ***"
+	@echo "*** ${THISDIR}: completed clean ***"
 
 install:
 	go install
 
 test:
 	@touch fail
-	@echo "*** TEST completed in ${THISDIR} ***"
+	@echo "*** ${THISDIR}: completed test ***"
 	@rm -f fail
 
 package:
 	mkdir -p ${TOP}/dist
 	cp config.json5 ${TOP}/dist/
-	@echo "*** PACKAGE completed in ${THISDIR} ***"
+	@echo "*** ${THISDIR}: completed package ***"

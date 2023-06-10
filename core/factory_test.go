@@ -26,6 +26,9 @@ func TestNewPopulation(t *testing.T) {
 	util.Init()
 	var f Factory
 	cfg := util.CreateTestingCFG()
+	if err := ValidateConfig(cfg); err != nil {
+		log.Panicf("*** PANIC ERROR ***  ValidateConfig returned error: %s\n", err)
+	}
 	var sim Simulator
 	f.Init(cfg)
 
@@ -101,6 +104,9 @@ func TestInvestorFromDNA(t *testing.T) {
 	var f Factory
 	util.Init()
 	cfg := util.CreateTestingCFG()
+	if err := ValidateConfig(cfg); err != nil {
+		log.Panicf("*** PANIC ERROR ***  ValidateConfig returned error: %s\n", err)
+	}
 	f.Init(cfg)
 
 	// t.Fail()
@@ -189,6 +195,9 @@ func TestMutation(t *testing.T) {
 	var f Factory
 	cfg := util.CreateTestingCFG()
 	cfg.PopulationSize = 1000
+	if err := ValidateConfig(cfg); err != nil {
+		log.Panicf("*** PANIC ERROR ***  ValidateConfig returned error: %s\n", err)
+	}
 	var sim Simulator
 	f.Init(cfg)
 	sim.Init(cfg, false, false)
@@ -198,7 +207,7 @@ func TestMutation(t *testing.T) {
 	//-----------------------------------------------------------------
 	var err error
 	if err = sim.NewPopulation(); err != nil {
-		log.Panicf("*** PANIC ERROR ***  NewPopulation returned error: %s\n", err.Error())
+		log.Panicf("*** PANIC ERROR ***  NewPopulation returned error: %s\n", err)
 	}
 
 	//-----------------------------------------------------------------

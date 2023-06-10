@@ -58,6 +58,7 @@ type AppConfig struct {
 	InvW1          float64    // weight for profit part of Investor FitnessScore
 	InvW2          float64    // weight for correctness part of Investor FitnessScore
 	MutationRate   int        // 1 - 100 indicating the % of mutation
+	DBSource       string     // {CSV | Database | OnlineService}
 }
 
 // LoadConfig reads the configuration data from config.json into an
@@ -107,6 +108,8 @@ func CreateTestingCFG() *AppConfig {
 		DRW2:           0.4,      // DRInfluencer Fitness Score weighting for number of predictions made. Constraint: DRW1 + DRW2 = 1.0
 		InvW1:          0.5,      // Investor Fitness Score weighting for "correctness" of predictions. Constraint: InvW1 + InvW2 = 1.0
 		InvW2:          0.5,      // Investor Fitness Score weighting for profit. Constraint: InvW1 + InvW2 = 1.0
+		MutationRate:   1,        // percentage number, from 1 - 100, what percent of the time does mutation occur
+		DBSource:       "CSV",    // {CSV | Database | OnlineService}
 	}
 	return &cfg
 }

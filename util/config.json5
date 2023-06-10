@@ -4,7 +4,7 @@
 {
     "DtStart": "2022-01-01",    // simulation start date for each generation
     "DtStop": "2022-12-31",     // simulation stop date for each generation
-    "Generations": 50,          // how many generations should the simulator run
+    "Generations": 20,          // how many generations should the simulator run
     "PopulationSize": 200,      // Total number Investors in the population
     "C1": "USD",                // main currency  (ISO 4217 code)
     "C2": "JPY",                // currency that we will invest in (ISO 4217 code)
@@ -22,6 +22,7 @@
     "InvW1": 0.5,               // Investor Fitness Score weighting for "correctness" of predictions. Constraint: InvW1 + InvW2 = 1.0
     "InvW2": 0.5,               // Investor Fitness Score weighting for profit. Constraint: InvW1 + InvW2 = 1.0
     "MutationRate": 1,          // number between 1 and 100, indicating the percentage of mutation
+    "DBSource": "CSV",          // { CSV | Database | OnlineService }
     "lastline": "ignore"
   }
   
