@@ -71,7 +71,7 @@ func displayStats() (data.DRInfo, data.ERInfo) {
 }
 
 func checkDR(t3 time.Time) {
-	rec := data.DRFindRecord(t3)
+	rec := data.CSVDBFindRecord(t3)
 	if rec == nil {
 		fmt.Println("DiscountRate Record not found.")
 		os.Exit(1)
@@ -284,12 +284,12 @@ func computeDRProbability(t1, t2, t3, t4 time.Time, dt1, dt2, dt4 int) {
 	//---------------------------------------------------------------------------
 	// Determine dDRR = (DiscountRateRatio at t1) - (DiscountRateRatio at t2)
 	//---------------------------------------------------------------------------
-	rec1 := data.DRFindRecord(t1)
+	rec1 := data.CSVDBFindRecord(t1)
 	if rec1 == nil {
 		fmt.Printf("ExchangeRate Record for %s not found.\n", t1.Format("1/2/2006"))
 		os.Exit(1)
 	}
-	rec2 := data.DRFindRecord(t2)
+	rec2 := data.CSVDBFindRecord(t2)
 	if rec2 == nil {
 		fmt.Printf("ExchangeRate Record for %s not found.\n", t2.Format("1/2/2006"))
 		os.Exit(1)

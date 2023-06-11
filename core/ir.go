@@ -149,12 +149,12 @@ func (p *IRInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
 	// //---------------------------------------------------------------------------
 	// // Determine dDRR = (DiscountRateRatio at t1) - (DiscountRateRatio at t2)
 	// //---------------------------------------------------------------------------
-	// rec1 := data.DRFindRecord(t1)
+	// rec1 := data.CSVDBFindRecord(t1)
 	// if rec1 == nil {
 	// 	err := fmt.Errorf("ExchangeRate Record for %s not found", t1.Format("1/2/2006"))
 	// 	return "hold", 0, err
 	// }
-	// rec2 := data.DRFindRecord(t2)
+	// rec2 := data.CSVDBFindRecord(t2)
 	// if rec2 == nil {
 	// 	err := fmt.Errorf("ExchangeRate Record for %s not found", t2.Format("1/2/2006"))
 	// 	return "hold", 0, err

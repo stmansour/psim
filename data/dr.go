@@ -32,28 +32,7 @@ func (r RatesAndRatiosRecords) Swap(i, j int) {
 	r[i], r[j] = r[j], r[i]
 }
 
-// GetRecord returns a RatesAndRatiosRecord based on the supplied date
-//
-// INPUTS
-//
-//	date = day for which we want DiscountRate data. Only the day, month, and year are significant.
-//
-// RETURNS
-//
-//	the record found if err == nil
-//	an empty record and an error if something went wrong.
-//
-// ----------------------------------------------------------------------------------------------------
-// func (r RatesAndRatiosRecords) GetRecord(date time.Time) (RatesAndRatiosRecord, error) {
-// 	for _, record := range r {
-// 		if record.Date.Equal(date) {
-// 			return record, nil
-// 		}
-// 	}
-// 	return RatesAndRatiosRecord{}, fmt.Errorf("record not found for date %s", date.Format("2006-01-02"))
-// }
-
-// DRFindRecord returns the record associated with the input date
+// CSVDBFindRecord returns the record associated with the input date
 //
 // INPUTS
 //
@@ -65,7 +44,7 @@ func (r RatesAndRatiosRecords) Swap(i, j int) {
 //	nil - record was not found
 //
 // ---------------------------------------------------------------------------
-func DRFindRecord(dt time.Time) *RatesAndRatiosRecord {
+func CSVDBFindRecord(dt time.Time) *RatesAndRatiosRecord {
 	left := 0
 	right := len(DInfo.DBRecs) - 1
 
