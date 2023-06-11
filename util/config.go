@@ -88,9 +88,14 @@ func LoadConfig() (AppConfig, error) {
 
 // CreateTestingCFG is a function that creates a test cfg file with no secrets for us in testing
 func CreateTestingCFG() *AppConfig {
+	dt1 := time.Date(2022, time.January, 1, 0, 0, 0, 0, time.UTC)
+	dt2 := time.Date(2022, time.December, 31, 0, 0, 0, 0, time.UTC)
+
 	cfg := AppConfig{
 		// DtStart: "2022-01-01", // simulation start date for each generation
 		// DtStop: "2022-12-31",  // simulation stop date for each generation
+		DtStart:        CustomDate(dt1),
+		DtStop:         CustomDate(dt2),
 		Generations:    1,        // how many generations should the simulator run
 		PopulationSize: 10,       // Total number Investors in the population
 		C1:             "USD",    // main currency  (ISO 4217 code)

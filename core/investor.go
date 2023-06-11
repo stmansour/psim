@@ -179,6 +179,7 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 		if er3 == nil {
 			return BuyCount, fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found", inv.T3.Format("1/2/2006"))
 		}
+
 		inv.ERT3 = er3.EXClose                     // exchange rate on T3
 		inv.BuyC2 = inv.T3C1 * inv.ERT3            // amount of C2 we purchased on T3
 		i.Investments = append(i.Investments, inv) // add it to the list of investments
