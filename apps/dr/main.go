@@ -34,9 +34,9 @@ type probInfo struct {
 }
 
 var app struct {
-	cfg             *util.AppConfig
-	dri             data.DRInfo
-	eri             data.ERInfo
+	cfg *util.AppConfig
+	dri data.DRInfo
+	// eri             data.ERInfo
 	probMap         map[string]probInfo
 	showInfo        bool
 	showAccuracy    bool
@@ -50,7 +50,7 @@ var app struct {
 	T4max           int
 }
 
-func displayStats() (data.DRInfo, data.ERInfo) {
+func displayStats() data.DRInfo {
 	drinfo := data.DRGetDataInfo()
 	if app.showInfo {
 		fmt.Printf("Discount Rate Info:\n")
@@ -59,15 +59,15 @@ func displayStats() (data.DRInfo, data.ERInfo) {
 		fmt.Printf("   Ending:\t%s\n", drinfo.DtStop.Format("Jan 2, 2006"))
 	}
 
-	erinfo := data.ERGetDataInfo()
-	if app.showInfo {
-		fmt.Printf("Exchange Rate Info:\n")
-		fmt.Printf("   Records:\t%d\n", data.ER.ERRecs.Len())
-		fmt.Printf("   Beginning:\t%s\n", erinfo.DtStart.Format("Jan 2, 2006"))
-		fmt.Printf("   Ending:\t%s\n", erinfo.DtStop.Format("Jan 2, 2006"))
-	}
+	// erinfo := data.ERGetDataInfo()
+	// if app.showInfo {
+	// 	fmt.Printf("Exchange Rate Info:\n")
+	// 	fmt.Printf("   Records:\t%d\n", data.ER.ERRecs.Len())
+	// 	fmt.Printf("   Beginning:\t%s\n", erinfo.DtStart.Format("Jan 2, 2006"))
+	// 	fmt.Printf("   Ending:\t%s\n", erinfo.DtStop.Format("Jan 2, 2006"))
+	// }
 
-	return drinfo, erinfo
+	return drinfo
 }
 
 func checkDR(t3 time.Time) {
@@ -147,27 +147,27 @@ func main() {
 	//-------------------------------------
 	// Now set up the boundaries...
 	//-------------------------------------
-	drinfo, erinfo := displayStats()
+	drinfo := displayStats()
 	app.dri = drinfo
-	app.eri = erinfo
+	// app.eri = erinfo
 
 	//--------------------------------------------------------------------------
 	// We must insure that the date range for which we calculate probabilities
 	// is such that data exists.  Now that we know how much data we have, make
 	// any adjustments necessary.
 	//--------------------------------------------------------------------------
-	dtStart := erinfo.DtStart.AddDate(0, 0, -app.cfg.MinDelta1)
-	dtStop := erinfo.DtStop.AddDate(0, 0, -app.cfg.MaxDelta4-1)
+	dtStart := drinfo.DtStart.AddDate(0, 0, -app.cfg.MinDelta1)
+	dtStop := drinfo.DtStop.AddDate(0, 0, -app.cfg.MaxDelta4-1)
 
 	//--------------------------------------------------------------------------
 	// Adjust these dates if the DR data does not yet exist...
 	//--------------------------------------------------------------------------
-	if dtStop.After(drinfo.DtStop) {
-		dtStop = drinfo.DtStop
-	}
-	if drinfo.DtStart.After(dtStart) {
-		dtStart = drinfo.DtStart
-	}
+	// if dtStop.After(drinfo.DtStop) {
+	// 	dtStop = drinfo.DtStop
+	// }
+	// if drinfo.DtStart.After(dtStart) {
+	// 	dtStart = drinfo.DtStart
+	// }
 
 	//--------------------------------------------
 	// End date is "up to" but not "including"
@@ -310,12 +310,12 @@ func computeDRProbability(t1, t2, t3, t4 time.Time, dt1, dt2, dt4 int) {
 	// Determine deltaER (dER) =
 	//         (ExchangeRate at t3) - (ExchangeRate at t4)
 	//-------------------------------------------------------------------------------
-	er1 := data.ERFindRecord(t3)
+	er1 := data.CSVDBFindRecord(t3)
 	if er1 == nil {
 		fmt.Printf("ExchangeRate Record for %s not found.\n", t3.Format("1/2/2006"))
 		os.Exit(1)
 	}
-	er2 := data.ERFindRecord(t4)
+	er2 := data.CSVDBFindRecord(t4)
 	if er2 == nil {
 		fmt.Printf("ExchangeRate Record for %s not found.\n", t4.Format("1/2/2006"))
 		os.Exit(1)

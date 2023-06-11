@@ -24,12 +24,12 @@ var app struct {
 }
 
 func dateIsInDataRange(a time.Time) string {
-	if a.Before(data.ER.DtStart) {
-		return "prior to Exchange Rate data range"
-	}
-	if a.After(data.ER.DtStop) {
-		return "after to Exchange Rate data range"
-	}
+	// if a.Before(data.ER.DtStart) {
+	// 	return "prior to Exchange Rate data range"
+	// }
+	// if a.After(data.ER.DtStop) {
+	// 	return "after to Exchange Rate data range"
+	// }
 	if a.Before(data.DR.DtStart) {
 		return "prior to Discount Rate data range"
 	}

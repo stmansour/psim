@@ -175,7 +175,7 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 		}
 		inv.T3 = T3
 		inv.T4 = T4 // we sell in Delta4 days
-		er3 := data.ERFindRecord(inv.T3)
+		er3 := data.CSVDBFindRecord(inv.T3)
 		if er3 == nil {
 			return BuyCount, fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found", inv.T3.Format("1/2/2006"))
 		}
@@ -232,7 +232,7 @@ func (i *Investor) SellConversion(t4 time.Time) (int, error) {
 			//-----------------------------------------------------------
 			// The time has arrived. Get the exchange rate for today...
 			//-----------------------------------------------------------
-			er4 := data.ERFindRecord(t4) // get the exchange rate on t4
+			er4 := data.CSVDBFindRecord(t4) // get the exchange rate on t4
 			if er4 == nil {
 				err = fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found; Investment marked as completed", t4.Format("1/2/2006"))
 				fmt.Printf("%s\n", err.Error())

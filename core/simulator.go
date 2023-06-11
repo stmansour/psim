@@ -465,7 +465,7 @@ func (s *Simulator) ResultsForInvestor(n int, v *Investor) string {
 	// store in:   c1Amt
 	//-------------------------------------------------------------------------
 	if amt > 0 {
-		er4 := data.ERFindRecord(dt) // get the exchange rate on t4
+		er4 := data.CSVDBFindRecord(dt) // get the exchange rate on t4
 		if er4 == nil {
 			err := fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found", dt.Format("1/2/2006"))
 			return err.Error()
