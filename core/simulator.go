@@ -470,7 +470,7 @@ func (s *Simulator) ResultsForInvestor(n int, v *Investor) string {
 			err := fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found", dt.Format("1/2/2006"))
 			return err.Error()
 		}
-		c1Amt = amt / er4.Close
+		c1Amt = amt / er4.EXClose
 		str += fmt.Sprintf("Pending Investments: %d, value: %8.2f %s  =  %8.2f %s\n", pending, amt, s.cfg.C2, c1Amt, s.cfg.C1)
 	}
 	str += fmt.Sprintf("\t\tInitial Stake: %8.2f %s,  End Balance: %8.2f %s\n", s.cfg.InitFunds, s.cfg.C1, v.BalanceC1+c1Amt, s.cfg.C1)

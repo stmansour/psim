@@ -11,12 +11,12 @@ import (
 
 // ExchangeRateRecord represents a single entry in the CSV file
 type ExchangeRateRecord struct {
-	Symbol string
-	Date   time.Time
-	Open   float64
-	High   float64
-	Low    float64
-	Close  float64
+	Symbol  string
+	Date    time.Time
+	Open    float64
+	High    float64
+	Low     float64
+	EXClose float64
 }
 
 // ExchangeRateRecords is a slice of ExchangeRateRecord structures
@@ -169,12 +169,12 @@ func ERInit() {
 			return
 		}
 		records = append(records, ExchangeRateRecord{
-			Symbol: row[0],
-			Date:   date,
-			Open:   open,
-			High:   high,
-			Low:    low,
-			Close:  close,
+			Symbol:  row[0],
+			Date:    date,
+			Open:    open,
+			High:    high,
+			Low:     low,
+			EXClose: close,
 		})
 	}
 

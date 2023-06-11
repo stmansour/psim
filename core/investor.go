@@ -179,7 +179,7 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 		if er3 == nil {
 			return BuyCount, fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found", inv.T3.Format("1/2/2006"))
 		}
-		inv.ERT3 = er3.Close                       // exchange rate on T3
+		inv.ERT3 = er3.EXClose                     // exchange rate on T3
 		inv.BuyC2 = inv.T3C1 * inv.ERT3            // amount of C2 we purchased on T3
 		i.Investments = append(i.Investments, inv) // add it to the list of investments
 		i.BalanceC1 -= inv.T3C1                    // we spent this much C1...
@@ -242,7 +242,7 @@ func (i *Investor) SellConversion(t4 time.Time) (int, error) {
 			//-----------------------------------------------------------
 			// Document this specific investment...
 			//-----------------------------------------------------------
-			i.Investments[j].ERT4 = er4.Close                                           // exchange rate on T4
+			i.Investments[j].ERT4 = er4.EXClose                                         // exchange rate on T4
 			i.Investments[j].SellC2 = i.Investments[j].BuyC2                            // sell exactly what we bought on the associated T3
 			i.Investments[j].T4C1 = i.Investments[j].SellC2 / i.Investments[j].ERT4     // amount of C1 we got back by selling SellC2 on T4 at the exchange rate on T4
 			i.Investments[j].Profitable = i.Investments[j].T4C1 > i.Investments[j].T3C1 // did we make money on this trade?

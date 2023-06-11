@@ -320,7 +320,7 @@ func computeDRProbability(t1, t2, t3, t4 time.Time, dt1, dt2, dt4 int) {
 		fmt.Printf("ExchangeRate Record for %s not found.\n", t4.Format("1/2/2006"))
 		os.Exit(1)
 	}
-	dER := er1.Close - er2.Close
+	dER := er1.EXClose - er2.EXClose
 
 	//-------------------------------------------------------------------------------
 	// Check to see if the prediction is correct.
