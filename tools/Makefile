@@ -1,21 +1,27 @@
-TOP=../..
+TOP=..
 BINDIR=${TOP}/dist
-THISDIR="apps/er"
+THISDIR="tools"
+TEST_FAILURE_FILE = .tests_failed
 
-dr: *.go
+tools: *.go
 	go vet
 	@if [[ -f "${GOPATH}/bin/golint" ]]; then golint; else staticcheck; fi
 	go build
+	mv tools csvfixer
 	@echo "*** ${THISDIR}: completed ${THISDIR} ***"
 
 clean:
 	go clean
+	rm -rf *.out
 	@echo "*** ${THISDIR}: completed clean ***"
 
 test:
 	@echo "*** ${THISDIR}: completed test ***"
 
+coverage:
+	go tool cover -html=coverage.out
+
 package:
-	mkdir -p ${BINDIR}/
-	cp er ${BINDIR}/
+	mkdir -p ${BINDIR}
+	cp cvsfixer ${BINDIR}/
 	@echo "*** ${THISDIR}: completed package ***"

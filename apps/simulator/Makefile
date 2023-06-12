@@ -10,6 +10,7 @@ dr: *.go
 
 clean:
 	go clean
+	rm -f simulator
 	@echo "*** ${THISDIR}: completed clean ***"
 
 test:

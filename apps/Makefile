@@ -1,4 +1,4 @@
-DIRS=dr er simulator
+DIRS=simulator
 THISDIR=apps
 
 apps:

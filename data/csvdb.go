@@ -29,28 +29,33 @@ type DRInfo struct {
 //  Date     - MM/DD/YYYY
 //
 //----------------------------------------------------------------------------
-//  COLUMN 2  =  DATATYPE RATIO
+//  COLUMN 2 thru n  =  statistics data
 //----------------------------------------------------------------------------
-//  The data type for C1 divided by the datatype for C2
+//  The general format is:
+//
+//      [C1][C2][DataType][Qualifier]
 //
 //  For Currency, use the ISO 4217 naming conventions, 3-letter strings, the
 //  first two identify the country, the last is represents the currency name.
-//  Examples:  USD = United States Dollar,  JPY Japanese Yen
 //
-//  Exchange Rate - use the ISO 3-letter strings, list C1 first, followed by
-//                  C2.  So for example, for C1 = USD and C2 = JPY, the
-//                  ExchangeRate would be USDJPY
+//  	Examples:
+//              USD = United States Dollar
+//              JPY Japanese Yen
 //
 //  DataType - use a 2 letter identifier:
-//             DR = Discount Rate
-//             IR = Inflation Rate
-//             UR = Unemployment Rate
-//             EX = Exchange Rate -- can be appended with "Open", "Low", "High", "Close"
+//      DR = Discount Rate
+//      IR = Inflation Rate
+//      UR = Unemployment Rate
+//      EX = Exchange Rate -- can be appended with "Open", "Low", "High", "Close"
 //
-//  DataTypeRatio - use the exchange rate,
-//                  followed by the 2 letter datatype, followed by an R
-//                  For the USD JPY example, Discount Rate Ratio would be:
-//                  USDJPYDRR
+//  Qualifier
+//      Ratio - indicates that the value is a ratio
+//      Close - indicates that this is the "Close" value for the date.  Currently,
+//              it applies only the Exchange Rate (EX) info
+//
+//      Examples:
+//              USDJPYDRRatio - USD / JPY Discount Rate Ratio
+//              USDJPYEXClose = USD / JPY Exchange Rate Closing value
 //
 //****************************************************************************
 

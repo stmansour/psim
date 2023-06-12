@@ -1,5 +1,5 @@
 # test comment
-DIRS=util data core apps
+DIRS=util data core tools apps
 DIST=dist 
 TEST_FAILURE_FILE = .tests_failed
 
