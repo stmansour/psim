@@ -12,7 +12,7 @@ tools: *.go
 
 clean:
 	go clean
-	rm -rf *.out
+	rm -rf csvfixer *.out
 	@echo "*** ${THISDIR}: completed clean ***"
 
 test:
@@ -23,5 +23,5 @@ coverage:
 
 package:
 	mkdir -p ${BINDIR}
-	cp cvsfixer ${BINDIR}/
+	cp csvfixer ${BINDIR}/
 	@echo "*** ${THISDIR}: completed package ***"
