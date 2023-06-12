@@ -35,7 +35,6 @@ type probInfo struct {
 
 var app struct {
 	cfg *util.AppConfig
-	dri data.DRInfo
 	// eri             data.ERInfo
 	probMap         map[string]probInfo
 	showInfo        bool
@@ -50,24 +49,13 @@ var app struct {
 	T4max           int
 }
 
-func displayStats() data.DRInfo {
-	drinfo := data.DRGetDataInfo()
+func displayStats() {
 	if app.showInfo {
 		fmt.Printf("Discount Rate Info:\n")
-		fmt.Printf("   Records:\t%d\n", data.DR.DRRecs.Len())
-		fmt.Printf("   Beginning:\t%s\n", drinfo.DtStart.Format("Jan 2, 2006"))
-		fmt.Printf("   Ending:\t%s\n", drinfo.DtStop.Format("Jan 2, 2006"))
+		fmt.Printf("   Records:\t%d\n", data.DInfo.DBRecs.Len())
+		fmt.Printf("   Beginning:\t%s\n", data.DInfo.DtStart.Format("Jan 2, 2006"))
+		fmt.Printf("   Ending:\t%s\n", data.DInfo.DtStop.Format("Jan 2, 2006"))
 	}
-
-	// erinfo := data.ERGetDataInfo()
-	// if app.showInfo {
-	// 	fmt.Printf("Exchange Rate Info:\n")
-	// 	fmt.Printf("   Records:\t%d\n", data.ER.ERRecs.Len())
-	// 	fmt.Printf("   Beginning:\t%s\n", erinfo.DtStart.Format("Jan 2, 2006"))
-	// 	fmt.Printf("   Ending:\t%s\n", erinfo.DtStop.Format("Jan 2, 2006"))
-	// }
-
-	return drinfo
 }
 
 func checkDR(t3 time.Time) {
@@ -147,8 +135,7 @@ func main() {
 	//-------------------------------------
 	// Now set up the boundaries...
 	//-------------------------------------
-	drinfo := displayStats()
-	app.dri = drinfo
+	displayStats()
 	// app.eri = erinfo
 
 	//--------------------------------------------------------------------------
@@ -156,17 +143,17 @@ func main() {
 	// is such that data exists.  Now that we know how much data we have, make
 	// any adjustments necessary.
 	//--------------------------------------------------------------------------
-	dtStart := drinfo.DtStart.AddDate(0, 0, -app.cfg.MinDelta1)
-	dtStop := drinfo.DtStop.AddDate(0, 0, -app.cfg.MaxDelta4-1)
+	dtStart := data.DInfo.DtStart.AddDate(0, 0, -app.cfg.MinDelta1)
+	dtStop := data.DInfo.DtStop.AddDate(0, 0, -app.cfg.MaxDelta4-1)
 
 	//--------------------------------------------------------------------------
 	// Adjust these dates if the DR data does not yet exist...
 	//--------------------------------------------------------------------------
-	// if dtStop.After(drinfo.DtStop) {
-	// 	dtStop = drinfo.DtStop
+	// if dtStop.After(data.DInfo.DtStop) {
+	// 	dtStop = data.DInfo.DtStop
 	// }
-	// if drinfo.DtStart.After(dtStart) {
-	// 	dtStart = drinfo.DtStart
+	// if data.DInfo.DtStart.After(dtStart) {
+	// 	dtStart = data.DInfo.DtStart
 	// }
 
 	//--------------------------------------------

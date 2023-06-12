@@ -11,8 +11,10 @@ import (
 // DInfo maintains data needed by the data subsystem.
 // The primary need is the two currencies C1 & C2
 var DInfo struct {
-	cfg    *util.AppConfig
-	DBRecs RatesAndRatiosRecords // all records... temporary, until we have database
+	cfg     *util.AppConfig
+	DBRecs  RatesAndRatiosRecords // all records... temporary, until we have database
+	DtStart time.Time             // earliest date with data
+	DtStop  time.Time             // latest date with data
 }
 
 // RatesAndRatiosRecord is the basic structure of discount rate data

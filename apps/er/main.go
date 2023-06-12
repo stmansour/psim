@@ -20,9 +20,9 @@ func main() {
 	if err = data.Init(&cfg); err != nil {
 		log.Fatalf("Error initilizing data subsystem: %s\n", err)
 	}
-	i := data.DR.DRRecs.Len()
-	dt1 := data.DR.DtStart
-	dt2 := data.DR.DtStop
+	i := data.DInfo.DBRecs.Len()
+	dt1 := data.DInfo.DtStart
+	dt2 := data.DInfo.DtStop
 
 	fmt.Printf("Discount Rate & Exchange Rate Info:\n")
 	fmt.Printf("   Records:\t%d\n", i)

@@ -11,6 +11,12 @@ import (
 	"time"
 )
 
+// DRInfo is meta information about the discount rate data
+type DRInfo struct {
+	DtStart time.Time // earliest date with data
+	DtStop  time.Time // latest date with data
+}
+
 //****************************************************************************
 //
 //  Column naming and formatting conventions:
@@ -148,8 +154,8 @@ func LoadCsvDB() error {
 	DInfo.DBRecs = records
 	sort.Sort(DInfo.DBRecs)
 	l := DInfo.DBRecs.Len()
-	DR.DtStart = DInfo.DBRecs[0].Date
-	DR.DtStop = DInfo.DBRecs[l-1].Date
+	DInfo.DtStart = DInfo.DBRecs[0].Date
+	DInfo.DtStop = DInfo.DBRecs[l-1].Date
 	return nil
 }
 
@@ -160,4 +166,49 @@ func validCurrencyPair(line string) bool {
 	myC1 := line[0:3]
 	myC2 := line[3:6]
 	return myC1 == DInfo.cfg.C1 && myC2 == DInfo.cfg.C2
+}
+
+// Len returns the length of the supplied RatesAndRatiosRecords array
+func (r RatesAndRatiosRecords) Len() int {
+	return len(r)
+}
+
+// Less is used to sort the records
+func (r RatesAndRatiosRecords) Less(i, j int) bool {
+	return r[i].Date.Before(r[j].Date)
+}
+
+// Swap is used to do exactly what you think it does
+func (r RatesAndRatiosRecords) Swap(i, j int) {
+	r[i], r[j] = r[j], r[i]
+}
+
+// CSVDBFindRecord returns the record associated with the input date
+//
+// INPUTS
+//
+//	dt = date of record to return
+//
+// RETURNS
+//
+//	pointer to the record on the supplied date
+//	nil - record was not found
+//
+// ---------------------------------------------------------------------------
+func CSVDBFindRecord(dt time.Time) *RatesAndRatiosRecord {
+	left := 0
+	right := len(DInfo.DBRecs) - 1
+
+	for left <= right {
+		mid := left + (right-left)/2
+		if DInfo.DBRecs[mid].Date.Year() == dt.Year() && DInfo.DBRecs[mid].Date.Month() == dt.Month() && DInfo.DBRecs[mid].Date.Day() == dt.Day() {
+			return &DInfo.DBRecs[mid]
+		} else if DInfo.DBRecs[mid].Date.Before(dt) {
+			left = mid + 1
+		} else {
+			right = mid - 1
+		}
+	}
+
+	return nil
 }

@@ -30,10 +30,10 @@ func dateIsInDataRange(a time.Time) string {
 	// if a.After(data.ER.DtStop) {
 	// 	return "after to Exchange Rate data range"
 	// }
-	if a.Before(data.DR.DtStart) {
+	if a.Before(data.DInfo.DtStart) {
 		return "prior to Discount Rate data range"
 	}
-	if a.After(data.DR.DtStop) {
+	if a.After(data.DInfo.DtStop) {
 		return "after to Discount Rate data range"
 	}
 	return "√"
