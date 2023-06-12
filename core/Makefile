@@ -25,6 +25,4 @@ coverage:
 	go tool cover -html=coverage.out
 
 package:
-	mkdir -p ${BINDIR}/data
-	cp *.csv ${BINDIR}/data
 	@echo "*** ${THISDIR}: completed package ***"

@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/stmansour/psim/util"
 )
 
 // DRInfo is meta information about the discount rate data
@@ -116,7 +118,7 @@ func LoadCsvDB() error {
 			continue // continue to the next line now
 		}
 
-		date, err := time.Parse("1/2/2006", line[0])
+		date, err := util.StringToDate(line[0])
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)

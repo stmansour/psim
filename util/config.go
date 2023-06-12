@@ -21,7 +21,7 @@ func (t *CustomDate) UnmarshalJSON(data []byte) error {
 	if string(data) == "null" {
 		return nil
 	}
-	parsedTime, err := time.Parse(`"2006-01-02"`, string(data))
+	parsedTime, err := StringToDate(string(data))
 	if err != nil {
 		return err
 	}

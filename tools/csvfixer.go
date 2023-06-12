@@ -98,7 +98,9 @@ func main() {
 
 		// has our loop date (dtLoop) reached the date of the next record (dtNextRecord)?
 		if dtLoop.Equal(dtNextRecord) || dtLoop.After(dtNextRecord) { // has the current loop date reached or passed that of the record?
-			printFromThisRecord++ // we're now going to be printing THIS record until the loop date reaches or passes this row's date
+			if len(records) < printFromThisRecord+1 {
+				printFromThisRecord++ // we're now going to be printing THIS record until the loop date reaches or passes this row's date
+			}
 		}
 
 		// print all columns after the date...
