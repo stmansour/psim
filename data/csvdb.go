@@ -85,12 +85,10 @@ func LoadCsvDB() error {
 	}
 
 	DInfo.DTypes = []string{"DRRatio", "EXClose"}
-	DInfo.DTypeCsvIndex = map[string]int{}
+	DInfo.CSVMap = map[string]int{}
 	for k := 0; k < len(DInfo.DTypes); k++ {
-		DInfo.DTypeCsvIndex[DInfo.DTypes[k]] = -1 // haven't located this column yet
+		DInfo.CSVMap[DInfo.DTypes[k]] = -1 // haven't located this column yet
 	}
-	// DRRatioCol := -1
-	// EXCloseCol := -1
 	records := RatesAndRatiosRecords{}
 	for i, line := range lines {
 		if i == 0 {
@@ -101,24 +99,20 @@ func LoadCsvDB() error {
 				log.Panicf("Problem with %s, column 1 is labelled %q, it should be %q\n", PLATODB, line[0], "Date")
 			}
 			//---------------------------------------------------------
-			// Search for the columns of interest.
+			// Search for the columns of interest. Record the column
+			// numbers in the map
 			//---------------------------------------------------------
 			for j := 1; j < len(line); j++ {
 				validcpair := validCurrencyPair(line[j]) // do the first 6 chars make a currency pair that matches with the simulation configuation?
 				l := len(line[j])
 				for k := 0; k < len(DInfo.DTypes); k++ {
 					if l == 13 && validcpair && strings.HasSuffix(line[j], DInfo.DTypes[k]) {
-						DInfo.DTypeCsvIndex[DInfo.DTypes[k]] = j // column located.  ex: DInfo.DTypeCsvIndex["DRRatio"] = j
+						DInfo.CSVMap[DInfo.DTypes[k]] = j // column located.  ex: DInfo.CSVMap["DRRatio"] = j
 					}
 				}
-				// if l == 13 && strings.HasSuffix(line[j], "DRRatio") && validcpair { // len("USDJPYDRRatio") = 13
-				// 	DRRatioCol = j
-				// } else if l == 13 && strings.HasSuffix(line[j], "EXClose") && validcpair { // len("USDJPYEXClose") = 13
-				// 	EXCloseCol = j
-				// }
 			}
 			for k := 0; k < len(DInfo.DTypes); k++ {
-				if DInfo.DTypeCsvIndex[DInfo.DTypes[k]] == -1 {
+				if DInfo.CSVMap[DInfo.DTypes[k]] == -1 {
 					return fmt.Errorf("No column in %s had label  %s%s%s, which is required for the current simulation configuration",
 						PLATODB, DInfo.cfg.C1, DInfo.cfg.C2, DInfo.DTypes[k])
 				}
@@ -155,13 +149,13 @@ func LoadCsvDB() error {
 		// }
 		// jpDiscountRate /= 100
 
-		DRRatio, err := strconv.ParseFloat(line[DInfo.DTypeCsvIndex["DRRatio"]], 64)
+		DRRatio, err := strconv.ParseFloat(line[DInfo.CSVMap["DRRatio"]], 64)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
 
-		EXClose, err := strconv.ParseFloat(line[DInfo.DTypeCsvIndex["EXCloseCol"]], 64)
+		EXClose, err := strconv.ParseFloat(line[DInfo.CSVMap["EXClose"]], 64)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)

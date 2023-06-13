@@ -11,12 +11,12 @@ import (
 // DInfo maintains data needed by the data subsystem.
 // The primary need is the two currencies C1 & C2
 var DInfo struct {
-	cfg           *util.AppConfig
-	DBRecs        RatesAndRatiosRecords // all records... temporary, until we have database
-	DtStart       time.Time             // earliest date with data
-	DtStop        time.Time             // latest date with data
-	DTypes        []string              // the list of Influencers, each has their own data type
-	DTypeCsvIndex map[string]int        // here we map the data type to its CSV column index
+	cfg     *util.AppConfig
+	DBRecs  RatesAndRatiosRecords // all records... temporary, until we have database
+	DtStart time.Time             // earliest date with data
+	DtStop  time.Time             // latest date with data
+	DTypes  []string              // the list of Influencers, each has their own data type
+	CSVMap  map[string]int        // which columns are where? Map the data type to a CSV column
 }
 
 // RatesAndRatiosRecord is the basic structure of discount rate data
