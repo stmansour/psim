@@ -494,7 +494,7 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 		return nil, err
 	}
 
-	Delta1, Delta2, Delta4, err := f.GenerateDeltas(DNAmap)
+	Delta1, Delta2, Delta4, err := f.GenerateDeltas(subclassName, DNAmap)
 	if err != nil {
 		return nil, err
 	}
@@ -580,12 +580,19 @@ func (f *Factory) ParseInfluencerDNA(DNA string) (string, map[string]interface{}
 //
 // # The ranges for Delta1, Delta2, and Delta4 are read from the config information
 //
+// INPUTS
+//
+//	subclass - we need to know what type of Influencer it is so that we can
+//	           determine the proper bounds for Delta1 & Delta2
+//
+//	DNA      - the basic dna mapped into [attribute]value
+//
 // RETURNS
 //
 //	Delta1, Delta2, and Delta4
 //
 // --------------------------------------------------------------------------------
-func (f *Factory) GenerateDeltas(DNA map[string]interface{}) (Delta1 int, Delta2 int, Delta4 int, err error) {
+func (f *Factory) GenerateDeltas(subclass string, DNA map[string]interface{}) (Delta1 int, Delta2 int, Delta4 int, err error) {
 	// Generate or validate Delta1
 	if val, ok := DNA["Delta1"].(int); ok {
 

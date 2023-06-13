@@ -21,6 +21,7 @@ func StringToDate(s string) (time.Time, error) {
 	// try the ansi std date format first
 	var Dt time.Time
 	var err error
+	s = Stripchars(s, "\"")
 	s = strings.TrimSpace(s)
 	for i := 0; i < len(AcceptedDateFmts); i++ {
 		Dt, err = time.Parse(AcceptedDateFmts[i], s)
