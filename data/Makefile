@@ -12,7 +12,7 @@ data: *.go
 
 clean:
 	go clean
-	rm -rf *.out
+	rm -rf *.out .tests_failed
 	@echo "*** ${THISDIR}: completed clean ***"
 
 test:
