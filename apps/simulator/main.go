@@ -92,7 +92,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to read config file: %v", err)
 	}
-	if err = core.ValidateConfig(&cfg); err != nil {
+	if err = util.ValidateConfig(&cfg); err != nil {
 		fmt.Printf("Please fix errors in the simulator configuration file, config.json5, and try again\n")
 		os.Exit(1)
 	}

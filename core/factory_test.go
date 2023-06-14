@@ -12,7 +12,7 @@ import (
 
 func TestNewPopulation(t *testing.T) {
 	var oldPopulationDNA = []string{
-		"{Investor;Delta4=14;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-20,Delta2=-5,Delta4=14}|{IRInfluencer,Delta1=-17,Delta2=-3,Delta4=14}]}",
+		"{Investor;Delta4=14;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-20,Delta2=-5,Delta4=14}|{IRInfluencer,Delta1=-150,Delta2=-45,Delta4=14}]}",
 		"{Investor;Delta4=12;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-27,Delta2=-5,Delta4=12}]}",
 		"{Investor;Delta4=9;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-21,Delta2=-1,Delta4=9}]}",
 		"{Investor;Delta4=4;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-7,Delta2=-4,Delta4=4}]}",
@@ -26,7 +26,7 @@ func TestNewPopulation(t *testing.T) {
 	util.Init()
 	var f Factory
 	cfg := util.CreateTestingCFG()
-	if err := ValidateConfig(cfg); err != nil {
+	if err := util.ValidateConfig(cfg); err != nil {
 		log.Panicf("*** PANIC ERROR ***  ValidateConfig returned error: %s\n", err)
 	}
 	var sim Simulator
@@ -104,7 +104,7 @@ func TestInvestorFromDNA(t *testing.T) {
 	var f Factory
 	util.Init()
 	cfg := util.CreateTestingCFG()
-	if err := ValidateConfig(cfg); err != nil {
+	if err := util.ValidateConfig(cfg); err != nil {
 		log.Panicf("*** PANIC ERROR ***  ValidateConfig returned error: %s\n", err)
 	}
 	f.Init(cfg)
@@ -121,8 +121,8 @@ func TestInvestorFromDNA(t *testing.T) {
 		Delta2: -2,
 	}
 	ir := IRInfluencer{
-		Delta1: -17,
-		Delta2: -3,
+		Delta1: -145,
+		Delta2: -50,
 	}
 	dr.Init(&parent1, cfg, parent1.Delta4)
 	dr.SetID()
@@ -140,8 +140,8 @@ func TestInvestorFromDNA(t *testing.T) {
 		Delta2: -3,
 	}
 	ur2 := URInfluencer{
-		Delta1: -17,
-		Delta2: -3,
+		Delta1: -150,
+		Delta2: -45,
 	}
 	dr2.Init(&parent2, cfg, parent2.Delta4)
 	dr2.SetID()
@@ -195,7 +195,7 @@ func TestMutation(t *testing.T) {
 	var f Factory
 	cfg := util.CreateTestingCFG()
 	cfg.PopulationSize = 1000
-	if err := ValidateConfig(cfg); err != nil {
+	if err := util.ValidateConfig(cfg); err != nil {
 		log.Panicf("*** PANIC ERROR ***  ValidateConfig returned error: %s\n", err)
 	}
 	var sim Simulator

@@ -416,7 +416,7 @@ func (f *Factory) NewInvestor(DNA string) Investor {
 	for i := 0; i < len(sa); i++ {
 		inf, err := f.NewInfluencer(sa[i])
 		if err != nil {
-			log.Panicf("*** PANIC ERROR *** NeInfluencer(%s) returned error: %s\n", sa[i], err.Error())
+			log.Panicf("*** PANIC ERROR *** NewInfluencer(%s) returned error: %s\n", sa[i], err.Error())
 		}
 		inf.Init(&inv, f.cfg, inv.Delta4)
 		inv.Influencers = append(inv.Influencers, inf)
@@ -592,14 +592,15 @@ func (f *Factory) ParseInfluencerDNA(DNA string) (string, map[string]interface{}
 //	Delta1, Delta2, and Delta4
 //
 // --------------------------------------------------------------------------------
-func (f *Factory) GenerateDeltas(subclass string, DNA map[string]interface{}) (Delta1 int, Delta2 int, Delta4 int, err error) {
+func (f *Factory) GenerateDeltas(sc string, DNA map[string]interface{}) (Delta1 int, Delta2 int, Delta4 int, err error) {
+	subclass := sc[:2] // should give us "DR", "IR", "UR", ...
 	// Generate or validate Delta1
 	if val, ok := DNA["Delta1"].(int); ok {
 
-		if val >= f.cfg.MinDelta1 && val <= f.cfg.MaxDelta1 {
+		if val >= f.cfg.DLimits[subclass].MinDelta1 && val <= f.cfg.DLimits[subclass].MaxDelta1 {
 			Delta1 = val
 		} else {
-			return 0, 0, 0, fmt.Errorf("invalid Delta1 value: %d, it must be in the range %d to %d", val, f.cfg.MinDelta1, f.cfg.MaxDelta2)
+			return 0, 0, 0, fmt.Errorf("invalid Delta1 value: %d, it must be in the range %d to %d", val, f.cfg.DLimits[subclass].MinDelta1, f.cfg.DLimits[subclass].MaxDelta2)
 		}
 	} else {
 		Delta1 = rand.Intn(27) - 30 // -30 to -4
@@ -607,16 +608,16 @@ func (f *Factory) GenerateDeltas(subclass string, DNA map[string]interface{}) (D
 
 	// Generate or validate Delta2
 	if val, ok := DNA["Delta2"].(int); ok {
-		if val > Delta1 && val <= f.cfg.MaxDelta2 && val >= f.cfg.MinDelta2 {
+		if val > Delta1 && val <= f.cfg.DLimits[subclass].MaxDelta2 && val >= f.cfg.DLimits[subclass].MinDelta2 {
 			Delta2 = val
 		} else {
-			mn := f.cfg.MinDelta2 // assume the min value is the configured lower limit
-			if Delta1 >= mn {     // if this is true, then Delta1's range can overlap Delta2
+			mn := f.cfg.DLimits[subclass].MinDelta2 // assume the min value is the configured lower limit
+			if Delta1 >= mn {                       // if this is true, then Delta1's range can overlap Delta2
 				//  MinDelta2       mn              MaxDelta2
 				//     |---------|--+-------------------|
 				//             Delta1
-				mn = Delta1 + 1            // see if we can move the minDelta2 value for this object to 1 greater than Delta1
-				if mn <= f.cfg.MaxDelta2 { // as long as mn is <= MaxDelta2, we're OK
+				mn = Delta1 + 1                              // see if we can move the minDelta2 value for this object to 1 greater than Delta1
+				if mn <= f.cfg.DLimits[subclass].MaxDelta2 { // as long as mn is <= MaxDelta2, we're OK
 					Delta2 = mn
 				} else {
 				}
@@ -626,7 +627,7 @@ func (f *Factory) GenerateDeltas(subclass string, DNA map[string]interface{}) (D
 		}
 	} else {
 		for {
-			Delta2 = util.RandomInRange(f.cfg.MinDelta2, f.cfg.MaxDelta2)
+			Delta2 = util.RandomInRange(f.cfg.DLimits[subclass].MinDelta2, f.cfg.DLimits[subclass].MaxDelta2)
 			if Delta2 > Delta1 {
 				break // if Delta2 is after Delta1, we're done. Otherwise we just keep trying
 			}

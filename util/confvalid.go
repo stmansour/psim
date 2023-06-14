@@ -1,9 +1,7 @@
-package core
+package util
 
 import (
 	"fmt"
-
-	"github.com/stmansour/psim/util"
 )
 
 // ValidDBSources contains the valid configuration choices for database
@@ -15,7 +13,7 @@ var ValidDBSources = []string{"CSV", "Database", "OnlineService"}
 //	return an error. Otherwise, it will return nil.
 //
 // ---------------------------------------------------------------------------------------
-func ValidateConfig(cfg *util.AppConfig) error {
+func ValidateConfig(cfg *AppConfig) error {
 	var err error
 	err = nil // assume everything is fine.  It will be set if any error conditions are hit
 
@@ -33,29 +31,32 @@ func ValidateConfig(cfg *util.AppConfig) error {
 	//       |                      |<- Delta2 ->|<-Delta4->|
 	//       |<-----------  Delta1  ------------>|
 	//-----------------------------------------------------------------------------------
-	if cfg.MinDelta2 >= 0 {
-		err = fmt.Errorf("MinDelta2 (%d) must be less than 0", cfg.MinDelta2)
-		fmt.Printf("** Configuration Error **  %s\n", err)
-	}
-	if cfg.MaxDelta2 <= cfg.MaxDelta1 {
-		err = fmt.Errorf("MaxDelta2 (%d) must be greater than MaxDelta1 (%d)", cfg.MaxDelta2, cfg.MaxDelta1)
-		fmt.Printf("** Configuration Error **  %s\n", err)
-	}
-	if cfg.MaxDelta1 < cfg.MinDelta1 {
-		err = fmt.Errorf("MaxDelta1 (%d) must be less than MinDelta1 (%d)", cfg.MaxDelta1, cfg.MinDelta1)
-		fmt.Printf("** Configuration Error **  %s\n", err)
-	}
-	if cfg.MaxDelta2 < cfg.MinDelta2 {
-		err = fmt.Errorf("MaxDelta2 (%d) must be less than MinDelta2 (%d)", cfg.MaxDelta2, cfg.MinDelta2)
-		fmt.Printf("** Configuration Error **  %s\n", err)
-	}
-	if cfg.MinDelta4 < 1 {
-		err = fmt.Errorf("MinDelta4 (%d) must be > 0", cfg.MinDelta4)
-		fmt.Printf("** Configuration Error **  %s\n", err)
-	}
-	if cfg.MinDelta4 >= cfg.MaxDelta4 {
-		err = fmt.Errorf("MinDelta4 (%d) must be less than MaxDelta4 (%d)", cfg.MinDelta4, cfg.MaxDelta4)
-		fmt.Printf("** Configuration Error **  %s\n", err)
+	for k := range cfg.DLimits {
+		if cfg.DLimits[k].MinDelta2 >= 0 {
+			err = fmt.Errorf("MinDelta2 (%d) must be less than 0", cfg.DLimits[k].MinDelta2)
+			fmt.Printf("** Configuration Error **  %s\n", err)
+		}
+		if cfg.DLimits[k].MaxDelta2 <= cfg.DLimits[k].MaxDelta1 {
+			err = fmt.Errorf("MaxDelta2 (%d) must be greater than MaxDelta1 (%d)", cfg.DLimits[k].MaxDelta2, cfg.DLimits[k].MaxDelta1)
+			fmt.Printf("** Configuration Error **  %s\n", err)
+		}
+		if cfg.DLimits[k].MaxDelta1 < cfg.DLimits[k].MinDelta1 {
+			err = fmt.Errorf("MaxDelta1 (%d) must be less than MinDelta1 (%d)", cfg.DLimits[k].MaxDelta1, cfg.DLimits[k].MinDelta1)
+			fmt.Printf("** Configuration Error **  %s\n", err)
+		}
+		if cfg.DLimits[k].MaxDelta2 < cfg.DLimits[k].MinDelta2 {
+			err = fmt.Errorf("MaxDelta2 (%d) must be less than MinDelta2 (%d)", cfg.DLimits[k].MaxDelta2, cfg.DLimits[k].MinDelta2)
+			fmt.Printf("** Configuration Error **  %s\n", err)
+		}
+
+		if cfg.MinDelta4 < 1 {
+			err = fmt.Errorf("MinDelta4 (%d) must be > 0", cfg.MinDelta4)
+			fmt.Printf("** Configuration Error **  %s\n", err)
+		}
+		if cfg.MinDelta4 >= cfg.MaxDelta4 {
+			err = fmt.Errorf("MinDelta4 (%d) must be less than MaxDelta4 (%d)", cfg.MinDelta4, cfg.MaxDelta4)
+			fmt.Printf("** Configuration Error **  %s\n", err)
+		}
 	}
 
 	//-------------------------------------------------
