@@ -84,7 +84,15 @@ func LoadCsvDB() error {
 		os.Exit(1)
 	}
 
-	DInfo.DTypes = []string{"DRRatio", "EXClose"}
+	//-------------------------------------------------------
+	// Here are the types of data the influencers support...
+	//-------------------------------------------------------
+	DInfo.DTypes = []string{"EXClose", "DRRatio", "URRatio"}
+
+	//----------------------------------------------------------------------
+	// Keep track of the column with the data needed for each ratio.  This
+	// is based on the two currencies in the simulation.
+	//----------------------------------------------------------------------
 	DInfo.CSVMap = map[string]int{}
 	for k := 0; k < len(DInfo.DTypes); k++ {
 		DInfo.CSVMap[DInfo.DTypes[k]] = -1 // haven't located this column yet
@@ -98,10 +106,10 @@ func LoadCsvDB() error {
 			if line[0] != "Date" {
 				log.Panicf("Problem with %s, column 1 is labelled %q, it should be %q\n", PLATODB, line[0], "Date")
 			}
-			//---------------------------------------------------------
-			// Search for the columns of interest. Record the column
-			// numbers in the map
-			//---------------------------------------------------------
+			//----------------------------------------------------------------------------
+			// Search for the columns of interest. Record the column numbers in the map.
+			// We're looking for EXClose, URRatio, DRRatio, etc.
+			//----------------------------------------------------------------------------
 			for j := 1; j < len(line); j++ {
 				validcpair := validCurrencyPair(line[j]) // do the first 6 chars make a currency pair that matches with the simulation configuation?
 				l := len(line[j])
@@ -111,6 +119,10 @@ func LoadCsvDB() error {
 					}
 				}
 			}
+
+			//--------------------------------------------------------------
+			// Make sure we have the data we need for the simulation...
+			//--------------------------------------------------------------
 			for k := 0; k < len(DInfo.DTypes); k++ {
 				if DInfo.CSVMap[DInfo.DTypes[k]] == -1 {
 					return fmt.Errorf("No column in %s had label  %s%s%s, which is required for the current simulation configuration",
@@ -118,14 +130,6 @@ func LoadCsvDB() error {
 				}
 			}
 
-			// if DRRatioCol < 0 {
-			// 	return fmt.Errorf("No column in %s had label  %s%s%s, which is required for the current simulation configuration",
-			// 		PLATODB, DInfo.cfg.C1, DInfo.cfg.C2, "DRRatio")
-			// }
-			// if EXCloseCol < 0 {
-			// 	return fmt.Errorf("No column in %s had label  %s%s%s, which is required for the current simulation configuration",
-			// 		PLATODB, DInfo.cfg.C1, DInfo.cfg.C2, "EXClose")
-			// }
 			continue // remaining rows are data, code below handles data, continue to the next line now
 		}
 
@@ -155,6 +159,12 @@ func LoadCsvDB() error {
 			os.Exit(1)
 		}
 
+		URRatio, err := strconv.ParseFloat(line[DInfo.CSVMap["URRatio"]], 64)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
 		EXClose, err := strconv.ParseFloat(line[DInfo.CSVMap["EXClose"]], 64)
 		if err != nil {
 			fmt.Println(err)
@@ -165,6 +175,8 @@ func LoadCsvDB() error {
 			// USDiscountRate: usDiscountRate,
 			// JPDiscountRate: jpDiscountRate,
 			DRRatio: DRRatio,
+			URRatio: URRatio,
+			// IRRatio: IRRatio,
 			EXClose: EXClose,
 		})
 	}

@@ -27,10 +27,10 @@ check_tests:
 	@if test -n "$(shell find . -name .tests_failed)"; then \
 		echo "Tests have failed in the following directories:"; \
 		find . -name .tests_failed -exec dirname {} \; ; \
-		exit 1; \
-	else \
-		echo "All tests passed."; \
-	fi
+			exit 1; \
+		else \
+			echo "All tests passed."; \
+		fi
 
 check_coverage:
 	@echo "UNIT TEST CODE COVERAGE:"

@@ -25,6 +25,8 @@ type RatesAndRatiosRecord struct {
 	// USDiscountRate float64
 	// JPDiscountRate float64
 	DRRatio float64
+	IRRatio float64
+	URRatio float64
 	EXClose float64
 }
 
