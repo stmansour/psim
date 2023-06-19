@@ -21,6 +21,7 @@ var app struct {
 	dumpInvestmentTable bool
 	showAllInvestors    bool // adds all investors to the output in the simulation results
 	sim                 core.Simulator
+	randNano            int64
 }
 
 func dateIsInDataRange(a time.Time) string {
@@ -79,15 +80,18 @@ func readCommandLineArgs() {
 	stiptr := flag.Bool("t", false, "write top investor profile to investorProfile.txt and its investments to investments.csv")
 	diptr := flag.Bool("i", false, "show 	all investors in the simulation results")
 	invptr := flag.Bool("v", false, "dump remaining Investments at simulation end")
+	rndptr := flag.Int64("r", -1, "random number seed")
 	flag.Parse()
 	app.showTopInvestor = *stiptr
 	app.dayByDayResults = *dptr
 	app.dumpInvestmentTable = *invptr
 	app.showAllInvestors = *diptr
+	app.randNano = *rndptr
 }
 
 func main() {
-	util.Init()
+	app.randNano = -1
+	util.Init(app.randNano)
 	cfg, err := util.LoadConfig()
 	if err != nil {
 		log.Fatalf("failed to read config file: %v", err)

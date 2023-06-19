@@ -23,7 +23,7 @@ func TestNewPopulation(t *testing.T) {
 		"{Investor;Delta4=9;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-4,Delta2=-3,Delta4=9}]}",
 		"{Investor;Delta4=2;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-21,Delta2=-5,Delta4=2}]}",
 	}
-	util.Init()
+	util.Init(-1)
 	var f Factory
 	cfg := util.CreateTestingCFG()
 	if err := util.ValidateConfig(cfg); err != nil {
@@ -102,7 +102,7 @@ func TestNewPopulation(t *testing.T) {
 
 func TestInvestorFromDNA(t *testing.T) {
 	var f Factory
-	util.Init()
+	util.Init(-1)
 	cfg := util.CreateTestingCFG()
 	if err := util.ValidateConfig(cfg); err != nil {
 		log.Panicf("*** PANIC ERROR ***  ValidateConfig returned error: %s\n", err)
@@ -191,7 +191,7 @@ func TestParseInvestorDNA(t *testing.T) {
 }
 
 func TestMutation(t *testing.T) {
-	util.Init()
+	util.Init(-1)
 	var f Factory
 	cfg := util.CreateTestingCFG()
 	cfg.PopulationSize = 1000

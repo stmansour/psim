@@ -16,6 +16,8 @@ import (
 // ---------------------------------------------------------------------------
 type CustomDate time.Time
 
+// RangeLimits limits for Influencers data research time
+// ---------------------------------------------------------------------------
 type RangeLimits struct {
 	MinDelta1 int // furthest back from t3 that t1 can be
 	MaxDelta1 int // closest to t3 that t1 can be

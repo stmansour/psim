@@ -38,7 +38,7 @@ import (
 // }
 
 func TestPLATODBLoad(t *testing.T) {
-	util.Init()
+	util.Init(-1)
 	Init(util.CreateTestingCFG())
 
 	dt := time.Date(2020, 3, 15, 0, 0, 0, 0, time.UTC)
@@ -50,7 +50,7 @@ func TestPLATODBLoad(t *testing.T) {
 }
 
 func TestBadConfig(t *testing.T) {
-	util.Init()
+	util.Init(-1)
 	cfg := util.CreateTestingCFG()
 	cfg.C1 = "XYZ"
 	err := Init(cfg)

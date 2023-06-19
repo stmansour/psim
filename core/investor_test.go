@@ -10,7 +10,7 @@ import (
 
 func TestInvestorDNA(t *testing.T) {
 	var f Factory
-	util.Init()
+	util.Init(-1)
 	cfg := util.CreateTestingCFG()
 	if err := util.ValidateConfig(cfg); err != nil {
 		log.Panicf("*** PANIC ERROR ***  ValidateConfig returned error: %s\n", err)

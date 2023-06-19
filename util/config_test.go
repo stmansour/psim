@@ -6,7 +6,7 @@ import (
 )
 
 func TestConfig(t *testing.T) {
-	Init()
+	Init(-1)
 	cfg, err := LoadConfig()
 	if err != nil {
 		t.Errorf("LoadConfig failed: %s", err)

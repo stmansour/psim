@@ -81,6 +81,7 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 
 	// Build the new population... Select parents, create a new Investor
 	for i := 0; i < f.cfg.PopulationSize; i++ {
+
 		idxParent1 := f.rouletteSelect(population, fitnessSum) // parent 1
 		idxParent2 := f.rouletteSelect(population, fitnessSum) // parent 2
 
@@ -90,9 +91,7 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 			idxParent2 = f.rouletteSelect(population, fitnessSum)
 			dbgCounter++
 			if dbgCounter > 2 {
-				util.DPrintf("population len = %d\n", len(population))
 				for j := 0; j < len(population); j++ {
-					util.DPrintf("population[%d].DNA() = %s, FitnessCalculated = %v, Fitness = %6.2f\n", j, population[j].DNA(), population[j].FitnessCalculated, population[j].Fitness)
 				}
 				log.Panicf("Looks like we're stuck in the loop\n")
 			}
@@ -290,6 +289,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 			log.Panicf("*** PANIC ERROR ***  BreedNewInvestor:  Error from NewInfluencer(%s) : %s\n", dna, err.Error())
 		}
 		newInvestor.Influencers = append(newInvestor.Influencers, inf)
+
 	}
 
 	//----------------------------------------------------------------------------------
@@ -328,6 +328,7 @@ func (f *Factory) Mutate(inv *Investor) {
 	}
 	randomKey := keys[rand.Intn(len(keys))]
 	// fmt.Printf("Random key: %s, value: %v\n", randomKey, m[randomKey])
+
 	switch randomKey {
 	case "Delta4":
 		d := 0
@@ -628,6 +629,9 @@ func (f *Factory) GenerateDeltas(sc string, DNA map[string]interface{}) (Delta1 
 	} else {
 		for {
 			Delta2 = util.RandomInRange(f.cfg.DLimits[subclass].MinDelta2, f.cfg.DLimits[subclass].MaxDelta2)
+			if f.cfg.DLimits[subclass].MaxDelta2 < Delta1 {
+				Delta1 = f.cfg.DLimits[subclass].MaxDelta2 - 1
+			}
 			if Delta2 > Delta1 {
 				break // if Delta2 is after Delta1, we're done. Otherwise we just keep trying
 			}

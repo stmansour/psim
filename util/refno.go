@@ -1,6 +1,7 @@
 package util
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
 )
@@ -21,10 +22,14 @@ var UtilData struct {
 // Init is the util library's initialization functio for all the really
 // low level initialization that needs to be done...
 // -----------------------------------------------------------------------------
-func Init() {
-	now := time.Now()
-	UtilData.Rand = rand.New(rand.NewSource(now.UnixNano())) // specific seed
-	rand.Seed(time.Now().UnixNano() + 42)                    // general seed
+func Init(randNano int64) {
+	if randNano == -1 {
+		now := time.Now()
+		randNano = now.UnixNano()
+		fmt.Printf("Random number seed:  %d\n", randNano)
+	}
+	UtilData.Rand = rand.New(rand.NewSource(randNano)) // specific seed
+	rand.Seed(randNano + 42)                           // general seed
 }
 
 // GenerateRefNo generate a unique identifier for a transaction. This is
