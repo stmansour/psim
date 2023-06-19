@@ -85,7 +85,7 @@ func ValidateConfig(cfg *AppConfig) error {
 	// Ensure that mutation is in range 1 - 100
 	//-------------------------------------------------
 	if cfg.MutationRate < 1 || cfg.MutationRate > 100 {
-		err = fmt.Errorf("Mutation rate must be in the range 1 - 100, current value is: %d", cfg.MutationRate)
+		err = fmt.Errorf("mutation rate must be in the range 1 - 100, current value is: %d", cfg.MutationRate)
 		fmt.Printf("** Configuration Error **  %s\n", err)
 	}
 
