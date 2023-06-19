@@ -217,8 +217,8 @@ func CreateTestingCFG() *AppConfig {
 	mapper := map[string]RangeLimits{
 		"DR": {
 			MinDelta1: -30,
-			MaxDelta1: -3,
-			MinDelta2: -7,
+			MaxDelta1: -7,
+			MinDelta2: -6,
 			MaxDelta2: -1,
 		},
 		"UR": {

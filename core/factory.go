@@ -597,46 +597,60 @@ func (f *Factory) GenerateDeltas(sc string, DNA map[string]interface{}) (Delta1 
 	subclass := sc[:2] // should give us "DR", "IR", "UR", ...
 	// Generate or validate Delta1
 	if val, ok := DNA["Delta1"].(int); ok {
-
-		if val >= f.cfg.DLimits[subclass].MinDelta1 && val <= f.cfg.DLimits[subclass].MaxDelta1 {
+		if f.cfg.DLimits[subclass].MinDelta1 <= val && val <= f.cfg.DLimits[subclass].MaxDelta1 {
 			Delta1 = val
 		} else {
-			return 0, 0, 0, fmt.Errorf("invalid Delta1 value: %d, it must be in the range %d to %d", val, f.cfg.DLimits[subclass].MinDelta1, f.cfg.DLimits[subclass].MaxDelta2)
+			util.DPrintf("DLimits[%s] = %#v\n", subclass, f.cfg.DLimits[subclass])
+			return 0, 0, 0, fmt.Errorf("invalid Delta1 value: %d, it must be in the range %d to %d", val, f.cfg.DLimits[subclass].MinDelta1, f.cfg.DLimits[subclass].MaxDelta1)
 		}
 	} else {
-		Delta1 = rand.Intn(27) - 30 // -30 to -4
+		// if no value found, generate based on configuration limits
+		Delta1 = util.RandomInRange(f.cfg.DLimits[subclass].MinDelta1, f.cfg.DLimits[subclass].MaxDelta1)
 	}
 
 	// Generate or validate Delta2
 	if val, ok := DNA["Delta2"].(int); ok {
-		if val > Delta1 && val <= f.cfg.DLimits[subclass].MaxDelta2 && val >= f.cfg.DLimits[subclass].MinDelta2 {
+		if f.cfg.DLimits[subclass].MinDelta2 <= val && val <= f.cfg.DLimits[subclass].MaxDelta2 {
 			Delta2 = val
 		} else {
-			mn := f.cfg.DLimits[subclass].MinDelta2 // assume the min value is the configured lower limit
-			if Delta1 >= mn {                       // if this is true, then Delta1's range can overlap Delta2
-				//  MinDelta2       mn              MaxDelta2
-				//     |---------|--+-------------------|
-				//             Delta1
-				mn = Delta1 + 1                              // see if we can move the minDelta2 value for this object to 1 greater than Delta1
-				if mn <= f.cfg.DLimits[subclass].MaxDelta2 { // as long as mn is <= MaxDelta2, we're OK
-					Delta2 = mn
-				} else {
-				}
-			} else {
-				log.Panicf("Not exactly sure what to do here, val = %d\n", val)
-			}
+			util.DPrintf("DLimits[%s] = %#v\n", subclass, f.cfg.DLimits[subclass])
+			return 0, 0, 0, fmt.Errorf("invalid Delta2 value: %d, it must be in the range %d to %d", val, f.cfg.DLimits[subclass].MinDelta2, f.cfg.DLimits[subclass].MaxDelta2)
 		}
 	} else {
-		for {
-			Delta2 = util.RandomInRange(f.cfg.DLimits[subclass].MinDelta2, f.cfg.DLimits[subclass].MaxDelta2)
-			if f.cfg.DLimits[subclass].MaxDelta2 < Delta1 {
-				Delta1 = f.cfg.DLimits[subclass].MaxDelta2 - 1
-			}
-			if Delta2 > Delta1 {
-				break // if Delta2 is after Delta1, we're done. Otherwise we just keep trying
-			}
-		}
+		// if no value found, generate based on configuration limits
+		Delta2 = util.RandomInRange(f.cfg.DLimits[subclass].MinDelta2, f.cfg.DLimits[subclass].MaxDelta2)
 	}
+
+	// // Generate or validate Delta2
+	// if val, ok := DNA["Delta2"].(int); ok {
+	// 	if val > Delta1 && val <= f.cfg.DLimits[subclass].MaxDelta2 && val >= f.cfg.DLimits[subclass].MinDelta2 {
+	// 		Delta2 = val
+	// 	} else {
+	// 		mn := f.cfg.DLimits[subclass].MinDelta2 // assume the min value is the configured lower limit
+	// 		if Delta1 >= mn {                       // if this is true, then Delta1's range can overlap Delta2
+	// 			//  MinDelta2       mn              MaxDelta2
+	// 			//     |---------|--+-------------------|
+	// 			//             Delta1
+	// 			mn = Delta1 + 1                              // see if we can move the minDelta2 value for this object to 1 greater than Delta1
+	// 			if mn <= f.cfg.DLimits[subclass].MaxDelta2 { // as long as mn is <= MaxDelta2, we're OK
+	// 				Delta2 = mn
+	// 			} else {
+	// 			}
+	// 		} else {
+	// 			log.Panicf("Not exactly sure what to do here, val = %d\n", val)
+	// 		}
+	// 	}
+	// } else {
+	// 	for {
+	// 		Delta2 = util.RandomInRange(f.cfg.DLimits[subclass].MinDelta2, f.cfg.DLimits[subclass].MaxDelta2)
+	// 		if f.cfg.DLimits[subclass].MaxDelta2 < Delta1 {
+	// 			Delta1 = f.cfg.DLimits[subclass].MaxDelta2 - 1
+	// 		}
+	// 		if Delta2 > Delta1 {
+	// 			break // if Delta2 is after Delta1, we're done. Otherwise we just keep trying
+	// 		}
+	// 	}
+	// }
 
 	// Generate or validate Delta4
 	if val, ok := DNA["Delta4"].(int); ok {

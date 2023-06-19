@@ -7,12 +7,13 @@ import (
 
 func TestConfig(t *testing.T) {
 	Init(-1)
-	cfg, err := LoadConfig()
-	if err != nil {
-		t.Errorf("LoadConfig failed: %s", err)
-	}
+	cfg := CreateTestingCFG()
+
 	for k, v := range cfg.DLimits {
-		fmt.Println("Key:", k, "Value:", v)
+		fmt.Printf("Key: %s, Value: %#v\n", k, v)
+	}
+	if err := ValidateConfig(cfg); err != nil {
+		t.Errorf("ValidateConfig failed: %s", err)
 	}
 
 }
