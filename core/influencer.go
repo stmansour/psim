@@ -18,7 +18,7 @@ type Prediction struct {
 	Probability float64   // probability that the action is correct
 	IType       string    // specific influencer type
 	ID          string    // id of this influencer
-	Correct     bool      // was this profitable?
+	Correct     bool      // was this profitable (correct)?
 	Completed   bool      // has this Prediction been Finalized
 }
 

@@ -90,9 +90,7 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 		for idxParent2 == idxParent1 {
 			idxParent2 = f.rouletteSelect(population, fitnessSum)
 			dbgCounter++
-			if dbgCounter > 2 {
-				for j := 0; j < len(population); j++ {
-				}
+			if dbgCounter > 3 {
 				log.Panicf("Looks like we're stuck in the loop\n")
 			}
 		}
@@ -210,8 +208,11 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	// Select influencers based on what the parents had.
 	// Build a list of InfluencerDNA structs that we'll create next
 	//-------------------------------------------------------------------
-	newInfluencersDNA := []InfluencerDNA{} // we're going to pick our Influencers now...
-	newInfCount := len(parents[util.RandomInRange(0, 1)].Influencers)
+	newInfluencersDNA := []InfluencerDNA{}                            // we're going to pick our Influencers now...
+	newInfCount := len(parents[util.RandomInRange(0, 1)].Influencers) // use the count from one of the parents
+	if newInfCount == 0 {
+		log.Panicf("newInfCount == 0, we cannot have an influencer with 0 investors\n")
+	}
 	for i := 0; i < newInfCount && len(parentInfluencers) > 0; i++ {
 		idx := rand.Intn(len(parentInfluencers)) // select a random subclass
 		newInfluencerDNA := InfluencerDNA{
@@ -620,37 +621,6 @@ func (f *Factory) GenerateDeltas(sc string, DNA map[string]interface{}) (Delta1 
 		// if no value found, generate based on configuration limits
 		Delta2 = util.RandomInRange(f.cfg.DLimits[subclass].MinDelta2, f.cfg.DLimits[subclass].MaxDelta2)
 	}
-
-	// // Generate or validate Delta2
-	// if val, ok := DNA["Delta2"].(int); ok {
-	// 	if val > Delta1 && val <= f.cfg.DLimits[subclass].MaxDelta2 && val >= f.cfg.DLimits[subclass].MinDelta2 {
-	// 		Delta2 = val
-	// 	} else {
-	// 		mn := f.cfg.DLimits[subclass].MinDelta2 // assume the min value is the configured lower limit
-	// 		if Delta1 >= mn {                       // if this is true, then Delta1's range can overlap Delta2
-	// 			//  MinDelta2       mn              MaxDelta2
-	// 			//     |---------|--+-------------------|
-	// 			//             Delta1
-	// 			mn = Delta1 + 1                              // see if we can move the minDelta2 value for this object to 1 greater than Delta1
-	// 			if mn <= f.cfg.DLimits[subclass].MaxDelta2 { // as long as mn is <= MaxDelta2, we're OK
-	// 				Delta2 = mn
-	// 			} else {
-	// 			}
-	// 		} else {
-	// 			log.Panicf("Not exactly sure what to do here, val = %d\n", val)
-	// 		}
-	// 	}
-	// } else {
-	// 	for {
-	// 		Delta2 = util.RandomInRange(f.cfg.DLimits[subclass].MinDelta2, f.cfg.DLimits[subclass].MaxDelta2)
-	// 		if f.cfg.DLimits[subclass].MaxDelta2 < Delta1 {
-	// 			Delta1 = f.cfg.DLimits[subclass].MaxDelta2 - 1
-	// 		}
-	// 		if Delta2 > Delta1 {
-	// 			break // if Delta2 is after Delta1, we're done. Otherwise we just keep trying
-	// 		}
-	// 	}
-	// }
 
 	// Generate or validate Delta4
 	if val, ok := DNA["Delta4"].(int); ok {

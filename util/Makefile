@@ -1,5 +1,6 @@
 TOP=..
 THISDIR="util"
+BINDIR=${TOP}/dist/platosim
 
 util: *.go
 	@touch fail
@@ -11,6 +12,7 @@ util: *.go
 	@echo "*** ${THISDIR}: completed compile ***"
 
 clean:
+	rm -rf *.out
 	@echo "*** ${THISDIR}: completed clean ***"
 
 install:
@@ -24,6 +26,6 @@ test:
 	@rm -f fail
 
 package:
-	mkdir -p ${TOP}/dist
-	cp config.json5 ${TOP}/dist/
+	mkdir -p ${BINDIR}
+	cp config.json5 ${BINDIR}/
 	@echo "*** ${THISDIR}: completed package ***"

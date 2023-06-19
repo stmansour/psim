@@ -1,5 +1,5 @@
 TOP=..
-BINDIR=${TOP}/dist
+BINDIR=${TOP}/dist/platosim
 THISDIR="data"
 TEST_FAILURE_FILE = .tests_failed
 
@@ -26,5 +26,5 @@ coverage:
 
 package:
 	mkdir -p ${BINDIR}/data
-	cd data;cp *.csv ../${BINDIR}/data;cd ..
+	cd data;cp platodb.csv ../${BINDIR}/data;cd ..
 	@echo "*** ${THISDIR}: completed package ***"

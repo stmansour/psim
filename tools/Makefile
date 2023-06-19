@@ -1,5 +1,5 @@
 TOP=..
-BINDIR=${TOP}/dist
+BINDIR=${TOP}/dist/platosim
 THISDIR="tools"
 TEST_FAILURE_FILE = .tests_failed
 
@@ -16,6 +16,9 @@ clean:
 	@echo "*** ${THISDIR}: completed clean ***"
 
 test:
+	@touch $(TEST_FAILURE_FILE)
+	@go test github.com/stmansour/psim/tools && rm -f $(TEST_FAILURE_FILE)
+	@go test -coverprofile=coverage.out || (echo "*** ERROR ***  go test failed!" && exit 1)
 	@echo "*** ${THISDIR}: completed test ***"
 
 coverage:

@@ -1,5 +1,5 @@
 TOP=..
-BINDIR=${TOP}/dist
+BINDIR=${TOP}/dist/platosim
 THISDIR="core"
 TEST_FAILURE_FILE = .tests_failed
 

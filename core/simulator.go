@@ -433,6 +433,8 @@ func (s *Simulator) ResultsByInvestor() {
 
 // ResultsForInvestor - dumps results of investor [i]
 //
+// ADD: % correct predictions
+//
 // INPUTS
 //
 //	n =      The index of this investor in the list

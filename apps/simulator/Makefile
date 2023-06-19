@@ -1,5 +1,5 @@
 TOP=../..
-BINDIR=${TOP}/dist
+BINDIR=${TOP}/dist/platosim
 THISDIR="apps/simulator"
 
 dr: *.go

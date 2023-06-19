@@ -2,32 +2,18 @@ package main
 
 import (
 	"encoding/csv"
-	"flag"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/stmansour/psim/util"
 )
 
-var app struct {
-	filename string
-}
-
-func readCommandLineArgs() {
-	fPtr := flag.String("f", "", "csv file name to open and process")
-	flag.Parse()
-	app.filename = *fPtr
-}
-
-func main() {
-	readCommandLineArgs()
-	if len(app.filename) == 0 {
-		fmt.Printf("You must supply the filename with the -f option\n")
-		os.Exit(1)
-	}
+// DoIt expands the supplied csvfile contents into daily values.
+func DoIt(filename string) {
 	// Open the CSV file
-	file, err := os.Open(app.filename)
+	file, err := os.Open(filename)
 	if err != nil {
 		fmt.Println("Error opening file:", err)
 		return
@@ -47,8 +33,10 @@ func main() {
 	//---------------------------------------------------------------
 	var d1, d2 time.Time
 	cols := records[0]
-	if cols[0] != "Date" {
-		fmt.Printf("*ERROR* the first column of the csv file must be Date\n")
+	util.DPrintf("len(cols[0]) = %d\n", len(cols[0]))
+
+	if !strings.HasSuffix(cols[0], "Date") {
+		fmt.Printf("*ERROR* the first column of the csv file must be Date, currently it is: %s\n", cols[0])
 		os.Exit(1)
 	}
 	d1, err = util.StringToDate(records[1][0])
