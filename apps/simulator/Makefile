@@ -4,7 +4,8 @@ THISDIR="apps/simulator"
 
 dr: *.go
 	go vet
-	@if [[ -f "${GOPATH}/bin/golint" ]]; then golint; else staticcheck; fi
+	golint
+	staticcheck
 	go build
 	@echo "*** ${THISDIR}: completed ${THISDIR} ***"
 
