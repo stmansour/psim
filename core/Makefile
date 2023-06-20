@@ -5,7 +5,8 @@ TEST_FAILURE_FILE = .tests_failed
 
 core: *.go
 	go vet
-	@if [[ -f "${GOPATH}/bin/golint" ]]; then golint; else staticcheck; fi
+	golint
+	staticcheck
 	go build
 	go install
 	@echo "*** ${THISDIR}: completed ${THISDIR} ***"

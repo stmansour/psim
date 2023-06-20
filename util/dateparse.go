@@ -29,5 +29,5 @@ func StringToDate(s string) (time.Time, error) {
 			return Dt, nil
 		}
 	}
-	return Dt, fmt.Errorf("Date could not be decoded")
+	return Dt, fmt.Errorf("date could not be decoded")
 }

@@ -2,7 +2,7 @@ package util
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"reflect"
 	"strings"
@@ -131,7 +131,7 @@ func LoadConfig() (AppConfig, error) {
 	}
 	defer configFile.Close()
 
-	byteValue, err := ioutil.ReadAll(configFile)
+	byteValue, err := io.ReadAll(configFile)
 	if err != nil {
 		return cfg, fmt.Errorf("failed to read config file: %v", err)
 	}

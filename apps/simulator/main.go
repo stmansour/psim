@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"math/rand"
 	"os"
 	"time"
 
@@ -101,7 +100,6 @@ func main() {
 		os.Exit(1)
 	}
 	readCommandLineArgs()
-	rand.Seed(time.Now().UnixNano())
 
 	if err = data.Init(&cfg); err != nil {
 		log.Fatalf("Error initilizing data subsystem: %s\n", err)

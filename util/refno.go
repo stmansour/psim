@@ -29,7 +29,6 @@ func Init(randNano int64) {
 		fmt.Printf("Random number seed:  %d\n", randNano)
 	}
 	UtilData.Rand = rand.New(rand.NewSource(randNano)) // specific seed
-	rand.Seed(randNano + 42)                           // general seed
 }
 
 // GenerateRefNo generate a unique identifier for a transaction. This is
@@ -63,11 +62,3 @@ func GenerateRefNo() string {
 	}
 	return string(l)
 }
-
-// func main() {
-// 	now := time.Now()
-// 	fmt.Printf("now = %s\n", now.Format("2006-01-02 15:04:00 MST"))
-// 	fmt.Printf("now.UnixNano() = %d\n", now.UnixNano())
-// 	UtilData.Rand = rand.New(rand.NewSource(now.UnixNano()))
-// 	fmt.Println(GenerateRefNo())
-// }

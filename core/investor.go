@@ -144,7 +144,7 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 	//        strategy, which is probably not a good approach.
 	//------------------------------------------------------------------------------
 	if len(recs) < 1 {
-		return BuyCount, fmt.Errorf("No predictions found")
+		return BuyCount, fmt.Errorf("no predictions found")
 	}
 	buyVotes := 0
 	holdVotes := 0

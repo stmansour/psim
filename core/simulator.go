@@ -335,7 +335,7 @@ func (s *Simulator) SaveStats() {
 //
 // ----------------------------------------------------------------------------
 func (s *Simulator) DumpStats() error {
-	fname := fmt.Sprintf("SimStats.csv")
+	fname := "SimStats.csv"
 	file, err := os.Create(fname)
 	if err != nil {
 		return err
@@ -494,7 +494,7 @@ func (s *Simulator) ResultsForInvestor(n int, v *Investor) string {
 	str += fmt.Sprintf("\t\tPrediction Accuracy:  %d / %d  = %3.3f%%\n", m, len(v.Investments), (float64(m*100) / float64(len(v.Investments))))
 
 	str += fmt.Sprintf("\t\tFitness Score:       %6.2f\n", v.FitnessScore())
-	str += fmt.Sprintf("\t\tInfluencer Fitness Scores:\n")
+	str += "\t\tInfluencer Fitness Scores:\n"
 	for i := 0; i < len(v.Influencers); i++ {
 		str += fmt.Sprintf("\t\t    %d: [%s] %6.2f\n", i, v.Influencers[i].DNA(), v.Influencers[i].FitnessScore())
 	}

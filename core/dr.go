@@ -2,6 +2,7 @@ package core
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/stmansour/psim/util"
@@ -136,7 +137,7 @@ func (p *DRInfluencer) DNA() string {
 	inv := p.MyInvestor()
 
 	if inv == nil {
-		util.DPrintf("YIPES!  Influencer's MyInvestor is nil!\n")
+		log.Panicf("YIPES!  Influencer's MyInvestor is nil!\n")
 	}
 	if p.Delta4 != inv.Delta4 {
 		util.DPrintf("YIPES!  Influencer Delta4 (%d) is not the same as Investor.Delta4 (%d)\n", p.Delta4, inv.Delta4)

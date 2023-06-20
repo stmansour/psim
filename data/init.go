@@ -82,7 +82,7 @@ func Init(cfg *util.AppConfig) error {
 			return err
 		}
 	default:
-		return fmt.Errorf("Unimplemented DBSource %s", DInfo.cfg.DBSource)
+		return fmt.Errorf("unimplemented DBSource %s", DInfo.cfg.DBSource)
 	}
 	// ERInit()
 	return nil

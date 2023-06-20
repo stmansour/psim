@@ -3,7 +3,6 @@ package core
 import (
 	"fmt"
 	"log"
-	"math/rand"
 	"reflect"
 	"testing"
 
@@ -216,7 +215,7 @@ func TestMutation(t *testing.T) {
 	//-----------------------------------------------------------------
 	for i := 0; i < len(sim.Investors); i++ {
 		sim.Investors[i].BalanceC1 += float64(util.RandomInRange(1, 1000))/1000.00 - 500.00 // random result
-		if rand.Float64() > 0.7 {                                                           // add an investment 30% of the time
+		if util.UtilData.Rand.Float64() > 0.7 {                                             // add an investment 30% of the time
 			cm := util.RandomInRange(1, 100) > 25 // true 75% of the time
 			pr := util.RandomInRange(1, 100) > 30 // true 70% of the time
 			inv := Investment{

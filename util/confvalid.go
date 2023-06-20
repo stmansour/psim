@@ -99,7 +99,7 @@ func ValidateConfig(cfg *AppConfig) error {
 		}
 	}
 	if !found {
-		err = fmt.Errorf("Unrecognized DBSource: %s", cfg.DBSource)
+		err = fmt.Errorf("unrecognized DBSource: %s", cfg.DBSource)
 		fmt.Printf("** Configuration Error **  %s\n", err)
 	}
 

@@ -44,13 +44,6 @@ func MigrateStructVals(pa interface{}, pb interface{}) error {
 		}
 		if fa.Type() == fb.Type() {
 			fb.Set(reflect.ValueOf(fa.Interface()))
-		} else {
-			// Unrecognized type - commented out for now as we don't need any special types
-			// err := XJSONprocess(&fa, &fb)
-			// if err != nil {
-			// 	val := reflect.ValueOf(fa.Interface()) // instantiate new pa value
-			// 	fb.Set(val.Convert(fb.Type()))         // set pb to the value of the new type value
-			// }
 		}
 	}
 	return nil

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"math/rand"
 	"strconv"
 	"strings"
 
@@ -199,10 +198,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	// option to flip it to (c) if we do not get the result's we're seeking
 	// with (a).
 	//-----------------------------------------------------------------------
-	var parentInfluencers []Influencer
-	for _, influencer := range append(p1Influencers, p2Influencers...) {
-		parentInfluencers = append(parentInfluencers, influencer)
-	}
+	parentInfluencers := append(p1Influencers, p2Influencers...)
 
 	//-------------------------------------------------------------------
 	// Select influencers based on what the parents had.
@@ -214,7 +210,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		log.Panicf("newInfCount == 0, we cannot have an influencer with 0 investors\n")
 	}
 	for i := 0; i < newInfCount && len(parentInfluencers) > 0; i++ {
-		idx := rand.Intn(len(parentInfluencers)) // select a random subclass
+		idx := util.UtilData.Rand.Intn(len(parentInfluencers)) // select a random subclass
 		newInfluencerDNA := InfluencerDNA{
 			Subclass: parentInfluencers[idx].Subclass(),
 			DNA1:     parentInfluencers[idx].DNA(),
@@ -327,7 +323,7 @@ func (f *Factory) Mutate(inv *Investor) {
 	for k := range m {
 		keys = append(keys, k)
 	}
-	randomKey := keys[rand.Intn(len(keys))]
+	randomKey := keys[util.UtilData.Rand.Intn(len(keys))]
 	// fmt.Printf("Random key: %s, value: %v\n", randomKey, m[randomKey])
 
 	switch randomKey {
@@ -349,7 +345,7 @@ func (f *Factory) Mutate(inv *Investor) {
 		w := float64(0)
 		found := false
 		for !found {
-			w = rand.Float64()
+			w = util.UtilData.Rand.Float64()
 			found = (w != inv.W1)
 		}
 		inv.W1 = w
@@ -358,7 +354,7 @@ func (f *Factory) Mutate(inv *Investor) {
 		w := float64(0)
 		found := false
 		for !found {
-			w = rand.Float64()
+			w = util.UtilData.Rand.Float64()
 			found = (w != inv.W2)
 		}
 		inv.W2 = w
@@ -663,7 +659,7 @@ func (f *Factory) GenerateDeltas(sc string, DNA map[string]interface{}) (Delta1 
 //
 // -----------------------------------------------------------------------------
 func (f *Factory) rouletteSelect(population []Investor, fitnessSum float64) int {
-	spin := rand.Float64() * fitnessSum
+	spin := util.UtilData.Rand.Float64() * fitnessSum
 	runningSum := 0.0
 
 	for i, investor := range population {

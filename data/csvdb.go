@@ -125,7 +125,7 @@ func LoadCsvDB() error {
 			//--------------------------------------------------------------
 			for k := 0; k < len(DInfo.DTypes); k++ {
 				if DInfo.CSVMap[DInfo.DTypes[k]] == -1 {
-					return fmt.Errorf("No column in %s had label  %s%s%s, which is required for the current simulation configuration",
+					return fmt.Errorf("no column in %s had label  %s%s%s, which is required for the current simulation configuration",
 						PLATODB, DInfo.cfg.C1, DInfo.cfg.C2, DInfo.DTypes[k])
 				}
 			}
