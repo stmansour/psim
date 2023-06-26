@@ -74,6 +74,11 @@ func DoIt(filename string) {
 	// value for every day of March.
 	//---------------------------------------------------------------
 	printFromThisRecord := 1
+	if err != nil {
+		fmt.Println("Error parsing date:", err)
+		os.Exit(1)
+	}
+
 	for dtLoop := d1; dtLoop.Before(d2); dtLoop = dtLoop.Add(24 * time.Hour) {
 		fmt.Printf("%s", dtLoop.Format("1/02/2006")) // This is the date we're on now
 
@@ -86,14 +91,14 @@ func DoIt(filename string) {
 
 		// has our loop date (dtLoop) reached the date of the next record (dtNextRecord)?
 		if dtLoop.Equal(dtNextRecord) || dtLoop.After(dtNextRecord) { // has the current loop date reached or passed that of the record?
-			if len(records) < printFromThisRecord+1 {
+			if printFromThisRecord+1 < len(records) {
 				printFromThisRecord++ // we're now going to be printing THIS record until the loop date reaches or passes this row's date
 			}
 		}
 
 		// print all columns after the date...
 		for j := 1; j < len(records[printFromThisRecord]); j++ {
-			fmt.Printf(",%s", records[printFromThisRecord][j])
+			fmt.Printf(",%s", util.Stripchars(records[printFromThisRecord][j], ", "))
 		}
 		fmt.Printf("\n")
 	}

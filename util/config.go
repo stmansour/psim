@@ -194,10 +194,6 @@ func CreateTestingCFG() *AppConfig {
 	dt2 := time.Date(2022, time.December, 31, 0, 0, 0, 0, time.UTC)
 
 	cfg := AppConfig{
-		// DtStart: "2022-01-01", // simulation start date for each generation
-		// DtStop: "2022-12-31",  // simulation stop date for each generation
-		DtStart:        CustomDate(dt1),
-		DtStop:         CustomDate(dt2),
 		Generations:    1,       // how many generations should the simulator run
 		PopulationSize: 10,      // Total number Investors in the population
 		C1:             "USD",   // main currency  (ISO 4217 code)
@@ -213,6 +209,11 @@ func CreateTestingCFG() *AppConfig {
 		MutationRate:   1,       // percentage number, from 1 - 100, what percent of the time does mutation occur
 		DBSource:       "CSV",   // {CSV | Database | OnlineService}
 	}
+
+	// DtStart: "2022-01-01", // simulation start date for each generation
+	// DtStop: "2022-12-31",  // simulation stop date for each generation
+	cfg.DtStart = CustomDate(dt1)
+	cfg.DtStop = CustomDate(dt2)
 
 	mapper := map[string]RangeLimits{
 		"DR": {
