@@ -77,9 +77,9 @@ func displaySimulationResults(cfg *util.AppConfig) {
 func readCommandLineArgs() {
 	dptr := flag.Bool("d", false, "show day-by-day results")
 	stiptr := flag.Bool("t", false, "write top investor profile to investorProfile.txt and its investments to investments.csv")
-	diptr := flag.Bool("i", false, "show 	all investors in the simulation results")
+	diptr := flag.Bool("i", false, "show all investors in the simulation results")
 	invptr := flag.Bool("v", false, "dump remaining Investments at simulation end")
-	rndptr := flag.Int64("r", -1, "random number seed")
+	rndptr := flag.Int64("r", -1, "random number seed. ex: ./simulator -r 1687802336231490000")
 	flag.Parse()
 	app.showTopInvestor = *stiptr
 	app.dayByDayResults = *dptr

@@ -191,11 +191,12 @@ func TestParseInvestorDNA(t *testing.T) {
 }
 
 func TestMutation(t *testing.T) {
+	var err error
 	util.Init(-1)
 	var f Factory
 	cfg := util.CreateTestingCFG()
 	cfg.PopulationSize = 1000
-	if err := util.ValidateConfig(cfg); err != nil {
+	if err = util.ValidateConfig(cfg); err != nil {
 		log.Panicf("*** PANIC ERROR ***  ValidateConfig returned error: %s\n", err)
 	}
 	var sim Simulator
@@ -203,15 +204,7 @@ func TestMutation(t *testing.T) {
 	sim.Init(cfg, false, false)
 
 	//-----------------------------------------------------------------
-	// Create initial population... it will be random
-	//-----------------------------------------------------------------
-	var err error
-	if err = sim.NewPopulation(); err != nil {
-		log.Panicf("*** PANIC ERROR ***  NewPopulation returned error: %s\n", err)
-	}
-
-	//-----------------------------------------------------------------
-	// Create initial population... it will be random
+	// Give them some transactions and stats to affect next gen
 	//-----------------------------------------------------------------
 	for i := 0; i < len(sim.Investors); i++ {
 		sim.Investors[i].BalanceC1 += float64(util.RandomInRange(1, 1000))/1000.00 - 500.00 // random result
@@ -243,6 +236,7 @@ func TestMutation(t *testing.T) {
 	//-----------------------------------------------------------------
 	// now let's create a new population from our test population...
 	//-----------------------------------------------------------------
+	sim.GensCompleted = 2 // force it to think this
 	sim.CalculateMaxVals()
 	sim.CalculateAllFitnessScores()
 	if err = sim.NewPopulation(); err != nil {

@@ -77,16 +77,35 @@ func (i *Investor) Init(cfg *util.AppConfig, f *Factory) {
 	// InfluencerSubclasses
 
 	//------------------------------------------------------------------
-	// Create a team of influencers.  For now, we're just going to add
-	// one influencer to get things compiling and running.
+	// Create a team of influencers.
 	//------------------------------------------------------------------
-	inf, err := f.NewInfluencer("{DRInfluencer}") // create with minimal DNA -- this causes random values to be generated where needed
-	if err != nil {
-		fmt.Printf("*** ERROR ***  From Influencer Factory: %s\n", err.Error())
-		return
+	numInfluencers := util.RandomInRange(1, len(InfluencerSubclasses))
+	for j := 0; j < numInfluencers; j++ {
+		subclassOK := false
+		subclass := ""
+		for !subclassOK {
+			subclass = InfluencerSubclasses[util.RandomInRange(0, len(InfluencerSubclasses)-1)]
+			found := false
+			for k := 0; k < len(i.Influencers) && !found; k++ {
+				s := i.Influencers[k].Subclass()
+				if s == subclass {
+					found = true
+				}
+			}
+			if !found {
+				subclassOK = true
+			}
+		}
+		dna := "{" + subclass + "}"
+
+		inf, err := f.NewInfluencer(dna) // create with minimal DNA -- this causes random values to be generated where needed
+		if err != nil {
+			fmt.Printf("*** ERROR ***  From Influencer Factory: %s\n", err.Error())
+			return
+		}
+		inf.Init(i, cfg, i.Delta4) // regardless of the influencer's sell date offset is, we need to force it to this one so that all are consistent
+		i.Influencers = append(i.Influencers, inf)
 	}
-	inf.Init(i, cfg, i.Delta4) // regardless of the influencer's sell date offset is, we need to force it to this one so that all are consistent
-	i.Influencers = append(i.Influencers, inf)
 }
 
 // DNA returns a string containing descriptions all its influencers.
@@ -331,7 +350,7 @@ func (i *Investor) InvestorProfile() error {
 	fmt.Fprintf(file, "              %14.2f %s\n", 0.0, i.cfg.C2)
 	fmt.Fprintf(file, "Ending cash:  %14.2f %s\n", i.BalanceC1, i.cfg.C1)
 	fmt.Fprintf(file, "              %14.2f %s\n", i.BalanceC2, i.cfg.C2)
-	fmt.Fprintf(file, "\nInvluencers:\n")
+	fmt.Fprintf(file, "\nInfluencers:\n")
 
 	for j := 0; j < len(i.Influencers); j++ {
 		fmt.Fprintf(file, "%d. %s\n", j+1, i.Influencers[j].DNA())
