@@ -241,10 +241,10 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		newInfluencersDNA = append(newInfluencersDNA, newInfluencerDNA)
 	}
 
-	util.DPrintf("------------------------------------\n")
-	for i := 0; i < len(newInfluencersDNA); i++ {
-		util.DPrintf("%d. %s\n", i, newInfluencersDNA[i].Subclass)
-	}
+	// util.DPrintf("------------------------------------\n")
+	// for i := 0; i < len(newInfluencersDNA); i++ {
+	// 	util.DPrintf("%d. %s\n", i, newInfluencersDNA[i].Subclass)
+	// }
 
 	//------------------------------------------------------------------------------------
 	// The slice newInfluencersDNA now has one entry for each Influencer we must create.
