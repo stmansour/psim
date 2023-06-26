@@ -209,6 +209,11 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	if newInfCount == 0 {
 		log.Panicf("newInfCount == 0, we cannot have an influencer with 0 investors\n")
 	}
+
+	//-------------------------------------------------------------------
+	// Seletct Influencer types...  We build a list of DNA strings of
+	// the parents' DNA
+	//-------------------------------------------------------------------
 	for i := 0; i < newInfCount && len(parentInfluencers) > 0; i++ {
 		idx := util.UtilData.Rand.Intn(len(parentInfluencers)) // select a random subclass
 		newInfluencerDNA := InfluencerDNA{
@@ -234,6 +239,11 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		}
 		parentInfluencers = tmp
 		newInfluencersDNA = append(newInfluencersDNA, newInfluencerDNA)
+	}
+
+	util.DPrintf("------------------------------------\n")
+	for i := 0; i < len(newInfluencersDNA); i++ {
+		util.DPrintf("%d. %s\n", i, newInfluencersDNA[i].Subclass)
 	}
 
 	//------------------------------------------------------------------------------------
@@ -286,7 +296,6 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 			log.Panicf("*** PANIC ERROR ***  BreedNewInvestor:  Error from NewInfluencer(%s) : %s\n", dna, err.Error())
 		}
 		newInvestor.Influencers = append(newInvestor.Influencers, inf)
-
 	}
 
 	//----------------------------------------------------------------------------------
@@ -304,7 +313,10 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	return newInvestor
 }
 
-// Mutate - there's a one percent chance that something will get completely changed
+// Mutate - there's a one percent chance that something will get completely changed.
+//
+//	TODO - add code that may increase or decrease the number of Influencers
+//
 // ------------------------------------------------------------------------------------
 func (f *Factory) Mutate(inv *Investor) {
 	f.MutateCalls++ // this marks another call to Mutate
@@ -360,18 +372,29 @@ func (f *Factory) Mutate(inv *Investor) {
 		inv.W2 = w
 		inv.W1 = 1.0 - w
 	case "Influencers":
-		idx := util.RandomInRange(0, len(InfluencerSubclasses)-1)
-		dna := fmt.Sprintf("{%s}", InfluencerSubclasses[idx])
-		idx = 0
-		if len(inv.Influencers) > 1 {
-			idx = util.RandomInRange(0, len(inv.Influencers)-1)
+		//-----------------------------------------
+		// we either add/remove an Influencer
+		//    OR
+		// change a parameter of an existing...
+		//-----------------------------------------
+		if util.RandomInRange(0, 1) == 0 { // 50% chance of change in field value or change of Influencer count
+			// Change of Influencer count
+
+		} else {
+			// Change field value
+			idx := util.RandomInRange(0, len(InfluencerSubclasses)-1)
+			dna := fmt.Sprintf("{%s}", InfluencerSubclasses[idx])
+			idx = 0
+			if len(inv.Influencers) > 1 {
+				idx = util.RandomInRange(0, len(inv.Influencers)-1)
+			}
+			r, err := f.NewInfluencer(dna)
+			if err != nil {
+				log.Panicf("*** PANIC ERROR NewInfluncer(%q) returned error: %s\n", dna, err)
+			}
+			r.Init(inv, inv.cfg, inv.Delta4)
+			inv.Influencers[idx] = r
 		}
-		r, err := f.NewInfluencer(dna)
-		if err != nil {
-			log.Panicf("*** PANIC ERROR NewInfluncer(%q) returned error: %s\n", dna, err)
-		}
-		r.Init(inv, inv.cfg, inv.Delta4)
-		inv.Influencers[idx] = r
 	default:
 		log.Panicf("*** PANIC ERROR *** Unhandled key from DNA: %s\n", randomKey)
 	}

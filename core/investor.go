@@ -71,6 +71,11 @@ func (i *Investor) Init(cfg *util.AppConfig, f *Factory) {
 		i.W2 = i.cfg.InvW2
 	}
 
+	// First, we determine the count
+	// infCount := util.RandomInRange(1, len(InfluencerSubclasses))
+
+	// InfluencerSubclasses
+
 	//------------------------------------------------------------------
 	// Create a team of influencers.  For now, we're just going to add
 	// one influencer to get things compiling and running.
