@@ -33,7 +33,7 @@ func DoIt(filename string) {
 	//---------------------------------------------------------------
 	var d1, d2 time.Time
 	cols := records[0]
-	util.DPrintf("len(cols[0]) = %d\n", len(cols[0]))
+	// util.DPrintf("len(cols[0]) = %d\n", len(cols[0]))
 
 	if !strings.HasSuffix(cols[0], "Date") {
 		fmt.Printf("*ERROR* the first column of the csv file must be Date, currently it is: %s\n", cols[0])
@@ -41,11 +41,19 @@ func DoIt(filename string) {
 	}
 	d1, err = util.StringToDate(records[1][0])
 	if err != nil {
+		util.DPrintf("decoding date d1 = %s, length = %d\n", records[1][0], len(records[1][0]))
 		fmt.Println("Error parsing date:", err)
 		os.Exit(1)
 	}
+
+	// check for a null last entry...
+	//-----------------------------------------
+	if len(records[len(records)-1][0]) == 0 {
+		records = records[0 : len(records)-2]
+	}
 	d2, err = util.StringToDate(records[len(records)-1][0])
 	if err != nil {
+		util.DPrintf("decoding date d2 = %s, length = %d\n", records[len(records)-1][0], len(records[len(records)-1][0]))
 		fmt.Println("Error parsing date:", err)
 		os.Exit(1)
 	}
@@ -65,6 +73,16 @@ func DoIt(filename string) {
 		fmt.Printf("%s", s)
 	}
 	fmt.Printf("\n")
+
+	//---------------------------------------------------------------
+	// Remove commas from the contents for the rest of the rows.
+	// That is, we need to change " 737,192.70 " to this "737192.70"
+	//---------------------------------------------------------------
+	for i := 1; i < len(records); i++ {
+		for j := 1; j < len(records[i]); j++ {
+			records[i][j] = util.Stripchars(records[i][j], " ,") // we don't want these characters in numbers
+		}
+	}
 
 	// We want the CSV file to contain values by day. Some statistics
 	// are published monthly, quarterly, yearly.  When this occurs

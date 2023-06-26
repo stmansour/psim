@@ -9,6 +9,7 @@ import (
 // AcceptedDateFmts is the array of string formats that StringToDate accepts
 var AcceptedDateFmts = []string{
 	"2006-1-2",
+	"1/2/06",
 	"1/2/2006",
 }
 
