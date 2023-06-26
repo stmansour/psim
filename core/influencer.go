@@ -39,6 +39,7 @@ type Influencer interface {
 	FitnessScore() float64
 	Subclass() string
 	MyInvestor() *Investor
+	SetMyInvestor(inv *Investor)
 	GetLenMyPredictions() int
 	SetMyPredictions(ps []Prediction)
 	GetMyPredictions() []Prediction

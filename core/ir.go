@@ -26,6 +26,11 @@ func (p *IRInfluencer) MyInvestor() *Investor {
 	return p.myInvestor
 }
 
+// SetMyInvestor returns a pointer to the investor object that holds this influencer
+func (p *IRInfluencer) SetMyInvestor(inv *Investor) {
+	p.myInvestor = inv
+}
+
 // SetMyPredictions is used primarily for testing and sets the Prediction
 // slice to the supplied value
 func (p *IRInfluencer) SetMyPredictions(ps []Prediction) {

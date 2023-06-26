@@ -25,7 +25,7 @@ func TestNewPopulation(t *testing.T) {
 	util.Init(-1)
 	var f Factory
 	cfg := util.CreateTestingCFG()
-	util.DPrintf("cfg.DLimits[DR] = %#v\n", cfg.DLimits["DR"])
+	// util.DPrintf("cfg.DLimits[DR] = %#v\n", cfg.DLimits["DR"])
 	if err := util.ValidateConfig(cfg); err != nil {
 		log.Panicf("*** PANIC ERROR ***  ValidateConfig returned error: %s\n", err)
 	}
@@ -241,6 +241,16 @@ func TestMutation(t *testing.T) {
 	sim.CalculateAllFitnessScores()
 	if err = sim.NewPopulation(); err != nil {
 		log.Panicf("*** PANIC ERROR *** NewPopulation returned error: %s\n", err)
+	}
+
+	//-------------------------------------------
+	// Check for too many Influencers...
+	//-------------------------------------------
+	max := len(InfluencerSubclasses)
+	for i := 0; i < len(sim.Investors); i++ {
+		if len(sim.Investors[i].Influencers) > max {
+			t.Errorf("sim.Investor[%d] has %d Influencers\n", i, len(sim.Investors[i].Influencers))
+		}
 	}
 
 }

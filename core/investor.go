@@ -71,10 +71,12 @@ func (i *Investor) Init(cfg *util.AppConfig, f *Factory) {
 		i.W2 = i.cfg.InvW2
 	}
 
-	// First, we determine the count
-	// infCount := util.RandomInRange(1, len(InfluencerSubclasses))
-
-	// InfluencerSubclasses
+	//--------------------------------------------------------------
+	// If we're creatng by DNA, do not create the influencers here
+	//--------------------------------------------------------------
+	if i.CreatedByDNA {
+		return
+	}
 
 	//------------------------------------------------------------------
 	// Create a team of influencers.

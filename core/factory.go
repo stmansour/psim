@@ -99,6 +99,20 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 			log.Panicf("BreedNewInvestor returned a new Investor with a nil factory\n")
 		}
 	}
+	//-------------------------------------------
+	// Check for too many Influencers...
+	//-------------------------------------------
+	max := len(InfluencerSubclasses)
+	count := 0
+	for i := 0; i < len(newPopulation); i++ {
+		if len(newPopulation[i].Influencers) > max {
+			util.DPrintf("newPopulation[%d] has %d Influencers\n", i, len(newPopulation[i].Influencers))
+			count++
+		}
+	}
+	if count > 0 {
+		log.Panicf("Fount %d Investors with number of Influencers > %d\n", count, max)
+	}
 
 	return newPopulation, nil
 }
@@ -209,6 +223,9 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	if newInfCount == 0 {
 		log.Panicf("newInfCount == 0, we cannot have an influencer with 0 investors\n")
 	}
+	if newInfCount > len(InfluencerSubclasses) {
+		log.Panicf("Factory.BreedNewInvestor.newInfCount = %d\n", newInfCount)
+	}
 
 	//-------------------------------------------------------------------
 	// Seletct Influencer types...  We build a list of DNA strings of
@@ -241,10 +258,9 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		newInfluencersDNA = append(newInfluencersDNA, newInfluencerDNA)
 	}
 
-	// util.DPrintf("------------------------------------\n")
-	// for i := 0; i < len(newInfluencersDNA); i++ {
-	// 	util.DPrintf("%d. %s\n", i, newInfluencersDNA[i].Subclass)
-	// }
+	if newInfCount > len(InfluencerSubclasses) {
+		log.Panicf("Factory.BreedNewInvestorlen(newInvestor.Influencers) = %d\n", len(newInvestor.Influencers))
+	}
 
 	//------------------------------------------------------------------------------------
 	// The slice newInfluencersDNA now has one entry for each Influencer we must create.
@@ -295,8 +311,14 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		if err != nil {
 			log.Panicf("*** PANIC ERROR ***  BreedNewInvestor:  Error from NewInfluencer(%s) : %s\n", dna, err.Error())
 		}
+		inf.SetMyInvestor(&newInvestor)
 		newInvestor.Influencers = append(newInvestor.Influencers, inf)
+		if len(newInvestor.Influencers) > len(InfluencerSubclasses) {
+			log.Panicf("Factory.BreedNewInvestor len(newInvestor.Influencers) = %d.  i = %d, newInfCount = %d\n", len(newInvestor.Influencers), i, newInfCount)
+		}
 	}
+
+	f.Mutate(&newInvestor) // mutate only after *everything* has been set
 
 	//----------------------------------------------------------------------------------
 	// The influencer has control over its research period, however the Investor has
@@ -307,8 +329,6 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	for i := 0; i < len(newInvestor.Influencers); i++ {
 		newInvestor.Influencers[i].Init(&newInvestor, f.cfg, newInvestor.Delta4)
 	}
-
-	f.Mutate(&newInvestor) // mutate only after *everything* has been set
 
 	return newInvestor
 }
