@@ -7,17 +7,9 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/stmansour/psim/data"
 	"github.com/stmansour/psim/util"
 )
-
-// InfluencerSubclasses is an array of strings with all the subclasses of
-// Influencer that the factory knows how to create.
-// ---------------------------------------------------------------------------
-var InfluencerSubclasses = []string{
-	"DRInfluencer",
-	"URInfluencer",
-	"IRInfluencer",
-}
 
 // Factory contains methods to create objects based on a DNA string
 type Factory struct {
@@ -102,7 +94,7 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 	//-------------------------------------------
 	// Check for too many Influencers...
 	//-------------------------------------------
-	max := len(InfluencerSubclasses)
+	max := len(data.InfluencerSubclasses)
 	count := 0
 	for i := 0; i < len(newPopulation); i++ {
 		if len(newPopulation[i].Influencers) > max {
@@ -218,12 +210,13 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	// Select influencers based on what the parents had.
 	// Build a list of InfluencerDNA structs that we'll create next
 	//-------------------------------------------------------------------
-	newInfluencersDNA := []InfluencerDNA{}                            // we're going to pick our Influencers now...
-	newInfCount := len(parents[util.RandomInRange(0, 1)].Influencers) // use the count from one of the parents
+	newInfluencersDNA := []InfluencerDNA{} // we're going to pick our Influencers now...
+	parent := parents[util.RandomInRange(0, 1)]
+	newInfCount := len(parent.Influencers) // use the count from one of the parents
 	if newInfCount == 0 {
 		log.Panicf("newInfCount == 0, we cannot have an influencer with 0 investors\n")
 	}
-	if newInfCount > len(InfluencerSubclasses) {
+	if newInfCount > len(data.InfluencerSubclasses) {
 		log.Panicf("Factory.BreedNewInvestor.newInfCount = %d\n", newInfCount)
 	}
 
@@ -258,7 +251,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		newInfluencersDNA = append(newInfluencersDNA, newInfluencerDNA)
 	}
 
-	if newInfCount > len(InfluencerSubclasses) {
+	if newInfCount > len(data.InfluencerSubclasses) {
 		log.Panicf("Factory.BreedNewInvestorlen(newInvestor.Influencers) = %d\n", len(newInvestor.Influencers))
 	}
 
@@ -312,8 +305,9 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 			log.Panicf("*** PANIC ERROR ***  BreedNewInvestor:  Error from NewInfluencer(%s) : %s\n", dna, err.Error())
 		}
 		inf.SetMyInvestor(&newInvestor)
+		inf.SetDelta4(newInvestor.Delta4)
 		newInvestor.Influencers = append(newInvestor.Influencers, inf)
-		if len(newInvestor.Influencers) > len(InfluencerSubclasses) {
+		if len(newInvestor.Influencers) > len(data.InfluencerSubclasses) {
 			log.Panicf("Factory.BreedNewInvestor len(newInvestor.Influencers) = %d.  i = %d, newInfCount = %d\n", len(newInvestor.Influencers), i, newInfCount)
 		}
 	}
@@ -402,8 +396,8 @@ func (f *Factory) Mutate(inv *Investor) {
 
 		} else {
 			// Change field value
-			idx := util.RandomInRange(0, len(InfluencerSubclasses)-1)
-			dna := fmt.Sprintf("{%s}", InfluencerSubclasses[idx])
+			idx := util.RandomInRange(0, len(data.InfluencerSubclasses)-1)
+			dna := fmt.Sprintf("{%s}", data.InfluencerSubclasses[idx])
 			idx = 0
 			if len(inv.Influencers) > 1 {
 				idx = util.RandomInRange(0, len(inv.Influencers)-1)
@@ -557,6 +551,14 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 			cfg:    f.cfg,
 		}
 		return &iri, nil
+	case "MSInfluencer":
+		msi := MSInfluencer{
+			Delta1: Delta1,
+			Delta2: Delta2,
+			Delta4: Delta4,
+			cfg:    f.cfg,
+		}
+		return &msi, nil
 	case "URInfluencer":
 		uri := URInfluencer{
 			Delta1: Delta1,
@@ -590,7 +592,7 @@ func (f *Factory) ParseInfluencerDNA(DNA string) (string, map[string]interface{}
 	for i, token := range tokens {
 		if i == 0 {
 			found := false
-			for _, v := range InfluencerSubclasses {
+			for _, v := range data.InfluencerSubclasses {
 				if v == token {
 					found = true
 					break

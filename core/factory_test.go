@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/stmansour/psim/data"
 	"github.com/stmansour/psim/util"
 )
 
@@ -246,7 +247,7 @@ func TestMutation(t *testing.T) {
 	//-------------------------------------------
 	// Check for too many Influencers...
 	//-------------------------------------------
-	max := len(InfluencerSubclasses)
+	max := len(data.InfluencerSubclasses)
 	for i := 0; i < len(sim.Investors); i++ {
 		if len(sim.Investors[i].Influencers) > max {
 			t.Errorf("sim.Investor[%d] has %d Influencers\n", i, len(sim.Investors[i].Influencers))

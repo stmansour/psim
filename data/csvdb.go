@@ -87,7 +87,7 @@ func LoadCsvDB() error {
 	//-------------------------------------------------------
 	// Here are the types of data the influencers support...
 	//-------------------------------------------------------
-	DInfo.DTypes = []string{"EXClose", "DRRatio", "URRatio"}
+	DInfo.DTypes = []string{"EXClose", "DRRatio", "MSRatio", "URRatio"}
 
 	//----------------------------------------------------------------------
 	// Keep track of the column with the data needed for each ratio.  This
@@ -159,25 +159,33 @@ func LoadCsvDB() error {
 			os.Exit(1)
 		}
 
+		EXClose, err := strconv.ParseFloat(line[DInfo.CSVMap["EXClose"]], 64)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		MSRatio, err := strconv.ParseFloat(line[DInfo.CSVMap["MSRatio"]], 64)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
 		URRatio, err := strconv.ParseFloat(line[DInfo.CSVMap["URRatio"]], 64)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
 
-		EXClose, err := strconv.ParseFloat(line[DInfo.CSVMap["EXClose"]], 64)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
 		records = append(records, RatesAndRatiosRecord{
 			Date: date,
 			// USDiscountRate: usDiscountRate,
 			// JPDiscountRate: jpDiscountRate,
 			DRRatio: DRRatio,
+			EXClose: EXClose,
+			MSRatio: MSRatio,
 			URRatio: URRatio,
 			// IRRatio: IRRatio,
-			EXClose: EXClose,
 		})
 	}
 

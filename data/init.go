@@ -26,12 +26,23 @@ type RatesAndRatiosRecord struct {
 	// JPDiscountRate float64
 	DRRatio float64
 	IRRatio float64
+	MSRatio float64
 	URRatio float64
 	EXClose float64
 }
 
 // PLATODB is the csv data file that is used for Discount Rate information
 var PLATODB = string("data/platodb.csv")
+
+// InfluencerSubclasses is an array of strings with all the subclasses of
+// Influencer that the factory knows how to create.
+// ---------------------------------------------------------------------------
+var InfluencerSubclasses = []string{
+	"DRInfluencer",
+	"URInfluencer",
+	"IRInfluencer",
+	"MSInfluencer",
+}
 
 // RatesAndRatiosRecords is a type for an array of DR records
 type RatesAndRatiosRecords []RatesAndRatiosRecord
