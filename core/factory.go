@@ -386,32 +386,92 @@ func (f *Factory) Mutate(inv *Investor) {
 		inv.W2 = w
 		inv.W1 = 1.0 - w
 	case "Influencers":
-		//-----------------------------------------
-		// we either add/remove an Influencer
-		//    OR
-		// change a parameter of an existing...
-		//-----------------------------------------
-		if util.RandomInRange(0, 1) == 0 { // 50% chance of change in field value or change of Influencer count
-			// Change of Influencer count
-
-		} else {
-			// Change field value
-			idx := util.RandomInRange(0, len(data.InfluencerSubclasses)-1)
-			dna := fmt.Sprintf("{%s}", data.InfluencerSubclasses[idx])
-			idx = 0
-			if len(inv.Influencers) > 1 {
-				idx = util.RandomInRange(0, len(inv.Influencers)-1)
-			}
-			r, err := f.NewInfluencer(dna)
-			if err != nil {
-				log.Panicf("*** PANIC ERROR NewInfluncer(%q) returned error: %s\n", dna, err)
-			}
-			r.Init(inv, inv.cfg, inv.Delta4)
-			inv.Influencers[idx] = r
-		}
+		f.MutateInfluencer(inv)
 	default:
 		log.Panicf("*** PANIC ERROR *** Unhandled key from DNA: %s\n", randomKey)
 	}
+}
+
+// MutateInfluencer will mutate the supplied investor by adding or removing an Influencer
+// where possible.
+//
+// INPUTS
+//
+//	inv - the Investor to mutate
+//
+// RETURNS
+//
+//	nothing at this time
+//
+// ----------------------------------------------------------------------------------------------------
+func (f *Factory) MutateInfluencer(inv *Investor) {
+	//---------------------------------------------
+	// 50% chance that we change influencer count
+	//---------------------------------------------
+	if util.RandomInRange(0, 1) == 0 {
+		//------------------------------------
+		// ADD or REMOVE
+		//------------------------------------
+		if util.RandomInRange(0, 1) == 0 { // 50% chance of adding
+			//-----------------------------------------------------------------------------
+			// ADD, but only if influencer count is < the number of influencer subclasses
+			//-----------------------------------------------------------------------------
+			if len(inv.Influencers) < len(data.InfluencerSubclasses) {
+				//------------------------------------------------------------------
+				// Randomly select a new subclass until we find one that does not
+				// yet exist in the investor's influencers
+				//------------------------------------------------------------------
+				subclass := f.RandomUnusedSubclass(inv)
+				//-----------------------------------------------------------------
+				// Now that we know the subclass, create it with random values...
+				//-----------------------------------------------------------------
+				inf, err := f.NewInfluencer("{" + subclass + "}")
+				if err != nil {
+					log.Panicf("NewInfluencer(%s) returned error: %s\n", subclass, err)
+				}
+				inf.Init(inv, inv.cfg, inv.Delta4)
+				inv.Influencers = append(inv.Influencers, inf)
+			}
+		} else {
+			//--------------------------------------------------------------------
+			// REMOVE - but only if there are 2 or more Influencers in the slice
+			//--------------------------------------------------------------------
+			if len(inv.Influencers) > 1 {
+				index := util.UtilData.Rand.Intn(len(inv.Influencers))
+				inv.Influencers = append(inv.Influencers[:index], inv.Influencers[index+1:]...)
+			}
+		}
+	} else {
+		//--------------------------------------------------------------------------------
+		// CHANGE EXISTING
+		// here we pick a random position... we'll delete the Influencer in that position
+		// but we will keep its subclass info, then we'll create a new one with random
+		// values to replace it.
+		//--------------------------------------------------------------------------------
+		idx := util.RandomInRange(0, len(inv.Influencers)-1) // pick the one to mutate
+		dna := "{" + data.InfluencerSubclasses[idx] + "}"    // remember its subclass
+		r, err := f.NewInfluencer(dna)                       // create a new one
+		if err != nil {
+			log.Panicf("*** PANIC ERROR NewInfluncer(%q) returned error: %s\n", dna, err)
+		}
+		r.Init(inv, inv.cfg, inv.Delta4) // intialize it
+		inv.Influencers[idx] = r         // and replace it in the slot we chose randomly
+	}
+}
+
+// RandomUnusedSubclass looks at the subclasses in the Investor's Influencers
+// and returns a randomly selected subclass that is NOT in the Investor's Influencers
+// ---------------------------------------------------------------------------------------
+func (*Factory) RandomUnusedSubclass(inv *Investor) string {
+	found := false
+	index := -1
+	for !found {
+		index = util.UtilData.Rand.Intn(len(data.InfluencerSubclasses))
+		for i := 0; i < len(inv.Influencers) && !found; i++ {
+			found = (inv.Influencers[i].Subclass() == data.InfluencerSubclasses[index])
+		}
+	}
+	return data.InfluencerSubclasses[index]
 }
 
 // NewInvestor creates a new investor from supplied DNA
