@@ -357,16 +357,43 @@ func (s *Simulator) DumpStats() error {
 	fmt.Fprintf(file, "\"C2: %s\"\n", s.cfg.C2)
 	fmt.Fprintf(file, "\"Generations: %d\"\n", s.GensCompleted)
 	fmt.Fprintf(file, "\"Population: %d\"\n", s.cfg.PopulationSize)
+
+	t := "Influencers: "
+	fmt.Fprintf(file, "%s", t)
+	n := len(t)
+	namesThisLine := 0
+	for i := 0; i < len(util.InfluencerSubclasses); i++ {
+		subclass := util.InfluencerSubclasses[i]
+		if namesThisLine > 0 {
+			fmt.Fprintf(file, " ")
+			n++
+		}
+		if n+len(subclass) > 77 {
+			t = "        "
+			fmt.Fprintf(file, "\n%s", t)
+			n = len(t)
+			namesThisLine = 0
+		}
+		fmt.Fprintf(file, "%s", subclass)
+		n += len(subclass)
+		namesThisLine++
+	}
+	fmt.Fprintf(file, "\n")
+
 	fmt.Fprintf(file, "\"Observed Mutation Rate: %6.3f%%\"\n", 100.0*float64(s.factory.Mutations)/float64(s.factory.MutateCalls))
 	fmt.Fprintf(file, "\"Elapsed Run Time: %s\"\n", et)
 	fmt.Fprintf(file, "\"\"\n")
 
 	// the header row
-	fmt.Fprintf(file, "%q,%q,%q,%q,%q\n", "Generation", "Profitable Investors", "Average Profit", "Max Profit", "Max Profit DNA")
+	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q\n", "Generation", "Profitable Investors", "Pct Profitable", "Average Profit", "Max Profit", "Max Profit DNA")
 
 	// investment rows
 	for i := 0; i < len(s.SimStats); i++ {
-		fmt.Fprintf(file, "%d,%d,%8.2f,%8.2f,%q\n", i, s.SimStats[i].ProfitableInvestors, s.SimStats[i].AvgProfit, s.SimStats[i].MaxProfit, s.SimStats[i].MaxProfigDNA)
+		fmt.Fprintf(file, "%d,%d,%5.1f%%,%8.2f,%8.2f,%q\n",
+			i,
+			s.SimStats[i].ProfitableInvestors,
+			100.0*float64(s.SimStats[i].ProfitableInvestors)/float64(s.cfg.PopulationSize),
+			s.SimStats[i].AvgProfit, s.SimStats[i].MaxProfit, s.SimStats[i].MaxProfigDNA)
 	}
 	return nil
 }

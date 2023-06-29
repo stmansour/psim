@@ -1,6 +1,7 @@
 TOP=../..
 BINDIR=${TOP}/dist/platosim
 THISDIR="apps/simulator"
+TEST_FAILURE_FILE = .tests_failed
 
 dr: *.go
 	go vet
@@ -11,11 +12,22 @@ dr: *.go
 
 clean:
 	go clean
-	rm -f simulator
+	rm -rf simulator data config.json5 SimStats.csv coverage.out
 	@echo "*** ${THISDIR}: completed clean ***"
 
-test:
+test: config.json5 data/platodb.csv
+	@touch $(TEST_FAILURE_FILE)
+	@go test -coverprofile=coverage.out -coverpkg=../../... && rm -f $(TEST_FAILURE_FILE)
 	@echo "*** ${THISDIR}: completed test ***"
+
+coverage:
+	go tool cover -html=coverage.out 
+
+config.json5:
+	cp ${TOP}/util/config.json5 .
+
+data/platodb.csv:
+	mkdir -p data;cp ${TOP}/data/data/platodb.csv data/
 
 package:
 	mkdir -p ${BINDIR}/

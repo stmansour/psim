@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/stmansour/psim/data"
 	"github.com/stmansour/psim/util"
 )
 
@@ -94,7 +93,7 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 	//-------------------------------------------
 	// Check for too many Influencers...
 	//-------------------------------------------
-	max := len(data.InfluencerSubclasses)
+	max := len(util.InfluencerSubclasses)
 	count := 0
 	for i := 0; i < len(newPopulation); i++ {
 		if len(newPopulation[i].Influencers) > max {
@@ -216,7 +215,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	if newInfCount == 0 {
 		log.Panicf("newInfCount == 0, we cannot have an influencer with 0 investors\n")
 	}
-	if newInfCount > len(data.InfluencerSubclasses) {
+	if newInfCount > len(util.InfluencerSubclasses) {
 		log.Panicf("Factory.BreedNewInvestor.newInfCount = %d\n", newInfCount)
 	}
 
@@ -251,7 +250,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		newInfluencersDNA = append(newInfluencersDNA, newInfluencerDNA)
 	}
 
-	if newInfCount > len(data.InfluencerSubclasses) {
+	if newInfCount > len(util.InfluencerSubclasses) {
 		log.Panicf("Factory.BreedNewInvestorlen(newInvestor.Influencers) = %d\n", len(newInvestor.Influencers))
 	}
 
@@ -307,7 +306,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		inf.SetMyInvestor(&newInvestor)
 		inf.SetDelta4(newInvestor.Delta4)
 		newInvestor.Influencers = append(newInvestor.Influencers, inf)
-		if len(newInvestor.Influencers) > len(data.InfluencerSubclasses) {
+		if len(newInvestor.Influencers) > len(util.InfluencerSubclasses) {
 			log.Panicf("Factory.BreedNewInvestor len(newInvestor.Influencers) = %d.  i = %d, newInfCount = %d\n", len(newInvestor.Influencers), i, newInfCount)
 		}
 	}
@@ -416,7 +415,7 @@ func (f *Factory) MutateInfluencer(inv *Investor) {
 			//-----------------------------------------------------------------------------
 			// ADD, but only if influencer count is < the number of influencer subclasses
 			//-----------------------------------------------------------------------------
-			if len(inv.Influencers) < len(data.InfluencerSubclasses) {
+			if len(inv.Influencers) < len(util.InfluencerSubclasses) {
 				//------------------------------------------------------------------
 				// Randomly select a new subclass until we find one that does not
 				// yet exist in the investor's influencers
@@ -449,7 +448,7 @@ func (f *Factory) MutateInfluencer(inv *Investor) {
 		// values to replace it.
 		//--------------------------------------------------------------------------------
 		idx := util.RandomInRange(0, len(inv.Influencers)-1) // pick the one to mutate
-		dna := "{" + data.InfluencerSubclasses[idx] + "}"    // remember its subclass
+		dna := "{" + util.InfluencerSubclasses[idx] + "}"    // remember its subclass
 		r, err := f.NewInfluencer(dna)                       // create a new one
 		if err != nil {
 			log.Panicf("*** PANIC ERROR NewInfluncer(%q) returned error: %s\n", dna, err)
@@ -466,12 +465,12 @@ func (*Factory) RandomUnusedSubclass(inv *Investor) string {
 	found := false
 	index := -1
 	for !found {
-		index = util.UtilData.Rand.Intn(len(data.InfluencerSubclasses))
+		index = util.UtilData.Rand.Intn(len(util.InfluencerSubclasses))
 		for i := 0; i < len(inv.Influencers) && !found; i++ {
-			found = (inv.Influencers[i].Subclass() == data.InfluencerSubclasses[index])
+			found = (inv.Influencers[i].Subclass() == util.InfluencerSubclasses[index])
 		}
 	}
-	return data.InfluencerSubclasses[index]
+	return util.InfluencerSubclasses[index]
 }
 
 // NewInvestor creates a new investor from supplied DNA
@@ -652,7 +651,7 @@ func (f *Factory) ParseInfluencerDNA(DNA string) (string, map[string]interface{}
 	for i, token := range tokens {
 		if i == 0 {
 			found := false
-			for _, v := range data.InfluencerSubclasses {
+			for _, v := range util.InfluencerSubclasses {
 				if v == token {
 					found = true
 					break

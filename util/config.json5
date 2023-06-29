@@ -17,6 +17,18 @@
     "DBSource": "CSV",          // { CSV | Database | OnlineService }
 
     //-----------------------------------------------------------------
+    //  INFLUENCER SUBCLASSES
+    //  Comment out the subclasses you don't want in the simulation
+    //  Uncomment subclasses you want in the simulation
+    //-----------------------------------------------------------------
+    "InfluencerSubclasses": [
+      "DRInfluencer",
+      "URInfluencer",
+      // "IRInfluencer",
+      "MSInfluencer"
+    ],
+
+    //-----------------------------------------------------------------
     //  DR - Discount Rate
     //-----------------------------------------------------------------
     "DRMinDelta1": -30,         // greatest amount of time prior to T3 that T1 can be
@@ -45,6 +57,16 @@
     "IRMaxDelta2": -30,         // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
     "IRW1": 0.6,                // IRInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: IRW1 + IRW2 = 1.0
     "IRW2": 0.4,                // IRInfluencer Fitness Score weighting for number of predictions made. Constraint: IRW1 + IRW2 = 1.0
+
+    //-----------------------------------------------------------------
+    //  MS - Money Supply
+    //-----------------------------------------------------------------
+    "MSMinDelta1": -180,        // greatest amount of time prior to T3 
+    "MSMaxDelta1": -90,         // least amount of time prior to T3
+    "MSMinDelta2": -60,         // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "MSMaxDelta2": -30,         // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "MSW1": 0.6,                // MSInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: MSW1 + MSW2 = 1.0
+    "MSW2": 0.4,                // MSInfluencer Fitness Score weighting for number of predictions made. Constraint: MSW1 + MSW2 = 1.0
 
     //-----------------------------------------------------------------
     //  INVESTOR

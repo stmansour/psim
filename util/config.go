@@ -25,6 +25,11 @@ type RangeLimits struct {
 	MaxDelta2 int // closest to t3 that t2 can be
 }
 
+// InfluencerSubclasses is an array of strings with all the subclasses of
+// Influencer that the factory knows how to create.
+// ---------------------------------------------------------------------------
+var InfluencerSubclasses []string
+
 // UnmarshalJSON implements an interface that allows our specially formatted
 // dates to be parsed by go's json unmarshaling code.
 // ----------------------------------------------------------------------------
@@ -45,38 +50,39 @@ func (t *CustomDate) UnmarshalJSON(data []byte) error {
 // to all areas of code in this project
 // ---------------------------------------------------------------------------
 type FileConfig struct {
-	C1             string     // Currency1 - the currency that we're trying to maximize
-	C2             string     // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
-	DtStart        CustomDate // simulation begins on this date
-	DtStop         CustomDate // simulation ends on this date
-	PopulationSize int        // how many investors are in this population
-	InitFunds      float64    // amount of funds each Investor is "staked" at the outset of the simulation
-	StdInvestment  float64    // standard investment amount
-	TradingDay     int        // this needs to be completely re-thought -- it's like a recurrence rule
-	TradingTime    time.Time  // time of day when buy/sell is executed
-	Generations    int        // current generation in the simulator
-	MaxInf         int        // maximum number of influencers for any Investor
-	MinInf         int        // minimum number of influencers for any Investor
-	DRMinDelta1    int        `json:"DRMinDelta1"`
-	DRMaxDelta1    int        `json:"DRMaxDelta1"`
-	DRMinDelta2    int        `json:"DRMinDelta2"`
-	DRMaxDelta2    int        `json:"DRMaxDelta2"`
-	URMinDelta1    int        `json:"URMinDelta1"`
-	URMaxDelta1    int        `json:"URMaxDelta1"`
-	URMinDelta2    int        `json:"URMinDelta2"`
-	URMaxDelta2    int        `json:"URMaxDelta2"`
-	IRMinDelta1    int        `json:"IRMinDelta1"`
-	IRMaxDelta1    int        `json:"IRMaxDelta1"`
-	IRMinDelta2    int        `json:"IRMinDelta2"`
-	IRMaxDelta2    int        `json:"IRMaxDelta2"`
-	MinDelta4      int        // closest to t3 that t4 can be
-	MaxDelta4      int        // furthest out from t3 that t4 can be
-	DRW1           float64    // weighting for correctness part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
-	DRW2           float64    // weighting for prediction count part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
-	InvW1          float64    // weight for profit part of Investor FitnessScore
-	InvW2          float64    // weight for correctness part of Investor FitnessScore
-	MutationRate   int        // 1 - 100 indicating the % of mutation
-	DBSource       string     // {CSV | Database | OnlineService}
+	C1                   string     // Currency1 - the currency that we're trying to maximize
+	C2                   string     // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
+	DtStart              CustomDate // simulation begins on this date
+	DtStop               CustomDate // simulation ends on this date
+	PopulationSize       int        // how many investors are in this population
+	InitFunds            float64    // amount of funds each Investor is "staked" at the outset of the simulation
+	StdInvestment        float64    // standard investment amount
+	TradingDay           int        // this needs to be completely re-thought -- it's like a recurrence rule
+	TradingTime          time.Time  // time of day when buy/sell is executed
+	Generations          int        // current generation in the simulator
+	MaxInf               int        // maximum number of influencers for any Investor
+	MinInf               int        // minimum number of influencers for any Investor
+	InfluencerSubclasses []string   // valid Influencer subclasses for this simulation
+	DRMinDelta1          int        `json:"DRMinDelta1"` // negative integer, most number of days prior to T3 for Influencer research to begin
+	DRMaxDelta1          int        `json:"DRMaxDelta1"` // negative integer, fewest number of days prior to T3 for Invfluencer research to begin
+	DRMinDelta2          int        `json:"DRMinDelta2"`
+	DRMaxDelta2          int        `json:"DRMaxDelta2"`
+	URMinDelta1          int        `json:"URMinDelta1"`
+	URMaxDelta1          int        `json:"URMaxDelta1"`
+	URMinDelta2          int        `json:"URMinDelta2"`
+	URMaxDelta2          int        `json:"URMaxDelta2"`
+	IRMinDelta1          int        `json:"IRMinDelta1"`
+	IRMaxDelta1          int        `json:"IRMaxDelta1"`
+	IRMinDelta2          int        `json:"IRMinDelta2"`
+	IRMaxDelta2          int        `json:"IRMaxDelta2"`
+	MinDelta4            int        // closest to t3 that t4 can be
+	MaxDelta4            int        // furthest out from t3 that t4 can be
+	DRW1                 float64    // weighting for correctness part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
+	DRW2                 float64    // weighting for prediction count part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
+	InvW1                float64    // weight for profit part of Investor FitnessScore
+	InvW2                float64    // weight for correctness part of Investor FitnessScore
+	MutationRate         int        // 1 - 100 indicating the % of mutation
+	DBSource             string     // {CSV | Database | OnlineService}
 }
 
 // AppConfig contains all the configuration values for the Simulator,
@@ -85,27 +91,28 @@ type FileConfig struct {
 // ---------------------------------------------------------------------------
 type AppConfig struct {
 	// ExchangeRate   string     // the exchange rate that controls investing for this simulation
-	C1             string                 // Currency1 - the currency that we're trying to maximize
-	C2             string                 // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
-	DtStart        CustomDate             // simulation begins on this date
-	DtStop         CustomDate             // simulation ends on this date
-	PopulationSize int                    // how many investors are in this population
-	InitFunds      float64                // amount of funds each Investor is "staked" at the outset of the simulation
-	StdInvestment  float64                // standard investment amount
-	TradingDay     int                    // this needs to be completely re-thought -- it's like a recurrence rule
-	TradingTime    time.Time              // time of day when buy/sell is executed
-	Generations    int                    // current generation in the simulator
-	MaxInf         int                    // maximum number of influencers for any Investor
-	MinInf         int                    // minimum number of influencers for any Investor
-	DLimits        map[string]RangeLimits // map from Influencer subtype to its research time limits
-	MinDelta4      int                    // closest to t3 that t4 can be
-	MaxDelta4      int                    // furthest out from t3 that t4 can be
-	DRW1           float64                // weighting for correctness part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
-	DRW2           float64                // weighting for prediction count part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
-	InvW1          float64                // weight for profit part of Investor FitnessScore
-	InvW2          float64                // weight for correctness part of Investor FitnessScore
-	MutationRate   int                    // 1 - 100 indicating the % of mutation
-	DBSource       string                 // {CSV | Database | OnlineService}
+	C1                   string                 // Currency1 - the currency that we're trying to maximize
+	C2                   string                 // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
+	DtStart              CustomDate             // simulation begins on this date
+	DtStop               CustomDate             // simulation ends on this date
+	PopulationSize       int                    // how many investors are in this population
+	InitFunds            float64                // amount of funds each Investor is "staked" at the outset of the simulation
+	StdInvestment        float64                // standard investment amount
+	TradingDay           int                    // this needs to be completely re-thought -- it's like a recurrence rule
+	TradingTime          time.Time              // time of day when buy/sell is executed
+	Generations          int                    // current generation in the simulator
+	MaxInf               int                    // maximum number of influencers for any Investor
+	MinInf               int                    // minimum number of influencers for any Investor
+	DLimits              map[string]RangeLimits // map from Influencer subtype to its research time limits
+	MinDelta4            int                    // closest to t3 that t4 can be
+	MaxDelta4            int                    // furthest out from t3 that t4 can be
+	DRW1                 float64                // weighting for correctness part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
+	DRW2                 float64                // weighting for prediction count part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
+	InvW1                float64                // weight for profit part of Investor FitnessScore
+	InvW2                float64                // weight for correctness part of Investor FitnessScore
+	MutationRate         int                    // 1 - 100 indicating the % of mutation
+	DBSource             string                 // {CSV | Database | OnlineService}
+	InfluencerSubclasses []string               // allowable Influencer subclasses for this run
 }
 
 func hasPrefix(tag string, prefixes []string, mod string) bool {
@@ -140,14 +147,23 @@ func LoadConfig() (AppConfig, error) {
 	//-------------------------------------
 	err = json5.Unmarshal(byteValue, &cfg)
 	if err != nil {
-		return cfg, fmt.Errorf("failed to unmarshal config data: %v", err)
+		return cfg, fmt.Errorf("failed to unmarshal config data into cfg: %v", err)
 	}
 
 	// now read into fcfg to pick up the other values...
 	//------------------------------------------------------
 	err = json5.Unmarshal(byteValue, &fcfg)
 	if err != nil {
-		return cfg, fmt.Errorf("failed to unmarshal config data: %v", err)
+		return cfg, fmt.Errorf("failed to unmarshal config data into fcfg: %v", err)
+	}
+
+	// First thing to do is set the InfluencerSubclasses...
+	//--------------------------------------------------------
+	InfluencerSubclasses = fcfg.InfluencerSubclasses
+	var prefixes []string
+	for i := 0; i < len(InfluencerSubclasses); i++ {
+		s := InfluencerSubclasses[i][:2]
+		prefixes = append(prefixes, s)
 	}
 
 	//-------------------------------------------
@@ -157,8 +173,6 @@ func LoadConfig() (AppConfig, error) {
 	t := reflect.TypeOf(fcfg)
 	v := reflect.ValueOf(fcfg)
 
-	prefixes := []string{"DR", "IR", "UR"}
-
 	for i := 0; i < t.NumField(); i++ {
 		field := t.Field(i)
 		jsonTag := field.Tag.Get("json")
@@ -166,6 +180,16 @@ func LoadConfig() (AppConfig, error) {
 
 		if strings.HasSuffix(jsonTag, "Delta1") || strings.HasSuffix(jsonTag, "Delta2") {
 			subclassName := jsonTag[:2]
+			// make sure this subclass has been called out...
+			found := false
+			for j := 0; j < len(InfluencerSubclasses) && !found; j++ {
+				if subclassName == InfluencerSubclasses[j][0:2] {
+					found = true
+				}
+			}
+			if !found {
+				continue // skip the limits if we're not even using this subclass
+			}
 			rangeLimits := mapper[subclassName]
 			if strings.HasSuffix(jsonTag, "Delta1") {
 				if hasPrefix(jsonTag, prefixes, "Min") {
@@ -208,8 +232,20 @@ func CreateTestingCFG() *AppConfig {
 		InvW2:          0.5,     // Investor Fitness Score weighting for profit. Constraint: InvW1 + InvW2 = 1.0
 		MutationRate:   1,       // percentage number, from 1 - 100, what percent of the time does mutation occur
 		DBSource:       "CSV",   // {CSV | Database | OnlineService}
+		InfluencerSubclasses: []string{ // default case is to enable all Influencer subclasses
+			"DRInfluencer",
+			"IRInfluencer",
+			"MSInfluencer",
+			"URInfluencer",
+		},
 	}
 
+	InfluencerSubclasses = []string{
+		"DRInfluencer",
+		"IRInfluencer",
+		"MSInfluencer",
+		"URInfluencer",
+	}
 	// DtStart: "2022-01-01", // simulation start date for each generation
 	// DtStop: "2022-12-31",  // simulation stop date for each generation
 	cfg.DtStart = CustomDate(dt1)
