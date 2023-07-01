@@ -18,8 +18,8 @@
 
     //-----------------------------------------------------------------
     //  INFLUENCER SUBCLASSES
-    //  Comment out the subclasses you don't want in the simulation
-    //  Uncomment subclasses you want in the simulation
+    //  Comment out the subclasses you don't want in the simulation (insert double slashes // at the beginning )
+    //  Uncomment subclasses you want in the simulation (remove the double slashes //)
     //-----------------------------------------------------------------
     "InfluencerSubclasses": [
       "DRInfluencer",
@@ -76,5 +76,4 @@
     "InvW1": 0.5,               // Investor Fitness Score weighting for "correctness" of predictions. Constraint: InvW1 + InvW2 = 1.0
     "InvW2": 0.5,               // Investor Fitness Score weighting for profit. Constraint: InvW1 + InvW2 = 1.0
     "lastline": "ignore"
-  }
-  
+}
