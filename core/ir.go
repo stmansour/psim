@@ -148,6 +148,12 @@ func (p *IRInfluencer) DNA() string {
 //	error      - nil on success, error encountered otherwise
 //
 // ---------------------------------------------------------------------------
+//
+//	func (p *IRInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
+//		return getPrediction(t3, p.Delta1, p.Delta2, func(rec1, rec2 *data.RatesAndRatiosRecord) float64 {
+//			return rec1.IRRatio - rec2.IRRatio
+//		})
+//	}
 func (p *IRInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
 	// t1 := t3.AddDate(0, 0, p.Delta1)
 	// t2 := t3.AddDate(0, 0, p.Delta2)

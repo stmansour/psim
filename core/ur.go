@@ -150,36 +150,42 @@ func (p *URInfluencer) DNA() string {
 //
 // ---------------------------------------------------------------------------
 func (p *URInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
-	t1 := t3.AddDate(0, 0, p.Delta1)
-	t2 := t3.AddDate(0, 0, p.Delta2)
-	//---------------------------------------------------------------------------
-	// Determine dDRR = (DiscountRateRatio at t1) - (DiscountRateRatio at t2)
-	//---------------------------------------------------------------------------
-	rec1 := data.CSVDBFindRecord(t1)
-	if rec1 == nil {
-		err := fmt.Errorf("ExchangeRate Record for %s not found", t1.Format("1/2/2006"))
-		return "hold", 0, err
-	}
-	rec2 := data.CSVDBFindRecord(t2)
-	if rec2 == nil {
-		err := fmt.Errorf("ExchangeRate Record for %s not found", t2.Format("1/2/2006"))
-		return "hold", 0, err
-	}
-	dURR := rec1.URRatio - rec2.URRatio
-
-	//-------------------------------------------------------------------------------
-	// Prediction formula (based on the change in UnemploymentRateRatios):
-	//     dURR > 0:   buy on t3, sell on t4
-	//     dURR <= 0:  take no action
-	//-------------------------------------------------------------------------------
-	prediction := "hold"
-	if dURR > 0 {
-		prediction = "buy"
-	}
-
-	// todo - return proper probability
-	return prediction, 0.5, nil
+	return getPrediction(t3, p.Delta1, p.Delta2, func(rec1, rec2 *data.RatesAndRatiosRecord) float64 {
+		return rec1.URRatio - rec2.URRatio
+	})
 }
+
+// func (p *URInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
+// 	t1 := t3.AddDate(0, 0, p.Delta1)
+// 	t2 := t3.AddDate(0, 0, p.Delta2)
+// 	//---------------------------------------------------------------------------
+// 	// Determine dDRR = (DiscountRateRatio at t1) - (DiscountRateRatio at t2)
+// 	//---------------------------------------------------------------------------
+// 	rec1 := data.CSVDBFindRecord(t1)
+// 	if rec1 == nil {
+// 		err := fmt.Errorf("ExchangeRate Record for %s not found", t1.Format("1/2/2006"))
+// 		return "hold", 0, err
+// 	}
+// 	rec2 := data.CSVDBFindRecord(t2)
+// 	if rec2 == nil {
+// 		err := fmt.Errorf("ExchangeRate Record for %s not found", t2.Format("1/2/2006"))
+// 		return "hold", 0, err
+// 	}
+// 	dURR := rec1.URRatio - rec2.URRatio
+
+// 	//-------------------------------------------------------------------------------
+// 	// Prediction formula (based on the change in UnemploymentRateRatios):
+// 	//     dURR > 0:   buy on t3, sell on t4
+// 	//     dURR <= 0:  take no action
+// 	//-------------------------------------------------------------------------------
+// 	prediction := "hold"
+// 	if dURR > 0 {
+// 		prediction = "buy"
+// 	}
+
+// 	// todo - return proper probability
+// 	return prediction, 0.5, nil
+// }
 
 // FitnessScore - Discount Rate Fitness Score.
 //
