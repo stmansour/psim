@@ -61,10 +61,10 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 	influencersBySubclass := make(map[string][]*Influencer) // stores pointers to each Influencer of each subclass
 
 	for i := 0; i < len(population); i++ {
-		fitnessSum += population[i].FitnessScore()
+		fitnessSum += population[i].CalculateFitnessScore()
 		for j := range population[i].Influencers {
 			subclass := population[i].Influencers[j].Subclass()
-			influencerFitnessSums[subclass] += population[i].Influencers[j].FitnessScore()
+			influencerFitnessSums[subclass] += population[i].Influencers[j].CalculateFitnessScore()
 			influencersBySubclass[subclass] = append(influencersBySubclass[subclass], &population[i].Influencers[j])
 		}
 	}
@@ -767,7 +767,7 @@ func (f *Factory) rouletteSelect(population []Investor, fitnessSum float64) int 
 	runningSum := 0.0
 
 	for i, investor := range population {
-		runningSum += investor.FitnessScore()
+		runningSum += investor.CalculateFitnessScore()
 		if runningSum >= spin {
 			return i
 		}

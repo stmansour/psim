@@ -49,7 +49,8 @@ func (t *CustomDate) UnmarshalJSON(data []byte) error {
 
 // FileConfig contains all the configuration values for the Simulator,
 // Investors, and Influencers. I had to put it here in order to be visible
-// to all areas of code in this project
+// to all areas of code in this project.
+// Do not get rid of the json tags
 // ---------------------------------------------------------------------------
 type FileConfig struct {
 	C1                   string     // Currency1 - the currency that we're trying to maximize
@@ -65,36 +66,36 @@ type FileConfig struct {
 	MaxInf               int        // maximum number of influencers for any Investor
 	MinInf               int        // minimum number of influencers for any Investor
 	InfluencerSubclasses []string   // valid Influencer subclasses for this simulation
-	DRMinDelta1          int        `json:"DRMinDelta1"` // negative integer, most number of days prior to T3 for Influencer research to begin
-	DRMaxDelta1          int        `json:"DRMaxDelta1"` // negative integer, fewest number of days prior to T3 for Invfluencer research to begin
-	DRMinDelta2          int        `json:"DRMinDelta2"`
-	DRMaxDelta2          int        `json:"DRMaxDelta2"`
-	URMinDelta1          int        `json:"URMinDelta1"`
-	URMaxDelta1          int        `json:"URMaxDelta1"`
-	URMinDelta2          int        `json:"URMinDelta2"`
-	URMaxDelta2          int        `json:"URMaxDelta2"`
-	IRMinDelta1          int        `json:"IRMinDelta1"`
-	IRMaxDelta1          int        `json:"IRMaxDelta1"`
-	IRMinDelta2          int        `json:"IRMinDelta2"`
-	IRMaxDelta2          int        `json:"IRMaxDelta2"`
-	MSMinDelta1          int        `json:"MSMinDelta1"`
-	MSMaxDelta1          int        `json:"MSMaxDelta1"`
-	MSMinDelta2          int        `json:"MSMinDelta2"`
-	MSMaxDelta2          int        `json:"MSMaxDelta2"`
+	DRMinDelta1          int        // negative integer, most number of days prior to T3 for Influencer research to begin
+	DRMaxDelta1          int        // negative integer, fewest number of days prior to T3 for Invfluencer research to begin
+	DRMinDelta2          int        // research boundary
+	DRMaxDelta2          int        // research boundary
+	URMinDelta1          int        // research boundary
+	URMaxDelta1          int        // research boundary
+	URMinDelta2          int        // research boundary
+	URMaxDelta2          int        // research boundary
+	IRMinDelta1          int        // research boundary
+	IRMaxDelta1          int        // research boundary
+	IRMinDelta2          int        // research boundary
+	IRMaxDelta2          int        // research boundary
+	MSMinDelta1          int        // research boundary
+	MSMaxDelta1          int        // research boundary
+	MSMinDelta2          int        // research boundary
+	MSMaxDelta2          int        // research boundary
 	MinDelta4            int        // closest to t3 that t4 can be
 	MaxDelta4            int        // furthest out from t3 that t4 can be
-	DRW1                 float64    // weighting for correctness part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
-	DRW2                 float64    // weighting for prediction count part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
-	IRW1                 float64
-	IRW2                 float64
-	MSW1                 float64
-	MSW2                 float64
-	URW1                 float64
-	URW2                 float64
-	InvW1                float64 // weight for profit part of Investor FitnessScore
-	InvW2                float64 // weight for correctness part of Investor FitnessScore
-	MutationRate         int     // 1 - 100 indicating the % of mutation
-	DBSource             string  // {CSV | Database | OnlineService}
+	DRW1                 float64    // weighting in fitness calculation
+	DRW2                 float64    // weighting in fitness calculation
+	IRW1                 float64    // weighting in fitness calculation
+	IRW2                 float64    // weighting in fitness calculation
+	MSW1                 float64    // weighting in fitness calculation
+	MSW2                 float64    // weighting in fitness calculation
+	URW1                 float64    // weighting in fitness calculation
+	URW2                 float64    // weighting in fitness calculation
+	InvW1                float64    // weight for profit part of Investor FitnessScore
+	InvW2                float64    // weight for correctness part of Investor FitnessScore
+	MutationRate         int        // 1 - 100 indicating the % of mutation
+	DBSource             string     // {CSV | Database | OnlineService}
 }
 
 // AppConfig contains all the configuration values for the Simulator,
@@ -235,20 +236,6 @@ func LoadConfig() (AppConfig, error) {
 					info.MaxDelta2 = value.(int)
 				}
 			}
-
-			// if strings.HasSuffix(jsonTag, "Delta1") {
-			// 	if hasPrefix(jsonTag, prefixes, "Min") {
-			// 		info.MinDelta1 = value.(int)
-			// 	} else if hasPrefix(jsonTag, prefixes, "Max") {
-			// 		info.MaxDelta1 = value.(int)
-			// 	}
-			// } else if strings.HasSuffix(jsonTag, "Delta2") {
-			// 	if hasPrefix(jsonTag, prefixes, "Min") {
-			// 		info.MinDelta2 = value.(int)
-			// 	} else if hasPrefix(jsonTag, prefixes, "Max") {
-			// 		info.MaxDelta2 = value.(int)
-			// 	}
-			// }
 			mapper[subclassName] = info // save the updated version
 		}
 	}

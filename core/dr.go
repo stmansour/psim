@@ -185,10 +185,10 @@ func (p *DRInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
 		})
 }
 
-// FitnessScore - See explanation in common.go calculateFitnessScore
+// CalculateFitnessScore - See explanation in common.go calculateFitnessScore
 //
 // RETURNS - the fitness score
 // ------------------------------------------------------------------------------------
-func (p *DRInfluencer) FitnessScore() float64 {
+func (p *DRInfluencer) CalculateFitnessScore() float64 {
 	return calculateFitnessScore(p, p.cfg)
 }

@@ -37,7 +37,7 @@ type Influencer interface {
 	SetDelta4(d int)
 	DNA() string
 
-	FitnessScore() float64
+	CalculateFitnessScore() float64
 	IsFitnessCalculated() bool
 	SetFitnessScore(x float64)
 	GetFitnessScore() float64

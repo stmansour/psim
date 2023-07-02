@@ -17,23 +17,26 @@ type SimulationStatistics struct {
 	ProfitableInvestors int     // number of Investors that were profitable in this generation
 	AvgProfit           float64 // avg profitability for profitable Investors in this generation
 	MaxProfit           float64 // largest profit Investor in this generation
+	TotalBuys           int     // total number of "buy" decisions made by the investor
+	ProfitableBuys      int     // total number of buys that were profitable
 	MaxProfigDNA        string  // DNA of the Investor making the highest profit this generation
 }
 
 // Simulator is a simulator object
 type Simulator struct {
-	cfg              *util.AppConfig        // system-wide configuration info
-	factory          Factory                // used to create Influencers
-	Investors        []Investor             // the population of the current generation
-	dayByDay         bool                   // show day by day results, debug feature
-	invTable         bool                   // dump the investment table at the end of the simulation
-	maxProfitThisRun float64                // the largest profit made by any investor during this simulation run
-	maxPredictions   map[string]int         // max predictions indexed by subclass
-	GensCompleted    int                    // the current count of the number of generations completed in the simulation
-	SimStats         []SimulationStatistics // keep track of what happened
-	SimStart         time.Time              // timestamp for simulation start
-	SimStop          time.Time              // timestamp for simulation stop
-	StopTimeSet      bool                   // set to true once SimStop is set. If it's false either the simulation is still in progress or did not complete
+	cfg               *util.AppConfig        // system-wide configuration info
+	factory           Factory                // used to create Influencers
+	Investors         []Investor             // the population of the current generation
+	dayByDay          bool                   // show day by day results, debug feature
+	invTable          bool                   // dump the investment table at the end of the simulation
+	maxProfitThisRun  float64                // the largest profit made by any investor during this simulation run
+	maxPredictions    map[string]int         // max predictions indexed by subclass
+	maxProfitInvestor int                    // the investor that had the max profit for this generation
+	GensCompleted     int                    // the current count of the number of generations completed in the simulation
+	SimStats          []SimulationStatistics // keep track of what happened
+	SimStart          time.Time              // timestamp for simulation start
+	SimStop           time.Time              // timestamp for simulation stop
+	StopTimeSet       bool                   // set to true once SimStop is set. If it's false either the simulation is still in progress or did not complete
 }
 
 // SetAppConfig simply sets the simulators pointer to the AppConfig struct
@@ -231,9 +234,9 @@ func (s *Simulator) CalculateAllFitnessScores() {
 	// Investor fitness scores
 	//----------------------------------------------------
 	for i := 0; i < len(s.Investors); i++ {
-		s.Investors[i].FitnessScore()
+		s.Investors[i].CalculateFitnessScore()
 		for j := 0; j < len(s.Investors[i].Influencers); j++ {
-			s.Investors[i].Influencers[j].FitnessScore()
+			s.Investors[i].Influencers[j].CalculateFitnessScore()
 		}
 	}
 }
@@ -302,6 +305,9 @@ func (s *Simulator) CalculateMaxVals() {
 // RETURNS
 // ----------------------------------------------------------------------------
 func (s *Simulator) SaveStats() {
+	//----------------------------------------------------
+	// Compute average investor profit this generation...
+	//----------------------------------------------------
 	prof := 0
 	maxProfit := float64(0)
 	avgProfit := float64(0)
@@ -314,15 +320,34 @@ func (s *Simulator) SaveStats() {
 			if profit > maxProfit {
 				maxProfit = profit
 				maxProfitDNA = s.Investors[i].DNA()
+				s.maxProfitInvestor = i
 			}
 		}
 	}
 	avgProfit = avgProfit / float64(prof) // average profit among the profitable
+
+	//----------------------------------------------------
+	// Compute details about Investor with max profit...
+	//----------------------------------------------------
+	idx := s.maxProfitInvestor
+	tot := 0
+	pro := 0
+	for _, investment := range s.Investors[idx].Investments {
+		if investment.Completed {
+			tot++
+		}
+		if investment.Profitable {
+			pro++
+		}
+	}
+
 	ss := SimulationStatistics{
 		ProfitableInvestors: prof,
 		AvgProfit:           avgProfit,
 		MaxProfit:           maxProfit,
 		MaxProfigDNA:        maxProfitDNA,
+		TotalBuys:           tot,
+		ProfitableBuys:      pro,
 	}
 	s.SimStats = append(s.SimStats, ss)
 }
@@ -385,15 +410,19 @@ func (s *Simulator) DumpStats() error {
 	fmt.Fprintf(file, "\"\"\n")
 
 	// the header row
-	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q\n", "Generation", "Profitable Investors", "Pct Profitable", "Average Profit", "Max Profit", "Max Profit DNA")
+	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q\n", "Generation", "Profitable Investors", "Pct Profitable Investors", "Average Profit", "Max Profit", "Total Buys", "Profitable Buys", "Pct Profitable Buys", "Max Profit DNA")
 
 	// investment rows
 	for i := 0; i < len(s.SimStats); i++ {
-		fmt.Fprintf(file, "%d,%d,%5.1f%%,%8.2f,%8.2f,%q\n",
+		fmt.Fprintf(file, "%d,%d,%5.1f%%,%8.2f,%8.2f,%d,%d,%4.2f%%,%q\n",
 			i,
 			s.SimStats[i].ProfitableInvestors,
 			100.0*float64(s.SimStats[i].ProfitableInvestors)/float64(s.cfg.PopulationSize),
-			s.SimStats[i].AvgProfit, s.SimStats[i].MaxProfit, s.SimStats[i].MaxProfigDNA)
+			s.SimStats[i].AvgProfit, s.SimStats[i].MaxProfit,
+			s.SimStats[i].TotalBuys,
+			s.SimStats[i].ProfitableBuys,
+			100.0*float64(s.SimStats[i].ProfitableBuys)/float64(s.SimStats[i].TotalBuys),
+			s.SimStats[i].MaxProfigDNA)
 	}
 	return nil
 }
@@ -520,10 +549,10 @@ func (s *Simulator) ResultsForInvestor(n int, v *Investor) string {
 	}
 	str += fmt.Sprintf("\t\tPrediction Accuracy:  %d / %d  = %3.3f%%\n", m, len(v.Investments), (float64(m*100) / float64(len(v.Investments))))
 
-	str += fmt.Sprintf("\t\tFitness Score:       %6.2f\n", v.FitnessScore())
+	str += fmt.Sprintf("\t\tFitness Score:       %6.2f\n", v.CalculateFitnessScore())
 	str += "\t\tInfluencer Fitness Scores:\n"
 	for i := 0; i < len(v.Influencers); i++ {
-		str += fmt.Sprintf("\t\t    %d: [%s] %6.2f\n", i, v.Influencers[i].DNA(), v.Influencers[i].FitnessScore())
+		str += fmt.Sprintf("\t\t    %d: [%s] %6.2f\n", i, v.Influencers[i].DNA(), v.Influencers[i].CalculateFitnessScore())
 	}
 
 	return str

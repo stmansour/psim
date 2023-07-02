@@ -377,7 +377,7 @@ func (i *Investment) ToString() string {
 	return s
 }
 
-// FitnessScore calculates the fitness score for an Investor.
+// CalculateFitnessScore calculates the fitness score for an Investor.
 //
 // The score depends  on the final amount of C1 the investor has at the end of the
 // simulation. If the investor ends up with less C1 than it started with, a low or
@@ -404,7 +404,7 @@ func (i *Investment) ToString() string {
 //	to the highest profit.
 //
 // ------------------------------------------------------------------------------------
-func (i *Investor) FitnessScore() float64 {
+func (i *Investor) CalculateFitnessScore() float64 {
 	if i.FitnessCalculated {
 		return i.Fitness
 	}
