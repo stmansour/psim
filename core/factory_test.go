@@ -25,7 +25,7 @@ func TestNewPopulation(t *testing.T) {
 	util.Init(-1)
 	var f Factory
 	cfg := util.CreateTestingCFG()
-	// util.DPrintf("cfg.DLimits[DR] = %#v\n", cfg.DLimits["DR"])
+	// util.DPrintf("cfg.SCInfo[DR] = %#v\n", cfg.SCInfo["DR"])
 	if err := util.ValidateConfig(cfg); err != nil {
 		log.Panicf("*** PANIC ERROR ***  ValidateConfig returned error: %s\n", err)
 	}

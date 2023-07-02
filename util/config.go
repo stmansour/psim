@@ -16,13 +16,15 @@ import (
 // ---------------------------------------------------------------------------
 type CustomDate time.Time
 
-// RangeLimits limits for Influencers data research time
+// InfluencerSubclassInfo limits for Influencers data research time
 // ---------------------------------------------------------------------------
-type RangeLimits struct {
-	MinDelta1 int // furthest back from t3 that t1 can be
-	MaxDelta1 int // closest to t3 that t1 can be
-	MinDelta2 int // furthest back from t3 that t2 can be
-	MaxDelta2 int // closest to t3 that t2 can be
+type InfluencerSubclassInfo struct {
+	MinDelta1 int     // furthest back from t3 that t1 can be
+	MaxDelta1 int     // closest to t3 that t1 can be
+	MinDelta2 int     // furthest back from t3 that t2 can be
+	MaxDelta2 int     // closest to t3 that t2 can be
+	FitnessW1 float64 // weight for correctness
+	FitnessW2 float64 // weight for activity
 }
 
 // InfluencerSubclasses is an array of strings with all the subclasses of
@@ -75,14 +77,24 @@ type FileConfig struct {
 	IRMaxDelta1          int        `json:"IRMaxDelta1"`
 	IRMinDelta2          int        `json:"IRMinDelta2"`
 	IRMaxDelta2          int        `json:"IRMaxDelta2"`
+	MSMinDelta1          int        `json:"MSMinDelta1"`
+	MSMaxDelta1          int        `json:"MSMaxDelta1"`
+	MSMinDelta2          int        `json:"MSMinDelta2"`
+	MSMaxDelta2          int        `json:"MSMaxDelta2"`
 	MinDelta4            int        // closest to t3 that t4 can be
 	MaxDelta4            int        // furthest out from t3 that t4 can be
 	DRW1                 float64    // weighting for correctness part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
 	DRW2                 float64    // weighting for prediction count part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
-	InvW1                float64    // weight for profit part of Investor FitnessScore
-	InvW2                float64    // weight for correctness part of Investor FitnessScore
-	MutationRate         int        // 1 - 100 indicating the % of mutation
-	DBSource             string     // {CSV | Database | OnlineService}
+	IRW1                 float64
+	IRW2                 float64
+	MSW1                 float64
+	MSW2                 float64
+	URW1                 float64
+	URW2                 float64
+	InvW1                float64 // weight for profit part of Investor FitnessScore
+	InvW2                float64 // weight for correctness part of Investor FitnessScore
+	MutationRate         int     // 1 - 100 indicating the % of mutation
+	DBSource             string  // {CSV | Database | OnlineService}
 }
 
 // AppConfig contains all the configuration values for the Simulator,
@@ -91,28 +103,28 @@ type FileConfig struct {
 // ---------------------------------------------------------------------------
 type AppConfig struct {
 	// ExchangeRate   string     // the exchange rate that controls investing for this simulation
-	C1                   string                 // Currency1 - the currency that we're trying to maximize
-	C2                   string                 // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
-	DtStart              CustomDate             // simulation begins on this date
-	DtStop               CustomDate             // simulation ends on this date
-	PopulationSize       int                    // how many investors are in this population
-	InitFunds            float64                // amount of funds each Investor is "staked" at the outset of the simulation
-	StdInvestment        float64                // standard investment amount
-	TradingDay           int                    // this needs to be completely re-thought -- it's like a recurrence rule
-	TradingTime          time.Time              // time of day when buy/sell is executed
-	Generations          int                    // current generation in the simulator
-	MaxInf               int                    // maximum number of influencers for any Investor
-	MinInf               int                    // minimum number of influencers for any Investor
-	DLimits              map[string]RangeLimits // map from Influencer subtype to its research time limits
-	MinDelta4            int                    // closest to t3 that t4 can be
-	MaxDelta4            int                    // furthest out from t3 that t4 can be
-	DRW1                 float64                // weighting for correctness part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
-	DRW2                 float64                // weighting for prediction count part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
-	InvW1                float64                // weight for profit part of Investor FitnessScore
-	InvW2                float64                // weight for correctness part of Investor FitnessScore
-	MutationRate         int                    // 1 - 100 indicating the % of mutation
-	DBSource             string                 // {CSV | Database | OnlineService}
-	InfluencerSubclasses []string               // allowable Influencer subclasses for this run
+	C1                   string                            // Currency1 - the currency that we're trying to maximize
+	C2                   string                            // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
+	DtStart              CustomDate                        // simulation begins on this date
+	DtStop               CustomDate                        // simulation ends on this date
+	PopulationSize       int                               // how many investors are in this population
+	InitFunds            float64                           // amount of funds each Investor is "staked" at the outset of the simulation
+	StdInvestment        float64                           // standard investment amount
+	TradingDay           int                               // this needs to be completely re-thought -- it's like a recurrence rule
+	TradingTime          time.Time                         // time of day when buy/sell is executed
+	Generations          int                               // current generation in the simulator
+	MaxInf               int                               // maximum number of influencers for any Investor
+	MinInf               int                               // minimum number of influencers for any Investor
+	SCInfo               map[string]InfluencerSubclassInfo // map from Influencer subtype to its research time limits
+	MinDelta4            int                               // closest to t3 that t4 can be
+	MaxDelta4            int                               // furthest out from t3 that t4 can be
+	DRW1                 float64                           // weighting for correctness part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
+	DRW2                 float64                           // weighting for prediction count part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
+	InvW1                float64                           // weight for profit part of Investor FitnessScore
+	InvW2                float64                           // weight for correctness part of Investor FitnessScore
+	MutationRate         int                               // 1 - 100 indicating the % of mutation
+	DBSource             string                            // {CSV | Database | OnlineService}
+	InfluencerSubclasses []string                          // allowable Influencer subclasses for this run
 }
 
 func hasPrefix(tag string, prefixes []string, mod string) bool {
@@ -167,20 +179,33 @@ func LoadConfig() (AppConfig, error) {
 	}
 
 	//-------------------------------------------
-	// now build the map[subclass]RangeLimits
+	// now build the map[subclass]InfluencerSubclassInfo
 	//-------------------------------------------
-	mapper := make(map[string]RangeLimits)
+	mapper := make(map[string]InfluencerSubclassInfo)
 	t := reflect.TypeOf(fcfg)
 	v := reflect.ValueOf(fcfg)
+	isi := []string{"W1", "W2", "Delta1", "Delta2"}
 
 	for i := 0; i < t.NumField(); i++ {
 		field := t.Field(i)
-		jsonTag := field.Tag.Get("json")
+		jsonTag := field.Name
 		value := v.Field(i).Interface()
 
-		if strings.HasSuffix(jsonTag, "Delta1") || strings.HasSuffix(jsonTag, "Delta2") {
+		//--------------------------------------------------------
+		// Check for values belonging to InfluencerSubclassInfo
+		//--------------------------------------------------------
+		isInfo := -1
+		for j := 0; j < len(isi) && isInfo < 0; j++ {
+			if strings.HasSuffix(jsonTag, isi[j]) {
+				isInfo = j
+			}
+		}
+
+		if isInfo >= 0 {
+			//--------------------------------------------------------
+			// make sure this subclass is included in the simulation
+			//--------------------------------------------------------
 			subclassName := jsonTag[:2]
-			// make sure this subclass has been called out...
 			found := false
 			for j := 0; j < len(InfluencerSubclasses) && !found; j++ {
 				if subclassName == InfluencerSubclasses[j][0:2] {
@@ -190,24 +215,44 @@ func LoadConfig() (AppConfig, error) {
 			if !found {
 				continue // skip the limits if we're not even using this subclass
 			}
-			rangeLimits := mapper[subclassName]
-			if strings.HasSuffix(jsonTag, "Delta1") {
+
+			info := mapper[subclassName] // grab the current version
+			switch isInfo {
+			case 0: // W1
+				info.FitnessW1 = value.(float64)
+			case 1: // W2
+				info.FitnessW2 = value.(float64)
+			case 2: // Delta1
 				if hasPrefix(jsonTag, prefixes, "Min") {
-					rangeLimits.MinDelta1 = value.(int)
+					info.MinDelta1 = value.(int)
 				} else if hasPrefix(jsonTag, prefixes, "Max") {
-					rangeLimits.MaxDelta1 = value.(int)
+					info.MaxDelta1 = value.(int)
 				}
-			} else if strings.HasSuffix(jsonTag, "Delta2") {
+			case 3: // Delta2
 				if hasPrefix(jsonTag, prefixes, "Min") {
-					rangeLimits.MinDelta2 = value.(int)
+					info.MinDelta2 = value.(int)
 				} else if hasPrefix(jsonTag, prefixes, "Max") {
-					rangeLimits.MaxDelta2 = value.(int)
+					info.MaxDelta2 = value.(int)
 				}
 			}
-			mapper[subclassName] = rangeLimits
+
+			// if strings.HasSuffix(jsonTag, "Delta1") {
+			// 	if hasPrefix(jsonTag, prefixes, "Min") {
+			// 		info.MinDelta1 = value.(int)
+			// 	} else if hasPrefix(jsonTag, prefixes, "Max") {
+			// 		info.MaxDelta1 = value.(int)
+			// 	}
+			// } else if strings.HasSuffix(jsonTag, "Delta2") {
+			// 	if hasPrefix(jsonTag, prefixes, "Min") {
+			// 		info.MinDelta2 = value.(int)
+			// 	} else if hasPrefix(jsonTag, prefixes, "Max") {
+			// 		info.MaxDelta2 = value.(int)
+			// 	}
+			// }
+			mapper[subclassName] = info // save the updated version
 		}
 	}
-	cfg.DLimits = mapper
+	cfg.SCInfo = mapper
 
 	return cfg, nil
 }
@@ -251,14 +296,14 @@ func CreateTestingCFG() *AppConfig {
 	cfg.DtStart = CustomDate(dt1)
 	cfg.DtStop = CustomDate(dt2)
 
-	mapper := map[string]RangeLimits{
+	mapper := map[string]InfluencerSubclassInfo{
 		"DR": {
 			MinDelta1: -30,
 			MaxDelta1: -7,
 			MinDelta2: -6,
 			MaxDelta2: -1,
 		},
-		"UR": {
+		"MS": {
 			MinDelta1: -180,
 			MaxDelta1: -90,
 			MinDelta2: -50,
@@ -270,8 +315,14 @@ func CreateTestingCFG() *AppConfig {
 			MinDelta2: -60,
 			MaxDelta2: -30,
 		},
+		"UR": {
+			MinDelta1: -180,
+			MaxDelta1: -90,
+			MinDelta2: -50,
+			MaxDelta2: -20,
+		},
 	}
-	cfg.DLimits = mapper
+	cfg.SCInfo = mapper
 
 	return &cfg
 }

@@ -698,28 +698,28 @@ func (f *Factory) GenerateDeltas(sc string, DNA map[string]interface{}) (Delta1 
 	subclass := sc[:2] // should give us "DR", "IR", "UR", ...
 	// Generate or validate Delta1
 	if val, ok := DNA["Delta1"].(int); ok {
-		if f.cfg.DLimits[subclass].MinDelta1 <= val && val <= f.cfg.DLimits[subclass].MaxDelta1 {
+		if f.cfg.SCInfo[subclass].MinDelta1 <= val && val <= f.cfg.SCInfo[subclass].MaxDelta1 {
 			Delta1 = val
 		} else {
-			util.DPrintf("DLimits[%s] = %#v\n", subclass, f.cfg.DLimits[subclass])
-			return 0, 0, 0, fmt.Errorf("invalid Delta1 value: %d, it must be in the range %d to %d", val, f.cfg.DLimits[subclass].MinDelta1, f.cfg.DLimits[subclass].MaxDelta1)
+			util.DPrintf("SCInfo[%s] = %#v\n", subclass, f.cfg.SCInfo[subclass])
+			return 0, 0, 0, fmt.Errorf("invalid Delta1 value: %d, it must be in the range %d to %d", val, f.cfg.SCInfo[subclass].MinDelta1, f.cfg.SCInfo[subclass].MaxDelta1)
 		}
 	} else {
 		// if no value found, generate based on configuration limits
-		Delta1 = util.RandomInRange(f.cfg.DLimits[subclass].MinDelta1, f.cfg.DLimits[subclass].MaxDelta1)
+		Delta1 = util.RandomInRange(f.cfg.SCInfo[subclass].MinDelta1, f.cfg.SCInfo[subclass].MaxDelta1)
 	}
 
 	// Generate or validate Delta2
 	if val, ok := DNA["Delta2"].(int); ok {
-		if f.cfg.DLimits[subclass].MinDelta2 <= val && val <= f.cfg.DLimits[subclass].MaxDelta2 {
+		if f.cfg.SCInfo[subclass].MinDelta2 <= val && val <= f.cfg.SCInfo[subclass].MaxDelta2 {
 			Delta2 = val
 		} else {
-			util.DPrintf("DLimits[%s] = %#v\n", subclass, f.cfg.DLimits[subclass])
-			return 0, 0, 0, fmt.Errorf("invalid Delta2 value: %d, it must be in the range %d to %d", val, f.cfg.DLimits[subclass].MinDelta2, f.cfg.DLimits[subclass].MaxDelta2)
+			util.DPrintf("SCInfo[%s] = %#v\n", subclass, f.cfg.SCInfo[subclass])
+			return 0, 0, 0, fmt.Errorf("invalid Delta2 value: %d, it must be in the range %d to %d", val, f.cfg.SCInfo[subclass].MinDelta2, f.cfg.SCInfo[subclass].MaxDelta2)
 		}
 	} else {
 		// if no value found, generate based on configuration limits
-		Delta2 = util.RandomInRange(f.cfg.DLimits[subclass].MinDelta2, f.cfg.DLimits[subclass].MaxDelta2)
+		Delta2 = util.RandomInRange(f.cfg.SCInfo[subclass].MinDelta2, f.cfg.SCInfo[subclass].MaxDelta2)
 	}
 
 	// Generate or validate Delta4

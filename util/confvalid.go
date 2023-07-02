@@ -33,25 +33,25 @@ func ValidateConfig(cfg *AppConfig) error {
 	//       |                      |<- Delta2 ->|<-Delta4->|
 	//       |<-----------  Delta1  ------------>|
 	//-----------------------------------------------------------------------------------
-	for k := range cfg.DLimits {
-		if cfg.DLimits[k].MinDelta2 >= 0 {
-			err = fmt.Errorf("MinDelta2 (%d) must be less than 0", cfg.DLimits[k].MinDelta2)
+	for k := range cfg.SCInfo {
+		if cfg.SCInfo[k].MinDelta2 >= 0 {
+			err = fmt.Errorf("MinDelta2 (%d) must be less than 0", cfg.SCInfo[k].MinDelta2)
 			fmt.Printf("** Configuration Error **  %s\n", err)
 		}
-		if !(cfg.DLimits[k].MaxDelta1 < cfg.DLimits[k].MinDelta2) {
-			err = fmt.Errorf("MaxDelta1 (%d) must be less than MinDelta2 (%d)", cfg.DLimits[k].MaxDelta1, cfg.DLimits[k].MinDelta2)
+		if !(cfg.SCInfo[k].MaxDelta1 < cfg.SCInfo[k].MinDelta2) {
+			err = fmt.Errorf("MaxDelta1 (%d) must be less than MinDelta2 (%d)", cfg.SCInfo[k].MaxDelta1, cfg.SCInfo[k].MinDelta2)
 			fmt.Printf("** Configuration Error **  %s\n", err)
 		}
-		if !(cfg.DLimits[k].MinDelta1 < cfg.DLimits[k].MaxDelta1) {
+		if !(cfg.SCInfo[k].MinDelta1 < cfg.SCInfo[k].MaxDelta1) {
 			fmt.Printf("cfg[%s]:\n", k)
-			fmt.Printf("MinDelta1 = %d, MaxDelta1 = %d\n", cfg.DLimits[k].MinDelta1, cfg.DLimits[k].MaxDelta1)
-			err = fmt.Errorf("MaxDelta1 (%d) must be greater than MinDelta1 (%d)", cfg.DLimits[k].MaxDelta1, cfg.DLimits[k].MinDelta1)
+			fmt.Printf("MinDelta1 = %d, MaxDelta1 = %d\n", cfg.SCInfo[k].MinDelta1, cfg.SCInfo[k].MaxDelta1)
+			err = fmt.Errorf("MaxDelta1 (%d) must be greater than MinDelta1 (%d)", cfg.SCInfo[k].MaxDelta1, cfg.SCInfo[k].MinDelta1)
 			fmt.Printf("** Configuration Error **  %s\n", err)
 		}
-		if !(cfg.DLimits[k].MinDelta2 < cfg.DLimits[k].MaxDelta2) {
+		if !(cfg.SCInfo[k].MinDelta2 < cfg.SCInfo[k].MaxDelta2) {
 			fmt.Printf("cfg[%s]:\n", k)
-			fmt.Printf("MinDelta2 = %d, MaxDelta2 = %d\n", cfg.DLimits[k].MinDelta2, cfg.DLimits[k].MaxDelta2)
-			err = fmt.Errorf("MaxDelta2 (%d) must be greater than MinDelta2 (%d)", cfg.DLimits[k].MaxDelta2, cfg.DLimits[k].MinDelta2)
+			fmt.Printf("MinDelta2 = %d, MaxDelta2 = %d\n", cfg.SCInfo[k].MinDelta2, cfg.SCInfo[k].MaxDelta2)
+			err = fmt.Errorf("MaxDelta2 (%d) must be greater than MinDelta2 (%d)", cfg.SCInfo[k].MaxDelta2, cfg.SCInfo[k].MinDelta2)
 			fmt.Printf("** Configuration Error **  %s\n", err)
 		}
 

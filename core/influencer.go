@@ -31,18 +31,24 @@ type Influencer interface {
 	Init(i *Investor, cfg *util.AppConfig, delta4 int)
 	GetID() string
 	SetID()
+	Subclass() string
 	SetDelta1(d int)
 	SetDelta2(d int)
 	SetDelta4(d int)
-	GetPrediction(t3 time.Time) (string, float64, error)
 	DNA() string
-	AppendPrediction(pr Prediction)
-	FinalizePrediction(t3, t4 time.Time, profitable bool)
+
 	FitnessScore() float64
-	Subclass() string
+	IsFitnessCalculated() bool
+	SetFitnessScore(x float64)
+	GetFitnessScore() float64
+
 	MyInvestor() *Investor
 	SetMyInvestor(inv *Investor)
+
+	AppendPrediction(pr Prediction)
+	FinalizePrediction(t3, t4 time.Time, profitable bool)
 	GetLenMyPredictions() int
-	SetMyPredictions(ps []Prediction)
 	GetMyPredictions() []Prediction
+	GetPrediction(t3 time.Time) (string, float64, error)
+	SetMyPredictions(ps []Prediction)
 }
