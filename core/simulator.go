@@ -3,7 +3,6 @@ package core
 import (
 	"fmt"
 	"log"
-	"os"
 	"time"
 
 	"github.com/stmansour/psim/util"
@@ -367,73 +366,158 @@ func (s *Simulator) SaveStats() {
 //	any error encountered
 //
 // ----------------------------------------------------------------------------
-func (s *Simulator) DumpStats() error {
-	fname := "SimStats.csv"
-	file, err := os.Create(fname)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
+// func (s *Simulator) DumpStats() error {
+// 	fname := "SimStats.csv"
+// 	file, err := os.Create(fname)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	defer file.Close()
 
-	et, _ := s.GetSimulationRunTime()
-	a := time.Time(s.cfg.DtStart)
-	b := time.Time(s.cfg.DtStop)
-	c := b.AddDate(0, 0, 1)
+// 	et, _ := s.GetSimulationRunTime()
+// 	a := time.Time(s.cfg.DtStart)
+// 	b := time.Time(s.cfg.DtStop)
+// 	c := b.AddDate(0, 0, 1)
 
-	// context information
-	fmt.Fprintf(file, "%q\n", "PLATO Simulator Results")
-	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
-	fmt.Fprintf(file, "\"Simulation Start Date: %s\"\n", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
-	fmt.Fprintf(file, "\"Simulation Stop Date: %s\"\n", c.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
-	fmt.Fprintf(file, "\"Simulation Time Duration: %s\"\n", util.DateDiffString(a, c))
-	fmt.Fprintf(file, "\"C1: %s\"\n", s.cfg.C1)
-	fmt.Fprintf(file, "\"C2: %s\"\n", s.cfg.C2)
-	fmt.Fprintf(file, "\"Generations: %d\"\n", s.GensCompleted)
-	fmt.Fprintf(file, "\"Population: %d\"\n", s.cfg.PopulationSize)
+// 	// context information
+// 	fmt.Fprintf(file, "%q\n", "PLATO Simulator Results")
+// 	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
+// 	fmt.Fprintf(file, "\"Simulation Start Date: %s\"\n", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
+// 	fmt.Fprintf(file, "\"Simulation Stop Date: %s\"\n", c.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
+// 	fmt.Fprintf(file, "\"Simulation Time Duration: %s\"\n", util.DateDiffString(a, c))
+// 	fmt.Fprintf(file, "\"C1: %s\"\n", s.cfg.C1)
+// 	fmt.Fprintf(file, "\"C2: %s\"\n", s.cfg.C2)
+// 	fmt.Fprintf(file, "\"Generations: %d\"\n", s.GensCompleted)
+// 	fmt.Fprintf(file, "\"Population: %d\"\n", s.cfg.PopulationSize)
 
-	t := "Influencers: "
-	fmt.Fprintf(file, "%s", t)
-	n := len(t)
-	namesThisLine := 0
-	for i := 0; i < len(util.InfluencerSubclasses); i++ {
-		subclass := util.InfluencerSubclasses[i]
-		if namesThisLine > 0 {
-			fmt.Fprintf(file, " ")
-			n++
-		}
-		if n+len(subclass) > 77 {
-			t = "        "
-			fmt.Fprintf(file, "\n%s", t)
-			n = len(t)
-			namesThisLine = 0
-		}
-		fmt.Fprintf(file, "%s", subclass)
-		n += len(subclass)
-		namesThisLine++
-	}
-	fmt.Fprintf(file, "\n")
+// 	t := "Influencers: "
+// 	fmt.Fprintf(file, "%s", t)
+// 	n := len(t)
+// 	namesThisLine := 0
+// 	for i := 0; i < len(util.InfluencerSubclasses); i++ {
+// 		subclass := util.InfluencerSubclasses[i]
+// 		if namesThisLine > 0 {
+// 			fmt.Fprintf(file, " ")
+// 			n++
+// 		}
+// 		if n+len(subclass) > 77 {
+// 			t = "        "
+// 			fmt.Fprintf(file, "\n%s", t)
+// 			n = len(t)
+// 			namesThisLine = 0
+// 		}
+// 		fmt.Fprintf(file, "%s", subclass)
+// 		n += len(subclass)
+// 		namesThisLine++
+// 	}
+// 	fmt.Fprintf(file, "\n")
 
-	fmt.Fprintf(file, "\"Observed Mutation Rate: %6.3f%%\"\n", 100.0*float64(s.factory.Mutations)/float64(s.factory.MutateCalls))
-	fmt.Fprintf(file, "\"Elapsed Run Time: %s\"\n", et)
-	fmt.Fprintf(file, "\"\"\n")
+// 	fmt.Fprintf(file, "\"Observed Mutation Rate: %6.3f%%\"\n", 100.0*float64(s.factory.Mutations)/float64(s.factory.MutateCalls))
+// 	fmt.Fprintf(file, "\"Elapsed Run Time: %s\"\n", et)
+// 	fmt.Fprintf(file, "\"\"\n")
 
-	// the header row
-	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q\n", "Generation", "Profitable Investors", "Pct Profitable Investors", "Average Profit", "Max Profit", "Total Buys", "Profitable Buys", "Pct Profitable Buys", "Max Profit DNA")
+// 	// the header row
+// 	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q\n", "Generation", "Profitable Investors", "Pct Profitable Investors", "Average Profit", "Max Profit", "Total Buys", "Profitable Buys", "Pct Profitable Buys", "Max Profit DNA")
 
-	// investment rows
-	for i := 0; i < len(s.SimStats); i++ {
-		fmt.Fprintf(file, "%d,%d,%5.1f%%,%8.2f,%8.2f,%d,%d,%4.2f%%,%q\n",
-			i,
-			s.SimStats[i].ProfitableInvestors,
-			100.0*float64(s.SimStats[i].ProfitableInvestors)/float64(s.cfg.PopulationSize),
-			s.SimStats[i].AvgProfit, s.SimStats[i].MaxProfit,
-			s.SimStats[i].TotalBuys,
-			s.SimStats[i].ProfitableBuys,
-			100.0*float64(s.SimStats[i].ProfitableBuys)/float64(s.SimStats[i].TotalBuys),
-			s.SimStats[i].MaxProfigDNA)
-	}
-	return nil
-}
+// 	// investment rows
+// 	for i := 0; i < len(s.SimStats); i++ {
+// 		fmt.Fprintf(file, "%d,%d,%5.1f%%,%8.2f,%8.2f,%d,%d,%4.2f%%,%q\n",
+// 			i,
+// 			s.SimStats[i].ProfitableInvestors,
+// 			100.0*float64(s.SimStats[i].ProfitableInvestors)/float64(s.cfg.PopulationSize),
+// 			s.SimStats[i].AvgProfit, s.SimStats[i].MaxProfit,
+// 			s.SimStats[i].TotalBuys,
+// 			s.SimStats[i].ProfitableBuys,
+// 			100.0*float64(s.SimStats[i].ProfitableBuys)/float64(s.SimStats[i].TotalBuys),
+// 			s.SimStats[i].MaxProfigDNA)
+// 	}
+// 	return nil
+// }
+
+// // DumpInvestments - dumps the top investor to a file after the simulation.
+// //
+// // RETURNS
+// //
+// //	any error encountered
+// //
+// // ----------------------------------------------------------------------------
+// func (s *Simulator) DumpInvestments(inv *Investor) error {
+// 	fname := fmt.Sprintf("Inv-Gen-%d.csv", s.GensCompleted)
+// 	file, err := os.Create(fname)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	defer file.Close()
+
+// 	//------------------------------------------------------------------------
+// 	// context information
+// 	//------------------------------------------------------------------------
+// 	fmt.Fprintf(file, "%q\n", "PLATO Simulator - Investor Investment List")
+// 	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
+// 	fmt.Fprintf(file, "\"C1: %s\"\n", s.cfg.C1)
+// 	fmt.Fprintf(file, "\"C2: %s\"\n", s.cfg.C2)
+// 	fmt.Fprintf(file, "\"Generation: %d\"\n", s.GensCompleted)
+// 	fmt.Fprintf(file, "\"Initial Funds: %10.2f\"\n", s.cfg.InitFunds)
+// 	fmt.Fprintf(file, "\"Ending Funds: %10.2f %s\"\n", inv.BalanceC1)
+
+// 	//------------------------------------------------------------------------
+// 	// Influencers for this investor.
+// 	//------------------------------------------------------------------------
+// 	t := "Influencers: "
+// 	fmt.Fprintf(file, "%s", t)
+// 	n := len(t)
+// 	namesThisLine := 0
+// 	for i := 0; i < len(util.InfluencerSubclasses); i++ {
+// 		subclass := util.InfluencerSubclasses[i]
+// 		if namesThisLine > 0 {
+// 			fmt.Fprintf(file, " ")
+// 			n++
+// 		}
+// 		if n+len(subclass) > 77 {
+// 			t = "        "
+// 			fmt.Fprintf(file, "\n%s", t)
+// 			n = len(t)
+// 			namesThisLine = 0
+// 		}
+// 		fmt.Fprintf(file, "%s", subclass)
+// 		n += len(subclass)
+// 		namesThisLine++
+// 	}
+// 	fmt.Fprintf(file, "\n")
+// 	fmt.Fprintf(file, "\"\"\n")
+
+// 	// ype Investment struct {
+// 	// 	id         string    // investment id
+// 	// 	T3         time.Time // date on which purchase of C2 was made
+// 	// 	T4         time.Time // date on which C2 will be exchanged for C1
+// 	// 	T3C1       float64   // amount of C2 to purchase at T3
+// 	// 	BuyC2      float64   // the amount of currency in C2 that C1 purchased on T3
+// 	// 	SellC2     float64   // for now, this is always going to be the same as BuyC2
+// 	// 	ERT3       float64   // the exchange rate on T3
+// 	// 	ERT4       float64   // the exchange rate on T4
+// 	// 	T4C1       float64   // amount of currency C1 we were able to purchase with C2 on T4 at exchange rate ERT4
+// 	// 	Delta4     int       // t4 = t3 + Delta4 - "sell" date
+// 	// 	Completed  bool      // true when the investmnet has been exchanged C2 for C1
+// 	// 	Profitable bool      // was this a profitable investment?
+// 	// }
+
+// 	// the header row
+// 	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q\n", "Generation", "Profitable Investors", "Pct Profitable Investors", "Average Profit", "Max Profit", "Total Buys", "Profitable Buys", "Pct Profitable Buys", "Max Profit DNA")
+
+// 	// investment rows
+// 	for i := 0; i < len(s.SimStats); i++ {
+// 		fmt.Fprintf(file, "%d,%d,%5.1f%%,%8.2f,%8.2f,%d,%d,%4.2f%%,%q\n",
+// 			i,
+// 			s.SimStats[i].ProfitableInvestors,
+// 			100.0*float64(s.SimStats[i].ProfitableInvestors)/float64(s.cfg.PopulationSize),
+// 			s.SimStats[i].AvgProfit, s.SimStats[i].MaxProfit,
+// 			s.SimStats[i].TotalBuys,
+// 			s.SimStats[i].ProfitableBuys,
+// 			100.0*float64(s.SimStats[i].ProfitableBuys)/float64(s.SimStats[i].TotalBuys),
+// 			s.SimStats[i].MaxProfigDNA)
+// 	}
+// 	return nil
+// }
 
 // ShowTopInvestor - dumps the top investor to a file after the simulation.
 //
