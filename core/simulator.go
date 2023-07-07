@@ -220,6 +220,14 @@ func (s *Simulator) Run() {
 	s.StopTimeSet = true
 }
 
+// func (s *Simulator) checkWeights() {
+// 	for i := 0; i < len(s.Investors); i++ {
+// 		if s.Investors[i].W1+s.Investors[i].W2 > 1.0 {
+// 			log.Panicf("Weights for Investors[%d] sum to %5.2f\n", i, s.Investors[i].W1+s.Investors[i].W2)
+// 		}
+// 	}
+// }
+
 // CalculateAllFitnessScores - calculates values over all the Influncers and Investors
 //
 //	that are needed to compute FitnesScores.

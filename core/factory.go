@@ -71,7 +71,6 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 
 	// Build the new population... Select parents, create a new Investor
 	for i := 0; i < f.cfg.PopulationSize; i++ {
-
 		idxParent1 := f.rouletteSelect(population, fitnessSum) // parent 1
 		idxParent2 := f.rouletteSelect(population, fitnessSum) // parent 2
 
@@ -161,11 +160,16 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	if val, ok := maps[util.RandomInRange(0, 1)]["Delta4"].(int); ok {
 		newInvestor.Delta4 = val
 	}
-	if val, ok := maps[util.RandomInRange(0, 1)]["InvW1"].(float64); ok {
-		newInvestor.W1 = val
-	}
-	if val, ok := maps[util.RandomInRange(0, 1)]["InvW2"].(float64); ok {
-		newInvestor.W2 = val
+	if util.RandomInRange(0, 1) == 0 {
+		if val, ok := maps[util.RandomInRange(0, 1)]["InvW1"].(float64); ok {
+			newInvestor.W1 = val
+			newInvestor.W2 = 1 - val
+		}
+	} else {
+		if val, ok := maps[util.RandomInRange(0, 1)]["InvW2"].(float64); ok {
+			newInvestor.W2 = val
+			newInvestor.W1 = 1 - val
+		}
 	}
 
 	//-----------------------------------------------------------------------
@@ -497,6 +501,9 @@ func (f *Factory) NewInvestor(DNA string) Investor {
 	if val, ok := m["InvW2"].(float64); ok {
 		inv.W2 = val
 	}
+	if inv.W1+inv.W2 > 1.0 {
+		log.Panicf("Investor Weights > 0\n")
+	}
 	inv.cfg = f.cfg
 	inv.factory = f
 	inv.BalanceC1 = inv.cfg.InitFunds
@@ -514,6 +521,10 @@ func (f *Factory) NewInvestor(DNA string) Investor {
 		}
 		inf.Init(&inv, f.cfg, inv.Delta4)
 		inv.Influencers = append(inv.Influencers, inf)
+	}
+
+	if inv.W1+inv.W2 > 1.0 {
+		log.Panicf("Investor Weights > 0\n")
 	}
 
 	return inv
