@@ -15,12 +15,11 @@ import (
 )
 
 var app struct {
-	showTopInvestor     bool
-	dayByDayResults     bool
-	dumpInvestmentTable bool
-	showAllInvestors    bool // adds all investors to the output in the simulation results
-	sim                 core.Simulator
-	randNano            int64
+	dumpInvestmentList bool
+	dayByDayResults    bool
+	showAllInvestors   bool // adds all investors to the output in the simulation results
+	sim                core.Simulator
+	randNano           int64
 }
 
 func dateIsInDataRange(a time.Time) string {
@@ -91,14 +90,12 @@ func displaySimulationResults(cfg *util.AppConfig) {
 
 func readCommandLineArgs() {
 	dptr := flag.Bool("d", false, "show day-by-day results")
-	stiptr := flag.Bool("t", false, "write top investor profile to investorProfile.txt and its investments to investments.csv")
+	stiptr := flag.Bool("t", false, "for each generation, write top investor Investment List to IList-Gen-n.csv")
 	diptr := flag.Bool("i", false, "show all investors in the simulation results")
-	invptr := flag.Bool("v", false, "dump remaining Investments at simulation end")
 	rndptr := flag.Int64("r", -1, "random number seed. ex: ./simulator -r 1687802336231490000")
 	flag.Parse()
-	app.showTopInvestor = *stiptr
+	app.dumpInvestmentList = *stiptr
 	app.dayByDayResults = *dptr
-	app.dumpInvestmentTable = *invptr
 	app.showAllInvestors = *diptr
 	app.randNano = *rndptr
 }
@@ -120,12 +117,12 @@ func doSimulation() {
 	}
 
 	displaySimulationDetails(&cfg)
-	app.sim.Init(&cfg, app.dayByDayResults, app.dumpInvestmentTable)
+	app.sim.Init(&cfg, app.dayByDayResults, app.dumpInvestmentList)
 	app.sim.Run()
 
 	displaySimulationResults(&cfg)
 
-	if app.showTopInvestor {
+	if app.dumpInvestmentList {
 		err := app.sim.ShowTopInvestor()
 		if err != nil {
 			fmt.Printf("Error writing Top Investor profile: %s\n", err.Error())
