@@ -16,17 +16,17 @@ func GenerateRefNo() string {
 
 	// Generate 10 random digits and 5 random letters
 	for i := 0; i < 10; i++ {
-		l = append(l, Alphabet[UtilData.Rand.Intn(26)])
+		l = append(l, Alphabet[RandomInRange(0, 25)])
 	}
 	for i := 0; i < 10; i++ {
-		l = append(l, Digits[UtilData.Rand.Intn(10)])
+		l = append(l, Digits[RandomInRange(0, 9)])
 	}
 	// move them around some random number of times
 	// fmt.Printf("Initial val:  %s\n", string(l))
-	swaps := 5 + UtilData.Rand.Intn(10)
+	swaps := 5 + RandomInRange(0, 9)
 	for i := 0; i < swaps; i++ {
-		j := UtilData.Rand.Intn(10)
-		k := 10 + UtilData.Rand.Intn(10)
+		j := RandomInRange(0, 9)
+		k := 10 + RandomInRange(0, 9)
 		l[k], l[j] = l[j], l[k]
 	}
 	return string(l)

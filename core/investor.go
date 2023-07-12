@@ -294,43 +294,6 @@ func (i *Investor) SellConversion(t4 time.Time) (int, error) {
 	return SellCount, err
 }
 
-// OutputInvestments dumps the Investments table to a .csv file
-// named investments.csv
-//
-// RETURNS
-//
-//	any error encountered or nil if no error
-//
-// ------------------------------------------------------------------------------------
-func (i *Investor) OutputInvestments(j int) error {
-	fname := fmt.Sprintf("Investments%03d.csv", j)
-	file, err := os.Create(fname)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	// the header row
-	fmt.Fprintf(file, "id,T3,T4,T3C1,ERT3,BuyC2,SellC2,ERT4,T4C1,Completed,Profitable\n")
-
-	// investment rows
-	for _, inv := range i.Investments {
-		//                  1  2  3      4     5      6      7     8      9 10 11
-		fmt.Fprintf(file, "%s,%s,%s,%10.2f,%6.2f,%10.2f,%10.2f,%6.2f,%10.2f,%v,%v\n",
-			inv.id,                      //1 s
-			inv.T3.Format("01/02/2006"), //2 s
-			inv.T4.Format("01/02/2006"), //3 s
-			inv.T3C1,                    //4 f
-			inv.ERT3,                    //5 f
-			inv.BuyC2,                   //6 f
-			inv.SellC2,                  //7 f
-			inv.ERT4,                    //8 f
-			inv.T4C1,                    //9 f
-			inv.Completed,               //10 b
-			inv.Profitable)              //11 b
-	}
-	return nil
-}
 
 // InvestorProfile outputs information about this investor and its influencers
 // to a file named "investorProfile.txt"

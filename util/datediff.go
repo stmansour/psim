@@ -69,18 +69,9 @@ func addDurStr(x int, n string) string {
 func DateDiffString(a, b time.Time) string {
 	year, month, day, _, _, _ := DateDiff(a, b)
 	s := addDurStr(year, "year")
-	if year > 1 {
-		s += "s"
-	}
 	s += " "
-	s += addDurStr(month, "month") + " "
-	if month > 1 {
-		s += "s"
-	}
+	s += addDurStr(month, "month")
 	s += " "
 	s += addDurStr(day, "day")
-	if day > 1 {
-		s += "s"
-	}
 	return s
 }

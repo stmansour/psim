@@ -27,6 +27,9 @@ test:
 	@echo "*** ${THISDIR}: completed test ***"
 	@rm -f fail
 
+coverage:
+	go tool cover -html=coverage.out
+
 package:
 	mkdir -p ${BINDIR}
 	cp config.json5 ${BINDIR}/
