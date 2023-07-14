@@ -47,7 +47,7 @@ check_tests:
 			exit 1; \
 		else \
 			echo "****************************"; \
-			echo "*     ALL TESTS PASSED     *"; \
+			echo "***   ALL TESTS PASSED   ***"; \
 			echo "****************************"; \
 		fi
 

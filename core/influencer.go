@@ -35,6 +35,10 @@ type Influencer interface {
 	SetDelta1(d int)
 	SetDelta2(d int)
 	SetDelta4(d int)
+	SetAppConfig(cfg *util.AppConfig)
+	GetDelta1() int
+	GetDelta2() int
+	GetDelta4() int
 	DNA() string
 
 	CalculateFitnessScore() float64

@@ -134,6 +134,16 @@ func (i *Investor) DNA() string {
 // list so that it can be completed when T4 arrives.  Currency C2 is purchased
 // using C1.  If there are no remaining funds, the function returns immediately.
 // Balances of C1 and C2 are adjusted whenever a conversion is done.
+//
+// INPUTS
+//
+//	t3   = date on which purchase will be made
+//
+// RETURNS
+//
+//	int   = 0 if no buy is made, 1 if a buy is made
+//	err   = any error encountered
+//
 // -----------------------------------------------------------------------------
 func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 	T4 := T3.AddDate(0, 0, i.Delta4) // here if we need it
@@ -230,7 +240,6 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 //
 // RETURNS:
 //
-//	The Investor
 //	Number of investments sold
 //	any error encountered, or nil if no errors were found
 //
@@ -294,7 +303,6 @@ func (i *Investor) SellConversion(t4 time.Time) (int, error) {
 	return SellCount, err
 }
 
-
 // InvestorProfile outputs information about this investor and its influencers
 // to a file named "investorProfile.txt"
 //
@@ -324,21 +332,21 @@ func (i *Investor) InvestorProfile() error {
 	return nil
 }
 
-// ToString simply returns a printable version of the Investment struct as a string.
-// ------------------------------------------------------------------------------------
-func (i *Investment) ToString() string {
-	s := fmt.Sprintf("    id		= %s\n", i.id)
-	s += fmt.Sprintf("    T3		= %s\n", i.T3)
-	s += fmt.Sprintf("    T4		= %s\n", i.T4)
-	s += fmt.Sprintf("    T3C1		= %8.2f\n", i.T3C1)
-	s += fmt.Sprintf("    BuyC2		= %8.2f\n", i.BuyC2)
-	s += fmt.Sprintf("    SellC2	= %8.2f\n", i.SellC2)
-	s += fmt.Sprintf("    ERT3		= %8.2f\n", i.ERT3)
-	s += fmt.Sprintf("    ERT4		= %8.2f\n", i.ERT4)
-	s += fmt.Sprintf("    T4C1	= %8.2f\n", i.T4C1)
-	s += fmt.Sprintf("    Delta4	= %d\n", i.Delta4)
-	return s
-}
+// // ToString simply returns a printable version of the Investment struct as a string.
+// // ------------------------------------------------------------------------------------
+// func (i *Investment) ToString() string {
+// 	s := fmt.Sprintf("    id		= %s\n", i.id)
+// 	s += fmt.Sprintf("    T3		= %s\n", i.T3)
+// 	s += fmt.Sprintf("    T4		= %s\n", i.T4)
+// 	s += fmt.Sprintf("    T3C1		= %8.2f\n", i.T3C1)
+// 	s += fmt.Sprintf("    BuyC2		= %8.2f\n", i.BuyC2)
+// 	s += fmt.Sprintf("    SellC2	= %8.2f\n", i.SellC2)
+// 	s += fmt.Sprintf("    ERT3		= %8.2f\n", i.ERT3)
+// 	s += fmt.Sprintf("    ERT4		= %8.2f\n", i.ERT4)
+// 	s += fmt.Sprintf("    T4C1	= %8.2f\n", i.T4C1)
+// 	s += fmt.Sprintf("    Delta4	= %d\n", i.Delta4)
+// 	return s
+// }
 
 // CalculateFitnessScore calculates the fitness score for an Investor.
 //
