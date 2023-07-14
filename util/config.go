@@ -96,6 +96,7 @@ type FileConfig struct {
 	InvW2                float64    // weight for correctness part of Investor FitnessScore
 	MutationRate         int        // 1 - 100 indicating the % of mutation
 	DBSource             string     // {CSV | Database | OnlineService}
+	RandNano             int64      // random seed
 }
 
 // AppConfig contains all the configuration values for the Simulator,
@@ -126,6 +127,7 @@ type AppConfig struct {
 	MutationRate         int                               // 1 - 100 indicating the % of mutation
 	DBSource             string                            // {CSV | Database | OnlineService}
 	InfluencerSubclasses []string                          // allowable Influencer subclasses for this run
+	RandNano             int64                             // random number seed used for this simulation
 }
 
 func hasPrefix(tag string, prefixes []string, mod string) bool {

@@ -23,7 +23,7 @@ test: config.json5 data/platodb.csv
 	@echo "*** ${THISDIR}: completed test ***"
 
 config.json5:
-	cp ../apps/simulator/config.json5 .
+	cp ${TOP}/util/config.json5 .
 
 data/platodb.csv:
 	mkdir -p data;cp ${TOP}/data/data/platodb.csv data/

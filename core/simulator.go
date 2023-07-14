@@ -446,6 +446,7 @@ func (s *Simulator) DumpInvestments(inv *Investor) error {
 	fmt.Fprintf(file, "\"Generation: %d\"\n", gen)
 	fmt.Fprintf(file, "\"Initial Funds: %10.2f\"\n", s.cfg.InitFunds)
 	fmt.Fprintf(file, "\"Ending Funds: %10.2f %s\"\n", inv.BalanceC1, inv.cfg.C1)
+	fmt.Fprintf(file, "\"Random Seed: %d\"\n", s.cfg.RandNano)
 
 	//------------------------------------------------------------------------
 	// Influencers for this investor.

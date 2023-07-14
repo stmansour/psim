@@ -101,7 +101,9 @@ func readCommandLineArgs() {
 }
 func doSimulation() {
 	app.randNano = -1
-	util.Init(app.randNano)
+
+	readCommandLineArgs()
+	app.randNano = util.Init(app.randNano)
 	cfg, err := util.LoadConfig()
 	if err != nil {
 		log.Fatalf("failed to read config file: %v", err)
@@ -110,7 +112,6 @@ func doSimulation() {
 		fmt.Printf("Please fix errors in the simulator configuration file, config.json5, and try again\n")
 		os.Exit(1)
 	}
-	readCommandLineArgs()
 
 	if err = data.Init(&cfg); err != nil {
 		log.Fatalf("Error initilizing data subsystem: %s\n", err)
