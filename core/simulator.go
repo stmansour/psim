@@ -24,19 +24,19 @@ type SimulationStatistics struct {
 
 // Simulator is a simulator object
 type Simulator struct {
-	cfg               *util.AppConfig        // system-wide configuration info
-	factory           Factory                // used to create Influencers
-	Investors         []Investor             // the population of the current generation
-	dayByDay          bool                   // show day by day results, debug feature
-	iList             bool                   // dump the investment list for top investor at the end of each generation
-	maxProfitThisRun  float64                // the largest profit made by any investor during this simulation run
-	maxPredictions    map[string]int         // max predictions indexed by subclass
-	maxProfitInvestor int                    // the investor that had the max profit for this generation
-	GensCompleted     int                    // the current count of the number of generations completed in the simulation
-	SimStats          []SimulationStatistics // keep track of what happened
-	SimStart          time.Time              // timestamp for simulation start
-	SimStop           time.Time              // timestamp for simulation stop
-	StopTimeSet       bool                   // set to true once SimStop is set. If it's false either the simulation is still in progress or did not complete
+	cfg                        *util.AppConfig        // system-wide configuration info
+	factory                    Factory                // used to create Influencers
+	Investors                  []Investor             // the population of the current generation
+	dayByDay                   bool                   // show day by day results, debug feature
+	dumpTopInvestorInvestments bool                   // dump the investment list for top investor at the end of each generation
+	maxProfitThisRun           float64                // the largest profit made by any investor during this simulation run
+	maxPredictions             map[string]int         // max predictions indexed by subclass
+	maxProfitInvestor          int                    // the investor that had the max profit for this generation
+	GensCompleted              int                    // the current count of the number of generations completed in the simulation
+	SimStats                   []SimulationStatistics // keep track of what happened
+	SimStart                   time.Time              // timestamp for simulation start
+	SimStop                    time.Time              // timestamp for simulation stop
+	StopTimeSet                bool                   // set to true once SimStop is set. If it's false either the simulation is still in progress or did not complete
 }
 
 // SetAppConfig simply sets the simulators pointer to the AppConfig struct
@@ -67,10 +67,10 @@ func (s *Simulator) GetSimulationRunTime() (string, time.Duration) {
 // Init initializes the simulation system, it also creates Investors and
 // calls their init functions.
 // ----------------------------------------------------------------------------
-func (s *Simulator) Init(cfg *util.AppConfig, dayByDay, iList bool) error {
+func (s *Simulator) Init(cfg *util.AppConfig, dayByDay, dumpTopInvestorInvestments bool) error {
 	s.cfg = cfg
 	s.dayByDay = dayByDay
-	s.iList = iList
+	s.dumpTopInvestorInvestments = dumpTopInvestorInvestments
 	s.factory.Init(s.cfg)
 
 	//------------------------------------------------------------------------
@@ -202,10 +202,11 @@ func (s *Simulator) Run() {
 		//----------------------------------------------------------------------
 		// Compute scores and stats
 		//----------------------------------------------------------------------
+		s.SettleC2Balance()
 		s.CalculateMaxVals()
 		s.CalculateAllFitnessScores()
 		s.SaveStats()
-		if s.iList {
+		if s.dumpTopInvestorInvestments {
 			if err := s.DumpInvestments(&s.Investors[s.maxProfitInvestor]); err != nil {
 				log.Printf("ERROR: DumpInvestments returned: %s\n", err)
 			}
@@ -225,13 +226,23 @@ func (s *Simulator) Run() {
 	s.StopTimeSet = true
 }
 
-// func (s *Simulator) checkWeights() {
-// 	for i := 0; i < len(s.Investors); i++ {
-// 		if s.Investors[i].W1+s.Investors[i].W2 > 1.0 {
-// 			log.Panicf("Weights for Investors[%d] sum to %5.2f\n", i, s.Investors[i].W1+s.Investors[i].W2)
-// 		}
-// 	}
-// }
+// SettleC2Balance - At the end of a simulation, we'll cash out all C2 for
+//
+//	the amount of C1 it gets on the last day of the simulation.
+//
+// RETURNS
+//
+//	nothing at this time
+//
+// ----------------------------------------------------------------------------
+func (s *Simulator) SettleC2Balance() {
+	for i := 0; i < len(s.Investors); i++ {
+		err := s.Investors[i].SettleC2Balance()
+		if err != nil {
+			log.Panicf("SettleC2Balance error from Investor %d: %s\n", i, err)
+		}
+	}
+}
 
 // CalculateAllFitnessScores - calculates values over all the Influncers and Investors
 //
@@ -244,7 +255,8 @@ func (s *Simulator) Run() {
 // ----------------------------------------------------------------------------
 func (s *Simulator) CalculateAllFitnessScores() {
 	//----------------------------------------------------
-	// Investor fitness scores
+	// Investor fitness scores. Then call each Influencer
+	// to compute its score.
 	//----------------------------------------------------
 	for i := 0; i < len(s.Investors); i++ {
 		s.Investors[i].CalculateFitnessScore()
@@ -393,6 +405,7 @@ func (s *Simulator) DumpStats() error {
 	fmt.Fprintf(file, "\"Simulation Time Duration: %s\"\n", util.DateDiffString(a, c))
 	fmt.Fprintf(file, "\"C1: %s\"\n", s.cfg.C1)
 	fmt.Fprintf(file, "\"C2: %s\"\n", s.cfg.C2)
+
 	fmt.Fprintf(file, "\"Generations: %d\"\n", s.GensCompleted)
 	fmt.Fprintf(file, "\"Population: %d\"\n", s.cfg.PopulationSize)
 
@@ -446,6 +459,7 @@ func (s *Simulator) DumpInvestments(inv *Investor) error {
 	fmt.Fprintf(file, "\"Generation: %d\"\n", gen)
 	fmt.Fprintf(file, "\"Initial Funds: %10.2f\"\n", s.cfg.InitFunds)
 	fmt.Fprintf(file, "\"Ending Funds: %10.2f %s\"\n", inv.BalanceC1, inv.cfg.C1)
+	fmt.Fprintf(file, "\"Settled Funds: %10.2f %s  (converted to C1 due to simulation end prior to T4)\"\n", inv.BalanceSettled, inv.cfg.C1)
 	fmt.Fprintf(file, "\"Random Seed: %d\"\n", s.cfg.RandNano)
 
 	//------------------------------------------------------------------------
@@ -453,15 +467,15 @@ func (s *Simulator) DumpInvestments(inv *Investor) error {
 	//------------------------------------------------------------------------
 	s.influencersToCSV(file)
 
-	// the header row                               0     1                     2     3                     4                     5                       6                       7        8
-	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q\n", "T3", "Exchange Rate (T3)", "T4", "Exchange Rate (T4)", "Purchase Amount C1", "Purchase Amount (C2)", "Sell Amount C2 on T4", "T4 C1", "Net C1(T4) - C1(T3)")
+	// the header row                                         0          1                2        3                  4                     5                        6                     7               8                    9       10
+	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q\n", "T3", "Exchange Rate (T3)", "T4", "Exchange Rate (T4)", "Purchase Amount C1", "Purchase Amount (C2)", "Sell Amount C2 on T4", "BalanceC1 (T3)", "BalanceC2 (T3)", "T4 C1", "Net C1(T4) - C1(T3)")
 
 	// investment rows
 	for i := 0; i < len(inv.Investments); i++ {
 		m := inv.Investments[i]
-		//                 0  1     2  3     4     5     6     7     8
-		//                 t3       t4       t3c1  buyc2 sellc2 t4c1, net
-		fmt.Fprintf(file, "%s,%8.2f,%s,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f\n",
+		//                 0  1     2  3     4     5     6     7     8      9    10
+		//                 t3       t4       t3c1  buyc2 sellc2 balc1 balc2   t4c1  net
+		fmt.Fprintf(file, "%s,%8.2f,%s,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f\n",
 			m.T3.Format("1/2/2006"), // 0
 			m.ERT3,                  // 1
 			m.T4.Format("1/2/2006"), // 2
@@ -469,8 +483,10 @@ func (s *Simulator) DumpInvestments(inv *Investor) error {
 			m.T3C1,                  // 4
 			m.BuyC2,                 // 5
 			m.SellC2,                // 6
-			m.T4C1,                  // 7
-			m.T4C1-m.T3C1)           // 8
+			m.BalanceC1,             // 7
+			m.BalanceC2,             // 8
+			m.T4C1,                  // 9
+			m.T4C1-m.T3C1)           // 10
 	}
 	return nil
 }

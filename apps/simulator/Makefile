@@ -12,7 +12,7 @@ dr: *.go
 
 clean:
 	go clean
-	rm -rf simulator data config.json5 SimStats.csv coverage.out
+	rm -rf simulator data config.json5 SimStats.csv coverage.out IList*.csv investorProfile.txt
 	@echo "*** ${THISDIR}: completed clean ***"
 
 test: config.json5 data/platodb.csv

@@ -15,11 +15,11 @@ import (
 )
 
 var app struct {
-	dumpInvestmentList bool
-	dayByDayResults    bool
-	showAllInvestors   bool // adds all investors to the output in the simulation results
-	sim                core.Simulator
-	randNano           int64
+	dumpTopInvestorInvestments bool
+	dayByDayResults            bool
+	showAllInvestors           bool // adds all investors to the output in the simulation results
+	sim                        core.Simulator
+	randNano                   int64
 }
 
 func dateIsInDataRange(a time.Time) string {
@@ -94,15 +94,12 @@ func readCommandLineArgs() {
 	diptr := flag.Bool("i", false, "show all investors in the simulation results")
 	rndptr := flag.Int64("r", -1, "random number seed. ex: ./simulator -r 1687802336231490000")
 	flag.Parse()
-	app.dumpInvestmentList = *stiptr
+	app.dumpTopInvestorInvestments = *stiptr
 	app.dayByDayResults = *dptr
 	app.showAllInvestors = *diptr
 	app.randNano = *rndptr
 }
 func doSimulation() {
-	app.randNano = -1
-
-	readCommandLineArgs()
 	app.randNano = util.Init(app.randNano)
 	cfg, err := util.LoadConfig()
 	if err != nil {
@@ -118,12 +115,12 @@ func doSimulation() {
 	}
 
 	displaySimulationDetails(&cfg)
-	app.sim.Init(&cfg, app.dayByDayResults, app.dumpInvestmentList)
+	app.sim.Init(&cfg, app.dayByDayResults, app.dumpTopInvestorInvestments)
 	app.sim.Run()
 
 	displaySimulationResults(&cfg)
 
-	if app.dumpInvestmentList {
+	if app.dumpTopInvestorInvestments {
 		err := app.sim.ShowTopInvestor()
 		if err != nil {
 			fmt.Printf("Error writing Top Investor profile: %s\n", err.Error())
@@ -132,5 +129,7 @@ func doSimulation() {
 }
 
 func main() {
+	app.randNano = -1
+	readCommandLineArgs()
 	doSimulation()
 }

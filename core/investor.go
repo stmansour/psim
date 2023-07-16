@@ -21,6 +21,7 @@ type Investor struct {
 	factory           *Factory        // used to create Influencers
 	BalanceC1         float64         // total amount of currency C1
 	BalanceC2         float64         // total amount of currency C2
+	BalanceSettled    float64         // amount of C2 converted to C1 because simulation ended before T4 arrived
 	Delta4            int             // t4 = t3 + Delta4 - must be the same Delta4 for all influencers in this investor
 	Investments       []Investment    // a record of all investments made by this investor
 	Influencers       []Influencer    // all the influencerst that advise this Investor
@@ -44,6 +45,8 @@ type Investment struct {
 	id         string    // investment id
 	T3         time.Time // date on which purchase of C2 was made
 	T4         time.Time // date on which C2 will be exchanged for C1
+	BalanceC1  float64   // amount of C1 after exchange on T3
+	BalanceC2  float64   // amount of C2 after exchange on T3
 	T3C1       float64   // amount of C2 to purchase at T3
 	BuyC2      float64   // the amount of currency in C2 that C1 purchased on T3
 	SellC2     float64   // for now, this is always going to be the same as BuyC2
@@ -218,16 +221,20 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 
 		inv.ERT3 = er3.EXClose                     // exchange rate on T3
 		inv.BuyC2 = inv.T3C1 * inv.ERT3            // amount of C2 we purchased on T3
-		i.Investments = append(i.Investments, inv) // add it to the list of investments
 		i.BalanceC1 -= inv.T3C1                    // we spent this much C1...
 		i.BalanceC2 += inv.BuyC2                   // to purchase this much more C2
+		inv.BalanceC1 = i.BalanceC1                // amount of C1 remaining after exchange
+		inv.BalanceC2 = i.BalanceC2                // amount of C2 remaining after exchange
+		i.Investments = append(i.Investments, inv) // add it to the list of investments
 
 		//----------------------------------------------------------------
 		// we need to update each of the Influencers predictions...
 		//         *** ONLY THE BUY PREDICTIONS ARE SAVED ***
 		//----------------------------------------------------------------
 		for j := 0; j < len(i.Influencers); j++ {
-			i.Influencers[j].AppendPrediction(recs[j])
+			if recs[j].Action == "buy" { // did this influencer predict a buy?
+				i.Influencers[j].AppendPrediction(recs[j]) // only save the buy predictions,
+			}
 		}
 	}
 	return BuyCount, nil
@@ -301,6 +308,30 @@ func (i *Investor) SellConversion(t4 time.Time) (int, error) {
 		}
 	}
 	return SellCount, err
+}
+
+// SettleC2Balance - At the end of a simulation, we'll cash out all C2 for
+//
+//	the amount of C1 it gets on the last day of the simulation.
+//
+// RETURNS
+//
+//	any error encountered
+//
+// ----------------------------------------------------------------------------
+func (i *Investor) SettleC2Balance() error {
+	if i.BalanceC2 > 0 {
+		dt := time.Time(i.cfg.DtStop)
+		er4 := data.CSVDBFindRecord(dt) // get the exchange rate on t4
+		if er4 == nil {
+			err := fmt.Errorf("*** ERROR *** SettleC2Balance: ExchangeRate Record for %s not found", dt.Format("1/2/2006"))
+			return err
+		}
+		i.BalanceSettled = i.BalanceC2 / er4.EXClose // convert remaining C2 back to C1
+		i.BalanceC1 += i.BalanceSettled              // remaining C2 cash converted to C1
+		i.BalanceC2 = 0
+	}
+	return nil
 }
 
 // InvestorProfile outputs information about this investor and its influencers
@@ -380,7 +411,9 @@ func (i *Investor) CalculateFitnessScore() float64 {
 		return i.Fitness
 	}
 
-	// Calculate correctness...
+	//-------------------------------------------------------
+	// Calculate correctness.  This will always be >= 0
+	//-------------------------------------------------------
 	correct := 0
 	total := 0
 	jlen := len(i.Investments)

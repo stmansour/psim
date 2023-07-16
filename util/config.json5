@@ -5,8 +5,8 @@
     //-----------------------------------------------------------------
     //  SIMULATOR
     //-----------------------------------------------------------------
-    "DtStart": "2022-01-01",    // simulation start date for each generation
-    "DtStop": "2022-12-31",     // simulation stop date for each generation
+    "DtStart": "2019-01-01",    // simulation start date for each generation
+    "DtStop": "2019-12-31",     // simulation stop date for each generation
     "Generations": 20,          // how many generations should the simulator run
     "PopulationSize": 200,      // Total number Investors in the population
     "C1": "USD",                // main currency  (ISO 4217 code)
