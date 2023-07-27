@@ -32,11 +32,13 @@ type Simulator struct {
 	maxProfitThisRun           float64                // the largest profit made by any investor during this simulation run
 	maxPredictions             map[string]int         // max predictions indexed by subclass
 	maxProfitInvestor          int                    // the investor that had the max profit for this generation
+	maxFitnessScore            float64                // maximum fitness score seen in this generation
 	GensCompleted              int                    // the current count of the number of generations completed in the simulation
 	SimStats                   []SimulationStatistics // keep track of what happened
 	SimStart                   time.Time              // timestamp for simulation start
 	SimStop                    time.Time              // timestamp for simulation stop
 	StopTimeSet                bool                   // set to true once SimStop is set. If it's false either the simulation is still in progress or did not complete
+
 }
 
 // SetAppConfig simply sets the simulators pointer to the AppConfig struct
@@ -93,7 +95,7 @@ func (s *Simulator) NewPopulation() error {
 	//----------------------------------
 	// First generation is random...
 	//----------------------------------
-	if s.GensCompleted == 0 {
+	if s.GensCompleted == 0 || s.maxFitnessScore == 0 {
 		for i := 0; i < s.cfg.PopulationSize; i++ {
 			var v Investor
 			s.Investors = append(s.Investors, v)
@@ -258,12 +260,17 @@ func (s *Simulator) CalculateAllFitnessScores() {
 	// Investor fitness scores. Then call each Influencer
 	// to compute its score.
 	//----------------------------------------------------
+	max := float64(0)
 	for i := 0; i < len(s.Investors); i++ {
-		s.Investors[i].CalculateFitnessScore()
+		x := s.Investors[i].CalculateFitnessScore()
+		if x > max {
+			max = x
+		}
 		for j := 0; j < len(s.Investors[i].Influencers); j++ {
 			s.Investors[i].Influencers[j].CalculateFitnessScore()
 		}
 	}
+	s.maxFitnessScore = max
 }
 
 // CalculateMaxVals - calculates values over all the Influncers and Investors
@@ -349,7 +356,9 @@ func (s *Simulator) SaveStats() {
 			}
 		}
 	}
-	avgProfit = avgProfit / float64(prof) // average profit among the profitable
+	if prof > 0 {
+		avgProfit = avgProfit / float64(prof) // average profit among the profitable
+	}
 
 	//----------------------------------------------------
 	// Compute details about Investor with max profit...
@@ -415,20 +424,27 @@ func (s *Simulator) DumpStats() error {
 	fmt.Fprintf(file, "\"Elapsed Run Time: %s\"\n", et)
 	fmt.Fprintf(file, "\"\"\n")
 
-	// the header row
-	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q\n", "Generation", "Profitable Investors", "Pct Profitable Investors", "Average Profit", "Max Profit", "Total Buys", "Profitable Buys", "Pct Profitable Buys", "Max Profit DNA")
+	// the header row   0  1  2  3  4  5  6  7  8
+	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q\n",
+		//   0         1                       2                           3                 4             5             6                  7                      8
+		"Generation", "Profitable Investors", "Pct Profitable Investors", "Average Profit", "Max Profit", "Total Buys", "Profitable Buys", "Pct Profitable Buys", "Max Profit DNA")
 
 	// investment rows
 	for i := 0; i < len(s.SimStats); i++ {
+		pctProfPred := float64(0)
+		if s.SimStats[i].TotalBuys > 0 {
+			pctProfPred = 100.0 * float64(s.SimStats[i].ProfitableBuys) / float64(s.SimStats[i].TotalBuys)
+		}
 		fmt.Fprintf(file, "%d,%d,%5.1f%%,%8.2f,%8.2f,%d,%d,%4.2f%%,%q\n",
-			i,
-			s.SimStats[i].ProfitableInvestors,
-			100.0*float64(s.SimStats[i].ProfitableInvestors)/float64(s.cfg.PopulationSize),
-			s.SimStats[i].AvgProfit, s.SimStats[i].MaxProfit,
-			s.SimStats[i].TotalBuys,
-			s.SimStats[i].ProfitableBuys,
-			100.0*float64(s.SimStats[i].ProfitableBuys)/float64(s.SimStats[i].TotalBuys),
-			s.SimStats[i].MaxProfigDNA)
+			i,                                 // 0
+			s.SimStats[i].ProfitableInvestors, // 1
+			100.0*float64(s.SimStats[i].ProfitableInvestors)/float64(s.cfg.PopulationSize), // 2
+			s.SimStats[i].AvgProfit,      // 3
+			s.SimStats[i].MaxProfit,      // 4
+			s.SimStats[i].TotalBuys,      // 5
+			s.SimStats[i].ProfitableBuys, // 6
+			pctProfPred,                  // 7
+			s.SimStats[i].MaxProfigDNA)   // 8
 	}
 	return nil
 }

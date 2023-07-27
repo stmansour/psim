@@ -85,7 +85,7 @@ func (i *Investor) Init(cfg *util.AppConfig, f *Factory) {
 	// Create a team of influencers.
 	//------------------------------------------------------------------
 	numInfluencers := util.RandomInRange(1, len(util.InfluencerSubclasses))
-	for j := 0; j < numInfluencers; j++ {
+	for j := 0; (j < numInfluencers) && (len(i.Influencers) < numInfluencers); j++ {
 		subclassOK := false
 		subclass := ""
 		for !subclassOK {

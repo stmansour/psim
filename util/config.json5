@@ -28,7 +28,8 @@
     //  3. Make sure the last line between the square brackets does
     //     not have a comma at the end of the line
     //-----------------------------------------------------------------
-      // "IRInfluencer",
+    
+    // "IRInfluencer",
     "InfluencerSubclasses": [
       "CCInfluencer",
       "DRInfluencer",

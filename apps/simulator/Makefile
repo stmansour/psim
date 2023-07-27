@@ -12,13 +12,16 @@ dr: *.go
 
 clean:
 	go clean
-	rm -rf simulator data config.json5 SimStats.csv coverage.out IList*.csv investorProfile.txt
+	rm -rf simulator data c*.json5 config.bak SimStats.csv coverage.out IList*.csv investorProfile.txt
 	@echo "*** ${THISDIR}: completed clean ***"
 
 test: config.json5 data/platodb.csv
 	@touch $(TEST_FAILURE_FILE)
 	@go test -coverprofile=coverage.out -coverpkg=../../... && rm -f $(TEST_FAILURE_FILE)
 	@echo "*** ${THISDIR}: completed test ***"
+
+itest: config.json5 data/platodb.csv
+	./genconfigs.sh
 
 coverage:
 	go tool cover -html=coverage.out 
