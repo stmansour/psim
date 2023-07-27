@@ -154,6 +154,12 @@ func LoadCsvDB() error {
 		// }
 		// jpDiscountRate /= 100
 
+		CCRatio, err := strconv.ParseFloat(line[DInfo.CSVMap["CCRatio"]], 64)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
 		DRRatio, err := strconv.ParseFloat(line[DInfo.CSVMap["DRRatio"]], 64)
 		if err != nil {
 			fmt.Println(err)
@@ -182,6 +188,7 @@ func LoadCsvDB() error {
 			Date: date,
 			// USDiscountRate: usDiscountRate,
 			// JPDiscountRate: jpDiscountRate,
+			CCRatio: CCRatio,
 			DRRatio: DRRatio,
 			EXClose: EXClose,
 			MSRatio: MSRatio,

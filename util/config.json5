@@ -23,8 +23,8 @@
     //-----------------------------------------------------------------
     "InfluencerSubclasses": [
       "CCInfluencer",
-      "DRInfluencer",
-      "URInfluencer",
+      // "DRInfluencer",
+      // "URInfluencer",
       // "IRInfluencer",
       "MSInfluencer"
     ],
