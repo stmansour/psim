@@ -605,6 +605,15 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 	}
 
 	switch subclassName {
+	case "CCInfluencer":
+		cri := CCInfluencer{
+			Delta1: Delta1,
+			Delta2: Delta2,
+			Delta4: Delta4,
+			cfg:    f.cfg,
+		}
+		return &cri, nil
+
 	case "DRInfluencer":
 		dri := DRInfluencer{
 			Delta1: Delta1,

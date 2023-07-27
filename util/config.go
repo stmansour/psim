@@ -66,6 +66,10 @@ type FileConfig struct {
 	MaxInf               int        // maximum number of influencers for any Investor
 	MinInf               int        // minimum number of influencers for any Investor
 	InfluencerSubclasses []string   // valid Influencer subclasses for this simulation
+	CCMinDelta1          int        // negative integer, most number of days prior to T3 for Influencer research to begin
+	CCMaxDelta1          int        // negative integer, fewest number of days prior to T3 for Invfluencer research to begin
+	CCMinDelta2          int        // research boundary
+	CCMaxDelta2          int        // research boundary
 	DRMinDelta1          int        // negative integer, most number of days prior to T3 for Influencer research to begin
 	DRMaxDelta1          int        // negative integer, fewest number of days prior to T3 for Invfluencer research to begin
 	DRMinDelta2          int        // research boundary
@@ -84,6 +88,8 @@ type FileConfig struct {
 	MSMaxDelta2          int        // research boundary
 	MinDelta4            int        // closest to t3 that t4 can be
 	MaxDelta4            int        // furthest out from t3 that t4 can be
+	CCW1                 float64    // weighting in fitness calculation
+	CCW2                 float64    // weighting in fitness calculation
 	DRW1                 float64    // weighting in fitness calculation
 	DRW2                 float64    // weighting in fitness calculation
 	IRW1                 float64    // weighting in fitness calculation
@@ -267,6 +273,7 @@ func CreateTestingCFG() *AppConfig {
 		MutationRate:   1,       // percentage number, from 1 - 100, what percent of the time does mutation occur
 		DBSource:       "CSV",   // {CSV | Database | OnlineService}
 		InfluencerSubclasses: []string{ // default case is to enable all Influencer subclasses
+			"CCInfluencer",
 			"DRInfluencer",
 			"IRInfluencer",
 			"MSInfluencer",
@@ -275,13 +282,13 @@ func CreateTestingCFG() *AppConfig {
 	}
 
 	InfluencerSubclasses = []string{
+		"CCInfluencer",
 		"DRInfluencer",
 		"IRInfluencer",
 		"MSInfluencer",
 		"URInfluencer",
 	}
-	// DtStart: "2022-01-01", // simulation start date for each generation
-	// DtStop: "2022-12-31",  // simulation stop date for each generation
+
 	cfg.DtStart = CustomDate(dt1)
 	cfg.DtStop = CustomDate(dt2)
 

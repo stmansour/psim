@@ -45,6 +45,7 @@ type DRInfo struct {
 //              JPY Japanese Yen
 //
 //  DataType - use a 2 letter identifier:
+//      CC = Consumer Confidence
 //      DR = Discount Rate
 //      IR = Inflation Rate
 //      UR = Unemployment Rate
@@ -87,7 +88,7 @@ func LoadCsvDB() error {
 	//-------------------------------------------------------
 	// Here are the types of data the influencers support...
 	//-------------------------------------------------------
-	DInfo.DTypes = []string{"EXClose", "DRRatio", "MSRatio", "URRatio"}
+	DInfo.DTypes = []string{"CCRatio", "EXClose", "DRRatio", "MSRatio", "URRatio"}
 
 	//----------------------------------------------------------------------
 	// Keep track of the column with the data needed for each ratio.  This
