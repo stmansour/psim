@@ -30,6 +30,16 @@
     ],
 
     //-----------------------------------------------------------------
+    //  CC - Consumer Confidence
+    //-----------------------------------------------------------------
+    "CCMinDelta1": -180,        // greatest amount of time prior to T3 that T1 can be
+    "CCMaxDelta1": -90,         // least amount of time prior to T3 that T1 can be
+    "CCMinDelta2": -60,         // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "CCMaxDelta2": -30,         // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "CCW1": 0.6,                // DRInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: DRW1 + DRW2 = 1.0
+    "CCW2": 0.4,                // DRInfluencer Fitness Score weighting for number of predictions made. Constraint: DRW1 + DRW2 = 1.0
+
+    //-----------------------------------------------------------------
     //  DR - Discount Rate
     //-----------------------------------------------------------------
     "DRMinDelta1": -30,         // greatest amount of time prior to T3 that T1 can be

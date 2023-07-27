@@ -293,6 +293,12 @@ func CreateTestingCFG() *AppConfig {
 	cfg.DtStop = CustomDate(dt2)
 
 	mapper := map[string]InfluencerSubclassInfo{
+		"CC": {
+			MinDelta1: -180,
+			MaxDelta1: -90,
+			MinDelta2: -50,
+			MaxDelta2: -20,
+		},
 		"DR": {
 			MinDelta1: -30,
 			MaxDelta1: -7,
