@@ -18,14 +18,21 @@
 
     //-----------------------------------------------------------------
     //  INFLUENCER SUBCLASSES
-    //  Comment out the subclasses you don't want in the simulation (insert double slashes // at the beginning )
-    //  Uncomment subclasses you want in the simulation (remove the double slashes //)
+    //  1. Comment out the subclasses you don't want in the simulation
+    //     (insert double slashes // at the beginning of the lines 
+    //     containing the influencers you want to remove, then move them
+    //     outside of the square brackets [])
+    //  2. Uncomment subclasses you want in the simulation (remove the
+    //     double slashes //) and move them in the lines between the
+    //     square brackets 
+    //  3. Make sure the last line between the square brackets does
+    //     not have a comma at the end of the line
     //-----------------------------------------------------------------
+      // "IRInfluencer",
     "InfluencerSubclasses": [
       "CCInfluencer",
-      // "DRInfluencer",
-      // "URInfluencer",
-      // "IRInfluencer",
+      "DRInfluencer",
+      "URInfluencer",
       "MSInfluencer"
     ],
 
