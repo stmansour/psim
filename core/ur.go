@@ -168,9 +168,10 @@ func (p *URInfluencer) DNA() string {
 //
 // ---------------------------------------------------------------------------
 func (p *URInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
-	return getPrediction(t3, p.Delta1, p.Delta2, func(rec1, rec2 *data.RatesAndRatiosRecord) float64 {
-		return rec1.URRatio - rec2.URRatio
-	})
+	return getPrediction(t3, p.Delta1, p.Delta2, func(rec1, rec2 *data.RatesAndRatiosRecord) (float64, float64, float64) {
+		return rec1.URRatio, rec2.URRatio, rec1.URRatio - rec2.URRatio
+	},
+		p.cfg.InfPredDebug)
 }
 
 // CalculateFitnessScore - See explanation in common.go calculateFitnessScore

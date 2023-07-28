@@ -17,7 +17,12 @@ func TestConfig(t *testing.T) {
 		t.Errorf("ValidateConfig failed: %s", err)
 	}
 
+	cfg.InfluencerSubclasses = append(cfg.InfluencerSubclasses, "URInfluencer,")
+	if err := ValidateConfig(cfg); err == nil {
+		t.Errorf("ValidateConfig failed: %q is not a valid Influencer subclass", "URInfluencer,")
+	}
 }
+
 func TestLoadConfig(t *testing.T) {
 	Init(-1)
 	cfg, err := LoadConfig()

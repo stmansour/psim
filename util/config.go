@@ -27,6 +27,16 @@ type InfluencerSubclassInfo struct {
 	FitnessW2 float64 // weight for activity
 }
 
+// ValidInfluencerSubclasses anything other than these values is an error
+// ---------------------------------------------------------------------------
+var ValidInfluencerSubclasses = []string{
+	"CCInfluencer",
+	"DRInfluencer",
+	"IRInfluencer",
+	"MSInfluencer",
+	"URInfluencer",
+}
+
 // InfluencerSubclasses is an array of strings with all the subclasses of
 // Influencer that the factory knows how to create.
 // ---------------------------------------------------------------------------
@@ -134,6 +144,7 @@ type AppConfig struct {
 	DBSource             string                            // {CSV | Database | OnlineService}
 	InfluencerSubclasses []string                          // allowable Influencer subclasses for this run
 	RandNano             int64                             // random number seed used for this simulation
+	InfPredDebug         bool                              // print debug info about every prediction
 }
 
 func hasPrefix(tag string, prefixes []string, mod string) bool {
@@ -164,6 +175,7 @@ func LoadConfig() (AppConfig, error) {
 		return cfg, fmt.Errorf("failed to read config file: %v", err)
 	}
 
+	//-------------------------------------
 	// read into our config struct
 	//-------------------------------------
 	err = json5.Unmarshal(byteValue, &cfg)
@@ -171,6 +183,7 @@ func LoadConfig() (AppConfig, error) {
 		return cfg, fmt.Errorf("failed to unmarshal config data into cfg: %v", err)
 	}
 
+	//------------------------------------------------------
 	// now read into fcfg to pick up the other values...
 	//------------------------------------------------------
 	err = json5.Unmarshal(byteValue, &fcfg)
@@ -178,6 +191,7 @@ func LoadConfig() (AppConfig, error) {
 		return cfg, fmt.Errorf("failed to unmarshal config data into fcfg: %v", err)
 	}
 
+	//--------------------------------------------------------
 	// First thing to do is set the InfluencerSubclasses...
 	//--------------------------------------------------------
 	InfluencerSubclasses = fcfg.InfluencerSubclasses

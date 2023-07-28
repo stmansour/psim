@@ -96,6 +96,7 @@ func (s *Simulator) NewPopulation() error {
 	// First generation is random...
 	//----------------------------------
 	if s.GensCompleted == 0 || s.maxFitnessScore == 0 {
+		s.Investors = make([]Investor, 0)
 		for i := 0; i < s.cfg.PopulationSize; i++ {
 			var v Investor
 			s.Investors = append(s.Investors, v)
@@ -144,6 +145,10 @@ func (s *Simulator) Run() {
 			iteration++
 			SellCount := 0
 			BuyCount := 0
+
+			if len(s.Investors) > s.cfg.PopulationSize {
+				log.Panicf("Population size should be %d, len(Investors) = %d", s.cfg.PopulationSize, len(s.Investors))
+			}
 
 			//-----------------------------------------
 			// Call SellConversion for each investor
@@ -420,7 +425,11 @@ func (s *Simulator) DumpStats() error {
 
 	s.influencersToCSV(file)
 
-	fmt.Fprintf(file, "\"Observed Mutation Rate: %6.3f%%\"\n", 100.0*float64(s.factory.Mutations)/float64(s.factory.MutateCalls))
+	omr := float64(0)
+	if s.factory.MutateCalls > 0 {
+		omr = 100.0 * float64(s.factory.Mutations) / float64(s.factory.MutateCalls)
+	}
+	fmt.Fprintf(file, "\"Observed Mutation Rate: %6.3f%%\"\n", omr)
 	fmt.Fprintf(file, "\"Elapsed Run Time: %s\"\n", et)
 	fmt.Fprintf(file, "\"\"\n")
 

@@ -20,6 +20,7 @@ var app struct {
 	showAllInvestors           bool // adds all investors to the output in the simulation results
 	sim                        core.Simulator
 	randNano                   int64
+	InfPredDebug               bool
 }
 
 func dateIsInDataRange(a time.Time) string {
@@ -74,9 +75,13 @@ func displaySimulationDetails(cfg *util.AppConfig) {
 
 func displaySimulationResults(cfg *util.AppConfig) {
 	f := app.sim.GetFactory()
+	omr := float64(0)
+	if f.MutateCalls > 0 {
+		omr = 100.0 * float64(f.Mutations) / float64(f.MutateCalls)
+	}
 	fmt.Printf("\n**************  S I M U L A T I O N   R E S U L T S  **************\n")
 	fmt.Printf("Number of generations: %d\n", app.sim.GensCompleted)
-	fmt.Printf("Observed Mutation Rate: %6.3f%%\n", 100.0*float64(f.Mutations)/float64(f.MutateCalls))
+	fmt.Printf("Observed Mutation Rate: %6.3f%%\n", omr)
 	s, _ := app.sim.GetSimulationRunTime()
 	fmt.Printf("Elapsed time: %s\n", s)
 	err := (&app.sim).DumpStats()
@@ -90,6 +95,7 @@ func displaySimulationResults(cfg *util.AppConfig) {
 
 func readCommandLineArgs() {
 	dptr := flag.Bool("d", false, "show day-by-day results")
+	Dptr := flag.Bool("D", false, "show prediction debug info - dumps a lot of data, use on short simulations, with minimal Influencers")
 	stiptr := flag.Bool("t", false, "for each generation, write top investor Investment List to IList-Gen-n.csv")
 	diptr := flag.Bool("i", false, "show all investors in the simulation results")
 	rndptr := flag.Int64("r", -1, "random number seed. ex: ./simulator -r 1687802336231490000")
@@ -98,13 +104,16 @@ func readCommandLineArgs() {
 	app.dayByDayResults = *dptr
 	app.showAllInvestors = *diptr
 	app.randNano = *rndptr
+	app.InfPredDebug = *Dptr
 }
+
 func doSimulation() {
 	app.randNano = util.Init(app.randNano)
 	cfg, err := util.LoadConfig()
 	if err != nil {
 		log.Fatalf("failed to read config file: %v", err)
 	}
+	cfg.InfPredDebug = app.InfPredDebug
 	if err = util.ValidateConfig(&cfg); err != nil {
 		fmt.Printf("Please fix errors in the simulator configuration file, config.json5, and try again\n")
 		os.Exit(1)

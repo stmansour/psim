@@ -11,19 +11,20 @@ import (
 // RatioFunc is a type used by the GetPrediction method of Influencer subclasses.
 // It returns the metric ratio for the subclass's specific metrics.
 // -----------------------------------------------------------------------------------
-type RatioFunc func(*data.RatesAndRatiosRecord, *data.RatesAndRatiosRecord) float64
+type RatioFunc func(*data.RatesAndRatiosRecord, *data.RatesAndRatiosRecord) (float64, float64, float64)
 
 // getPrediction - using the supplied date, it researches data and makes
 // a prediction on whther to "buy" or "hold"
 //
 // RETURNS
 //
-//	action     -  "buy" or "hold"
-//	prediction - probability of correctness - most valid for "buy" action
-//	error      - nil on success, error encountered otherwise
+//		action     -  "buy" or "hold"
+//		prediction - probability of correctness - most valid for "buy" action
+//		error      - nil on success, error encountered otherwise
+//	 dbg        - print date, numbers, dRR, and prediction
 //
 // ---------------------------------------------------------------------------
-func getPrediction(t3 time.Time, delta1 int, delta2 int, f RatioFunc) (string, float64, error) {
+func getPrediction(t3 time.Time, delta1 int, delta2 int, f RatioFunc, dbg bool) (string, float64, error) {
 	t1 := t3.AddDate(0, 0, delta1)
 	t2 := t3.AddDate(0, 0, delta2)
 
@@ -38,13 +39,16 @@ func getPrediction(t3 time.Time, delta1 int, delta2 int, f RatioFunc) (string, f
 		return "hold", 0, err
 	}
 
-	dRR := f(rec1, rec2)
+	d1, d2, dRR := f(rec1, rec2)
 
 	prediction := "hold"
 	if dRR > 0 {
 		prediction = "buy"
 	}
 
+	if dbg {
+		fmt.Printf("%s: ratio(t1) = %5.2f, ratio(t2) = %5.2f, dRR = %5.2f, prediction = %s\n", t3.Format("01/02/2006"), d1, d2, dRR, prediction)
+	}
 	// todo - return proper probability
 	return prediction, 0.5, nil
 }

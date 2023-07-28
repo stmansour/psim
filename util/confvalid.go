@@ -103,5 +103,19 @@ func ValidateConfig(cfg *AppConfig) error {
 		fmt.Printf("** Configuration Error **  %s\n", err)
 	}
 
+	// Create a map for quick lookup of valid influencer subclasses
+	validMap := make(map[string]bool)
+	for _, subclass := range ValidInfluencerSubclasses {
+		validMap[subclass] = true
+	}
+
+	// Validate the influencer subclasses
+	for _, subclass := range cfg.InfluencerSubclasses {
+		if !validMap[subclass] {
+			err = fmt.Errorf("invalid Influencer subclass: %q", subclass)
+			fmt.Printf("** Configuration Error **  %s\n", err)
+		}
+	}
+
 	return err
 }

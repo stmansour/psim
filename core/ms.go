@@ -168,9 +168,10 @@ func (p *MSInfluencer) DNA() string {
 //
 // ---------------------------------------------------------------------------
 func (p *MSInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
-	return getPrediction(t3, p.Delta1, p.Delta2, func(rec1, rec2 *data.RatesAndRatiosRecord) float64 {
-		return rec1.MSRatio - rec2.MSRatio
-	})
+	return getPrediction(t3, p.Delta1, p.Delta2, func(rec1, rec2 *data.RatesAndRatiosRecord) (float64, float64, float64) {
+		return rec1.MSRatio, rec2.MSRatio, rec1.MSRatio - rec2.MSRatio
+	},
+		p.cfg.InfPredDebug)
 }
 
 // CalculateFitnessScore - See explanation in common.go calculateFitnessScore

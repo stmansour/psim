@@ -53,7 +53,7 @@ check_tests:
 
 package:
 	for dir in $(DIRS); do make -C $$dir package;done
-	cd dist ; tar cvf platosim.tar platosim ; gzip platosim.tar
+	cd dist ; rm -f platosim.tar* ; tar cvf platosim.tar platosim ; gzip platosim.tar
 
 all: clean psim package test
 	@echo "Completed"

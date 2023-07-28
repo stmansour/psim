@@ -180,9 +180,10 @@ func (p *CCInfluencer) DNA() string {
 // ---------------------------------------------------------------------------
 func (p *CCInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
 	return getPrediction(t3, p.Delta1, p.Delta2,
-		func(rec1, rec2 *data.RatesAndRatiosRecord) float64 {
-			return rec1.CCRatio - rec2.CCRatio
-		})
+		func(rec1, rec2 *data.RatesAndRatiosRecord) (float64, float64, float64) {
+			return rec1.CCRatio, rec2.CCRatio, rec1.CCRatio - rec2.CCRatio
+		},
+		p.cfg.InfPredDebug)
 }
 
 // CalculateFitnessScore - See explanation in common.go calculateFitnessScore
