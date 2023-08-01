@@ -47,7 +47,7 @@ type DRInfo struct {
 //  DataType - use a 2 letter identifier:
 //      CC = Consumer Confidence
 //      DR = Discount Rate
-//		GD = Government Debt to GDP
+//      GD = Government Debt to GDP
 //      IR = Inflation Rate
 //      UR = Unemployment Rate
 //      EX = Exchange Rate -- can be appended with "Open", "Low", "High", "Close"
