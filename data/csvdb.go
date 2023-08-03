@@ -89,7 +89,7 @@ func LoadCsvDB() error {
 	//-------------------------------------------------------
 	// Here are the types of data the influencers support...
 	//-------------------------------------------------------
-	DInfo.DTypes = []string{"CCRatio", "EXClose", "DRRatio", "MSRatio", "URRatio"}
+	DInfo.DTypes = []string{"CCRatio", "EXClose", "DRRatio", "GDRatio", "MSRatio", "URRatio"}
 
 	//----------------------------------------------------------------------
 	// Keep track of the column with the data needed for each ratio.  This

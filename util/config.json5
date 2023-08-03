@@ -33,6 +33,7 @@
     "InfluencerSubclasses": [
       "CCInfluencer",
       "DRInfluencer",
+      "GDInfluencer",
       "URInfluencer",
       "MSInfluencer"
     ],
@@ -56,6 +57,16 @@
     "DRMaxDelta2": -1,          // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
     "DRW1": 0.6,                // DRInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: DRW1 + DRW2 = 1.0
     "DRW2": 0.4,                // DRInfluencer Fitness Score weighting for number of predictions made. Constraint: DRW1 + DRW2 = 1.0
+
+    //-----------------------------------------------------------------
+    //  GD - Discount Rate
+    //-----------------------------------------------------------------
+    "GDMinDelta1": -730,        // greatest amount of time prior to T3 that T1 can be
+    "GDMaxDelta1": -630,        // least amount of time prior to T3 that T1 can be
+    "GDMinDelta2": -180,        // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "GDMaxDelta2": -120,        // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "GDW1": 0.6,                // GDInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: GDW1 + GDW2 = 1.0
+    "GDW2": 0.4,                // GDInfluencer Fitness Score weighting for number of predictions made. Constraint: GDW1 + GDW2 = 1.0
 
     //-----------------------------------------------------------------
     //  IR - Inflation Rate

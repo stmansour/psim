@@ -32,6 +32,7 @@ type InfluencerSubclassInfo struct {
 var ValidInfluencerSubclasses = []string{
 	"CCInfluencer",
 	"DRInfluencer",
+	"GDInfluencer",
 	"IRInfluencer",
 	"MSInfluencer",
 	"URInfluencer",
@@ -84,6 +85,10 @@ type FileConfig struct {
 	DRMaxDelta1          int        // negative integer, fewest number of days prior to T3 for Invfluencer research to begin
 	DRMinDelta2          int        // research boundary
 	DRMaxDelta2          int        // research boundary
+	GDMinDelta1          int        // negative integer, most number of days prior to T3 for Influencer research to begin
+	GDMaxDelta1          int        // negative integer, fewest number of days prior to T3 for Invfluencer research to begin
+	GDMinDelta2          int        // research boundary
+	GDMaxDelta2          int        // research boundary
 	URMinDelta1          int        // research boundary
 	URMaxDelta1          int        // research boundary
 	URMinDelta2          int        // research boundary
@@ -102,6 +107,8 @@ type FileConfig struct {
 	CCW2                 float64    // weighting in fitness calculation
 	DRW1                 float64    // weighting in fitness calculation
 	DRW2                 float64    // weighting in fitness calculation
+	GDW1                 float64    // weighting in fitness calculation
+	GDW2                 float64    // weighting in fitness calculation
 	IRW1                 float64    // weighting in fitness calculation
 	IRW2                 float64    // weighting in fitness calculation
 	MSW1                 float64    // weighting in fitness calculation
@@ -289,6 +296,7 @@ func CreateTestingCFG() *AppConfig {
 		InfluencerSubclasses: []string{ // default case is to enable all Influencer subclasses
 			"CCInfluencer",
 			"DRInfluencer",
+			"GDInfluencer",
 			"IRInfluencer",
 			"MSInfluencer",
 			"URInfluencer",
@@ -298,6 +306,7 @@ func CreateTestingCFG() *AppConfig {
 	InfluencerSubclasses = []string{
 		"CCInfluencer",
 		"DRInfluencer",
+		"GDInfluencer",
 		"IRInfluencer",
 		"MSInfluencer",
 		"URInfluencer",
@@ -319,17 +328,23 @@ func CreateTestingCFG() *AppConfig {
 			MinDelta2: -6,
 			MaxDelta2: -1,
 		},
-		"MS": {
-			MinDelta1: -180,
-			MaxDelta1: -90,
-			MinDelta2: -50,
-			MaxDelta2: -20,
+		"GD": {
+			MinDelta1: -730,
+			MaxDelta1: -630,
+			MinDelta2: -180,
+			MaxDelta2: -120,
 		},
 		"IR": {
 			MinDelta1: -180,
 			MaxDelta1: -90,
 			MinDelta2: -60,
 			MaxDelta2: -30,
+		},
+		"MS": {
+			MinDelta1: -180,
+			MaxDelta1: -90,
+			MinDelta2: -50,
+			MaxDelta2: -20,
 		},
 		"UR": {
 			MinDelta1: -180,

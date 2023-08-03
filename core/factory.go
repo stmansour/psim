@@ -622,6 +622,14 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 			cfg:    f.cfg,
 		}
 		return &dri, nil
+	case "GDInfluencer":
+		dri := GDInfluencer{
+			Delta1: Delta1,
+			Delta2: Delta2,
+			Delta4: Delta4,
+			cfg:    f.cfg,
+		}
+		return &dri, nil
 	case "IRInfluencer":
 		iri := IRInfluencer{
 			Delta1: Delta1,

@@ -3,6 +3,7 @@
 influencers=(
     "CCInfluencer"
     "DRInfluencer"
+    "GDInfluencer"
     "URInfluencer"
     "MSInfluencer"
 )

@@ -46,10 +46,21 @@ func DoIt(filename string) {
 		os.Exit(1)
 	}
 
+	//----------------------------------------
+	// find the last useful record...
+	//----------------------------------------
+	last := len(records) - 1
+	for i := last; i > 0; i-- {
+		if len(records[i][0]) > 0 {
+			last = i
+			break
+		}
+	}
+
 	// check for a null last entry...
 	//-----------------------------------------
 	if len(records[len(records)-1][0]) == 0 {
-		records = records[0 : len(records)-2]
+		records = records[0:last]
 	}
 	d2, err = util.StringToDate(records[len(records)-1][0])
 	if err != nil {

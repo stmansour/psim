@@ -26,6 +26,7 @@ type RatesAndRatiosRecord struct {
 	// JPDiscountRate float64
 	CCRatio float64
 	DRRatio float64
+	GDRatio float64
 	IRRatio float64
 	MSRatio float64
 	URRatio float64
