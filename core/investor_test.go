@@ -40,13 +40,7 @@ func TestInvestorDNA(t *testing.T) {
 	ir.Init(&v, cfg, v.Delta4)
 
 	v.Influencers = []Influencer{&dr, &ir}
-
-	// drDNA := dr.DNA()
-	// util.DPrintf("drDNA = %s\n", drDNA)
-	// irDNA := ir.DNA()
-	// util.DPrintf("irDNA = %s\n", irDNA)
 	InvestorDNA := v.DNA()
-	// util.DPrintf("InvestorDNA = %s\n", InvestorDNA)
 
 	expected := "{Investor;Delta4=4;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-30,Delta2=-2,Delta4=4}|{IRInfluencer,Delta1=-17,Delta2=-3,Delta4=4}]}"
 	if InvestorDNA != expected {

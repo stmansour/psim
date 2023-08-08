@@ -141,60 +141,46 @@ func LoadCsvDB() error {
 			os.Exit(1)
 		}
 
-		// usDiscountRate, err := strconv.ParseFloat(strings.TrimSuffix(line[1], "%"), 64)
-		// if err != nil {
-		// 	fmt.Println(err)
-		// 	os.Exit(1)
-		// }
-		// usDiscountRate /= 100
+		// EXClose float64 // valid if FLAGS & 0 is != 0
+		// CCRatio float64 // valid if FLAGS & 1 is != 0
+		// DRRatio float64 // valid if FLAGS & 2 is != 0
+		// GDRatio float64 // valid if FLAGS & 3 is != 0
+		// IRRatio float64 // valid if FLAGS & 4 is != 0
+		// MSRatio float64 // valid if FLAGS & 5 is != 0
+		// URRatio float64 // valid if FLAGS & 6 is != 0
 
-		// jpDiscountRate, err := strconv.ParseFloat(strings.TrimSuffix(line[2], "%"), 64)
-		// if err != nil {
-		// 	fmt.Println(err)
-		// 	os.Exit(1)
-		// }
-		// jpDiscountRate /= 100
+		FLAGS := uint64(0) // assume no info exists
 
-		CCRatio, err := strconv.ParseFloat(line[DInfo.CSVMap["CCRatio"]], 64)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+		EXClose, exists := getNamedFloat("EXClose", line, 0)
+		FLAGS |= exists
 
-		DRRatio, err := strconv.ParseFloat(line[DInfo.CSVMap["DRRatio"]], 64)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+		CCRatio, exists := getNamedFloat("CCRatio", line, 1)
+		FLAGS |= exists
 
-		EXClose, err := strconv.ParseFloat(line[DInfo.CSVMap["EXClose"]], 64)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+		DRRatio, exists := getNamedFloat("DRRatio", line, 2)
+		FLAGS |= exists
 
-		MSRatio, err := strconv.ParseFloat(line[DInfo.CSVMap["MSRatio"]], 64)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+		GDRatio, exists := getNamedFloat("GDRatio", line, 3)
+		FLAGS |= exists
 
-		URRatio, err := strconv.ParseFloat(line[DInfo.CSVMap["URRatio"]], 64)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+		IRRatio, exists := getNamedFloat("IRRatio", line, 4)
+		FLAGS |= exists
+
+		MSRatio, exists := getNamedFloat("MSRatio", line, 5)
+		FLAGS |= exists
+
+		URRatio, exists := getNamedFloat("URRatio", line, 6)
+		FLAGS |= exists
 
 		records = append(records, RatesAndRatiosRecord{
-			Date: date,
-			// USDiscountRate: usDiscountRate,
-			// JPDiscountRate: jpDiscountRate,
+			Date:    date,
 			CCRatio: CCRatio,
 			DRRatio: DRRatio,
 			EXClose: EXClose,
+			GDRatio: GDRatio,
+			IRRatio: IRRatio,
 			MSRatio: MSRatio,
 			URRatio: URRatio,
-			// IRRatio: IRRatio,
 		})
 	}
 
@@ -204,6 +190,41 @@ func LoadCsvDB() error {
 	DInfo.DtStart = DInfo.DBRecs[0].Date
 	DInfo.DtStop = DInfo.DBRecs[l-1].Date
 	return nil
+}
+
+// getNamedFloat - centralize a bunch of lines that would need to be
+//
+//	repeated for every column of data without this func.
+//
+// INPUTS
+//
+//	val = name of data column
+//	line = array of strings -- parsed csv input line
+//	bitpos = bit position in FLAGS for this particular column
+//
+// RETURNS
+// float64 = the ratio if it exists, value is only valid if bool is true
+// uint64  = a flag in bitpos - if 1 it means that the value is valid, 0
+//
+//	means the value was not supplied.
+//
+// --------------------------------------------------------------------------
+func getNamedFloat(val string, line []string, bitpos int) (float64, uint64) {
+	var flags uint64
+	key, exists := DInfo.CSVMap[val]
+	if !exists {
+		return 0, 0
+	}
+	s := line[key]
+	if s == "" {
+		return 0, 0
+	}
+	ratio, err := strconv.ParseFloat(s, 64)
+	if err != nil {
+		log.Panicf("getNamedFloat: invalid value: %q, err = %s\n", val, err)
+	}
+	flags |= 1 << bitpos
+	return ratio, flags
 }
 
 func validCurrencyPair(line string) bool {
