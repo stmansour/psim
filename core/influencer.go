@@ -39,6 +39,9 @@ type Influencer interface {
 	GetDelta1() int
 	GetDelta2() int
 	GetDelta4() int
+	GetFlagPos() int
+	GetNilDataCount() int
+	IncNilDataCount()
 	DNA() string
 
 	CalculateFitnessScore() float64

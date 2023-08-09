@@ -14,7 +14,16 @@ import (
 type RatioFunc func(*data.RatesAndRatiosRecord, *data.RatesAndRatiosRecord) (float64, float64, float64)
 
 // getPrediction - using the supplied date, it researches data and makes
-// a prediction on whther to "buy" or "hold"
+//
+//	a prediction on whther to "buy" or "hold".  This consolidates the
+//	same code used by all Influencers
+//
+// INPUTS
+//
+//	    t3 - date of the transaction
+//	delta1 = # days prior to t3 to begin research
+//	delta2 = # days prior to t3 to end research
+//	bitpos = bit position of valid data flag for this Influencer
 //
 // RETURNS
 //
@@ -24,9 +33,9 @@ type RatioFunc func(*data.RatesAndRatiosRecord, *data.RatesAndRatiosRecord) (flo
 //	 dbg        - print date, numbers, dRR, and prediction
 //
 // ---------------------------------------------------------------------------
-func getPrediction(t3 time.Time, delta1 int, delta2 int, f RatioFunc, dbg bool) (string, float64, error) {
-	t1 := t3.AddDate(0, 0, delta1)
-	t2 := t3.AddDate(0, 0, delta2)
+func getPrediction(t3 time.Time, p Influencer, f RatioFunc, dbg bool) (string, float64, error) {
+	t1 := t3.AddDate(0, 0, p.GetDelta1())
+	t2 := t3.AddDate(0, 0, p.GetDelta2())
 
 	rec1 := data.CSVDBFindRecord(t1)
 	if rec1 == nil {
@@ -36,6 +45,12 @@ func getPrediction(t3 time.Time, delta1 int, delta2 int, f RatioFunc, dbg bool) 
 	rec2 := data.CSVDBFindRecord(t2)
 	if rec2 == nil {
 		err := fmt.Errorf("data.RatesAndRatiosRecord for %s not found", t2.Format("1/2/2006"))
+		return "hold", 0, err
+	}
+	flagpos := p.GetFlagPos()
+
+	if ((rec1.FLAGS & 1 << flagpos) | (rec2.FLAGS & 1 << flagpos)) == 0 {
+		err := fmt.Errorf("nildata")
 		return "hold", 0, err
 	}
 

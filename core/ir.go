@@ -19,6 +19,23 @@ type IRInfluencer struct {
 	Fitness             float64
 	MyPredictions       []Prediction
 	myInvestor          *Investor // my parent, the investor that holds me
+	flagpos             int
+	nilDataCount        int // how many times did we encounter nil data in research
+}
+
+// GetNilDataCount returns the value for nilDataCount
+func (p *IRInfluencer) GetNilDataCount() int {
+	return p.nilDataCount
+}
+
+// IncNilDataCount the bit position of the valid data flag for this Influencer
+func (p *IRInfluencer) IncNilDataCount() {
+	p.nilDataCount++
+}
+
+// GetFlagPos the bit position of the valid data flag for this Influencer
+func (p *IRInfluencer) GetFlagPos() int {
+	return p.flagpos
 }
 
 // GetFitnessScore returns the current value of Fitness
@@ -140,6 +157,7 @@ func (p *IRInfluencer) Init(i *Investor, cfg *util.AppConfig, delta4 int) {
 	p.cfg = cfg
 	p.SetID()
 	p.Delta4 = delta4
+	p.flagpos = 4
 }
 
 // Subclass - a method that returns the Influencer subclass of this object
@@ -168,7 +186,7 @@ func (p *IRInfluencer) DNA() string {
 // ---------------------------------------------------------------------------
 //
 //	func (p *IRInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
-//		return getPrediction(t3, p.Delta1, p.Delta2, func(rec1, rec2 *data.RatesAndRatiosRecord) float64 {
+//		return getPrediction(t3, p, func(rec1, rec2 *data.RatesAndRatiosRecord) float64 {
 //			return rec1.IRRatio - rec2.IRRatio
 //		})
 //	}

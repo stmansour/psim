@@ -181,6 +181,7 @@ func LoadCsvDB() error {
 			IRRatio: IRRatio,
 			MSRatio: MSRatio,
 			URRatio: URRatio,
+			FLAGS:   FLAGS,
 		})
 	}
 

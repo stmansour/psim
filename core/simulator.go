@@ -14,12 +14,13 @@ import (
 // SimulationStatistics contains relevant metrics for each generation simulated
 // ------------------------------------------------------------------
 type SimulationStatistics struct {
-	ProfitableInvestors int     // number of Investors that were profitable in this generation
-	AvgProfit           float64 // avg profitability for profitable Investors in this generation
-	MaxProfit           float64 // largest profit Investor in this generation
-	TotalBuys           int     // total number of "buy" decisions made by the investor
-	ProfitableBuys      int     // total number of buys that were profitable
-	MaxProfigDNA        string  // DNA of the Investor making the highest profit this generation
+	ProfitableInvestors  int     // number of Investors that were profitable in this generation
+	AvgProfit            float64 // avg profitability for profitable Investors in this generation
+	MaxProfit            float64 // largest profit Investor in this generation
+	TotalBuys            int     // total number of "buy" decisions made by the investor
+	ProfitableBuys       int     // total number of buys that were profitable
+	MaxProfigDNA         string  // DNA of the Investor making the highest profit this generation
+	TotalNilDataRequests int     // total number of nildata errors that occurred across all Influencers
 }
 
 // Simulator is a simulator object
@@ -365,6 +366,18 @@ func (s *Simulator) SaveStats() {
 		avgProfit = avgProfit / float64(prof) // average profit among the profitable
 	}
 
+	// Compute the total number of nildata errors across all Influencers
+
+	totNil := 0
+	for j := 0; j < len(s.Investors); j++ {
+		inf := s.Investors[j].Influencers
+		for k := 0; k < len(inf); k++ {
+			if inf[k].GetNilDataCount() > 0 {
+				totNil += inf[k].GetNilDataCount()
+			}
+		}
+	}
+
 	//----------------------------------------------------
 	// Compute details about Investor with max profit...
 	//----------------------------------------------------
@@ -381,12 +394,13 @@ func (s *Simulator) SaveStats() {
 	}
 
 	ss := SimulationStatistics{
-		ProfitableInvestors: prof,
-		AvgProfit:           avgProfit,
-		MaxProfit:           maxProfit,
-		MaxProfigDNA:        maxProfitDNA,
-		TotalBuys:           tot,
-		ProfitableBuys:      pro,
+		ProfitableInvestors:  prof,
+		AvgProfit:            avgProfit,
+		MaxProfit:            maxProfit,
+		MaxProfigDNA:         maxProfitDNA,
+		TotalBuys:            tot,
+		ProfitableBuys:       pro,
+		TotalNilDataRequests: totNil,
 	}
 	s.SimStats = append(s.SimStats, ss)
 }
@@ -424,6 +438,7 @@ func (s *Simulator) DumpStats() error {
 	fmt.Fprintf(file, "\"Population: %d\"\n", s.cfg.PopulationSize)
 
 	s.influencersToCSV(file)
+	// s.influencerMissingData(file)
 
 	omr := float64(0)
 	if s.factory.MutateCalls > 0 {
@@ -433,10 +448,10 @@ func (s *Simulator) DumpStats() error {
 	fmt.Fprintf(file, "\"Elapsed Run Time: %s\"\n", et)
 	fmt.Fprintf(file, "\"\"\n")
 
-	// the header row   0  1  2  3  4  5  6  7  8
-	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q\n",
+	// the header row   0  1  2  3  4  5  6  7  8  9
+	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q,%q\n",
 		//   0         1                       2                           3                 4             5             6                  7                      8
-		"Generation", "Profitable Investors", "Pct Profitable Investors", "Average Profit", "Max Profit", "Total Buys", "Profitable Buys", "Pct Profitable Buys", "Max Profit DNA")
+		"Generation", "Profitable Investors", "Pct Profitable Investors", "Average Profit", "Max Profit", "Total Buys", "Profitable Buys", "Pct Profitable Buys", "Nil Data Requests", "DNA")
 
 	// investment rows
 	for i := 0; i < len(s.SimStats); i++ {
@@ -444,16 +459,17 @@ func (s *Simulator) DumpStats() error {
 		if s.SimStats[i].TotalBuys > 0 {
 			pctProfPred = 100.0 * float64(s.SimStats[i].ProfitableBuys) / float64(s.SimStats[i].TotalBuys)
 		}
-		fmt.Fprintf(file, "%d,%d,%5.1f%%,%8.2f,%8.2f,%d,%d,%4.2f%%,%q\n",
+		fmt.Fprintf(file, "%d,%d,%5.1f%%,%8.2f,%8.2f,%d,%d,%4.2f%%,%d,%q\n",
 			i,                                 // 0
 			s.SimStats[i].ProfitableInvestors, // 1
 			100.0*float64(s.SimStats[i].ProfitableInvestors)/float64(s.cfg.PopulationSize), // 2
-			s.SimStats[i].AvgProfit,      // 3
-			s.SimStats[i].MaxProfit,      // 4
-			s.SimStats[i].TotalBuys,      // 5
-			s.SimStats[i].ProfitableBuys, // 6
-			pctProfPred,                  // 7
-			s.SimStats[i].MaxProfigDNA)   // 8
+			s.SimStats[i].AvgProfit,            // 3
+			s.SimStats[i].MaxProfit,            // 4
+			s.SimStats[i].TotalBuys,            // 5
+			s.SimStats[i].ProfitableBuys,       // 6
+			pctProfPred,                        // 7
+			s.SimStats[i].TotalNilDataRequests, // 8
+			s.SimStats[i].MaxProfigDNA)         // 9
 	}
 	return nil
 }
@@ -518,7 +534,7 @@ func (s *Simulator) DumpInvestments(inv *Investor) error {
 
 // influencersToCSV - single place to call to dump Influencers to CSV file
 // ---------------------------------------------------------------------------
-func (*Simulator) influencersToCSV(file *os.File) {
+func (s *Simulator) influencersToCSV(file *os.File) {
 	t := "Influencers: "
 	fmt.Fprintf(file, "%s", t)
 	n := len(t)
@@ -541,6 +557,39 @@ func (*Simulator) influencersToCSV(file *os.File) {
 	}
 	fmt.Fprintf(file, "\n\n")
 }
+
+// // influencerMissingData - Dump Info regarding any time data was requested
+// //
+// //	by an influencer and got back a nildata error.
+// //
+// // ---------------------------------------------------------------------------
+// func (s *Simulator) influencerMissingData(file *os.File) {
+// 	n := 0 // num of subclasses that encountered missing data
+// 	t := "Missing Data Access: "
+// 	fmt.Fprintf(file, "%s", t)
+
+// 	for i := 0; i < len(util.InfluencerSubclasses); i++ {
+// 		subclass := util.InfluencerSubclasses[i]
+// 		tot := 0
+// 		for j := 0; j < len(s.Investors); j++ {
+// 			inf := s.Investors[j].Influencers
+// 			for k := 0; k < len(inf); k++ {
+// 				if inf[k].Subclass() == subclass && inf[k].GetNilDataCount() > 0 {
+// 					tot += inf[k].GetNilDataCount()
+// 				}
+// 			}
+// 		}
+// 		if tot > 0 {
+// 			n++
+// 			fmt.Fprintf(file, "\n%s: %d", subclass, tot)
+// 		}
+// 	}
+
+// 	if n == 0 {
+// 		fmt.Fprintf(file, "none")
+// 	}
+// 	fmt.Fprintf(file, "\n\n")
+// }
 
 // ShowTopInvestor - dumps the top investor to a file after the simulation.
 //
