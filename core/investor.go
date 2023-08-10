@@ -163,7 +163,9 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 		influencer := i.Influencers[j]
 		prediction, probability, err := influencer.GetPrediction(T3)
 		if err != nil {
-			return BuyCount, err
+			if err.Error() != "nildata" {
+				return BuyCount, err
+			}
 		}
 		recs = append(recs,
 			Prediction{

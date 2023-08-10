@@ -48,8 +48,15 @@ func getPrediction(t3 time.Time, p Influencer, f RatioFunc, dbg bool) (string, f
 		return "hold", 0, err
 	}
 	flagpos := p.GetFlagPos()
+	flagslot := uint64(1 << flagpos)
 
-	if ((rec1.FLAGS & 1 << flagpos) | (rec2.FLAGS & 1 << flagpos)) == 0 {
+	if ((rec1.FLAGS & flagslot) | (rec2.FLAGS & flagslot)) == 0 {
+		if rec1.FLAGS&flagslot == 0 {
+			p.IncNilDataCount()
+		}
+		if rec2.FLAGS&flagslot == 0 {
+			p.IncNilDataCount()
+		}
 		err := fmt.Errorf("nildata")
 		return "hold", 0, err
 	}

@@ -141,13 +141,13 @@ func LoadCsvDB() error {
 			os.Exit(1)
 		}
 
-		// EXClose float64 // valid if FLAGS & 0 is != 0
-		// CCRatio float64 // valid if FLAGS & 1 is != 0
-		// DRRatio float64 // valid if FLAGS & 2 is != 0
-		// GDRatio float64 // valid if FLAGS & 3 is != 0
-		// IRRatio float64 // valid if FLAGS & 4 is != 0
-		// MSRatio float64 // valid if FLAGS & 5 is != 0
-		// URRatio float64 // valid if FLAGS & 6 is != 0
+		// EXClose float64 // valid if FLAGS & 1<<0 is != 0
+		// CCRatio float64 // valid if FLAGS & 1<<1 is != 0
+		// DRRatio float64 // valid if FLAGS & 1<<2 is != 0
+		// GDRatio float64 // valid if FLAGS & 1<<3 is != 0
+		// IRRatio float64 // valid if FLAGS & 1<<4 is != 0
+		// MSRatio float64 // valid if FLAGS & 1<<5 is != 0
+		// URRatio float64 // valid if FLAGS & 1<<6 is != 0
 
 		FLAGS := uint64(0) // assume no info exists
 
