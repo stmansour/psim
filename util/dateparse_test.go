@@ -41,4 +41,13 @@ func TestDateParse(t *testing.T) {
 		t.Errorf("error from StringToDate: %s\n", err)
 	}
 	fmt.Printf("Year = %d, Month = %v, day = %d\n", dt.Year(), dt.Month(), dt.Day())
+
+	dt, err = StringToDate("2020-12-01T00:00:00")
+	if err != nil {
+		t.Errorf("error from StringToDate: %s\n", err)
+	}
+	if dt.Year() != 2020 || dt.Month() != time.December || dt.Day() != 1 {
+		t.Errorf("Expected D M Y = 2020 December 1, got Year = %d, Month = %v, day = %d\n", dt.Year(), dt.Month(), dt.Day())
+	}
+
 }

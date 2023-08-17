@@ -215,8 +215,8 @@ func (s *Simulator) Run() {
 		s.CalculateAllFitnessScores()
 		s.SaveStats()
 		if s.dumpTopInvestorInvestments {
-			if err := s.DumpInvestments(&s.Investors[s.maxProfitInvestor]); err != nil {
-				log.Printf("ERROR: DumpInvestments returned: %s\n", err)
+			if err := s.InvestmentsToCSV(&s.Investors[s.maxProfitInvestor]); err != nil {
+				log.Printf("ERROR: InvestmentsToCSV returned: %s\n", err)
 			}
 		}
 
@@ -430,6 +430,7 @@ func (s *Simulator) DumpStats() error {
 	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Start Date: %s\"\n", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Stop Date: %s\"\n", c.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
+	fmt.Fprintf(file, "\"Simulation Settle Date: %s\"\n", s.cfg.DtSettle.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Time Duration: %s\"\n", util.DateDiffString(a, c))
 	fmt.Fprintf(file, "\"C1: %s\"\n", s.cfg.C1)
 	fmt.Fprintf(file, "\"C2: %s\"\n", s.cfg.C2)
@@ -474,14 +475,14 @@ func (s *Simulator) DumpStats() error {
 	return nil
 }
 
-// DumpInvestments - dumps the top investor to a file after the simulation.
+// InvestmentsToCSV - dumps the top investor to a file after the simulation.
 //
 // RETURNS
 //
 //	any error encountered
 //
 // ----------------------------------------------------------------------------
-func (s *Simulator) DumpInvestments(inv *Investor) error {
+func (s *Simulator) InvestmentsToCSV(inv *Investor) error {
 	gen := s.GensCompleted - 1 // the generation number has already been incremented
 	fname := fmt.Sprintf("IList-Gen-%d.csv", gen)
 	file, err := os.Create(fname)
@@ -490,11 +491,17 @@ func (s *Simulator) DumpInvestments(inv *Investor) error {
 	}
 	defer file.Close()
 
+	a := time.Time(s.cfg.DtStart)
+	b := time.Time(s.cfg.DtStop)
+	c := b.AddDate(0, 0, 1)
 	//------------------------------------------------------------------------
 	// context information
 	//------------------------------------------------------------------------
 	fmt.Fprintf(file, "%q\n", "PLATO Simulator - Investor Investment List")
 	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
+	fmt.Fprintf(file, "\"Simulation Start Date: %s\"\n", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
+	fmt.Fprintf(file, "\"Simulation Stop Date: %s\"\n", c.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
+	fmt.Fprintf(file, "\"Simulation Settle Date: %s\"\n", s.cfg.DtSettle.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"C1: %s\"\n", s.cfg.C1)
 	fmt.Fprintf(file, "\"C2: %s\"\n", s.cfg.C2)
 	fmt.Fprintf(file, "\"Generation: %d\"\n", gen)
@@ -508,26 +515,29 @@ func (s *Simulator) DumpInvestments(inv *Investor) error {
 	//------------------------------------------------------------------------
 	s.influencersToCSV(file)
 
-	// the header row                                         0          1                2        3                  4                     5                        6                     7               8                    9       10
-	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q\n", "T3", "Exchange Rate (T3)", "T4", "Exchange Rate (T4)", "Purchase Amount C1", "Purchase Amount (C2)", "Sell Amount C2 on T4", "BalanceC1 (T3)", "BalanceC2 (T3)", "T4 C1", "Net C1(T4) - C1(T3)")
+	// the header row                                         0          1                2        3                  4                     5                      6                 7                 8             9       10      11                 12
+	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q\n", "T3", "Exchange Rate (T3)", "T4", "Exchange Rate (T4)", "Purchase Amount C1", "Purchase Amount (C2)", "BalanceC1 (T3)", "BalanceC2 (T3)", "T4 C2 Sold", "T4 C1", "Gain", "Balance C1 (T4)", "Balance C2 (T4)")
 
 	// investment rows
 	for i := 0; i < len(inv.Investments); i++ {
 		m := inv.Investments[i]
 		//                 0  1     2  3     4     5     6     7     8      9    10
 		//                 t3       t4       t3c1  buyc2 sellc2 balc1 balc2   t4c1  net
-		fmt.Fprintf(file, "%s,%8.2f,%s,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f\n",
-			m.T3.Format("1/2/2006"), // 0
-			m.ERT3,                  // 1
-			m.T4.Format("1/2/2006"), // 2
-			m.ERT4,                  // 3
-			m.T3C1,                  // 4
-			m.BuyC2,                 // 5
-			m.SellC2,                // 6
-			m.BalanceC1,             // 7
-			m.BalanceC2,             // 8
-			m.T4C1,                  // 9
-			m.T4C1-m.T3C1)           // 10
+		fmt.Fprintf(file, "%s,%8.2f,%s,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f\n",
+			m.T3.Format("1/2/2006"), // 0 - date on which purchase of C2 was made
+			m.ERT3,                  // 1 - the exchange rate on T3
+			m.T4.Format("1/2/2006"), // 2 - date on which C2 will be exchanged for C1
+			m.ERT4,                  // 3 - the exchange rate on T4
+			m.T3C1,                  // 4 - amount of C1 exchanged for C2 on T3
+			m.T3C2Buy,               // 5 - the amount of currency in C2 that T3C1 purchased on T3
+			m.T3BalanceC1,           // 6 - C1 balance after exchange on T3
+			m.T3BalanceC2,           // 7 - C2 balance after exchange on T3
+			m.T4C2Sold,              // 8 - for now, this is always going to be the same as T3C2Buy
+			m.T4C1,                  // 9 - amount of currency C1 we were able to purchase with C2 on T4 at exchange rate ERT4
+			m.T4C1-m.T3C1,           // 10 - profit (or loss if negative) on this investment
+			m.T4BalanceC1,           // 11 - C1 balance after exchange on T4
+			m.T4BalanceC2,           // 12 - C2 balance after exchange on T4
+		)
 	}
 	return nil
 }
@@ -670,7 +680,7 @@ func (s *Simulator) ResultsForInvestor(n int, v *Investor) string {
 	amt := float64(0)
 	for j := 0; j < pending; j++ {
 		if !v.Investments[j].Completed {
-			amt += v.Investments[j].BuyC2
+			amt += v.Investments[j].T3C2Buy
 		}
 	}
 

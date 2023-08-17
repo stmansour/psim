@@ -67,7 +67,7 @@ type FileConfig struct {
 	C1                   string     // Currency1 - the currency that we're trying to maximize
 	C2                   string     // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
 	DtStart              CustomDate // simulation begins on this date
-	DtStop               CustomDate // simulation ends on this date
+	DtStop               CustomDate // simulation ends on this date. Guaranteed that no "buys" happen after this date
 	PopulationSize       int        // how many investors are in this population
 	InitFunds            float64    // amount of funds each Investor is "staked" at the outset of the simulation
 	StdInvestment        float64    // standard investment amount
@@ -132,6 +132,7 @@ type AppConfig struct {
 	C2                   string                            // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
 	DtStart              CustomDate                        // simulation begins on this date
 	DtStop               CustomDate                        // simulation ends on this date
+	DtSettle             time.Time                         // later of DtStop or date on which the last sale was made
 	PopulationSize       int                               // how many investors are in this population
 	InitFunds            float64                           // amount of funds each Investor is "staked" at the outset of the simulation
 	StdInvestment        float64                           // standard investment amount
@@ -269,7 +270,7 @@ func LoadConfig() (AppConfig, error) {
 		}
 	}
 	cfg.SCInfo = mapper
-
+	cfg.DtSettle = time.Time(cfg.DtStop) // start it here... it will be updated later if needed
 	return cfg, nil
 }
 
@@ -354,6 +355,7 @@ func CreateTestingCFG() *AppConfig {
 		},
 	}
 	cfg.SCInfo = mapper
+	cfg.DtSettle = time.Time(cfg.DtStop)
 
 	return &cfg
 }

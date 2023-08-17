@@ -27,25 +27,30 @@ type RatioFunc func(*data.RatesAndRatiosRecord, *data.RatesAndRatiosRecord) (flo
 //
 // RETURNS
 //
-//		action     -  "buy" or "hold"
-//		prediction - probability of correctness - most valid for "buy" action
-//		error      - nil on success, error encountered otherwise
-//	 dbg        - print date, numbers, dRR, and prediction
+//			action     - "buy" or "hold" or "abstain"
+//	                  "abstain" means remove it from the decision making process
+//	                  because there was an error in doing its research (most likely
+//	                  the data it needed was missing)
+//			confidence - probability that the prediction is correct
+//			error      - nil on success, error encountered otherwise
+//		 dbg        - print date, numbers, dRR, and prediction
 //
 // ---------------------------------------------------------------------------
 func getPrediction(t3 time.Time, p Influencer, f RatioFunc, dbg bool) (string, float64, error) {
+	prediction := "abstain"
+
 	t1 := t3.AddDate(0, 0, p.GetDelta1())
 	t2 := t3.AddDate(0, 0, p.GetDelta2())
 
 	rec1 := data.CSVDBFindRecord(t1)
 	if rec1 == nil {
 		err := fmt.Errorf("data.RatesAndRatiosRecord for %s not found", t1.Format("1/2/2006"))
-		return "hold", 0, err
+		return prediction, 0, err
 	}
 	rec2 := data.CSVDBFindRecord(t2)
 	if rec2 == nil {
 		err := fmt.Errorf("data.RatesAndRatiosRecord for %s not found", t2.Format("1/2/2006"))
-		return "hold", 0, err
+		return prediction, 0, err
 	}
 	flagpos := p.GetFlagPos()
 	flagslot := uint64(1 << flagpos)
@@ -58,12 +63,12 @@ func getPrediction(t3 time.Time, p Influencer, f RatioFunc, dbg bool) (string, f
 			p.IncNilDataCount()
 		}
 		err := fmt.Errorf("nildata")
-		return "hold", 0, err
+		return prediction, 0, err
 	}
 
 	d1, d2, dRR := f(rec1, rec2)
 
-	prediction := "hold"
+	prediction = "hold"
 	if dRR > 0 {
 		prediction = "buy"
 	}

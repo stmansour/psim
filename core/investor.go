@@ -42,20 +42,22 @@ type Investor struct {
 // to a CSV file for analysis.
 // ----------------------------------------------------------------------------
 type Investment struct {
-	id         string    // investment id
-	T3         time.Time // date on which purchase of C2 was made
-	T4         time.Time // date on which C2 will be exchanged for C1
-	BalanceC1  float64   // amount of C1 after exchange on T3
-	BalanceC2  float64   // amount of C2 after exchange on T3
-	T3C1       float64   // amount of C2 to purchase at T3
-	BuyC2      float64   // the amount of currency in C2 that C1 purchased on T3
-	SellC2     float64   // for now, this is always going to be the same as BuyC2
-	ERT3       float64   // the exchange rate on T3
-	ERT4       float64   // the exchange rate on T4
-	T4C1       float64   // amount of currency C1 we were able to purchase with C2 on T4 at exchange rate ERT4
-	Delta4     int       // t4 = t3 + Delta4 - "sell" date
-	Completed  bool      // true when the investmnet has been exchanged C2 for C1
-	Profitable bool      // was this a profitable investment?
+	id          string    // investment id
+	T3          time.Time // date on which purchase of C2 was made
+	T4          time.Time // date on which C2 will be exchanged for C1
+	T3BalanceC1 float64   // C1 balance after exchange on T3
+	T3BalanceC2 float64   // C2 balance after exchange on T3
+	T4BalanceC1 float64   // C1 balance after exchange on T4
+	T4BalanceC2 float64   // C2 balance after exchange on T4
+	T3C1        float64   // amount of C1 exchanged for C2 on T3
+	T3C2Buy     float64   // the amount of currency in C2 that T3C1 purchased on T3
+	T4C2Sold    float64   // for now, this is always going to be the same as T3C2Buy
+	ERT3        float64   // the exchange rate on T3
+	ERT4        float64   // the exchange rate on T4
+	T4C1        float64   // amount of currency C1 we were able to purchase with C2 on T4 at exchange rate ERT4
+	Delta4      int       // t4 = t3 + Delta4 - "sell" date
+	Completed   bool      // true when the investmnet has been exchanged C2 for C1
+	Profitable  bool      // was this a profitable investment?
 }
 
 // Init is called during Generation 1 to get things started.  All settable
@@ -189,12 +191,16 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 	}
 	buyVotes := 0
 	holdVotes := 0
+	abstain := 0
 	buy := false // assume that we will not buy
 	for j := 0; j < len(recs); j++ {
-		if recs[j].Action == "buy" {
+		switch recs[j].Action {
+		case "buy":
 			buyVotes++
-		} else {
+		case "hold":
 			holdVotes++
+		case "abstain":
+			abstain++
 		}
 	}
 
@@ -222,11 +228,11 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 		}
 
 		inv.ERT3 = er3.EXClose                     // exchange rate on T3
-		inv.BuyC2 = inv.T3C1 * inv.ERT3            // amount of C2 we purchased on T3
+		inv.T3C2Buy = inv.T3C1 * inv.ERT3          // amount of C2 we purchased on T3
 		i.BalanceC1 -= inv.T3C1                    // we spent this much C1...
-		i.BalanceC2 += inv.BuyC2                   // to purchase this much more C2
-		inv.BalanceC1 = i.BalanceC1                // amount of C1 remaining after exchange
-		inv.BalanceC2 = i.BalanceC2                // amount of C2 remaining after exchange
+		i.BalanceC2 += inv.T3C2Buy                 // to purchase this much more C2
+		inv.T3BalanceC1 = i.BalanceC1              // C1 balance after exchange
+		inv.T3BalanceC2 = i.BalanceC2              // C2 balance after exchange
 		i.Investments = append(i.Investments, inv) // add it to the list of investments
 
 		//----------------------------------------------------------------
@@ -273,37 +279,8 @@ func (i *Investor) SellConversion(t4 time.Time) (int, error) {
 		//------------------------------------------------
 		dtSell := time.Time(i.Investments[j].T4)  // date on which we need to sell (convert) C2
 		if t4.Equal(dtSell) || t4.After(dtSell) { // if the sell date has arrived...
-			//-----------------------------------------------------------
-			// The time has arrived. Get the exchange rate for today...
-			//-----------------------------------------------------------
-			er4 := data.CSVDBFindRecord(t4) // get the exchange rate on t4
-			if er4 == nil {
-				err = fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found; Investment marked as completed", t4.Format("1/2/2006"))
-				fmt.Printf("%s\n", err.Error())
-				i.Investments[j].Completed = true
+			if err = i.settleInvestment(t4, j); err != nil {
 				continue
-			}
-
-			//-----------------------------------------------------------
-			// Document this specific investment...
-			//-----------------------------------------------------------
-			i.Investments[j].ERT4 = er4.EXClose                                         // exchange rate on T4
-			i.Investments[j].SellC2 = i.Investments[j].BuyC2                            // sell exactly what we bought on the associated T3
-			i.Investments[j].T4C1 = i.Investments[j].SellC2 / i.Investments[j].ERT4     // amount of C1 we got back by selling SellC2 on T4 at the exchange rate on T4
-			i.Investments[j].Profitable = i.Investments[j].T4C1 > i.Investments[j].T3C1 // did we make money on this trade?
-			i.Investments[j].Completed = true                                           // this investment is now completed
-
-			//-------------------------------------------------------------
-			// Update Investor's totals having concluded the investment...
-			//-------------------------------------------------------------
-			i.BalanceC1 += i.Investments[j].T4C1   // we recovered this much C1...
-			i.BalanceC2 -= i.Investments[j].SellC2 // by selling this C2
-
-			//-------------------------------------------------------------
-			// Update each Influencer's predictions...
-			//-------------------------------------------------------------
-			for k := 0; k < len(i.Influencers); k++ {
-				i.Influencers[k].FinalizePrediction(i.Investments[j].T3, t4, i.Investments[j].Profitable)
 			}
 
 			SellCount++
@@ -312,9 +289,59 @@ func (i *Investor) SellConversion(t4 time.Time) (int, error) {
 	return SellCount, err
 }
 
+// settleInvestment - this code was moved to a method as it needed to be done
+//
+//	in several places.
+//
+// INPUTS
+//
+//	t4 - sell date
+//	 j - index into i.Investments for the particular investment to sell
+//
+// RETURNS
+//
+//	any critical error encountered
+//
+// -----------------------------------------------------------------------------
+func (i *Investor) settleInvestment(t4 time.Time, j int) error {
+	var err error
+	er4 := data.CSVDBFindRecord(t4)
+	if er4 == nil {
+		err = fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found; Investment marked as completed", t4.Format("1/2/2006"))
+		fmt.Printf("%s\n", err.Error())
+		i.Investments[j].Completed = true
+		return nil // this was not a critical error, it's been reported, just keep going
+	}
+
+	i.Investments[j].ERT4 = er4.EXClose                                         // exchange rate on T4
+	i.Investments[j].T4C2Sold = i.Investments[j].T3C2Buy                        // sell exactly what we bought on the associated T3
+	i.Investments[j].T4C1 = i.Investments[j].T4C2Sold / i.Investments[j].ERT4   // amount of C1 we got back by selling T4C2Sold on T4 at the exchange rate on T4
+	i.Investments[j].Profitable = i.Investments[j].T4C1 > i.Investments[j].T3C1 // did we make money on this trade?
+	i.Investments[j].Completed = true                                           // this investment is now completed
+
+	//-------------------------------------------------------------
+	// Update Investor's totals having concluded the investment...
+	//-------------------------------------------------------------
+	i.BalanceC1 += i.Investments[j].T4C1       // we recovered this much C1...
+	i.BalanceC2 -= i.Investments[j].T4C2Sold   // by selling this C2
+	i.Investments[j].T4BalanceC1 = i.BalanceC1 // not sure how valuable this info is
+	i.Investments[j].T4BalanceC2 = i.BalanceC2 // not sure how valuable this info is
+
+	//-------------------------------------------------------------
+	// Update each Influencer's predictions...
+	//-------------------------------------------------------------
+	for k := 0; k < len(i.Influencers); k++ {
+		i.Influencers[k].FinalizePrediction(i.Investments[j].T3, t4, i.Investments[j].Profitable)
+	}
+	return nil
+}
+
 // SettleC2Balance - At the end of a simulation, we'll cash out all C2 for
 //
-//	the amount of C1 it gets on the last day of the simulation.
+//		      C1. If the target sell date (T4) is after the simulation stop date
+//			  we will use the actual T4 (if data for that date exists). We will
+//			  also update the Settle Date for the simulation as needed.
+//	       Also, if T4 is after cfg.DtSettle then update DtSettle to this date.
 //
 // RETURNS
 //
@@ -322,16 +349,18 @@ func (i *Investor) SellConversion(t4 time.Time) (int, error) {
 //
 // ----------------------------------------------------------------------------
 func (i *Investor) SettleC2Balance() error {
-	if i.BalanceC2 > 0 {
-		dt := time.Time(i.cfg.DtStop)
-		er4 := data.CSVDBFindRecord(dt) // get the exchange rate on t4
-		if er4 == nil {
-			err := fmt.Errorf("*** ERROR *** SettleC2Balance: ExchangeRate Record for %s not found", dt.Format("1/2/2006"))
-			return err
+	if i.BalanceC2 == 0 {
+		return nil
+	}
+	for j := 0; j < len(i.Investments); j++ {
+		if i.Investments[j].Completed {
+			continue
 		}
-		i.BalanceSettled = i.BalanceC2 / er4.EXClose // convert remaining C2 back to C1
-		i.BalanceC1 += i.BalanceSettled              // remaining C2 cash converted to C1
-		i.BalanceC2 = 0
+		i.settleInvestment(i.Investments[j].T4, j)
+		if i.Investments[j].T4.After(time.Time(i.cfg.DtSettle)) {
+			i.cfg.DtSettle = i.Investments[j].T4
+		}
+
 	}
 	return nil
 }
@@ -372,8 +401,8 @@ func (i *Investor) InvestorProfile() error {
 // 	s += fmt.Sprintf("    T3		= %s\n", i.T3)
 // 	s += fmt.Sprintf("    T4		= %s\n", i.T4)
 // 	s += fmt.Sprintf("    T3C1		= %8.2f\n", i.T3C1)
-// 	s += fmt.Sprintf("    BuyC2		= %8.2f\n", i.BuyC2)
-// 	s += fmt.Sprintf("    SellC2	= %8.2f\n", i.SellC2)
+// 	s += fmt.Sprintf("    T3C2Buy		= %8.2f\n", i.T3C2Buy)
+// 	s += fmt.Sprintf("    T4C2Sold	= %8.2f\n", i.T4C2Sold)
 // 	s += fmt.Sprintf("    ERT3		= %8.2f\n", i.ERT3)
 // 	s += fmt.Sprintf("    ERT4		= %8.2f\n", i.ERT4)
 // 	s += fmt.Sprintf("    T4C1	= %8.2f\n", i.T4C1)
