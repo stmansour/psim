@@ -3,6 +3,7 @@ package util
 import (
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"reflect"
 	"strings"
@@ -64,62 +65,71 @@ func (t *CustomDate) UnmarshalJSON(data []byte) error {
 // Do not get rid of the json tags
 // ---------------------------------------------------------------------------
 type FileConfig struct {
-	C1                   string     // Currency1 - the currency that we're trying to maximize
-	C2                   string     // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
-	DtStart              CustomDate // simulation begins on this date
-	DtStop               CustomDate // simulation ends on this date. Guaranteed that no "buys" happen after this date
-	PopulationSize       int        // how many investors are in this population
-	InitFunds            float64    // amount of funds each Investor is "staked" at the outset of the simulation
-	StdInvestment        float64    // standard investment amount
-	TradingDay           int        // this needs to be completely re-thought -- it's like a recurrence rule
-	TradingTime          time.Time  // time of day when buy/sell is executed
-	Generations          int        // current generation in the simulator
-	MaxInf               int        // maximum number of influencers for any Investor
-	MinInf               int        // minimum number of influencers for any Investor
-	InfluencerSubclasses []string   // valid Influencer subclasses for this simulation
-	CCMinDelta1          int        // negative integer, most number of days prior to T3 for Influencer research to begin
-	CCMaxDelta1          int        // negative integer, fewest number of days prior to T3 for Invfluencer research to begin
-	CCMinDelta2          int        // research boundary
-	CCMaxDelta2          int        // research boundary
-	DRMinDelta1          int        // negative integer, most number of days prior to T3 for Influencer research to begin
-	DRMaxDelta1          int        // negative integer, fewest number of days prior to T3 for Invfluencer research to begin
-	DRMinDelta2          int        // research boundary
-	DRMaxDelta2          int        // research boundary
-	GDMinDelta1          int        // negative integer, most number of days prior to T3 for Influencer research to begin
-	GDMaxDelta1          int        // negative integer, fewest number of days prior to T3 for Invfluencer research to begin
-	GDMinDelta2          int        // research boundary
-	GDMaxDelta2          int        // research boundary
-	URMinDelta1          int        // research boundary
-	URMaxDelta1          int        // research boundary
-	URMinDelta2          int        // research boundary
-	URMaxDelta2          int        // research boundary
-	IRMinDelta1          int        // research boundary
-	IRMaxDelta1          int        // research boundary
-	IRMinDelta2          int        // research boundary
-	IRMaxDelta2          int        // research boundary
-	MSMinDelta1          int        // research boundary
-	MSMaxDelta1          int        // research boundary
-	MSMinDelta2          int        // research boundary
-	MSMaxDelta2          int        // research boundary
-	MinDelta4            int        // closest to t3 that t4 can be
-	MaxDelta4            int        // furthest out from t3 that t4 can be
-	CCW1                 float64    // weighting in fitness calculation
-	CCW2                 float64    // weighting in fitness calculation
-	DRW1                 float64    // weighting in fitness calculation
-	DRW2                 float64    // weighting in fitness calculation
-	GDW1                 float64    // weighting in fitness calculation
-	GDW2                 float64    // weighting in fitness calculation
-	IRW1                 float64    // weighting in fitness calculation
-	IRW2                 float64    // weighting in fitness calculation
-	MSW1                 float64    // weighting in fitness calculation
-	MSW2                 float64    // weighting in fitness calculation
-	URW1                 float64    // weighting in fitness calculation
-	URW2                 float64    // weighting in fitness calculation
-	InvW1                float64    // weight for profit part of Investor FitnessScore
-	InvW2                float64    // weight for correctness part of Investor FitnessScore
-	MutationRate         int        // 1 - 100 indicating the % of mutation
-	DBSource             string     // {CSV | Database | OnlineService}
-	RandNano             int64      // random seed
+	C1      string     // Currency1 - the currency that we're trying to maximize
+	C2      string     // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
+	DtStart CustomDate // simulation begins on this date
+	DtStop  CustomDate // simulation ends on this date. Guaranteed that no "buys" happen after this date
+	//--------------------------------------------------------------------------------
+	// The format of the GenDurSpec string is one to four pairs of the the following
+	// values:  an integer,  one of the following letters: YMWD. There can be 1,
+	// 2, 3 or 4 pairs, but each pair must contain a different letter from the
+	// YMWD.  For example, ‘1 Y’ means 1 year, ‘1 Y 2 M’ means 1 year and 2 months.
+	// W is for weeks,  and D is for Days.  It is fine to have a string like ’60 D’,
+	// which means 60 days.
+	//--------------------------------------------------------------------------------
+	GenDurSpec           string    // described above
+	Generations          int       // current generation in the simulator
+	PopulationSize       int       // how many investors are in this population
+	InitFunds            float64   // amount of funds each Investor is "staked" at the outset of the simulation
+	StdInvestment        float64   // standard investment amount
+	TradingDay           int       // this needs to be completely re-thought -- it's like a recurrence rule
+	TradingTime          time.Time // time of day when buy/sell is executed
+	MaxInf               int       // maximum number of influencers for any Investor
+	MinInf               int       // minimum number of influencers for any Investor
+	InfluencerSubclasses []string  // valid Influencer subclasses for this simulation
+	CCMinDelta1          int       // negative integer, most number of days prior to T3 for Influencer research to begin
+	CCMaxDelta1          int       // negative integer, fewest number of days prior to T3 for Invfluencer research to begin
+	CCMinDelta2          int       // research boundary
+	CCMaxDelta2          int       // research boundary
+	DRMinDelta1          int       // negative integer, most number of days prior to T3 for Influencer research to begin
+	DRMaxDelta1          int       // negative integer, fewest number of days prior to T3 for Invfluencer research to begin
+	DRMinDelta2          int       // research boundary
+	DRMaxDelta2          int       // research boundary
+	GDMinDelta1          int       // negative integer, most number of days prior to T3 for Influencer research to begin
+	GDMaxDelta1          int       // negative integer, fewest number of days prior to T3 for Invfluencer research to begin
+	GDMinDelta2          int       // research boundary
+	GDMaxDelta2          int       // research boundary
+	URMinDelta1          int       // research boundary
+	URMaxDelta1          int       // research boundary
+	URMinDelta2          int       // research boundary
+	URMaxDelta2          int       // research boundary
+	IRMinDelta1          int       // research boundary
+	IRMaxDelta1          int       // research boundary
+	IRMinDelta2          int       // research boundary
+	IRMaxDelta2          int       // research boundary
+	MSMinDelta1          int       // research boundary
+	MSMaxDelta1          int       // research boundary
+	MSMinDelta2          int       // research boundary
+	MSMaxDelta2          int       // research boundary
+	MinDelta4            int       // closest to t3 that t4 can be
+	MaxDelta4            int       // furthest out from t3 that t4 can be
+	CCW1                 float64   // weighting in fitness calculation
+	CCW2                 float64   // weighting in fitness calculation
+	DRW1                 float64   // weighting in fitness calculation
+	DRW2                 float64   // weighting in fitness calculation
+	GDW1                 float64   // weighting in fitness calculation
+	GDW2                 float64   // weighting in fitness calculation
+	IRW1                 float64   // weighting in fitness calculation
+	IRW2                 float64   // weighting in fitness calculation
+	MSW1                 float64   // weighting in fitness calculation
+	MSW2                 float64   // weighting in fitness calculation
+	URW1                 float64   // weighting in fitness calculation
+	URW2                 float64   // weighting in fitness calculation
+	InvW1                float64   // weight for profit part of Investor FitnessScore
+	InvW2                float64   // weight for correctness part of Investor FitnessScore
+	MutationRate         int       // 1 - 100 indicating the % of mutation
+	DBSource             string    // {CSV | Database | OnlineService}
+	RandNano             int64     // random seed
 }
 
 // AppConfig contains all the configuration values for the Simulator,
@@ -132,6 +142,8 @@ type AppConfig struct {
 	C2                   string                            // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
 	DtStart              CustomDate                        // simulation begins on this date
 	DtStop               CustomDate                        // simulation ends on this date
+	GenDurSpec           string                            // gen dur spec
+	GenDur               *GenerationDuration               // parsed gen dur spec
 	DtSettle             time.Time                         // later of DtStop or date on which the last sale was made
 	PopulationSize       int                               // how many investors are in this population
 	InitFunds            float64                           // amount of funds each Investor is "staked" at the outset of the simulation
@@ -271,6 +283,13 @@ func LoadConfig() (AppConfig, error) {
 	}
 	cfg.SCInfo = mapper
 	cfg.DtSettle = time.Time(cfg.DtStop) // start it here... it will be updated later if needed
+
+	if len(cfg.GenDurSpec) != 0 {
+		cfg.GenDur, err = ParseGenerationDuration(cfg.GenDurSpec)
+		if err != nil {
+			log.Panicf("Invalid GenDurSpec specification: %s\n", cfg.GenDurSpec)
+		}
+	}
 	return cfg, nil
 }
 

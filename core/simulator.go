@@ -133,16 +133,35 @@ func (s *Simulator) NewPopulation() error {
 // simulation and some indicators as to how things are progressing.
 // ----------------------------------------------------------------------------
 func (s *Simulator) Run() {
+	iteration := 0
+	s.SimStart = time.Now()
+	dtStop := time.Time(s.cfg.DtStop)
+	isGenDur := len(s.cfg.GenDurSpec) > 0
+	genStart := time.Time(s.cfg.DtStart)
+	// if isGenDur {
+	// 	genDays := s.getGenerationDays(s.cfg.GenDur)                                  // number of days in one generation
+	// 	s.cfg.Generations = int(dtStop.Sub(genStart).Hours() / 24 / float64(genDays)) // Calculate the number of generations
+	// }
+	if isGenDur {
+		genDays := s.getGenerationDays(s.cfg.GenDur)   // number of days in one generation
+		totalDays := dtStop.Sub(genStart).Hours() / 24 // number of generations, rounding up
+		s.cfg.Generations = int(float64(totalDays) / float64(genDays))
+		if float64(totalDays)/float64(genDays) > float64(s.cfg.Generations) {
+			s.cfg.Generations++
+		}
+	}
+
 	//-------------------------------------------------------------------------
 	// Iterate day-by-day through the simulation.
 	//-------------------------------------------------------------------------
-	iteration := 0
-	s.SimStart = time.Now()
 	for g := 0; g < s.cfg.Generations; g++ {
-		dt := time.Time(s.cfg.DtStart)
-		dtStop := time.Time(s.cfg.DtStop)
+		dt := genStart
+		dtGenEnd := dt.AddDate(s.cfg.GenDur.Years, s.cfg.GenDur.Months, s.cfg.GenDur.Weeks*7+s.cfg.GenDur.Days) // end of this generation
+		if dtGenEnd.After(dtStop) || !isGenDur {
+			dtGenEnd = dtStop
+		}
 
-		for dtStop.After(dt) || dtStop.Equal(dt) {
+		for dt.Before(dtGenEnd) || dt.Equal(dtGenEnd) {
 			iteration++
 			SellCount := 0
 			BuyCount := 0
@@ -204,7 +223,8 @@ func (s *Simulator) Run() {
 
 			dt = dt.AddDate(0, 0, 1)
 		}
-		s.GensCompleted++ // we have just concluded another generation
+		genStart = dtGenEnd // Start next generation from the end of the last
+		s.GensCompleted++   // we have just concluded another generation
 		fmt.Printf("Completed generation %d\n", s.GensCompleted)
 
 		//----------------------------------------------------------------------
@@ -232,6 +252,22 @@ func (s *Simulator) Run() {
 	}
 	s.SimStop = time.Now()
 	s.StopTimeSet = true
+}
+
+// Helper function to calculate the total days in a generation.  It is not
+// always the same because the GenerationDuration spec can include months
+// which have a varying number of days. It can also span years which can
+// introduce leap years which have an extra day.
+//
+// INPUTS
+//
+//	gd - the parsed generation duration struct
+//
+// --------------------------------------------------------------------------
+func (s *Simulator) getGenerationDays(gd *util.GenerationDuration) int {
+	dtTmp := time.Date(0, time.January, 0, 0, 0, 0, 0, time.UTC)       // Using a zero year for calculation purposes
+	dtGenEnd := dtTmp.AddDate(gd.Years, gd.Months, gd.Weeks*7+gd.Days) // end date of this generation
+	return int(dtGenEnd.Sub(dtTmp).Hours() / 24)
 }
 
 // SettleC2Balance - At the end of a simulation, we'll cash out all C2 for
@@ -429,13 +465,16 @@ func (s *Simulator) DumpStats() error {
 	fmt.Fprintf(file, "%q\n", "PLATO Simulator Results")
 	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Start Date: %s\"\n", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
-	fmt.Fprintf(file, "\"Simulation Stop Date: %s\"\n", c.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
+	fmt.Fprintf(file, "\"Simulation Stop Date: %s\"\n", b.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Settle Date: %s\"\n", s.cfg.DtSettle.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Time Duration: %s\"\n", util.DateDiffString(a, c))
 	fmt.Fprintf(file, "\"C1: %s\"\n", s.cfg.C1)
 	fmt.Fprintf(file, "\"C2: %s\"\n", s.cfg.C2)
 
 	fmt.Fprintf(file, "\"Generations: %d\"\n", s.GensCompleted)
+	if len(s.cfg.GenDurSpec) > 0 {
+		fmt.Fprintf(file, "\"Generation Lifetime: %s\"\n", s.cfg.GenDurSpec)
+	}
 	fmt.Fprintf(file, "\"Population: %d\"\n", s.cfg.PopulationSize)
 
 	s.influencersToCSV(file)

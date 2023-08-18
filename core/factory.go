@@ -71,13 +71,13 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 
 	// Build the new population... Select parents, create a new Investor
 	for i := 0; i < f.cfg.PopulationSize; i++ {
-		idxParent1 := f.rouletteSelect(population, fitnessSum) // parent 1
-		idxParent2 := f.rouletteSelect(population, fitnessSum) // parent 2
+		idxParent1 := f.rouletteSelect(population, fitnessSum, -1)         // parent 1
+		idxParent2 := f.rouletteSelect(population, fitnessSum, idxParent1) // parent 2
 
 		// ensure idxParent2 is different from idxParent1
 		dbgCounter := 0
 		for idxParent2 == idxParent1 {
-			idxParent2 = f.rouletteSelect(population, fitnessSum)
+			idxParent2 = f.rouletteSelect(population, fitnessSum, idxParent1)
 			dbgCounter++
 			if dbgCounter > 3 {
 				log.Panicf("Looks like we're stuck in the loop\n")
@@ -790,12 +790,20 @@ func (f *Factory) GenerateDeltas(sc string, DNA map[string]interface{}) (Delta1 
 //	index of the investor selected
 //
 // -----------------------------------------------------------------------------
-func (f *Factory) rouletteSelect(population []Investor, fitnessSum float64) int {
+func (f *Factory) rouletteSelect(population []Investor, fitnessSum float64, used int) int {
 	spin := util.UtilData.Rand.Float64() * fitnessSum
 	runningSum := 0.0
+	zeros := 0 // count the number of Investors in the population with a 0 fitness score
 
 	for i, investor := range population {
-		runningSum += investor.CalculateFitnessScore()
+		if i == used {
+			continue
+		}
+		score := investor.CalculateFitnessScore()
+		if score == 0 {
+			zeros++
+		}
+		runningSum += score
 		if runningSum >= spin {
 			return i
 		}
