@@ -81,3 +81,46 @@ func ParseGenerationDuration(s string) (*GenerationDuration, error) {
 
 	return duration, nil
 }
+
+// FormatGenDur formats the GenerationDuration struct into a human readable string.
+// -----------------------------------------------------------------------------------
+func FormatGenDur(g *GenerationDuration) string {
+	s := ""
+	if g == nil {
+		return s
+	}
+	if g.Years > 0 {
+		s += fmt.Sprintf("%d year", g.Years)
+		if g.Years > 1 {
+			s += "s"
+		}
+	}
+	if g.Months > 0 {
+		if len(s) > 0 {
+			s += " "
+		}
+		s += fmt.Sprintf("%d month", g.Months)
+		if g.Months > 1 {
+			s += "s"
+		}
+	}
+	if g.Weeks > 0 {
+		if len(s) > 0 {
+			s += " "
+		}
+		s += fmt.Sprintf("%d week", g.Weeks)
+		if g.Weeks > 1 {
+			s += "s"
+		}
+	}
+	if g.Days > 0 {
+		if len(s) > 0 {
+			s += " "
+		}
+		s += fmt.Sprintf("%d day", g.Days)
+		if g.Days > 1 {
+			s += "s"
+		}
+	}
+	return s
+}

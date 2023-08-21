@@ -231,7 +231,7 @@ func (s *Simulator) Run() {
 				genStart = dtGenEnd // Start next generation from the end of the last
 			}
 			s.GensCompleted++ // we have just concluded another generation
-			fmt.Printf("Completed generation %d\n", s.GensCompleted)
+			fmt.Printf("Completed generation %d, dt = %s\n", s.GensCompleted, dt.Format("Jan 2, 1006"))
 
 			//----------------------------------------------------------------------
 			// Compute scores and stats
@@ -256,6 +256,7 @@ func (s *Simulator) Run() {
 				s.maxPredictions = make(map[string]int, 0)
 			}
 		}
+		fmt.Printf("loop %d completed\n", lc)
 	}
 
 	s.SimStop = time.Now()
@@ -474,16 +475,16 @@ func (s *Simulator) DumpStats() error {
 	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Start Date: %s\"\n", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Stop Date: %s\"\n", b.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
+	fmt.Fprintf(file, "\"Generations: %d\"\n", s.GensCompleted)
+	if len(s.cfg.GenDurSpec) > 0 {
+		fmt.Fprintf(file, "\"Generation Lifetime: %s\"\n", util.FormatGenDur(s.cfg.GenDur))
+	}
 	fmt.Fprintf(file, "\"Simulation Loop Count: %d\"\n", s.cfg.LoopCount)
 	fmt.Fprintf(file, "\"Simulation Settle Date: %s\"\n", s.cfg.DtSettle.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Time Duration: %s\"\n", util.DateDiffString(a, c))
 	fmt.Fprintf(file, "\"C1: %s\"\n", s.cfg.C1)
 	fmt.Fprintf(file, "\"C2: %s\"\n", s.cfg.C2)
 
-	fmt.Fprintf(file, "\"Generations: %d\"\n", s.GensCompleted)
-	if len(s.cfg.GenDurSpec) > 0 {
-		fmt.Fprintf(file, "\"Generation Lifetime: %s\"\n", s.cfg.GenDurSpec)
-	}
 	fmt.Fprintf(file, "\"Population: %d\"\n", s.cfg.PopulationSize)
 
 	s.influencersToCSV(file)

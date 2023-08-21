@@ -38,17 +38,22 @@ func displaySimulationDetails(cfg *util.AppConfig) {
 	a := time.Time(cfg.DtStart)
 	b := time.Time(cfg.DtStop)
 	c := b.AddDate(0, 0, 1)
-	fmt.Printf("Start:           %s\tvalid: %s\n", a.Format("Jan 2, 2006"), dateIsInDataRange(a))
-	fmt.Printf("Stop:            %s\tvalid: %s\n", b.Format("Jan 2, 2006"), dateIsInDataRange(b))
-	fmt.Printf("C1:              %s\n", cfg.C1)
-	fmt.Printf("C2:              %s\n", cfg.C2)
+	fmt.Printf("Start:               %s\tvalid: %s\n", a.Format("Jan 2, 2006"), dateIsInDataRange(a))
+	fmt.Printf("Stop:                %s\tvalid: %s\n", b.Format("Jan 2, 2006"), dateIsInDataRange(b))
+	if len(cfg.GenDurSpec) > 0 {
+		fmt.Printf("Generation Lifetime: %s\n", util.FormatGenDur(cfg.GenDur))
+	}
+	fmt.Printf("Loop count:          %d\n", cfg.LoopCount)
+
+	fmt.Printf("C1:                  %s\n", cfg.C1)
+	fmt.Printf("C2:                  %s\n", cfg.C2)
 
 	if a.After(b) {
 		fmt.Printf("*** ERROR *** Start date is after Stop ")
 		os.Exit(2)
 	}
-	fmt.Printf("Duration:        %s\n", util.DateDiffString(a, c))
-	fmt.Printf("Population Size: %d\n", cfg.PopulationSize)
+	fmt.Printf("Duration:            %s\n", util.DateDiffString(a, c))
+	fmt.Printf("Population Size:     %d\n", cfg.PopulationSize)
 	s := "Influencers:     "
 	fmt.Printf("%s", s)
 	n := len(s)
