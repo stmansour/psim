@@ -65,10 +65,11 @@ func (t *CustomDate) UnmarshalJSON(data []byte) error {
 // Do not get rid of the json tags
 // ---------------------------------------------------------------------------
 type FileConfig struct {
-	C1      string     // Currency1 - the currency that we're trying to maximize
-	C2      string     // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
-	DtStart CustomDate // simulation begins on this date
-	DtStop  CustomDate // simulation ends on this date. Guaranteed that no "buys" happen after this date
+	C1        string     // Currency1 - the currency that we're trying to maximize
+	C2        string     // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
+	DtStart   CustomDate // simulation begins on this date
+	DtStop    CustomDate // simulation ends on this date. Guaranteed that no "buys" happen after this date
+	LoopCount int        // how many times to loop over DtStart to DtStop
 	//--------------------------------------------------------------------------------
 	// The format of the GenDurSpec string is one to four pairs of the the following
 	// values:  an integer,  one of the following letters: YMWD. There can be 1,
@@ -142,6 +143,7 @@ type AppConfig struct {
 	C2                   string                            // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
 	DtStart              CustomDate                        // simulation begins on this date
 	DtStop               CustomDate                        // simulation ends on this date
+	LoopCount            int                               // how many times to loop over DtStart to DtStop
 	GenDurSpec           string                            // gen dur spec
 	GenDur               *GenerationDuration               // parsed gen dur spec
 	DtSettle             time.Time                         // later of DtStop or date on which the last sale was made
@@ -301,6 +303,7 @@ func CreateTestingCFG() *AppConfig {
 	cfg := AppConfig{
 		Generations:    1,       // how many generations should the simulator run
 		PopulationSize: 10,      // Total number Investors in the population
+		LoopCount:      10,      // How many times to loop over DtStart to DtSTop
 		C1:             "USD",   // main currency  (ISO 4217 code)
 		C2:             "JPY",   // currency that we will invest in (ISO 4217 code)
 		InitFunds:      1000.00, // how much each Investor is funded at the start of a simulation cycle

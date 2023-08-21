@@ -56,8 +56,10 @@ func TestReadGenerationDur(t *testing.T) {
 		t.Errorf("LoadConfig failed: %s", err)
 		return
 	}
-	if cfg.GenDur.Years != 1 {
-		t.Errorf("Expecting GenDur to show 1 year duration, found: years = %d, months = %d, weeks = %d, days = %d", cfg.GenDur.Years, cfg.GenDur.Months, cfg.GenDur.Weeks, cfg.GenDur.Days)
+	if len(cfg.GenDurSpec) > 0 {
+		if cfg.GenDur.Years != 1 {
+			t.Errorf("Expecting GenDur to show 1 year duration, found: years = %d, months = %d, weeks = %d, days = %d", cfg.GenDur.Years, cfg.GenDur.Months, cfg.GenDur.Weeks, cfg.GenDur.Days)
+		}
 	}
 
 }

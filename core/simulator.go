@@ -135,121 +135,129 @@ func (s *Simulator) NewPopulation() error {
 func (s *Simulator) Run() {
 	iteration := 0
 	s.SimStart = time.Now()
-	dtStop := time.Time(s.cfg.DtStop)
-	isGenDur := len(s.cfg.GenDurSpec) > 0
-	genStart := time.Time(s.cfg.DtStart)
-	// if isGenDur {
-	// 	genDays := s.getGenerationDays(s.cfg.GenDur)                                  // number of days in one generation
-	// 	s.cfg.Generations = int(dtStop.Sub(genStart).Hours() / 24 / float64(genDays)) // Calculate the number of generations
-	// }
-	if isGenDur {
-		genDays := s.getGenerationDays(s.cfg.GenDur)   // number of days in one generation
-		totalDays := dtStop.Sub(genStart).Hours() / 24 // number of generations, rounding up
-		s.cfg.Generations = int(float64(totalDays) / float64(genDays))
-		if float64(totalDays)/float64(genDays) > float64(s.cfg.Generations) {
-			s.cfg.Generations++
-		}
-	}
+	for lc := 0; lc < s.cfg.LoopCount; lc++ {
 
-	//-------------------------------------------------------------------------
-	// Iterate day-by-day through the simulation.
-	//-------------------------------------------------------------------------
-	for g := 0; g < s.cfg.Generations; g++ {
-		dt := genStart
-		dtGenEnd := dt.AddDate(s.cfg.GenDur.Years, s.cfg.GenDur.Months, s.cfg.GenDur.Weeks*7+s.cfg.GenDur.Days) // end of this generation
-		if dtGenEnd.After(dtStop) || !isGenDur {
-			dtGenEnd = dtStop
+		dtStop := time.Time(s.cfg.DtStop)
+		isGenDur := len(s.cfg.GenDurSpec) > 0
+		genStart := time.Time(s.cfg.DtStart)
+
+		if isGenDur {
+			genDays := s.getGenerationDays(s.cfg.GenDur)   // number of days in one generation
+			totalDays := dtStop.Sub(genStart).Hours() / 24 // number of generations, rounding up
+			s.cfg.Generations = int(float64(totalDays) / float64(genDays))
+			if float64(totalDays)/float64(genDays) > float64(s.cfg.Generations) {
+				s.cfg.Generations++
+			}
 		}
 
-		for dt.Before(dtGenEnd) || dt.Equal(dtGenEnd) {
-			iteration++
-			SellCount := 0
-			BuyCount := 0
-
-			if len(s.Investors) > s.cfg.PopulationSize {
-				log.Panicf("Population size should be %d, len(Investors) = %d", s.cfg.PopulationSize, len(s.Investors))
+		//-------------------------------------------------------------------------
+		// Iterate day-by-day through the simulation.
+		//-------------------------------------------------------------------------
+		var dtGenEnd time.Time
+		for g := 0; g < s.cfg.Generations; g++ {
+			dt := genStart
+			if isGenDur {
+				dtGenEnd = dt.AddDate(s.cfg.GenDur.Years, s.cfg.GenDur.Months, s.cfg.GenDur.Weeks*7+s.cfg.GenDur.Days) // end of this generation
+			} else {
+				dtGenEnd = dtStop
+			}
+			if dtGenEnd.After(dtStop) || !isGenDur {
+				dtGenEnd = dtStop
 			}
 
-			//-----------------------------------------
-			// Call SellConversion for each investor
-			//-----------------------------------------
-			for j := 0; j < len(s.Investors); j++ {
-				sc, err := (&s.Investors[j]).SellConversion(dt)
-				if err != nil {
-					fmt.Printf("SellConversion returned: %s\n", err.Error())
-				}
-				SellCount += sc
-			}
+			for dt.Before(dtGenEnd) || dt.Equal(dtGenEnd) {
+				iteration++
+				SellCount := 0
+				BuyCount := 0
 
-			//-----------------------------------------
-			// Call BuyConversion for each investor
-			//-----------------------------------------
-			check := false
-			for j := 0; j < len(s.Investors); j++ {
-				bc, err := (&s.Investors[j]).BuyConversion(dt)
-				if err != nil {
-					fmt.Printf("BuyConversion returned: %s\n", err.Error())
+				if len(s.Investors) > s.cfg.PopulationSize {
+					log.Panicf("Population size should be %d, len(Investors) = %d", s.cfg.PopulationSize, len(s.Investors))
 				}
-				if len(s.Investors[j].Investments) > 0 {
-					check = true
-				}
-				BuyCount += bc
-			}
-			if check {
-				x := 0
+
+				//-----------------------------------------
+				// Call SellConversion for each investor
+				//-----------------------------------------
 				for j := 0; j < len(s.Investors); j++ {
-					x += len(s.Investors[j].Investments)
-				}
-			}
-
-			//============== DEBUG --------------------------------------------------------
-			if s.dayByDay {
-				count := 0
-				invPending := 0
-				for j := 0; j < len(s.Investors); j++ {
-					if s.Investors[j].BalanceC1 > 0 {
-						count++
+					sc, err := (&s.Investors[j]).SellConversion(dt)
+					if err != nil {
+						fmt.Printf("SellConversion returned: %s\n", err.Error())
 					}
-					for k := 0; k < len(s.Investors[j].Investments); k++ {
-						if !s.Investors[j].Investments[k].Completed {
-							invPending++
+					SellCount += sc
+				}
+
+				//-----------------------------------------
+				// Call BuyConversion for each investor
+				//-----------------------------------------
+				check := false
+				for j := 0; j < len(s.Investors); j++ {
+					bc, err := (&s.Investors[j]).BuyConversion(dt)
+					if err != nil {
+						fmt.Printf("BuyConversion returned: %s\n", err.Error())
+					}
+					if len(s.Investors[j].Investments) > 0 {
+						check = true
+					}
+					BuyCount += bc
+				}
+				if check {
+					x := 0
+					for j := 0; j < len(s.Investors); j++ {
+						x += len(s.Investors[j].Investments)
+					}
+				}
+
+				//============== DEBUG --------------------------------------------------------
+				if s.dayByDay {
+					count := 0
+					invPending := 0
+					for j := 0; j < len(s.Investors); j++ {
+						if s.Investors[j].BalanceC1 > 0 {
+							count++
+						}
+						for k := 0; k < len(s.Investors[j].Investments); k++ {
+							if !s.Investors[j].Investments[k].Completed {
+								invPending++
+							}
 						}
 					}
+					fmt.Printf("%4d. Date: %s, Buys: %d, Sells %d,\n      investors remaining: %d, investments pending: %d\n",
+						iteration, dt.Format("2006-Jan-02"), BuyCount, SellCount, count, invPending)
 				}
-				fmt.Printf("%4d. Date: %s, Buys: %d, Sells %d,\n      investors remaining: %d, investments pending: %d\n",
-					iteration, dt.Format("2006-Jan-02"), BuyCount, SellCount, count, invPending)
-			}
-			//============== DEBUG --------------------------------------------------------
+				//============== DEBUG --------------------------------------------------------
 
-			dt = dt.AddDate(0, 0, 1)
-		}
-		genStart = dtGenEnd // Start next generation from the end of the last
-		s.GensCompleted++   // we have just concluded another generation
-		fmt.Printf("Completed generation %d\n", s.GensCompleted)
-
-		//----------------------------------------------------------------------
-		// Compute scores and stats
-		//----------------------------------------------------------------------
-		s.SettleC2Balance()
-		s.CalculateMaxVals()
-		s.CalculateAllFitnessScores()
-		s.SaveStats()
-		if s.dumpTopInvestorInvestments {
-			if err := s.InvestmentsToCSV(&s.Investors[s.maxProfitInvestor]); err != nil {
-				log.Printf("ERROR: InvestmentsToCSV returned: %s\n", err)
+				dt = dt.AddDate(0, 0, 1)
 			}
-		}
-
-		//----------------------------------------------------------------------------------------------
-		// Now replace current generation with next generation unless this is the last generation...
-		//----------------------------------------------------------------------------------------------
-		if s.GensCompleted < s.cfg.Generations {
-			if err := s.NewPopulation(); err != nil {
-				log.Panicf("*** PANIC ERROR *** NewPopulation returned error: %s\n", err)
+			if isGenDur {
+				genStart = dtGenEnd // Start next generation from the end of the last
 			}
-			s.maxPredictions = make(map[string]int, 0)
+			s.GensCompleted++ // we have just concluded another generation
+			fmt.Printf("Completed generation %d\n", s.GensCompleted)
+
+			//----------------------------------------------------------------------
+			// Compute scores and stats
+			//----------------------------------------------------------------------
+			s.SettleC2Balance()
+			s.CalculateMaxVals()
+			s.CalculateAllFitnessScores()
+			s.SaveStats()
+			if s.dumpTopInvestorInvestments {
+				if err := s.InvestmentsToCSV(&s.Investors[s.maxProfitInvestor]); err != nil {
+					log.Printf("ERROR: InvestmentsToCSV returned: %s\n", err)
+				}
+			}
+
+			//----------------------------------------------------------------------------------------------
+			// Now replace current generation with next generation unless this is the last generation...
+			//----------------------------------------------------------------------------------------------
+			if s.GensCompleted < s.cfg.Generations || lc+1 < s.cfg.LoopCount {
+				if err := s.NewPopulation(); err != nil {
+					log.Panicf("*** PANIC ERROR *** NewPopulation returned error: %s\n", err)
+				}
+				s.maxPredictions = make(map[string]int, 0)
+			}
 		}
 	}
+
 	s.SimStop = time.Now()
 	s.StopTimeSet = true
 }
@@ -466,6 +474,7 @@ func (s *Simulator) DumpStats() error {
 	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Start Date: %s\"\n", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Stop Date: %s\"\n", b.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
+	fmt.Fprintf(file, "\"Simulation Loop Count: %d\"\n", s.cfg.LoopCount)
 	fmt.Fprintf(file, "\"Simulation Settle Date: %s\"\n", s.cfg.DtSettle.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Time Duration: %s\"\n", util.DateDiffString(a, c))
 	fmt.Fprintf(file, "\"C1: %s\"\n", s.cfg.C1)
@@ -540,6 +549,7 @@ func (s *Simulator) InvestmentsToCSV(inv *Investor) error {
 	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Start Date: %s\"\n", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Stop Date: %s\"\n", c.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
+	fmt.Fprintf(file, "\"Simulation Loop Count: %d\"\n", s.cfg.LoopCount)
 	fmt.Fprintf(file, "\"Simulation Settle Date: %s\"\n", s.cfg.DtSettle.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"C1: %s\"\n", s.cfg.C1)
 	fmt.Fprintf(file, "\"C2: %s\"\n", s.cfg.C2)

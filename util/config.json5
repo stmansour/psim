@@ -7,8 +7,9 @@
     //-----------------------------------------------------------------
     "DtStart": "1990-01-01",    // simulation start date for each generation
     "DtStop": "1995-12-31",     // simulation stop date for each generation
-    "Generations": 20,          // how many generations should the simulator run. NOTE: This value is only valid if GenDurSpec is commented out.
-    "GenDurSpec": "1 Y",     // How long is a generation.  EX:  "1 Y",  "6 M",  "8 W", "1 Y 6 M", "90 D"
+    "LoopCount": 20,            // How many times to loop over DtStart to DtStop
+    "Generations": 1,          // how many generations should the simulator run. NOTE: This value is only valid if GenDurSpec is commented out.
+    // "GenDurSpec": "1 Y",        // How long is a generation.  EX:  "1 Y",  "6 M",  "8 W", "1 Y 6 M", "90 D"
     "PopulationSize": 200,      // Total number Investors in the population
     "C1": "USD",                // main currency  (ISO 4217 code)
     "C2": "JPY",                // currency that we will invest in (ISO 4217 code)
