@@ -183,7 +183,7 @@ func (p *CCInfluencer) DNA() string {
 	if p.Delta4 != inv.Delta4 {
 		util.DPrintf("YIPES!  Influencer Delta4 (%d) is not the same as Investor.Delta4 (%d)\n", p.Delta4, inv.Delta4)
 	}
-	return fmt.Sprintf("{%s,Delta1=%d,Delta2=%d,Delta4=%d}", p.Subclass(), p.Delta1, p.Delta2, p.Delta4)
+	return fmt.Sprintf("{%s,Delta1=%d,Delta2=%d}", p.Subclass(), p.Delta1, p.Delta2)
 }
 
 // GetPrediction - using the supplied date, it researches data and makes

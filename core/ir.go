@@ -171,7 +171,7 @@ func (p *IRInfluencer) Subclass() string {
 //
 // ----------------------------------------------------------------------------
 func (p *IRInfluencer) DNA() string {
-	return fmt.Sprintf("{%s,Delta1=%d,Delta2=%d,Delta4=%d}", p.Subclass(), p.Delta1, p.Delta2, p.Delta4)
+	return fmt.Sprintf("{%s,Delta1=%d,Delta2=%d}", p.Subclass(), p.Delta1, p.Delta2)
 }
 
 // GetPrediction - using the supplied date, it researches data and makes
