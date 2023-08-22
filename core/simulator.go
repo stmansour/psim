@@ -153,6 +153,7 @@ func (s *Simulator) Run() {
 		//-------------------------------------------------------------------------
 		// Iterate day-by-day through the simulation.
 		//-------------------------------------------------------------------------
+		var d time.Time
 		var dtGenEnd time.Time
 		for g := 0; g < s.cfg.Generations; g++ {
 			dt := genStart
@@ -165,7 +166,7 @@ func (s *Simulator) Run() {
 				dtGenEnd = dtStop
 			}
 
-			for dt.Before(dtGenEnd) || dt.Equal(dtGenEnd) {
+			for dt.Before(dtGenEnd) {
 				iteration++
 				SellCount := 0
 				BuyCount := 0
@@ -224,14 +225,17 @@ func (s *Simulator) Run() {
 						iteration, dt.Format("2006-Jan-02"), BuyCount, SellCount, count, invPending)
 				}
 				//============== DEBUG --------------------------------------------------------
-
+				d = dt
 				dt = dt.AddDate(0, 0, 1)
 			}
+			s.GensCompleted++ // we have just concluded another generation
+			if g+1 == s.cfg.Generations || !isGenDur {
+				d = dt
+			}
+			fmt.Printf("Completed generation %d, dt = %s\n", s.GensCompleted, d.Format("Jan 2, 2006"))
 			if isGenDur {
 				genStart = dtGenEnd // Start next generation from the end of the last
 			}
-			s.GensCompleted++ // we have just concluded another generation
-			fmt.Printf("Completed generation %d, dt = %s\n", s.GensCompleted, dt.Format("Jan 2, 1006"))
 
 			//----------------------------------------------------------------------
 			// Compute scores and stats
