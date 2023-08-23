@@ -14,13 +14,15 @@ import (
 // SimulationStatistics contains relevant metrics for each generation simulated
 // ------------------------------------------------------------------
 type SimulationStatistics struct {
-	ProfitableInvestors  int     // number of Investors that were profitable in this generation
-	AvgProfit            float64 // avg profitability for profitable Investors in this generation
-	MaxProfit            float64 // largest profit Investor in this generation
-	TotalBuys            int     // total number of "buy" decisions made by the investor
-	ProfitableBuys       int     // total number of buys that were profitable
-	MaxProfigDNA         string  // DNA of the Investor making the highest profit this generation
-	TotalNilDataRequests int     // total number of nildata errors that occurred across all Influencers
+	ProfitableInvestors  int       // number of Investors that were profitable in this generation
+	AvgProfit            float64   // avg profitability for profitable Investors in this generation
+	MaxProfit            float64   // largest profit Investor in this generation
+	TotalBuys            int       // total number of "buy" decisions made by the investor
+	ProfitableBuys       int       // total number of buys that were profitable
+	MaxProfigDNA         string    // DNA of the Investor making the highest profit this generation
+	TotalNilDataRequests int       // total number of nildata errors that occurred across all Influencers
+	DtGenStart           time.Time // first date of this generation
+	DtGenStop            time.Time // last date of this generation
 }
 
 // Simulator is a simulator object
@@ -133,6 +135,8 @@ func (s *Simulator) NewPopulation() error {
 // simulation and some indicators as to how things are progressing.
 // ----------------------------------------------------------------------------
 func (s *Simulator) Run() {
+	var thisGenDtStart time.Time
+	var thisGenDtEnd time.Time
 	iteration := 0
 	s.SimStart = time.Now()
 	for lc := 0; lc < s.cfg.LoopCount; lc++ {
@@ -232,7 +236,9 @@ func (s *Simulator) Run() {
 			if g+1 == s.cfg.Generations || !isGenDur {
 				d = dt
 			}
-			fmt.Printf("Completed generation %d, dt = %s\n", s.GensCompleted, d.Format("Jan 2, 2006"))
+			thisGenDtStart = genStart
+			thisGenDtEnd = d
+			fmt.Printf("Completed generation %d, %s - %s\n", s.GensCompleted, thisGenDtStart.Format("Jan _2, 2006"), d.Format("Jan _2, 2006"))
 			if isGenDur {
 				genStart = dtGenEnd // Start next generation from the end of the last
 			}
@@ -243,7 +249,7 @@ func (s *Simulator) Run() {
 			s.SettleC2Balance()
 			s.CalculateMaxVals()
 			s.CalculateAllFitnessScores()
-			s.SaveStats()
+			s.SaveStats(thisGenDtStart, thisGenDtEnd)
 			if s.dumpTopInvestorInvestments {
 				if err := s.InvestmentsToCSV(&s.Investors[s.maxProfitInvestor]); err != nil {
 					log.Printf("ERROR: InvestmentsToCSV returned: %s\n", err)
@@ -260,7 +266,7 @@ func (s *Simulator) Run() {
 				s.maxPredictions = make(map[string]int, 0)
 			}
 		}
-		fmt.Printf("loop %d completed\n", lc)
+		fmt.Printf("loop %d completed.  %s - %s\n", lc, thisGenDtStart.Format("Jan _2, 2006"), thisGenDtEnd.Format("Jan _2, 2006"))
 	}
 
 	s.SimStop = time.Now()
@@ -387,11 +393,17 @@ func (s *Simulator) CalculateMaxVals() {
 	}
 }
 
-// SaveStats - dumps the top investor to a file after the simulation.
+// SaveStats - dumps the top investor for the current generation into an array
+//
+//	to be used in SimStats.csv when the simulation completes
+//
+// INPUTS
+//
+//	dtStart, dtStop = the start and stop time of the generation being saved
 //
 // RETURNS
 // ----------------------------------------------------------------------------
-func (s *Simulator) SaveStats() {
+func (s *Simulator) SaveStats(dtStart, dtStop time.Time) {
 	//----------------------------------------------------
 	// Compute average investor profit this generation...
 	//----------------------------------------------------
@@ -450,6 +462,8 @@ func (s *Simulator) SaveStats() {
 		TotalBuys:            tot,
 		ProfitableBuys:       pro,
 		TotalNilDataRequests: totNil,
+		DtGenStart:           dtStart,
+		DtGenStop:            dtStop,
 	}
 	s.SimStats = append(s.SimStats, ss)
 }
@@ -502,10 +516,10 @@ func (s *Simulator) DumpStats() error {
 	fmt.Fprintf(file, "\"Elapsed Run Time: %s\"\n", et)
 	fmt.Fprintf(file, "\"\"\n")
 
-	// the header row   0  1  2  3  4  5  6  7  8  9
-	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q,%q\n",
-		//   0         1                       2                           3                 4             5             6                  7                      8
-		"Generation", "Profitable Investors", "Pct Profitable Investors", "Average Profit", "Max Profit", "Total Buys", "Profitable Buys", "Pct Profitable Buys", "Nil Data Requests", "DNA")
+	// the header row   0 0a 0b 1  2  3  4  5  6  7  8  9
+	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q\n",
+		//   0         0a			0b				1                       2                           3                 4             5             6                  7                      8
+		"Generation", "Gen Start", "Gen Stop", "Profitable Investors", "Pct Profitable Investors", "Average Profit", "Max Profit", "Total Buys", "Profitable Buys", "Pct Profitable Buys", "Nil Data Requests", "DNA")
 
 	// investment rows
 	for i := 0; i < len(s.SimStats); i++ {
@@ -513,17 +527,19 @@ func (s *Simulator) DumpStats() error {
 		if s.SimStats[i].TotalBuys > 0 {
 			pctProfPred = 100.0 * float64(s.SimStats[i].ProfitableBuys) / float64(s.SimStats[i].TotalBuys)
 		}
-		fmt.Fprintf(file, "%d,%d,%5.1f%%,%8.2f,%8.2f,%d,%d,%4.2f%%,%d,%q\n",
-			i,                                 // 0
-			s.SimStats[i].ProfitableInvestors, // 1
+		fmt.Fprintf(file, "%d,%q,%q,%d,%5.1f%%,%8.2f,%8.2f,%d,%d,%4.2f%%,%d,%q\n",
+			i, // 0
+			s.SimStats[i].DtGenStart.Format("1/2/2006"),                                    // 0a
+			s.SimStats[i].DtGenStop.Format("1/2/2006"),                                     // 0b
+			s.SimStats[i].ProfitableInvestors,                                              // 1
 			100.0*float64(s.SimStats[i].ProfitableInvestors)/float64(s.cfg.PopulationSize), // 2
-			s.SimStats[i].AvgProfit,            // 3
-			s.SimStats[i].MaxProfit,            // 4
-			s.SimStats[i].TotalBuys,            // 5
-			s.SimStats[i].ProfitableBuys,       // 6
-			pctProfPred,                        // 7
-			s.SimStats[i].TotalNilDataRequests, // 8
-			s.SimStats[i].MaxProfigDNA)         // 9
+			s.SimStats[i].AvgProfit,                                                        // 3
+			s.SimStats[i].MaxProfit,                                                        // 4
+			s.SimStats[i].TotalBuys,                                                        // 5
+			s.SimStats[i].ProfitableBuys,                                                   // 6
+			pctProfPred,                                                                    // 7
+			s.SimStats[i].TotalNilDataRequests,                                             // 8
+			s.SimStats[i].MaxProfigDNA)                                                     // 9
 	}
 	return nil
 }
