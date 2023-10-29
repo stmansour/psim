@@ -10,8 +10,8 @@ import (
 	"github.com/stmansour/psim/data"
 )
 
-// CCInfluencer is the Influencer that predicts based on Consumer Confidence
-type CCInfluencer struct {
+// BPInfluencer is the Influencer that predicts based on DiscountRate
+type BPInfluencer struct {
 	cfg                 *util.AppConfig
 	Delta1              int
 	Delta2              int
@@ -22,81 +22,81 @@ type CCInfluencer struct {
 	Fitness             float64
 	MyPredictions       []Prediction
 	myInvestor          *Investor // my parent, the investor that holds me
-	flagpos             int
-	nilDataCount        int // how many times did we encounter nil data in research
+	flagpos             int       // bit position in the data flags to indicate whether or not the value exists
+	nilDataCount        int       // how many times did we encounter nil data in research
 }
 
 // GetNilDataCount returns the value for nilDataCount
-func (p *CCInfluencer) GetNilDataCount() int {
+func (p *BPInfluencer) GetNilDataCount() int {
 	return p.nilDataCount
 }
 
 // IncNilDataCount the bit position of the valid data flag for this Influencer
-func (p *CCInfluencer) IncNilDataCount() {
+func (p *BPInfluencer) IncNilDataCount() {
 	p.nilDataCount++
 }
 
 // GetFlagPos the bit position of the valid data flag for this Influencer
-func (p *CCInfluencer) GetFlagPos() int {
+func (p *BPInfluencer) GetFlagPos() int {
 	return p.flagpos
 }
 
 // GetFitnessScore returns the current value of Fitness
-func (p *CCInfluencer) GetFitnessScore() float64 {
+func (p *BPInfluencer) GetFitnessScore() float64 {
 	return p.Fitness
 }
 
 // SetFitnessScore sets this objects FitnessScore to the supplied value
 // ------------------------------------------------------------------------
-func (p *CCInfluencer) SetFitnessScore(x float64) {
+func (p *BPInfluencer) SetFitnessScore(x float64) {
 	p.Fitness = x
 	p.FitnessIsCalculated = true
 }
 
 // IsFitnessCalculated returns the boolean FitnessIsCalculated indicating whether
 // or not we have a valid value for Fitness.
-func (p *CCInfluencer) IsFitnessCalculated() bool {
+func (p *BPInfluencer) IsFitnessCalculated() bool {
 	return p.FitnessIsCalculated
 }
 
 // MyInvestor returns a pointer to the investor object that holds this influencer
-func (p *CCInfluencer) MyInvestor() *Investor {
+func (p *BPInfluencer) MyInvestor() *Investor {
 	return p.myInvestor
 }
 
 // SetMyInvestor returns a pointer to the investor object that holds this influencer
-func (p *CCInfluencer) SetMyInvestor(inv *Investor) {
+func (p *BPInfluencer) SetMyInvestor(inv *Investor) {
 	p.myInvestor = inv
 }
 
 // SetMyPredictions is used primarily for testing and sets the Prediction
 // slice to the supplied value
-func (p *CCInfluencer) SetMyPredictions(ps []Prediction) {
+func (p *BPInfluencer) SetMyPredictions(ps []Prediction) {
 	p.MyPredictions = ps
 }
 
 // GetMyPredictions is used primarily for testing and returns MyPredictions
-func (p *CCInfluencer) GetMyPredictions() []Prediction {
+func (p *BPInfluencer) GetMyPredictions() []Prediction {
 	return p.MyPredictions
 }
 
 // GetAppConfig - return the config struct
-func (p *CCInfluencer) GetAppConfig() *util.AppConfig {
+func (p *BPInfluencer) GetAppConfig() *util.AppConfig {
 	return p.cfg
 }
 
 // GetLenMyPredictions - how many buy predictions
-func (p *CCInfluencer) GetLenMyPredictions() int {
+func (p *BPInfluencer) GetLenMyPredictions() int {
 	return len(p.MyPredictions)
 }
 
 // AppendPrediction - append a new prediction to the list of buy predictions
-func (p *CCInfluencer) AppendPrediction(pr Prediction) {
+func (p *BPInfluencer) AppendPrediction(pr Prediction) {
 	p.MyPredictions = append(p.MyPredictions, pr)
 }
 
 // FinalizePrediction - finalize the results of this prediction
-func (p *CCInfluencer) FinalizePrediction(t3, t4 time.Time, profitable bool) {
+func (p *BPInfluencer) FinalizePrediction(t3, t4 time.Time, profitable bool) {
 	for i := 0; i < len(p.MyPredictions); i++ {
 		if p.MyPredictions[i].Completed {
 			continue
@@ -110,63 +110,63 @@ func (p *CCInfluencer) FinalizePrediction(t3, t4 time.Time, profitable bool) {
 }
 
 // GetID - get ID string
-func (p *CCInfluencer) GetID() string {
+func (p *BPInfluencer) GetID() string {
 	return p.ID
 }
 
 // SetAppConfig - set cfg
-func (p *CCInfluencer) SetAppConfig(cfg *util.AppConfig) {
+func (p *BPInfluencer) SetAppConfig(cfg *util.AppConfig) {
 	p.cfg = cfg
 }
 
 // GetDelta1 - get Delta1
-func (p *CCInfluencer) GetDelta1() int {
+func (p *BPInfluencer) GetDelta1() int {
 	return p.Delta1
 }
 
 // SetDelta1 - set Delta1
-func (p *CCInfluencer) SetDelta1(d int) {
+func (p *BPInfluencer) SetDelta1(d int) {
 	p.Delta1 = d
 }
 
 // GetDelta2 - get Delta2
-func (p *CCInfluencer) GetDelta2() int {
+func (p *BPInfluencer) GetDelta2() int {
 	return p.Delta2
 }
 
 // SetDelta2 - set Delta2
-func (p *CCInfluencer) SetDelta2(d int) {
+func (p *BPInfluencer) SetDelta2(d int) {
 	p.Delta2 = d
 }
 
 // GetDelta4 - get Delta4
-func (p *CCInfluencer) GetDelta4() int {
+func (p *BPInfluencer) GetDelta4() int {
 	return p.Delta4
 }
 
 // SetDelta4 - set Delta4
-func (p *CCInfluencer) SetDelta4(x int) {
+func (p *BPInfluencer) SetDelta4(x int) {
 	p.Delta4 = x
 }
 
 // SetID - set ID
-func (p *CCInfluencer) SetID() {
+func (p *BPInfluencer) SetID() {
 	rn := util.GenerateRefNo()
-	p.ID = fmt.Sprintf("CCInfluencer|%d|%d|%d|%s", p.Delta1, p.Delta2, p.Delta4, rn)
+	p.ID = fmt.Sprintf("BPInfluencer|%d|%d|%d|%s", p.Delta1, p.Delta2, p.Delta4, rn)
 }
 
-// Init - initializes a CCInfluencer
-func (p *CCInfluencer) Init(i *Investor, cfg *util.AppConfig, delta4 int) {
+// Init - initializes a BPInfluencer
+func (p *BPInfluencer) Init(i *Investor, cfg *util.AppConfig, delta4 int) {
 	p.myInvestor = i
 	p.cfg = cfg
 	p.SetID()
 	p.Delta4 = delta4
-	p.flagpos = 1
+	p.flagpos = 2
 }
 
 // Subclass - a method that returns the Influencer subclass of this object
-func (p *CCInfluencer) Subclass() string {
-	return "CCInfluencer"
+func (p *BPInfluencer) Subclass() string {
+	return "BPInfluencer"
 }
 
 // DNA - a quick description of the type of Influencer and
@@ -174,7 +174,7 @@ func (p *CCInfluencer) Subclass() string {
 //	its key attributes.
 //
 // ----------------------------------------------------------------------------
-func (p *CCInfluencer) DNA() string {
+func (p *BPInfluencer) DNA() string {
 	inv := p.MyInvestor()
 
 	if inv == nil {
@@ -196,10 +196,10 @@ func (p *CCInfluencer) DNA() string {
 //	error      - nil on success, error encountered otherwise
 //
 // ---------------------------------------------------------------------------
-func (p *CCInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
+func (p *BPInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
 	return getPrediction(t3, p,
 		func(rec1, rec2 *data.RatesAndRatiosRecord) (float64, float64, float64) {
-			return rec1.CCRatio, rec2.CCRatio, rec1.CCRatio - rec2.CCRatio
+			return rec1.BPRatio, rec2.BPRatio, rec1.BPRatio - rec2.BPRatio
 		},
 		p.cfg.InfPredDebug)
 }
@@ -208,6 +208,6 @@ func (p *CCInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
 //
 // RETURNS - the fitness score
 // ------------------------------------------------------------------------------------
-func (p *CCInfluencer) CalculateFitnessScore() float64 {
+func (p *BPInfluencer) CalculateFitnessScore() float64 {
 	return calculateFitnessScore(p, p.cfg)
 }

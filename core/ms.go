@@ -8,7 +8,7 @@ import (
 	"github.com/stmansour/psim/util"
 )
 
-// MSInfluencer is the Influencer that predicts based on DiscountRate
+// MSInfluencer is the Influencer that predicts based on Money Supply
 type MSInfluencer struct {
 	cfg                 *util.AppConfig
 	Delta1              int

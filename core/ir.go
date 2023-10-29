@@ -7,7 +7,7 @@ import (
 	"github.com/stmansour/psim/util"
 )
 
-// IRInfluencer is the Influencer that predicts based on DiscountRate
+// IRInfluencer is the Influencer that predicts based on Inflation Rate
 type IRInfluencer struct {
 	cfg                 *util.AppConfig
 	Delta1              int

@@ -8,7 +8,7 @@ import (
 	"github.com/stmansour/psim/util"
 )
 
-// URInfluencer is the Influencer that predicts based on DiscountRate
+// URInfluencer is the Influencer that predicts based on Unemployment Rate
 type URInfluencer struct {
 	cfg                 *util.AppConfig
 	Delta1              int

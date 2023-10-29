@@ -58,6 +58,7 @@ type Investment struct {
 	Delta4      int       // t4 = t3 + Delta4 - "sell" date
 	Completed   bool      // true when the investmnet has been exchanged C2 for C1
 	Profitable  bool      // was this a profitable investment?
+	RetryCount  int       // how many times was this retried
 }
 
 // Init is called during Generation 1 to get things started.  All settable
@@ -317,7 +318,15 @@ func (i *Investor) settleInvestment(t4 time.Time, j int) error {
 	i.Investments[j].T4C2Sold = i.Investments[j].T3C2Buy                        // sell exactly what we bought on the associated T3
 	i.Investments[j].T4C1 = i.Investments[j].T4C2Sold / i.Investments[j].ERT4   // amount of C1 we got back by selling T4C2Sold on T4 at the exchange rate on T4
 	i.Investments[j].Profitable = i.Investments[j].T4C1 > i.Investments[j].T3C1 // did we make money on this trade?
-	i.Investments[j].Completed = true                                           // this investment is now completed
+
+	// if !i.Investments[j].Profitable {
+	// 	// buy sell decision... if we make more than 0.1%, sell, otherwise hold
+
+	// 	// i.Investments[j].RetryCount++
+	// 	// i.Investments[j].T4 = t4.AddDate(0,0,i.Investments[j].Delta4)
+	// 	// return nil
+	// }
+	i.Investments[j].Completed = true // this investment is now completed
 
 	//-------------------------------------------------------------
 	// Update Investor's totals having concluded the investment...

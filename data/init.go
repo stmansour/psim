@@ -21,15 +21,47 @@ var DInfo struct {
 
 // RatesAndRatiosRecord is the basic structure of discount rate data
 type RatesAndRatiosRecord struct {
-	Date    time.Time
-	CCRatio float64 // valid if FLAGS & 1<<0 is != 0
-	DRRatio float64 // valid if FLAGS & 1<<1 is != 0
-	GDRatio float64 // valid if FLAGS & 1<<2 is != 0
-	IRRatio float64 // valid if FLAGS & 1<<3 is != 0
-	MSRatio float64 // valid if FLAGS & 1<<4 is != 0
-	URRatio float64 // valid if FLAGS & 1<<5 is != 0
-	EXClose float64 // valid if FLAGS & 1<<6 is != 0
-	FLAGS   uint64  // can hold flags for the first 64 values associated with the Date
+	Date time.Time
+
+	BCRatio float64 // Check FLAGS for validity
+	BPRatio float64 // Check FLAGS for validity
+	CCRatio float64 // Check FLAGS for validity
+	CURatio float64 // Check FLAGS for validity
+	DRRatio float64 // Check FLAGS for validity
+	EXClose float64 //
+	GDRatio float64 // Check FLAGS for validity
+	HSRatio float64 // Check FLAGS for validity
+	IERatio float64 // Check FLAGS for validity
+	IPRatio float64 // Check FLAGS for validity
+	IRRatio float64 // Check FLAGS for validity
+	MPRatio float64 // Check FLAGS for validity
+	MSRatio float64 // Check FLAGS for validity
+	RSRatio float64 // Check FLAGS for validity
+	SPRatio float64 // Check FLAGS for validity
+	URRatio float64 // Check FLAGS for validity
+
+	FLAGS uint64 // can hold flags for the first 64 values associated with the Date, see DataFlags
+}
+
+// DataFlags indicate which bit of the flag fields must be set in order for the
+// associated value to be valid.
+var DataFlags struct {
+	BCRatioValid uint64
+	BPRatioValid uint64
+	CCRatioValid uint64
+	CURatioValid uint64
+	DRRatioValid uint64
+	EXCloseValid uint64
+	GDRatioValid uint64
+	HSRatioValid uint64
+	IERatioValid uint64
+	IPRatioValid uint64
+	IRRatioValid uint64
+	MPRatioValid uint64
+	MSRatioValid uint64
+	RSRatioValid uint64
+	SPRatioValid uint64
+	URRatioValid uint64
 }
 
 // PLATODB is the csv data file that is used for Discount Rate information
@@ -87,6 +119,55 @@ func Init(cfg *util.AppConfig) error {
 		return fmt.Errorf("unimplemented DBSource %s", DInfo.cfg.DBSource)
 	}
 	return nil
+}
+
+func DRec2String(drec *RatesAndRatiosRecord) string {
+	s := fmt.Sprintf(`    Date = %s
+	BCRatio = %9.3f  %s
+	BPRatio = %9.3f  %s
+	CCRatio = %9.3f  %s
+	CURatio = %9.3f  %s
+	DRRatio = %9.3f  %s
+	EXClose = %9.3f  %s
+	GDRatio = %9.3f  %s
+	HSRatio = %9.3f  %s
+	IERatio = %9.3f  %s
+	IPRatio = %9.3f  %s
+	IRRatio = %9.3f  %s
+	MPRatio = %9.3f  %s
+	MSRatio = %9.3f  %s
+	RSRatio = %9.3f  %s
+	SPRatio = %9.3f  %s
+	URRatio = %9.3f  %s
+	FLAGS   = %b
+	`,
+		drec.Date.Format("Jan 2, 2006"),
+		drec.BCRatio, isValidCheck(drec.FLAGS, DataFlags.BCRatioValid),
+		drec.BPRatio, isValidCheck(drec.FLAGS, DataFlags.BPRatioValid),
+		drec.CCRatio, isValidCheck(drec.FLAGS, DataFlags.CCRatioValid),
+		drec.CURatio, isValidCheck(drec.FLAGS, DataFlags.CURatioValid),
+		drec.DRRatio, isValidCheck(drec.FLAGS, DataFlags.DRRatioValid),
+		drec.EXClose, isValidCheck(drec.FLAGS, DataFlags.EXCloseValid),
+		drec.GDRatio, isValidCheck(drec.FLAGS, DataFlags.GDRatioValid),
+		drec.HSRatio, isValidCheck(drec.FLAGS, DataFlags.HSRatioValid),
+		drec.IERatio, isValidCheck(drec.FLAGS, DataFlags.IERatioValid),
+		drec.IPRatio, isValidCheck(drec.FLAGS, DataFlags.IPRatioValid),
+		drec.IRRatio, isValidCheck(drec.FLAGS, DataFlags.IRRatioValid),
+		drec.MPRatio, isValidCheck(drec.FLAGS, DataFlags.MPRatioValid),
+		drec.MSRatio, isValidCheck(drec.FLAGS, DataFlags.MSRatioValid),
+		drec.RSRatio, isValidCheck(drec.FLAGS, DataFlags.RSRatioValid),
+		drec.SPRatio, isValidCheck(drec.FLAGS, DataFlags.SPRatioValid),
+		drec.URRatio, isValidCheck(drec.FLAGS, DataFlags.URRatioValid),
+		drec.FLAGS,
+	)
+	return s
+}
+
+func isValidCheck(u1, u2 uint64) string {
+	if u1&u2 != 0 {
+		return "√"
+	}
+	return ""
 }
 
 // HandleUTF8FileChars returns the first line of the file with

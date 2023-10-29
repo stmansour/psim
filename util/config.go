@@ -31,11 +31,21 @@ type InfluencerSubclassInfo struct {
 // ValidInfluencerSubclasses anything other than these values is an error
 // ---------------------------------------------------------------------------
 var ValidInfluencerSubclasses = []string{
+	"BCInfluencer",
+	"BPInfluencer",
 	"CCInfluencer",
+	"CUInfluencer",
 	"DRInfluencer",
+	"EXInfluencer",
 	"GDInfluencer",
+	"HSInfluencer",
+	"IEInfluencer",
+	"IPInfluencer",
 	"IRInfluencer",
+	"MPInfluencer",
 	"MSInfluencer",
+	"RSInfluencer",
+	"SPInfluencer",
 	"URInfluencer",
 }
 
@@ -221,11 +231,12 @@ func LoadConfig() (AppConfig, error) {
 	for i := 0; i < len(InfluencerSubclasses); i++ {
 		s := InfluencerSubclasses[i][:2]
 		prefixes = append(prefixes, s)
+		// DPrintf("LOAD - InfluencerSubclasses[%d] = %s", i, InfluencerSubclasses[i])
 	}
 
-	//-------------------------------------------
+	//----------------------------------------------------
 	// now build the map[subclass]InfluencerSubclassInfo
-	//-------------------------------------------
+	//----------------------------------------------------
 	mapper := make(map[string]InfluencerSubclassInfo)
 	t := reflect.TypeOf(fcfg)
 	v := reflect.ValueOf(fcfg)
@@ -320,7 +331,7 @@ func CreateTestingCFG() *AppConfig {
 			"CCInfluencer",
 			"DRInfluencer",
 			"GDInfluencer",
-			"IRInfluencer",
+			// "IRInfluencer",
 			"MSInfluencer",
 			"URInfluencer",
 		},
@@ -339,7 +350,25 @@ func CreateTestingCFG() *AppConfig {
 	cfg.DtStop = CustomDate(dt2)
 
 	mapper := map[string]InfluencerSubclassInfo{
+		"BC": {
+			MinDelta1: -180,
+			MaxDelta1: -90,
+			MinDelta2: -50,
+			MaxDelta2: -20,
+		},
+		"BP": {
+			MinDelta1: -180,
+			MaxDelta1: -90,
+			MinDelta2: -50,
+			MaxDelta2: -20,
+		},
 		"CC": {
+			MinDelta1: -180,
+			MaxDelta1: -90,
+			MinDelta2: -50,
+			MaxDelta2: -20,
+		},
+		"CU": {
 			MinDelta1: -180,
 			MaxDelta1: -90,
 			MinDelta2: -50,
@@ -357,13 +386,49 @@ func CreateTestingCFG() *AppConfig {
 			MinDelta2: -180,
 			MaxDelta2: -120,
 		},
+		"HS": {
+			MinDelta1: -180,
+			MaxDelta1: -90,
+			MinDelta2: -60,
+			MaxDelta2: -30,
+		},
+		"IE": {
+			MinDelta1: -180,
+			MaxDelta1: -90,
+			MinDelta2: -60,
+			MaxDelta2: -30,
+		},
+		"IP": {
+			MinDelta1: -180,
+			MaxDelta1: -90,
+			MinDelta2: -60,
+			MaxDelta2: -30,
+		},
 		"IR": {
 			MinDelta1: -180,
 			MaxDelta1: -90,
 			MinDelta2: -60,
 			MaxDelta2: -30,
 		},
+		"MR": {
+			MinDelta1: -180,
+			MaxDelta1: -90,
+			MinDelta2: -50,
+			MaxDelta2: -20,
+		},
 		"MS": {
+			MinDelta1: -180,
+			MaxDelta1: -90,
+			MinDelta2: -50,
+			MaxDelta2: -20,
+		},
+		"RS": {
+			MinDelta1: -180,
+			MaxDelta1: -90,
+			MinDelta2: -50,
+			MaxDelta2: -20,
+		},
+		"SP": {
 			MinDelta1: -180,
 			MaxDelta1: -90,
 			MinDelta2: -50,

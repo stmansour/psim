@@ -45,12 +45,23 @@ type DRInfo struct {
 //              JPY Japanese Yen
 //
 //  DataType - use a 2 letter identifier:
+//      BC = Business Confidence
+//      BP = Building Permits
 //      CC = Consumer Confidence
+//		CP = Corporate Profits  ***
+//      CU = Capacity Utilization
 //      DR = Discount Rate
-//      GD = Government Debt to GDP
-//      IR = Inflation Rate
-//      UR = Unemployment Rate
 //      EX = Exchange Rate -- can be appended with "Open", "Low", "High", "Close"
+//      GD = Government Debt to GDP
+//      HS = Housing Starts
+//      IE = Inflation Expectation
+//      IP = Industrial Production
+//      IR = Inflation Rate
+//      MP = Manufacturing Production
+//      MS = Manufacturing Production
+//      RS = Retail Sales
+//      SP = Stock Prices
+//      UR = Unemployment Rate
 //
 //  Qualifier
 //      Ratio - indicates that the value is a ratio
@@ -89,7 +100,26 @@ func LoadCsvDB() error {
 	//-------------------------------------------------------
 	// Here are the types of data the influencers support...
 	//-------------------------------------------------------
-	DInfo.DTypes = []string{"CCRatio", "EXClose", "DRRatio", "GDRatio", "MSRatio", "URRatio"}
+	DInfo.DTypes = []string{
+		"BCRatio",
+		"BPRatio",
+		"CCRatio",
+		"CURatio",
+		"DRRatio",
+		"EXClose",
+		"GDRatio",
+		"HSRatio",
+		"IERatio",
+		"IPRatio",
+		"IRRatio",
+		"MPRatio",
+		"MSRatio", // short term liquidity
+		// "M1Ratio", // short term liquidity
+		// "M2Ratio", // longer term liquidity
+		"RSRatio",
+		"SPRatio",
+		"URRatio",
+	}
 
 	//----------------------------------------------------------------------
 	// Keep track of the column with the data needed for each ratio.  This
@@ -100,6 +130,7 @@ func LoadCsvDB() error {
 		DInfo.CSVMap[DInfo.DTypes[k]] = -1 // haven't located this column yet
 	}
 	records := RatesAndRatiosRecords{}
+
 	for i, line := range lines {
 		if i == 0 {
 			// handle the unicode case...
@@ -126,9 +157,10 @@ func LoadCsvDB() error {
 			// Make sure we have the data we need for the simulation...
 			//--------------------------------------------------------------
 			for k := 0; k < len(DInfo.DTypes); k++ {
-				if DInfo.CSVMap[DInfo.DTypes[k]] == -1 {
-					return fmt.Errorf("no column in %s had label  %s%s%s, which is required for the current simulation configuration",
+				if subclassIsUsedInSimulation(DInfo.DTypes[k]) && DInfo.CSVMap[DInfo.DTypes[k]] == -1 {
+					s := fmt.Sprintf("no column in %s had label  %s%s%s, which is required for the current simulation configuration",
 						PLATODB, DInfo.cfg.C1, DInfo.cfg.C2, DInfo.DTypes[k])
+					return fmt.Errorf(s)
 				}
 			}
 
@@ -141,48 +173,94 @@ func LoadCsvDB() error {
 			os.Exit(1)
 		}
 
-		// EXClose float64 // valid if FLAGS & 1<<0 is != 0
-		// CCRatio float64 // valid if FLAGS & 1<<1 is != 0
-		// DRRatio float64 // valid if FLAGS & 1<<2 is != 0
-		// GDRatio float64 // valid if FLAGS & 1<<3 is != 0
-		// IRRatio float64 // valid if FLAGS & 1<<4 is != 0
-		// MSRatio float64 // valid if FLAGS & 1<<5 is != 0
-		// URRatio float64 // valid if FLAGS & 1<<6 is != 0
-
 		FLAGS := uint64(0) // assume no info exists
 
-		EXClose, exists := getNamedFloat("EXClose", line, 0)
+		BCRatio, exists := getNamedFloat("BCRatio", line, 0)
 		FLAGS |= exists
+		DataFlags.BCRatioValid = exists
 
-		CCRatio, exists := getNamedFloat("CCRatio", line, 1)
+		BPRatio, exists := getNamedFloat("BPRatio", line, 1)
 		FLAGS |= exists
+		DataFlags.BPRatioValid = exists
 
-		DRRatio, exists := getNamedFloat("DRRatio", line, 2)
+		CCRatio, exists := getNamedFloat("CCRatio", line, 2)
 		FLAGS |= exists
+		DataFlags.CCRatioValid = exists
 
-		GDRatio, exists := getNamedFloat("GDRatio", line, 3)
+		CURatio, exists := getNamedFloat("CURatio", line, 3)
 		FLAGS |= exists
+		DataFlags.CURatioValid = exists
 
-		IRRatio, exists := getNamedFloat("IRRatio", line, 4)
+		DRRatio, exists := getNamedFloat("DRRatio", line, 4)
 		FLAGS |= exists
+		DataFlags.DRRatioValid = exists
 
-		MSRatio, exists := getNamedFloat("MSRatio", line, 5)
+		EXClose, exists := getNamedFloat("EXClose", line, 5)
 		FLAGS |= exists
+		DataFlags.EXCloseValid = exists
 
-		URRatio, exists := getNamedFloat("URRatio", line, 6)
+		GDRatio, exists := getNamedFloat("GDRatio", line, 6)
 		FLAGS |= exists
+		DataFlags.GDRatioValid = exists
+		util.DPrintf("GDRatio = %9.2f, exists = %b\n", GDRatio, exists)
+
+		HSRatio, exists := getNamedFloat("HSRatio", line, 7)
+		FLAGS |= exists
+		DataFlags.HSRatioValid = exists
+
+		IERatio, exists := getNamedFloat("IERatio", line, 8)
+		FLAGS |= exists
+		DataFlags.IERatioValid = exists
+
+		IPRatio, exists := getNamedFloat("IPRatio", line, 9)
+		FLAGS |= exists
+		DataFlags.IPRatioValid = exists
+
+		IRRatio, exists := getNamedFloat("IRRatio", line, 10)
+		FLAGS |= exists
+		DataFlags.IRRatioValid = exists
+
+		MPRatio, exists := getNamedFloat("MPRatio", line, 11)
+		FLAGS |= exists
+		DataFlags.MPRatioValid = exists
+
+		MSRatio, exists := getNamedFloat("MSRatio", line, 12)
+		FLAGS |= exists
+		DataFlags.MSRatioValid = exists
+
+		RSRatio, exists := getNamedFloat("RSRatio", line, 13)
+		FLAGS |= exists
+		DataFlags.RSRatioValid = exists
+
+		SPRatio, exists := getNamedFloat("SPRatio", line, 14)
+		FLAGS |= exists
+		DataFlags.SPRatioValid = exists
+
+		URRatio, exists := getNamedFloat("URRatio", line, 15)
+		FLAGS |= exists
+		DataFlags.URRatioValid = exists
 
 		records = append(records, RatesAndRatiosRecord{
 			Date:    date,
+			BCRatio: BCRatio,
+			BPRatio: BPRatio,
 			CCRatio: CCRatio,
+			CURatio: CURatio,
 			DRRatio: DRRatio,
 			EXClose: EXClose,
 			GDRatio: GDRatio,
+			HSRatio: HSRatio,
+			IERatio: IERatio,
+			IPRatio: IPRatio,
 			IRRatio: IRRatio,
+			MPRatio: MPRatio,
 			MSRatio: MSRatio,
+			RSRatio: RSRatio,
+			SPRatio: SPRatio,
 			URRatio: URRatio,
 			FLAGS:   FLAGS,
 		})
+
 	}
 
 	DInfo.DBRecs = records
@@ -190,7 +268,26 @@ func LoadCsvDB() error {
 	l := DInfo.DBRecs.Len()
 	DInfo.DtStart = DInfo.DBRecs[0].Date
 	DInfo.DtStop = DInfo.DBRecs[l-1].Date
+
+	util.DPrintf("Loaded %d records.   %s - %s\n", l, DInfo.DtStart.Format("jan 2, 2006"), DInfo.DtStop.Format("jan 2, 2006"))
+
 	return nil
+}
+
+// subclassIsUsedInSimulation - returns true if the supplied Influencer Subtype
+// string is used in this simulation.  Any string will work as long as the first
+// two letters indicate the influencer subtype. This means that strings such as
+// "IPRatio" will work to indicat the IPInfluencer.
+// ---------------------------------------------------------------------------------
+func subclassIsUsedInSimulation(ss string) bool {
+	s := ss[:2] // we only need the first 2 chars
+	for i := 0; i < len(DInfo.cfg.InfluencerSubclasses); i++ {
+		if s == DInfo.cfg.InfluencerSubclasses[i][:2] {
+
+			return true
+		}
+	}
+	return false
 }
 
 // getNamedFloat - centralize a bunch of lines that would need to be
@@ -199,7 +296,7 @@ func LoadCsvDB() error {
 //
 // INPUTS
 //
-//	val = name of data column
+//	val = name of data column excluding C1C2
 //	line = array of strings -- parsed csv input line
 //	bitpos = bit position in FLAGS for this particular column
 //
@@ -212,12 +309,17 @@ func LoadCsvDB() error {
 // --------------------------------------------------------------------------
 func getNamedFloat(val string, line []string, bitpos int) (float64, uint64) {
 	var flags uint64
+
+	util.DPrintf("bitpos = %d, find %s val... ", bitpos, val)
+
 	key, exists := DInfo.CSVMap[val]
-	if !exists {
+	if !exists || key < 0 {
+		util.DPrintf("failed! A\n")
 		return 0, 0
 	}
 	s := line[key]
 	if s == "" {
+		util.DPrintf("failed! B\n")
 		return 0, 0
 	}
 	ratio, err := strconv.ParseFloat(s, 64)
@@ -225,6 +327,7 @@ func getNamedFloat(val string, line []string, bitpos int) (float64, uint64) {
 		log.Panicf("getNamedFloat: invalid value: %q, err = %s\n", val, err)
 	}
 	flags |= 1 << bitpos
+	util.DPrintf("success!\n")
 	return ratio, flags
 }
 

@@ -10,7 +10,7 @@ import (
 	"github.com/stmansour/psim/data"
 )
 
-// GDInfluencer is the Influencer that predicts based on DiscountRate
+// GDInfluencer is the Influencer that predicts based on Government Debt
 type GDInfluencer struct {
 	cfg                 *util.AppConfig
 	Delta1              int
