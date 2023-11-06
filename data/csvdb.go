@@ -58,8 +58,8 @@ type DRInfo struct {
 //      IP = Industrial Production
 //      IR = Inflation Rate
 //      MP = Manufacturing Production
-//      M1 = Money Supply -
-//      M2 = Money Supply -
+//      M1 = Money Supply - short term
+//      M2 = Money Supply - long term
 //      RS = Retail Sales
 //      SP = Stock Prices
 //      UR = Unemployment Rate
@@ -229,15 +229,19 @@ func LoadCsvDB() error {
 		FLAGS |= exists
 		DataFlags.M1RatioValid = exists
 
-		RSRatio, exists := getNamedFloat("RSRatio", line, 13)
+		M2Ratio, exists := getNamedFloat("M2Ratio", line, 13)
+		FLAGS |= exists
+		DataFlags.M2RatioValid = exists
+
+		RSRatio, exists := getNamedFloat("RSRatio", line, 14)
 		FLAGS |= exists
 		DataFlags.RSRatioValid = exists
 
-		SPRatio, exists := getNamedFloat("SPRatio", line, 14)
+		SPRatio, exists := getNamedFloat("SPRatio", line, 15)
 		FLAGS |= exists
 		DataFlags.SPRatioValid = exists
 
-		URRatio, exists := getNamedFloat("URRatio", line, 15)
+		URRatio, exists := getNamedFloat("URRatio", line, 16)
 		FLAGS |= exists
 		DataFlags.URRatioValid = exists
 
@@ -256,6 +260,7 @@ func LoadCsvDB() error {
 			IRRatio: IRRatio,
 			MPRatio: MPRatio,
 			M1Ratio: M1Ratio,
+			M2Ratio: M2Ratio,
 			RSRatio: RSRatio,
 			SPRatio: SPRatio,
 			URRatio: URRatio,

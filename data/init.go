@@ -36,6 +36,7 @@ type RatesAndRatiosRecord struct {
 	IRRatio float64 // Check FLAGS for validity
 	MPRatio float64 // Check FLAGS for validity
 	M1Ratio float64 // Check FLAGS for validity
+	M2Ratio float64 // Check FLAGS for validity
 	RSRatio float64 // Check FLAGS for validity
 	SPRatio float64 // Check FLAGS for validity
 	URRatio float64 // Check FLAGS for validity
@@ -59,6 +60,7 @@ var DataFlags struct {
 	IRRatioValid uint64
 	MPRatioValid uint64
 	M1RatioValid uint64
+	M2RatioValid uint64
 	RSRatioValid uint64
 	SPRatioValid uint64
 	URRatioValid uint64
@@ -139,6 +141,7 @@ func DRec2String(drec *RatesAndRatiosRecord) string {
 	IRRatio = %9.3f  %s
 	MPRatio = %9.3f  %s
 	M1Ratio = %9.3f  %s
+	M2Ratio = %9.3f  %s
 	RSRatio = %9.3f  %s
 	SPRatio = %9.3f  %s
 	URRatio = %9.3f  %s
@@ -158,6 +161,7 @@ func DRec2String(drec *RatesAndRatiosRecord) string {
 		drec.IRRatio, isValidCheck(drec.FLAGS, DataFlags.IRRatioValid),
 		drec.MPRatio, isValidCheck(drec.FLAGS, DataFlags.MPRatioValid),
 		drec.M1Ratio, isValidCheck(drec.FLAGS, DataFlags.M1RatioValid),
+		drec.M2Ratio, isValidCheck(drec.FLAGS, DataFlags.M2RatioValid),
 		drec.RSRatio, isValidCheck(drec.FLAGS, DataFlags.RSRatioValid),
 		drec.SPRatio, isValidCheck(drec.FLAGS, DataFlags.SPRatioValid),
 		drec.URRatio, isValidCheck(drec.FLAGS, DataFlags.URRatioValid),

@@ -44,6 +44,7 @@ var ValidInfluencerSubclasses = []string{
 	"IRInfluencer",
 	"MPInfluencer",
 	// "M1Influencer",
+	// "M2Influencer",
 	"RSInfluencer",
 	"SPInfluencer",
 	"URInfluencer",
@@ -122,6 +123,10 @@ type FileConfig struct {
 	M1MaxDelta1          int       // research boundary
 	M1MinDelta2          int       // research boundary
 	M1MaxDelta2          int       // research boundary
+	M2MinDelta1          int       // research boundary
+	M2MaxDelta1          int       // research boundary
+	M2MinDelta2          int       // research boundary
+	M2MaxDelta2          int       // research boundary
 	MinDelta4            int       // closest to t3 that t4 can be
 	MaxDelta4            int       // furthest out from t3 that t4 can be
 	CCW1                 float64   // weighting in fitness calculation
@@ -134,6 +139,8 @@ type FileConfig struct {
 	IRW2                 float64   // weighting in fitness calculation
 	M1W1                 float64   // weighting in fitness calculation
 	M1W2                 float64   // weighting in fitness calculation
+	M2W1                 float64   // weighting in fitness calculation
+	M2W2                 float64   // weighting in fitness calculation
 	URW1                 float64   // weighting in fitness calculation
 	URW2                 float64   // weighting in fitness calculation
 	InvW1                float64   // weight for profit part of Investor FitnessScore
@@ -335,6 +342,7 @@ func CreateTestingCFG() *AppConfig {
 			// "GDInfluencer",
 			// "IRInfluencer",
 			// "M1Influencer",
+			// "M2Influencer",
 			"URInfluencer",
 		},
 	}
@@ -345,6 +353,7 @@ func CreateTestingCFG() *AppConfig {
 		// "GDInfluencer",
 		"IRInfluencer",
 		// "M1Influencer",
+		// "M2Influencer",
 		"URInfluencer",
 	}
 
@@ -419,6 +428,12 @@ func CreateTestingCFG() *AppConfig {
 			MaxDelta2: -20,
 		},
 		"M1": {
+			MinDelta1: -180,
+			MaxDelta1: -90,
+			MinDelta2: -50,
+			MaxDelta2: -20,
+		},
+		"M2": {
 			MinDelta1: -180,
 			MaxDelta1: -90,
 			MinDelta2: -50,
