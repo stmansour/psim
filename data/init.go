@@ -35,7 +35,7 @@ type RatesAndRatiosRecord struct {
 	IPRatio float64 // Check FLAGS for validity
 	IRRatio float64 // Check FLAGS for validity
 	MPRatio float64 // Check FLAGS for validity
-	MSRatio float64 // Check FLAGS for validity
+	M1Ratio float64 // Check FLAGS for validity
 	RSRatio float64 // Check FLAGS for validity
 	SPRatio float64 // Check FLAGS for validity
 	URRatio float64 // Check FLAGS for validity
@@ -58,7 +58,7 @@ var DataFlags struct {
 	IPRatioValid uint64
 	IRRatioValid uint64
 	MPRatioValid uint64
-	MSRatioValid uint64
+	M1RatioValid uint64
 	RSRatioValid uint64
 	SPRatioValid uint64
 	URRatioValid uint64
@@ -121,6 +121,9 @@ func Init(cfg *util.AppConfig) error {
 	return nil
 }
 
+// DRec2String provides a visual representation of what data is
+// available in the data record.
+// ------------------------------------------------------------------
 func DRec2String(drec *RatesAndRatiosRecord) string {
 	s := fmt.Sprintf(`    Date = %s
 	BCRatio = %9.3f  %s
@@ -135,7 +138,7 @@ func DRec2String(drec *RatesAndRatiosRecord) string {
 	IPRatio = %9.3f  %s
 	IRRatio = %9.3f  %s
 	MPRatio = %9.3f  %s
-	MSRatio = %9.3f  %s
+	M1Ratio = %9.3f  %s
 	RSRatio = %9.3f  %s
 	SPRatio = %9.3f  %s
 	URRatio = %9.3f  %s
@@ -154,7 +157,7 @@ func DRec2String(drec *RatesAndRatiosRecord) string {
 		drec.IPRatio, isValidCheck(drec.FLAGS, DataFlags.IPRatioValid),
 		drec.IRRatio, isValidCheck(drec.FLAGS, DataFlags.IRRatioValid),
 		drec.MPRatio, isValidCheck(drec.FLAGS, DataFlags.MPRatioValid),
-		drec.MSRatio, isValidCheck(drec.FLAGS, DataFlags.MSRatioValid),
+		drec.M1Ratio, isValidCheck(drec.FLAGS, DataFlags.M1RatioValid),
 		drec.RSRatio, isValidCheck(drec.FLAGS, DataFlags.RSRatioValid),
 		drec.SPRatio, isValidCheck(drec.FLAGS, DataFlags.SPRatioValid),
 		drec.URRatio, isValidCheck(drec.FLAGS, DataFlags.URRatioValid),

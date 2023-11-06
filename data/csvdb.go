@@ -58,7 +58,8 @@ type DRInfo struct {
 //      IP = Industrial Production
 //      IR = Inflation Rate
 //      MP = Manufacturing Production
-//      MS = Manufacturing Production
+//      M1 = Money Supply -
+//      M2 = Money Supply -
 //      RS = Retail Sales
 //      SP = Stock Prices
 //      UR = Unemployment Rate
@@ -113,9 +114,8 @@ func LoadCsvDB() error {
 		"IPRatio",
 		"IRRatio",
 		"MPRatio",
-		"MSRatio", // short term liquidity
-		// "M1Ratio", // short term liquidity
-		// "M2Ratio", // longer term liquidity
+		"M1Ratio", // short term liquidity
+		"M2Ratio", // longer term liquidity
 		"RSRatio",
 		"SPRatio",
 		"URRatio",
@@ -160,6 +160,7 @@ func LoadCsvDB() error {
 				if subclassIsUsedInSimulation(DInfo.DTypes[k]) && DInfo.CSVMap[DInfo.DTypes[k]] == -1 {
 					s := fmt.Sprintf("no column in %s had label  %s%s%s, which is required for the current simulation configuration",
 						PLATODB, DInfo.cfg.C1, DInfo.cfg.C2, DInfo.DTypes[k])
+					util.DPrintf(s)
 					return fmt.Errorf(s)
 				}
 			}
@@ -202,7 +203,7 @@ func LoadCsvDB() error {
 		GDRatio, exists := getNamedFloat("GDRatio", line, 6)
 		FLAGS |= exists
 		DataFlags.GDRatioValid = exists
-		util.DPrintf("GDRatio = %9.2f, exists = %b\n", GDRatio, exists)
+		// util.DPrintf("GDRatio = %9.2f, exists = %b\n", GDRatio, exists)
 
 		HSRatio, exists := getNamedFloat("HSRatio", line, 7)
 		FLAGS |= exists
@@ -224,9 +225,9 @@ func LoadCsvDB() error {
 		FLAGS |= exists
 		DataFlags.MPRatioValid = exists
 
-		MSRatio, exists := getNamedFloat("MSRatio", line, 12)
+		M1Ratio, exists := getNamedFloat("M1Ratio", line, 12)
 		FLAGS |= exists
-		DataFlags.MSRatioValid = exists
+		DataFlags.M1RatioValid = exists
 
 		RSRatio, exists := getNamedFloat("RSRatio", line, 13)
 		FLAGS |= exists
@@ -254,7 +255,7 @@ func LoadCsvDB() error {
 			IPRatio: IPRatio,
 			IRRatio: IRRatio,
 			MPRatio: MPRatio,
-			MSRatio: MSRatio,
+			M1Ratio: M1Ratio,
 			RSRatio: RSRatio,
 			SPRatio: SPRatio,
 			URRatio: URRatio,
@@ -310,16 +311,16 @@ func subclassIsUsedInSimulation(ss string) bool {
 func getNamedFloat(val string, line []string, bitpos int) (float64, uint64) {
 	var flags uint64
 
-	util.DPrintf("bitpos = %d, find %s val... ", bitpos, val)
+	// util.DPrintf("bitpos = %d, find %s val... ", bitpos, val)
 
 	key, exists := DInfo.CSVMap[val]
 	if !exists || key < 0 {
-		util.DPrintf("failed! A\n")
+		// util.DPrintf("failed! A\n")
 		return 0, 0
 	}
 	s := line[key]
 	if s == "" {
-		util.DPrintf("failed! B\n")
+		// util.DPrintf("failed! B\n")
 		return 0, 0
 	}
 	ratio, err := strconv.ParseFloat(s, 64)
@@ -327,7 +328,7 @@ func getNamedFloat(val string, line []string, bitpos int) (float64, uint64) {
 		log.Panicf("getNamedFloat: invalid value: %q, err = %s\n", val, err)
 	}
 	flags |= 1 << bitpos
-	util.DPrintf("success!\n")
+	// util.DPrintf("success!\n")
 	return ratio, flags
 }
 

@@ -638,14 +638,14 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 			cfg:    f.cfg,
 		}
 		return &iri, nil
-	case "MSInfluencer":
-		msi := MSInfluencer{
+	case "M1Influencer":
+		m1i := M1Influencer{
 			Delta1: Delta1,
 			Delta2: Delta2,
 			Delta4: Delta4,
 			cfg:    f.cfg,
 		}
-		return &msi, nil
+		return &m1i, nil
 	case "URInfluencer":
 		uri := URInfluencer{
 			Delta1: Delta1,

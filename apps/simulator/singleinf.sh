@@ -1,11 +1,11 @@
 #!/bin/bash
 
 influencers=(
-    "CCInfluencer"
+    # "CCInfluencer"
     "DRInfluencer"
     "GDInfluencer"
     "URInfluencer"
-    "MSInfluencer"
+    # "M1Influencer"
 )
 
 # Backup the original config.json5 file

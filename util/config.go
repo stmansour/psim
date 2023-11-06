@@ -37,13 +37,13 @@ var ValidInfluencerSubclasses = []string{
 	"CUInfluencer",
 	"DRInfluencer",
 	"EXInfluencer",
-	"GDInfluencer",
+	// "GDInfluencer",
 	"HSInfluencer",
 	"IEInfluencer",
 	"IPInfluencer",
 	"IRInfluencer",
 	"MPInfluencer",
-	"MSInfluencer",
+	// "M1Influencer",
 	"RSInfluencer",
 	"SPInfluencer",
 	"URInfluencer",
@@ -118,10 +118,10 @@ type FileConfig struct {
 	IRMaxDelta1          int       // research boundary
 	IRMinDelta2          int       // research boundary
 	IRMaxDelta2          int       // research boundary
-	MSMinDelta1          int       // research boundary
-	MSMaxDelta1          int       // research boundary
-	MSMinDelta2          int       // research boundary
-	MSMaxDelta2          int       // research boundary
+	M1MinDelta1          int       // research boundary
+	M1MaxDelta1          int       // research boundary
+	M1MinDelta2          int       // research boundary
+	M1MaxDelta2          int       // research boundary
 	MinDelta4            int       // closest to t3 that t4 can be
 	MaxDelta4            int       // furthest out from t3 that t4 can be
 	CCW1                 float64   // weighting in fitness calculation
@@ -132,8 +132,8 @@ type FileConfig struct {
 	GDW2                 float64   // weighting in fitness calculation
 	IRW1                 float64   // weighting in fitness calculation
 	IRW2                 float64   // weighting in fitness calculation
-	MSW1                 float64   // weighting in fitness calculation
-	MSW2                 float64   // weighting in fitness calculation
+	M1W1                 float64   // weighting in fitness calculation
+	M1W2                 float64   // weighting in fitness calculation
 	URW1                 float64   // weighting in fitness calculation
 	URW2                 float64   // weighting in fitness calculation
 	InvW1                float64   // weight for profit part of Investor FitnessScore
@@ -306,7 +306,9 @@ func LoadConfig() (AppConfig, error) {
 	return cfg, nil
 }
 
-// CreateTestingCFG is a function that creates a test cfg file with no secrets for us in testing
+// CreateTestingCFG is a function that creates a test cfg file with no secrets
+// for use in testing
+// -----------------------------------------------------------------------------
 func CreateTestingCFG() *AppConfig {
 	dt1 := time.Date(2022, time.January, 1, 0, 0, 0, 0, time.UTC)
 	dt2 := time.Date(2022, time.December, 31, 0, 0, 0, 0, time.UTC)
@@ -330,9 +332,9 @@ func CreateTestingCFG() *AppConfig {
 		InfluencerSubclasses: []string{ // default case is to enable all Influencer subclasses
 			"CCInfluencer",
 			"DRInfluencer",
-			"GDInfluencer",
+			// "GDInfluencer",
 			// "IRInfluencer",
-			"MSInfluencer",
+			// "M1Influencer",
 			"URInfluencer",
 		},
 	}
@@ -340,9 +342,9 @@ func CreateTestingCFG() *AppConfig {
 	InfluencerSubclasses = []string{
 		"CCInfluencer",
 		"DRInfluencer",
-		"GDInfluencer",
+		// "GDInfluencer",
 		"IRInfluencer",
-		"MSInfluencer",
+		// "M1Influencer",
 		"URInfluencer",
 	}
 
@@ -416,7 +418,7 @@ func CreateTestingCFG() *AppConfig {
 			MinDelta2: -50,
 			MaxDelta2: -20,
 		},
-		"MS": {
+		"M1": {
 			MinDelta1: -180,
 			MaxDelta1: -90,
 			MinDelta2: -50,
