@@ -32,12 +32,12 @@
     //-----------------------------------------------------------------
     
     // "IRInfluencer",
-    // "GDInfluencer",
-    // "M1Influencer"
     // "M2Influencer"
     "InfluencerSubclasses": [
       "CCInfluencer",
       "DRInfluencer",
+      "GDInfluencer",
+      "M1Influencer",
       "URInfluencer",
     ],
 
