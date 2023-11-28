@@ -13,9 +13,21 @@ import (
 	"github.com/stmansour/psim/data"
 )
 
+// CourseOfAction encapsulates the elements of an Influencer's prediction
+// ----------------------------------------------------------------------------
+type CourseOfAction struct {
+	Action     string
+	ActionPct  float64
+	BuyVotes   float64
+	SellVotes  float64
+	HoldVotes  float64
+	TotalVotes float64
+	Abstains   float64
+}
+
 // Investor is the class that manages one or more influencers to pursue an
 // investment strategy in currency exchange.
-// =---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 type Investor struct {
 	cfg               *util.AppConfig // program wide configuration values
 	factory           *Factory        // used to create Influencers
@@ -134,6 +146,103 @@ func (i *Investor) DNA() string {
 	return s
 }
 
+// GetCourseOfAction returns the Investor's "buy", "sell", "hold" prediction for T3
+//
+// --------------------------------------------------------------------------------
+func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
+	T4 := T3.AddDate(0, 0, i.Delta4) // here if we need it
+	var coa CourseOfAction
+	coa.Action = "abstain" // the prediction, assume the worst for now
+	var recs []Prediction
+	for j := 0; j < len(i.Influencers); j++ {
+		influencer := i.Influencers[j]
+		prediction, probability, weight, err := influencer.GetPrediction(T3)
+		if err != nil {
+			if err.Error() != "nildata" {
+				return coa, err
+			}
+		}
+		recs = append(recs,
+			Prediction{
+				T3:          T3,
+				T4:          T4,
+				Action:      prediction,
+				Probability: probability,
+				Weight:      weight,
+				IType:       reflect.TypeOf(influencer).String(),
+				ID:          influencer.GetID(),
+				Correct:     false, // don't know yet
+			})
+	}
+
+	//------------------------------------------------------------------------------
+	// make decision based on predictions.
+	// TODO:  This code needs to be rethought. For now, I'm using a 'majority wins'
+	//        strategy, which is probably not a good approach.
+	//------------------------------------------------------------------------------
+	if len(recs) < 1 {
+		return coa, fmt.Errorf("no predictions found")
+	}
+	for j := 0; j < len(recs); j++ {
+		switch recs[j].Action {
+		case "buy":
+			coa.BuyVotes += recs[j].Probability * recs[j].Weight
+		case "hold":
+			coa.HoldVotes += recs[j].Probability * recs[j].Weight
+		case "sell":
+			coa.SellVotes += recs[j].Probability * recs[j].Weight
+		case "abstain":
+			coa.Abstains++
+			// abstainers don't add to the totalVotes
+		}
+	}
+	setCourseOfAction(&coa, "DistributedDecision")
+
+	return coa, nil
+}
+
+// setCourseOfAction sets the Action and ActionPct based on influencers input
+// ----------------------------------------------------------------------------
+func setCourseOfAction(coa *CourseOfAction, method string) error {
+	coa.TotalVotes = coa.BuyVotes + coa.HoldVotes + coa.SellVotes // even if it's already been added, this won't hurt anything
+	switch method {
+	case "DistributedDecision":
+		return distributedDecisionCOA(coa)
+	}
+	return fmt.Errorf("course of action method not recognized: %s", method)
+}
+
+// distributedDecisionCOA accommodates all votes in its course of action
+//
+// -----------------------------------------------------------------------------
+func distributedDecisionCOA(coa *CourseOfAction) error {
+
+	if coa.BuyVotes == coa.TotalVotes {
+		coa.Action = "buy"
+		coa.ActionPct = 1.0
+	} else if coa.HoldVotes == coa.TotalVotes {
+		coa.Action = "hold"
+		coa.ActionPct = 1.0
+	} else if coa.SellVotes == coa.TotalVotes {
+		coa.Action = "sell"
+		coa.ActionPct = 1.0
+	} else if coa.BuyVotes > coa.SellVotes {
+		coa.Action = "buy"
+		holdFactor := float64(coa.HoldVotes) / float64(coa.TotalVotes)
+		activeVotes := float64(coa.BuyVotes + coa.SellVotes)
+		coa.ActionPct = (float64(coa.BuyVotes-coa.SellVotes) / activeVotes) * (1.0 - holdFactor)
+	} else if coa.SellVotes > coa.BuyVotes {
+		coa.Action = "sell"
+		holdFactor := float64(coa.HoldVotes) / float64(coa.TotalVotes)
+		activeVotes := float64(coa.BuyVotes + coa.SellVotes)
+		coa.ActionPct = (float64(coa.SellVotes-coa.BuyVotes) / activeVotes) * (1.0 - holdFactor)
+	} else {
+		coa.Action = "hold"
+		coa.ActionPct = 1.0
+	}
+	return nil
+}
+
 // BuyConversion spins through all the influencers and asks for recommendations
 // on whether to buy or hold on T3. Then the Investor decides whether to buy
 // or hold.  If a "buy" is made, then an entry is added to the Investments
@@ -164,7 +273,7 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 	var recs []Prediction
 	for j := 0; j < len(i.Influencers); j++ {
 		influencer := i.Influencers[j]
-		prediction, probability, err := influencer.GetPrediction(T3)
+		prediction, probability, weight, err := influencer.GetPrediction(T3)
 		if err != nil {
 			if err.Error() != "nildata" {
 				return BuyCount, err
@@ -176,6 +285,7 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 				T4:          T4,
 				Action:      prediction,
 				Probability: probability,
+				Weight:      weight,
 				IType:       reflect.TypeOf(influencer).String(),
 				ID:          influencer.GetID(),
 				Correct:     false, // don't know yet
@@ -265,6 +375,12 @@ func (i *Investor) SellConversion(t4 time.Time) (int, error) {
 	SellCount := 0
 	err = nil
 
+	//-------------------------------------------------------
+	// first... determine whether we buy, sell, or hold...
+	//-------------------------------------------------------
+
+	//------------------------------------------------------------------
+
 	// Look for investments to sell on t4
 	jlen := len(i.Investments)
 	for j := 0; j < jlen; j++ {
@@ -287,6 +403,7 @@ func (i *Investor) SellConversion(t4 time.Time) (int, error) {
 			SellCount++
 		}
 	}
+
 	return SellCount, err
 }
 

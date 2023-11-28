@@ -13,31 +13,43 @@ import (
 // -----------------------------------------------------------------------------------
 type RatioFunc func(*data.RatesAndRatiosRecord, *data.RatesAndRatiosRecord) (float64, float64, float64)
 
-// getPrediction - using the supplied date, it researches data and makes
+// getPrediction using the supplied date, it researches data and makes
 //
-//	a prediction on whther to "buy" or "hold".  This consolidates the
-//	same code used by all Influencers
+//		 a prediction on whether to "buy", "sell", "hold", or "abstain".
+//	  This function consolidates the same code used by all Influencers.
+//
+//		 Current method:  subtract the C2 data ratio from the C1 data ratio.
+//		 The rediction is based on where the result lands in this space:
+//
+//		                    |<------------------HOLD------------------->|
+//		           <-- SELL |<--      mn       -->|<--       mx      -->| BUY -->
+//		 -------------------|---------------------|---------------------|------------------------
+//		                                         0.0
 //
 // INPUTS
 //
-//	    t3 - date of the transaction
+//	    t3 = date of the transaction
 //	delta1 = # days prior to t3 to begin research
 //	delta2 = # days prior to t3 to end research
 //	bitpos = bit position of valid data flag for this Influencer
+//	dbg    - print date, numbers, dRR, and prediction
+//	mn,mx  - the min and max values less than and greater than 0
+//	         that is considered the "hold space".
 //
 // RETURNS
 //
-//			action     - "buy" or "hold" or "abstain"
-//	                  "abstain" means remove it from the decision making process
-//	                  because there was an error in doing its research (most likely
-//	                  the data it needed was missing)
-//			confidence - probability that the prediction is correct
-//			error      - nil on success, error encountered otherwise
-//		 dbg        - print date, numbers, dRR, and prediction
+//				action     - "buy", "sell", "hold", or "abstain"
+//			                 "abstain" means remove it from the decision making process
+//			                 because there was an error in doing its research (most likely
+//			                 the data it needed was missing)
+//				confidence - probability that the prediction is correct.  TEMPORARY IMPL
+//		                     (it always returns 1.0 for confidence at this point)
+//	         weight     - how much to weight this decision (always 1.0 for now)
+//				error      - nil on success, error encountered otherwise
 //
 // ---------------------------------------------------------------------------
-func getPrediction(t3 time.Time, p Influencer, f RatioFunc, dbg bool) (string, float64, error) {
-	prediction := "abstain"
+func getPrediction(t3 time.Time, p Influencer, f RatioFunc, dbg bool, mn, mx float64) (string, float64, float64, error) {
+	prediction := "abstain" // assume no data
 
 	t1 := t3.AddDate(0, 0, p.GetDelta1())
 	t2 := t3.AddDate(0, 0, p.GetDelta2())
@@ -45,12 +57,12 @@ func getPrediction(t3 time.Time, p Influencer, f RatioFunc, dbg bool) (string, f
 	rec1 := data.CSVDBFindRecord(t1)
 	if rec1 == nil {
 		err := fmt.Errorf("data.RatesAndRatiosRecord for %s not found", t1.Format("1/2/2006"))
-		return prediction, 0, err
+		return prediction, 0, 0, err
 	}
 	rec2 := data.CSVDBFindRecord(t2)
 	if rec2 == nil {
 		err := fmt.Errorf("data.RatesAndRatiosRecord for %s not found", t2.Format("1/2/2006"))
-		return prediction, 0, err
+		return prediction, 0, 0, err
 	}
 	flagpos := p.GetFlagPos()
 	flagslot := uint64(1 << flagpos)
@@ -63,21 +75,23 @@ func getPrediction(t3 time.Time, p Influencer, f RatioFunc, dbg bool) (string, f
 			p.IncNilDataCount()
 		}
 		err := fmt.Errorf("nildata")
-		return prediction, 0, err
+		return prediction, 0, 0, err
 	}
 
 	d1, d2, dRR := f(rec1, rec2)
 
-	prediction = "hold"
-	if dRR > 0 {
-		prediction = "buy"
+	prediction = "hold" // we have the data and made the calculation.  Assume "hold"
+	if dRR > mx {
+		prediction = "buy" // check buy condition
+	} else if dRR < mn {
+		prediction = "sell" // check sell condition
 	}
 
 	if dbg {
 		fmt.Printf("%s: ratio(t1) = %5.2f, ratio(t2) = %5.2f, dRR = %5.2f, prediction = %s\n", t3.Format("01/02/2006"), d1, d2, dRR, prediction)
 	}
-	// todo - return proper probability
-	return prediction, 0.5, nil
+	// todo - return proper probability and weight
+	return prediction, 1.0, 1.0, nil
 }
 
 // calculatFitness - the generic Fitness Score calculator for many of the Influencer subclasses.

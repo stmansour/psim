@@ -1,5 +1,11 @@
 //  PLATO SIMULATOR CONFIGURATION FILE
 //  JSON5 is being used primarily so that we can add comments to this file.
+//
+//  Notes:
+//    floating point numbers cannot begin with ".".  
+//    That is:  
+//       0.1 is valid
+//        .1 is not valid
 //----------------------------------------------------------------------------------
 {
     //-----------------------------------------------------------------
@@ -8,7 +14,7 @@
     "DtStart": "2018-01-01",    // simulation start date for each generation
     "DtStop": "2018-12-31",     // simulation stop date for each generation
     "LoopCount": 20,            // How many times to loop over DtStart to DtStop
-    "Generations": 1,          // how many generations should the simulator run. NOTE: This value is only valid if GenDurSpec is commented out.
+    "Generations": 1,           // how many generations should the simulator run. NOTE: This value is only valid if GenDurSpec is commented out.
     // "GenDurSpec": "1 Y",        // How long is a generation.  EX:  "1 Y",  "6 M",  "8 W", "1 Y 6 M", "90 D"
     "PopulationSize": 200,      // Total number Investors in the population
     "C1": "USD",                // main currency  (ISO 4217 code)
@@ -17,6 +23,8 @@
     "StdInvestment": 10000.00,  // the "standard" investment amount if a decision is made to invest in C2
     "MutationRate": 1,          // number between 1 and 100, indicating the percentage of mutation
     "DBSource": "CSV",          // { CSV | Database | OnlineService }
+    "HoldWindowPos": 0.1,       // positive hold area
+    "HoldWindowNeg": -0.1,      // negative hold area 
 
     //-----------------------------------------------------------------
     //  INFLUENCER SUBCLASSES

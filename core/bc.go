@@ -10,12 +10,14 @@ import (
 	"github.com/stmansour/psim/data"
 )
 
-// BCInfluencer is the Influencer that predicts based on DiscountRate
+// BCInfluencer is the Influencer that predicts based on
 type BCInfluencer struct {
 	cfg                 *util.AppConfig
 	Delta1              int
 	Delta2              int
 	Delta4              int
+	HoldMin             float64 // ratio diffs below this amount indicate sell
+	HoldMax             float64 // ratio diffs above this amount indicate buy
 	ID                  string
 	FitnessIsCalculated bool
 	FitnessIsNormalized bool
@@ -191,17 +193,17 @@ func (p *BCInfluencer) DNA() string {
 //
 // RETURNS
 //
-//	action     -  "buy" or "hold"
-//	prediction - probability of correctness - most valid for "buy" action
-//	error      - nil on success, error encountered otherwise
+//	action   -  "buy" or "hold"
+//	prob     - probability of correctness - most valid for "buy" action
+//	error    - nil on success, error encountered otherwise
 //
 // ---------------------------------------------------------------------------
-func (p *BCInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
+func (p *BCInfluencer) GetPrediction(t3 time.Time) (string, float64, float64, error) {
 	return getPrediction(t3, p,
 		func(rec1, rec2 *data.RatesAndRatiosRecord) (float64, float64, float64) {
 			return rec1.BCRatio, rec2.BCRatio, rec1.BCRatio - rec2.BCRatio
 		},
-		p.cfg.InfPredDebug)
+		p.cfg.InfPredDebug, p.cfg.HoldWindowNeg, p.cfg.HoldWindowPos)
 }
 
 // CalculateFitnessScore - See explanation in common.go calculateFitnessScore

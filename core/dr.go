@@ -16,6 +16,8 @@ type DRInfluencer struct {
 	Delta1              int
 	Delta2              int
 	Delta4              int
+	HoldMin             float64 // ratio diffs below this amount indicate sell
+	HoldMax             float64 // ratio diffs above this amount indicate buy
 	ID                  string
 	FitnessIsCalculated bool
 	FitnessIsNormalized bool
@@ -196,12 +198,12 @@ func (p *DRInfluencer) DNA() string {
 //	error      - nil on success, error encountered otherwise
 //
 // ---------------------------------------------------------------------------
-func (p *DRInfluencer) GetPrediction(t3 time.Time) (string, float64, error) {
+func (p *DRInfluencer) GetPrediction(t3 time.Time) (string, float64, float64, error) {
 	return getPrediction(t3, p,
 		func(rec1, rec2 *data.RatesAndRatiosRecord) (float64, float64, float64) {
 			return rec1.DRRatio, rec2.DRRatio, rec1.DRRatio - rec2.DRRatio
 		},
-		p.cfg.InfPredDebug)
+		p.cfg.InfPredDebug, p.cfg.HoldWindowNeg, p.cfg.HoldWindowPos)
 }
 
 // CalculateFitnessScore - See explanation in common.go calculateFitnessScore

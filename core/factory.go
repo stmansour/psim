@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/stmansour/psim/data"
 	"github.com/stmansour/psim/util"
 )
 
@@ -15,6 +16,7 @@ type Factory struct {
 	cfg         *util.AppConfig // system-wide configuration info
 	MutateCalls int64           // how many calls were made to Mutate()
 	Mutations   int64           // how many times did mutation happen
+
 }
 
 // InfluencerDNA is a struct of information used during the process of
@@ -604,64 +606,138 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 		return nil, err
 	}
 
+	//============================================
+	// TODO:  Add mn,mx to the influencer data
+	//============================================
 	switch subclassName {
-	case "CCInfluencer":
-		cri := CCInfluencer{
-			Delta1: Delta1,
-			Delta2: Delta2,
-			Delta4: Delta4,
-			cfg:    f.cfg,
+	case "BCInfluencer":
+		x := BCInfluencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			Delta4:  Delta4,
+			HoldMin: data.DBInfo.HoldSpace["BCRatio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["BCRatio"].Mx,
+			cfg:     f.cfg,
 		}
-		return &cri, nil
+		return &x, nil
+
+	case "BPInfluencer":
+		x := BPInfluencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			Delta4:  Delta4,
+			HoldMin: data.DBInfo.HoldSpace["BPRatio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["BPRatio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
+	case "CCInfluencer":
+		x := CCInfluencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			Delta4:  Delta4,
+			HoldMin: data.DBInfo.HoldSpace["CCRatio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["CCRatio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
+	// case "CUInfluencer":
+	// 	x := CUInfluencer{
+	// 		Delta1: Delta1,
+	// 		Delta2: Delta2,
+	// 		Delta4: Delta4,
+	//		HoldMin: data.DBInfo.HoldSpace["BCRatio"].Mn,
+	//		HoldMax:data.DBInfo.HoldSpace["BCRatio"].Mx,
+	// 		cfg:    f.cfg,
+	// 	}
+	// 	return &x, nil
 
 	case "DRInfluencer":
-		dri := DRInfluencer{
-			Delta1: Delta1,
-			Delta2: Delta2,
-			Delta4: Delta4,
-			cfg:    f.cfg,
+		x := DRInfluencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			Delta4:  Delta4,
+			HoldMin: data.DBInfo.HoldSpace["DRRatio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["DRRatio"].Mx,
+			cfg:     f.cfg,
 		}
-		return &dri, nil
+		return &x, nil
+
 	case "GDInfluencer":
-		dri := GDInfluencer{
-			Delta1: Delta1,
-			Delta2: Delta2,
-			Delta4: Delta4,
-			cfg:    f.cfg,
+		x := GDInfluencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			Delta4:  Delta4,
+			HoldMin: data.DBInfo.HoldSpace["GDRatio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["GDRatio"].Mx,
+			cfg:     f.cfg,
 		}
-		return &dri, nil
+		return &x, nil
+
+	// case "HSInfluencer":
+	// 	hsi := HSInfluencer{
+	// 		Delta1: Delta1,
+	// 		Delta2: Delta2,
+	// 		Delta4: Delta4,
+	// HoldMin: data.DBInfo.HoldSpace["BCRatio"].Mn,
+	// HoldMax:data.DBInfo.HoldSpace["BCRatio"].Mx,
+	// 		cfg:    f.cfg,
+	// 	}
+	// 	return &hsi, nil
+
+	// case "IEInfluencer":
+
+	// case "IPInfluencer":
+
 	case "IRInfluencer":
-		iri := IRInfluencer{
-			Delta1: Delta1,
-			Delta2: Delta2,
-			Delta4: Delta4,
-			cfg:    f.cfg,
+		x := IRInfluencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			Delta4:  Delta4,
+			HoldMin: data.DBInfo.HoldSpace["IRRatio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["IRRatio"].Mx,
+			cfg:     f.cfg,
 		}
-		return &iri, nil
+		return &x, nil
+
 	case "M1Influencer":
-		m1i := M1Influencer{
-			Delta1: Delta1,
-			Delta2: Delta2,
-			Delta4: Delta4,
-			cfg:    f.cfg,
+		x := M1Influencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			Delta4:  Delta4,
+			HoldMin: data.DBInfo.HoldSpace["M1Ratio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["M1Ratio"].Mx,
+			cfg:     f.cfg,
 		}
-		return &m1i, nil
+		return &x, nil
+
 	case "M2Influencer":
-		m2i := M2Influencer{
-			Delta1: Delta1,
-			Delta2: Delta2,
-			Delta4: Delta4,
-			cfg:    f.cfg,
+		x := M2Influencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			Delta4:  Delta4,
+			HoldMin: data.DBInfo.HoldSpace["M2Ratio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["M2Ratio"].Mx,
+			cfg:     f.cfg,
 		}
-		return &m2i, nil
+		return &x, nil
+
+	// case "RSInfluencer":
+
+	// case "SPInfluencer":
+
 	case "URInfluencer":
-		uri := URInfluencer{
-			Delta1: Delta1,
-			Delta2: Delta2,
-			Delta4: Delta4,
-			cfg:    f.cfg,
+		x := URInfluencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			Delta4:  Delta4,
+			HoldMin: data.DBInfo.HoldSpace["URRatio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["URRatio"].Mx,
+			cfg:     f.cfg,
 		}
-		return &uri, nil
+		return &x, nil
 	default:
 		return nil, errors.New("unknown subclass")
 	}

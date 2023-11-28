@@ -35,19 +35,18 @@ var ValidInfluencerSubclasses = []string{
 	"BPInfluencer",
 	"CCInfluencer",
 	"CUInfluencer",
-	"DRInfluencer",
-	"EXInfluencer",
+	"DRInfluencer", // discount rate
 	"GDInfluencer",
-	"HSInfluencer",
+	"HSInfluencer", // housing starts
 	"IEInfluencer",
 	"IPInfluencer",
-	"IRInfluencer",
+	"IRInfluencer", // inflation rate
+	"M1Influencer", // money supply short term
+	"M2Influencer", // money supply long term
 	"MPInfluencer",
-	"M1Influencer",
-	"M2Influencer",
 	"RSInfluencer",
 	"SPInfluencer",
-	"URInfluencer",
+	"URInfluencer", // unemployment rate
 }
 
 // InfluencerSubclasses is an array of strings with all the subclasses of
@@ -71,9 +70,8 @@ func (t *CustomDate) UnmarshalJSON(data []byte) error {
 }
 
 // FileConfig contains all the configuration values for the Simulator,
-// Investors, and Influencers. I had to put it here in order to be visible
-// to all areas of code in this project.
-// Do not get rid of the json tags
+// Investors, and Influencers. It needs to be in this directory so that
+// it is visible to all areas of code in this project.
 // ---------------------------------------------------------------------------
 type FileConfig struct {
 	C1        string     // Currency1 - the currency that we're trying to maximize
@@ -81,6 +79,13 @@ type FileConfig struct {
 	DtStart   CustomDate // simulation begins on this date
 	DtStop    CustomDate // simulation ends on this date. Guaranteed that no "buys" happen after this date
 	LoopCount int        // how many times to loop over DtStart to DtStop
+
+	//----------------------------------------------------------------------------------------------
+	// computed as follows a percentage of the ExchangeRateRatio on the first day of the simulation
+	//----------------------------------------------------------------------------------------------
+	HoldWindowPos float64 // positive space to consider as "no difference" when subtracting two ratios
+	HoldWindowNeg float64 // negative space to consider as "no difference" when subtracting two ratios
+
 	//--------------------------------------------------------------------------------
 	// The format of the GenDurSpec string is one to four pairs of the the following
 	// values:  an integer,  one of the following letters: YMWD. There can be 1,
@@ -161,6 +166,8 @@ type AppConfig struct {
 	DtStart              CustomDate                        // simulation begins on this date
 	DtStop               CustomDate                        // simulation ends on this date
 	LoopCount            int                               // how many times to loop over DtStart to DtStop
+	HoldWindowPos        float64                           // positive space to consider as "no difference" when subtracting two ratios
+	HoldWindowNeg        float64                           // negative space to consider as "no difference" when subtracting two ratios
 	GenDurSpec           string                            // gen dur spec
 	GenDur               *GenerationDuration               // parsed gen dur spec
 	DtSettle             time.Time                         // later of DtStop or date on which the last sale was made

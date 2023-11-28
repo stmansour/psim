@@ -13,10 +13,29 @@ import (
 	"github.com/stmansour/psim/util"
 )
 
-// DRInfo is meta information about the discount rate data
-type DRInfo struct {
-	DtStart time.Time // earliest date with data
-	DtStop  time.Time // latest date with data
+// HoldLimits are used to define the delta between ratios that are to be considered as a "hold"
+// The values are a percentage. The percentages are applied to the first value on or after the
+// simulation date. The area between delta*mn and delta*mx is the hold area.
+// -----------------------------------------------------------------------------------------------
+type HoldLimits struct {
+	Mn float64
+	Mx float64
+}
+
+// DBInfo is meta information about the discount rate data
+var DBInfo struct {
+	MaxValidBitpos int
+
+	//-----------------------------------------------------------------------------------------------------
+	// note that HoldRec.Date is not necessarily the date for the values found.
+	// The values are the first valid values found on or after the simulation start date.
+	//-----------------------------------------------------------------------------------------------------
+	HoldRec RatesAndRatiosRecord // values on first day of simulation to help set "hold" area.
+
+	//-----------------------------------------------------------------------------------------------------
+	// HoldSpace is a map that defines the hold space for the data type used as an index
+	//-----------------------------------------------------------------------------------------------------
+	HoldSpace map[string]HoldLimits
 }
 
 //****************************************************************************
@@ -84,6 +103,20 @@ type DRInfo struct {
 //
 // ---------------------------------------------------------------------------
 func LoadCsvDB() error {
+	err := LoadCsvData()
+	if err != nil {
+		return err
+	}
+	DBInfo.HoldSpace = make(map[string]HoldLimits)
+	err = InitHoldSpace()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// LoadCsvData does the bulk of the work for LoadCsvDB
+func LoadCsvData() error {
 	file, err := os.Open(PLATODB)
 	if err != nil {
 		fmt.Println(err)
@@ -102,25 +135,25 @@ func LoadCsvDB() error {
 	// Here are the types of data the influencers support...
 	//-------------------------------------------------------
 	DInfo.DTypes = []string{
-		"BCRatio",
-		"BPRatio",
-		"CCRatio",
-		"CURatio",
-		"DRRatio",
-		"EXClose",
-		"GDRatio",
-		"HSRatio",
-		"IERatio",
-		"IPRatio",
-		"IRRatio",
-		"MPRatio",
-		"M1Ratio", // short term liquidity
-		"M2Ratio", // longer term liquidity
-		"RSRatio",
-		"SPRatio",
-		"URRatio",
+		"BCRatio", //  0 - Business Confidence Ratio
+		"BPRatio", //  1 – Building Permits Ratio
+		"CCRatio", //  2 - Consumer Confidence Ratio
+		"CPRatio", //  3 - -Corporate Profits Ratio
+		"CURatio", //  4 – Capacity Utilization Ratio
+		"DRRatio", //  5 – Discount Rate Ratio
+		"EXClose", //  6 - Exchange Rate Close
+		"GDRatio", //  7 – Debt to GDP Ratio
+		"HSRatio", //  8 - Housing Starts Ratio
+		"IERatio", //  9 - Inflation Expectations Ratio
+		"IPRatio", // 10 – Industrial Production Ratio
+		"IRRatio", // 11 - Inflation Rate Ratio
+		"MPRatio", // 12 – Manufacturing Production Ratio
+		"M1Ratio", // 13 – M1 Money Supply Ratio
+		"M2Ratio", // 14 – M2 Money Supply Ratio
+		"RSRatio", // 15 – Retail Sales Ratio
+		"SPRatio", // 16 – Stock Price Ratio
+		"URRatio", // 17 – Unemployment Rate Ratio
 	}
-
 	//----------------------------------------------------------------------
 	// Keep track of the column with the data needed for each ratio.  This
 	// is based on the two currencies in the simulation.
@@ -334,6 +367,12 @@ func getNamedFloat(val string, line []string, bitpos int) (float64, uint64) {
 	}
 	flags |= 1 << bitpos
 	// util.DPrintf("success!\n")
+
+	// keep track of the maximum bit position
+	if bitpos > DBInfo.MaxValidBitpos {
+		DBInfo.MaxValidBitpos = bitpos
+	}
+
 	return ratio, flags
 }
 
