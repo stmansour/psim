@@ -144,18 +144,16 @@ func TestInvestorDNA(t *testing.T) {
 		}
 		fmt.Printf("action = %s, prob = %4.2f, weight = %4.2f\n", action, prob, weight)
 
-		buy, err := x.MyInvestor().BuyConversion(dt)
+		err = x.MyInvestor().DailyRun(dt, false)
 		if err != nil {
 			t.Errorf("BuyConversion returned error: %s", err)
 		}
-		fmt.Printf("buy = %d\n", buy)
 
-		t4 := dt.AddDate(0, 0, x.GetDelta4())
-		sellcount, err := x.MyInvestor().SellConversion(t4)
+		t4 := dt.AddDate(0, 0, 5)
+		err = x.MyInvestor().DailyRun(t4, false)
 		if err != nil {
 			t.Errorf("SellConversion returned error: %s", err)
 		}
-		fmt.Printf("sellcount = %d\n", sellcount)
 
 	}
 

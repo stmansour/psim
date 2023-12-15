@@ -6,6 +6,7 @@ import (
 	"math"
 	"os"
 	"reflect"
+	"sort"
 	"time"
 
 	"github.com/stmansour/psim/util"
@@ -44,6 +45,7 @@ type Investor struct {
 	FitnessCalculated bool            // true after fitness score is calculated and stored in Fitness
 	Fitness           float64         // Fitness score calculated at the end of a simulation cycle
 	CreatedByDNA      bool            // some init steps must be skipped if it's created from DNA
+	ID                string          // unique id for this investor
 }
 
 // Investment describes a full transaction when the Investor decides to buy.
@@ -63,15 +65,17 @@ type Investment struct {
 	T4BalanceC2 float64   // C2 balance after exchange on T4
 	T3C1        float64   // amount of C1 exchanged for C2 on T3
 	T3C2Buy     float64   // the amount of currency in C2 that T3C1 purchased on T3
-	T4C2Sold    float64   // for now, this is always going to be the same as T3C2Buy
+	T4C2Sold    float64   // we may need to sell it off over multiple transactions. This keeps track of how much we've sold.
 	ERT3        float64   // the exchange rate on T3
 	ERT4        float64   // the exchange rate on T4
 	T4C1        float64   // amount of currency C1 we were able to purchase with C2 on T4 at exchange rate ERT4
 	Delta4      int       // t4 = t3 + Delta4 - "sell" date
 	Completed   bool      // true when the investmnet has been exchanged C2 for C1
-	Profitable  bool      // was this a profitable investment?
+	Profitable  []bool    // was this a profitable investment?  Can be multiple if sold across multiple sales.
 	RetryCount  int       // how many times was this retried
 }
+
+var rnderr = float64(0.01) // if we have less than this amount of C2 remaining, just assume we're done.
 
 // Init is called during Generation 1 to get things started.  All settable
 // fields are set to random values.
@@ -150,7 +154,7 @@ func (i *Investor) DNA() string {
 //
 // --------------------------------------------------------------------------------
 func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
-	T4 := T3.AddDate(0, 0, i.Delta4) // here if we need it
+	// T4 := T3.AddDate(0, 0, i.Delta4) // here if we need it
 	var coa CourseOfAction
 	coa.Action = "abstain" // the prediction, assume the worst for now
 	var recs []Prediction
@@ -164,8 +168,8 @@ func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 		}
 		recs = append(recs,
 			Prediction{
-				T3:          T3,
-				T4:          T4,
+				T3: T3,
+				// T4:          T4,
 				Action:      prediction,
 				Probability: probability,
 				Weight:      weight,
@@ -173,6 +177,7 @@ func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 				ID:          influencer.GetID(),
 				Correct:     false, // don't know yet
 			})
+
 	}
 
 	//------------------------------------------------------------------------------
@@ -181,6 +186,7 @@ func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 	//        strategy, which is probably not a good approach.
 	//------------------------------------------------------------------------------
 	if len(recs) < 1 {
+
 		return coa, fmt.Errorf("no predictions found")
 	}
 	for j := 0; j < len(recs); j++ {
@@ -196,9 +202,28 @@ func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 			// abstainers don't add to the totalVotes
 		}
 	}
-	setCourseOfAction(&coa, "DistributedDecision")
+
+	setCourseOfAction(&coa, i.cfg.COAStrategy)
+	if i.cfg.Trace {
+		for j := 0; j < len(recs); j++ {
+			i.FormatPrediction(&recs[j])
+		}
+		i.FormatCOA(&coa)
+	}
 
 	return coa, nil
+}
+
+// FormatPrediction prints a readable version of the Influencers predictions
+// ----------------------------------------------------------------------------
+func (i *Investor) FormatPrediction(p *Prediction) {
+	fmt.Printf("\t%s: %s\n", p.IType, p.Action)
+}
+
+// FormatPrediction prints a readable version of the Influencers predictions
+// ----------------------------------------------------------------------------
+func (i *Investor) FormatCOA(c *CourseOfAction) {
+	fmt.Printf("\tCOA:  Action: %s  %4.2f  |  Buy: %6.2f   Hold: %6.2f   Sell: %6.2f   Abstain: %6.2f\n", c.Action, c.ActionPct, c.BuyVotes, c.HoldVotes, c.SellVotes, c.Abstains)
 }
 
 // setCourseOfAction sets the Action and ActionPct based on influencers input
@@ -243,6 +268,328 @@ func distributedDecisionCOA(coa *CourseOfAction) error {
 	return nil
 }
 
+// DailyRun is the main function of an Investor - manage funds for today
+//
+// INPUTS
+//
+//	T3      - day to evaluate and act on
+//	sellall - if true simulator has passed the simulation end date. Only execute
+//	          sells until we're out of C2.  We'll consider anything less
+//	          than 1.00 C2 to be "done"
+//
+// RETURNS
+// err - any error encountered
+// ------------------------------------------------------------------------------
+func (i *Investor) DailyRun(T3 time.Time, sellall bool) error {
+	if i.cfg.Trace {
+		fmt.Printf("%s - %s\n", T3.Format("Jan _2, 2006"), i.ID)
+	}
+	coa, err := i.GetCourseOfAction(T3)
+	if err != nil {
+		return err
+	}
+	switch coa.Action {
+	case "buy":
+		if sellall {
+			return nil
+		}
+		if err = i.ExecuteBuy(T3, coa.ActionPct); err != nil {
+			return err
+		}
+	case "sell":
+		if err = i.ExecuteSell(T3, coa.ActionPct); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// ExecuteBuy does an exchange of C1 for C2 on T3. It will purchase pct*i.cfg.StdInvestment
+//
+// INPUTS
+// T3 - the date on which this buy is being executed
+// pct - the percentage of the StdInvestment amount.
+// RETURNS
+// err - any error encountered
+// -----------------------------------------------------------------------------
+func (i *Investor) ExecuteBuy(T3 time.Time, pct float64) error {
+	//-------------------------------------------------------
+	// make sure we have funds before executing any buy...
+	//-------------------------------------------------------
+	if i.BalanceC1 < 1.00 {
+		return nil
+	}
+
+	var inv Investment
+	inv.id = util.GenerateRefNo()
+	inv.T3C1 = i.cfg.StdInvestment * pct
+	if i.BalanceC1 < i.cfg.StdInvestment {
+		inv.T3C1 = i.BalanceC1
+	}
+	inv.T3 = T3
+	er3 := data.CSVDBFindRecord(inv.T3)
+	if er3 == nil {
+		return fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found", inv.T3.Format("1/2/2006"))
+	}
+
+	inv.ERT3 = er3.EXClose                     // exchange rate on T3
+	inv.T3C2Buy = inv.T3C1 * inv.ERT3          // amount of C2 we purchased on T3
+	inv.T4C2Sold = 0                           // just being explicit, haven't sold any of it yet
+	i.BalanceC1 -= inv.T3C1                    // we spent this much C1...
+	i.BalanceC2 += inv.T3C2Buy                 // to purchase this much more C2
+	inv.T3BalanceC1 = i.BalanceC1              // C1 balance after exchange
+	inv.T3BalanceC2 = i.BalanceC2              // C2 balance after exchange
+	i.Investments = append(i.Investments, inv) // add it to the list of investments
+
+	if i.cfg.Trace {
+		i.showBuy(&inv)
+	}
+
+	return nil
+}
+
+func (i *Investor) showBuy(inv *Investment) {
+	fmt.Printf("%s - BUY   %8.2f %s (%8.2f %s)\n", inv.T3.Format("Jan 02, 2006"), inv.T3C1, i.cfg.C1, inv.T3C2Buy, i.cfg.C2)
+}
+
+// ExecuteSell does an exchange of C2 for C1 on T4. It will purchase pct*i.cfg.StdInvestment
+//
+// INPUTS
+// T4 - the date on which this buy is being executed
+// pct - the percentage of the StdInvestment amount.
+// RETURNS
+// err - any error encountered
+// -----------------------------------------------------------------------------
+func (i *Investor) ExecuteSell(T4 time.Time, pct float64) error {
+	//------------------------------------------
+	// Make sure we have something to sell...
+	//------------------------------------------
+	if i.BalanceC2 < 1.00 {
+		return nil
+	}
+	sellAmount := pct * i.BalanceC2 // the action was to sell pct * i.BalanceC2
+	i.settleInvestment(T4, sellAmount)
+
+	return nil
+}
+
+// settleInvestment - this code was moved to a method as it needed to be done
+//
+//	This function is called when we need to convert C2 from the jth Investment
+//	back to C1
+//
+// INPUTS
+//
+//	   t4         - sell date
+//	   sellAmount - the amount we're looking to sell.  Could be greater than, equal to,
+//		               or less than the amount of C2 we gained in this Investment.
+//
+// RETURNS
+//
+//	   adjusted sellAmount after settling this investment
+//		  any critical error encountered
+//
+// -----------------------------------------------------------------------------
+func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, error) {
+	var err error
+	var thisSaleC2 float64
+	var thisSaleC1 float64
+
+	//-------------------------------------------------
+	// Save the exchange rate on the day of sale, t4
+	//-------------------------------------------------
+	er4 := data.CSVDBFindRecord(t4)
+	if er4 == nil {
+		// this should never happen.
+		err = fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found; Investment marked as completed", t4.Format("1/2/2006"))
+		fmt.Printf("%s\n", err.Error())
+		return sellAmount, nil // it's was not a critical error, it's been reported, just keep going
+	}
+
+	//-------------------------------------------------------------------
+	// Now that we have today's exchange rate... sort the investments
+	// by ERT4 decending.  We do this so that we sell everything we can
+	// at the greatest loss... per Joe, this gives us tax benefits. This
+	// is accomplished by processing the Investments slice sorted by
+	// ERT4 descending. Profitability is inversely proportional to T4 EXClose.
+	//-------------------------------------------------------------------
+	for j := 0; j < len(i.Investments); j++ {
+		if !i.Investments[j].Completed {
+			i.Investments[j].ERT4 = er4.EXClose // exchange rate on T4... just applies to this sale, we don't touch completed Investments
+		}
+	}
+	i.sortInvestmentsDescending()
+
+	//-----------------------------------------------------------------
+	// Now spin through the investments selling "sellAmount" of C2
+	//-----------------------------------------------------------------
+	for j := 0; j < len(i.Investments) && sellAmount > rnderr; j++ {
+		if i.Investments[j].Completed {
+			continue // skip if already processed
+		}
+
+		//---------------------------------------------------------------------------------
+		// If amount we're selling is greater than or equal to what's in this investment
+		// then we'll sell it all.  Otherwise we'll sell enough to cover sellAmount
+		//---------------------------------------------------------------------------------
+		remaining := i.Investments[j].T3C2Buy - i.Investments[j].T4C2Sold // remaining is how much C2 we bought in this Investment minus what we've already sold
+		if sellAmount >= remaining {
+			thisSaleC2 = i.Investments[j].T3C2Buy // sell everything we bought on T3
+		} else {
+			thisSaleC2 = sellAmount // sellAmount is < what we have. So we'll sell a portion
+		}
+
+		sellAmount -= thisSaleC2                                                                    // adjust sellAmount now that we know how much to sell in this exchange
+		i.Investments[j].T4C2Sold += thisSaleC2                                                     // add what we're selling now to what's already been sold
+		thisSaleC1 = thisSaleC2 / i.Investments[j].ERT4                                             // amount of C1 we got back by selling "sellAmount"
+		i.Investments[j].T4C1 += thisSaleC1                                                         // add the C1 we got back to the cumulative total for this investment
+		p := i.Investments[j].ERT4 > i.Investments[j].ERT3                                          // this is the profitability condition at its simplest
+		i.Investments[j].Profitable = append(i.Investments[j].Profitable, p)                        // was this transaction profitable?  Save it in the list
+		i.Investments[j].Completed = (i.Investments[j].T4C2Sold+rnderr >= i.Investments[j].T3C2Buy) // we'rd completed when we've sold as much as we bought
+		i.BalanceC1 += i.Investments[j].T4C1                                                        // we recovered this much C1...
+		i.BalanceC2 -= i.Investments[j].T4C2Sold                                                    // by selling this C2
+		i.Investments[j].T4BalanceC1 = i.BalanceC1                                                  // amount of C1 after this exchange
+		i.Investments[j].T4BalanceC2 = i.BalanceC2                                                  // amount of C2 after this exchange
+		i.Investments[j].T4 = t4                                                                    // the date on which this particular sale was done (we don't save all dates of sale)
+
+		//-------------------------------------------------------------
+		// Update each Influencer's predictions...
+		//-------------------------------------------------------------
+		for k := 0; k < len(i.Influencers); k++ {
+			i.Influencers[k].FinalizePrediction(i.Investments[j].T3, t4, p)
+		}
+		i.showSell(&i.Investments[j], thisSaleC1, thisSaleC2)
+	}
+
+	return sellAmount, nil
+}
+
+func (i *Investor) showSell(inv *Investment, tsc1, tsc2 float64) {
+	fmt.Printf("%s - SELL  %8.2f %s (%8.2f %s)\n", inv.T4.Format("Jan 02, 2006"), tsc1, i.cfg.C1, tsc2, i.cfg.C2)
+}
+
+// sortInvestmentsDescending uses the E
+func (i *Investor) sortInvestmentsDescending() {
+	sort.Slice(i.Investments, func(j, k int) bool {
+		return i.Investments[j].ERT4 > i.Investments[k].ERT4
+	})
+}
+
+// // SettleC2Balance - At the end of a simulation, we'll cash out all C2 for
+// //
+// //		      C1. If the target sell date (T4) is after the simulation stop date
+// //			  we will use the actual T4 (if data for that date exists). We will
+// //			  also update the Settle Date for the simulation as needed.
+// //	       Also, if T4 is after cfg.DtSettle then update DtSettle to this date.
+// //
+// // RETURNS
+// //
+// //	any error encountered
+// //
+// // ----------------------------------------------------------------------------
+// func (i *Investor) SettleC2Balance() error {
+// 	if i.BalanceC2 == 0 {
+// 		return nil
+// 	}
+// 	for j := 0; j < len(i.Investments); j++ {
+// 		if i.Investments[j].Completed {
+// 			continue
+// 		}
+// 		i.settleInvestment(i.Investments[j].T4, j)
+// 		if i.Investments[j].T4.After(time.Time(i.cfg.DtSettle)) {
+// 			i.cfg.DtSettle = i.Investments[j].T4
+// 		}
+
+// 	}
+// 	return nil
+// }
+
+// // settleInvestment - this code was moved to a method as it needed to be done
+// //
+// //	in several places.
+// //
+// // INPUTS
+// //
+// //		t4 - sell date
+// //		 j - index into i.Investments for the particular investment to sell
+// //	 sellAmount - the portion of this investment to sell.  Must be <= i.Investments[j].T3C2Buy
+// //
+// // RETURNS
+// //
+// //	any critical error encountered
+// //
+// // -----------------------------------------------------------------------------
+// func (i *Investor) settleInvestment(t4 time.Time, j int, sellAmount float64) error {
+// 	var err error
+// 	er4 := data.CSVDBFindRecord(t4)
+// 	if er4 == nil {
+// 		err = fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found; Investment marked as completed", t4.Format("1/2/2006"))
+// 		fmt.Printf("%s\n", err.Error())
+// 		i.Investments[j].Completed = true
+// 		return nil // this was not a critical error, it's been reported, just keep going
+// 	}
+
+// 	i.Investments[j].ERT4 = er4.EXClose                                       // exchange rate on T4
+// 	i.Investments[j].T4C2Sold = i.Investments[j].T3C2Buy                      // sell exactly what we bought on the associated T3
+// 	i.Investments[j].T4C1 = i.Investments[j].T4C2Sold / i.Investments[j].ERT4 // amount of C1 we got back by selling T4C2Sold on T4 at the exchange rate on T4
+// 	p := i.Investments[j].ERT4 < i.Investments[j].ERT3                        // this is the condition for profitability
+// 	i.Investments[j].Profitable = append(i.Investments[j].Profitable, p)      // append this to the list
+
+// 	// if !i.Investments[j].Profitable {
+// 	// 	// buy sell decision... if we make more than 0.1%, sell, otherwise hold
+
+// 	// 	// i.Investments[j].RetryCount++
+// 	// 	// i.Investments[j].T4 = t4.AddDate(0,0,i.Investments[j].Delta4)
+// 	// 	// return nil
+// 	// }
+// 	i.Investments[j].Completed = true // this investment is now completed
+
+// 	//-------------------------------------------------------------
+// 	// Update Investor's totals having concluded the investment...
+// 	//-------------------------------------------------------------
+// 	i.BalanceC1 += i.Investments[j].T4C1       // we recovered this much C1...
+// 	i.BalanceC2 -= i.Investments[j].T4C2Sold   // by selling this C2
+// 	i.Investments[j].T4BalanceC1 = i.BalanceC1 // not sure how valuable this info is
+// 	i.Investments[j].T4BalanceC2 = i.BalanceC2 // not sure how valuable this info is
+
+// 	//-------------------------------------------------------------
+// 	// Update each Influencer's predictions...
+// 	//-------------------------------------------------------------
+// 	for k := 0; k < len(i.Influencers); k++ {
+// 		i.Influencers[k].FinalizePrediction(i.Investments[j].T3, t4, i.Investments[j].Profitable)
+// 	}
+// 	return nil
+// }
+
+// // SettleC2Balance - At the end of a simulation, we'll cash out all C2 for
+// //
+// //		      C1. If the target sell date (T4) is after the simulation stop date
+// //			  we will use the actual T4 (if data for that date exists). We will
+// //			  also update the Settle Date for the simulation as needed.
+// //	       Also, if T4 is after cfg.DtSettle then update DtSettle to this date.
+// //
+// // RETURNS
+// //
+// //	any error encountered
+// //
+// // ----------------------------------------------------------------------------
+// func (i *Investor) SettleC2Balance() error {
+// 	if i.BalanceC2 == 0 {
+// 		return nil
+// 	}
+// 	for j := 0; j < len(i.Investments); j++ {
+// 		if i.Investments[j].Completed {
+// 			continue
+// 		}
+// 		i.settleInvestment(i.Investments[j].T4, j)
+// 		if i.Investments[j].T4.After(time.Time(i.cfg.DtSettle)) {
+// 			i.cfg.DtSettle = i.Investments[j].T4
+// 		}
+
+// 	}
+// 	return nil
+// }
+
 // BuyConversion spins through all the influencers and asks for recommendations
 // on whether to buy or hold on T3. Then the Investor decides whether to buy
 // or hold.  If a "buy" is made, then an entry is added to the Investments
@@ -260,104 +607,104 @@ func distributedDecisionCOA(coa *CourseOfAction) error {
 //	err   = any error encountered
 //
 // -----------------------------------------------------------------------------
-func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
-	T4 := T3.AddDate(0, 0, i.Delta4) // here if we need it
-	BuyCount := 0
-	if i.BalanceC1 <= 0.0 {
-		return BuyCount, nil // we cannot do anything else, we have no C1 left
-	}
+// func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
+// 	T4 := T3.AddDate(0, 0, i.Delta4) // here if we need it
+// 	BuyCount := 0
+// 	if i.BalanceC1 <= 0.0 {
+// 		return BuyCount, nil // we cannot do anything else, we have no C1 left
+// 	}
 
-	//----------------------------------------------------------------------------
-	// Have each Influencer make their prediction. Hold the predictions in recs[]
-	//----------------------------------------------------------------------------
-	var recs []Prediction
-	for j := 0; j < len(i.Influencers); j++ {
-		influencer := i.Influencers[j]
-		prediction, probability, weight, err := influencer.GetPrediction(T3)
-		if err != nil {
-			if err.Error() != "nildata" {
-				return BuyCount, err
-			}
-		}
-		recs = append(recs,
-			Prediction{
-				T3:          T3,
-				T4:          T4,
-				Action:      prediction,
-				Probability: probability,
-				Weight:      weight,
-				IType:       reflect.TypeOf(influencer).String(),
-				ID:          influencer.GetID(),
-				Correct:     false, // don't know yet
-			})
-	}
+// 	//----------------------------------------------------------------------------
+// 	// Have each Influencer make their prediction. Hold the predictions in recs[]
+// 	//----------------------------------------------------------------------------
+// 	var recs []Prediction
+// 	for j := 0; j < len(i.Influencers); j++ {
+// 		influencer := i.Influencers[j]
+// 		prediction, probability, weight, err := influencer.GetPrediction(T3)
+// 		if err != nil {
+// 			if err.Error() != "nildata" {
+// 				return BuyCount, err
+// 			}
+// 		}
+// 		recs = append(recs,
+// 			Prediction{
+// 				T3:          T3,
+// 				T4:          T4,
+// 				Action:      prediction,
+// 				Probability: probability,
+// 				Weight:      weight,
+// 				IType:       reflect.TypeOf(influencer).String(),
+// 				ID:          influencer.GetID(),
+// 				Correct:     false, // don't know yet
+// 			})
+// 	}
 
-	//------------------------------------------------------------------------------
-	// make decision based on predictions.
-	// TODO:  This code needs to be rethought. For now, I'm using a 'majority wins'
-	//        strategy, which is probably not a good approach.
-	//------------------------------------------------------------------------------
-	if len(recs) < 1 {
-		return BuyCount, fmt.Errorf("no predictions found")
-	}
-	buyVotes := 0
-	holdVotes := 0
-	abstain := 0
-	buy := false // assume that we will not buy
-	for j := 0; j < len(recs); j++ {
-		switch recs[j].Action {
-		case "buy":
-			buyVotes++
-		case "hold":
-			holdVotes++
-		case "abstain":
-			abstain++
-		}
-	}
+// 	//------------------------------------------------------------------------------
+// 	// make decision based on predictions.
+// 	// TODO:  This code needs to be rethought. For now, I'm using a 'majority wins'
+// 	//        strategy, which is probably not a good approach.
+// 	//------------------------------------------------------------------------------
+// 	if len(recs) < 1 {
+// 		return BuyCount, fmt.Errorf("no predictions found")
+// 	}
+// 	buyVotes := 0
+// 	holdVotes := 0
+// 	abstain := 0
+// 	buy := false // assume that we will not buy
+// 	for j := 0; j < len(recs); j++ {
+// 		switch recs[j].Action {
+// 		case "buy":
+// 			buyVotes++
+// 		case "hold":
+// 			holdVotes++
+// 		case "abstain":
+// 			abstain++
+// 		}
+// 	}
 
-	if buyVotes > holdVotes {
-		buy = true
-		// util.DPrintf("Buy decision on %s\n", T3.Format("1/2/2006"))
-	}
+// 	if buyVotes > holdVotes {
+// 		buy = true
+// 		// util.DPrintf("Buy decision on %s\n", T3.Format("1/2/2006"))
+// 	}
 
-	//------------------------------------------------------------------------------
-	// if buy, get exchange rate and add to investments and update balances
-	//------------------------------------------------------------------------------
-	if buy {
-		BuyCount++
-		var inv Investment
-		inv.id = util.GenerateRefNo()
-		inv.T3C1 = i.cfg.StdInvestment
-		if i.BalanceC1 < i.cfg.StdInvestment {
-			inv.T3C1 = i.BalanceC1
-		}
-		inv.T3 = T3
-		inv.T4 = T4 // we sell in Delta4 days
-		er3 := data.CSVDBFindRecord(inv.T3)
-		if er3 == nil {
-			return BuyCount, fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found", inv.T3.Format("1/2/2006"))
-		}
+// 	//------------------------------------------------------------------------------
+// 	// if buy, get exchange rate and add to investments and update balances
+// 	//------------------------------------------------------------------------------
+// 	if buy {
+// 		BuyCount++
+// 		var inv Investment
+// 		inv.id = util.GenerateRefNo()
+// 		inv.T3C1 = i.cfg.StdInvestment
+// 		if i.BalanceC1 < i.cfg.StdInvestment {
+// 			inv.T3C1 = i.BalanceC1
+// 		}
+// 		inv.T3 = T3
+// 		inv.T4 = T4 // we sell in Delta4 days
+// 		er3 := data.CSVDBFindRecord(inv.T3)
+// 		if er3 == nil {
+// 			return BuyCount, fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found", inv.T3.Format("1/2/2006"))
+// 		}
 
-		inv.ERT3 = er3.EXClose                     // exchange rate on T3
-		inv.T3C2Buy = inv.T3C1 * inv.ERT3          // amount of C2 we purchased on T3
-		i.BalanceC1 -= inv.T3C1                    // we spent this much C1...
-		i.BalanceC2 += inv.T3C2Buy                 // to purchase this much more C2
-		inv.T3BalanceC1 = i.BalanceC1              // C1 balance after exchange
-		inv.T3BalanceC2 = i.BalanceC2              // C2 balance after exchange
-		i.Investments = append(i.Investments, inv) // add it to the list of investments
+// 		inv.ERT3 = er3.EXClose                     // exchange rate on T3
+// 		inv.T3C2Buy = inv.T3C1 * inv.ERT3          // amount of C2 we purchased on T3
+// 		i.BalanceC1 -= inv.T3C1                    // we spent this much C1...
+// 		i.BalanceC2 += inv.T3C2Buy                 // to purchase this much more C2
+// 		inv.T3BalanceC1 = i.BalanceC1              // C1 balance after exchange
+// 		inv.T3BalanceC2 = i.BalanceC2              // C2 balance after exchange
+// 		i.Investments = append(i.Investments, inv) // add it to the list of investments
 
-		//----------------------------------------------------------------
-		// we need to update each of the Influencers predictions...
-		//         *** ONLY THE BUY PREDICTIONS ARE SAVED ***
-		//----------------------------------------------------------------
-		for j := 0; j < len(i.Influencers); j++ {
-			if recs[j].Action == "buy" { // did this influencer predict a buy?
-				i.Influencers[j].AppendPrediction(recs[j]) // only save the buy predictions,
-			}
-		}
-	}
-	return BuyCount, nil
-}
+// 		//----------------------------------------------------------------
+// 		// we need to update each of the Influencers predictions...
+// 		//         *** ONLY THE BUY PREDICTIONS ARE SAVED ***
+// 		//----------------------------------------------------------------
+// 		for j := 0; j < len(i.Influencers); j++ {
+// 			if recs[j].Action == "buy" { // did this influencer predict a buy?
+// 				i.Influencers[j].AppendPrediction(recs[j]) // only save the buy predictions,
+// 			}
+// 		}
+// 	}
+// 	return BuyCount, nil
+// }
 
 // SellConversion scans the Investment table for any Investment that concludes on
 // the supplied t4.  When one is found, it converts C2 back to C1 and updates the
@@ -370,126 +717,19 @@ func (i *Investor) BuyConversion(T3 time.Time) (int, error) {
 //	any error encountered, or nil if no errors were found
 //
 // ----------------------------------------------------------------------------------
-func (i *Investor) SellConversion(t4 time.Time) (int, error) {
-	var err error
-	SellCount := 0
-	err = nil
+// func (i *Investor) SellConversion(t4 time.Time) (int, error) {
+// 	var err error
+// 	SellCount := 0
+// 	err = nil
 
-	//-------------------------------------------------------
-	// first... determine whether we buy, sell, or hold...
-	//-------------------------------------------------------
+// 	//-------------------------------------------------------
+// 	// first... determine whether we buy, sell, or hold...
+// 	//-------------------------------------------------------
 
-	//------------------------------------------------------------------
+// 	//------------------------------------------------------------------
 
-	// Look for investments to sell on t4
-	jlen := len(i.Investments)
-	for j := 0; j < jlen; j++ {
-		//-------------------------------
-		// Skip completed investments...
-		//-------------------------------
-		if i.Investments[j].Completed {
-			continue
-		}
-
-		//------------------------------------------------
-		// Check to see if the sell date has arrived...
-		//------------------------------------------------
-		dtSell := time.Time(i.Investments[j].T4)  // date on which we need to sell (convert) C2
-		if t4.Equal(dtSell) || t4.After(dtSell) { // if the sell date has arrived...
-			if err = i.settleInvestment(t4, j); err != nil {
-				continue
-			}
-
-			SellCount++
-		}
-	}
-
-	return SellCount, err
-}
-
-// settleInvestment - this code was moved to a method as it needed to be done
-//
-//	in several places.
-//
-// INPUTS
-//
-//	t4 - sell date
-//	 j - index into i.Investments for the particular investment to sell
-//
-// RETURNS
-//
-//	any critical error encountered
-//
-// -----------------------------------------------------------------------------
-func (i *Investor) settleInvestment(t4 time.Time, j int) error {
-	var err error
-	er4 := data.CSVDBFindRecord(t4)
-	if er4 == nil {
-		err = fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found; Investment marked as completed", t4.Format("1/2/2006"))
-		fmt.Printf("%s\n", err.Error())
-		i.Investments[j].Completed = true
-		return nil // this was not a critical error, it's been reported, just keep going
-	}
-
-	i.Investments[j].ERT4 = er4.EXClose                                         // exchange rate on T4
-	i.Investments[j].T4C2Sold = i.Investments[j].T3C2Buy                        // sell exactly what we bought on the associated T3
-	i.Investments[j].T4C1 = i.Investments[j].T4C2Sold / i.Investments[j].ERT4   // amount of C1 we got back by selling T4C2Sold on T4 at the exchange rate on T4
-	i.Investments[j].Profitable = i.Investments[j].T4C1 > i.Investments[j].T3C1 // did we make money on this trade?
-
-	// if !i.Investments[j].Profitable {
-	// 	// buy sell decision... if we make more than 0.1%, sell, otherwise hold
-
-	// 	// i.Investments[j].RetryCount++
-	// 	// i.Investments[j].T4 = t4.AddDate(0,0,i.Investments[j].Delta4)
-	// 	// return nil
-	// }
-	i.Investments[j].Completed = true // this investment is now completed
-
-	//-------------------------------------------------------------
-	// Update Investor's totals having concluded the investment...
-	//-------------------------------------------------------------
-	i.BalanceC1 += i.Investments[j].T4C1       // we recovered this much C1...
-	i.BalanceC2 -= i.Investments[j].T4C2Sold   // by selling this C2
-	i.Investments[j].T4BalanceC1 = i.BalanceC1 // not sure how valuable this info is
-	i.Investments[j].T4BalanceC2 = i.BalanceC2 // not sure how valuable this info is
-
-	//-------------------------------------------------------------
-	// Update each Influencer's predictions...
-	//-------------------------------------------------------------
-	for k := 0; k < len(i.Influencers); k++ {
-		i.Influencers[k].FinalizePrediction(i.Investments[j].T3, t4, i.Investments[j].Profitable)
-	}
-	return nil
-}
-
-// SettleC2Balance - At the end of a simulation, we'll cash out all C2 for
-//
-//		      C1. If the target sell date (T4) is after the simulation stop date
-//			  we will use the actual T4 (if data for that date exists). We will
-//			  also update the Settle Date for the simulation as needed.
-//	       Also, if T4 is after cfg.DtSettle then update DtSettle to this date.
-//
-// RETURNS
-//
-//	any error encountered
-//
-// ----------------------------------------------------------------------------
-func (i *Investor) SettleC2Balance() error {
-	if i.BalanceC2 == 0 {
-		return nil
-	}
-	for j := 0; j < len(i.Investments); j++ {
-		if i.Investments[j].Completed {
-			continue
-		}
-		i.settleInvestment(i.Investments[j].T4, j)
-		if i.Investments[j].T4.After(time.Time(i.cfg.DtSettle)) {
-			i.cfg.DtSettle = i.Investments[j].T4
-		}
-
-	}
-	return nil
-}
+// 	return SellCount, err
+// }
 
 // InvestorProfile outputs information about this investor and its influencers
 // to a file named "investorProfile.txt"
@@ -575,13 +815,18 @@ func (i *Investor) CalculateFitnessScore() float64 {
 	total := 0
 	jlen := len(i.Investments)
 	for j := 0; j < jlen; j++ {
-		total++
-		if i.Investments[j].Completed && i.Investments[j].Profitable {
-			correct++
+		if i.Investments[j].Completed {
+			pl := i.Investments[j].Profitable
+			for k := 0; k < len(pl); k++ {
+				total++
+				if pl[k] {
+					correct++
+				}
+			}
 		}
 	}
 	correctness := float64(0)
-	if total > 0 {
+	if total > 0 && correct > 0 {
 		correctness = float64(float64(correct) / float64(total))
 	}
 

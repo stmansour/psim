@@ -21,6 +21,7 @@ var app struct {
 	sim                        core.Simulator
 	randNano                   int64
 	InfPredDebug               bool
+	trace                      bool
 }
 
 func dateIsInDataRange(a time.Time) string {
@@ -102,6 +103,7 @@ func readCommandLineArgs() {
 	dptr := flag.Bool("d", false, "show day-by-day results")
 	Dptr := flag.Bool("D", false, "show prediction debug info - dumps a lot of data, use on short simulations, with minimal Influencers")
 	stiptr := flag.Bool("t", false, "for each generation, write top investor Investment List to IList-Gen-n.csv")
+	traceptr := flag.Bool("trace", false, "trace decision-making process every day, all investors")
 	diptr := flag.Bool("i", false, "show all investors in the simulation results")
 	rndptr := flag.Int64("r", -1, "random number seed. ex: ./simulator -r 1687802336231490000")
 	flag.Parse()
@@ -110,6 +112,7 @@ func readCommandLineArgs() {
 	app.showAllInvestors = *diptr
 	app.randNano = *rndptr
 	app.InfPredDebug = *Dptr
+	app.trace = *traceptr
 }
 
 func doSimulation() {
@@ -123,6 +126,7 @@ func doSimulation() {
 		fmt.Printf("Please fix errors in the simulator configuration file, config.json5, and try again\n")
 		os.Exit(1)
 	}
+	cfg.Trace = app.trace
 
 	if err = data.Init(&cfg); err != nil {
 		log.Fatalf("Error initilizing data subsystem: %s\n", err)

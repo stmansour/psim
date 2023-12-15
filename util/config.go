@@ -74,11 +74,12 @@ func (t *CustomDate) UnmarshalJSON(data []byte) error {
 // it is visible to all areas of code in this project.
 // ---------------------------------------------------------------------------
 type FileConfig struct {
-	C1        string     // Currency1 - the currency that we're trying to maximize
-	C2        string     // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
-	DtStart   CustomDate // simulation begins on this date
-	DtStop    CustomDate // simulation ends on this date. Guaranteed that no "buys" happen after this date
-	LoopCount int        // how many times to loop over DtStart to DtStop
+	C1          string     // Currency1 - the currency that we're trying to maximize
+	C2          string     // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
+	DtStart     CustomDate // simulation begins on this date
+	DtStop      CustomDate // simulation ends on this date. Guaranteed that no "buys" happen after this date
+	LoopCount   int        // how many times to loop over DtStart to DtStop
+	COAStrategy string     // course of action strategy used by Investors (choices are: DistributedDecision)
 
 	//----------------------------------------------------------------------------------------------
 	// computed as follows a percentage of the ExchangeRateRatio on the first day of the simulation
@@ -155,16 +156,16 @@ type FileConfig struct {
 	RandNano             int64     // random seed
 }
 
-// AppConfig contains all the configuration values for the Simulator,
-// Investors, and Influencers. I had to put it here in order to be visible
+// AppConfig is the struct of config data used throughout the code by the Simulator,
+// Investors, and Influencers. It is here in the util directory in order to be visible
 // to all areas of code in this project
 // ---------------------------------------------------------------------------
 type AppConfig struct {
-	// ExchangeRate   string     // the exchange rate that controls investing for this simulation
 	C1                   string                            // Currency1 - the currency that we're trying to maximize
 	C2                   string                            // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
 	DtStart              CustomDate                        // simulation begins on this date
 	DtStop               CustomDate                        // simulation ends on this date
+	COAStrategy          string                            // course of action strategy used by Investors (choices are: DistributedDecision)
 	LoopCount            int                               // how many times to loop over DtStart to DtStop
 	HoldWindowPos        float64                           // positive space to consider as "no difference" when subtracting two ratios
 	HoldWindowNeg        float64                           // negative space to consider as "no difference" when subtracting two ratios
@@ -191,6 +192,7 @@ type AppConfig struct {
 	InfluencerSubclasses []string                          // allowable Influencer subclasses for this run
 	RandNano             int64                             // random number seed used for this simulation
 	InfPredDebug         bool                              // print debug info about every prediction
+	Trace                bool                              // use this flag to cause full trace information to be printed regarding every Investor decision every day.
 }
 
 func hasPrefix(tag string, prefixes []string, mod string) bool {
@@ -343,6 +345,7 @@ func CreateTestingCFG() *AppConfig {
 		InvW2:          0.5,     // Investor Fitness Score weighting for profit. Constraint: InvW1 + InvW2 = 1.0
 		MutationRate:   1,       // percentage number, from 1 - 100, what percent of the time does mutation occur
 		DBSource:       "CSV",   // {CSV | Database | OnlineService}
+		COAStrategy:    "DistributedDecision",
 		InfluencerSubclasses: []string{ // default case is to enable all Influencer subclasses
 			"CCInfluencer",
 			"DRInfluencer",

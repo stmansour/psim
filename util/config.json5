@@ -24,7 +24,8 @@
     "MutationRate": 1,          // number between 1 and 100, indicating the percentage of mutation
     "DBSource": "CSV",          // { CSV | Database | OnlineService }
     "HoldWindowPos": 0.1,       // positive hold area
-    "HoldWindowNeg": -0.1,      // negative hold area 
+    "HoldWindowNeg": -0.1,      // negative hold area
+    "COAStrategy": "DistributedDecision", // course of action strategy.  Choose from (DistributedDecision)
 
     //-----------------------------------------------------------------
     //  INFLUENCER SUBCLASSES

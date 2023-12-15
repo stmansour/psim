@@ -212,9 +212,9 @@ func TestMutation(t *testing.T) {
 			cm := util.RandomInRange(1, 100) > 25 // true 75% of the time
 			pr := util.RandomInRange(1, 100) > 30 // true 70% of the time
 			inv := Investment{
-				Completed:  cm,
-				Profitable: pr,
+				Completed: cm,
 			}
+			inv.Profitable = append(inv.Profitable, pr)
 			sim.Investors[i].Investments = append(sim.Investors[i].Investments, inv)
 			//----------------------------------------------
 			// add info for the Influencer's Predictions...

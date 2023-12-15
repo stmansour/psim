@@ -59,3 +59,7 @@ all: clean psim package test
 	@echo "Completed"
 
 build: clean psim package
+
+
+stats:
+	@find . -name "*.go" | srcstats

@@ -41,6 +41,7 @@ type Simulator struct {
 	SimStart                   time.Time              // timestamp for simulation start
 	SimStop                    time.Time              // timestamp for simulation stop
 	StopTimeSet                bool                   // set to true once SimStop is set. If it's false either the simulation is still in progress or did not complete
+	MarkToEndInProgress        bool                   // initially false, set to true when we have a C2 balance on or after cfg.DtStop, when all C2 is sold this will return to being false
 
 }
 
@@ -102,6 +103,7 @@ func (s *Simulator) NewPopulation() error {
 		s.Investors = make([]Investor, 0)
 		for i := 0; i < s.cfg.PopulationSize; i++ {
 			var v Investor
+			v.ID = s.factory.GenerateInvestorID()
 			s.Investors = append(s.Investors, v)
 		}
 		//------------------------------------------------------------------------
@@ -160,9 +162,9 @@ func (s *Simulator) Run() {
 		var d time.Time
 		var dtGenEnd time.Time
 		for g := 0; g < s.cfg.Generations; g++ {
-			dt := genStart
+			T3 := genStart
 			if isGenDur {
-				dtGenEnd = dt.AddDate(s.cfg.GenDur.Years, s.cfg.GenDur.Months, s.cfg.GenDur.Weeks*7+s.cfg.GenDur.Days) // end of this generation
+				dtGenEnd = T3.AddDate(s.cfg.GenDur.Years, s.cfg.GenDur.Months, s.cfg.GenDur.Weeks*7+s.cfg.GenDur.Days) // end of this generation
 			} else {
 				dtGenEnd = dtStop
 			}
@@ -170,71 +172,48 @@ func (s *Simulator) Run() {
 				dtGenEnd = dtStop
 			}
 
-			for dt.Before(dtGenEnd) {
+			for T3.Before(dtGenEnd) && !s.MarkToEndInProgress {
 				iteration++
-				SellCount := 0
-				BuyCount := 0
 
 				if len(s.Investors) > s.cfg.PopulationSize {
 					log.Panicf("Population size should be %d, len(Investors) = %d", s.cfg.PopulationSize, len(s.Investors))
 				}
+				//*********************** BEGIN SIMULATOR DAILY LOOP ***********************
 
-				//-----------------------------------------
-				// Call SellConversion for each investor
-				//-----------------------------------------
+				allC2Settled := false // if we're in MarkToEnd mode, note if any Investor has > 1.00 C2
+				//-----------------------------------------------
+				// Ask each investor to do their daily run...
+				//-----------------------------------------------
 				for j := 0; j < len(s.Investors); j++ {
-					sc, err := (&s.Investors[j]).SellConversion(dt)
+					err := s.Investors[j].DailyRun(T3, s.MarkToEndInProgress)
 					if err != nil {
-						fmt.Printf("SellConversion returned: %s\n", err.Error())
+						fmt.Printf("Investors[%d].DailyRun() returned: %s", j, err.Error())
 					}
-					SellCount += sc
-				}
 
-				//-----------------------------------------
-				// Call BuyConversion for each investor
-				//-----------------------------------------
-				check := false
-				for j := 0; j < len(s.Investors); j++ {
-					bc, err := (&s.Investors[j]).BuyConversion(dt)
-					if err != nil {
-						fmt.Printf("BuyConversion returned: %s\n", err.Error())
-					}
-					if len(s.Investors[j].Investments) > 0 {
-						check = true
-					}
-					BuyCount += bc
-				}
-				if check {
-					x := 0
-					for j := 0; j < len(s.Investors); j++ {
-						x += len(s.Investors[j].Investments)
+					//------------------------------------------------------------------------------
+					// If we're in MarkToEnd mode, check to see if all Investors have < 1.00 of C2
+					//------------------------------------------------------------------------------
+					if s.MarkToEndInProgress {
+						allC2Settled = allC2Settled || s.Investors[j].BalanceC2 >= 1.00
 					}
 				}
 
-				//============== DEBUG --------------------------------------------------------
-				if s.dayByDay {
-					count := 0
-					invPending := 0
-					for j := 0; j < len(s.Investors); j++ {
-						if s.Investors[j].BalanceC1 > 0 {
-							count++
-						}
-						for k := 0; k < len(s.Investors[j].Investments); k++ {
-							if !s.Investors[j].Investments[k].Completed {
-								invPending++
-							}
-						}
-					}
-					fmt.Printf("%4d. Date: %s, Buys: %d, Sells %d,\n      investors remaining: %d, investments pending: %d\n",
-						iteration, dt.Format("2006-Jan-02"), BuyCount, SellCount, count, invPending)
+				//-------------------------------------------------------------------
+				// Terminate MarkToEnd if all Investors have settled their C2
+				//-------------------------------------------------------------------
+				if s.MarkToEndInProgress && allC2Settled {
+					s.cfg.DtSettle = T3
+					s.MarkToEndInProgress = false
 				}
-				//============== DEBUG --------------------------------------------------------
-				d = dt
-				dt = dt.AddDate(0, 0, 1)
+
+				//*********************** BEGIN SIMULATOR DAILY LOOP ***********************
+
+				d = T3
+				T3 = T3.AddDate(0, 0, 1)
 			}
 			s.GensCompleted++ // we have just concluded another generation
 			if g+1 == s.cfg.Generations || !isGenDur {
-				d = dt
+				d = T3
 			}
 			thisGenDtStart = genStart
 			thisGenDtEnd = d
@@ -246,7 +225,7 @@ func (s *Simulator) Run() {
 			//----------------------------------------------------------------------
 			// Compute scores and stats
 			//----------------------------------------------------------------------
-			s.SettleC2Balance()
+			// s.SettleC2Balance()  // no longer needed.  We do MarkToEnd in main loop
 			s.CalculateMaxVals()
 			s.CalculateAllFitnessScores()
 			s.SaveStats(thisGenDtStart, thisGenDtEnd)
@@ -298,14 +277,14 @@ func (s *Simulator) getGenerationDays(gd *util.GenerationDuration) int {
 //	nothing at this time
 //
 // ----------------------------------------------------------------------------
-func (s *Simulator) SettleC2Balance() {
-	for i := 0; i < len(s.Investors); i++ {
-		err := s.Investors[i].SettleC2Balance()
-		if err != nil {
-			log.Panicf("SettleC2Balance error from Investor %d: %s\n", i, err)
-		}
-	}
-}
+// func (s *Simulator) SettleC2Balance() {
+// 	for i := 0; i < len(s.Investors); i++ {
+// 		err := s.Investors[i].SettleC2Balance()
+// 		if err != nil {
+// 			log.Panicf("SettleC2Balance error from Investor %d: %s\n", i, err)
+// 		}
+// 	}
+// }
 
 // CalculateAllFitnessScores - calculates values over all the Influncers and Investors
 //
@@ -449,8 +428,14 @@ func (s *Simulator) SaveStats(dtStart, dtStop time.Time) {
 		if investment.Completed {
 			tot++
 		}
-		if investment.Profitable {
-			pro++
+		//----------------------------------------------------------------
+		// Note that when we sell, we try to sell at a loss first. So
+		// this might not be a good way to determine profitable buys
+		//----------------------------------------------------------------
+		for j := 0; j < len(investment.Profitable); j++ {
+			if investment.Profitable[j] {
+				pro++
+			}
 		}
 	}
 
@@ -776,13 +761,15 @@ func (s *Simulator) ResultsForInvestor(n int, v *Investor) string {
 	pctGain := netGain / s.cfg.InitFunds
 	str += fmt.Sprintf("\t\tNet Gain:  %8.2f %s  (%3.3f%%)\n", netGain, s.cfg.C1, pctGain)
 
-	//-------------------------------------------------------------------------
+	//-----------------------------------z--------------------------------------
 	// When this investor made a buy prediction, how often was it correct...
 	//-------------------------------------------------------------------------
 	m := 0 // number of times the prediction was "correct" (resulted in a profit)
 	for i := 0; i < len(v.Investments); i++ {
-		if v.Investments[i].Profitable {
-			m++
+		for _, p := range v.Investments[i].Profitable {
+			if p {
+				m++
+			}
 		}
 	}
 	str += fmt.Sprintf("\t\tPrediction Accuracy:  %d / %d  = %3.3f%%\n", m, len(v.Investments), (float64(m*100) / float64(len(v.Investments))))

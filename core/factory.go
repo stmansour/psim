@@ -16,7 +16,7 @@ type Factory struct {
 	cfg         *util.AppConfig // system-wide configuration info
 	MutateCalls int64           // how many calls were made to Mutate()
 	Mutations   int64           // how many times did mutation happen
-
+	InvCounter  int64           // used in ID generation
 }
 
 // InfluencerDNA is a struct of information used during the process of
@@ -109,6 +109,12 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 	return newPopulation, nil
 }
 
+// GenerateInvestorID generates a unique investor id string
+func (f *Factory) GenerateInvestorID() string {
+	f.InvCounter++
+	return fmt.Sprintf("Investor%d", f.InvCounter)
+}
+
 // BreedNewInvestor creates a new Investor by going through the genetic
 // algorithm. It also creates the Investor's Influencers.  Here's how
 // we choose the next generation Influencers for the new Investor.
@@ -134,6 +140,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	newInvestor.FitnessCalculated = false
 	newInvestor.Fitness = 0.0
 	newInvestor.BalanceC1 = f.cfg.InitFunds
+	newInvestor.ID = f.GenerateInvestorID()
 
 	parent1 := (*population)[idxParent1]
 	parent2 := (*population)[idxParent2]
