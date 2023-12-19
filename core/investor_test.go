@@ -138,7 +138,7 @@ func TestInvestorDNA(t *testing.T) {
 			t.Errorf("x.Delta1: should be 5, but it is %d", x.GetDelta4())
 		}
 
-		action, prob, weight, err := x.GetPrediction(dt)
+		action, _, _, prob, weight, err := x.GetPrediction(dt)
 		if err != nil {
 			t.Errorf("GetPrediction returned error: %s", err)
 		}
@@ -157,4 +157,9 @@ func TestInvestorDNA(t *testing.T) {
 
 	}
 
+}
+
+// TestAllZeroFitness tests how the next generation is calculated if the
+// current generation of Investors has 0 for all its fitness score
+func TestAllZeroFitness(t *testing.T) {
 }

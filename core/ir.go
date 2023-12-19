@@ -192,7 +192,7 @@ func (p *IRInfluencer) DNA() string {
 //			return rec1.IRRatio - rec2.IRRatio
 //		})
 //	}
-func (p *IRInfluencer) GetPrediction(t3 time.Time) (string, float64, float64, error) {
+func (p *IRInfluencer) GetPrediction(t3 time.Time) (string, float64, float64, float64, float64, error) {
 	// t1 := t3.AddDate(0, 0, p.Delta1)
 	// t2 := t3.AddDate(0, 0, p.Delta2)
 	// //---------------------------------------------------------------------------
@@ -221,7 +221,7 @@ func (p *IRInfluencer) GetPrediction(t3 time.Time) (string, float64, float64, er
 	// }
 
 	// todo - return proper probability
-	return prediction, 1.0, 1.0, nil
+	return prediction, 1.0, 1.0, 1.0, 1.0, nil
 }
 
 // CalculateFitnessScore - See explanation in common.go calculateFitnessScore

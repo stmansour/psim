@@ -187,7 +187,7 @@ func (p *M1Influencer) DNA() string {
 //	error      - nil on success, error encountered otherwise
 //
 // ---------------------------------------------------------------------------
-func (p *M1Influencer) GetPrediction(t3 time.Time) (string, float64, float64, error) {
+func (p *M1Influencer) GetPrediction(t3 time.Time) (string, float64, float64, float64, float64, error) {
 
 	// At the moment, the prediction function simply computes the difference
 	// ratios on the supplied date.

@@ -96,9 +96,11 @@ func (s *Simulator) Init(cfg *util.AppConfig, dayByDay, dumpTopInvestorInvestmen
 // ----------------------------------------------------------------------------
 func (s *Simulator) NewPopulation() error {
 
-	//----------------------------------
-	// First generation is random...
-	//----------------------------------
+	//----------------------------------------------------------------------------
+	// First generation is random.  Also, if an entire generation completed
+	// and the max fitness score is 0, then treat it like the first generation...
+	// In other words, just make it a random population.
+	//----------------------------------------------------------------------------
 	if s.GensCompleted == 0 || s.maxFitnessScore == 0 {
 		s.Investors = make([]Investor, 0)
 		for i := 0; i < s.cfg.PopulationSize; i++ {
@@ -210,6 +212,11 @@ func (s *Simulator) Run() {
 
 				d = T3
 				T3 = T3.AddDate(0, 0, 1)
+
+				// DEBUG... remove when possible
+				if T3.Year() > 2022 {
+					s.MarkToEndInProgress = false
+				}
 			}
 			s.GensCompleted++ // we have just concluded another generation
 			if g+1 == s.cfg.Generations || !isGenDur {

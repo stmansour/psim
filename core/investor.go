@@ -160,7 +160,7 @@ func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 	var recs []Prediction
 	for j := 0; j < len(i.Influencers); j++ {
 		influencer := i.Influencers[j]
-		prediction, probability, weight, err := influencer.GetPrediction(T3)
+		prediction, r1, r2, probability, weight, err := influencer.GetPrediction(T3)
 		if err != nil {
 			if err.Error() != "nildata" {
 				return coa, err
@@ -168,8 +168,12 @@ func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 		}
 		recs = append(recs,
 			Prediction{
-				T3: T3,
+				Delta1: int64(influencer.GetDelta1()),
+				Delta2: int64(influencer.GetDelta2()),
+				T3:     T3,
 				// T4:          T4,
+				RT1:         r1,
+				RT2:         r2,
 				Action:      prediction,
 				Probability: probability,
 				Weight:      weight,
@@ -186,7 +190,6 @@ func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 	//        strategy, which is probably not a good approach.
 	//------------------------------------------------------------------------------
 	if len(recs) < 1 {
-
 		return coa, fmt.Errorf("no predictions found")
 	}
 	for j := 0; j < len(recs); j++ {
@@ -206,7 +209,7 @@ func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 	setCourseOfAction(&coa, i.cfg.COAStrategy)
 	if i.cfg.Trace {
 		for j := 0; j < len(recs); j++ {
-			i.FormatPrediction(&recs[j])
+			i.FormatPrediction(&recs[j], T3)
 		}
 		i.FormatCOA(&coa)
 	}
@@ -216,14 +219,20 @@ func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 
 // FormatPrediction prints a readable version of the Influencers predictions
 // ----------------------------------------------------------------------------
-func (i *Investor) FormatPrediction(p *Prediction) {
-	fmt.Printf("\t%s: %s\n", p.IType, p.Action)
+func (i *Investor) FormatPrediction(p *Prediction, T3 time.Time) {
+	fmt.Printf("\t%s: %s   (T1 %s [%4.2f] -  T2 %s [%4.2f])\n",
+		p.IType[6:8],
+		p.Action,
+		T3.AddDate(0, 0, int(p.Delta1)).Format("Jan _2, 2006"),
+		p.RT1,
+		T3.AddDate(0, 0, int(p.Delta2)).Format("Jan _2, 2006"),
+		p.RT2)
 }
 
-// FormatPrediction prints a readable version of the Influencers predictions
+// FormatCOA prints a readable version of the Influencers predictions
 // ----------------------------------------------------------------------------
 func (i *Investor) FormatCOA(c *CourseOfAction) {
-	fmt.Printf("\tCOA:  Action: %s  %4.2f  |  Buy: %6.2f   Hold: %6.2f   Sell: %6.2f   Abstain: %6.2f\n", c.Action, c.ActionPct, c.BuyVotes, c.HoldVotes, c.SellVotes, c.Abstains)
+	fmt.Printf("\tCOA:  Action: %s  %3.0f%%  (buy: %3.2f, hold: %3.2f, sell: %3.2f, abs: %3.2f) [C1bal = %6.2f, C2bal = %6.2f]\n", c.Action, c.ActionPct*100, c.BuyVotes, c.HoldVotes, c.SellVotes, c.Abstains, i.BalanceC1, i.BalanceC2)
 }
 
 // setCourseOfAction sets the Action and ActionPct based on influencers input
@@ -434,23 +443,26 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 		//---------------------------------------------------------------------------------
 		remaining := i.Investments[j].T3C2Buy - i.Investments[j].T4C2Sold // remaining is how much C2 we bought in this Investment minus what we've already sold
 		if sellAmount >= remaining {
-			thisSaleC2 = i.Investments[j].T3C2Buy // sell everything we bought on T3
+			thisSaleC2 = remaining // sell everything we have left
 		} else {
 			thisSaleC2 = sellAmount // sellAmount is < what we have. So we'll sell a portion
 		}
 
-		sellAmount -= thisSaleC2                                                                    // adjust sellAmount now that we know how much to sell in this exchange
-		i.Investments[j].T4C2Sold += thisSaleC2                                                     // add what we're selling now to what's already been sold
-		thisSaleC1 = thisSaleC2 / i.Investments[j].ERT4                                             // amount of C1 we got back by selling "sellAmount"
-		i.Investments[j].T4C1 += thisSaleC1                                                         // add the C1 we got back to the cumulative total for this investment
-		p := i.Investments[j].ERT4 > i.Investments[j].ERT3                                          // this is the profitability condition at its simplest
-		i.Investments[j].Profitable = append(i.Investments[j].Profitable, p)                        // was this transaction profitable?  Save it in the list
-		i.Investments[j].Completed = (i.Investments[j].T4C2Sold+rnderr >= i.Investments[j].T3C2Buy) // we'rd completed when we've sold as much as we bought
-		i.BalanceC1 += i.Investments[j].T4C1                                                        // we recovered this much C1...
-		i.BalanceC2 -= i.Investments[j].T4C2Sold                                                    // by selling this C2
-		i.Investments[j].T4BalanceC1 = i.BalanceC1                                                  // amount of C1 after this exchange
-		i.Investments[j].T4BalanceC2 = i.BalanceC2                                                  // amount of C2 after this exchange
-		i.Investments[j].T4 = t4                                                                    // the date on which this particular sale was done (we don't save all dates of sale)
+		sellAmount -= thisSaleC2                        // adjust sellAmount now that we know how much to sell in this exchange
+		thisSaleC1 = thisSaleC2 / i.Investments[j].ERT4 // This is the sell. The Amount of C1 we got back by selling "sellAmount"
+		i.Investments[j].T4C2Sold += thisSaleC2         // add what we're selling now to what's already been sold
+		i.Investments[j].T4C1 += thisSaleC1             // add the C1 we got back to the cumulative total for this investment
+
+		p := i.Investments[j].ERT4 > i.Investments[j].ERT3                   // this is the profitability condition at its simplest
+		i.Investments[j].Profitable = append(i.Investments[j].Profitable, p) // was this transaction profitable?  Save it in the list
+
+		i.Investments[j].Completed = (i.Investments[j].T4C2Sold+rnderr >= i.Investments[j].T3C2Buy) // we're completed when we've sold as much as we bought
+
+		i.BalanceC1 += i.Investments[j].T4C1       // we recovered this much C1...
+		i.BalanceC2 -= i.Investments[j].T4C2Sold   // by selling this C2
+		i.Investments[j].T4BalanceC1 = i.BalanceC1 // amount of C1 after this exchange
+		i.Investments[j].T4BalanceC2 = i.BalanceC2 // amount of C2 after this exchange
+		i.Investments[j].T4 = t4                   // the date on which this particular sale was done (we don't save all dates of sale)
 
 		//-------------------------------------------------------------
 		// Update each Influencer's predictions...
@@ -458,7 +470,9 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 		for k := 0; k < len(i.Influencers); k++ {
 			i.Influencers[k].FinalizePrediction(i.Investments[j].T3, t4, p)
 		}
-		i.showSell(&i.Investments[j], thisSaleC1, thisSaleC2)
+		if i.cfg.Trace {
+			i.showSell(&i.Investments[j], thisSaleC1, thisSaleC2)
+		}
 	}
 
 	return sellAmount, nil

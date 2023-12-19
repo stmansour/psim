@@ -48,7 +48,7 @@ type RatioFunc func(*data.RatesAndRatiosRecord, *data.RatesAndRatiosRecord) (flo
 //				error      - nil on success, error encountered otherwise
 //
 // ---------------------------------------------------------------------------
-func getPrediction(t3 time.Time, p Influencer, f RatioFunc, dbg bool, mn, mx float64) (string, float64, float64, error) {
+func getPrediction(t3 time.Time, p Influencer, f RatioFunc, dbg bool, mn, mx float64) (string, float64, float64, float64, float64, error) {
 	prediction := "abstain" // assume no data
 
 	t1 := t3.AddDate(0, 0, p.GetDelta1())
@@ -57,12 +57,12 @@ func getPrediction(t3 time.Time, p Influencer, f RatioFunc, dbg bool, mn, mx flo
 	rec1 := data.CSVDBFindRecord(t1)
 	if rec1 == nil {
 		err := fmt.Errorf("data.RatesAndRatiosRecord for %s not found", t1.Format("1/2/2006"))
-		return prediction, 0, 0, err
+		return prediction, 0, 0, 0, 0, err
 	}
 	rec2 := data.CSVDBFindRecord(t2)
 	if rec2 == nil {
 		err := fmt.Errorf("data.RatesAndRatiosRecord for %s not found", t2.Format("1/2/2006"))
-		return prediction, 0, 0, err
+		return prediction, 0, 0, 0, 0, err
 	}
 	flagpos := p.GetFlagPos()
 	flagslot := uint64(1 << flagpos)
@@ -75,7 +75,7 @@ func getPrediction(t3 time.Time, p Influencer, f RatioFunc, dbg bool, mn, mx flo
 			p.IncNilDataCount()
 		}
 		err := fmt.Errorf("nildata")
-		return prediction, 0, 0, err
+		return prediction, 0, 0, 0, 0, err
 	}
 
 	d1, d2, dRR := f(rec1, rec2)
@@ -91,7 +91,7 @@ func getPrediction(t3 time.Time, p Influencer, f RatioFunc, dbg bool, mn, mx flo
 		fmt.Printf("%s: ratio(t1) = %5.2f, ratio(t2) = %5.2f, dRR = %5.2f, prediction = %s\n", t3.Format("01/02/2006"), d1, d2, dRR, prediction)
 	}
 	// todo - return proper probability and weight
-	return prediction, 1.0, 1.0, nil
+	return prediction, d1, d2, 1.0, 1.0, nil
 }
 
 // calculatFitness - the generic Fitness Score calculator for many of the Influencer subclasses.

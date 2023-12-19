@@ -198,7 +198,7 @@ func (p *GDInfluencer) DNA() string {
 //	error      - nil on success, error encountered otherwise
 //
 // ---------------------------------------------------------------------------
-func (p *GDInfluencer) GetPrediction(t3 time.Time) (string, float64, float64, error) {
+func (p *GDInfluencer) GetPrediction(t3 time.Time) (string, float64, float64, float64, float64, error) {
 	return getPrediction(t3, p,
 		func(rec1, rec2 *data.RatesAndRatiosRecord) (float64, float64, float64) {
 			return rec1.GDRatio, rec2.GDRatio, rec1.GDRatio - rec2.GDRatio

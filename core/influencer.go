@@ -22,8 +22,12 @@ import (
 // its own performance.
 // ----------------------------------------------------------------------------
 type Prediction struct {
+	Delta1      int64     // research start offset
+	Delta2      int64     // research stop offset
 	T3          time.Time // date of buy
 	T4          time.Time // date of sell
+	RT1         float64   // ratio at time T1
+	RT2         float64   // ratio at time T2
 	Action      string    // buy or hold
 	Probability float64   // probability that the action is correct
 	Weight      float64   // how heavily should this prediction weigh in the overall decision
@@ -67,6 +71,6 @@ type Influencer interface {
 	FinalizePrediction(t3, t4 time.Time, profitable bool)
 	GetLenMyPredictions() int
 	GetMyPredictions() []Prediction
-	GetPrediction(t3 time.Time) (string, float64, float64, error)
+	GetPrediction(t3 time.Time) (string, float64, float64, float64, float64, error)
 	SetMyPredictions(ps []Prediction)
 }

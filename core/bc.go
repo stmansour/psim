@@ -198,7 +198,7 @@ func (p *BCInfluencer) DNA() string {
 //	error    - nil on success, error encountered otherwise
 //
 // ---------------------------------------------------------------------------
-func (p *BCInfluencer) GetPrediction(t3 time.Time) (string, float64, float64, error) {
+func (p *BCInfluencer) GetPrediction(t3 time.Time) (string, float64, float64, float64, float64, error) {
 	return getPrediction(t3, p,
 		func(rec1, rec2 *data.RatesAndRatiosRecord) (float64, float64, float64) {
 			return rec1.BCRatio, rec2.BCRatio, rec1.BCRatio - rec2.BCRatio
