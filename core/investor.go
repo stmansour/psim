@@ -139,7 +139,7 @@ func (i *Investor) Init(cfg *util.AppConfig, f *Factory) {
 //
 // ----------------------------------------------------------------------------
 func (i *Investor) DNA() string {
-	s := fmt.Sprintf("{Investor;Delta4=%d;InvW1=%6.4f;InvW2=%6.4f;Influencers=[", i.Delta4, i.W1, i.W2)
+	s := fmt.Sprintf("{Investor;InvW1=%6.4f;InvW2=%6.4f;Influencers=[", i.W1, i.W2)
 	for j := 0; j < len(i.Influencers); j++ {
 		s += i.Influencers[j].DNA()
 		if j+1 < len(i.Influencers) {
@@ -358,7 +358,7 @@ func (i *Investor) ExecuteBuy(T3 time.Time, pct float64) error {
 }
 
 func (i *Investor) showBuy(inv *Investment) {
-	fmt.Printf("%s - BUY   %8.2f %s (%8.2f %s)\n", inv.T3.Format("Jan 02, 2006"), inv.T3C1, i.cfg.C1, inv.T3C2Buy, i.cfg.C2)
+	fmt.Printf("        *** BUY ***   %8.2f %s (%8.2f %s)\n", inv.T4C1, i.cfg.C1, inv.T3C2Buy, i.cfg.C2)
 }
 
 // ExecuteSell does an exchange of C2 for C1 on T4. It will purchase pct*i.cfg.StdInvestment
@@ -448,18 +448,18 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 			thisSaleC2 = sellAmount // sellAmount is < what we have. So we'll sell a portion
 		}
 
-		sellAmount -= thisSaleC2                        // adjust sellAmount now that we know how much to sell in this exchange
+		sellAmount -= thisSaleC2                        // this will be what's left to sell, now that we know how much to sell in this exchange
 		thisSaleC1 = thisSaleC2 / i.Investments[j].ERT4 // This is the sell. The Amount of C1 we got back by selling "sellAmount"
 		i.Investments[j].T4C2Sold += thisSaleC2         // add what we're selling now to what's already been sold
 		i.Investments[j].T4C1 += thisSaleC1             // add the C1 we got back to the cumulative total for this investment
 
-		p := i.Investments[j].ERT4 > i.Investments[j].ERT3                   // this is the profitability condition at its simplest
+		p := i.Investments[j].ERT4 < i.Investments[j].ERT3                   // this is the profitability condition at its simplest
 		i.Investments[j].Profitable = append(i.Investments[j].Profitable, p) // was this transaction profitable?  Save it in the list
 
 		i.Investments[j].Completed = (i.Investments[j].T4C2Sold+rnderr >= i.Investments[j].T3C2Buy) // we're completed when we've sold as much as we bought
 
-		i.BalanceC1 += i.Investments[j].T4C1       // we recovered this much C1...
-		i.BalanceC2 -= i.Investments[j].T4C2Sold   // by selling this C2
+		i.BalanceC1 += thisSaleC1                  // we recovered this much C1...
+		i.BalanceC2 -= thisSaleC2                  // by selling this C2
 		i.Investments[j].T4BalanceC1 = i.BalanceC1 // amount of C1 after this exchange
 		i.Investments[j].T4BalanceC2 = i.BalanceC2 // amount of C2 after this exchange
 		i.Investments[j].T4 = t4                   // the date on which this particular sale was done (we don't save all dates of sale)
@@ -479,7 +479,17 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 }
 
 func (i *Investor) showSell(inv *Investment, tsc1, tsc2 float64) {
-	fmt.Printf("%s - SELL  %8.2f %s (%8.2f %s)\n", inv.T4.Format("Jan 02, 2006"), tsc1, i.cfg.C1, tsc2, i.cfg.C2)
+	gains := 0
+	losses := 0
+	n := len(inv.Profitable)
+	for j := 0; j < n; j++ {
+		if inv.Profitable[j] {
+			gains++
+		} else {
+			losses++
+		}
+	}
+	fmt.Printf("        *** SELL ***  %8.2f %s, [%8.2f %s], investments affected: %d -->  %d profited, %d lost\n", tsc1, i.cfg.C1, tsc2, i.cfg.C2, n, gains, losses)
 }
 
 // sortInvestmentsDescending uses the E

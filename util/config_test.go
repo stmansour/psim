@@ -25,7 +25,7 @@ func TestConfig(t *testing.T) {
 
 func TestLoadConfig(t *testing.T) {
 	Init(-1)
-	cfg, err := LoadConfig()
+	cfg, err := LoadConfig("")
 	if err != nil {
 		t.Errorf("LoadConfig failed: %s", err)
 		return

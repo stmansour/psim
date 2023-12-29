@@ -733,7 +733,16 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 
 	// case "RSInfluencer":
 
-	// case "SPInfluencer":
+	case "SPInfluencer":
+		x := SPInfluencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			Delta4:  Delta4,
+			HoldMin: data.DBInfo.HoldSpace["SPRatio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["SPRatio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
 
 	case "URInfluencer":
 		x := URInfluencer{

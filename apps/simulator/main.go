@@ -22,6 +22,7 @@ var app struct {
 	randNano                   int64
 	InfPredDebug               bool
 	trace                      bool
+	cfName                     string // override default with this file
 }
 
 func dateIsInDataRange(a time.Time) string {
@@ -106,6 +107,7 @@ func readCommandLineArgs() {
 	traceptr := flag.Bool("trace", false, "trace decision-making process every day, all investors")
 	diptr := flag.Bool("i", false, "show all investors in the simulation results")
 	rndptr := flag.Int64("r", -1, "random number seed. ex: ./simulator -r 1687802336231490000")
+	cfptr := flag.String("c", "", "configuration file to use (instead of config.json)")
 	flag.Parse()
 	app.dumpTopInvestorInvestments = *stiptr
 	app.dayByDayResults = *dptr
@@ -113,11 +115,13 @@ func readCommandLineArgs() {
 	app.randNano = *rndptr
 	app.InfPredDebug = *Dptr
 	app.trace = *traceptr
+	app.cfName = *cfptr
 }
 
 func doSimulation() {
 	app.randNano = util.Init(app.randNano)
-	cfg, err := util.LoadConfig()
+	// fmt.Printf("cfName = %s\n", app.cfName)
+	cfg, err := util.LoadConfig(app.cfName)
 	if err != nil {
 		log.Fatalf("failed to read config file: %v", err)
 	}

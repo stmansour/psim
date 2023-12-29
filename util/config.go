@@ -45,7 +45,7 @@ var ValidInfluencerSubclasses = []string{
 	"M2Influencer", // money supply long term
 	"MPInfluencer",
 	"RSInfluencer",
-	"SPInfluencer",
+	"SPInfluencer", // stock price
 	"URInfluencer", // unemployment rate
 }
 
@@ -133,6 +133,10 @@ type FileConfig struct {
 	M2MaxDelta1          int       // research boundary
 	M2MinDelta2          int       // research boundary
 	M2MaxDelta2          int       // research boundary
+	SPMinDelta1          int       // research boundary
+	SPMaxDelta1          int       // research boundary
+	SPMinDelta2          int       // research boundary
+	SPMaxDelta2          int       // research boundary
 	MinDelta4            int       // closest to t3 that t4 can be
 	MaxDelta4            int       // furthest out from t3 that t4 can be
 	CCW1                 float64   // weighting in fitness calculation
@@ -147,6 +151,8 @@ type FileConfig struct {
 	M1W2                 float64   // weighting in fitness calculation
 	M2W1                 float64   // weighting in fitness calculation
 	M2W2                 float64   // weighting in fitness calculation
+	SPW1                 float64   // weighting in fitness calculation
+	SPW2                 float64   // weighting in fitness calculation
 	URW1                 float64   // weighting in fitness calculation
 	URW2                 float64   // weighting in fitness calculation
 	InvW1                float64   // weight for profit part of Investor FitnessScore
@@ -207,12 +213,28 @@ func hasPrefix(tag string, prefixes []string, mod string) bool {
 
 // LoadConfig reads the configuration data from config.json into an
 // internal struct and returns that struct.
+//
+// INPUT
+//
+//	overrideConfig - name of override config file.  use nil or "" to
+//	                 indicate no override
+//
+// RETURNS
+//
+//	the AppConfig struct
+//	any error encountered
+//
 // ---------------------------------------------------------------------
-func LoadConfig() (AppConfig, error) {
+func LoadConfig(cfname string) (AppConfig, error) {
 	var cfg AppConfig
 	var fcfg FileConfig
 
-	configFile, err := os.Open("config.json5")
+	fname := "config.json5"
+	if len(cfname) > 0 {
+		fname = cfname
+	}
+	fmt.Printf("LoadConfig:  fname = %s\n", fname)
+	configFile, err := os.Open(fname)
 	if err != nil {
 		return cfg, fmt.Errorf("failed to open config file: %v", err)
 	}
@@ -456,10 +478,10 @@ func CreateTestingCFG() *AppConfig {
 			MaxDelta2: -20,
 		},
 		"SP": {
-			MinDelta1: -180,
-			MaxDelta1: -90,
-			MinDelta2: -50,
-			MaxDelta2: -20,
+			MinDelta1: -30,
+			MaxDelta1: -6,
+			MinDelta2: -5,
+			MaxDelta2: -1,
 		},
 		"UR": {
 			MinDelta1: -180,
