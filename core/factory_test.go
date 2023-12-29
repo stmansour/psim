@@ -11,16 +11,16 @@ import (
 
 func TestNewPopulation(t *testing.T) {
 	var oldPopulationDNA = []string{
-		"{Investor;Delta4=14;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-20,Delta2=-5}|{IRInfluencer,Delta1=-150,Delta2=-45}]}",
-		"{Investor;Delta4=12;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-27,Delta2=-5}]}",
-		"{Investor;Delta4=9;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-21,Delta2=-1}]}",
-		"{Investor;Delta4=4;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-7,Delta2=-4}]}",
-		"{Investor;Delta4=10;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-11,Delta2=-5}]}",
-		"{Investor;Delta4=10;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-30,Delta2=-1}]}",
-		"{Investor;Delta4=2;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-29,Delta2=-3}]}",
-		"{Investor;Delta4=13;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-23,Delta2=-5}]}",
-		"{Investor;Delta4=9;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-7,Delta2=-3}]}",
-		"{Investor;Delta4=2;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-21,Delta2=-5}]}",
+		"{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-20,Delta2=-5}|{IRInfluencer,Delta1=-150,Delta2=-45}]}",
+		"{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-27,Delta2=-5}]}",
+		"{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-21,Delta2=-1}]}",
+		"{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-7,Delta2=-4}]}",
+		"{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-11,Delta2=-5}]}",
+		"{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-30,Delta2=-1}]}",
+		"{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-29,Delta2=-3}]}",
+		"{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-23,Delta2=-5}]}",
+		"{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-7,Delta2=-3}]}",
+		"{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-21,Delta2=-5}]}",
 	}
 	util.Init(-1)
 	var f Factory

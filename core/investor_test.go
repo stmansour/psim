@@ -82,7 +82,7 @@ func TestInvestorDNA(t *testing.T) {
 	v.Influencers = []Influencer{&dr, &ir}
 	InvestorDNA := v.DNA()
 
-	expected := "{Investor;Delta4=4;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-30,Delta2=-2}|{IRInfluencer,Delta1=-17,Delta2=-3}]}"
+	expected := "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-30,Delta2=-2}|{IRInfluencer,Delta1=-17,Delta2=-3}]}"
 	if InvestorDNA != expected {
 		fmt.Printf("-----------------------------------------------------------------------\n")
 		fmt.Printf("MISMATCHED DNA\n")
@@ -110,7 +110,7 @@ func TestInvestorDNA(t *testing.T) {
 	ur2.Init(&v2, nil, v2.Delta4)
 	v2.Influencers = []Influencer{&dr2, &ur2}
 	Investor2DNA := v2.DNA()
-	expected2 := "{Investor;Delta4=2;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-28,Delta2=-3}|{URInfluencer,Delta1=-17,Delta2=-3}]}"
+	expected2 := "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{DRInfluencer,Delta1=-28,Delta2=-3}|{URInfluencer,Delta1=-17,Delta2=-3}]}"
 	if Investor2DNA != expected2 {
 		fmt.Printf("MISMATCHED DNA\n")
 		fmt.Printf("Investor2DNA = %s\n", Investor2DNA)
