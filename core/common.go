@@ -56,12 +56,12 @@ func getPrediction(t3 time.Time, p Influencer, f RatioFunc, dbg bool, mn, mx flo
 
 	rec1 := data.CSVDBFindRecord(t1)
 	if rec1 == nil {
-		err := fmt.Errorf("data.RatesAndRatiosRecord for %s not found", t1.Format("1/2/2006"))
+		err := fmt.Errorf("nildata: data.RatesAndRatiosRecord for %s not found", t1.Format("1/2/2006"))
 		return prediction, 0, 0, 0, 0, err
 	}
 	rec2 := data.CSVDBFindRecord(t2)
 	if rec2 == nil {
-		err := fmt.Errorf("data.RatesAndRatiosRecord for %s not found", t2.Format("1/2/2006"))
+		err := fmt.Errorf("nildata: data.RatesAndRatiosRecord for %s not found", t2.Format("1/2/2006"))
 		return prediction, 0, 0, 0, 0, err
 	}
 	flagpos := p.GetFlagPos()

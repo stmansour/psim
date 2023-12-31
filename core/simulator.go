@@ -22,8 +22,10 @@ type SimulationStatistics struct {
 	MaxProfitDNA         string    // DNA of the Investor making the highest profit this generation
 	TotalNilDataRequests int       // total number of nildata errors that occurred across all Influencers
 	DtGenStart           time.Time // first date of this generation
-	DtGenStop            time.Time // last date of this generation
+	DtGenStop            time.Time // target last date of this generation
 	TotalHoldingC2       int       // total number of Investors still holding C2 after simulation stop date
+	DtActualStop         time.Time // the date we actually stopped the simulation after trying to settle remaining C2 after DtGenStop
+	UnsettledC2          float64   // the amount of C2 held across all Investors when simulation stopped.
 }
 
 // Simulator is a simulator object
@@ -145,9 +147,12 @@ func (s *Simulator) Run() {
 	now := time.Now()
 	iteration := 0
 	s.SimStart = time.Now()
+	var DateSettled time.Time
+
 	for lc := 0; lc < s.cfg.LoopCount; lc++ {
 
 		dtStop := time.Time(s.cfg.DtStop)
+		DateSettled = dtStop
 		isGenDur := len(s.cfg.GenDurSpec) > 0
 		genStart := time.Time(s.cfg.DtStart)
 
@@ -176,7 +181,7 @@ func (s *Simulator) Run() {
 				dtGenEnd = dtStop
 			}
 
-			for T3.Before(dtGenEnd) && !s.MarkToEndInProgress {
+			for T3.Before(dtGenEnd) || s.MarkToEndInProgress {
 				iteration++
 
 				if len(s.Investors) > s.cfg.PopulationSize {
@@ -184,14 +189,14 @@ func (s *Simulator) Run() {
 				}
 				//*********************** BEGIN SIMULATOR DAILY LOOP ***********************
 
-				SettleC2 := 0 // assume the worst, it will get reset
+				SettleC2 := 0 // if past simulation end date, we'll count the Investors that still have C2
 				//-----------------------------------------------
 				// Ask each investor to do their daily run...
 				//-----------------------------------------------
 				for j := 0; j < len(s.Investors); j++ {
 					err := s.Investors[j].DailyRun(T3, s.MarkToEndInProgress)
 					if err != nil {
-						fmt.Printf("Investors[%d].DailyRun() returned: %s", j, err.Error())
+						fmt.Printf("Investors[%d].DailyRun() returned: %s\n", j, err.Error())
 					}
 
 					//------------------------------------------------------------------------------
@@ -207,8 +212,9 @@ func (s *Simulator) Run() {
 				//-------------------------------------------------------------------
 				// Terminate MarkToEnd if all Investors have settled their C2
 				//-------------------------------------------------------------------
-				if s.MarkToEndInProgress && SettleC2 > 0 {
+				if s.MarkToEndInProgress && SettleC2 == 0 {
 					// s.cfg.DtSettle = T3  -- this is not correct, this is a simululation run value, not a configuration value
+					DateSettled = T3
 					s.MarkToEndInProgress = false
 				}
 
@@ -230,18 +236,23 @@ func (s *Simulator) Run() {
 					}
 				}
 
-				// Don't let
-				if T3.Equal(now) {
+				// Don't let it go past today's date.
+				if !T3.Before(now) {
 					s.MarkToEndInProgress = false
 				}
 			}
+			T3 = T3.AddDate(0, 0, -1)
 			s.GensCompleted++ // we have just concluded another generation
 			if g+1 == s.cfg.Generations || !isGenDur {
 				d = T3
 			}
 			thisGenDtStart = genStart
 			thisGenDtEnd = d
-			fmt.Printf("Completed generation %d, %s - %s\n", s.GensCompleted, thisGenDtStart.Format("Jan _2, 2006"), d.Format("Jan _2, 2006"))
+			unsettled := float64(0)
+			for j := 0; j < len(s.Investors); j++ {
+				unsettled += s.Investors[j].BalanceC2
+			}
+			fmt.Printf("Completed generation %d, %s - %s,  unsettled = %8.2f\n", s.GensCompleted, thisGenDtStart.Format("Jan _2, 2006"), d.Format("Jan _2, 2006"), unsettled)
 			if isGenDur {
 				genStart = dtGenEnd // Start next generation from the end of the last
 			}
@@ -252,7 +263,7 @@ func (s *Simulator) Run() {
 			// s.SettleC2Balance()  // no longer needed.  We do MarkToEnd in main loop
 			s.CalculateMaxVals()
 			s.CalculateAllFitnessScores()
-			s.SaveStats(thisGenDtStart, thisGenDtEnd)
+			s.SaveStats(thisGenDtStart, thisGenDtEnd /*DateSettled*/, T3)
 			if s.dumpTopInvestorInvestments {
 				if err := s.InvestmentsToCSV(&s.Investors[s.maxProfitInvestor]); err != nil {
 					log.Printf("ERROR: InvestmentsToCSV returned: %s\n", err)
@@ -268,6 +279,7 @@ func (s *Simulator) Run() {
 				}
 				s.maxPredictions = make(map[string]int, 0)
 			}
+			s.MarkToEndInProgress = false
 		}
 		fmt.Printf("loop %d completed.  %s - %s\n", lc, thisGenDtStart.Format("Jan _2, 2006"), thisGenDtEnd.Format("Jan _2, 2006"))
 	}
@@ -406,7 +418,7 @@ func (s *Simulator) CalculateMaxVals() {
 //
 // RETURNS
 // ----------------------------------------------------------------------------
-func (s *Simulator) SaveStats(dtStart, dtStop time.Time) {
+func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time) {
 	//----------------------------------------------------
 	// Compute average investor profit this generation...
 	//----------------------------------------------------
@@ -415,6 +427,7 @@ func (s *Simulator) SaveStats(dtStart, dtStop time.Time) {
 	avgProfit := float64(0)
 	maxProfitDNA := ""
 	totalHoldingC2 := 0
+	totalC2 := float64(0)
 
 	for i := 0; i < len(s.Investors); i++ {
 		if s.Investors[i].BalanceC1 > s.cfg.InitFunds {
@@ -429,6 +442,7 @@ func (s *Simulator) SaveStats(dtStart, dtStop time.Time) {
 		}
 		if s.Investors[i].BalanceC2 >= 1.0 {
 			totalHoldingC2++
+			totalC2 += s.Investors[i].BalanceC2
 		}
 	}
 	if prof > 0 {
@@ -457,6 +471,7 @@ func (s *Simulator) SaveStats(dtStart, dtStop time.Time) {
 		if investment.Completed {
 			tot++
 		}
+
 		//----------------------------------------------------------------
 		// Note that when we sell, we try to sell at a loss first. So
 		// this might not be a good way to determine profitable buys
@@ -479,6 +494,8 @@ func (s *Simulator) SaveStats(dtStart, dtStop time.Time) {
 		DtGenStart:           dtStart,
 		DtGenStop:            dtStop,
 		TotalHoldingC2:       totalHoldingC2,
+		DtActualStop:         dtSettled,
+		UnsettledC2:          totalC2,
 	}
 	s.SimStats = append(s.SimStats, ss)
 }
@@ -513,7 +530,6 @@ func (s *Simulator) DumpStats() error {
 		fmt.Fprintf(file, "\"Generation Lifetime: %s\"\n", util.FormatGenDur(s.cfg.GenDur))
 	}
 	fmt.Fprintf(file, "\"Simulation Loop Count: %d\"\n", s.cfg.LoopCount)
-	fmt.Fprintf(file, "\"Simulation Settle Date: %s\"\n", s.cfg.DtSettle.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Time Duration: %s\"\n", util.DateDiffString(a, c))
 	fmt.Fprintf(file, "\"C1: %s\"\n", s.cfg.C1)
 	fmt.Fprintf(file, "\"C2: %s\"\n", s.cfg.C2)
@@ -531,10 +547,23 @@ func (s *Simulator) DumpStats() error {
 	fmt.Fprintf(file, "\"Elapsed Run Time: %s\"\n", et)
 	fmt.Fprintf(file, "\"\"\n")
 
-	// the header row   0 0a 0b 1  2  3  4  5  6  7  8  9
-	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q\n",
-		//   0         0a			0b				1                       2                           3                 4             5             6                  7                      8
-		"Generation", "Gen Start", "Gen Stop", "Profitable Investors", "Profitable Investors", "Average Profit", "Max Profit", "Total Buys", "Profitable Buys", "Profitable Buys", "Nil Data Requests", "Investors Holding C2", "DNA")
+	// the header row   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14
+	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q\n",
+		"Generation",             // 0
+		"Gen Start",              // 1
+		"Gen Stop",               // 2
+		"Profitable Investors",   // 3
+		"% Profitable Investors", // 4
+		"Average Profit",         // 5
+		"Max Profit",             // 6
+		"Total Buys",             // 7
+		"Profitable Buys",        // 8
+		"Profitable Buys",        // 9
+		"Nil Data Requests",      // 10
+		"Investors Holding C2",   // 11
+		"Total Unsettled C2",     // 12
+		"Actual Stop Date",       // 13
+		"DNA")                    // 14
 
 	// investment rows
 	for i := 0; i < len(s.SimStats); i++ {
@@ -542,20 +571,22 @@ func (s *Simulator) DumpStats() error {
 		if s.SimStats[i].TotalBuys > 0 {
 			pctProfPred = 100.0 * float64(s.SimStats[i].ProfitableBuys) / float64(s.SimStats[i].TotalBuys)
 		}
-		fmt.Fprintf(file, "%d,%q,%q,%d,%5.1f%%,%8.2f,%8.2f,%d,%d,%4.2f%%,%d,%d,%q\n",
+		fmt.Fprintf(file, "%d,%q,%q,%d,%5.1f%%,%8.2f,%8.2f,%d,%d,%4.2f%%,%d,%d,%8.2f,%q,%q\n",
 			i, // 0
-			s.SimStats[i].DtGenStart.Format("1/2/2006"),                                    // 0a
-			s.SimStats[i].DtGenStop.Format("1/2/2006"),                                     // 0b
-			s.SimStats[i].ProfitableInvestors,                                              // 1
-			100.0*float64(s.SimStats[i].ProfitableInvestors)/float64(s.cfg.PopulationSize), // 2
-			s.SimStats[i].AvgProfit,                                                        // 3
-			s.SimStats[i].MaxProfit,                                                        // 4
-			s.SimStats[i].TotalBuys,                                                        // 5
-			s.SimStats[i].ProfitableBuys,                                                   // 6
-			pctProfPred,                                                                    // 7
-			s.SimStats[i].TotalNilDataRequests,                                             // 8
-			s.SimStats[i].TotalHoldingC2,                                                   // 9
-			s.SimStats[i].MaxProfitDNA)                                                     //
+			s.SimStats[i].DtGenStart.Format("1/2/2006"),                                    // 1
+			s.SimStats[i].DtGenStop.Format("1/2/2006"),                                     // 2
+			s.SimStats[i].ProfitableInvestors,                                              // 3
+			100.0*float64(s.SimStats[i].ProfitableInvestors)/float64(s.cfg.PopulationSize), // 4
+			s.SimStats[i].AvgProfit,                                                        // 5
+			s.SimStats[i].MaxProfit,                                                        // 6
+			s.SimStats[i].TotalBuys,                                                        // 7
+			s.SimStats[i].ProfitableBuys,                                                   // 8
+			pctProfPred,                                                                    // 9
+			s.SimStats[i].TotalNilDataRequests,                                             // 10
+			s.SimStats[i].TotalHoldingC2,                                                   // 11
+			s.SimStats[i].UnsettledC2,                                                      // 12
+			s.SimStats[i].DtActualStop.Format("1/2/2006"),                                  // 13
+			s.SimStats[i].MaxProfitDNA)                                                     // 14
 	}
 	return nil
 }

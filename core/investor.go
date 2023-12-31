@@ -7,6 +7,7 @@ import (
 	"os"
 	"reflect"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/stmansour/psim/util"
@@ -162,7 +163,9 @@ func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 		influencer := i.Influencers[j]
 		prediction, r1, r2, probability, weight, err := influencer.GetPrediction(T3)
 		if err != nil {
-			if err.Error() != "nildata" {
+			// if the error is anything except nildata, then return now
+			if !strings.Contains(err.Error(), "nildata") {
+				fmt.Printf("nildata comparison failed. Returning now. Error = %s\n", err.Error())
 				return coa, err
 			}
 		}
