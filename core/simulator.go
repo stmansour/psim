@@ -26,6 +26,7 @@ type SimulationStatistics struct {
 	TotalHoldingC2       int       // total number of Investors still holding C2 after simulation stop date
 	DtActualStop         time.Time // the date we actually stopped the simulation after trying to settle remaining C2 after DtGenStop
 	UnsettledC2          float64   // the amount of C2 held across all Investors when simulation stopped.
+	EndOfDataReached     bool      // true if current day was reached before all C2 was sold
 }
 
 // Simulator is a simulator object
@@ -144,15 +145,16 @@ func (s *Simulator) NewPopulation() error {
 func (s *Simulator) Run() {
 	var thisGenDtStart time.Time
 	var thisGenDtEnd time.Time
+	var EndOfDataReached bool
 	now := time.Now()
 	iteration := 0
 	s.SimStart = time.Now()
-	var DateSettled time.Time
+	// var DateSettled time.Time
 
 	for lc := 0; lc < s.cfg.LoopCount; lc++ {
 
 		dtStop := time.Time(s.cfg.DtStop)
-		DateSettled = dtStop
+		// DateSettled = dtStop
 		isGenDur := len(s.cfg.GenDurSpec) > 0
 		genStart := time.Time(s.cfg.DtStart)
 
@@ -180,6 +182,7 @@ func (s *Simulator) Run() {
 			if dtGenEnd.After(dtStop) || !isGenDur {
 				dtGenEnd = dtStop
 			}
+			EndOfDataReached = false
 
 			for T3.Before(dtGenEnd) || s.MarkToEndInProgress {
 				iteration++
@@ -214,7 +217,7 @@ func (s *Simulator) Run() {
 				//-------------------------------------------------------------------
 				if s.MarkToEndInProgress && SettleC2 == 0 {
 					// s.cfg.DtSettle = T3  -- this is not correct, this is a simululation run value, not a configuration value
-					DateSettled = T3
+					// DateSettled = T3
 					s.MarkToEndInProgress = false
 				}
 
@@ -239,6 +242,7 @@ func (s *Simulator) Run() {
 				// Don't let it go past today's date.
 				if !T3.Before(now) {
 					s.MarkToEndInProgress = false
+					EndOfDataReached = true
 				}
 			}
 			T3 = T3.AddDate(0, 0, -1)
@@ -263,7 +267,7 @@ func (s *Simulator) Run() {
 			// s.SettleC2Balance()  // no longer needed.  We do MarkToEnd in main loop
 			s.CalculateMaxVals()
 			s.CalculateAllFitnessScores()
-			s.SaveStats(thisGenDtStart, thisGenDtEnd /*DateSettled*/, T3)
+			s.SaveStats(thisGenDtStart, thisGenDtEnd, T3, EndOfDataReached)
 			if s.dumpTopInvestorInvestments {
 				if err := s.InvestmentsToCSV(&s.Investors[s.maxProfitInvestor]); err != nil {
 					log.Printf("ERROR: InvestmentsToCSV returned: %s\n", err)
@@ -418,7 +422,7 @@ func (s *Simulator) CalculateMaxVals() {
 //
 // RETURNS
 // ----------------------------------------------------------------------------
-func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time) {
+func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time, eodr bool) {
 	//----------------------------------------------------
 	// Compute average investor profit this generation...
 	//----------------------------------------------------
@@ -496,6 +500,7 @@ func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time) {
 		TotalHoldingC2:       totalHoldingC2,
 		DtActualStop:         dtSettled,
 		UnsettledC2:          totalC2,
+		EndOfDataReached:     eodr,
 	}
 	s.SimStats = append(s.SimStats, ss)
 }
@@ -547,8 +552,8 @@ func (s *Simulator) DumpStats() error {
 	fmt.Fprintf(file, "\"Elapsed Run Time: %s\"\n", et)
 	fmt.Fprintf(file, "\"\"\n")
 
-	// the header row   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14
-	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q\n",
+	// the header row   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q\n",
 		"Generation",             // 0
 		"Gen Start",              // 1
 		"Gen Stop",               // 2
@@ -558,12 +563,13 @@ func (s *Simulator) DumpStats() error {
 		"Max Profit",             // 6
 		"Total Buys",             // 7
 		"Profitable Buys",        // 8
-		"Profitable Buys",        // 9
+		"% Profitable Buys",      // 9
 		"Nil Data Requests",      // 10
 		"Investors Holding C2",   // 11
 		"Total Unsettled C2",     // 12
 		"Actual Stop Date",       // 13
-		"DNA")                    // 14
+		"All Investors Settled",  // 14
+		"DNA")                    // 15
 
 	// investment rows
 	for i := 0; i < len(s.SimStats); i++ {
@@ -571,7 +577,11 @@ func (s *Simulator) DumpStats() error {
 		if s.SimStats[i].TotalBuys > 0 {
 			pctProfPred = 100.0 * float64(s.SimStats[i].ProfitableBuys) / float64(s.SimStats[i].TotalBuys)
 		}
-		fmt.Fprintf(file, "%d,%q,%q,%d,%5.1f%%,%8.2f,%8.2f,%d,%d,%4.2f%%,%d,%d,%8.2f,%q,%q\n",
+		settled := "no"
+		if !s.SimStats[i].EndOfDataReached {
+			settled = "yes"
+		}
+		fmt.Fprintf(file, "%d,%q,%q,%d,%5.1f%%,%8.2f,%8.2f,%d,%d,%4.2f%%,%d,%d,%8.2f,%q,%q,%q\n",
 			i, // 0
 			s.SimStats[i].DtGenStart.Format("1/2/2006"),                                    // 1
 			s.SimStats[i].DtGenStop.Format("1/2/2006"),                                     // 2
@@ -586,7 +596,8 @@ func (s *Simulator) DumpStats() error {
 			s.SimStats[i].TotalHoldingC2,                                                   // 11
 			s.SimStats[i].UnsettledC2,                                                      // 12
 			s.SimStats[i].DtActualStop.Format("1/2/2006"),                                  // 13
-			s.SimStats[i].MaxProfitDNA)                                                     // 14
+			settled,                    // 14
+			s.SimStats[i].MaxProfitDNA) // 15
 	}
 	return nil
 }
