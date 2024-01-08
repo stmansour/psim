@@ -6,6 +6,24 @@ import (
 	"time"
 )
 
+func TestSingleInvestorMode(t *testing.T) {
+	Init(-1)
+	cfg, err := LoadConfig("singleInvestor.json5")
+	if err != nil {
+		t.Errorf("LoadConfig failed: %s", err)
+		return
+	}
+	if err := ValidateConfig(&cfg); err != nil {
+		t.Errorf("ValidateConfig failed: %s", err)
+	}
+	if !cfg.SingleInvestorMode {
+		t.Errorf("Single investor mode was expected to be true, but it was false")
+	}
+	if cfg.LoopCount != 1 || cfg.PopulationSize != 1 {
+		t.Errorf("Expected LoopCount and PopulationSize to be 1.  Found LoopCount = %d, PopulationSize = %d", cfg.LoopCount, cfg.PopulationSize)
+	}
+}
+
 func TestConfig(t *testing.T) {
 	Init(-1)
 	cfg := CreateTestingCFG()

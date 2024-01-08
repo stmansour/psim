@@ -40,6 +40,7 @@ func displaySimulationDetails(cfg *util.AppConfig) {
 	a := time.Time(cfg.DtStart)
 	b := time.Time(cfg.DtStop)
 	c := b.AddDate(0, 0, 1)
+	fmt.Printf("Configuration File:  %s\n", app.cfName)
 	fmt.Printf("Start:               %s\tvalid: %s\n", a.Format("Jan 2, 2006"), dateIsInDataRange(a))
 	fmt.Printf("Stop:                %s\tvalid: %s\n", b.Format("Jan 2, 2006"), dateIsInDataRange(b))
 	if len(cfg.GenDurSpec) > 0 {
@@ -152,6 +153,7 @@ func doSimulation() {
 
 func main() {
 	app.randNano = -1
+	app.cfName = "config.json5"
 	readCommandLineArgs()
 	doSimulation()
 }

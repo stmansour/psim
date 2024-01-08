@@ -11,8 +11,8 @@
     //-----------------------------------------------------------------
     //  SIMULATOR
     //-----------------------------------------------------------------
-    "DtStart": "2018-01-01",    // simulation start date for each generation
-    "DtStop": "2018-12-31",     // simulation stop date for each generation
+    "DtStart": "2015-05-01",    // simulation start date for each generation
+    "DtStop": "2015-05-31",     // simulation stop date for each generation
     "LoopCount": 20,            // How many times to loop over DtStart to DtStop
     "Generations": 1,           // how many generations should the simulator run. NOTE: This value is only valid if GenDurSpec is commented out.
     // "GenDurSpec": "1 Y",        // How long is a generation.  EX:  "1 Y",  "6 M",  "8 W", "1 Y 6 M", "90 D"
@@ -28,16 +28,17 @@
     "COAStrategy": "DistributedDecision", // course of action strategy.  Choose from (DistributedDecision)
 
     //-----------------------------------------------------------------
-    //  There may be times when we need to test or check the performance
+    //  There may be times when we need to test or check the behavior
     //  of a specific Investor, based on its DNA. In this case, looping
-    //  and generations are not relevant. This mode of operation simulates
-    //  how a specific Investor will do.  When "SingleInvestorMode" is
+    //  and generations are not relevant. Instead, we need the behavior
+    //  to be completely repeatable and predictable.
+    //  When "SingleInvestorMode" is
     //  true, LoopCount will be forced to 1, Generations will be forced
     //  to 1.  This would simulate things more like the production
     //  version of this projects code will operate. 
     //-----------------------------------------------------------------
-    "SingleInvestorMode": false,
-    "SingleInvestorDNA": "",
+    "SingleInvestorMode": true,
+    "SingleInvestorDNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{SPInfluencer,Delta1=-27,Delta2=-5}]}",
 
     //-----------------------------------------------------------------
     //  INFLUENCER SUBCLASSES
@@ -54,12 +55,13 @@
     
     // "IRInfluencer",
     // "M2Influencer"
+    // "GDInfluencer",
+    // "M1Influencer",
+    // "CCInfluencer",
+    // "DRInfluencer",
+    // "URInfluencer",
     "InfluencerSubclasses": [
-      "CCInfluencer",
-      "DRInfluencer",
-      "GDInfluencer",
-      "M1Influencer",
-      "URInfluencer",
+      "SPInfluencer"
     ],
 
     //-----------------------------------------------------------------

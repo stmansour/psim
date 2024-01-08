@@ -39,7 +39,7 @@ func TestNewPopulation(t *testing.T) {
 	//----------------------------
 	pop := []Investor{}
 	for i := 0; i < len(oldPopulationDNA); i++ {
-		inv := f.NewInvestor(oldPopulationDNA[i])
+		inv := f.NewInvestorFromDNA(oldPopulationDNA[i])
 		dna := inv.DNA()
 		if dna != oldPopulationDNA[i] {
 			t.Errorf("DNA and newDNA differ:\n\tcreated: %s\n\texpected: %s", dna, oldPopulationDNA[i])

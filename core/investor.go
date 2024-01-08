@@ -151,17 +151,17 @@ func (i *Investor) DNA() string {
 	return s
 }
 
-// GetCourseOfAction returns the Investor's "buy", "sell", "hold" prediction for T3
-//
+// GetCourseOfAction returns the Investor's "buy", "sell", "hold", or "abstain"
+// prediction for T3
 // --------------------------------------------------------------------------------
 func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 	// T4 := T3.AddDate(0, 0, i.Delta4) // here if we need it
 	var coa CourseOfAction
 	coa.Action = "abstain" // the prediction, assume the worst for now
 	var recs []Prediction
+
 	for j := 0; j < len(i.Influencers); j++ {
-		influencer := i.Influencers[j]
-		prediction, r1, r2, probability, weight, err := influencer.GetPrediction(T3)
+		prediction, r1, r2, probability, weight, err := i.Influencers[j].GetPrediction(T3)
 		if err != nil {
 			// if the error is anything except nildata, then return now
 			if !strings.Contains(err.Error(), "nildata") {
@@ -171,8 +171,8 @@ func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 		}
 		recs = append(recs,
 			Prediction{
-				Delta1: int64(influencer.GetDelta1()),
-				Delta2: int64(influencer.GetDelta2()),
+				Delta1: int64(i.Influencers[j].GetDelta1()),
+				Delta2: int64(i.Influencers[j].GetDelta2()),
 				T3:     T3,
 				// T4:          T4,
 				RT1:         r1,
@@ -180,17 +180,15 @@ func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 				Action:      prediction,
 				Probability: probability,
 				Weight:      weight,
-				IType:       reflect.TypeOf(influencer).String(),
-				ID:          influencer.GetID(),
+				IType:       reflect.TypeOf(i.Influencers[j]).String(),
+				ID:          i.Influencers[j].GetID(),
 				Correct:     false, // don't know yet
 			})
 
 	}
 
 	//------------------------------------------------------------------------------
-	// make decision based on predictions.
-	// TODO:  This code needs to be rethought. For now, I'm using a 'majority wins'
-	//        strategy, which is probably not a good approach.
+	// compute the stats on today's prediction
 	//------------------------------------------------------------------------------
 	if len(recs) < 1 {
 		return coa, fmt.Errorf("no predictions found")
@@ -209,7 +207,7 @@ func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 		}
 	}
 
-	setCourseOfAction(&coa, i.cfg.COAStrategy)
+	setCourseOfAction(&coa, i.cfg.COAStrategy) // use course of action strategy called out in the config file
 	if i.cfg.Trace {
 		for j := 0; j < len(recs); j++ {
 			i.FormatPrediction(&recs[j], T3)
@@ -254,24 +252,34 @@ func setCourseOfAction(coa *CourseOfAction, method string) error {
 // -----------------------------------------------------------------------------
 func distributedDecisionCOA(coa *CourseOfAction) error {
 
-	if coa.BuyVotes == coa.TotalVotes {
+	if coa.BuyVotes == coa.TotalVotes { // all votes to buy?
 		coa.Action = "buy"
 		coa.ActionPct = 1.0
-	} else if coa.HoldVotes == coa.TotalVotes {
+	} else if coa.HoldVotes == coa.TotalVotes { // all votes to hold?
 		coa.Action = "hold"
 		coa.ActionPct = 1.0
-	} else if coa.SellVotes == coa.TotalVotes {
+	} else if coa.SellVotes == coa.TotalVotes { // all votes to sell?
 		coa.Action = "sell"
 		coa.ActionPct = 1.0
-	} else if coa.BuyVotes > coa.SellVotes {
+	} else if coa.BuyVotes > coa.SellVotes { // more buy votes than sell votes?
 		coa.Action = "buy"
-		holdFactor := float64(coa.HoldVotes) / float64(coa.TotalVotes)
-		activeVotes := float64(coa.BuyVotes + coa.SellVotes)
+		holdFactor := float64(coa.HoldVotes) / float64(coa.TotalVotes) // percentage that wants to hold
+		activeVotes := float64(coa.BuyVotes + coa.SellVotes)           // total active votes
+		//-----------------------------------------------------------------
+		//                                 BuyVotes - SellVotes
+		//              (1 - holdFactor) * --------------------
+		//                                    activeVotes
+		//-----------------------------------------------------------------
 		coa.ActionPct = (float64(coa.BuyVotes-coa.SellVotes) / activeVotes) * (1.0 - holdFactor)
 	} else if coa.SellVotes > coa.BuyVotes {
 		coa.Action = "sell"
-		holdFactor := float64(coa.HoldVotes) / float64(coa.TotalVotes)
-		activeVotes := float64(coa.BuyVotes + coa.SellVotes)
+		holdFactor := float64(coa.HoldVotes) / float64(coa.TotalVotes) // percentage that wants to hold
+		activeVotes := float64(coa.BuyVotes + coa.SellVotes)           // total active votes
+		//-----------------------------------------------------------------
+		//                                 SellVotes - BuyVotes
+		//              (1 - holdFactor) * --------------------
+		//                                    activeVotes
+		//-----------------------------------------------------------------
 		coa.ActionPct = (float64(coa.SellVotes-coa.BuyVotes) / activeVotes) * (1.0 - holdFactor)
 	} else {
 		coa.Action = "hold"
@@ -285,14 +293,14 @@ func distributedDecisionCOA(coa *CourseOfAction) error {
 // INPUTS
 //
 //	T3      - day to evaluate and act on
-//	sellall - if true simulator has passed the simulation end date. Only execute
+//	winddown - if true simulator has passed the simulation end date. Only execute
 //	          sells until we're out of C2.  We'll consider anything less
 //	          than 1.00 C2 to be "done"
 //
 // RETURNS
 // err - any error encountered
 // ------------------------------------------------------------------------------
-func (i *Investor) DailyRun(T3 time.Time, sellall bool) error {
+func (i *Investor) DailyRun(T3 time.Time, winddown bool) error {
 	if i.cfg.Trace {
 		fmt.Printf("%s - %s\n", T3.Format("Jan _2, 2006"), i.ID)
 	}
@@ -302,7 +310,7 @@ func (i *Investor) DailyRun(T3 time.Time, sellall bool) error {
 	}
 	switch coa.Action {
 	case "buy":
-		if sellall {
+		if winddown {
 			return nil
 		}
 		if err = i.ExecuteBuy(T3, coa.ActionPct); err != nil {

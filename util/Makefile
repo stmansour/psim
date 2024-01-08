@@ -14,7 +14,7 @@ util: *.go
 	@echo "*** ${THISDIR}: completed compile ***"
 
 clean:
-	rm -rf *.out
+	rm -rf *.out fail
 	@echo "*** ${THISDIR}: completed clean ***"
 
 install:

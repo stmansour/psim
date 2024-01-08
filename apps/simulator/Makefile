@@ -12,11 +12,12 @@ dr: *.go
 
 clean:
 	go clean
-	rm -rf simulator data c*.json5 config.bak SimStats.csv coverage.out IList*.csv investorProfile.txt *Influencer.csv
+	rm -rf .tests_failed t1 simulator data c*.json5 config.bak SimStats.csv coverage.out IList*.csv investorProfile.txt *Influencer.csv
 	@echo "*** ${THISDIR}: completed clean ***"
 
 test: config db
 	@touch $(TEST_FAILURE_FILE)
+	./functest.sh
 	@go test -coverprofile=coverage.out -coverpkg=../../... && rm -f $(TEST_FAILURE_FILE)
 	@echo "*** ${THISDIR}: completed test ***"
 

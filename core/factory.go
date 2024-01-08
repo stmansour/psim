@@ -229,6 +229,11 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		log.Panicf("newInfCount == 0, we cannot have an influencer with 0 investors\n")
 	}
 	if newInfCount > len(util.InfluencerSubclasses) {
+		fmt.Printf("Uh oh:  newInfCount = %d, len(util.InfluencerSubclasses) = %d\n", newInfCount, len(util.InfluencerSubclasses))
+		fmt.Printf("\tutil.InfluencerSubclasses:")
+		for i := 0; i < len(util.InfluencerSubclasses); i++ {
+			fmt.Printf("%2d: %s\n", i, util.InfluencerSubclasses[i])
+		}
 		log.Panicf("Factory.BreedNewInvestor.newInfCount = %d\n", newInfCount)
 	}
 
@@ -486,9 +491,9 @@ func (*Factory) RandomUnusedSubclass(inv *Investor) string {
 	return util.InfluencerSubclasses[index]
 }
 
-// NewInvestor creates a new investor from supplied DNA
+// NewInvestorFromDNA creates a new investor from supplied DNA.
 // -----------------------------------------------------------------------------
-func (f *Factory) NewInvestor(DNA string) Investor {
+func (f *Factory) NewInvestorFromDNA(DNA string) Investor {
 	m, err := f.ParseInvestorDNA(DNA)
 	if err != nil {
 		log.Panicf("*** PANIC ERROR *** ParseInvestorDNA returned: %s\n", err.Error())
@@ -535,7 +540,7 @@ func (f *Factory) NewInvestor(DNA string) Investor {
 	if inv.W1+inv.W2 > 1.0 {
 		log.Panicf("Investor Weights > 0\n")
 	}
-
+	inv.ID = f.GenerateInvestorID()
 	return inv
 }
 

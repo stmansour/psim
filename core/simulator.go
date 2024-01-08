@@ -45,8 +45,24 @@ type Simulator struct {
 	SimStart                   time.Time              // timestamp for simulation start
 	SimStop                    time.Time              // timestamp for simulation stop
 	StopTimeSet                bool                   // set to true once SimStop is set. If it's false either the simulation is still in progress or did not complete
-	MarkToEndInProgress        bool                   // initially false, set to true when we have a C2 balance on or after cfg.DtStop, when all C2 is sold this will return to being false
+	WindDownInProgress         bool                   // initially false, set to true when we have a C2 balance on or after cfg.DtStop, when all C2 is sold this will return to being false
+}
 
+func (s *Simulator) ResetSimulator() {
+	var f Factory
+	s.cfg = nil
+	s.factory = f
+	s.Investors = nil
+	s.dayByDay = false
+	s.dumpTopInvestorInvestments = false
+	s.maxProfitThisRun = 0
+	s.maxPredictions = make(map[string]int)
+	s.maxProfitInvestor = 0
+	s.maxFitnessScore = 0
+	s.GensCompleted = 0
+	s.SimStats = make([]SimulationStatistics, 0)
+	s.StopTimeSet = false
+	s.WindDownInProgress = false
 }
 
 // SetAppConfig simply sets the simulators pointer to the AppConfig struct
@@ -81,6 +97,7 @@ func (s *Simulator) Init(cfg *util.AppConfig, dayByDay, dumpTopInvestorInvestmen
 	s.cfg = cfg
 	s.dayByDay = dayByDay
 	s.dumpTopInvestorInvestments = dumpTopInvestorInvestments
+
 	s.factory.Init(s.cfg)
 
 	//------------------------------------------------------------------------
@@ -106,10 +123,15 @@ func (s *Simulator) NewPopulation() error {
 	// In other words, just make it a random population.
 	//----------------------------------------------------------------------------
 	if s.GensCompleted == 0 || s.maxFitnessScore == 0 {
+
 		s.Investors = make([]Investor, 0)
 		for i := 0; i < s.cfg.PopulationSize; i++ {
 			var v Investor
-			v.ID = s.factory.GenerateInvestorID()
+			if s.cfg.SingleInvestorMode {
+				v = s.factory.NewInvestorFromDNA(s.cfg.SingleInvestorDNA)
+			} else {
+				v.ID = s.factory.GenerateInvestorID()
+			}
 			s.Investors = append(s.Investors, v)
 		}
 		//------------------------------------------------------------------------
@@ -184,12 +206,13 @@ func (s *Simulator) Run() {
 			}
 			EndOfDataReached = false
 
-			for T3.Before(dtGenEnd) || s.MarkToEndInProgress {
+			for T3.Before(dtGenEnd) || s.WindDownInProgress {
 				iteration++
 
 				if len(s.Investors) > s.cfg.PopulationSize {
 					log.Panicf("Population size should be %d, len(Investors) = %d", s.cfg.PopulationSize, len(s.Investors))
 				}
+
 				//*********************** BEGIN SIMULATOR DAILY LOOP ***********************
 
 				SettleC2 := 0 // if past simulation end date, we'll count the Investors that still have C2
@@ -197,7 +220,7 @@ func (s *Simulator) Run() {
 				// Ask each investor to do their daily run...
 				//-----------------------------------------------
 				for j := 0; j < len(s.Investors); j++ {
-					err := s.Investors[j].DailyRun(T3, s.MarkToEndInProgress)
+					err := s.Investors[j].DailyRun(T3, s.WindDownInProgress)
 					if err != nil {
 						fmt.Printf("Investors[%d].DailyRun() returned: %s\n", j, err.Error())
 					}
@@ -205,7 +228,7 @@ func (s *Simulator) Run() {
 					//------------------------------------------------------------------------------
 					// If we're in MarkToEnd mode, check to see if all Investors have < 1.00 of C2
 					//------------------------------------------------------------------------------
-					if s.MarkToEndInProgress {
+					if s.WindDownInProgress {
 						if s.Investors[j].BalanceC2 > 1.00 {
 							SettleC2++ // another investor needs to settle C2
 						}
@@ -215,10 +238,10 @@ func (s *Simulator) Run() {
 				//-------------------------------------------------------------------
 				// Terminate MarkToEnd if all Investors have settled their C2
 				//-------------------------------------------------------------------
-				if s.MarkToEndInProgress && SettleC2 == 0 {
+				if s.WindDownInProgress && SettleC2 == 0 {
 					// s.cfg.DtSettle = T3  -- this is not correct, this is a simululation run value, not a configuration value
 					// DateSettled = T3
-					s.MarkToEndInProgress = false
+					s.WindDownInProgress = false
 				}
 
 				//*********************** END SIMULATOR DAILY LOOP ***********************
@@ -226,22 +249,22 @@ func (s *Simulator) Run() {
 				d = T3
 				T3 = T3.AddDate(0, 0, 1)
 
-				if !s.MarkToEndInProgress && !T3.Before(dtGenEnd) {
+				if !s.WindDownInProgress && !T3.Before(dtGenEnd) {
 					//----------------------------------------------------------------------
 					// if we get to this point, it means that we're about to drop out of
 					// the daily loop. See if any investor is holding C2. If so, we will
-					// set s.MarkToEndInProgress to true in order to sell all remaining C2.
+					// set s.WindDownInProgress to true in order to sell all remaining C2.
 					//----------------------------------------------------------------------
-					for j := 0; j < len(s.Investors) && !s.MarkToEndInProgress; j++ {
+					for j := 0; j < len(s.Investors) && !s.WindDownInProgress; j++ {
 						if s.Investors[j].BalanceC2 > 1 {
-							s.MarkToEndInProgress = true
+							s.WindDownInProgress = true
 						}
 					}
 				}
 
 				// Don't let it go past today's date.
 				if !T3.Before(now) {
-					s.MarkToEndInProgress = false
+					s.WindDownInProgress = false
 					EndOfDataReached = true
 				}
 			}
@@ -283,7 +306,7 @@ func (s *Simulator) Run() {
 				}
 				s.maxPredictions = make(map[string]int, 0)
 			}
-			s.MarkToEndInProgress = false
+			s.WindDownInProgress = false
 		}
 		fmt.Printf("loop %d completed.  %s - %s\n", lc, thisGenDtStart.Format("Jan _2, 2006"), thisGenDtEnd.Format("Jan _2, 2006"))
 	}

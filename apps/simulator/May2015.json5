@@ -21,7 +21,7 @@
     "C2": "JPY",                // currency that we will invest in (ISO 4217 code)
     "InitFunds": 100000.00,     // how much each Investor is funded at the start of a simulation cycle
     "StdInvestment": 10000.00,  // the "standard" investment amount if a decision is made to invest in C2
-    "MutationRate": 1,          // number between 1 and 100, indicating the percentage of mutation
+    "MutationRate": 15,          // number between 1 and 100, indicating the percentage of mutation
     "DBSource": "CSV",          // { CSV | Database | OnlineService }
     "HoldWindowPos": 0.1,       // positive hold area
     "HoldWindowNeg": -0.1,      // negative hold area
@@ -111,6 +111,9 @@
     "M2W1": 0.6,                // M2Influencer Fitness Score weighting for "correctness" of predictions. Constraint: M2W1 + M2W2 = 1.0
     "M2W2": 0.4,                // M2Influencer Fitness Score weighting for number of predictions made. Constraint: M2W1 + M2W2 = 1.0
 
+    //-----------------------------------------------------------------
+    //  SP - Stock PRice
+    //-----------------------------------------------------------------
 		"SPMinDelta1": -90,
 		"SPMaxDelta1": -21,
 		"SPMinDelta2": -20,

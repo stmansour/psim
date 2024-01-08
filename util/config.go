@@ -160,6 +160,12 @@ type FileConfig struct {
 	MutationRate         int       // 1 - 100 indicating the % of mutation
 	DBSource             string    // {CSV | Database | OnlineService}
 	RandNano             int64     // random seed
+
+	//--------------------------------------------------------------------------------------------------------------------
+	// Single Investor mode...  LoopCount will be set to 1, Generations will be set to 1, PopulationSize will be set to 1
+	//--------------------------------------------------------------------------------------------------------------------
+	SingleInvestorMode bool   // default is false, when true it means we're running a single investor... more like the production code will run
+	SingleInvestorDNA  string // DNA of the single investor
 }
 
 // AppConfig is the struct of config data used throughout the code by the Simulator,
@@ -199,6 +205,8 @@ type AppConfig struct {
 	RandNano             int64                             // random number seed used for this simulation
 	InfPredDebug         bool                              // print debug info about every prediction
 	Trace                bool                              // use this flag to cause full trace information to be printed regarding every Investor decision every day.
+	SingleInvestorMode   bool                              // default is false, when true it means we're running a single investor... more like the production code will run
+	SingleInvestorDNA    string                            // DNA of the single investor
 }
 
 func hasPrefix(tag string, prefixes []string, mod string) bool {
@@ -341,6 +349,13 @@ func LoadConfig(cfname string) (AppConfig, error) {
 			log.Panicf("Invalid GenDurSpec specification: %s\n", cfg.GenDurSpec)
 		}
 	}
+
+	if cfg.SingleInvestorMode {
+		cfg.LoopCount = 1
+		cfg.Generations = 1
+		cfg.PopulationSize = 1
+	}
+
 	return cfg, nil
 }
 
