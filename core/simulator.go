@@ -48,6 +48,10 @@ type Simulator struct {
 	WindDownInProgress         bool                   // initially false, set to true when we have a C2 balance on or after cfg.DtStop, when all C2 is sold this will return to being false
 }
 
+// ResetSimulator is primarily to support tests. It resets the simulator
+// object to its initial state for successive simulator runs from different
+// test functions
+//-----------------------------------------------------------------------------
 func (s *Simulator) ResetSimulator() {
 	var f Factory
 	s.cfg = nil
