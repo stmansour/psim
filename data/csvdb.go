@@ -54,7 +54,7 @@ var DBInfo struct {
 //----------------------------------------------------------------------------
 //  The general format is:
 //
-//      [C1][C2][DataType][Qualifier]
+//      [C1][C2]{DataType}(Qualifier)
 //
 //  For Currency, use the ISO 4217 naming conventions, 3-letter strings, the
 //  first two identify the country, the last is represents the currency name.
@@ -426,6 +426,5 @@ func CSVDBFindRecord(dt time.Time) *RatesAndRatiosRecord {
 			right = mid - 1
 		}
 	}
-
 	return nil
 }
