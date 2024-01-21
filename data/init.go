@@ -8,15 +8,19 @@ import (
 	"github.com/stmansour/psim/util"
 )
 
+// RatesAndRatiosRecords is a type for an array of DR records
+type RatesAndRatiosRecords []RatesAndRatiosRecord
+
 // DInfo maintains data needed by the data subsystem.
 // The primary need is the two currencies C1 & C2
 var DInfo struct {
 	cfg     *util.AppConfig
-	DBRecs  RatesAndRatiosRecords // all records... temporary, until we have database
-	DtStart time.Time             // earliest date with data
-	DtStop  time.Time             // latest date with data
-	DTypes  []string              // the list of Influencers, each has their own data type
-	CSVMap  map[string]int        // which columns are where? Map the data type to a CSV column
+	DBRecs  RatesAndRatiosRecords  // all records... temporary, until we have database
+	LRecs   []LinguisticDataRecord // all lingustic records
+	DtStart time.Time              // earliest date with data
+	DtStop  time.Time              // latest date with data
+	DTypes  []string               // the list of Influencers, each has their own data type
+	CSVMap  map[string]int         // which columns are where? Map the data type to a CSV column
 }
 
 // RatesAndRatiosRecord is the basic structure of discount rate data
@@ -44,6 +48,15 @@ type RatesAndRatiosRecord struct {
 	FLAGS uint64 // can hold flags for the first 64 values associated with the Date, see DataFlags
 }
 
+// LingusticsRecord is a temporary struct to hold lingustic
+type LingusticsRecord struct {
+	Date              time.Time
+	LUSALSNScore_ECON float64 // (negative sentiment, USA economic news)
+	LUSALSPScore_ECON float64 // (positive sentiment, USA economic news)
+	LJPNLSNScore_ECON float64 // (negative sentiment, JPN economic news)
+	LJPNLSPScore_ECON float64 // (positive sentiment, JPN economic  news)
+}
+
 // DataFlags indicate which bit of the flag fields must be set in order for the
 // associated value to be valid.
 var DataFlags struct {
@@ -68,9 +81,6 @@ var DataFlags struct {
 
 // PLATODB is the csv data file that is used for Discount Rate information
 var PLATODB = string("data/platodb.csv")
-
-// RatesAndRatiosRecords is a type for an array of DR records
-type RatesAndRatiosRecords []RatesAndRatiosRecord
 
 // CurrencyInfo contains information about currencies used in this program
 type CurrencyInfo struct {
@@ -166,6 +176,74 @@ func DRec2String(drec *RatesAndRatiosRecord) string {
 		drec.SPRatio, isValidCheck(drec.FLAGS, DataFlags.SPRatioValid),
 		drec.URRatio, isValidCheck(drec.FLAGS, DataFlags.URRatioValid),
 		drec.FLAGS,
+	)
+	return s
+}
+
+func LRecToString(lrec *LinguisticDataRecord) string {
+	s := fmt.Sprintf(`    Date = %s
+	LALLLSNScore      = %9.3f
+	LALLLSPScore      = %9.3f
+	LALLWHAScore      = %9.3f
+	LALLWHOScore      = %9.3f
+	LALLWHLScore      = %9.3f
+	LALLWPAScore      = %9.3f
+	LALLWDECount      = %9.3f
+	LALLWDFCount      = %9.3f
+	LALLWDPCount      = %9.3f
+	LALLWDMCount      = %9.3f
+	LUSALSNScore_ECON = %9.3f
+	LUSALSPScore_ECON = %9.3f
+	LUSAWHAScore_ECON = %9.3f
+	LUSAWHOScore_ECON = %9.3f
+	LUSAWHLScore_ECON = %9.3f
+	LUSAWPAScore_ECON = %9.3f
+	LUSAWDECount_ECON = %9.3f
+	LUSAWDFCount_ECON = %9.3f
+	LUSAWDPCount_ECON = %9.3f
+	LUSALIMCount_ECON = %9.3f
+	LJPNLSNScore_ECON = %9.3f
+	LJPNLSPScore_ECON = %9.3f
+	LJPNWHAScore_ECON = %9.3f
+	LJPNWHOScore_ECON = %9.3f
+	LJPNWHLScore_ECON = %9.3f
+	LJPNWPAScore_ECON = %9.3f
+	LJPNWDECount_ECON = %9.3f
+	LJPNWDFCount_ECON = %9.3f
+	LJPNWDPCount_ECON = %9.3f
+	LJPNLIMCount_ECON = %9.3f
+	`,
+		lrec.Date.Format("Jan 2, 2006"),
+		lrec.LALLLSNScore,
+		lrec.LALLLSPScore,
+		lrec.LALLWHAScore,
+		lrec.LALLWHOScore,
+		lrec.LALLWHLScore,
+		lrec.LALLWPAScore,
+		lrec.LALLWDECount,
+		lrec.LALLWDFCount,
+		lrec.LALLWDPCount,
+		lrec.LALLWDMCount,
+		lrec.LUSALSNScore_ECON,
+		lrec.LUSALSPScore_ECON,
+		lrec.LUSAWHAScore_ECON,
+		lrec.LUSAWHOScore_ECON,
+		lrec.LUSAWHLScore_ECON,
+		lrec.LUSAWPAScore_ECON,
+		lrec.LUSAWDECount_ECON,
+		lrec.LUSAWDFCount_ECON,
+		lrec.LUSAWDPCount_ECON,
+		lrec.LUSALIMCount_ECON,
+		lrec.LJPNLSNScore_ECON,
+		lrec.LJPNLSPScore_ECON,
+		lrec.LJPNWHAScore_ECON,
+		lrec.LJPNWHOScore_ECON,
+		lrec.LJPNWHLScore_ECON,
+		lrec.LJPNWPAScore_ECON,
+		lrec.LJPNWDECount_ECON,
+		lrec.LJPNWDFCount_ECON,
+		lrec.LJPNWDPCount_ECON,
+		lrec.LJPNLIMCount_ECON,
 	)
 	return s
 }

@@ -13,6 +13,40 @@ import (
 	"github.com/stmansour/psim/util"
 )
 
+type LinguisticDataRecord struct {
+	Date              time.Time
+	LALLLSNScore      float64
+	LALLLSPScore      float64
+	LALLWHAScore      float64
+	LALLWHOScore      float64
+	LALLWHLScore      float64
+	LALLWPAScore      float64
+	LALLWDECount      float64
+	LALLWDFCount      float64
+	LALLWDPCount      float64
+	LALLWDMCount      float64
+	LUSALSNScore_ECON float64
+	LUSALSPScore_ECON float64
+	LUSAWHAScore_ECON float64
+	LUSAWHOScore_ECON float64
+	LUSAWHLScore_ECON float64
+	LUSAWPAScore_ECON float64
+	LUSAWDECount_ECON float64
+	LUSAWDFCount_ECON float64
+	LUSAWDPCount_ECON float64
+	LUSALIMCount_ECON float64
+	LJPNLSNScore_ECON float64
+	LJPNLSPScore_ECON float64
+	LJPNWHAScore_ECON float64
+	LJPNWHOScore_ECON float64
+	LJPNWHLScore_ECON float64
+	LJPNWPAScore_ECON float64
+	LJPNWDECount_ECON float64
+	LJPNWDFCount_ECON float64
+	LJPNWDPCount_ECON float64
+	LJPNLIMCount_ECON float64
+}
+
 // HoldLimits are used to define the delta between ratios that are to be considered as a "hold"
 // The values are a percentage. The percentages are applied to the first value on or after the
 // simulation date. The area between delta*mn and delta*mx is the hold area.
@@ -299,7 +333,6 @@ func LoadCsvData() error {
 			URRatio: URRatio,
 			FLAGS:   FLAGS,
 		})
-
 	}
 
 	DInfo.DBRecs = records
@@ -308,8 +341,119 @@ func LoadCsvData() error {
 	DInfo.DtStart = DInfo.DBRecs[0].Date
 	DInfo.DtStop = DInfo.DBRecs[l-1].Date
 
+	if err = LoadLinguistics(lines); err != nil {
+		fmt.Printf("error from LoadLingustics: %s\n", err.Error())
+	}
 	util.DPrintf("Loaded %d records.   %s - %s\n", l, DInfo.DtStart.Format("jan 2, 2006"), DInfo.DtStop.Format("jan 2, 2006"))
+	return nil
+}
 
+// LoadLinguistics loads the linguistic stats from the CSV file
+//
+// RETURNS
+//
+//	any error encountered
+func LoadLinguistics(lines [][]string) error {
+	var records []LinguisticDataRecord
+	var err error
+	cols := make(map[string]int, 100)
+	for i, line := range lines {
+		if i == 0 {
+			for j := 0; j < len(line); j++ {
+				if line[j][0] == 'L' {
+					cols[line[j]] = j
+					fmt.Printf("col %d = %s\n", j, lines[0][j])
+				}
+			}
+			continue // we've done all we need to do with lines[0]
+		}
+
+		var rec LinguisticDataRecord
+		rec.Date, err = util.StringToDate(line[0])
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		for columnName, index := range cols {
+			if len(line[index]) == 0 {
+				continue
+			}
+			// Assuming all fields are float64 as per your struct
+			if value, err := strconv.ParseFloat(line[index], 64); err == nil {
+				switch columnName {
+				case "LALLLSNScore":
+					rec.LALLLSNScore = value
+				case "LALLLSPScore":
+					rec.LALLLSPScore = value
+				case "LALLWHAScore":
+					rec.LALLWHAScore = value
+				case "LALLWHOScore":
+					rec.LALLWHOScore = value
+				case "LALLWHLScore":
+					rec.LALLWHLScore = value
+				case "LALLWPAScore":
+					rec.LALLWPAScore = value
+				case "LALLWDECount":
+					rec.LALLWDECount = value
+				case "LALLWDFCount":
+					rec.LALLWDFCount = value
+				case "LALLWDPCount":
+					rec.LALLWDPCount = value
+				case "LALLWDMCount":
+					rec.LALLWDMCount = value
+				case "LUSALSNScore_ECON":
+					rec.LUSALSNScore_ECON = value
+				case "LUSALSPScore_ECON":
+					rec.LUSALSPScore_ECON = value
+				case "LUSAWHAScore_ECON":
+					rec.LUSAWHAScore_ECON = value
+				case "LUSAWHOScore_ECON":
+					rec.LUSAWHOScore_ECON = value
+				case "LUSAWHLScore_ECON":
+					rec.LUSAWHLScore_ECON = value
+				case "LUSAWPAScore_ECON":
+					rec.LUSAWPAScore_ECON = value
+				case "LUSAWDECount_ECON":
+					rec.LUSAWDECount_ECON = value
+				case "LUSAWDFCount_ECON":
+					rec.LUSAWDFCount_ECON = value
+				case "LUSAWDPCount_ECON":
+					rec.LUSAWDPCount_ECON = value
+				case "LUSALIMCount_ECON":
+					rec.LUSALIMCount_ECON = value
+				case "LJPNLSNScore_ECON":
+					rec.LJPNLSNScore_ECON = value
+				case "LJPNLSPScore_ECON":
+					rec.LJPNLSPScore_ECON = value
+				case "LJPNWHAScore_ECON":
+					rec.LJPNWHAScore_ECON = value
+				case "LJPNWHOScore_ECON":
+					rec.LJPNWHOScore_ECON = value
+				case "LJPNWHLScore_ECON":
+					rec.LJPNWHLScore_ECON = value
+				case "LJPNWPAScore_ECON":
+					rec.LJPNWPAScore_ECON = value
+				case "LJPNWDECount_ECON":
+					rec.LJPNWDECount_ECON = value
+				case "LJPNWDFCount_ECON":
+					rec.LJPNWDFCount_ECON = value
+				case "LJPNWDPCount_ECON":
+					rec.LJPNWDPCount_ECON = value
+				case "LJPNLIMCount_ECON":
+					rec.LJPNLIMCount_ECON = value
+				default:
+					// Optionally handle unknown column names
+				}
+			} else {
+				// Handle error in conversion
+				fmt.Printf("Error converting value for %s: %v", columnName, err)
+			}
+		}
+		records = append(records, rec)
+	}
+
+	DInfo.LRecs = records
 	return nil
 }
 
@@ -420,6 +564,35 @@ func CSVDBFindRecord(dt time.Time) *RatesAndRatiosRecord {
 		mid := left + (right-left)/2
 		if DInfo.DBRecs[mid].Date.Year() == dt.Year() && DInfo.DBRecs[mid].Date.Month() == dt.Month() && DInfo.DBRecs[mid].Date.Day() == dt.Day() {
 			return &DInfo.DBRecs[mid]
+		} else if DInfo.DBRecs[mid].Date.Before(dt) {
+			left = mid + 1
+		} else {
+			right = mid - 1
+		}
+	}
+	return nil
+}
+
+// CSVDBFindLRecord returns the lingustics record associated with the input date
+//
+// INPUTS
+//
+//	dt = date of record to return
+//
+// RETURNS
+//
+//	pointer to the record on the supplied date
+//	nil - record was not found
+//
+// ---------------------------------------------------------------------------
+func CSVDBFindLRecord(dt time.Time) *LinguisticDataRecord {
+	left := 0
+	right := len(DInfo.DBRecs) - 1
+
+	for left <= right {
+		mid := left + (right-left)/2
+		if DInfo.DBRecs[mid].Date.Year() == dt.Year() && DInfo.DBRecs[mid].Date.Month() == dt.Month() && DInfo.DBRecs[mid].Date.Day() == dt.Day() {
+			return &DInfo.LRecs[mid]
 		} else if DInfo.DBRecs[mid].Date.Before(dt) {
 			left = mid + 1
 		} else {
