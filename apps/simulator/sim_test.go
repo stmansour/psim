@@ -27,3 +27,13 @@ func TestInvestorDNA(t *testing.T) {
 
 	doSimulation()
 }
+
+func TestLinguisticDNA(t *testing.T) {
+	app.randNano = -1
+	app.cfName = "l0Investor.json5"
+	s := &app.sim
+	s.ResetSimulator()
+
+	doSimulation()
+
+}

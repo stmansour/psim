@@ -5,7 +5,7 @@ TEST_FAILURE_FILE = .tests_failed
 
 core: *.go
 	go vet
-	golint
+	@golint ./... | grep -v "use underscores in Go names;" | ( ! grep . )
 	staticcheck
 	go build
 	go install

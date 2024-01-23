@@ -51,7 +51,7 @@ func TestPLATODBLoad(t *testing.T) {
 	if drec.Date.Year() != 2020 || drec.Date.Day() != 15 || drec.Date.Month() != time.April {
 		t.Errorf("Date expected = 2020-Apr-15, got %s", drec.Date.Format("2006-Jan-02"))
 	}
-	util.DPrintf("drec 4/15/2020 = %s\n", DRec2String(drec))
+	util.Console("TestPLATODBLoad: drec 4/15/2020 = %s\n", DRec2String(drec))
 
 	// Read linguistic Records
 	dt = time.Date(2015, time.May, 15, 0, 0, 0, 0, time.UTC)
@@ -63,7 +63,7 @@ func TestPLATODBLoad(t *testing.T) {
 	if lrec.Date.Year() != 2015 || lrec.Date.Month() != time.May || lrec.Date.Day() != 15 {
 		t.Errorf("Date expected = 2015-May-15, got %s", lrec.Date.Format("2006-Jan-02"))
 	}
-	util.DPrintf("lrec %s = %s\n", dt.Format("2006-Jan-02"), LRecToString(lrec))
+	util.Console("TestPLATODBLoad: lrec %s = %s\n", dt.Format("2006-Jan-02"), LRecToString(lrec))
 }
 
 func TestBadConfig(t *testing.T) {

@@ -9,14 +9,13 @@ import (
 // Steps to create a new Influencer:
 // 1. Update the Influencer name in data/init.go
 // 2. Update mapper in util/config.go
-//    Update: ValidInfluencerSubclasses in config.go
+//    Update: ValidInfluencerSubclasses in util/config.go
 //    Update: 6 lines in type FileConfig:  xxW1, xxW2, and xxMinDelta1, xxMinDelta2, xxMaxDelta1, xxMaxDelta2 in config.go
-// 3. Update DInfo.Types in LoadCsvDB (csvdb.go)
+// 3. Update DInfo.Types in LoadCsvDB (data/csvdb.go)
 // 4. Update LoadCsvDB in data/csvdb.go with a data flag position for the new influencer ratio
 //    This will probably require renumbering all of them.
 // 5. Create an influencer class file in core/  copy and modify a file like dr.go
 // 6. Update Factory - NewInfluencer to create one
-//                     NextValidRecord to look for first valid data
 //-------------------------------------------------------------------------------------------
 
 // Prediction holds the predictions from Influencers. Based on a list

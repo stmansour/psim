@@ -1,11 +1,11 @@
 TOP=..
 BINDIR=${TOP}/dist/platosim
-THISDIR="data"
+THISDIR=data
 TEST_FAILURE_FILE = .tests_failed
 
 data: *.go
 	go vet
-	golint
+	@golint ./... | grep -v "use underscores in Go names;" | ( ! grep . )
 	staticcheck
 	go build
 	go install

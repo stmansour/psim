@@ -23,6 +23,41 @@ var DInfo struct {
 	CSVMap  map[string]int         // which columns are where? Map the data type to a CSV column
 }
 
+// LinguisticDataRecord is a temporary structure of data for linguistic metrics
+type LinguisticDataRecord struct {
+	Date              time.Time
+	LALLLSNScore      float64
+	LALLLSPScore      float64
+	LALLWHAScore      float64
+	LALLWHOScore      float64
+	LALLWHLScore      float64
+	LALLWPAScore      float64
+	LALLWDECount      float64
+	LALLWDFCount      float64
+	LALLWDPCount      float64
+	LALLWDMCount      float64
+	LUSDLSNScore_ECON float64
+	LUSDLSPScore_ECON float64
+	LUSDWHAScore_ECON float64
+	LUSDWHOScore_ECON float64
+	LUSDWHLScore_ECON float64
+	LUSDWPAScore_ECON float64
+	LUSDWDECount_ECON float64
+	LUSDWDFCount_ECON float64
+	LUSDWDPCount_ECON float64
+	LUSDLIMCount_ECON float64
+	LJPYLSNScore_ECON float64
+	LJPYLSPScore_ECON float64
+	LJPYWHAScore_ECON float64
+	LJPYWHOScore_ECON float64
+	LJPYWHLScore_ECON float64
+	LJPYWPAScore_ECON float64
+	LJPYWDECount_ECON float64
+	LJPYWDFCount_ECON float64
+	LJPYWDPCount_ECON float64
+	LJPYLIMCount_ECON float64
+}
+
 // RatesAndRatiosRecord is the basic structure of discount rate data
 type RatesAndRatiosRecord struct {
 	Date time.Time
@@ -46,15 +81,6 @@ type RatesAndRatiosRecord struct {
 	URRatio float64 // Check FLAGS for validity
 
 	FLAGS uint64 // can hold flags for the first 64 values associated with the Date, see DataFlags
-}
-
-// LingusticsRecord is a temporary struct to hold lingustic
-type LingusticsRecord struct {
-	Date              time.Time
-	LUSALSNScore_ECON float64 // (negative sentiment, USA economic news)
-	LUSALSPScore_ECON float64 // (positive sentiment, USA economic news)
-	LJPNLSNScore_ECON float64 // (negative sentiment, JPN economic news)
-	LJPNLSPScore_ECON float64 // (positive sentiment, JPN economic  news)
 }
 
 // DataFlags indicate which bit of the flag fields must be set in order for the
@@ -180,6 +206,7 @@ func DRec2String(drec *RatesAndRatiosRecord) string {
 	return s
 }
 
+// LRecToString returns a human-readable string for the supplied lrec
 func LRecToString(lrec *LinguisticDataRecord) string {
 	s := fmt.Sprintf(`    Date = %s
 	LALLLSNScore      = %9.3f
@@ -192,26 +219,26 @@ func LRecToString(lrec *LinguisticDataRecord) string {
 	LALLWDFCount      = %9.3f
 	LALLWDPCount      = %9.3f
 	LALLWDMCount      = %9.3f
-	LUSALSNScore_ECON = %9.3f
-	LUSALSPScore_ECON = %9.3f
-	LUSAWHAScore_ECON = %9.3f
-	LUSAWHOScore_ECON = %9.3f
-	LUSAWHLScore_ECON = %9.3f
-	LUSAWPAScore_ECON = %9.3f
-	LUSAWDECount_ECON = %9.3f
-	LUSAWDFCount_ECON = %9.3f
-	LUSAWDPCount_ECON = %9.3f
-	LUSALIMCount_ECON = %9.3f
-	LJPNLSNScore_ECON = %9.3f
-	LJPNLSPScore_ECON = %9.3f
-	LJPNWHAScore_ECON = %9.3f
-	LJPNWHOScore_ECON = %9.3f
-	LJPNWHLScore_ECON = %9.3f
-	LJPNWPAScore_ECON = %9.3f
-	LJPNWDECount_ECON = %9.3f
-	LJPNWDFCount_ECON = %9.3f
-	LJPNWDPCount_ECON = %9.3f
-	LJPNLIMCount_ECON = %9.3f
+	LUSDLSNScore_ECON = %9.3f
+	LUSDLSPScore_ECON = %9.3f
+	LUSDWHAScore_ECON = %9.3f
+	LUSDWHOScore_ECON = %9.3f
+	LUSDWHLScore_ECON = %9.3f
+	LUSDWPAScore_ECON = %9.3f
+	LUSDWDECount_ECON = %9.3f
+	LUSDWDFCount_ECON = %9.3f
+	LUSDWDPCount_ECON = %9.3f
+	LUSDLIMCount_ECON = %9.3f
+	LJPYLSNScore_ECON = %9.3f
+	LJPYLSPScore_ECON = %9.3f
+	LJPYWHAScore_ECON = %9.3f
+	LJPYWHOScore_ECON = %9.3f
+	LJPYWHLScore_ECON = %9.3f
+	LJPYWPAScore_ECON = %9.3f
+	LJPYWDECount_ECON = %9.3f
+	LJPYWDFCount_ECON = %9.3f
+	LJPYWDPCount_ECON = %9.3f
+	LJPYLIMCount_ECON = %9.3f
 	`,
 		lrec.Date.Format("Jan 2, 2006"),
 		lrec.LALLLSNScore,
@@ -224,26 +251,26 @@ func LRecToString(lrec *LinguisticDataRecord) string {
 		lrec.LALLWDFCount,
 		lrec.LALLWDPCount,
 		lrec.LALLWDMCount,
-		lrec.LUSALSNScore_ECON,
-		lrec.LUSALSPScore_ECON,
-		lrec.LUSAWHAScore_ECON,
-		lrec.LUSAWHOScore_ECON,
-		lrec.LUSAWHLScore_ECON,
-		lrec.LUSAWPAScore_ECON,
-		lrec.LUSAWDECount_ECON,
-		lrec.LUSAWDFCount_ECON,
-		lrec.LUSAWDPCount_ECON,
-		lrec.LUSALIMCount_ECON,
-		lrec.LJPNLSNScore_ECON,
-		lrec.LJPNLSPScore_ECON,
-		lrec.LJPNWHAScore_ECON,
-		lrec.LJPNWHOScore_ECON,
-		lrec.LJPNWHLScore_ECON,
-		lrec.LJPNWPAScore_ECON,
-		lrec.LJPNWDECount_ECON,
-		lrec.LJPNWDFCount_ECON,
-		lrec.LJPNWDPCount_ECON,
-		lrec.LJPNLIMCount_ECON,
+		lrec.LUSDLSNScore_ECON,
+		lrec.LUSDLSPScore_ECON,
+		lrec.LUSDWHAScore_ECON,
+		lrec.LUSDWHOScore_ECON,
+		lrec.LUSDWHLScore_ECON,
+		lrec.LUSDWPAScore_ECON,
+		lrec.LUSDWDECount_ECON,
+		lrec.LUSDWDFCount_ECON,
+		lrec.LUSDWDPCount_ECON,
+		lrec.LUSDLIMCount_ECON,
+		lrec.LJPYLSNScore_ECON,
+		lrec.LJPYLSPScore_ECON,
+		lrec.LJPYWHAScore_ECON,
+		lrec.LJPYWHOScore_ECON,
+		lrec.LJPYWHLScore_ECON,
+		lrec.LJPYWPAScore_ECON,
+		lrec.LJPYWDECount_ECON,
+		lrec.LJPYWDFCount_ECON,
+		lrec.LJPYWDPCount_ECON,
+		lrec.LJPYLIMCount_ECON,
 	)
 	return s
 }

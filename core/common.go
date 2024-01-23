@@ -19,7 +19,7 @@ type RatioFunc func(*data.RatesAndRatiosRecord, *data.RatesAndRatiosRecord) (flo
 //	  This function consolidates the same code used by all Influencers.
 //
 //		 Current method:  subtract the C2 data ratio from the C1 data ratio.
-//		 The rediction is based on where the result lands in this space:
+//		 The prediction is based on where the result lands in this space:
 //
 //		                    |<------------------HOLD------------------->|
 //		           <-- SELL |<--      mn       -->|<--       mx      -->| BUY -->
@@ -44,7 +44,7 @@ type RatioFunc func(*data.RatesAndRatiosRecord, *data.RatesAndRatiosRecord) (flo
 //			                 the data it needed was missing)
 //				confidence - probability that the prediction is correct.  TEMPORARY IMPL
 //		                     (it always returns 1.0 for confidence at this point)
-//	         weight     - how much to weight this decision (always 1.0 for now)
+//	            weight     - how much to weight this decision (always 1.0 for now)
 //				error      - nil on success, error encountered otherwise
 //
 // ---------------------------------------------------------------------------

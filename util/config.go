@@ -41,6 +41,7 @@ var ValidInfluencerSubclasses = []string{
 	"IEInfluencer",
 	"IPInfluencer",
 	"IRInfluencer", // inflation rate
+	"L0Influencer", // LSPScore_ECON - linguistic sentiment positive
 	"M1Influencer", // money supply short term
 	"M2Influencer", // money supply long term
 	"MPInfluencer",
@@ -125,6 +126,10 @@ type FileConfig struct {
 	IRMaxDelta1          int       // research boundary
 	IRMinDelta2          int       // research boundary
 	IRMaxDelta2          int       // research boundary
+	L0MinDelta1          int       // research boundary
+	L0MaxDelta1          int       // research boundary
+	L0MinDelta2          int       // research boundary
+	L0MaxDelta2          int       // research boundary
 	M1MinDelta1          int       // research boundary
 	M1MaxDelta1          int       // research boundary
 	M1MinDelta2          int       // research boundary
@@ -147,6 +152,8 @@ type FileConfig struct {
 	GDW2                 float64   // weighting in fitness calculation
 	IRW1                 float64   // weighting in fitness calculation
 	IRW2                 float64   // weighting in fitness calculation
+	L0W1                 float64   // weighting in fitness calculation
+	L0W2                 float64   // weighting in fitness calculation
 	M1W1                 float64   // weighting in fitness calculation
 	M1W2                 float64   // weighting in fitness calculation
 	M2W1                 float64   // weighting in fitness calculation
@@ -399,6 +406,7 @@ func CreateTestingCFG() *AppConfig {
 		"DRInfluencer",
 		// "GDInfluencer",
 		"IRInfluencer",
+		"L0Influencer",
 		// "M1Influencer",
 		// "M2Influencer",
 		"URInfluencer",
@@ -468,11 +476,11 @@ func CreateTestingCFG() *AppConfig {
 			MinDelta2: -60,
 			MaxDelta2: -30,
 		},
-		"MR": {
-			MinDelta1: -180,
-			MaxDelta1: -90,
-			MinDelta2: -50,
-			MaxDelta2: -20,
+		"L0": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
 		},
 		"M1": {
 			MinDelta1: -180,
@@ -481,6 +489,12 @@ func CreateTestingCFG() *AppConfig {
 			MaxDelta2: -20,
 		},
 		"M2": {
+			MinDelta1: -180,
+			MaxDelta1: -90,
+			MinDelta2: -50,
+			MaxDelta2: -20,
+		},
+		"MR": {
 			MinDelta1: -180,
 			MaxDelta1: -90,
 			MinDelta2: -50,

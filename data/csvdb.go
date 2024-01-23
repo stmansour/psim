@@ -13,40 +13,6 @@ import (
 	"github.com/stmansour/psim/util"
 )
 
-type LinguisticDataRecord struct {
-	Date              time.Time
-	LALLLSNScore      float64
-	LALLLSPScore      float64
-	LALLWHAScore      float64
-	LALLWHOScore      float64
-	LALLWHLScore      float64
-	LALLWPAScore      float64
-	LALLWDECount      float64
-	LALLWDFCount      float64
-	LALLWDPCount      float64
-	LALLWDMCount      float64
-	LUSALSNScore_ECON float64
-	LUSALSPScore_ECON float64
-	LUSAWHAScore_ECON float64
-	LUSAWHOScore_ECON float64
-	LUSAWHLScore_ECON float64
-	LUSAWPAScore_ECON float64
-	LUSAWDECount_ECON float64
-	LUSAWDFCount_ECON float64
-	LUSAWDPCount_ECON float64
-	LUSALIMCount_ECON float64
-	LJPNLSNScore_ECON float64
-	LJPNLSPScore_ECON float64
-	LJPNWHAScore_ECON float64
-	LJPNWHOScore_ECON float64
-	LJPNWHLScore_ECON float64
-	LJPNWPAScore_ECON float64
-	LJPNWDECount_ECON float64
-	LJPNWDFCount_ECON float64
-	LJPNWDPCount_ECON float64
-	LJPNLIMCount_ECON float64
-}
-
 // HoldLimits are used to define the delta between ratios that are to be considered as a "hold"
 // The values are a percentage. The percentages are applied to the first value on or after the
 // simulation date. The area between delta*mn and delta*mx is the hold area.
@@ -110,9 +76,10 @@ var DBInfo struct {
 //      IE = Inflation Expectation
 //      IP = Industrial Production
 //      IR = Inflation Rate
-//      MP = Manufacturing Production
+//      L0 = Linguistic sentiment positive
 //      M1 = Money Supply - short term
 //      M2 = Money Supply - long term
+//      MR = Manufacturing ?
 //      RS = Retail Sales
 //      SP = Stock Prices
 //      UR = Unemployment Rate
@@ -181,12 +148,13 @@ func LoadCsvData() error {
 		"IERatio", //  9 - Inflation Expectations Ratio
 		"IPRatio", // 10 – Industrial Production Ratio
 		"IRRatio", // 11 - Inflation Rate Ratio
-		"MPRatio", // 12 – Manufacturing Production Ratio
+		"L0Ratio", // 12 - Linguistic Sentiment positive
 		"M1Ratio", // 13 – M1 Money Supply Ratio
 		"M2Ratio", // 14 – M2 Money Supply Ratio
-		"RSRatio", // 15 – Retail Sales Ratio
-		"SPRatio", // 16 – Stock Price Ratio
-		"URRatio", // 17 – Unemployment Rate Ratio
+		"MPRatio", // 15 – Manufacturing Production Ratio
+		"RSRatio", // 16 – Retail Sales Ratio
+		"SPRatio", // 17 – Stock Price Ratio
+		"URRatio", // 18 – Unemployment Rate Ratio
 	}
 	//----------------------------------------------------------------------
 	// Keep track of the column with the data needed for each ratio.  This
@@ -224,6 +192,9 @@ func LoadCsvData() error {
 			// Make sure we have the data we need for the simulation...
 			//--------------------------------------------------------------
 			for k := 0; k < len(DInfo.DTypes); k++ {
+				if DInfo.DTypes[k][0] == 'L' {
+					continue // at this point, we're just going to assume the linguistics are there``
+				}
 				if subclassIsUsedInSimulation(DInfo.DTypes[k]) && DInfo.CSVMap[DInfo.DTypes[k]] == -1 {
 					s := fmt.Sprintf("no column in %s had label  %s%s%s, which is required for the current simulation configuration",
 						PLATODB, DInfo.cfg.C1, DInfo.cfg.C2, DInfo.DTypes[k])
@@ -344,7 +315,7 @@ func LoadCsvData() error {
 	if err = LoadLinguistics(lines); err != nil {
 		fmt.Printf("error from LoadLingustics: %s\n", err.Error())
 	}
-	util.DPrintf("Loaded %d records.   %s - %s\n", l, DInfo.DtStart.Format("jan 2, 2006"), DInfo.DtStop.Format("jan 2, 2006"))
+	// util.DPrintf("Loaded %d records.   %s - %s\n", l, DInfo.DtStart.Format("jan 2, 2006"), DInfo.DtStop.Format("jan 2, 2006"))
 	return nil
 }
 
@@ -362,7 +333,7 @@ func LoadLinguistics(lines [][]string) error {
 			for j := 0; j < len(line); j++ {
 				if line[j][0] == 'L' {
 					cols[line[j]] = j
-					fmt.Printf("col %d = %s\n", j, lines[0][j])
+					// fmt.Printf("col %d = %s\n", j, lines[0][j])
 				}
 			}
 			continue // we've done all we need to do with lines[0]
@@ -402,46 +373,46 @@ func LoadLinguistics(lines [][]string) error {
 					rec.LALLWDPCount = value
 				case "LALLWDMCount":
 					rec.LALLWDMCount = value
-				case "LUSALSNScore_ECON":
-					rec.LUSALSNScore_ECON = value
-				case "LUSALSPScore_ECON":
-					rec.LUSALSPScore_ECON = value
-				case "LUSAWHAScore_ECON":
-					rec.LUSAWHAScore_ECON = value
-				case "LUSAWHOScore_ECON":
-					rec.LUSAWHOScore_ECON = value
-				case "LUSAWHLScore_ECON":
-					rec.LUSAWHLScore_ECON = value
-				case "LUSAWPAScore_ECON":
-					rec.LUSAWPAScore_ECON = value
-				case "LUSAWDECount_ECON":
-					rec.LUSAWDECount_ECON = value
-				case "LUSAWDFCount_ECON":
-					rec.LUSAWDFCount_ECON = value
-				case "LUSAWDPCount_ECON":
-					rec.LUSAWDPCount_ECON = value
-				case "LUSALIMCount_ECON":
-					rec.LUSALIMCount_ECON = value
-				case "LJPNLSNScore_ECON":
-					rec.LJPNLSNScore_ECON = value
-				case "LJPNLSPScore_ECON":
-					rec.LJPNLSPScore_ECON = value
-				case "LJPNWHAScore_ECON":
-					rec.LJPNWHAScore_ECON = value
-				case "LJPNWHOScore_ECON":
-					rec.LJPNWHOScore_ECON = value
-				case "LJPNWHLScore_ECON":
-					rec.LJPNWHLScore_ECON = value
-				case "LJPNWPAScore_ECON":
-					rec.LJPNWPAScore_ECON = value
-				case "LJPNWDECount_ECON":
-					rec.LJPNWDECount_ECON = value
-				case "LJPNWDFCount_ECON":
-					rec.LJPNWDFCount_ECON = value
-				case "LJPNWDPCount_ECON":
-					rec.LJPNWDPCount_ECON = value
-				case "LJPNLIMCount_ECON":
-					rec.LJPNLIMCount_ECON = value
+				case "LUSDLSNScore_ECON":
+					rec.LUSDLSNScore_ECON = value
+				case "LUSDLSPScore_ECON":
+					rec.LUSDLSPScore_ECON = value
+				case "LUSDWHAScore_ECON":
+					rec.LUSDWHAScore_ECON = value
+				case "LUSDWHOScore_ECON":
+					rec.LUSDWHOScore_ECON = value
+				case "LUSDWHLScore_ECON":
+					rec.LUSDWHLScore_ECON = value
+				case "LUSDWPAScore_ECON":
+					rec.LUSDWPAScore_ECON = value
+				case "LUSDWDECount_ECON":
+					rec.LUSDWDECount_ECON = value
+				case "LUSDWDFCount_ECON":
+					rec.LUSDWDFCount_ECON = value
+				case "LUSDWDPCount_ECON":
+					rec.LUSDWDPCount_ECON = value
+				case "LUSDLIMCount_ECON":
+					rec.LUSDLIMCount_ECON = value
+				case "LJPYLSNScore_ECON":
+					rec.LJPYLSNScore_ECON = value
+				case "LJPYLSPScore_ECON":
+					rec.LJPYLSPScore_ECON = value
+				case "LJPYWHAScore_ECON":
+					rec.LJPYWHAScore_ECON = value
+				case "LJPYWHOScore_ECON":
+					rec.LJPYWHOScore_ECON = value
+				case "LJPYWHLScore_ECON":
+					rec.LJPYWHLScore_ECON = value
+				case "LJPYWPAScore_ECON":
+					rec.LJPYWPAScore_ECON = value
+				case "LJPYWDECount_ECON":
+					rec.LJPYWDECount_ECON = value
+				case "LJPYWDFCount_ECON":
+					rec.LJPYWDFCount_ECON = value
+				case "LJPYWDPCount_ECON":
+					rec.LJPYWDPCount_ECON = value
+				case "LJPYLIMCount_ECON":
+					rec.LJPYLIMCount_ECON = value
 				default:
 					// Optionally handle unknown column names
 				}
