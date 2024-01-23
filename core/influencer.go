@@ -6,7 +6,12 @@ import (
 	"github.com/stmansour/psim/util"
 )
 
+// LINGUISTIC INFLUENCER LIST
+//  L0 - works with LxxxLSPScore_ECON   -   where xxx is the ISO currency code:  USD, AUD, JPY, ...
+//
+
 // Steps to create a new Influencer:
+//
 // 1. Update the Influencer name in data/init.go
 // 2. Update mapper in util/config.go
 //    Update: ValidInfluencerSubclasses in util/config.go
@@ -16,7 +21,9 @@ import (
 //    This will probably require renumbering all of them.
 // 5. Create an influencer class file in core/  copy and modify a file like dr.go
 // 6. Update Factory - NewInfluencer to create one
-//-------------------------------------------------------------------------------------------
+//
+//  TODO: this needs to be simplied in the next redesign
+//-----------------------------------------------------------------------------
 
 // Prediction holds the predictions from Influencers. Based on a list
 // of these recommendations, the Investor will decide whether to "buy" or
