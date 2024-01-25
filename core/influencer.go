@@ -7,12 +7,25 @@ import (
 )
 
 // LINGUISTIC INFLUENCER LIST
-//  L0 - works with LxxxLSPScore_ECON   -   where xxx is the ISO currency code:  USD, AUD, JPY, ...
+//  L0 - uses LxxxLSPScore_ECON   -   Lexicoder Sentiment Positivity - where xxx is the ISO currency code:  USD, AUD, JPY, ...
+// 	L1 - uses LxxxLSNScore_ECON   -   Lexicoder Sentiment Negativity
+// 	L2 - uses LxxxWHAScore_ECON
+// 	L3 - uses LxxxWHOScore_ECON
+// 	L4 - uses LxxxWHLScore_ECON
+// 	L5 - uses LxxxWPAScore_ECON
 //
+// 	LJPYWDECount_ECON
+// 	LJPYWDFCount_ECON
+// 	LJPYWDPCount_ECON
+// 	LJPYLIMCount_ECON
+// 	LUSDWDECount_ECON
+// 	LUSDWDFCount_ECON
+// 	LUSDWDPCount_ECON
+// 	LUSDLIMCount_ECON
 
 // Steps to create a new Influencer:
 //
-// 1. Update the Influencer name in data/init.go
+// 1. Update the Influencer name in data/init.go (this may be obsolete now)
 // 2. Update mapper in util/config.go
 //    Update: ValidInfluencerSubclasses in util/config.go
 //    Update: 6 lines in type FileConfig:  xxW1, xxW2, and xxMinDelta1, xxMinDelta2, xxMaxDelta1, xxMaxDelta2 in config.go

@@ -77,6 +77,11 @@ var DBInfo struct {
 //      IP = Industrial Production
 //      IR = Inflation Rate
 //      L0 = Linguistic sentiment positive
+//      L1 = Linguistic LSNScore_ECON
+//      L2 = Linguistic WHAScore_ECON
+//      L3 = Linguistic WHOScore_ECON
+//      L4 = Linguistic WHLScore_ECON
+//      L5 = Linguistic WPAScore_ECON
 //      M1 = Money Supply - short term
 //      M2 = Money Supply - long term
 //      MR = Manufacturing ?
@@ -148,13 +153,18 @@ func LoadCsvData() error {
 		"IERatio", //  9 - Inflation Expectations Ratio
 		"IPRatio", // 10 – Industrial Production Ratio
 		"IRRatio", // 11 - Inflation Rate Ratio
-		"L0Ratio", // 12 - Linguistic Sentiment positive
-		"M1Ratio", // 13 – M1 Money Supply Ratio
-		"M2Ratio", // 14 – M2 Money Supply Ratio
-		"MPRatio", // 15 – Manufacturing Production Ratio
-		"RSRatio", // 16 – Retail Sales Ratio
-		"SPRatio", // 17 – Stock Price Ratio
-		"URRatio", // 18 – Unemployment Rate Ratio
+		"M1Ratio", // 12 – M1 Money Supply Ratio
+		"M2Ratio", // 13 – M2 Money Supply Ratio
+		"MPRatio", // 14 – Manufacturing Production Ratio
+		"RSRatio", // 15 – Retail Sales Ratio
+		"SPRatio", // 16 – Stock Price Ratio
+		"URRatio", // 17 – Unemployment Rate Ratio
+		"L0Ratio", // not needed for linguistics
+		"L1Ratio", // not needed for linguistics
+		"L2Ratio", // not needed for linguistics
+		"L3Ratio", // not needed for linguistics
+		"L4Ratio", // not needed for linguistics
+		"L5Ratio", // not needed for linguistics
 	}
 	//----------------------------------------------------------------------
 	// Keep track of the column with the data needed for each ratio.  This

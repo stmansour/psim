@@ -7,8 +7,8 @@ import (
 	"github.com/stmansour/psim/util"
 )
 
-// L0Influencer is the Influencer that predicts based on Linguistic Sentiment associated with a country
-type L0Influencer struct {
+// L2Influencer is the Influencer that predicts based on Linguistic Sentiment associated with a country
+type L2Influencer struct {
 	cfg                 *util.AppConfig
 	Delta1              int
 	Delta2              int
@@ -26,75 +26,75 @@ type L0Influencer struct {
 }
 
 // GetNilDataCount returns the value for nilDataCount
-func (p *L0Influencer) GetNilDataCount() int {
+func (p *L2Influencer) GetNilDataCount() int {
 	return p.nilDataCount
 }
 
 // IncNilDataCount the bit position of the valid data flag for this Influencer
-func (p *L0Influencer) IncNilDataCount() {
+func (p *L2Influencer) IncNilDataCount() {
 	p.nilDataCount++
 }
 
 // GetFlagPos the bit position of the valid data flag for this Influencer
-func (p *L0Influencer) GetFlagPos() int {
+func (p *L2Influencer) GetFlagPos() int {
 	return p.flagpos
 }
 
 // GetFitnessScore returns the current value of Fitness
-func (p *L0Influencer) GetFitnessScore() float64 {
+func (p *L2Influencer) GetFitnessScore() float64 {
 	return p.Fitness
 }
 
 // SetFitnessScore sets this objects FitnessScore to the supplied value
-func (p *L0Influencer) SetFitnessScore(x float64) {
+func (p *L2Influencer) SetFitnessScore(x float64) {
 	p.Fitness = x
 	p.FitnessIsCalculated = true
 }
 
 // IsFitnessCalculated returns the boolean FitnessIsCalculated indicating whether
 // or not we have a valid value for Fitness.
-func (p *L0Influencer) IsFitnessCalculated() bool {
+func (p *L2Influencer) IsFitnessCalculated() bool {
 	return p.FitnessIsCalculated
 }
 
 // MyInvestor returns a pointer to the investor object that holds this influencer
-func (p *L0Influencer) MyInvestor() *Investor {
+func (p *L2Influencer) MyInvestor() *Investor {
 	return p.myInvestor
 }
 
 // SetMyInvestor returns a pointer to the investor object that holds this influencer
-func (p *L0Influencer) SetMyInvestor(inv *Investor) {
+func (p *L2Influencer) SetMyInvestor(inv *Investor) {
 	p.myInvestor = inv
 }
 
 // SetMyPredictions is used primarily for testing and sets the Prediction
 // slice to the supplied value
-func (p *L0Influencer) SetMyPredictions(ps []Prediction) {
+func (p *L2Influencer) SetMyPredictions(ps []Prediction) {
 	p.MyPredictions = ps
 }
 
 // GetMyPredictions is used primarily for testing and returns MyPredictions
-func (p *L0Influencer) GetMyPredictions() []Prediction {
+func (p *L2Influencer) GetMyPredictions() []Prediction {
 	return p.MyPredictions
 }
 
 // GetAppConfig - return cfg struct
-func (p *L0Influencer) GetAppConfig() *util.AppConfig {
+func (p *L2Influencer) GetAppConfig() *util.AppConfig {
 	return p.cfg
 }
 
 // GetLenMyPredictions - add a new buy prediction
-func (p *L0Influencer) GetLenMyPredictions() int {
+func (p *L2Influencer) GetLenMyPredictions() int {
 	return len(p.MyPredictions)
 }
 
 // AppendPrediction - append a new prediction to the list of buy predictions
-func (p *L0Influencer) AppendPrediction(pr Prediction) {
+func (p *L2Influencer) AppendPrediction(pr Prediction) {
 	p.MyPredictions = append(p.MyPredictions, pr)
 }
 
 // FinalizePrediction - finalize the results of this prediction
-func (p *L0Influencer) FinalizePrediction(t3, t4 time.Time, profitable bool) {
+func (p *L2Influencer) FinalizePrediction(t3, t4 time.Time, profitable bool) {
 	for i := 0; i < len(p.MyPredictions); i++ {
 		if p.MyPredictions[i].Completed {
 			continue
@@ -108,52 +108,52 @@ func (p *L0Influencer) FinalizePrediction(t3, t4 time.Time, profitable bool) {
 }
 
 // GetID - get ID string
-func (p *L0Influencer) GetID() string {
+func (p *L2Influencer) GetID() string {
 	return p.ID
 }
 
 // SetAppConfig - set cfg
-func (p *L0Influencer) SetAppConfig(cfg *util.AppConfig) {
+func (p *L2Influencer) SetAppConfig(cfg *util.AppConfig) {
 	p.cfg = cfg
 }
 
 // GetDelta1 - get Delta1
-func (p *L0Influencer) GetDelta1() int {
+func (p *L2Influencer) GetDelta1() int {
 	return p.Delta1
 }
 
 // SetDelta1 - set Delta1
-func (p *L0Influencer) SetDelta1(d int) {
+func (p *L2Influencer) SetDelta1(d int) {
 	p.Delta1 = d
 }
 
 // GetDelta2 - get Delta2
-func (p *L0Influencer) GetDelta2() int {
+func (p *L2Influencer) GetDelta2() int {
 	return p.Delta2
 }
 
 // SetDelta2 - set Delta2
-func (p *L0Influencer) SetDelta2(d int) {
+func (p *L2Influencer) SetDelta2(d int) {
 	p.Delta2 = d
 }
 
 // GetDelta4 - get Delta4
-func (p *L0Influencer) GetDelta4() int {
+func (p *L2Influencer) GetDelta4() int {
 	return p.Delta4
 }
 
 // SetDelta4 - set Delta4
-func (p *L0Influencer) SetDelta4(x int) {
+func (p *L2Influencer) SetDelta4(x int) {
 	p.Delta4 = x
 }
 
 // SetID - set ID
-func (p *L0Influencer) SetID() {
-	p.ID = fmt.Sprintf("L0Influencer|%d|%d|%d|%s", p.Delta1, p.Delta2, p.Delta4, util.GenerateRefNo())
+func (p *L2Influencer) SetID() {
+	p.ID = fmt.Sprintf("L2Influencer|%d|%d|%d|%s", p.Delta1, p.Delta2, p.Delta4, util.GenerateRefNo())
 }
 
-// Init - initializes a L0Influencer
-func (p *L0Influencer) Init(i *Investor, cfg *util.AppConfig, delta4 int) {
+// Init - initializes a L2Influencer
+func (p *L2Influencer) Init(i *Investor, cfg *util.AppConfig, delta4 int) {
 	p.myInvestor = i
 	p.cfg = cfg
 	p.SetID()
@@ -162,14 +162,14 @@ func (p *L0Influencer) Init(i *Investor, cfg *util.AppConfig, delta4 int) {
 }
 
 // Subclass - a method that returns the Influencer subclass of this object
-func (p *L0Influencer) Subclass() string {
-	return "L0Influencer"
+func (p *L2Influencer) Subclass() string {
+	return "L2Influencer"
 }
 
 // DNA - returns the DNA of this influencer.
 // A quick description of the type of Influencer and its key attributes.
 // ----------------------------------------------------------------------------
-func (p *L0Influencer) DNA() string {
+func (p *L2Influencer) DNA() string {
 	return fmt.Sprintf("{%s,Delta1=%d,Delta2=%d}", p.Subclass(), p.Delta1, p.Delta2)
 }
 
@@ -179,8 +179,8 @@ func (p *L0Influencer) DNA() string {
 //	t1 = T3-p.Delta1
 //	t2 = T3-p.Delta2
 //
-// val1 = L0_C1metric(t1)/L0_C2metric(t1)
-// val2 = L0_C1metric(t2)/L0_C2metric(t2)
+// val1 = L2_C1metric(t1)/L2_C2metric(t1)
+// val2 = L2_C1metric(t2)/L2_C2metric(t2)
 // delta = val2 - val1
 // if ABS(delta) < HOLD then hold
 // if delta > HOLD, then buy, else sell
@@ -195,11 +195,11 @@ func (p *L0Influencer) DNA() string {
 //	error      - nil on success, error encountered otherwise
 //
 // ---------------------------------------------------------------------------
-func (p *L0Influencer) GetPrediction(t3 time.Time) (string, float64, float64, float64, float64, error) {
+func (p *L2Influencer) GetPrediction(t3 time.Time) (string, float64, float64, float64, float64, error) {
 	prediction := "abstain" // assume no data
 	C1 := p.cfg.C1
 	C2 := p.cfg.C2
-	dtype := "LSPScore_ECON"
+	dtype := "WHAScore_ECON"
 
 	t1 := t3.AddDate(0, 0, p.GetDelta1())
 	t2 := t3.AddDate(0, 0, p.GetDelta2())
@@ -238,6 +238,6 @@ func (p *L0Influencer) GetPrediction(t3 time.Time) (string, float64, float64, fl
 //
 // RETURNS - the fitness score
 // ------------------------------------------------------------------------------------
-func (p *L0Influencer) CalculateFitnessScore() float64 {
+func (p *L2Influencer) CalculateFitnessScore() float64 {
 	return calculateFitnessScore(p, p.cfg)
 }

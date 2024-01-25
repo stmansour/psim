@@ -702,6 +702,17 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 	// case "IEInfluencer":
 
 	// case "IPInfluencer":
+	case "IRInfluencer":
+		x := IRInfluencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			Delta4:  Delta4,
+			HoldMin: data.DBInfo.HoldSpace["IRRatio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["IRRatio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
 	case "L0Influencer":
 		x := L0Influencer{
 			Delta1:  Delta1,
@@ -713,13 +724,57 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 		}
 		return &x, nil
 
-	case "IRInfluencer":
-		x := IRInfluencer{
+	case "L1Influencer":
+		x := L1Influencer{
 			Delta1:  Delta1,
 			Delta2:  Delta2,
 			Delta4:  Delta4,
-			HoldMin: data.DBInfo.HoldSpace["IRRatio"].Mn,
-			HoldMax: data.DBInfo.HoldSpace["IRRatio"].Mx,
+			HoldMin: data.DBInfo.HoldSpace["L1Ratio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["L1Ratio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
+	case "L2Influencer":
+		x := L2Influencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			Delta4:  Delta4,
+			HoldMin: data.DBInfo.HoldSpace["L2Ratio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["L2Ratio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
+	case "L3Influencer":
+		x := L3Influencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			Delta4:  Delta4,
+			HoldMin: data.DBInfo.HoldSpace["L3Ratio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["L3Ratio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
+	case "L4Influencer":
+		x := L4Influencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			Delta4:  Delta4,
+			HoldMin: data.DBInfo.HoldSpace["L4Ratio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["L4Ratio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
+	case "L5Influencer":
+		x := L5Influencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			Delta4:  Delta4,
+			HoldMin: data.DBInfo.HoldSpace["L5Ratio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["L5Ratio"].Mx,
 			cfg:     f.cfg,
 		}
 		return &x, nil

@@ -1,7 +1,7 @@
 # test comment
 DIRS=util data core tools apps
 DIST=dist 
-TEST_FAILURE_FILE = .tests_failed
+TEST_FAILURE_FILE=fail
 
 .PHONY: test
 
@@ -41,9 +41,9 @@ check_tests:
 		echo "`dirname $$dir` : $$coverage"; \
 	done
 	@echo
-	@if test -n "$(shell find . -name .tests_failed)"; then \
+	@if test -n "$(shell find . -name ${TEST_FAILURE_FILE})"; then \
 		echo "Tests have failed in the following directories:"; \
-		find . -name .tests_failed -exec dirname {} \; ; \
+		find . -name "${TEST_FAILURE_FILE}" -exec dirname {} \; ; \
 			exit 1; \
 		else \
 			echo "****************************"; \

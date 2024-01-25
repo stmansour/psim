@@ -1,7 +1,7 @@
 TOP=../..
 BINDIR=${TOP}/dist/platosim
 THISDIR="apps/simulator"
-TEST_FAILURE_FILE = .tests_failed
+TEST_FAILURE_FILE=fail
 
 dr: *.go
 	go vet
@@ -12,7 +12,7 @@ dr: *.go
 
 clean:
 	go clean
-	rm -rf .tests_failed t1 simulator data c*.json5 config.bak SimStats.csv coverage.out IList*.csv investorProfile.txt *Influencer.csv
+	rm -rf fail t1 simulator data c*.json5 config.bak SimStats.csv coverage.out IList*.csv investorProfile.txt *Influencer.csv
 	@echo "*** ${THISDIR}: completed clean ***"
 
 test: config db

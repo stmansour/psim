@@ -51,7 +51,7 @@ type Simulator struct {
 // ResetSimulator is primarily to support tests. It resets the simulator
 // object to its initial state for successive simulator runs from different
 // test functions
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 func (s *Simulator) ResetSimulator() {
 	var f Factory
 	s.cfg = nil
@@ -210,7 +210,7 @@ func (s *Simulator) Run() {
 			}
 			EndOfDataReached = false
 
-			for T3.Before(dtGenEnd) || s.WindDownInProgress {
+			for T3.Before(dtGenEnd) || T3.Equal(dtGenEnd) || s.WindDownInProgress {
 				iteration++
 
 				if len(s.Investors) > s.cfg.PopulationSize {
@@ -283,7 +283,7 @@ func (s *Simulator) Run() {
 			for j := 0; j < len(s.Investors); j++ {
 				unsettled += s.Investors[j].BalanceC2
 			}
-			fmt.Printf("Completed generation %d, %s - %s,  unsettled = %8.2f\n", s.GensCompleted, thisGenDtStart.Format("Jan _2, 2006"), d.Format("Jan _2, 2006"), unsettled)
+			fmt.Printf("Completed generation %d, %s - %s,  unsettled = %8.2f %s\n", s.GensCompleted, thisGenDtStart.Format("Jan _2, 2006"), d.Format("Jan _2, 2006"), unsettled, s.cfg.C2)
 			if isGenDur {
 				genStart = dtGenEnd // Start next generation from the end of the last
 			}

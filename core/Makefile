@@ -1,7 +1,7 @@
 TOP=..
 BINDIR=${TOP}/dist/platosim
 THISDIR="core"
-TEST_FAILURE_FILE = .tests_failed
+TEST_FAILURE_FILE=fail
 
 core: *.go
 	go vet
@@ -13,7 +13,7 @@ core: *.go
 
 clean:
 	go clean
-	rm -rf *.out .tests_failed data config.json5
+	rm -rf *.out fail data config.json5
 	@echo "*** ${THISDIR}: completed clean ***"
 
 test: config.json5 data/platodb.csv

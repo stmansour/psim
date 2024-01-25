@@ -1,6 +1,4 @@
 Random number seed:  12345
-LoadConfig:  fname = singleInvestor.json5
-**DBG** Loaded 19219 records.   jan 4, 1971 - jan 17, 2023
 **************  S I M U L A T I O N   D E T A I L S  **************
 Configuration File:  singleInvestor.json5
 Start:               May 1, 2015	valid: √

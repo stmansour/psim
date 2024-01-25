@@ -1,7 +1,7 @@
 TOP=..
 BINDIR=${TOP}/dist/platosim
 THISDIR=data
-TEST_FAILURE_FILE = .tests_failed
+TEST_FAILURE_FILE=fail
 
 data: *.go
 	go vet
@@ -13,7 +13,7 @@ data: *.go
 
 clean:
 	go clean
-	@rm -rf *.out .tests_failed
+	@rm -rf *.out fail
 	@echo "*** ${THISDIR}: completed clean ***"
 
 test:

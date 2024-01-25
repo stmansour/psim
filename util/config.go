@@ -42,6 +42,11 @@ var ValidInfluencerSubclasses = []string{
 	"IPInfluencer",
 	"IRInfluencer", // inflation rate
 	"L0Influencer", // LSPScore_ECON - linguistic sentiment positive
+	"L1Influencer", //
+	"L2Influencer", //
+	"L3Influencer", //
+	"L4Influencer", //
+	"L5Influencer", //
 	"M1Influencer", // money supply short term
 	"M2Influencer", // money supply long term
 	"MPInfluencer",
@@ -130,6 +135,26 @@ type FileConfig struct {
 	L0MaxDelta1          int       // research boundary
 	L0MinDelta2          int       // research boundary
 	L0MaxDelta2          int       // research boundary
+	L1MinDelta1          int       // research boundary
+	L1MaxDelta1          int       // research boundary
+	L1MinDelta2          int       // research boundary
+	L1MaxDelta2          int       // research boundary
+	L2MinDelta1          int       // research boundary
+	L2MaxDelta1          int       // research boundary
+	L2MinDelta2          int       // research boundary
+	L2MaxDelta2          int       // research boundary
+	L3MinDelta1          int       // research boundary
+	L3MaxDelta1          int       // research boundary
+	L3MinDelta2          int       // research boundary
+	L3MaxDelta2          int       // research boundary
+	L4MinDelta1          int       // research boundary
+	L4MaxDelta1          int       // research boundary
+	L4MinDelta2          int       // research boundary
+	L4MaxDelta2          int       // research boundary
+	L5MinDelta1          int       // research boundary
+	L5MaxDelta1          int       // research boundary
+	L5MinDelta2          int       // research boundary
+	L5MaxDelta2          int       // research boundary
 	M1MinDelta1          int       // research boundary
 	M1MaxDelta1          int       // research boundary
 	M1MinDelta2          int       // research boundary
@@ -154,6 +179,16 @@ type FileConfig struct {
 	IRW2                 float64   // weighting in fitness calculation
 	L0W1                 float64   // weighting in fitness calculation
 	L0W2                 float64   // weighting in fitness calculation
+	L1W1                 float64   // weighting in fitness calculation
+	L1W2                 float64   // weighting in fitness calculation
+	L2W1                 float64   // weighting in fitness calculation
+	L2W2                 float64   // weighting in fitness calculation
+	L3W1                 float64   // weighting in fitness calculation
+	L3W2                 float64   // weighting in fitness calculation
+	L4W1                 float64   // weighting in fitness calculation
+	L4W2                 float64   // weighting in fitness calculation
+	L5W1                 float64   // weighting in fitness calculation
+	L5W2                 float64   // weighting in fitness calculation
 	M1W1                 float64   // weighting in fitness calculation
 	M1W2                 float64   // weighting in fitness calculation
 	M2W1                 float64   // weighting in fitness calculation
@@ -248,7 +283,6 @@ func LoadConfig(cfname string) (AppConfig, error) {
 	if len(cfname) > 0 {
 		fname = cfname
 	}
-	fmt.Printf("LoadConfig:  fname = %s\n", fname)
 	configFile, err := os.Open(fname)
 	if err != nil {
 		return cfg, fmt.Errorf("failed to open config file: %v", err)
@@ -407,6 +441,11 @@ func CreateTestingCFG() *AppConfig {
 		// "GDInfluencer",
 		"IRInfluencer",
 		"L0Influencer",
+		"L1Influencer",
+		"L2Influencer",
+		"L3Influencer",
+		"L4Influencer",
+		"L5Influencer",
 		// "M1Influencer",
 		// "M2Influencer",
 		"URInfluencer",
@@ -477,6 +516,36 @@ func CreateTestingCFG() *AppConfig {
 			MaxDelta2: -30,
 		},
 		"L0": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
+		},
+		"L1": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
+		},
+		"L2": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
+		},
+		"L3": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
+		},
+		"L4": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
+		},
+		"L5": {
 			MinDelta1: -90,
 			MaxDelta1: -30,
 			MinDelta2: -29,
