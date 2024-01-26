@@ -19,17 +19,26 @@ type CoaTestData struct {
 	actionPercent float64
 }
 
+/*
+   investor_test.go:48: i = 0, expected: action = sell, actionPercent = 0.300  --- found action = sell, actionPercent = 0.500
+   investor_test.go:48: i = 4, expected: action = buy, actionPercent = 0.200  --- found action = buy, actionPercent = 0.600
+   investor_test.go:48: i = 5, expected: action = buy, actionPercent = 0.400  --- found action = buy, actionPercent = 0.600
+   investor_test.go:48: i = 6, expected: action = hold, actionPercent = 1.000  --- found action = hold, actionPercent = 0.600
+   investor_test.go:48: i = 7, expected: action = sell, actionPercent = 0.100  --- found action = sell, actionPercent = 0.200
+
+*/
+
 func TestCOA(t *testing.T) {
 	var d = []CoaTestData{
 		// buy, hold, sell, abstain
-		{2, 3, 5, 0, "sell", 0.3},
+		{2, 3, 5, 0, "sell", 0.5},
 		{10, 0, 0, 0, "buy", 1.0},
 		{0, 10, 0, 0, "hold", 1.0},
 		{0, 0, 10, 1, "sell", 1.0},
-		{6, 0, 4, 0, "buy", 0.2},
-		{6, 2, 2, 0, "buy", 0.4},
-		{2, 6, 2, 0, "hold", 1.0},
-		{1, 7, 2, 0, "sell", 0.1},
+		{6, 0, 4, 0, "buy", 0.6},
+		{6, 2, 2, 0, "buy", 0.6},
+		{2, 6, 2, 0, "hold", 0.6},
+		{1, 7, 2, 0, "sell", 0.2},
 	}
 	// t.Fail()
 	for i := 0; i < len(d); i++ {

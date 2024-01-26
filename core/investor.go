@@ -251,8 +251,8 @@ func setCourseOfAction(coa *CourseOfAction, method string) error {
 //
 // -----------------------------------------------------------------------------
 func distributedDecisionCOA(coa *CourseOfAction) error {
-
-	if coa.BuyVotes == coa.TotalVotes { // all votes to buy?
+	activeVotes := float64(coa.BuyVotes + coa.SellVotes + coa.HoldVotes) // total active votes
+	if coa.BuyVotes == coa.TotalVotes {                                  // all votes to buy?
 		coa.Action = "buy"
 		coa.ActionPct = 1.0
 	} else if coa.HoldVotes == coa.TotalVotes { // all votes to hold?
@@ -263,27 +263,13 @@ func distributedDecisionCOA(coa *CourseOfAction) error {
 		coa.ActionPct = 1.0
 	} else if coa.BuyVotes > coa.SellVotes { // more buy votes than sell votes?
 		coa.Action = "buy"
-		holdFactor := float64(coa.HoldVotes) / float64(coa.TotalVotes) // percentage that wants to hold
-		activeVotes := float64(coa.BuyVotes + coa.SellVotes)           // total active votes
-		//-----------------------------------------------------------------
-		//                                 BuyVotes - SellVotes
-		//              (1 - holdFactor) * --------------------
-		//                                    activeVotes
-		//-----------------------------------------------------------------
-		coa.ActionPct = (float64(coa.BuyVotes-coa.SellVotes) / activeVotes) * (1.0 - holdFactor)
+		coa.ActionPct = float64(coa.BuyVotes) / activeVotes
 	} else if coa.SellVotes > coa.BuyVotes {
 		coa.Action = "sell"
-		holdFactor := float64(coa.HoldVotes) / float64(coa.TotalVotes) // percentage that wants to hold
-		activeVotes := float64(coa.BuyVotes + coa.SellVotes)           // total active votes
-		//-----------------------------------------------------------------
-		//                                 SellVotes - BuyVotes
-		//              (1 - holdFactor) * --------------------
-		//                                    activeVotes
-		//-----------------------------------------------------------------
-		coa.ActionPct = (float64(coa.SellVotes-coa.BuyVotes) / activeVotes) * (1.0 - holdFactor)
+		coa.ActionPct = float64(coa.SellVotes) / activeVotes
 	} else {
 		coa.Action = "hold"
-		coa.ActionPct = 1.0
+		coa.ActionPct = float64(coa.HoldVotes) / activeVotes
 	}
 	return nil
 }
