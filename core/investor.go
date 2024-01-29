@@ -233,7 +233,14 @@ func (i *Investor) FormatPrediction(p *Prediction, T3 time.Time) {
 // FormatCOA prints a readable version of the Influencers predictions
 // ----------------------------------------------------------------------------
 func (i *Investor) FormatCOA(c *CourseOfAction) {
-	fmt.Printf("\tCOA:  Action: %s  %3.0f%%  (buy: %3.2f, hold: %3.2f, sell: %3.2f, abs: %3.2f) [C1bal = %6.2f, C2bal = %6.2f]\n", c.Action, c.ActionPct*100, c.BuyVotes, c.HoldVotes, c.SellVotes, c.Abstains, i.BalanceC1, i.BalanceC2)
+	fmt.Printf("\tCOA:  Action: %s  %3.0f%%  (buy: %3.2f, hold: %3.2f, sell: %3.2f, abs: %3.2f)\n", c.Action, c.ActionPct*100, c.BuyVotes, c.HoldVotes, c.SellVotes, c.Abstains)
+}
+
+// PortfolioToString returns a string with the portfolio balance at time t
+// ----------------------------------------------------------------------------
+func (i *Investor) PortfolioToString(t time.Time) string {
+	pv := i.PortfolioValue(t)
+	return fmt.Sprintf("C1bal = %6.2f %s, C2bal = %6.2f %s, PV = %6.2f %s\n", i.BalanceC1, i.cfg.C1, i.BalanceC2, i.cfg.C2, pv, i.cfg.C1)
 }
 
 // setCourseOfAction sets the Action and ActionPct based on influencers input
@@ -302,11 +309,16 @@ func (i *Investor) DailyRun(T3 time.Time, winddown bool) error {
 		if err = i.ExecuteBuy(T3, coa.ActionPct); err != nil {
 			return err
 		}
+
 	case "sell":
 		if err = i.ExecuteSell(T3, coa.ActionPct); err != nil {
 			return err
 		}
 	}
+	if i.cfg.Trace {
+		fmt.Printf("\t%s\n", i.PortfolioToString(T3))
+	}
+
 	return nil
 }
 
@@ -377,6 +389,17 @@ func (i *Investor) ExecuteSell(T4 time.Time, pct float64) error {
 	i.settleInvestment(T4, sellAmount)
 
 	return nil
+}
+
+// PortfolioValue returns the value of the Investors portfolio at time t. The
+// portfolio value is returned in terms of C1 and it is the current BalanceC1
+// plus BalanceC2 converted to C1 at t.
+// ------------------------------------------------------------------------------
+func (i *Investor) PortfolioValue(t time.Time) float64 {
+	er := data.CSVDBFindRecord(t)  // exchange rate for C2 at time t
+	C2 := i.BalanceC2 / er.EXClose // amount of C1 we get for BalanceC2 at this exchange rate
+	pv := i.BalanceC1 + C2
+	return pv
 }
 
 // settleInvestment - this code was moved to a method as it needed to be done
