@@ -773,6 +773,46 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 		}
 		return &x, nil
 
+	case "L6Influencer":
+		x := L6Influencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			HoldMin: data.DBInfo.HoldSpace["L6Ratio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["L6Ratio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
+	case "L7Influencer":
+		x := L7Influencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			HoldMin: data.DBInfo.HoldSpace["L7Ratio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["L7Ratio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
+	case "L8Influencer":
+		x := L8Influencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			HoldMin: data.DBInfo.HoldSpace["L8Ratio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["L8Ratio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
+	case "L9Influencer":
+		x := L9Influencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			HoldMin: data.DBInfo.HoldSpace["L9Ratio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["L9Ratio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
 	case "LAInfluencer":
 		x := LAInfluencer{
 			Delta1:  Delta1,

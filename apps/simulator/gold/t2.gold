@@ -9,7 +9,8 @@ C2:                  JPY
 Duration:            0 years 1 month 0 days
 Population Size:     1
 Influencers:     L0Influencer, L1Influencer, L2Influencer, L3Influencer, 
-                 L4Influencer, L5Influencer, LAInfluencer
+                 L4Influencer, L5Influencer, L6Influencer, L7Influencer, 
+                 L8Influencer, L9Influencer, LAInfluencer
 *******************************************************************
 
 May  1, 2015 - Investor1
@@ -19,7 +20,11 @@ May  1, 2015 - Investor1
 	L3: sell   (T1 Mar 17, 2015 [1.14] -  T2 Apr 26, 2015 [0.97])
 	L4: buy   (T1 Mar 17, 2015 [1.00] -  T2 Apr 26, 2015 [1.11])
 	L5: hold   (T1 Mar 17, 2015 [1.00] -  T2 Apr 26, 2015 [1.00])
-	COA:  Action: hold   33%  (buy: 2.00, hold: 2.00, sell: 2.00, abs: 0.00)
+	L6: hold   (T1 Mar 17, 2015 [1.00] -  T2 Apr 26, 2015 [0.99])
+	L7: hold   (T1 Mar 17, 2015 [0.98] -  T2 Apr 26, 2015 [0.93])
+	L8: sell   (T1 Mar 17, 2015 [1.18] -  T2 Apr 26, 2015 [1.06])
+	L9: hold   (T1 Mar 17, 2015 [0.87] -  T2 Apr 26, 2015 [0.90])
+	COA:  Action: sell   30%  (buy: 2.00, hold: 5.00, sell: 3.00, abs: 0.00)
 	C1bal = 100000.00 USD, C2bal =   0.00 JPY, PV = 100000.00 USD
 
 May  2, 2015 - Investor1
@@ -29,7 +34,11 @@ May  2, 2015 - Investor1
 	L3: hold   (T1 Mar 18, 2015 [1.01] -  T2 Apr 27, 2015 [1.06])
 	L4: sell   (T1 Mar 18, 2015 [1.03] -  T2 Apr 27, 2015 [0.85])
 	L5: hold   (T1 Mar 18, 2015 [1.09] -  T2 Apr 27, 2015 [1.09])
-	COA:  Action: sell   33%  (buy: 0.00, hold: 4.00, sell: 2.00, abs: 0.00)
+	L6: hold   (T1 Mar 18, 2015 [0.99] -  T2 Apr 27, 2015 [1.03])
+	L7: hold   (T1 Mar 18, 2015 [0.94] -  T2 Apr 27, 2015 [1.03])
+	L8: hold   (T1 Mar 18, 2015 [1.17] -  T2 Apr 27, 2015 [1.12])
+	L9: hold   (T1 Mar 18, 2015 [0.82] -  T2 Apr 27, 2015 [0.92])
+	COA:  Action: sell   20%  (buy: 0.00, hold: 8.00, sell: 2.00, abs: 0.00)
 	C1bal = 100000.00 USD, C2bal =   0.00 JPY, PV = 100000.00 USD
 
 May  3, 2015 - Investor1
@@ -39,9 +48,13 @@ May  3, 2015 - Investor1
 	L3: buy   (T1 Mar 19, 2015 [0.99] -  T2 Apr 28, 2015 [1.09])
 	L4: sell   (T1 Mar 19, 2015 [1.00] -  T2 Apr 28, 2015 [0.87])
 	L5: buy   (T1 Mar 19, 2015 [0.86] -  T2 Apr 28, 2015 [1.10])
-	COA:  Action: buy   67%  (buy: 4.00, hold: 1.00, sell: 1.00, abs: 0.00)
-        *** BUY ***       0.00 USD (801400.00 JPY)
-	C1bal = 93333.33 USD, C2bal = 801400.00 JPY, PV = 100000.00 USD
+	L6: buy   (T1 Mar 19, 2015 [0.97] -  T2 Apr 28, 2015 [1.07])
+	L7: buy   (T1 Mar 19, 2015 [0.94] -  T2 Apr 28, 2015 [1.06])
+	L8: hold   (T1 Mar 19, 2015 [1.04] -  T2 Apr 28, 2015 [1.14])
+	L9: buy   (T1 Mar 19, 2015 [0.87] -  T2 Apr 28, 2015 [1.00])
+	COA:  Action: buy   70%  (buy: 7.00, hold: 2.00, sell: 1.00, abs: 0.00)
+        *** BUY ***       0.00 USD (841470.00 JPY)
+	C1bal = 93000.00 USD, C2bal = 841470.00 JPY, PV = 100000.00 USD
 
 May  4, 2015 - Investor1
 	L0: hold   (T1 Mar 20, 2015 [1.04] -  T2 Apr 29, 2015 [1.10])
@@ -50,9 +63,13 @@ May  4, 2015 - Investor1
 	L3: buy   (T1 Mar 20, 2015 [0.97] -  T2 Apr 29, 2015 [1.16])
 	L4: hold   (T1 Mar 20, 2015 [1.09] -  T2 Apr 29, 2015 [1.01])
 	L5: hold   (T1 Mar 20, 2015 [0.99] -  T2 Apr 29, 2015 [0.94])
-	COA:  Action: buy   33%  (buy: 2.00, hold: 4.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (400833.33 JPY)
-	C1bal = 90000.00 USD, C2bal = 1202233.33 JPY, PV = 99997.78 USD
+	L6: hold   (T1 Mar 20, 2015 [0.98] -  T2 Apr 29, 2015 [1.03])
+	L7: hold   (T1 Mar 20, 2015 [0.95] -  T2 Apr 29, 2015 [0.99])
+	L8: hold   (T1 Mar 20, 2015 [1.04] -  T2 Apr 29, 2015 [1.06])
+	L9: hold   (T1 Mar 20, 2015 [0.91] -  T2 Apr 29, 2015 [0.94])
+	COA:  Action: buy   20%  (buy: 2.00, hold: 8.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (240500.00 JPY)
+	C1bal = 91000.00 USD, C2bal = 1081970.00 JPY, PV = 99997.67 USD
 
 May  5, 2015 - Investor1
 	L0: buy   (T1 Mar 21, 2015 [0.95] -  T2 Apr 30, 2015 [1.08])
@@ -61,9 +78,13 @@ May  5, 2015 - Investor1
 	L3: sell   (T1 Mar 21, 2015 [1.09] -  T2 Apr 30, 2015 [0.96])
 	L4: hold   (T1 Mar 21, 2015 [0.99] -  T2 Apr 30, 2015 [1.05])
 	L5: buy   (T1 Mar 21, 2015 [0.92] -  T2 Apr 30, 2015 [1.19])
-	COA:  Action: buy   33%  (buy: 2.00, hold: 3.00, sell: 1.00, abs: 0.00)
-        *** BUY ***       0.00 USD (399566.67 JPY)
-	C1bal = 86666.67 USD, C2bal = 1601800.00 JPY, PV = 100029.48 USD
+	L6: hold   (T1 Mar 21, 2015 [0.94] -  T2 Apr 30, 2015 [1.00])
+	L7: hold   (T1 Mar 21, 2015 [0.96] -  T2 Apr 30, 2015 [1.04])
+	L8: buy   (T1 Mar 21, 2015 [0.95] -  T2 Apr 30, 2015 [1.08])
+	L9: hold   (T1 Mar 21, 2015 [0.99] -  T2 Apr 30, 2015 [0.91])
+	COA:  Action: buy   30%  (buy: 3.00, hold: 6.00, sell: 1.00, abs: 0.00)
+        *** BUY ***       0.00 USD (359610.00 JPY)
+	C1bal = 88000.00 USD, C2bal = 1441580.00 JPY, PV = 100026.20 USD
 
 May  6, 2015 - Investor1
 	L0: buy   (T1 Mar 22, 2015 [0.99] -  T2 May  1, 2015 [1.10])
@@ -72,8 +93,13 @@ May  6, 2015 - Investor1
 	L3: sell   (T1 Mar 22, 2015 [1.09] -  T2 May  1, 2015 [0.98])
 	L4: buy   (T1 Mar 22, 2015 [0.84] -  T2 May  1, 2015 [1.19])
 	L5: hold   (T1 Mar 22, 2015 [1.05] -  T2 May  1, 2015 [0.96])
-	COA:  Action: hold   33%  (buy: 2.00, hold: 2.00, sell: 2.00, abs: 0.00)
-	C1bal = 86666.67 USD, C2bal = 1601800.00 JPY, PV = 100079.83 USD
+	L6: hold   (T1 Mar 22, 2015 [0.98] -  T2 May  1, 2015 [0.98])
+	L7: buy   (T1 Mar 22, 2015 [0.89] -  T2 May  1, 2015 [0.99])
+	L8: buy   (T1 Mar 22, 2015 [1.00] -  T2 May  1, 2015 [1.12])
+	L9: sell   (T1 Mar 22, 2015 [0.97] -  T2 May  1, 2015 [0.81])
+	COA:  Action: buy   40%  (buy: 4.00, hold: 3.00, sell: 3.00, abs: 0.00)
+        *** BUY ***       0.00 USD (477680.00 JPY)
+	C1bal = 84000.00 USD, C2bal = 1919260.00 JPY, PV = 100071.51 USD
 
 May  7, 2015 - Investor1
 	L0: sell   (T1 Mar 23, 2015 [1.02] -  T2 May  2, 2015 [0.90])
@@ -82,9 +108,15 @@ May  7, 2015 - Investor1
 	L3: hold   (T1 Mar 23, 2015 [1.00] -  T2 May  2, 2015 [0.94])
 	L4: hold   (T1 Mar 23, 2015 [0.94] -  T2 May  2, 2015 [0.94])
 	L5: sell   (T1 Mar 23, 2015 [1.18] -  T2 May  2, 2015 [0.93])
-	COA:  Action: sell   50%  (buy: 1.00, hold: 2.00, sell: 3.00, abs: 0.00)
-        *** SELL ***   6688.66 USD, [800900.00 JPY], investments affected: 1 -->  1 profited, 0 lost
-	C1bal = 93355.33 USD, C2bal = 800900.00 JPY, PV = 100043.98 USD
+	L6: sell   (T1 Mar 23, 2015 [0.97] -  T2 May  2, 2015 [0.85])
+	L7: sell   (T1 Mar 23, 2015 [0.90] -  T2 May  2, 2015 [0.76])
+	L8: sell   (T1 Mar 23, 2015 [1.02] -  T2 May  2, 2015 [0.86])
+	L9: sell   (T1 Mar 23, 2015 [0.88] -  T2 May  2, 2015 [0.75])
+	COA:  Action: sell   70%  (buy: 1.00, hold: 2.00, sell: 7.00, abs: 0.00)
+        *** SELL ***   7027.48 USD, [841470.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***   2008.52 USD, [240500.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***   2184.00 USD, [261512.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+	C1bal = 95219.99 USD, C2bal = 575778.00 JPY, PV = 100028.56 USD
 
 May  8, 2015 - Investor1
 	L0: sell   (T1 Mar 24, 2015 [1.16] -  T2 May  3, 2015 [1.01])
@@ -93,10 +125,14 @@ May  8, 2015 - Investor1
 	L3: hold   (T1 Mar 24, 2015 [0.87] -  T2 May  3, 2015 [0.90])
 	L4: buy   (T1 Mar 24, 2015 [0.96] -  T2 May  3, 2015 [1.21])
 	L5: sell   (T1 Mar 24, 2015 [1.06] -  T2 May  3, 2015 [0.92])
-	COA:  Action: sell   50%  (buy: 1.00, hold: 2.00, sell: 3.00, abs: 0.00)
-        *** SELL ***      4.17 USD, [  500.00 JPY], investments affected: 2 -->  2 profited, 0 lost
-        *** SELL ***   3339.04 USD, [399950.00 JPY], investments affected: 1 -->  1 profited, 0 lost
-	C1bal = 96698.54 USD, C2bal = 400450.00 JPY, PV = 100041.75 USD
+	L6: hold   (T1 Mar 24, 2015 [1.02] -  T2 May  3, 2015 [0.98])
+	L7: hold   (T1 Mar 24, 2015 [0.96] -  T2 May  3, 2015 [0.92])
+	L8: sell   (T1 Mar 24, 2015 [1.15] -  T2 May  3, 2015 [0.95])
+	L9: buy   (T1 Mar 24, 2015 [0.82] -  T2 May  3, 2015 [0.93])
+	COA:  Action: sell   40%  (buy: 2.00, hold: 4.00, sell: 4.00, abs: 0.00)
+        *** SELL ***    818.98 USD, [98098.00 JPY], investments affected: 2 -->  2 profited, 0 lost
+        *** SELL ***   1103.80 USD, [132213.20 JPY], investments affected: 1 -->  0 profited, 1 lost
+	C1bal = 97142.78 USD, C2bal = 345466.80 JPY, PV = 100026.96 USD
 
 May  9, 2015 - Investor1
 	L0: sell   (T1 Mar 25, 2015 [1.18] -  T2 May  4, 2015 [0.92])
@@ -105,10 +141,13 @@ May  9, 2015 - Investor1
 	L3: sell   (T1 Mar 25, 2015 [1.14] -  T2 May  4, 2015 [0.88])
 	L4: sell   (T1 Mar 25, 2015 [1.20] -  T2 May  4, 2015 [0.91])
 	L5: sell   (T1 Mar 25, 2015 [1.19] -  T2 May  4, 2015 [0.89])
-	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 6.00, abs: 0.00)
-        *** SELL ***      7.37 USD, [  883.33 JPY], investments affected: 2 -->  2 profited, 0 lost
-        *** SELL ***   3335.84 USD, [399566.67 JPY], investments affected: 1 -->  1 profited, 0 lost
-	C1bal = 100041.75 USD, C2bal =   0.00 JPY, PV = 100041.75 USD
+	L6: sell   (T1 Mar 25, 2015 [1.10] -  T2 May  4, 2015 [0.90])
+	L7: hold   (T1 Mar 25, 2015 [0.96] -  T2 May  4, 2015 [0.87])
+	L8: sell   (T1 Mar 25, 2015 [1.20] -  T2 May  4, 2015 [0.93])
+	L9: hold   (T1 Mar 25, 2015 [0.91] -  T2 May  4, 2015 [0.84])
+	COA:  Action: sell   80%  (buy: 0.00, hold: 2.00, sell: 8.00, abs: 0.00)
+        *** SELL ***   2307.34 USD, [276373.44 JPY], investments affected: 2 -->  0 profited, 2 lost
+	C1bal = 99450.12 USD, C2bal = 69093.36 JPY, PV = 100026.96 USD
 
 May 10, 2015 - Investor1
 	L0: hold   (T1 Mar 26, 2015 [1.09] -  T2 May  5, 2015 [1.01])
@@ -117,9 +156,13 @@ May 10, 2015 - Investor1
 	L3: hold   (T1 Mar 26, 2015 [1.02] -  T2 May  5, 2015 [0.96])
 	L4: buy   (T1 Mar 26, 2015 [0.98] -  T2 May  5, 2015 [1.22])
 	L5: hold   (T1 Mar 26, 2015 [1.02] -  T2 May  5, 2015 [1.02])
-	COA:  Action: buy   17%  (buy: 1.00, hold: 5.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (199633.33 JPY)
-	C1bal = 98375.08 USD, C2bal = 199633.33 JPY, PV = 100041.75 USD
+	L6: hold   (T1 Mar 26, 2015 [1.00] -  T2 May  5, 2015 [0.95])
+	L7: hold   (T1 Mar 26, 2015 [0.95] -  T2 May  5, 2015 [0.91])
+	L8: hold   (T1 Mar 26, 2015 [1.12] -  T2 May  5, 2015 [1.06])
+	L9: hold   (T1 Mar 26, 2015 [0.88] -  T2 May  5, 2015 [0.84])
+	COA:  Action: buy   10%  (buy: 1.00, hold: 9.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (119780.00 JPY)
+	C1bal = 98450.12 USD, C2bal = 188873.36 JPY, PV = 100026.96 USD
 
 May 11, 2015 - Investor1
 	L0: sell   (T1 Mar 27, 2015 [1.19] -  T2 May  6, 2015 [1.02])
@@ -128,9 +171,14 @@ May 11, 2015 - Investor1
 	L3: hold   (T1 Mar 27, 2015 [1.04] -  T2 May  6, 2015 [0.99])
 	L4: hold   (T1 Mar 27, 2015 [1.10] -  T2 May  6, 2015 [1.04])
 	L5: hold   (T1 Mar 27, 2015 [1.05] -  T2 May  6, 2015 [1.04])
-	COA:  Action: sell   33%  (buy: 0.00, hold: 4.00, sell: 2.00, abs: 0.00)
-        *** SELL ***    554.31 USD, [66544.44 JPY], investments affected: 1 -->  0 profited, 1 lost
-	C1bal = 98929.39 USD, C2bal = 133088.89 JPY, PV = 100038.00 USD
+	L6: sell   (T1 Mar 27, 2015 [1.05] -  T2 May  6, 2015 [0.94])
+	L7: hold   (T1 Mar 27, 2015 [1.01] -  T2 May  6, 2015 [0.92])
+	L8: sell   (T1 Mar 27, 2015 [1.21] -  T2 May  6, 2015 [1.00])
+	L9: hold   (T1 Mar 27, 2015 [0.82] -  T2 May  6, 2015 [0.83])
+	COA:  Action: sell   40%  (buy: 0.00, hold: 6.00, sell: 4.00, abs: 0.00)
+        *** SELL ***    575.54 USD, [69093.36 JPY], investments affected: 3 -->  0 profited, 3 lost
+        *** SELL ***     53.78 USD, [ 6455.98 JPY], investments affected: 1 -->  0 profited, 1 lost
+	C1bal = 99079.44 USD, C2bal = 113324.02 JPY, PV = 100023.41 USD
 
 May 12, 2015 - Investor1
 	L0: buy   (T1 Mar 28, 2015 [0.94] -  T2 May  7, 2015 [1.13])
@@ -139,9 +187,13 @@ May 12, 2015 - Investor1
 	L3: hold   (T1 Mar 28, 2015 [0.98] -  T2 May  7, 2015 [0.98])
 	L4: hold   (T1 Mar 28, 2015 [1.08] -  T2 May  7, 2015 [1.06])
 	L5: hold   (T1 Mar 28, 2015 [0.99] -  T2 May  7, 2015 [0.92])
-	COA:  Action: buy   17%  (buy: 1.00, hold: 5.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (199666.67 JPY)
-	C1bal = 97262.72 USD, C2bal = 332755.56 JPY, PV = 100040.32 USD
+	L6: buy   (T1 Mar 28, 2015 [0.91] -  T2 May  7, 2015 [1.06])
+	L7: buy   (T1 Mar 28, 2015 [0.86] -  T2 May  7, 2015 [1.03])
+	L8: buy   (T1 Mar 28, 2015 [0.97] -  T2 May  7, 2015 [1.13])
+	L9: buy   (T1 Mar 28, 2015 [0.84] -  T2 May  7, 2015 [0.95])
+	COA:  Action: buy   50%  (buy: 5.00, hold: 5.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (599000.00 JPY)
+	C1bal = 94079.44 USD, C2bal = 712324.02 JPY, PV = 100025.38 USD
 
 May 13, 2015 - Investor1
 	L0: hold   (T1 Mar 29, 2015 [1.03] -  T2 May  8, 2015 [1.08])
@@ -150,9 +202,13 @@ May 13, 2015 - Investor1
 	L3: hold   (T1 Mar 29, 2015 [1.01] -  T2 May  8, 2015 [0.95])
 	L4: buy   (T1 Mar 29, 2015 [1.12] -  T2 May  8, 2015 [1.23])
 	L5: buy   (T1 Mar 29, 2015 [1.04] -  T2 May  8, 2015 [1.38])
-	COA:  Action: buy   33%  (buy: 2.00, hold: 4.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (396966.67 JPY)
-	C1bal = 93929.39 USD, C2bal = 729722.22 JPY, PV = 100056.88 USD
+	L6: hold   (T1 Mar 29, 2015 [0.96] -  T2 May  8, 2015 [1.00])
+	L7: hold   (T1 Mar 29, 2015 [0.95] -  T2 May  8, 2015 [0.96])
+	L8: buy   (T1 Mar 29, 2015 [0.98] -  T2 May  8, 2015 [1.08])
+	L9: hold   (T1 Mar 29, 2015 [0.86] -  T2 May  8, 2015 [0.87])
+	COA:  Action: buy   30%  (buy: 3.00, hold: 7.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (357270.00 JPY)
+	C1bal = 91079.44 USD, C2bal = 1069594.02 JPY, PV = 100060.83 USD
 
 May 14, 2015 - Investor1
 	L0: sell   (T1 Mar 30, 2015 [1.16] -  T2 May  9, 2015 [0.87])
@@ -161,8 +217,14 @@ May 14, 2015 - Investor1
 	L3: hold   (T1 Mar 30, 2015 [1.08] -  T2 May  9, 2015 [1.05])
 	L4: buy   (T1 Mar 30, 2015 [1.00] -  T2 May  9, 2015 [1.16])
 	L5: buy   (T1 Mar 30, 2015 [1.10] -  T2 May  9, 2015 [1.25])
-	COA:  Action: hold   33%  (buy: 2.00, hold: 2.00, sell: 2.00, abs: 0.00)
-	C1bal = 93929.39 USD, C2bal = 729722.22 JPY, PV = 100051.22 USD
+	L6: sell   (T1 Mar 30, 2015 [1.09] -  T2 May  9, 2015 [0.86])
+	L7: sell   (T1 Mar 30, 2015 [1.06] -  T2 May  9, 2015 [0.86])
+	L8: sell   (T1 Mar 30, 2015 [1.18] -  T2 May  9, 2015 [0.90])
+	L9: sell   (T1 Mar 30, 2015 [0.95] -  T2 May  9, 2015 [0.78])
+	COA:  Action: sell   60%  (buy: 2.00, hold: 2.00, sell: 6.00, abs: 0.00)
+        *** SELL ***    950.70 USD, [113324.02 JPY], investments affected: 2 -->  1 profited, 1 lost
+        *** SELL ***   4433.16 USD, [528432.39 JPY], investments affected: 1 -->  1 profited, 0 lost
+	C1bal = 96463.30 USD, C2bal = 427837.61 JPY, PV = 100052.54 USD
 
 May 15, 2015 - Investor1
 	L0: sell   (T1 Mar 31, 2015 [1.16] -  T2 May 10, 2015 [0.87])
@@ -171,11 +233,14 @@ May 15, 2015 - Investor1
 	L3: hold   (T1 Mar 31, 2015 [1.01] -  T2 May 10, 2015 [1.01])
 	L4: sell   (T1 Mar 31, 2015 [1.08] -  T2 May 10, 2015 [0.86])
 	L5: hold   (T1 Mar 31, 2015 [1.10] -  T2 May 10, 2015 [1.15])
-	COA:  Action: sell   67%  (buy: 0.00, hold: 2.00, sell: 4.00, abs: 0.00)
-        *** SELL ***   1115.02 USD, [133088.89 JPY], investments affected: 2 -->  1 profited, 1 lost
-        *** SELL ***   1672.81 USD, [199666.67 JPY], investments affected: 1 -->  1 profited, 0 lost
-        *** SELL ***   1287.92 USD, [153725.93 JPY], investments affected: 1 -->  0 profited, 1 lost
-	C1bal = 98005.14 USD, C2bal = 243240.74 JPY, PV = 100043.01 USD
+	L6: sell   (T1 Mar 31, 2015 [1.07] -  T2 May 10, 2015 [0.88])
+	L7: sell   (T1 Mar 31, 2015 [0.99] -  T2 May 10, 2015 [0.85])
+	L8: sell   (T1 Mar 31, 2015 [1.19] -  T2 May 10, 2015 [0.92])
+	L9: sell   (T1 Mar 31, 2015 [0.88] -  T2 May 10, 2015 [0.78])
+	COA:  Action: sell   80%  (buy: 0.00, hold: 2.00, sell: 8.00, abs: 0.00)
+        *** SELL ***    591.22 USD, [70567.61 JPY], investments affected: 2 -->  2 profited, 0 lost
+        *** SELL ***   2276.33 USD, [271702.48 JPY], investments affected: 1 -->  0 profited, 1 lost
+	C1bal = 99330.84 USD, C2bal = 85567.52 JPY, PV = 100047.73 USD
 
 May 16, 2015 - Investor1
 	L0: sell   (T1 Apr  1, 2015 [1.22] -  T2 May 11, 2015 [1.10])
@@ -184,8 +249,13 @@ May 16, 2015 - Investor1
 	L3: buy   (T1 Apr  1, 2015 [1.08] -  T2 May 11, 2015 [1.21])
 	L4: hold   (T1 Apr  1, 2015 [1.11] -  T2 May 11, 2015 [1.04])
 	L5: hold   (T1 Apr  1, 2015 [1.04] -  T2 May 11, 2015 [1.08])
-	COA:  Action: hold   67%  (buy: 1.00, hold: 4.00, sell: 1.00, abs: 0.00)
-	C1bal = 98005.14 USD, C2bal = 243240.74 JPY, PV = 100043.01 USD
+	L6: hold   (T1 Apr  1, 2015 [1.05] -  T2 May 11, 2015 [1.00])
+	L7: hold   (T1 Apr  1, 2015 [0.99] -  T2 May 11, 2015 [0.94])
+	L8: sell   (T1 Apr  1, 2015 [1.21] -  T2 May 11, 2015 [1.08])
+	L9: hold   (T1 Apr  1, 2015 [0.87] -  T2 May 11, 2015 [0.85])
+	COA:  Action: sell   20%  (buy: 1.00, hold: 7.00, sell: 2.00, abs: 0.00)
+        *** SELL ***    143.38 USD, [17113.50 JPY], investments affected: 2 -->  0 profited, 2 lost
+	C1bal = 99474.22 USD, C2bal = 68454.02 JPY, PV = 100047.73 USD
 
 May 17, 2015 - Investor1
 	L0: sell   (T1 Apr  2, 2015 [1.14] -  T2 May 12, 2015 [0.98])
@@ -194,9 +264,13 @@ May 17, 2015 - Investor1
 	L3: sell   (T1 Apr  2, 2015 [1.13] -  T2 May 12, 2015 [0.96])
 	L4: hold   (T1 Apr  2, 2015 [1.11] -  T2 May 12, 2015 [1.01])
 	L5: sell   (T1 Apr  2, 2015 [1.18] -  T2 May 12, 2015 [1.07])
-	COA:  Action: sell   67%  (buy: 0.00, hold: 2.00, sell: 4.00, abs: 0.00)
-        *** SELL ***   1358.58 USD, [162160.49 JPY], investments affected: 2 -->  0 profited, 2 lost
-	C1bal = 99363.72 USD, C2bal = 81080.25 JPY, PV = 100043.01 USD
+	L6: hold   (T1 Apr  2, 2015 [1.01] -  T2 May 12, 2015 [0.92])
+	L7: hold   (T1 Apr  2, 2015 [0.97] -  T2 May 12, 2015 [0.88])
+	L8: sell   (T1 Apr  2, 2015 [1.18] -  T2 May 12, 2015 [0.97])
+	L9: hold   (T1 Apr  2, 2015 [0.82] -  T2 May 12, 2015 [0.82])
+	COA:  Action: sell   50%  (buy: 0.00, hold: 5.00, sell: 5.00, abs: 0.00)
+        *** SELL ***    286.75 USD, [34227.01 JPY], investments affected: 3 -->  0 profited, 3 lost
+	C1bal = 99760.97 USD, C2bal = 34227.01 JPY, PV = 100047.73 USD
 
 May 18, 2015 - Investor1
 	L0: hold   (T1 Apr  3, 2015 [1.03] -  T2 May 13, 2015 [1.03])
@@ -205,9 +279,13 @@ May 18, 2015 - Investor1
 	L3: hold   (T1 Apr  3, 2015 [1.09] -  T2 May 13, 2015 [1.02])
 	L4: buy   (T1 Apr  3, 2015 [0.98] -  T2 May 13, 2015 [1.11])
 	L5: buy   (T1 Apr  3, 2015 [0.97] -  T2 May 13, 2015 [1.09])
-	COA:  Action: buy   33%  (buy: 2.00, hold: 3.00, sell: 1.00, abs: 0.00)
-        *** BUY ***       0.00 USD (399400.00 JPY)
-	C1bal = 96030.39 USD, C2bal = 480480.25 JPY, PV = 100040.41 USD
+	L6: hold   (T1 Apr  3, 2015 [0.99] -  T2 May 13, 2015 [0.97])
+	L7: hold   (T1 Apr  3, 2015 [0.92] -  T2 May 13, 2015 [0.92])
+	L8: hold   (T1 Apr  3, 2015 [1.04] -  T2 May 13, 2015 [1.05])
+	L9: hold   (T1 Apr  3, 2015 [0.89] -  T2 May 13, 2015 [0.87])
+	COA:  Action: buy   20%  (buy: 2.00, hold: 7.00, sell: 1.00, abs: 0.00)
+        *** BUY ***       0.00 USD (239640.00 JPY)
+	C1bal = 97760.97 USD, C2bal = 273867.01 JPY, PV = 100046.63 USD
 
 May 19, 2015 - Investor1
 	L0: buy   (T1 Apr  4, 2015 [0.98] -  T2 May 14, 2015 [1.08])
@@ -216,9 +294,13 @@ May 19, 2015 - Investor1
 	L3: hold   (T1 Apr  4, 2015 [1.06] -  T2 May 14, 2015 [1.00])
 	L4: hold   (T1 Apr  4, 2015 [1.06] -  T2 May 14, 2015 [1.05])
 	L5: hold   (T1 Apr  4, 2015 [1.00] -  T2 May 14, 2015 [1.09])
-	COA:  Action: buy   17%  (buy: 1.00, hold: 5.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (200966.67 JPY)
-	C1bal = 94363.72 USD, C2bal = 681446.91 JPY, PV = 100015.13 USD
+	L6: hold   (T1 Apr  4, 2015 [0.98] -  T2 May 14, 2015 [1.04])
+	L7: buy   (T1 Apr  4, 2015 [0.93] -  T2 May 14, 2015 [1.05])
+	L8: hold   (T1 Apr  4, 2015 [1.02] -  T2 May 14, 2015 [1.11])
+	L9: hold   (T1 Apr  4, 2015 [0.88] -  T2 May 14, 2015 [0.94])
+	COA:  Action: buy   20%  (buy: 2.00, hold: 8.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (241160.00 JPY)
+	C1bal = 95760.97 USD, C2bal = 515027.01 JPY, PV = 100032.22 USD
 
 May 20, 2015 - Investor1
 	L0: buy   (T1 Apr  5, 2015 [1.01] -  T2 May 15, 2015 [1.22])
@@ -227,10 +309,12 @@ May 20, 2015 - Investor1
 	L3: sell   (T1 Apr  5, 2015 [1.15] -  T2 May 15, 2015 [1.05])
 	L4: sell   (T1 Apr  5, 2015 [1.25] -  T2 May 15, 2015 [1.08])
 	L5: sell   (T1 Apr  5, 2015 [1.03] -  T2 May 15, 2015 [0.89])
-	COA:  Action: sell   50%  (buy: 2.00, hold: 1.00, sell: 3.00, abs: 0.00)
-        *** SELL ***    668.54 USD, [81080.25 JPY], investments affected: 3 -->  0 profited, 3 lost
-        *** SELL ***   2140.86 USD, [259643.21 JPY], investments affected: 1 -->  0 profited, 1 lost
-	C1bal = 97173.12 USD, C2bal = 340723.46 JPY, PV = 99982.51 USD
+	L6: hold   (T1 Apr  5, 2015 [1.00] -  T2 May 15, 2015 [1.08])
+	L7: hold   (T1 Apr  5, 2015 [0.98] -  T2 May 15, 2015 [1.01])
+	L8: buy   (T1 Apr  5, 2015 [1.07] -  T2 May 15, 2015 [1.23])
+	L9: hold   (T1 Apr  5, 2015 [0.86] -  T2 May 15, 2015 [0.89])
+	COA:  Action: hold   40%  (buy: 3.00, hold: 4.00, sell: 3.00, abs: 0.00)
+	C1bal = 95760.97 USD, C2bal = 515027.01 JPY, PV = 100007.57 USD
 
 May 21, 2015 - Investor1
 	L0: sell   (T1 Apr  6, 2015 [1.10] -  T2 May 16, 2015 [0.99])
@@ -239,10 +323,14 @@ May 21, 2015 - Investor1
 	L3: sell   (T1 Apr  6, 2015 [1.10] -  T2 May 16, 2015 [0.89])
 	L4: sell   (T1 Apr  6, 2015 [1.16] -  T2 May 16, 2015 [1.04])
 	L5: sell   (T1 Apr  6, 2015 [1.09] -  T2 May 16, 2015 [0.87])
-	COA:  Action: sell   83%  (buy: 0.00, hold: 1.00, sell: 5.00, abs: 0.00)
-        *** SELL ***   1154.44 USD, [139756.79 JPY], investments affected: 2 -->  0 profited, 2 lost
-        *** SELL ***   1190.97 USD, [144179.42 JPY], investments affected: 1 -->  0 profited, 1 lost
-	C1bal = 99518.54 USD, C2bal = 56787.24 JPY, PV = 99987.62 USD
+	L6: hold   (T1 Apr  6, 2015 [0.97] -  T2 May 16, 2015 [0.98])
+	L7: hold   (T1 Apr  6, 2015 [0.97] -  T2 May 16, 2015 [0.95])
+	L8: hold   (T1 Apr  6, 2015 [1.05] -  T2 May 16, 2015 [1.05])
+	L9: hold   (T1 Apr  6, 2015 [0.86] -  T2 May 16, 2015 [0.92])
+	COA:  Action: sell   50%  (buy: 0.00, hold: 5.00, sell: 5.00, abs: 0.00)
+        *** SELL ***    282.73 USD, [34227.01 JPY], investments affected: 4 -->  0 profited, 4 lost
+        *** SELL ***   1844.43 USD, [223286.50 JPY], investments affected: 1 -->  0 profited, 1 lost
+	C1bal = 97888.13 USD, C2bal = 257513.50 JPY, PV = 100015.29 USD
 
 May 22, 2015 - Investor1
 	L0: buy   (T1 Apr  7, 2015 [0.96] -  T2 May 17, 2015 [1.09])
@@ -251,9 +339,13 @@ May 22, 2015 - Investor1
 	L3: buy   (T1 Apr  7, 2015 [0.75] -  T2 May 17, 2015 [1.07])
 	L4: buy   (T1 Apr  7, 2015 [0.77] -  T2 May 17, 2015 [1.25])
 	L5: buy   (T1 Apr  7, 2015 [0.83] -  T2 May 17, 2015 [1.09])
-	COA:  Action: buy  100%  (buy: 6.00, hold: 0.00, sell: 0.00, abs: 0.00)
+	L6: buy   (T1 Apr  7, 2015 [0.90] -  T2 May 17, 2015 [1.01])
+	L7: buy   (T1 Apr  7, 2015 [0.82] -  T2 May 17, 2015 [1.01])
+	L8: buy   (T1 Apr  7, 2015 [1.03] -  T2 May 17, 2015 [1.13])
+	L9: buy   (T1 Apr  7, 2015 [0.73] -  T2 May 17, 2015 [0.88])
+	COA:  Action: buy  100%  (buy: 10.00, hold: 0.00, sell: 0.00, abs: 0.00)
         *** BUY ***       0.00 USD (1214500.00 JPY)
-	C1bal = 89518.54 USD, C2bal = 1271287.24 JPY, PV = 99986.11 USD
+	C1bal = 87888.13 USD, C2bal = 1472013.50 JPY, PV = 100008.46 USD
 
 May 23, 2015 - Investor1
 	L0: hold   (T1 Apr  8, 2015 [1.17] -  T2 May 18, 2015 [1.07])
@@ -262,8 +354,12 @@ May 23, 2015 - Investor1
 	L3: hold   (T1 Apr  8, 2015 [1.00] -  T2 May 18, 2015 [1.03])
 	L4: sell   (T1 Apr  8, 2015 [1.08] -  T2 May 18, 2015 [0.97])
 	L5: buy   (T1 Apr  8, 2015 [0.96] -  T2 May 18, 2015 [1.23])
-	COA:  Action: hold   67%  (buy: 1.00, hold: 4.00, sell: 1.00, abs: 0.00)
-	C1bal = 89518.54 USD, C2bal = 1271287.24 JPY, PV = 99986.11 USD
+	L6: hold   (T1 Apr  8, 2015 [1.03] -  T2 May 18, 2015 [0.99])
+	L7: hold   (T1 Apr  8, 2015 [0.97] -  T2 May 18, 2015 [1.03])
+	L8: hold   (T1 Apr  8, 2015 [1.20] -  T2 May 18, 2015 [1.13])
+	L9: hold   (T1 Apr  8, 2015 [0.81] -  T2 May 18, 2015 [0.87])
+	COA:  Action: hold   80%  (buy: 1.00, hold: 8.00, sell: 1.00, abs: 0.00)
+	C1bal = 87888.13 USD, C2bal = 1472013.50 JPY, PV = 100008.46 USD
 
 May 24, 2015 - Investor1
 	L0: hold   (T1 Apr  9, 2015 [1.09] -  T2 May 19, 2015 [1.05])
@@ -272,10 +368,15 @@ May 24, 2015 - Investor1
 	L3: hold   (T1 Apr  9, 2015 [1.07] -  T2 May 19, 2015 [0.99])
 	L4: sell   (T1 Apr  9, 2015 [1.15] -  T2 May 19, 2015 [1.05])
 	L5: hold   (T1 Apr  9, 2015 [1.00] -  T2 May 19, 2015 [1.10])
-	COA:  Action: sell   33%  (buy: 0.00, hold: 4.00, sell: 2.00, abs: 0.00)
-        *** SELL ***    467.58 USD, [56787.24 JPY], investments affected: 2 -->  0 profited, 2 lost
-        *** SELL ***   3021.62 USD, [366975.17 JPY], investments affected: 1 -->  0 profited, 1 lost
-	C1bal = 93007.73 USD, C2bal = 847524.83 JPY, PV = 99986.11 USD
+	L6: hold   (T1 Apr  9, 2015 [0.99] -  T2 May 19, 2015 [0.98])
+	L7: hold   (T1 Apr  9, 2015 [1.00] -  T2 May 19, 2015 [0.98])
+	L8: hold   (T1 Apr  9, 2015 [1.12] -  T2 May 19, 2015 [1.08])
+	L9: buy   (T1 Apr  9, 2015 [0.80] -  T2 May 19, 2015 [0.91])
+	COA:  Action: sell   20%  (buy: 1.00, hold: 7.00, sell: 2.00, abs: 0.00)
+        *** SELL ***    134.65 USD, [16353.50 JPY], investments affected: 2 -->  0 profited, 2 lost
+        *** SELL ***   1985.67 USD, [241160.00 JPY], investments affected: 1 -->  0 profited, 1 lost
+        *** SELL ***    303.74 USD, [36889.20 JPY], investments affected: 1 -->  0 profited, 1 lost
+	C1bal = 90312.20 USD, C2bal = 1177610.80 JPY, PV = 100008.46 USD
 
 May 25, 2015 - Investor1
 	L0: hold   (T1 Apr 10, 2015 [1.05] -  T2 May 20, 2015 [1.11])
@@ -284,9 +385,13 @@ May 25, 2015 - Investor1
 	L3: hold   (T1 Apr 10, 2015 [0.89] -  T2 May 20, 2015 [0.95])
 	L4: hold   (T1 Apr 10, 2015 [1.01] -  T2 May 20, 2015 [1.09])
 	L5: buy   (T1 Apr 10, 2015 [0.94] -  T2 May 20, 2015 [1.14])
-	COA:  Action: buy   17%  (buy: 1.00, hold: 5.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (202416.67 JPY)
-	C1bal = 91341.06 USD, C2bal = 1049941.50 JPY, PV = 99986.11 USD
+	L6: hold   (T1 Apr 10, 2015 [0.94] -  T2 May 20, 2015 [0.97])
+	L7: hold   (T1 Apr 10, 2015 [0.90] -  T2 May 20, 2015 [0.97])
+	L8: hold   (T1 Apr 10, 2015 [1.11] -  T2 May 20, 2015 [1.08])
+	L9: buy   (T1 Apr 10, 2015 [0.71] -  T2 May 20, 2015 [0.88])
+	COA:  Action: buy   20%  (buy: 2.00, hold: 8.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (242900.00 JPY)
+	C1bal = 88312.20 USD, C2bal = 1420510.80 JPY, PV = 100008.46 USD
 
 May 26, 2015 - Investor1
 	L0: buy   (T1 Apr 11, 2015 [0.91] -  T2 May 21, 2015 [1.11])
@@ -295,9 +400,13 @@ May 26, 2015 - Investor1
 	L3: buy   (T1 Apr 11, 2015 [0.86] -  T2 May 21, 2015 [1.18])
 	L4: buy   (T1 Apr 11, 2015 [1.06] -  T2 May 21, 2015 [1.18])
 	L5: hold   (T1 Apr 11, 2015 [1.02] -  T2 May 21, 2015 [0.98])
-	COA:  Action: buy   67%  (buy: 4.00, hold: 2.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (820533.33 JPY)
-	C1bal = 84674.39 USD, C2bal = 1870474.83 JPY, PV = 99871.62 USD
+	L6: buy   (T1 Apr 11, 2015 [0.84] -  T2 May 21, 2015 [1.04])
+	L7: buy   (T1 Apr 11, 2015 [0.80] -  T2 May 21, 2015 [0.94])
+	L8: buy   (T1 Apr 11, 2015 [0.95] -  T2 May 21, 2015 [1.14])
+	L9: buy   (T1 Apr 11, 2015 [0.71] -  T2 May 21, 2015 [0.84])
+	COA:  Action: buy   80%  (buy: 8.00, hold: 2.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (984640.00 JPY)
+	C1bal = 80312.20 USD, C2bal = 2405150.80 JPY, PV = 99853.56 USD
 
 May 27, 2015 - Investor1
 	L0: hold   (T1 Apr 12, 2015 [1.04] -  T2 May 22, 2015 [1.14])
@@ -306,9 +415,13 @@ May 27, 2015 - Investor1
 	L3: hold   (T1 Apr 12, 2015 [1.13] -  T2 May 22, 2015 [1.10])
 	L4: buy   (T1 Apr 12, 2015 [1.03] -  T2 May 22, 2015 [1.15])
 	L5: buy   (T1 Apr 12, 2015 [0.87] -  T2 May 22, 2015 [1.11])
-	COA:  Action: buy   50%  (buy: 3.00, hold: 3.00, sell: 0.00, abs: 0.00)
+	L6: buy   (T1 Apr 12, 2015 [0.95] -  T2 May 22, 2015 [1.07])
+	L7: hold   (T1 Apr 12, 2015 [0.89] -  T2 May 22, 2015 [0.90])
+	L8: buy   (T1 Apr 12, 2015 [1.08] -  T2 May 22, 2015 [1.22])
+	L9: hold   (T1 Apr 12, 2015 [0.76] -  T2 May 22, 2015 [0.79])
+	COA:  Action: buy   50%  (buy: 5.00, hold: 5.00, sell: 0.00, abs: 0.00)
         *** BUY ***       0.00 USD (618800.00 JPY)
-	C1bal = 79674.39 USD, C2bal = 2489274.83 JPY, PV = 99788.12 USD
+	C1bal = 75312.20 USD, C2bal = 3023950.80 JPY, PV = 99746.19 USD
 
 May 28, 2015 - Investor1
 	L0: sell   (T1 Apr 13, 2015 [1.17] -  T2 May 23, 2015 [0.82])
@@ -317,12 +430,16 @@ May 28, 2015 - Investor1
 	L3: sell   (T1 Apr 13, 2015 [1.19] -  T2 May 23, 2015 [0.93])
 	L4: sell   (T1 Apr 13, 2015 [1.16] -  T2 May 23, 2015 [0.82])
 	L5: sell   (T1 Apr 13, 2015 [1.10] -  T2 May 23, 2015 [0.90])
-	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 6.00, abs: 0.00)
-        *** SELL ***   6824.97 USD, [847524.83 JPY], investments affected: 2 -->  0 profited, 2 lost
-        *** SELL ***   1630.03 USD, [202416.67 JPY], investments affected: 1 -->  0 profited, 1 lost
-        *** SELL ***   6607.61 USD, [820533.33 JPY], investments affected: 1 -->  0 profited, 1 lost
+	L6: sell   (T1 Apr 13, 2015 [1.04] -  T2 May 23, 2015 [0.84])
+	L7: sell   (T1 Apr 13, 2015 [1.00] -  T2 May 23, 2015 [0.76])
+	L8: sell   (T1 Apr 13, 2015 [1.27] -  T2 May 23, 2015 [0.82])
+	L9: hold   (T1 Apr 13, 2015 [0.82] -  T2 May 23, 2015 [0.82])
+	COA:  Action: sell   90%  (buy: 0.00, hold: 1.00, sell: 9.00, abs: 0.00)
+        *** SELL ***   1956.03 USD, [242900.00 JPY], investments affected: 1 -->  0 profited, 1 lost
+        *** SELL ***   9483.10 USD, [1177610.80 JPY], investments affected: 2 -->  0 profited, 2 lost
         *** SELL ***   4983.09 USD, [618800.00 JPY], investments affected: 1 -->  0 profited, 1 lost
-	C1bal = 99720.09 USD, C2bal =   0.00 JPY, PV = 99720.09 USD
+        *** SELL ***   5494.00 USD, [682244.92 JPY], investments affected: 1 -->  0 profited, 1 lost
+	C1bal = 97228.41 USD, C2bal = 302395.08 JPY, PV = 99663.55 USD
 
 May 29, 2015 - Investor1
 	L0: sell   (T1 Apr 14, 2015 [1.16] -  T2 May 24, 2015 [0.96])
@@ -331,8 +448,13 @@ May 29, 2015 - Investor1
 	L3: hold   (T1 Apr 14, 2015 [1.04] -  T2 May 24, 2015 [1.04])
 	L4: hold   (T1 Apr 14, 2015 [1.14] -  T2 May 24, 2015 [1.05])
 	L5: hold   (T1 Apr 14, 2015 [0.94] -  T2 May 24, 2015 [0.87])
-	COA:  Action: sell   50%  (buy: 0.00, hold: 3.00, sell: 3.00, abs: 0.00)
-	C1bal = 99720.09 USD, C2bal =   0.00 JPY, PV = 99720.09 USD
+	L6: sell   (T1 Apr 14, 2015 [1.04] -  T2 May 24, 2015 [0.93])
+	L7: sell   (T1 Apr 14, 2015 [1.01] -  T2 May 24, 2015 [0.88])
+	L8: sell   (T1 Apr 14, 2015 [1.18] -  T2 May 24, 2015 [0.97])
+	L9: hold   (T1 Apr 14, 2015 [0.85] -  T2 May 24, 2015 [0.86])
+	COA:  Action: sell   60%  (buy: 0.00, hold: 4.00, sell: 6.00, abs: 0.00)
+        *** SELL ***   1463.44 USD, [181437.05 JPY], investments affected: 2 -->  0 profited, 2 lost
+	C1bal = 98691.85 USD, C2bal = 120958.03 JPY, PV = 99667.48 USD
 
 May 30, 2015 - Investor1
 	L0: hold   (T1 Apr 15, 2015 [1.12] -  T2 May 25, 2015 [1.06])
@@ -341,8 +463,13 @@ May 30, 2015 - Investor1
 	L3: hold   (T1 Apr 15, 2015 [1.08] -  T2 May 25, 2015 [1.03])
 	L4: hold   (T1 Apr 15, 2015 [1.08] -  T2 May 25, 2015 [1.10])
 	L5: hold   (T1 Apr 15, 2015 [1.07] -  T2 May 25, 2015 [1.10])
-	COA:  Action: sell   17%  (buy: 0.00, hold: 5.00, sell: 1.00, abs: 0.00)
-	C1bal = 99720.09 USD, C2bal =   0.00 JPY, PV = 99720.09 USD
+	L6: hold   (T1 Apr 15, 2015 [1.01] -  T2 May 25, 2015 [0.99])
+	L7: hold   (T1 Apr 15, 2015 [0.99] -  T2 May 25, 2015 [0.94])
+	L8: sell   (T1 Apr 15, 2015 [1.19] -  T2 May 25, 2015 [1.08])
+	L9: hold   (T1 Apr 15, 2015 [0.88] -  T2 May 25, 2015 [0.87])
+	COA:  Action: sell   20%  (buy: 0.00, hold: 8.00, sell: 2.00, abs: 0.00)
+        *** SELL ***    195.13 USD, [24191.61 JPY], investments affected: 3 -->  0 profited, 3 lost
+	C1bal = 98886.97 USD, C2bal = 96766.43 JPY, PV = 99667.48 USD
 
 May 31, 2015 - Investor1
 	L0: hold   (T1 Apr 16, 2015 [1.08] -  T2 May 26, 2015 [1.01])
@@ -351,11 +478,602 @@ May 31, 2015 - Investor1
 	L3: hold   (T1 Apr 16, 2015 [1.04] -  T2 May 26, 2015 [1.06])
 	L4: hold   (T1 Apr 16, 2015 [1.05] -  T2 May 26, 2015 [1.04])
 	L5: hold   (T1 Apr 16, 2015 [1.03] -  T2 May 26, 2015 [0.97])
-	COA:  Action: sell   17%  (buy: 0.00, hold: 5.00, sell: 1.00, abs: 0.00)
-	C1bal = 99720.09 USD, C2bal =   0.00 JPY, PV = 99720.09 USD
+	L6: hold   (T1 Apr 16, 2015 [0.96] -  T2 May 26, 2015 [0.94])
+	L7: hold   (T1 Apr 16, 2015 [0.90] -  T2 May 26, 2015 [0.88])
+	L8: hold   (T1 Apr 16, 2015 [1.10] -  T2 May 26, 2015 [1.02])
+	L9: hold   (T1 Apr 16, 2015 [0.83] -  T2 May 26, 2015 [0.82])
+	COA:  Action: sell   10%  (buy: 0.00, hold: 9.00, sell: 1.00, abs: 0.00)
+        *** SELL ***     78.05 USD, [ 9676.64 JPY], investments affected: 4 -->  0 profited, 4 lost
+	C1bal = 98965.02 USD, C2bal = 87089.78 JPY, PV = 99667.48 USD
 
-Completed generation 1, May  1, 2015 - May 31, 2015,  unsettled =     0.00 JPY
-loop 0 completed.  May  1, 2015 - May 31, 2015
+Jun  1, 2015 - Investor1
+	L0: hold   (T1 Apr 17, 2015 [0.98] -  T2 May 27, 2015 [1.07])
+	L1: hold   (T1 Apr 17, 2015 [0.98] -  T2 May 27, 2015 [1.03])
+	L2: hold   (T1 Apr 17, 2015 [0.95] -  T2 May 27, 2015 [0.92])
+	L3: hold   (T1 Apr 17, 2015 [0.99] -  T2 May 27, 2015 [1.06])
+	L4: buy   (T1 Apr 17, 2015 [1.02] -  T2 May 27, 2015 [1.19])
+	L5: buy   (T1 Apr 17, 2015 [0.91] -  T2 May 27, 2015 [1.03])
+	L6: buy   (T1 Apr 17, 2015 [0.89] -  T2 May 27, 2015 [1.00])
+	L7: buy   (T1 Apr 17, 2015 [0.79] -  T2 May 27, 2015 [0.94])
+	L8: hold   (T1 Apr 17, 2015 [0.99] -  T2 May 27, 2015 [1.08])
+	L9: hold   (T1 Apr 17, 2015 [0.75] -  T2 May 27, 2015 [0.85])
+	COA:  Action: buy   40%  (buy: 4.00, hold: 6.00, sell: 0.00, abs: 0.00)
+Jun  2, 2015 - Investor1
+	L0: buy   (T1 Apr 18, 2015 [0.78] -  T2 May 28, 2015 [1.14])
+	L1: buy   (T1 Apr 18, 2015 [0.87] -  T2 May 28, 2015 [1.09])
+	L2: buy   (T1 Apr 18, 2015 [0.79] -  T2 May 28, 2015 [0.92])
+	L3: hold   (T1 Apr 18, 2015 [0.99] -  T2 May 28, 2015 [1.00])
+	L4: hold   (T1 Apr 18, 2015 [1.00] -  T2 May 28, 2015 [0.93])
+	L5: hold   (T1 Apr 18, 2015 [1.07] -  T2 May 28, 2015 [1.14])
+	L6: buy   (T1 Apr 18, 2015 [0.75] -  T2 May 28, 2015 [1.01])
+	L7: buy   (T1 Apr 18, 2015 [0.66] -  T2 May 28, 2015 [0.95])
+	L8: buy   (T1 Apr 18, 2015 [0.88] -  T2 May 28, 2015 [1.16])
+	L9: buy   (T1 Apr 18, 2015 [0.65] -  T2 May 28, 2015 [0.80])
+	COA:  Action: buy   70%  (buy: 7.00, hold: 3.00, sell: 0.00, abs: 0.00)
+Jun  3, 2015 - Investor1
+	L0: buy   (T1 Apr 19, 2015 [0.87] -  T2 May 29, 2015 [1.20])
+	L1: buy   (T1 Apr 19, 2015 [0.88] -  T2 May 29, 2015 [1.10])
+	L2: hold   (T1 Apr 19, 2015 [0.96] -  T2 May 29, 2015 [1.00])
+	L3: buy   (T1 Apr 19, 2015 [0.86] -  T2 May 29, 2015 [1.01])
+	L4: hold   (T1 Apr 19, 2015 [0.91] -  T2 May 29, 2015 [0.96])
+	L5: hold   (T1 Apr 19, 2015 [1.00] -  T2 May 29, 2015 [1.03])
+	L6: buy   (T1 Apr 19, 2015 [0.81] -  T2 May 29, 2015 [1.08])
+	L7: buy   (T1 Apr 19, 2015 [0.72] -  T2 May 29, 2015 [1.04])
+	L8: buy   (T1 Apr 19, 2015 [0.89] -  T2 May 29, 2015 [1.19])
+	L9: buy   (T1 Apr 19, 2015 [0.69] -  T2 May 29, 2015 [0.99])
+	COA:  Action: buy   70%  (buy: 7.00, hold: 3.00, sell: 0.00, abs: 0.00)
+Jun  4, 2015 - Investor1
+	L0: hold   (T1 Apr 20, 2015 [0.99] -  T2 May 30, 2015 [0.97])
+	L1: hold   (T1 Apr 20, 2015 [1.02] -  T2 May 30, 2015 [1.09])
+	L2: hold   (T1 Apr 20, 2015 [0.85] -  T2 May 30, 2015 [0.92])
+	L3: hold   (T1 Apr 20, 2015 [0.96] -  T2 May 30, 2015 [0.90])
+	L4: hold   (T1 Apr 20, 2015 [1.01] -  T2 May 30, 2015 [1.04])
+	L5: hold   (T1 Apr 20, 2015 [1.08] -  T2 May 30, 2015 [1.04])
+	L6: hold   (T1 Apr 20, 2015 [0.92] -  T2 May 30, 2015 [1.00])
+	L7: hold   (T1 Apr 20, 2015 [0.84] -  T2 May 30, 2015 [0.92])
+	L8: hold   (T1 Apr 20, 2015 [1.03] -  T2 May 30, 2015 [1.05])
+	L9: buy   (T1 Apr 20, 2015 [0.80] -  T2 May 30, 2015 [0.97])
+	COA:  Action: buy   10%  (buy: 1.00, hold: 9.00, sell: 0.00, abs: 0.00)
+Jun  5, 2015 - Investor1
+	L0: sell   (T1 Apr 21, 2015 [1.12] -  T2 May 31, 2015 [0.97])
+	L1: sell   (T1 Apr 21, 2015 [1.15] -  T2 May 31, 2015 [1.02])
+	L2: sell   (T1 Apr 21, 2015 [1.03] -  T2 May 31, 2015 [0.90])
+	L3: hold   (T1 Apr 21, 2015 [0.99] -  T2 May 31, 2015 [1.04])
+	L4: sell   (T1 Apr 21, 2015 [1.09] -  T2 May 31, 2015 [0.95])
+	L5: hold   (T1 Apr 21, 2015 [1.08] -  T2 May 31, 2015 [1.01])
+	L6: hold   (T1 Apr 21, 2015 [1.01] -  T2 May 31, 2015 [0.95])
+	L7: hold   (T1 Apr 21, 2015 [0.92] -  T2 May 31, 2015 [0.87])
+	L8: sell   (T1 Apr 21, 2015 [1.17] -  T2 May 31, 2015 [1.03])
+	L9: hold   (T1 Apr 21, 2015 [0.83] -  T2 May 31, 2015 [0.85])
+	COA:  Action: sell   50%  (buy: 0.00, hold: 5.00, sell: 5.00, abs: 0.00)
+        *** SELL ***    346.75 USD, [43544.89 JPY], investments affected: 5 -->  0 profited, 5 lost
+	C1bal = 99311.78 USD, C2bal = 43544.89 JPY, PV = 99658.53 USD
+
+Jun  6, 2015 - Investor1
+	L0: hold   (T1 Apr 22, 2015 [1.15] -  T2 Jun  1, 2015 [1.13])
+	L1: sell   (T1 Apr 22, 2015 [1.15] -  T2 Jun  1, 2015 [1.00])
+	L2: sell   (T1 Apr 22, 2015 [1.00] -  T2 Jun  1, 2015 [0.87])
+	L3: buy   (T1 Apr 22, 2015 [1.03] -  T2 Jun  1, 2015 [1.14])
+	L4: hold   (T1 Apr 22, 2015 [1.10] -  T2 Jun  1, 2015 [1.02])
+	L5: hold   (T1 Apr 22, 2015 [1.00] -  T2 Jun  1, 2015 [1.05])
+	L6: hold   (T1 Apr 22, 2015 [1.04] -  T2 Jun  1, 2015 [0.99])
+	L7: hold   (T1 Apr 22, 2015 [0.94] -  T2 Jun  1, 2015 [0.96])
+	L8: hold   (T1 Apr 22, 2015 [1.21] -  T2 Jun  1, 2015 [1.15])
+	L9: hold   (T1 Apr 22, 2015 [0.81] -  T2 Jun  1, 2015 [0.79])
+	COA:  Action: sell   20%  (buy: 1.00, hold: 7.00, sell: 2.00, abs: 0.00)
+        *** SELL ***     69.35 USD, [ 8708.98 JPY], investments affected: 6 -->  0 profited, 6 lost
+	C1bal = 99381.13 USD, C2bal = 34835.91 JPY, PV = 99658.53 USD
+
+Jun  7, 2015 - Investor1
+	L0: hold   (T1 Apr 23, 2015 [1.08] -  T2 Jun  2, 2015 [1.14])
+	L1: hold   (T1 Apr 23, 2015 [1.08] -  T2 Jun  2, 2015 [1.07])
+	L2: hold   (T1 Apr 23, 2015 [0.94] -  T2 Jun  2, 2015 [0.94])
+	L3: buy   (T1 Apr 23, 2015 [0.99] -  T2 Jun  2, 2015 [1.20])
+	L4: buy   (T1 Apr 23, 2015 [1.08] -  T2 Jun  2, 2015 [1.42])
+	L5: sell   (T1 Apr 23, 2015 [1.17] -  T2 Jun  2, 2015 [1.03])
+	L6: hold   (T1 Apr 23, 2015 [0.99] -  T2 Jun  2, 2015 [0.98])
+	L7: hold   (T1 Apr 23, 2015 [0.89] -  T2 Jun  2, 2015 [0.98])
+	L8: hold   (T1 Apr 23, 2015 [1.07] -  T2 Jun  2, 2015 [1.15])
+	L9: hold   (T1 Apr 23, 2015 [0.79] -  T2 Jun  2, 2015 [0.80])
+	COA:  Action: buy   20%  (buy: 2.00, hold: 7.00, sell: 1.00, abs: 0.00)
+Jun  8, 2015 - Investor1
+	L0: buy   (T1 Apr 24, 2015 [1.00] -  T2 Jun  3, 2015 [1.10])
+	L1: hold   (T1 Apr 24, 2015 [1.02] -  T2 Jun  3, 2015 [1.06])
+	L2: hold   (T1 Apr 24, 2015 [0.81] -  T2 Jun  3, 2015 [0.87])
+	L3: buy   (T1 Apr 24, 2015 [0.91] -  T2 Jun  3, 2015 [1.03])
+	L4: hold   (T1 Apr 24, 2015 [1.04] -  T2 Jun  3, 2015 [1.08])
+	L5: sell   (T1 Apr 24, 2015 [1.18] -  T2 Jun  3, 2015 [1.00])
+	L6: hold   (T1 Apr 24, 2015 [0.97] -  T2 Jun  3, 2015 [1.00])
+	L7: hold   (T1 Apr 24, 2015 [0.91] -  T2 Jun  3, 2015 [0.93])
+	L8: buy   (T1 Apr 24, 2015 [1.06] -  T2 Jun  3, 2015 [1.18])
+	L9: hold   (T1 Apr 24, 2015 [0.85] -  T2 Jun  3, 2015 [0.84])
+	COA:  Action: buy   30%  (buy: 3.00, hold: 6.00, sell: 1.00, abs: 0.00)
+Jun  9, 2015 - Investor1
+	L0: hold   (T1 Apr 25, 2015 [0.99] -  T2 Jun  4, 2015 [1.03])
+	L1: hold   (T1 Apr 25, 2015 [1.02] -  T2 Jun  4, 2015 [0.98])
+	L2: hold   (T1 Apr 25, 2015 [1.06] -  T2 Jun  4, 2015 [0.98])
+	L3: hold   (T1 Apr 25, 2015 [0.93] -  T2 Jun  4, 2015 [0.98])
+	L4: sell   (T1 Apr 25, 2015 [1.16] -  T2 Jun  4, 2015 [0.87])
+	L5: sell   (T1 Apr 25, 2015 [1.18] -  T2 Jun  4, 2015 [1.04])
+	L6: hold   (T1 Apr 25, 2015 [1.00] -  T2 Jun  4, 2015 [0.94])
+	L7: sell   (T1 Apr 25, 2015 [0.96] -  T2 Jun  4, 2015 [0.85])
+	L8: hold   (T1 Apr 25, 2015 [0.98] -  T2 Jun  4, 2015 [1.06])
+	L9: sell   (T1 Apr 25, 2015 [0.97] -  T2 Jun  4, 2015 [0.76])
+	COA:  Action: sell   40%  (buy: 0.00, hold: 6.00, sell: 4.00, abs: 0.00)
+        *** SELL ***    112.23 USD, [13934.37 JPY], investments affected: 7 -->  0 profited, 7 lost
+	C1bal = 99493.35 USD, C2bal = 20901.55 JPY, PV = 99661.70 USD
+
+Jun 10, 2015 - Investor1
+	L0: hold   (T1 Apr 26, 2015 [1.00] -  T2 Jun  5, 2015 [0.99])
+	L1: hold   (T1 Apr 26, 2015 [1.01] -  T2 Jun  5, 2015 [1.00])
+	L2: sell   (T1 Apr 26, 2015 [1.32] -  T2 Jun  5, 2015 [0.93])
+	L3: hold   (T1 Apr 26, 2015 [0.97] -  T2 Jun  5, 2015 [0.98])
+	L4: hold   (T1 Apr 26, 2015 [1.11] -  T2 Jun  5, 2015 [1.02])
+	L5: buy   (T1 Apr 26, 2015 [1.00] -  T2 Jun  5, 2015 [1.14])
+	L6: hold   (T1 Apr 26, 2015 [0.99] -  T2 Jun  5, 2015 [0.93])
+	L7: hold   (T1 Apr 26, 2015 [0.93] -  T2 Jun  5, 2015 [0.89])
+	L8: hold   (T1 Apr 26, 2015 [1.06] -  T2 Jun  5, 2015 [1.00])
+	L9: hold   (T1 Apr 26, 2015 [0.90] -  T2 Jun  5, 2015 [0.89])
+	COA:  Action: hold   80%  (buy: 1.00, hold: 8.00, sell: 1.00, abs: 0.00)
+	C1bal = 99493.35 USD, C2bal = 20901.55 JPY, PV = 99663.67 USD
+
+Jun 11, 2015 - Investor1
+	L0: hold   (T1 Apr 27, 2015 [1.13] -  T2 Jun  6, 2015 [1.09])
+	L1: hold   (T1 Apr 27, 2015 [1.10] -  T2 Jun  6, 2015 [1.18])
+	L2: sell   (T1 Apr 27, 2015 [1.12] -  T2 Jun  6, 2015 [0.89])
+	L3: hold   (T1 Apr 27, 2015 [1.06] -  T2 Jun  6, 2015 [1.06])
+	L4: buy   (T1 Apr 27, 2015 [0.85] -  T2 Jun  6, 2015 [1.13])
+	L5: sell   (T1 Apr 27, 2015 [1.09] -  T2 Jun  6, 2015 [0.96])
+	L6: hold   (T1 Apr 27, 2015 [1.03] -  T2 Jun  6, 2015 [1.08])
+	L7: hold   (T1 Apr 27, 2015 [1.03] -  T2 Jun  6, 2015 [1.06])
+	L8: hold   (T1 Apr 27, 2015 [1.12] -  T2 Jun  6, 2015 [1.17])
+	L9: buy   (T1 Apr 27, 2015 [0.92] -  T2 Jun  6, 2015 [1.06])
+	COA:  Action: hold   60%  (buy: 2.00, hold: 6.00, sell: 2.00, abs: 0.00)
+	C1bal = 99493.35 USD, C2bal = 20901.55 JPY, PV = 99662.43 USD
+
+Jun 12, 2015 - Investor1
+	L0: sell   (T1 Apr 28, 2015 [1.14] -  T2 Jun  7, 2015 [1.03])
+	L1: hold   (T1 Apr 28, 2015 [1.09] -  T2 Jun  7, 2015 [1.02])
+	L2: sell   (T1 Apr 28, 2015 [1.23] -  T2 Jun  7, 2015 [1.09])
+	L3: sell   (T1 Apr 28, 2015 [1.09] -  T2 Jun  7, 2015 [0.82])
+	L4: buy   (T1 Apr 28, 2015 [0.87] -  T2 Jun  7, 2015 [1.21])
+	L5: buy   (T1 Apr 28, 2015 [1.10] -  T2 Jun  7, 2015 [1.25])
+	L6: hold   (T1 Apr 28, 2015 [1.07] -  T2 Jun  7, 2015 [1.05])
+	L7: sell   (T1 Apr 28, 2015 [1.06] -  T2 Jun  7, 2015 [0.93])
+	L8: hold   (T1 Apr 28, 2015 [1.14] -  T2 Jun  7, 2015 [1.06])
+	L9: buy   (T1 Apr 28, 2015 [1.00] -  T2 Jun  7, 2015 [1.15])
+	COA:  Action: sell   40%  (buy: 3.00, hold: 3.00, sell: 4.00, abs: 0.00)
+        *** SELL ***     67.85 USD, [ 8360.62 JPY], investments affected: 8 -->  0 profited, 8 lost
+	C1bal = 99561.20 USD, C2bal = 12540.93 JPY, PV = 99662.97 USD
+
+Jun 13, 2015 - Investor1
+	L0: hold   (T1 Apr 29, 2015 [1.10] -  T2 Jun  8, 2015 [1.15])
+	L1: hold   (T1 Apr 29, 2015 [1.01] -  T2 Jun  8, 2015 [1.04])
+	L2: sell   (T1 Apr 29, 2015 [1.11] -  T2 Jun  8, 2015 [0.92])
+	L3: hold   (T1 Apr 29, 2015 [1.16] -  T2 Jun  8, 2015 [1.10])
+	L4: buy   (T1 Apr 29, 2015 [1.01] -  T2 Jun  8, 2015 [1.21])
+	L5: hold   (T1 Apr 29, 2015 [0.94] -  T2 Jun  8, 2015 [0.90])
+	L6: hold   (T1 Apr 29, 2015 [1.03] -  T2 Jun  8, 2015 [1.04])
+	L7: hold   (T1 Apr 29, 2015 [0.99] -  T2 Jun  8, 2015 [1.00])
+	L8: hold   (T1 Apr 29, 2015 [1.06] -  T2 Jun  8, 2015 [1.13])
+	L9: hold   (T1 Apr 29, 2015 [0.94] -  T2 Jun  8, 2015 [0.97])
+	COA:  Action: hold   80%  (buy: 1.00, hold: 8.00, sell: 1.00, abs: 0.00)
+	C1bal = 99561.20 USD, C2bal = 12540.93 JPY, PV = 99662.97 USD
+
+Jun 14, 2015 - Investor1
+	L0: hold   (T1 Apr 30, 2015 [1.08] -  T2 Jun  9, 2015 [1.06])
+	L1: hold   (T1 Apr 30, 2015 [1.01] -  T2 Jun  9, 2015 [0.97])
+	L2: hold   (T1 Apr 30, 2015 [0.95] -  T2 Jun  9, 2015 [0.93])
+	L3: hold   (T1 Apr 30, 2015 [0.96] -  T2 Jun  9, 2015 [0.98])
+	L4: buy   (T1 Apr 30, 2015 [1.05] -  T2 Jun  9, 2015 [1.19])
+	L5: sell   (T1 Apr 30, 2015 [1.19] -  T2 Jun  9, 2015 [1.06])
+	L6: hold   (T1 Apr 30, 2015 [1.00] -  T2 Jun  9, 2015 [0.96])
+	L7: hold   (T1 Apr 30, 2015 [1.04] -  T2 Jun  9, 2015 [0.96])
+	L8: hold   (T1 Apr 30, 2015 [1.08] -  T2 Jun  9, 2015 [1.08])
+	L9: hold   (T1 Apr 30, 2015 [0.91] -  T2 Jun  9, 2015 [0.84])
+	COA:  Action: hold   80%  (buy: 1.00, hold: 8.00, sell: 1.00, abs: 0.00)
+	C1bal = 99561.20 USD, C2bal = 12540.93 JPY, PV = 99662.97 USD
+
+Jun 15, 2015 - Investor1
+	L0: hold   (T1 May  1, 2015 [1.10] -  T2 Jun 10, 2015 [1.10])
+	L1: hold   (T1 May  1, 2015 [1.10] -  T2 Jun 10, 2015 [1.03])
+	L2: buy   (T1 May  1, 2015 [0.88] -  T2 Jun 10, 2015 [0.98])
+	L3: buy   (T1 May  1, 2015 [0.98] -  T2 Jun 10, 2015 [1.11])
+	L4: hold   (T1 May  1, 2015 [1.19] -  T2 Jun 10, 2015 [1.24])
+	L5: buy   (T1 May  1, 2015 [0.96] -  T2 Jun 10, 2015 [1.16])
+	L6: hold   (T1 May  1, 2015 [0.98] -  T2 Jun 10, 2015 [0.98])
+	L7: hold   (T1 May  1, 2015 [0.99] -  T2 Jun 10, 2015 [0.95])
+	L8: hold   (T1 May  1, 2015 [1.12] -  T2 Jun 10, 2015 [1.08])
+	L9: hold   (T1 May  1, 2015 [0.81] -  T2 Jun 10, 2015 [0.85])
+	COA:  Action: buy   30%  (buy: 3.00, hold: 7.00, sell: 0.00, abs: 0.00)
+Jun 16, 2015 - Investor1
+	L0: buy   (T1 May  2, 2015 [0.90] -  T2 Jun 11, 2015 [1.12])
+	L1: buy   (T1 May  2, 2015 [0.88] -  T2 Jun 11, 2015 [1.04])
+	L2: hold   (T1 May  2, 2015 [1.03] -  T2 Jun 11, 2015 [1.03])
+	L3: hold   (T1 May  2, 2015 [0.94] -  T2 Jun 11, 2015 [1.03])
+	L4: buy   (T1 May  2, 2015 [0.94] -  T2 Jun 11, 2015 [1.12])
+	L5: buy   (T1 May  2, 2015 [0.93] -  T2 Jun 11, 2015 [1.16])
+	L6: buy   (T1 May  2, 2015 [0.85] -  T2 Jun 11, 2015 [0.98])
+	L7: buy   (T1 May  2, 2015 [0.76] -  T2 Jun 11, 2015 [0.94])
+	L8: buy   (T1 May  2, 2015 [0.86] -  T2 Jun 11, 2015 [1.13])
+	L9: hold   (T1 May  2, 2015 [0.75] -  T2 Jun 11, 2015 [0.84])
+	COA:  Action: buy   70%  (buy: 7.00, hold: 3.00, sell: 0.00, abs: 0.00)
+Jun 17, 2015 - Investor1
+	L0: hold   (T1 May  3, 2015 [1.01] -  T2 Jun 12, 2015 [1.07])
+	L1: hold   (T1 May  3, 2015 [1.04] -  T2 Jun 12, 2015 [1.08])
+	L2: hold   (T1 May  3, 2015 [0.93] -  T2 Jun 12, 2015 [1.01])
+	L3: hold   (T1 May  3, 2015 [0.90] -  T2 Jun 12, 2015 [0.91])
+	L4: sell   (T1 May  3, 2015 [1.21] -  T2 Jun 12, 2015 [1.05])
+	L5: hold   (T1 May  3, 2015 [0.92] -  T2 Jun 12, 2015 [0.92])
+	L6: hold   (T1 May  3, 2015 [0.98] -  T2 Jun 12, 2015 [1.01])
+	L7: hold   (T1 May  3, 2015 [0.92] -  T2 Jun 12, 2015 [0.98])
+	L8: buy   (T1 May  3, 2015 [0.95] -  T2 Jun 12, 2015 [1.18])
+	L9: hold   (T1 May  3, 2015 [0.93] -  T2 Jun 12, 2015 [0.85])
+	COA:  Action: hold   80%  (buy: 1.00, hold: 8.00, sell: 1.00, abs: 0.00)
+	C1bal = 99561.20 USD, C2bal = 12540.93 JPY, PV = 99662.13 USD
+
+Jun 18, 2015 - Investor1
+	L0: hold   (T1 May  4, 2015 [0.92] -  T2 Jun 13, 2015 [0.92])
+	L1: hold   (T1 May  4, 2015 [0.94] -  T2 Jun 13, 2015 [0.88])
+	L2: buy   (T1 May  4, 2015 [0.85] -  T2 Jun 13, 2015 [1.02])
+	L3: buy   (T1 May  4, 2015 [0.88] -  T2 Jun 13, 2015 [1.10])
+	L4: hold   (T1 May  4, 2015 [0.91] -  T2 Jun 13, 2015 [0.93])
+	L5: hold   (T1 May  4, 2015 [0.89] -  T2 Jun 13, 2015 [0.87])
+	L6: hold   (T1 May  4, 2015 [0.90] -  T2 Jun 13, 2015 [0.94])
+	L7: hold   (T1 May  4, 2015 [0.87] -  T2 Jun 13, 2015 [0.94])
+	L8: hold   (T1 May  4, 2015 [0.93] -  T2 Jun 13, 2015 [1.02])
+	L9: hold   (T1 May  4, 2015 [0.84] -  T2 Jun 13, 2015 [0.91])
+	COA:  Action: buy   20%  (buy: 2.00, hold: 8.00, sell: 0.00, abs: 0.00)
+Jun 19, 2015 - Investor1
+	L0: hold   (T1 May  5, 2015 [1.01] -  T2 Jun 14, 2015 [0.98])
+	L1: hold   (T1 May  5, 2015 [0.96] -  T2 Jun 14, 2015 [0.98])
+	L2: hold   (T1 May  5, 2015 [0.88] -  T2 Jun 14, 2015 [0.92])
+	L3: buy   (T1 May  5, 2015 [0.96] -  T2 Jun 14, 2015 [1.17])
+	L4: sell   (T1 May  5, 2015 [1.22] -  T2 Jun 14, 2015 [1.05])
+	L5: hold   (T1 May  5, 2015 [1.02] -  T2 Jun 14, 2015 [1.01])
+	L6: hold   (T1 May  5, 2015 [0.95] -  T2 Jun 14, 2015 [0.91])
+	L7: hold   (T1 May  5, 2015 [0.91] -  T2 Jun 14, 2015 [0.95])
+	L8: hold   (T1 May  5, 2015 [1.06] -  T2 Jun 14, 2015 [1.02])
+	L9: hold   (T1 May  5, 2015 [0.84] -  T2 Jun 14, 2015 [0.76])
+	COA:  Action: hold   80%  (buy: 1.00, hold: 8.00, sell: 1.00, abs: 0.00)
+	C1bal = 99561.20 USD, C2bal = 12540.93 JPY, PV = 99663.41 USD
+
+Jun 20, 2015 - Investor1
+	L0: buy   (T1 May  6, 2015 [1.02] -  T2 Jun 15, 2015 [1.20])
+	L1: hold   (T1 May  6, 2015 [1.01] -  T2 Jun 15, 2015 [1.10])
+	L2: hold   (T1 May  6, 2015 [0.93] -  T2 Jun 15, 2015 [0.89])
+	L3: buy   (T1 May  6, 2015 [0.99] -  T2 Jun 15, 2015 [1.11])
+	L4: hold   (T1 May  6, 2015 [1.04] -  T2 Jun 15, 2015 [1.04])
+	L5: hold   (T1 May  6, 2015 [1.04] -  T2 Jun 15, 2015 [0.94])
+	L6: buy   (T1 May  6, 2015 [0.94] -  T2 Jun 15, 2015 [1.05])
+	L7: hold   (T1 May  6, 2015 [0.92] -  T2 Jun 15, 2015 [1.00])
+	L8: buy   (T1 May  6, 2015 [1.00] -  T2 Jun 15, 2015 [1.20])
+	L9: hold   (T1 May  6, 2015 [0.83] -  T2 Jun 15, 2015 [0.79])
+	COA:  Action: buy   40%  (buy: 4.00, hold: 6.00, sell: 0.00, abs: 0.00)
+Jun 21, 2015 - Investor1
+	L0: hold   (T1 May  7, 2015 [1.13] -  T2 Jun 16, 2015 [1.16])
+	L1: hold   (T1 May  7, 2015 [1.07] -  T2 Jun 16, 2015 [1.10])
+	L2: hold   (T1 May  7, 2015 [0.90] -  T2 Jun 16, 2015 [0.95])
+	L3: hold   (T1 May  7, 2015 [0.98] -  T2 Jun 16, 2015 [1.07])
+	L4: hold   (T1 May  7, 2015 [1.06] -  T2 Jun 16, 2015 [1.04])
+	L5: hold   (T1 May  7, 2015 [0.92] -  T2 Jun 16, 2015 [1.01])
+	L6: hold   (T1 May  7, 2015 [1.06] -  T2 Jun 16, 2015 [1.01])
+	L7: hold   (T1 May  7, 2015 [1.03] -  T2 Jun 16, 2015 [1.01])
+	L8: hold   (T1 May  7, 2015 [1.13] -  T2 Jun 16, 2015 [1.18])
+	L9: sell   (T1 May  7, 2015 [0.95] -  T2 Jun 16, 2015 [0.78])
+	COA:  Action: sell   10%  (buy: 0.00, hold: 9.00, sell: 1.00, abs: 0.00)
+        *** SELL ***     10.22 USD, [ 1254.09 JPY], investments affected: 9 -->  1 profited, 8 lost
+	C1bal = 99571.42 USD, C2bal = 11286.84 JPY, PV = 99663.41 USD
+
+Jun 22, 2015 - Investor1
+	L0: hold   (T1 May  8, 2015 [1.08] -  T2 Jun 17, 2015 [1.10])
+	L1: hold   (T1 May  8, 2015 [1.07] -  T2 Jun 17, 2015 [1.11])
+	L2: hold   (T1 May  8, 2015 [0.97] -  T2 Jun 17, 2015 [0.94])
+	L3: hold   (T1 May  8, 2015 [0.95] -  T2 Jun 17, 2015 [1.05])
+	L4: hold   (T1 May  8, 2015 [1.23] -  T2 Jun 17, 2015 [1.19])
+	L5: sell   (T1 May  8, 2015 [1.38] -  T2 Jun 17, 2015 [0.99])
+	L6: hold   (T1 May  8, 2015 [1.00] -  T2 Jun 17, 2015 [1.02])
+	L7: hold   (T1 May  8, 2015 [0.96] -  T2 Jun 17, 2015 [0.96])
+	L8: hold   (T1 May  8, 2015 [1.08] -  T2 Jun 17, 2015 [1.17])
+	L9: hold   (T1 May  8, 2015 [0.87] -  T2 Jun 17, 2015 [0.82])
+	COA:  Action: sell   10%  (buy: 0.00, hold: 9.00, sell: 1.00, abs: 0.00)
+        *** SELL ***      9.16 USD, [ 1128.68 JPY], investments affected: 10 -->  1 profited, 9 lost
+	C1bal = 99580.58 USD, C2bal = 10158.15 JPY, PV = 99662.98 USD
+
+Jun 23, 2015 - Investor1
+	L0: buy   (T1 May  9, 2015 [0.87] -  T2 Jun 18, 2015 [0.98])
+	L1: hold   (T1 May  9, 2015 [0.94] -  T2 Jun 18, 2015 [1.02])
+	L2: sell   (T1 May  9, 2015 [0.91] -  T2 Jun 18, 2015 [0.69])
+	L3: hold   (T1 May  9, 2015 [1.05] -  T2 Jun 18, 2015 [0.98])
+	L4: hold   (T1 May  9, 2015 [1.16] -  T2 Jun 18, 2015 [1.25])
+	L5: sell   (T1 May  9, 2015 [1.25] -  T2 Jun 18, 2015 [0.96])
+	L6: hold   (T1 May  9, 2015 [0.86] -  T2 Jun 18, 2015 [0.96])
+	L7: hold   (T1 May  9, 2015 [0.86] -  T2 Jun 18, 2015 [0.93])
+	L8: buy   (T1 May  9, 2015 [0.90] -  T2 Jun 18, 2015 [1.05])
+	L9: hold   (T1 May  9, 2015 [0.78] -  T2 Jun 18, 2015 [0.86])
+	COA:  Action: hold   60%  (buy: 2.00, hold: 6.00, sell: 2.00, abs: 0.00)
+	C1bal = 99580.58 USD, C2bal = 10158.15 JPY, PV = 99662.69 USD
+
+Jun 24, 2015 - Investor1
+	L0: buy   (T1 May 10, 2015 [0.87] -  T2 Jun 19, 2015 [1.07])
+	L1: buy   (T1 May 10, 2015 [0.91] -  T2 Jun 19, 2015 [1.10])
+	L2: hold   (T1 May 10, 2015 [0.79] -  T2 Jun 19, 2015 [0.82])
+	L3: hold   (T1 May 10, 2015 [1.01] -  T2 Jun 19, 2015 [0.96])
+	L4: buy   (T1 May 10, 2015 [0.86] -  T2 Jun 19, 2015 [1.07])
+	L5: hold   (T1 May 10, 2015 [1.15] -  T2 Jun 19, 2015 [1.17])
+	L6: buy   (T1 May 10, 2015 [0.88] -  T2 Jun 19, 2015 [0.99])
+	L7: hold   (T1 May 10, 2015 [0.85] -  T2 Jun 19, 2015 [0.93])
+	L8: buy   (T1 May 10, 2015 [0.92] -  T2 Jun 19, 2015 [1.15])
+	L9: hold   (T1 May 10, 2015 [0.78] -  T2 Jun 19, 2015 [0.82])
+	COA:  Action: buy   50%  (buy: 5.00, hold: 5.00, sell: 0.00, abs: 0.00)
+Jun 25, 2015 - Investor1
+	L0: sell   (T1 May 11, 2015 [1.10] -  T2 Jun 20, 2015 [0.96])
+	L1: hold   (T1 May 11, 2015 [1.09] -  T2 Jun 20, 2015 [1.12])
+	L2: sell   (T1 May 11, 2015 [0.93] -  T2 Jun 20, 2015 [0.73])
+	L3: sell   (T1 May 11, 2015 [1.21] -  T2 Jun 20, 2015 [0.87])
+	L4: hold   (T1 May 11, 2015 [1.04] -  T2 Jun 20, 2015 [1.11])
+	L5: hold   (T1 May 11, 2015 [1.08] -  T2 Jun 20, 2015 [1.02])
+	L6: hold   (T1 May 11, 2015 [1.00] -  T2 Jun 20, 2015 [0.97])
+	L7: hold   (T1 May 11, 2015 [0.94] -  T2 Jun 20, 2015 [0.96])
+	L8: hold   (T1 May 11, 2015 [1.08] -  T2 Jun 20, 2015 [1.03])
+	L9: hold   (T1 May 11, 2015 [0.85] -  T2 Jun 20, 2015 [0.92])
+	COA:  Action: sell   30%  (buy: 0.00, hold: 7.00, sell: 3.00, abs: 0.00)
+        *** SELL ***     24.65 USD, [ 3047.45 JPY], investments affected: 11 -->  1 profited, 10 lost
+	C1bal = 99605.23 USD, C2bal = 7110.71 JPY, PV = 99662.74 USD
+
+Jun 26, 2015 - Investor1
+	L0: hold   (T1 May 12, 2015 [0.98] -  T2 Jun 21, 2015 [0.93])
+	L1: hold   (T1 May 12, 2015 [0.97] -  T2 Jun 21, 2015 [0.98])
+	L2: sell   (T1 May 12, 2015 [1.03] -  T2 Jun 21, 2015 [0.85])
+	L3: hold   (T1 May 12, 2015 [0.96] -  T2 Jun 21, 2015 [0.97])
+	L4: hold   (T1 May 12, 2015 [1.01] -  T2 Jun 21, 2015 [0.96])
+	L5: hold   (T1 May 12, 2015 [1.07] -  T2 Jun 21, 2015 [1.01])
+	L6: hold   (T1 May 12, 2015 [0.92] -  T2 Jun 21, 2015 [0.92])
+	L7: hold   (T1 May 12, 2015 [0.88] -  T2 Jun 21, 2015 [0.93])
+	L8: hold   (T1 May 12, 2015 [0.97] -  T2 Jun 21, 2015 [0.97])
+	L9: hold   (T1 May 12, 2015 [0.82] -  T2 Jun 21, 2015 [0.89])
+	COA:  Action: sell   10%  (buy: 0.00, hold: 9.00, sell: 1.00, abs: 0.00)
+        *** SELL ***      5.74 USD, [  711.07 JPY], investments affected: 12 -->  1 profited, 11 lost
+	C1bal = 99610.96 USD, C2bal = 6399.64 JPY, PV = 99662.61 USD
+
+Jun 27, 2015 - Investor1
+	L0: hold   (T1 May 13, 2015 [1.03] -  T2 Jun 22, 2015 [1.04])
+	L1: hold   (T1 May 13, 2015 [1.05] -  T2 Jun 22, 2015 [1.05])
+	L2: hold   (T1 May 13, 2015 [0.88] -  T2 Jun 22, 2015 [0.93])
+	L3: hold   (T1 May 13, 2015 [1.02] -  T2 Jun 22, 2015 [1.06])
+	L4: hold   (T1 May 13, 2015 [1.11] -  T2 Jun 22, 2015 [1.08])
+	L5: sell   (T1 May 13, 2015 [1.09] -  T2 Jun 22, 2015 [0.93])
+	L6: hold   (T1 May 13, 2015 [0.97] -  T2 Jun 22, 2015 [0.92])
+	L7: hold   (T1 May 13, 2015 [0.92] -  T2 Jun 22, 2015 [0.83])
+	L8: hold   (T1 May 13, 2015 [1.05] -  T2 Jun 22, 2015 [1.04])
+	L9: sell   (T1 May 13, 2015 [0.87] -  T2 Jun 22, 2015 [0.75])
+	COA:  Action: sell   20%  (buy: 0.00, hold: 8.00, sell: 2.00, abs: 0.00)
+        *** SELL ***     10.33 USD, [ 1279.93 JPY], investments affected: 13 -->  1 profited, 12 lost
+	C1bal = 99621.29 USD, C2bal = 5119.71 JPY, PV = 99662.61 USD
+
+Jun 28, 2015 - Investor1
+	L0: hold   (T1 May 14, 2015 [1.08] -  T2 Jun 23, 2015 [1.11])
+	L1: hold   (T1 May 14, 2015 [1.10] -  T2 Jun 23, 2015 [1.18])
+	L2: buy   (T1 May 14, 2015 [0.89] -  T2 Jun 23, 2015 [1.01])
+	L3: hold   (T1 May 14, 2015 [1.00] -  T2 Jun 23, 2015 [1.01])
+	L4: buy   (T1 May 14, 2015 [1.05] -  T2 Jun 23, 2015 [1.23])
+	L5: buy   (T1 May 14, 2015 [1.09] -  T2 Jun 23, 2015 [1.25])
+	L6: hold   (T1 May 14, 2015 [1.04] -  T2 Jun 23, 2015 [1.04])
+	L7: sell   (T1 May 14, 2015 [1.05] -  T2 Jun 23, 2015 [0.92])
+	L8: hold   (T1 May 14, 2015 [1.11] -  T2 Jun 23, 2015 [1.16])
+	L9: hold   (T1 May 14, 2015 [0.94] -  T2 Jun 23, 2015 [0.85])
+	COA:  Action: buy   30%  (buy: 3.00, hold: 6.00, sell: 1.00, abs: 0.00)
+Jun 29, 2015 - Investor1
+	L0: sell   (T1 May 15, 2015 [1.22] -  T2 Jun 24, 2015 [1.07])
+	L1: hold   (T1 May 15, 2015 [1.22] -  T2 Jun 24, 2015 [1.13])
+	L2: hold   (T1 May 15, 2015 [0.97] -  T2 Jun 24, 2015 [1.05])
+	L3: buy   (T1 May 15, 2015 [1.05] -  T2 Jun 24, 2015 [1.16])
+	L4: buy   (T1 May 15, 2015 [1.08] -  T2 Jun 24, 2015 [1.25])
+	L5: buy   (T1 May 15, 2015 [0.89] -  T2 Jun 24, 2015 [1.30])
+	L6: hold   (T1 May 15, 2015 [1.08] -  T2 Jun 24, 2015 [1.03])
+	L7: hold   (T1 May 15, 2015 [1.01] -  T2 Jun 24, 2015 [0.91])
+	L8: sell   (T1 May 15, 2015 [1.23] -  T2 Jun 24, 2015 [1.13])
+	L9: hold   (T1 May 15, 2015 [0.89] -  T2 Jun 24, 2015 [0.87])
+	COA:  Action: buy   30%  (buy: 3.00, hold: 5.00, sell: 2.00, abs: 0.00)
+Jun 30, 2015 - Investor1
+	L0: buy   (T1 May 16, 2015 [0.99] -  T2 Jun 25, 2015 [1.11])
+	L1: hold   (T1 May 16, 2015 [1.15] -  T2 Jun 25, 2015 [1.13])
+	L2: buy   (T1 May 16, 2015 [0.84] -  T2 Jun 25, 2015 [0.98])
+	L3: buy   (T1 May 16, 2015 [0.89] -  T2 Jun 25, 2015 [1.10])
+	L4: buy   (T1 May 16, 2015 [1.04] -  T2 Jun 25, 2015 [1.19])
+	L5: buy   (T1 May 16, 2015 [0.87] -  T2 Jun 25, 2015 [1.04])
+	L6: hold   (T1 May 16, 2015 [0.98] -  T2 Jun 25, 2015 [1.02])
+	L7: hold   (T1 May 16, 2015 [0.95] -  T2 Jun 25, 2015 [0.99])
+	L8: hold   (T1 May 16, 2015 [1.05] -  T2 Jun 25, 2015 [1.13])
+	L9: hold   (T1 May 16, 2015 [0.92] -  T2 Jun 25, 2015 [0.98])
+	COA:  Action: buy   50%  (buy: 5.00, hold: 5.00, sell: 0.00, abs: 0.00)
+Jul  1, 2015 - Investor1
+	L0: hold   (T1 May 17, 2015 [1.09] -  T2 Jun 26, 2015 [1.19])
+	L1: hold   (T1 May 17, 2015 [1.20] -  T2 Jun 26, 2015 [1.17])
+	L2: hold   (T1 May 17, 2015 [1.13] -  T2 Jun 26, 2015 [1.09])
+	L3: hold   (T1 May 17, 2015 [1.07] -  T2 Jun 26, 2015 [1.08])
+	L4: sell   (T1 May 17, 2015 [1.25] -  T2 Jun 26, 2015 [1.09])
+	L5: hold   (T1 May 17, 2015 [1.09] -  T2 Jun 26, 2015 [1.00])
+	L6: hold   (T1 May 17, 2015 [1.01] -  T2 Jun 26, 2015 [0.99])
+	L7: sell   (T1 May 17, 2015 [1.01] -  T2 Jun 26, 2015 [0.90])
+	L8: buy   (T1 May 17, 2015 [1.13] -  T2 Jun 26, 2015 [1.27])
+	L9: sell   (T1 May 17, 2015 [0.88] -  T2 Jun 26, 2015 [0.71])
+	COA:  Action: sell   30%  (buy: 1.00, hold: 6.00, sell: 3.00, abs: 0.00)
+        *** SELL ***     12.49 USD, [ 1535.91 JPY], investments affected: 14 -->  2 profited, 12 lost
+	C1bal = 99633.78 USD, C2bal = 3583.80 JPY, PV = 99662.91 USD
+
+Jul  2, 2015 - Investor1
+	L0: hold   (T1 May 18, 2015 [1.07] -  T2 Jun 27, 2015 [1.04])
+	L1: sell   (T1 May 18, 2015 [1.12] -  T2 Jun 27, 2015 [0.96])
+	L2: buy   (T1 May 18, 2015 [0.92] -  T2 Jun 27, 2015 [1.66])
+	L3: hold   (T1 May 18, 2015 [1.03] -  T2 Jun 27, 2015 [1.08])
+	L4: hold   (T1 May 18, 2015 [0.97] -  T2 Jun 27, 2015 [0.97])
+	L5: hold   (T1 May 18, 2015 [1.23] -  T2 Jun 27, 2015 [1.19])
+	L6: sell   (T1 May 18, 2015 [0.99] -  T2 Jun 27, 2015 [0.88])
+	L7: sell   (T1 May 18, 2015 [1.03] -  T2 Jun 27, 2015 [0.78])
+	L8: hold   (T1 May 18, 2015 [1.13] -  T2 Jun 27, 2015 [1.03])
+	L9: sell   (T1 May 18, 2015 [0.87] -  T2 Jun 27, 2015 [0.73])
+	COA:  Action: sell   40%  (buy: 1.00, hold: 5.00, sell: 4.00, abs: 0.00)
+        *** SELL ***     11.64 USD, [ 1433.52 JPY], investments affected: 15 -->  2 profited, 13 lost
+	C1bal = 99645.42 USD, C2bal = 2150.28 JPY, PV = 99662.88 USD
+
+Jul  3, 2015 - Investor1
+	L0: hold   (T1 May 19, 2015 [1.05] -  T2 Jun 28, 2015 [1.10])
+	L1: hold   (T1 May 19, 2015 [1.08] -  T2 Jun 28, 2015 [1.13])
+	L2: buy   (T1 May 19, 2015 [0.94] -  T2 Jun 28, 2015 [1.10])
+	L3: buy   (T1 May 19, 2015 [0.99] -  T2 Jun 28, 2015 [1.19])
+	L4: hold   (T1 May 19, 2015 [1.05] -  T2 Jun 28, 2015 [1.06])
+	L5: sell   (T1 May 19, 2015 [1.10] -  T2 Jun 28, 2015 [0.93])
+	L6: hold   (T1 May 19, 2015 [0.98] -  T2 Jun 28, 2015 [1.05])
+	L7: hold   (T1 May 19, 2015 [0.98] -  T2 Jun 28, 2015 [1.03])
+	L8: buy   (T1 May 19, 2015 [1.08] -  T2 Jun 28, 2015 [1.23])
+	L9: hold   (T1 May 19, 2015 [0.91] -  T2 Jun 28, 2015 [0.97])
+	COA:  Action: buy   30%  (buy: 3.00, hold: 6.00, sell: 1.00, abs: 0.00)
+Jul  4, 2015 - Investor1
+	L0: hold   (T1 May 20, 2015 [1.11] -  T2 Jun 29, 2015 [1.15])
+	L1: hold   (T1 May 20, 2015 [1.11] -  T2 Jun 29, 2015 [1.01])
+	L2: buy   (T1 May 20, 2015 [0.87] -  T2 Jun 29, 2015 [1.12])
+	L3: hold   (T1 May 20, 2015 [0.95] -  T2 Jun 29, 2015 [0.98])
+	L4: sell   (T1 May 20, 2015 [1.09] -  T2 Jun 29, 2015 [0.94])
+	L5: hold   (T1 May 20, 2015 [1.14] -  T2 Jun 29, 2015 [1.04])
+	L6: hold   (T1 May 20, 2015 [0.97] -  T2 Jun 29, 2015 [1.00])
+	L7: hold   (T1 May 20, 2015 [0.97] -  T2 Jun 29, 2015 [0.94])
+	L8: hold   (T1 May 20, 2015 [1.08] -  T2 Jun 29, 2015 [1.11])
+	L9: hold   (T1 May 20, 2015 [0.88] -  T2 Jun 29, 2015 [0.87])
+	COA:  Action: hold   80%  (buy: 1.00, hold: 8.00, sell: 1.00, abs: 0.00)
+	C1bal = 99645.42 USD, C2bal = 2150.28 JPY, PV = 99662.88 USD
+
+Jul  5, 2015 - Investor1
+	L0: sell   (T1 May 21, 2015 [1.11] -  T2 Jun 30, 2015 [0.95])
+	L1: sell   (T1 May 21, 2015 [1.19] -  T2 Jun 30, 2015 [0.88])
+	L2: hold   (T1 May 21, 2015 [0.89] -  T2 Jun 30, 2015 [0.93])
+	L3: sell   (T1 May 21, 2015 [1.18] -  T2 Jun 30, 2015 [0.91])
+	L4: sell   (T1 May 21, 2015 [1.18] -  T2 Jun 30, 2015 [0.81])
+	L5: hold   (T1 May 21, 2015 [0.98] -  T2 Jun 30, 2015 [0.96])
+	L6: sell   (T1 May 21, 2015 [1.04] -  T2 Jun 30, 2015 [0.84])
+	L7: sell   (T1 May 21, 2015 [0.94] -  T2 Jun 30, 2015 [0.84])
+	L8: sell   (T1 May 21, 2015 [1.14] -  T2 Jun 30, 2015 [0.98])
+	L9: hold   (T1 May 21, 2015 [0.84] -  T2 Jun 30, 2015 [0.75])
+	COA:  Action: sell   70%  (buy: 0.00, hold: 3.00, sell: 7.00, abs: 0.00)
+        *** SELL ***     12.22 USD, [ 1505.19 JPY], investments affected: 16 -->  2 profited, 14 lost
+	C1bal = 99657.64 USD, C2bal = 645.08 JPY, PV = 99662.88 USD
+
+Jul  6, 2015 - Investor1
+	L0: sell   (T1 May 22, 2015 [1.14] -  T2 Jul  1, 2015 [1.00])
+	L1: sell   (T1 May 22, 2015 [1.29] -  T2 Jul  1, 2015 [0.88])
+	L2: hold   (T1 May 22, 2015 [0.96] -  T2 Jul  1, 2015 [1.00])
+	L3: sell   (T1 May 22, 2015 [1.10] -  T2 Jul  1, 2015 [0.96])
+	L4: sell   (T1 May 22, 2015 [1.15] -  T2 Jul  1, 2015 [0.74])
+	L5: sell   (T1 May 22, 2015 [1.11] -  T2 Jul  1, 2015 [0.89])
+	L6: sell   (T1 May 22, 2015 [1.07] -  T2 Jul  1, 2015 [0.83])
+	L7: sell   (T1 May 22, 2015 [0.90] -  T2 Jul  1, 2015 [0.71])
+	L8: sell   (T1 May 22, 2015 [1.22] -  T2 Jul  1, 2015 [0.95])
+	L9: sell   (T1 May 22, 2015 [0.79] -  T2 Jul  1, 2015 [0.68])
+	COA:  Action: sell   90%  (buy: 0.00, hold: 1.00, sell: 9.00, abs: 0.00)
+        *** SELL ***      4.74 USD, [  580.57 JPY], investments affected: 17 -->  3 profited, 14 lost
+	C1bal = 99662.38 USD, C2bal =  64.51 JPY, PV = 99662.91 USD
+
+Jul  7, 2015 - Investor1
+	L0: buy   (T1 May 23, 2015 [0.82] -  T2 Jul  2, 2015 [1.00])
+	L1: buy   (T1 May 23, 2015 [0.91] -  T2 Jul  2, 2015 [1.01])
+	L2: hold   (T1 May 23, 2015 [0.81] -  T2 Jul  2, 2015 [0.90])
+	L3: sell   (T1 May 23, 2015 [0.93] -  T2 Jul  2, 2015 [0.76])
+	L4: buy   (T1 May 23, 2015 [0.82] -  T2 Jul  2, 2015 [0.94])
+	L5: buy   (T1 May 23, 2015 [0.90] -  T2 Jul  2, 2015 [1.01])
+	L6: hold   (T1 May 23, 2015 [0.84] -  T2 Jul  2, 2015 [0.91])
+	L7: buy   (T1 May 23, 2015 [0.76] -  T2 Jul  2, 2015 [0.89])
+	L8: buy   (T1 May 23, 2015 [0.82] -  T2 Jul  2, 2015 [1.00])
+	L9: hold   (T1 May 23, 2015 [0.82] -  T2 Jul  2, 2015 [0.83])
+	COA:  Action: buy   60%  (buy: 6.00, hold: 3.00, sell: 1.00, abs: 0.00)
+Jul  8, 2015 - Investor1
+	L0: buy   (T1 May 24, 2015 [0.96] -  T2 Jul  3, 2015 [1.15])
+	L1: buy   (T1 May 24, 2015 [0.98] -  T2 Jul  3, 2015 [1.10])
+	L2: buy   (T1 May 24, 2015 [0.83] -  T2 Jul  3, 2015 [0.97])
+	L3: hold   (T1 May 24, 2015 [1.04] -  T2 Jul  3, 2015 [1.00])
+	L4: hold   (T1 May 24, 2015 [1.05] -  T2 Jul  3, 2015 [1.10])
+	L5: hold   (T1 May 24, 2015 [0.87] -  T2 Jul  3, 2015 [0.82])
+	L6: buy   (T1 May 24, 2015 [0.93] -  T2 Jul  3, 2015 [1.06])
+	L7: buy   (T1 May 24, 2015 [0.88] -  T2 Jul  3, 2015 [1.07])
+	L8: buy   (T1 May 24, 2015 [0.97] -  T2 Jul  3, 2015 [1.15])
+	L9: hold   (T1 May 24, 2015 [0.86] -  T2 Jul  3, 2015 [0.86])
+	COA:  Action: buy   60%  (buy: 6.00, hold: 4.00, sell: 0.00, abs: 0.00)
+Jul  9, 2015 - Investor1
+	L0: sell   (T1 May 25, 2015 [1.06] -  T2 Jul  4, 2015 [0.83])
+	L1: sell   (T1 May 25, 2015 [1.09] -  T2 Jul  4, 2015 [0.82])
+	L2: hold   (T1 May 25, 2015 [0.83] -  T2 Jul  4, 2015 [0.84])
+	L3: sell   (T1 May 25, 2015 [1.03] -  T2 Jul  4, 2015 [0.83])
+	L4: sell   (T1 May 25, 2015 [1.10] -  T2 Jul  4, 2015 [0.85])
+	L5: sell   (T1 May 25, 2015 [1.10] -  T2 Jul  4, 2015 [0.75])
+	L6: sell   (T1 May 25, 2015 [0.99] -  T2 Jul  4, 2015 [0.77])
+	L7: sell   (T1 May 25, 2015 [0.94] -  T2 Jul  4, 2015 [0.77])
+	L8: sell   (T1 May 25, 2015 [1.08] -  T2 Jul  4, 2015 [0.83])
+	L9: sell   (T1 May 25, 2015 [0.87] -  T2 Jul  4, 2015 [0.77])
+	COA:  Action: sell   90%  (buy: 0.00, hold: 1.00, sell: 9.00, abs: 0.00)
+        *** SELL ***      0.48 USD, [   58.06 JPY], investments affected: 18 -->  4 profited, 14 lost
+	C1bal = 99662.86 USD, C2bal =   6.45 JPY, PV = 99662.91 USD
+
+Jul 10, 2015 - Investor1
+	L0: hold   (T1 May 26, 2015 [1.01] -  T2 Jul  5, 2015 [0.92])
+	L1: hold   (T1 May 26, 2015 [0.99] -  T2 Jul  5, 2015 [0.97])
+	L2: hold   (T1 May 26, 2015 [0.90] -  T2 Jul  5, 2015 [0.87])
+	L3: hold   (T1 May 26, 2015 [1.06] -  T2 Jul  5, 2015 [1.02])
+	L4: hold   (T1 May 26, 2015 [1.04] -  T2 Jul  5, 2015 [0.98])
+	L5: sell   (T1 May 26, 2015 [0.97] -  T2 Jul  5, 2015 [0.87])
+	L6: hold   (T1 May 26, 2015 [0.94] -  T2 Jul  5, 2015 [0.87])
+	L7: hold   (T1 May 26, 2015 [0.88] -  T2 Jul  5, 2015 [0.87])
+	L8: hold   (T1 May 26, 2015 [1.02] -  T2 Jul  5, 2015 [0.95])
+	L9: hold   (T1 May 26, 2015 [0.82] -  T2 Jul  5, 2015 [0.84])
+	COA:  Action: sell   10%  (buy: 0.00, hold: 9.00, sell: 1.00, abs: 0.00)
+        *** SELL ***      0.01 USD, [    0.65 JPY], investments affected: 19 -->  5 profited, 14 lost
+	C1bal = 99662.87 USD, C2bal =   5.81 JPY, PV = 99662.91 USD
+
+Jul 11, 2015 - Investor1
+	L0: hold   (T1 May 27, 2015 [1.07] -  T2 Jul  6, 2015 [1.15])
+	L1: hold   (T1 May 27, 2015 [1.03] -  T2 Jul  6, 2015 [1.02])
+	L2: buy   (T1 May 27, 2015 [0.92] -  T2 Jul  6, 2015 [1.09])
+	L3: hold   (T1 May 27, 2015 [1.06] -  T2 Jul  6, 2015 [1.06])
+	L4: sell   (T1 May 27, 2015 [1.19] -  T2 Jul  6, 2015 [0.98])
+	L5: sell   (T1 May 27, 2015 [1.03] -  T2 Jul  6, 2015 [0.87])
+	L6: hold   (T1 May 27, 2015 [1.00] -  T2 Jul  6, 2015 [1.00])
+	L7: hold   (T1 May 27, 2015 [0.94] -  T2 Jul  6, 2015 [0.98])
+	L8: hold   (T1 May 27, 2015 [1.08] -  T2 Jul  6, 2015 [1.12])
+	L9: hold   (T1 May 27, 2015 [0.85] -  T2 Jul  6, 2015 [0.79])
+	COA:  Action: sell   20%  (buy: 1.00, hold: 7.00, sell: 2.00, abs: 0.00)
+        *** SELL ***      0.01 USD, [    1.16 JPY], investments affected: 20 -->  6 profited, 14 lost
+	C1bal = 99662.87 USD, C2bal =   4.64 JPY, PV = 99662.91 USD
+
+Jul 12, 2015 - Investor1
+	L0: sell   (T1 May 28, 2015 [1.14] -  T2 Jul  7, 2015 [1.00])
+	L1: sell   (T1 May 28, 2015 [1.09] -  T2 Jul  7, 2015 [0.91])
+	L2: buy   (T1 May 28, 2015 [0.92] -  T2 Jul  7, 2015 [1.03])
+	L3: hold   (T1 May 28, 2015 [1.00] -  T2 Jul  7, 2015 [0.97])
+	L4: hold   (T1 May 28, 2015 [0.93] -  T2 Jul  7, 2015 [1.00])
+	L5: sell   (T1 May 28, 2015 [1.14] -  T2 Jul  7, 2015 [0.92])
+	L6: hold   (T1 May 28, 2015 [1.01] -  T2 Jul  7, 2015 [0.94])
+	L7: hold   (T1 May 28, 2015 [0.95] -  T2 Jul  7, 2015 [0.93])
+	L8: sell   (T1 May 28, 2015 [1.16] -  T2 Jul  7, 2015 [0.96])
+	L9: hold   (T1 May 28, 2015 [0.80] -  T2 Jul  7, 2015 [0.87])
+	COA:  Action: sell   40%  (buy: 1.00, hold: 5.00, sell: 4.00, abs: 0.00)
+        *** SELL ***      0.02 USD, [    1.86 JPY], investments affected: 21 -->  7 profited, 14 lost
+	C1bal = 99662.89 USD, C2bal =   2.79 JPY, PV = 99662.91 USD
+
+Jul 13, 2015 - Investor1
+	L0: sell   (T1 May 29, 2015 [1.20] -  T2 Jul  8, 2015 [1.04])
+	L1: sell   (T1 May 29, 2015 [1.10] -  T2 Jul  8, 2015 [0.88])
+	L2: hold   (T1 May 29, 2015 [1.00] -  T2 Jul  8, 2015 [0.92])
+	L3: hold   (T1 May 29, 2015 [1.01] -  T2 Jul  8, 2015 [1.05])
+	L4: sell   (T1 May 29, 2015 [0.96] -  T2 Jul  8, 2015 [0.82])
+	L5: sell   (T1 May 29, 2015 [1.03] -  T2 Jul  8, 2015 [0.84])
+	L6: sell   (T1 May 29, 2015 [1.08] -  T2 Jul  8, 2015 [0.88])
+	L7: sell   (T1 May 29, 2015 [1.04] -  T2 Jul  8, 2015 [0.89])
+	L8: sell   (T1 May 29, 2015 [1.19] -  T2 Jul  8, 2015 [1.00])
+	L9: sell   (T1 May 29, 2015 [0.99] -  T2 Jul  8, 2015 [0.71])
+	COA:  Action: sell   80%  (buy: 0.00, hold: 2.00, sell: 8.00, abs: 0.00)
+        *** SELL ***      0.02 USD, [    2.23 JPY], investments affected: 22 -->  7 profited, 15 lost
+	C1bal = 99662.91 USD, C2bal =   0.56 JPY, PV = 99662.91 USD
+
+Completed generation 1, May  1, 2015 - Jul 13, 2015,  unsettled =     0.56 JPY
+loop 0 completed.  May  1, 2015 - Jul 13, 2015
 
 **************  S I M U L A T I O N   R E S U L T S  **************
 Number of generations: 1
