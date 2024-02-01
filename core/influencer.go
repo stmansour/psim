@@ -13,15 +13,20 @@ import (
 // 	L3 - uses LxxxWHOScore_ECON
 // 	L4 - uses LxxxWHLScore_ECON
 // 	L5 - uses LxxxWPAScore_ECON
-//
-// 	LJPYWDECount_ECON
-// 	LJPYWDFCount_ECON
-// 	LJPYWDPCount_ECON
-// 	LJPYLIMCount_ECON
-// 	LUSDWDECount_ECON
-// 	LUSDWDFCount_ECON
-// 	LUSDWDPCount_ECON
-// 	LUSDLIMCount_ECON
+//  L6 - uses LxxxWDECount_ECON
+// 	L7 - uses LxxxWDFCount_ECON
+// 	L8 - uses LxxxWDPCount_ECON
+// 	L9 - uses LxxxLIMCount_ECON
+// 	LA - LALLLSNScore
+//	LB - LALLLSPScore
+//	LC - LALLWHAScore
+//	LD - LALLWHOScore
+//	LE - LALLWHLScore
+//	LF - LALLWPAScore
+//	LG - LALLWDECount
+//	LH - LALLWDFCount
+//	LI - LALLWDPCount
+//	LJ - LALLWDMCount
 
 // Steps to create a new Influencer:
 //
@@ -32,8 +37,8 @@ import (
 // 3. Update DInfo.Types in LoadCsvDB (data/csvdb.go)
 // 4. Update LoadCsvDB in data/csvdb.go with a data flag position for the new influencer ratio
 //    This will probably require renumbering all of them.
+// 6. Update core/factory.c - NewInfluencer to create one
 // 5. Create an influencer class file in core/  copy and modify a file like dr.go
-// 6. Update Factory - NewInfluencer to create one
 //
 //  TODO: this needs to be simplied in the next redesign
 //-----------------------------------------------------------------------------
@@ -71,11 +76,9 @@ type Influencer interface {
 	Subclass() string
 	SetDelta1(d int)
 	SetDelta2(d int)
-	SetDelta4(d int)
 	SetAppConfig(cfg *util.AppConfig)
 	GetDelta1() int
 	GetDelta2() int
-	GetDelta4() int
 	GetFlagPos() int
 	GetNilDataCount() int
 	IncNilDataCount()

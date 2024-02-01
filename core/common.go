@@ -202,3 +202,31 @@ func computeRatio(t time.Time, C1, C2, datatype string) (float64, error) {
 	}
 	return c1val / c2val, nil
 }
+
+// getLinguisticRec gets the linguistic record for time t
+//
+// INPUTS
+//
+//		    t - where in the time series
+//	       C1 - used to determine the locale of the datatype
+//	       C2 - used to determine the locale of the datatype
+//	 datatype - LSPScore_ECON, LSNScore_ECON, WHAScore_ECON, ...
+//
+// RETURNS
+//
+//	val at time t
+//	err - any error encountered
+//
+// ---------------------------------------------------------------------------------------------
+func getLinguisticRec(t time.Time, datatype string) (float64, error) {
+	rec := data.CSVDBFindLRecord(t)
+	if rec == nil {
+		err := fmt.Errorf("nildata: data.LinguisticDataRecord for %s not found", t.Format("1/2/2006"))
+		return 0, err
+	}
+	c1val, err := data.GetLValue(rec, "ALL", datatype)
+	if err != nil {
+		log.Panicf("error getting Linguistic value: %s", err.Error())
+	}
+	return c1val, nil
+}

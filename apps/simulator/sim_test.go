@@ -32,6 +32,7 @@ func TestLinguisticDNA(t *testing.T) {
 	app.randNano = -1
 	app.cfName = "linguistics.json5"
 	s := &app.sim
+	app.trace = true
 	s.ResetSimulator()
 
 	doSimulation()

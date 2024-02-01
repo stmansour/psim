@@ -557,12 +557,18 @@ func (s *Simulator) DumpStats() error {
 	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Start Date: %s\"\n", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Stop Date: %s\"\n", b.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
-	fmt.Fprintf(file, "\"Generations: %d\"\n", s.GensCompleted)
-	if len(s.cfg.GenDurSpec) > 0 {
-		fmt.Fprintf(file, "\"Generation Lifetime: %s\"\n", util.FormatGenDur(s.cfg.GenDur))
+
+	if s.cfg.SingleInvestorMode {
+		fmt.Fprintf(file, "\"Single Investor Mode\"\n")
+		fmt.Fprintf(file, "\"DNA: %s\"\n", s.cfg.SingleInvestorDNA)
+	} else {
+		fmt.Fprintf(file, "\"Generations: %d\"\n", s.GensCompleted)
+		if len(s.cfg.GenDurSpec) > 0 {
+			fmt.Fprintf(file, "\"Generation Lifetime: %s\"\n", util.FormatGenDur(s.cfg.GenDur))
+		}
+		fmt.Fprintf(file, "\"Simulation Loop Count: %d\"\n", s.cfg.LoopCount)
+		fmt.Fprintf(file, "\"Simulation Time Duration: %s\"\n", util.DateDiffString(a, c))
 	}
-	fmt.Fprintf(file, "\"Simulation Loop Count: %d\"\n", s.cfg.LoopCount)
-	fmt.Fprintf(file, "\"Simulation Time Duration: %s\"\n", util.DateDiffString(a, c))
 	fmt.Fprintf(file, "\"C1: %s\"\n", s.cfg.C1)
 	fmt.Fprintf(file, "\"C2: %s\"\n", s.cfg.C2)
 

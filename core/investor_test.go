@@ -127,17 +127,12 @@ func TestInvestorDNA(t *testing.T) {
 		x.SetAppConfig(cfg)
 		x.SetDelta1(-18)
 		x.SetDelta2(-4)
-		x.SetDelta4(5)
 		if x.GetDelta1() != -18 {
 			t.Errorf("x.Delta1: should be -18, but it is %d", x.GetDelta1())
 		}
 		if x.GetDelta2() != -4 {
 			t.Errorf("x.Delta1: should be -4, but it is %d", x.GetDelta2())
 		}
-		if x.GetDelta4() != 5 {
-			t.Errorf("x.Delta1: should be 5, but it is %d", x.GetDelta4())
-		}
-
 		action, _, _, prob, weight, err := x.GetPrediction(dt)
 		if err != nil {
 			t.Errorf("GetPrediction returned error: %s", err)

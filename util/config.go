@@ -47,6 +47,20 @@ var ValidInfluencerSubclasses = []string{
 	"L3Influencer", //
 	"L4Influencer", //
 	"L5Influencer", //
+	"L6Influencer",
+	"L7Influencer",
+	"L8Influencer",
+	"L9Influencer",
+	"LAInfluencer",
+	"LBInfluencer",
+	"LCInfluencer",
+	"LDInfluencer",
+	"LEInfluencer",
+	"LFInfluencer",
+	"LGInfluencer",
+	"LHInfluencer",
+	"LIInfluencer",
+	"LJInfluencer",
 	"M1Influencer", // money supply short term
 	"M2Influencer", // money supply long term
 	"MPInfluencer",
@@ -155,53 +169,137 @@ type FileConfig struct {
 	L5MaxDelta1          int       // research boundary
 	L5MinDelta2          int       // research boundary
 	L5MaxDelta2          int       // research boundary
-	M1MinDelta1          int       // research boundary
-	M1MaxDelta1          int       // research boundary
-	M1MinDelta2          int       // research boundary
-	M1MaxDelta2          int       // research boundary
-	M2MinDelta1          int       // research boundary
-	M2MaxDelta1          int       // research boundary
-	M2MinDelta2          int       // research boundary
-	M2MaxDelta2          int       // research boundary
-	SPMinDelta1          int       // research boundary
-	SPMaxDelta1          int       // research boundary
-	SPMinDelta2          int       // research boundary
-	SPMaxDelta2          int       // research boundary
-	MinDelta4            int       // closest to t3 that t4 can be
-	MaxDelta4            int       // furthest out from t3 that t4 can be
-	CCW1                 float64   // weighting in fitness calculation
-	CCW2                 float64   // weighting in fitness calculation
-	DRW1                 float64   // weighting in fitness calculation
-	DRW2                 float64   // weighting in fitness calculation
-	GDW1                 float64   // weighting in fitness calculation
-	GDW2                 float64   // weighting in fitness calculation
-	IRW1                 float64   // weighting in fitness calculation
-	IRW2                 float64   // weighting in fitness calculation
-	L0W1                 float64   // weighting in fitness calculation
-	L0W2                 float64   // weighting in fitness calculation
-	L1W1                 float64   // weighting in fitness calculation
-	L1W2                 float64   // weighting in fitness calculation
-	L2W1                 float64   // weighting in fitness calculation
-	L2W2                 float64   // weighting in fitness calculation
-	L3W1                 float64   // weighting in fitness calculation
-	L3W2                 float64   // weighting in fitness calculation
-	L4W1                 float64   // weighting in fitness calculation
-	L4W2                 float64   // weighting in fitness calculation
-	L5W1                 float64   // weighting in fitness calculation
-	L5W2                 float64   // weighting in fitness calculation
-	M1W1                 float64   // weighting in fitness calculation
-	M1W2                 float64   // weighting in fitness calculation
-	M2W1                 float64   // weighting in fitness calculation
-	M2W2                 float64   // weighting in fitness calculation
-	SPW1                 float64   // weighting in fitness calculation
-	SPW2                 float64   // weighting in fitness calculation
-	URW1                 float64   // weighting in fitness calculation
-	URW2                 float64   // weighting in fitness calculation
-	InvW1                float64   // weight for profit part of Investor FitnessScore
-	InvW2                float64   // weight for correctness part of Investor FitnessScore
-	MutationRate         int       // 1 - 100 indicating the % of mutation
-	DBSource             string    // {CSV | Database | OnlineService}
-	RandNano             int64     // random seed
+	L6MinDelta1          int       // research boundary
+	L6MinDelta2          int
+	L6MaxDelta1          int
+	L6MaxDelta2          int
+	L7MinDelta1          int // research boundary
+	L7MinDelta2          int
+	L7MaxDelta1          int
+	L7MaxDelta2          int
+	L8MinDelta1          int // research boundary
+	L8MinDelta2          int
+	L8MaxDelta1          int
+	L8MaxDelta2          int
+	L9MinDelta1          int // research boundary
+	L9MinDelta2          int
+	L9MaxDelta1          int
+	L9MaxDelta2          int
+	LAMinDelta1          int // research boundary
+	LAMinDelta2          int
+	LAMaxDelta1          int
+	LAMaxDelta2          int
+	LBMinDelta1          int // research boundary
+	LBMinDelta2          int
+	LBMaxDelta1          int
+	LBMaxDelta2          int
+	LCMinDelta1          int // research boundary
+	LCMinDelta2          int
+	LCMaxDelta1          int
+	LCMaxDelta2          int
+	LDMinDelta1          int // research boundary
+	LDMinDelta2          int
+	LDMaxDelta1          int
+	LDMaxDelta2          int
+	LEMinDelta1          int // research boundary
+	LEMinDelta2          int
+	LEMaxDelta1          int
+	LEMaxDelta2          int
+	LFMinDelta1          int // research boundary
+	LFMinDelta2          int
+	LFMaxDelta1          int
+	LFMaxDelta2          int
+	LGMinDelta1          int // research boundary
+	LGMinDelta2          int
+	LGMaxDelta1          int
+	LGMaxDelta2          int
+	LHMinDelta1          int // research boundary
+	LHMinDelta2          int
+	LHMaxDelta1          int
+	LHMaxDelta2          int
+	LIMinDelta1          int // research boundary
+	LIMinDelta2          int
+	LIMaxDelta1          int
+	LIMaxDelta2          int
+	LJMinDelta1          int // research boundary
+	LJMinDelta2          int
+	LJMaxDelta1          int
+	LJMaxDelta2          int
+	M1MinDelta1          int     // research boundary
+	M1MaxDelta1          int     // research boundary
+	M1MinDelta2          int     // research boundary
+	M1MaxDelta2          int     // research boundary
+	M2MinDelta1          int     // research boundary
+	M2MaxDelta1          int     // research boundary
+	M2MinDelta2          int     // research boundary
+	M2MaxDelta2          int     // research boundary
+	SPMinDelta1          int     // research boundary
+	SPMaxDelta1          int     // research boundary
+	SPMinDelta2          int     // research boundary
+	SPMaxDelta2          int     // research boundary
+	MinDelta4            int     // closest to t3 that t4 can be
+	MaxDelta4            int     // furthest out from t3 that t4 can be
+	CCW1                 float64 // weighting in fitness calculation
+	CCW2                 float64 // weighting in fitness calculation
+	DRW1                 float64 // weighting in fitness calculation
+	DRW2                 float64 // weighting in fitness calculation
+	GDW1                 float64 // weighting in fitness calculation
+	GDW2                 float64 // weighting in fitness calculation
+	IRW1                 float64 // weighting in fitness calculation
+	IRW2                 float64 // weighting in fitness calculation
+	L0W1                 float64 // weighting in fitness calculation
+	L0W2                 float64 // weighting in fitness calculation
+	L1W1                 float64 // weighting in fitness calculation
+	L1W2                 float64 // weighting in fitness calculation
+	L2W1                 float64 // weighting in fitness calculation
+	L2W2                 float64 // weighting in fitness calculation
+	L3W1                 float64 // weighting in fitness calculation
+	L3W2                 float64 // weighting in fitness calculation
+	L4W1                 float64 // weighting in fitness calculation
+	L4W2                 float64 // weighting in fitness calculation
+	L5W1                 float64 // weighting in fitness calculation
+	L5W2                 float64 // weighting in fitness calculation
+	L6W1                 float64
+	L6W2                 float64
+	L7W1                 float64
+	L7W2                 float64
+	L8W1                 float64
+	L8W2                 float64
+	L9W1                 float64
+	L9W2                 float64
+	LAW1                 float64
+	LAW2                 float64
+	LBW1                 float64
+	LBW2                 float64
+	LCW1                 float64
+	LCW2                 float64
+	LDW1                 float64
+	LDW2                 float64
+	LEW1                 float64
+	LEW2                 float64
+	LFW1                 float64
+	LFW2                 float64
+	LGW1                 float64
+	LGW2                 float64
+	LHW1                 float64
+	LHW2                 float64
+	LIW1                 float64
+	LIW2                 float64
+	LJW1                 float64
+	LJW2                 float64
+	M1W1                 float64 // weighting in fitness calculation
+	M1W2                 float64 // weighting in fitness calculation
+	M2W1                 float64 // weighting in fitness calculation
+	M2W2                 float64 // weighting in fitness calculation
+	SPW1                 float64 // weighting in fitness calculation
+	SPW2                 float64 // weighting in fitness calculation
+	URW1                 float64 // weighting in fitness calculation
+	URW2                 float64 // weighting in fitness calculation
+	InvW1                float64 // weight for profit part of Investor FitnessScore
+	InvW2                float64 // weight for correctness part of Investor FitnessScore
+	MutationRate         int     // 1 - 100 indicating the % of mutation
+	DBSource             string  // {CSV | Database | OnlineService}
+	RandNano             int64   // random seed
 
 	//--------------------------------------------------------------------------------------------------------------------
 	// Single Investor mode...  LoopCount will be set to 1, Generations will be set to 1, PopulationSize will be set to 1
@@ -546,6 +644,90 @@ func CreateTestingCFG() *AppConfig {
 			MaxDelta2: -1,
 		},
 		"L5": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
+		},
+		"L6": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
+		},
+		"L7": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
+		},
+		"L8": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
+		},
+		"L9": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
+		},
+		"LA": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
+		},
+		"LB": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
+		},
+		"LC": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
+		},
+		"LD": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
+		},
+		"LE": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
+		},
+		"LF": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
+		},
+		"LG": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
+		},
+		"LH": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
+		},
+		"LI": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
+		},
+		"LJ": {
 			MinDelta1: -90,
 			MaxDelta1: -30,
 			MinDelta2: -29,

@@ -82,6 +82,20 @@ var DBInfo struct {
 //      L3 = Linguistic WHOScore_ECON
 //      L4 = Linguistic WHLScore_ECON
 //      L5 = Linguistic WPAScore_ECON
+//		L6 = Linguistic LALLWDECount
+//		L7 = Linguistic LALLWDFCount
+//		L8 = Linguistic LALLWDPCount
+//		L9 = Linguistic LALLWDMCount
+//		LA = Linguistic LUSDLSNScore_ECON
+//		LB = Linguistic LUSDLSPScore_ECON
+//		LC = Linguistic LUSDWHAScore_ECON
+//		LD = Linguistic LUSDWHOScore_ECON
+//		LE = Linguistic LUSDWHLScore_ECON
+//		LF = Linguistic LUSDWPAScore_ECON
+//		LG = Linguistic LUSDWDECount_ECON
+//		LH = Linguistic LUSDWDFCount_ECON
+//		LI = Linguistic LUSDWDPCount_ECON
+//		LJ = Linguistic LUSDLIMCount_ECON
 //      M1 = Money Supply - short term
 //      M2 = Money Supply - long term
 //      MR = Manufacturing ?
@@ -159,12 +173,12 @@ func LoadCsvData() error {
 		"RSRatio", // 15 – Retail Sales Ratio
 		"SPRatio", // 16 – Stock Price Ratio
 		"URRatio", // 17 – Unemployment Rate Ratio
-		"L0Ratio", // not needed for linguistics
-		"L1Ratio", // not needed for linguistics
-		"L2Ratio", // not needed for linguistics
-		"L3Ratio", // not needed for linguistics
-		"L4Ratio", // not needed for linguistics
-		"L5Ratio", // not needed for linguistics
+		// "L0Ratio", // not needed for linguistics
+		// "L1Ratio", // not needed for linguistics
+		// "L2Ratio", // not needed for linguistics
+		// "L3Ratio", // not needed for linguistics
+		// "L4Ratio", // not needed for linguistics
+		// "L5Ratio", // not needed for linguistics
 	}
 	//----------------------------------------------------------------------
 	// Keep track of the column with the data needed for each ratio.  This

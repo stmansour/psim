@@ -322,7 +322,6 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 			log.Panicf("*** PANIC ERROR ***  BreedNewInvestor:  Error from NewInfluencer(%s) : %s\n", dna, err.Error())
 		}
 		inf.SetMyInvestor(&newInvestor)
-		inf.SetDelta4(newInvestor.Delta4)
 		newInvestor.Influencers = append(newInvestor.Influencers, inf)
 		if len(newInvestor.Influencers) > len(util.InfluencerSubclasses) {
 			log.Panicf("Factory.BreedNewInvestor len(newInvestor.Influencers) = %d.  i = %d, newInfCount = %d\n", len(newInvestor.Influencers), i, newInfCount)
@@ -378,12 +377,6 @@ func (f *Factory) Mutate(inv *Investor) {
 			found = (d == inv.Delta4)
 		}
 		inv.Delta4 = d
-		//-------------------------------------------------------------------------------------
-		// if we mutate Delta4, we have to change ALL influencers to use the new Delta4 value
-		//-------------------------------------------------------------------------------------
-		for i := 0; i < len(inv.Influencers); i++ {
-			inv.Influencers[i].SetDelta4(inv.Delta4)
-		}
 	case "InvW1":
 		w := float64(0)
 		found := false
@@ -521,6 +514,7 @@ func (f *Factory) NewInvestorFromDNA(DNA string) Investor {
 	inv.cfg = f.cfg
 	inv.factory = f
 	inv.BalanceC1 = inv.cfg.InitFunds
+	inv.CreatedByDNA = true
 
 	infDNA, ok := m["Influencers"].(string)
 	if !ok {
@@ -775,6 +769,16 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 			Delta4:  Delta4,
 			HoldMin: data.DBInfo.HoldSpace["L5Ratio"].Mn,
 			HoldMax: data.DBInfo.HoldSpace["L5Ratio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
+	case "LAInfluencer":
+		x := LAInfluencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			HoldMin: data.DBInfo.HoldSpace["LARatio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["LARatio"].Mx,
 			cfg:     f.cfg,
 		}
 		return &x, nil
