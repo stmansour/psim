@@ -38,9 +38,9 @@
     //  version of this projects code will operate. 
     //-----------------------------------------------------------------
     "SingleInvestorMode": true,
-    "SingleInvestorDNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{L0Influencer,Delta1=-45,Delta2=-5}|{L1Influencer,Delta1=-45,Delta2=-5}|{L2Influencer,Delta1=-45,Delta2=-5}|{L3Influencer,Delta1=-45,Delta2=-5}|{L4Influencer,Delta1=-45,Delta2=-5}|{L5Influencer,Delta1=-45,Delta2=-5}|{L6Influencer,Delta1=-45,Delta2=-5}|{L7Influencer,Delta1=-45,Delta2=-5}|{L8Influencer,Delta1=-45,Delta2=-5}|{L9Influencer,Delta1=-45,Delta2=-5}]}",
+    // "SingleInvestorDNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{L0Influencer,Delta1=-45,Delta2=-5}|{L1Influencer,Delta1=-45,Delta2=-5}|{L2Influencer,Delta1=-45,Delta2=-5}|{L3Influencer,Delta1=-45,Delta2=-5}|{L4Influencer,Delta1=-45,Delta2=-5}|{L5Influencer,Delta1=-45,Delta2=-5}|{L6Influencer,Delta1=-45,Delta2=-5}|{L7Influencer,Delta1=-45,Delta2=-5}|{L8Influencer,Delta1=-45,Delta2=-5}|{L9Influencer,Delta1=-45,Delta2=-5}]}",
     // "SingleInvestorDNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{L5Influencer,Delta1=-90,Delta2=-5}]}",
-    // "SingleInvestorDNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{L9Influencer,Delta1=-17,Delta2=-2}]}",
+    "SingleInvestorDNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{LJInfluencer,Delta1=-17,Delta2=-2}]}",
 
     //-----------------------------------------------------------------
     //  INFLUENCER SUBCLASSES
@@ -75,6 +75,15 @@
       "L8Influencer",
       "L9Influencer",
       "LAInfluencer",
+      "LBInfluencer",
+      "LCInfluencer",
+      "LDInfluencer",
+      "LEInfluencer",
+      "LFInfluencer",
+      "LGInfluencer",
+      "LHInfluencer",
+      "LIInfluencer",
+      "LJInfluencer",
     ],
 
     //-----------------------------------------------------------------
@@ -218,7 +227,7 @@
     "L9W2": 0.4,                // L9Influencer Fitness Score weighting for number of predictions made. Constraint: L9W1 + L9W2 = 1.0
 
     //-----------------------------------------------------------------
-    //  LA - LxxxLSPScore_ECON - linguistic sentiment positive
+    //  LA - LALLLSNScore
     //-----------------------------------------------------------------
     "LAMinDelta1": -90,         // greatest amount of time prior to T3 
     "LAMaxDelta1": -15,         // least amount of time prior to T3
@@ -226,6 +235,96 @@
     "LAMaxDelta2": -1,          // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
     "LAW1": 0.6,                // LAInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: LAW1 + LAW2 = 1.0
     "LAW2": 0.4,                // LAInfluencer Fitness Score weighting for number of predictions made. Constraint: LAW1 + LAW2 = 1.0
+
+    //-----------------------------------------------------------------
+    //  LB
+    //-----------------------------------------------------------------
+    "LBMinDelta1": -90,         // greatest amount of time prior to T3 
+    "LBMaxDelta1": -15,         // least amount of time prior to T3
+    "LBMinDelta2": -14,         // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "LBMaxDelta2": -1,          // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "LBW1": 0.6,                // LBInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: LBW1 + LBW2 = 1.0
+    "LBW2": 0.4,                // LBInfluencer Fitness Score weighting for number of predictions made. Constraint: LBW1 + LBW2 = 1.0
+
+    //-----------------------------------------------------------------
+    //  LC
+    //-----------------------------------------------------------------
+    "LCMinDelta1": -90,         // greatest amount of time prior to T3 
+    "LCMaxDelta1": -15,         // least amount of time prior to T3
+    "LCMinDelta2": -14,         // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "LCMaxDelta2": -1,          // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "LCW1": 0.6,                // LCInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: LCW1 + LCW2 = 1.0
+    "LCW2": 0.4,                // LCInfluencer Fitness Score weighting for number of predictions made. Constraint: LCW1 + LCW2 = 1.0
+
+    //-----------------------------------------------------------------
+    //  LD
+    //-----------------------------------------------------------------
+    "LDMinDelta1": -90,         // greatest amount of time prior to T3 
+    "LDMaxDelta1": -15,         // least amount of time prior to T3
+    "LDMinDelta2": -14,         // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "LDMaxDelta2": -1,          // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "LDW1": 0.6,                // LDInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: LDW1 + LDW2 = 1.0
+    "LDW2": 0.4,                // LDInfluencer Fitness Score weighting for number of predictions made. Constraint: LDW1 + LDW2 = 1.0
+
+    //-----------------------------------------------------------------
+    //  LE
+    //-----------------------------------------------------------------
+    "LEMinDelta1": -90,         // greatest amount of time prior to T3 
+    "LEMaxDelta1": -15,         // least amount of time prior to T3
+    "LEMinDelta2": -14,         // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "LEMaxDelta2": -1,          // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "LEW1": 0.6,                // LEInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: LEW1 + LEW2 = 1.0
+    "LEW2": 0.4,                // LEInfluencer Fitness Score weighting for number of predictions made. Constraint: LEW1 + LEW2 = 1.0
+
+    //-----------------------------------------------------------------
+    //  LF
+    //-----------------------------------------------------------------
+    "LFMinDelta1": -90,         // greatest amount of time prior to T3 
+    "LFMaxDelta1": -15,         // least amount of time prior to T3
+    "LFMinDelta2": -14,         // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "LFMaxDelta2": -1,          // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "LFW1": 0.6,                // LFInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: LFW1 + LFW2 = 1.0
+    "LFW2": 0.4,                // LFInfluencer Fitness Score weighting for number of predictions made. Constraint: LFW1 + LFW2 = 1.0
+
+    //-----------------------------------------------------------------
+    //  LG
+    //-----------------------------------------------------------------
+    "LGMinDelta1": -90,         // greatest amount of time prior to T3 
+    "LGMaxDelta1": -15,         // least amount of time prior to T3
+    "LGMinDelta2": -14,         // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "LGMaxDelta2": -1,          // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "LGW1": 0.6,                // LGInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: LGW1 + LGW2 = 1.0
+    "LGW2": 0.4,                // LGInfluencer Fitness Score weighting for number of predictions made. Constraint: LGW1 + LGW2 = 1.0
+
+    //-----------------------------------------------------------------
+    //  LH
+    //-----------------------------------------------------------------
+    "LHMinDelta1": -90,         // greatest amount of time prior to T3 
+    "LHMaxDelta1": -15,         // least amount of time prior to T3
+    "LHMinDelta2": -14,         // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "LHMaxDelta2": -1,          // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "LHW1": 0.6,                // LHInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: LHW1 + LHW2 = 1.0
+    "LHW2": 0.4,                // LHInfluencer Fitness Score weighting for number of predictions made. Constraint: LHW1 + LHW2 = 1.0
+
+    //-----------------------------------------------------------------
+    //  LI
+    //-----------------------------------------------------------------
+    "LIMinDelta1": -90,         // greatest amount of time prior to T3 
+    "LIMaxDelta1": -15,         // least amount of time prior to T3
+    "LIMinDelta2": -14,         // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "LIMaxDelta2": -1,          // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "LIW1": 0.6,                // LIInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: LIW1 + LIW2 = 1.0
+    "LIW2": 0.4,                // LIInfluencer Fitness Score weighting for number of predictions made. Constraint: LIW1 + LIW2 = 1.0
+
+    //-----------------------------------------------------------------
+    //  LJ
+    //-----------------------------------------------------------------
+    "LJMinDelta1": -90,         // greatest amount of time prior to T3 
+    "LJMaxDelta1": -15,         // least amount of time prior to T3
+    "LJMinDelta2": -14,         // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "LJMaxDelta2": -1,          // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "LJW1": 0.6,                // LJInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: LJW1 + LJW2 = 1.0
+    "LJW2": 0.4,                // LJInfluencer Fitness Score weighting for number of predictions made. Constraint: LJW1 + LJW2 = 1.0
 
     //-----------------------------------------------------------------
     //  M1 - Money Supply - short term liquidity

@@ -823,6 +823,96 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 		}
 		return &x, nil
 
+	case "LBInfluencer":
+		x := LBInfluencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			HoldMin: data.DBInfo.HoldSpace["LBRatio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["LBRatio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
+	case "LCInfluencer":
+		x := LCInfluencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			HoldMin: data.DBInfo.HoldSpace["LCRatio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["LCRatio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
+	case "LDInfluencer":
+		x := LDInfluencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			HoldMin: data.DBInfo.HoldSpace["LDRatio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["LDRatio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
+	case "LEInfluencer":
+		x := LEInfluencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			HoldMin: data.DBInfo.HoldSpace["LERatio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["LERatio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
+	case "LFInfluencer":
+		x := LFInfluencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			HoldMin: data.DBInfo.HoldSpace["LFRatio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["LFRatio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
+	case "LGInfluencer":
+		x := LGInfluencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			HoldMin: data.DBInfo.HoldSpace["LGRatio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["LGRatio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
+	case "LHInfluencer":
+		x := LHInfluencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			HoldMin: data.DBInfo.HoldSpace["LHRatio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["LHRatio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
+	case "LIInfluencer":
+		x := LIInfluencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			HoldMin: data.DBInfo.HoldSpace["LIRatio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["LIRatio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
+	case "LJInfluencer":
+		x := LJInfluencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			HoldMin: data.DBInfo.HoldSpace["LJRatio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["LJRatio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
 	case "M1Influencer":
 		x := M1Influencer{
 			Delta1:  Delta1,
