@@ -57,6 +57,7 @@ func displaySimulationDetails(cfg *util.AppConfig) {
 	}
 	fmt.Printf("Duration:            %s\n", util.DateDiffString(a, c))
 	fmt.Printf("Population Size:     %d\n", cfg.PopulationSize)
+	fmt.Printf("COA Strategy:        %s\n", cfg.COAStrategy)
 	s := "Influencers:     "
 	fmt.Printf("%s", s)
 	n := len(s)

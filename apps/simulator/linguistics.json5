@@ -25,7 +25,7 @@
     "DBSource": "CSV",          // { CSV | Database | OnlineService }
     "HoldWindowPos": 0.1,       // positive hold area
     "HoldWindowNeg": -0.1,      // negative hold area
-    "COAStrategy": "DistributedDecision", // course of action strategy.  Choose from (DistributedDecision)
+    "COAStrategy": "MajorityRules", // course of action strategy.  Choose from (DistributedDecision, MajorityRules)
 
     //-----------------------------------------------------------------
     //  There may be times when we need to test or check the behavior

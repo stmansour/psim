@@ -573,6 +573,7 @@ func (s *Simulator) DumpStats() error {
 	fmt.Fprintf(file, "\"C2: %s\"\n", s.cfg.C2)
 
 	fmt.Fprintf(file, "\"Population: %d\"\n", s.cfg.PopulationSize)
+	fmt.Fprintf(file, "\"COA Strategy: %s\"\n", s.cfg.COAStrategy)
 
 	s.influencersToCSV(file)
 	// s.influencerMissingData(file)
@@ -670,6 +671,7 @@ func (s *Simulator) InvestmentsToCSV(inv *Investor) error {
 	fmt.Fprintf(file, "\"Ending Funds: %10.2f %s\"\n", inv.BalanceC1, inv.cfg.C1)
 	fmt.Fprintf(file, "\"Settled Funds: %10.2f %s  (converted to C1 due to simulation end prior to T4)\"\n", inv.BalanceSettled, inv.cfg.C1)
 	fmt.Fprintf(file, "\"Random Seed: %d\"\n", s.cfg.RandNano)
+	fmt.Fprintf(file, "\"COA Strategy: %s\"\n", s.cfg.COAStrategy)
 
 	//------------------------------------------------------------------------
 	// Influencers for this investor.

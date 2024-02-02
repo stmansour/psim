@@ -250,6 +250,8 @@ func setCourseOfAction(coa *CourseOfAction, method string) error {
 	switch method {
 	case "DistributedDecision":
 		return distributedDecisionCOA(coa)
+	case "MajorityRules":
+		return majorityRulesCOA(coa)
 	}
 	return fmt.Errorf("course of action method not recognized: %s", method)
 }
@@ -277,6 +279,21 @@ func distributedDecisionCOA(coa *CourseOfAction) error {
 	} else {
 		coa.Action = "hold"
 		coa.ActionPct = float64(coa.HoldVotes) / activeVotes
+	}
+	return nil
+}
+
+// majorityRulesCOA the draconian decision maker.  The ActionPct is always 100%
+//
+// -----------------------------------------------------------------------------
+func majorityRulesCOA(coa *CourseOfAction) error {
+	coa.ActionPct = 1
+	if coa.BuyVotes > coa.SellVotes { // more buy votes than sell votes?
+		coa.Action = "buy"
+	} else if coa.SellVotes > coa.BuyVotes {
+		coa.Action = "sell"
+	} else {
+		coa.Action = "hold"
 	}
 	return nil
 }

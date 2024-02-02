@@ -8,6 +8,7 @@ C1:                  USD
 C2:                  JPY
 Duration:            0 years 1 month 0 days
 Population Size:     1
+COA Strategy:        DistributedDecision
 Influencers:     SPInfluencer
 *******************************************************************
 
