@@ -38,9 +38,9 @@
     //  version of this projects code will operate. 
     //-----------------------------------------------------------------
     "SingleInvestorMode": true,
-    // "SingleInvestorDNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{L0Influencer,Delta1=-45,Delta2=-5}|{L1Influencer,Delta1=-45,Delta2=-5}|{L2Influencer,Delta1=-45,Delta2=-5}|{L3Influencer,Delta1=-45,Delta2=-5}|{L4Influencer,Delta1=-45,Delta2=-5}|{L5Influencer,Delta1=-45,Delta2=-5}|{L6Influencer,Delta1=-45,Delta2=-5}|{L7Influencer,Delta1=-45,Delta2=-5}|{L8Influencer,Delta1=-45,Delta2=-5}|{L9Influencer,Delta1=-45,Delta2=-5}]}",
+    "SingleInvestorDNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{L0Influencer,Delta1=-45,Delta2=-5}|{L1Influencer,Delta1=-45,Delta2=-5}|{L2Influencer,Delta1=-45,Delta2=-5}|{L3Influencer,Delta1=-45,Delta2=-5}|{L4Influencer,Delta1=-45,Delta2=-5}|{L5Influencer,Delta1=-45,Delta2=-5}|{L6Influencer,Delta1=-45,Delta2=-5}|{L7Influencer,Delta1=-45,Delta2=-5}|{L8Influencer,Delta1=-45,Delta2=-5}|{L9Influencer,Delta1=-45,Delta2=-5}|{LAInfluencer,Delta1=-45,Delta2=-5}|{LBInfluencer,Delta1=-45,Delta2=-5}|{LCInfluencer,Delta1=-45,Delta2=-5}|{LDInfluencer,Delta1=-45,Delta2=-5}|{LEInfluencer,Delta1=-45,Delta2=-5}|{LFInfluencer,Delta1=-45,Delta2=-5}|{LGInfluencer,Delta1=-45,Delta2=-5}|{LHInfluencer,Delta1=-45,Delta2=-5}|{LIInfluencer,Delta1=-45,Delta2=-5}]}",
     // "SingleInvestorDNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{L5Influencer,Delta1=-90,Delta2=-5}]}",
-    "SingleInvestorDNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{LJInfluencer,Delta1=-17,Delta2=-2}]}",
+    // "SingleInvestorDNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{LJInfluencer,Delta1=-17,Delta2=-2}]}",
 
     //-----------------------------------------------------------------
     //  INFLUENCER SUBCLASSES
