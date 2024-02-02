@@ -313,6 +313,7 @@ type FileConfig struct {
 // to all areas of code in this project
 // ---------------------------------------------------------------------------
 type AppConfig struct {
+	Filename             string                            // filename of the configuration file read
 	C1                   string                            // Currency1 - the currency that we're trying to maximize
 	C2                   string                            // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
 	DtStart              CustomDate                        // simulation begins on this date
@@ -386,7 +387,7 @@ func LoadConfig(cfname string) (AppConfig, error) {
 		return cfg, fmt.Errorf("failed to open config file: %v", err)
 	}
 	defer configFile.Close()
-
+	cfg.Filename = fname
 	byteValue, err := io.ReadAll(configFile)
 	if err != nil {
 		return cfg, fmt.Errorf("failed to read config file: %v", err)

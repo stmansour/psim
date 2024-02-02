@@ -554,6 +554,7 @@ func (s *Simulator) DumpStats() error {
 
 	// context information
 	fmt.Fprintf(file, "%q\n", "PLATO Simulator Results")
+	fmt.Fprintf(file, "\"Configuration File:  %s\"\n", s.cfg.Filename)
 	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Start Date: %s\"\n", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Stop Date: %s\"\n", b.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
@@ -659,6 +660,7 @@ func (s *Simulator) InvestmentsToCSV(inv *Investor) error {
 	// context information
 	//------------------------------------------------------------------------
 	fmt.Fprintf(file, "%q\n", "PLATO Simulator - Investor Investment List")
+	fmt.Fprintf(file, "\"Configuration File:  %s\"\n", s.cfg.Filename)
 	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Start Date: %s\"\n", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Stop Date: %s\"\n", c.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
