@@ -94,18 +94,15 @@ func (t *CustomDate) UnmarshalJSON(data []byte) error {
 // it is visible to all areas of code in this project.
 // ---------------------------------------------------------------------------
 type FileConfig struct {
-	C1          string     // Currency1 - the currency that we're trying to maximize
-	C2          string     // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
-	DtStart     CustomDate // simulation begins on this date
-	DtStop      CustomDate // simulation ends on this date. Guaranteed that no "buys" happen after this date
-	LoopCount   int        // how many times to loop over DtStart to DtStop
-	COAStrategy string     // course of action strategy used by Investors (choices are: DistributedDecision)
-
-	//----------------------------------------------------------------------------------------------
-	// computed as follows a percentage of the ExchangeRateRatio on the first day of the simulation
-	//----------------------------------------------------------------------------------------------
-	HoldWindowPos float64 // positive space to consider as "no difference" when subtracting two ratios
-	HoldWindowNeg float64 // negative space to consider as "no difference" when subtracting two ratios
+	C1               string     // Currency1 - the currency that we're trying to maximize
+	C2               string     // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
+	DtStart          CustomDate // simulation begins on this date
+	DtStop           CustomDate // simulation ends on this date. Guaranteed that no "buys" happen after this date
+	LoopCount        int        // how many times to loop over DtStart to DtStop
+	COAStrategy      string     // course of action strategy used by Investors (choices are: DistributedDecision)
+	TopInvestorCount int        // how many top investors to include in financial report
+	HoldWindowPos    float64    // positive space to consider as "no difference" when subtracting two ratios
+	HoldWindowNeg    float64    // negative space to consider as "no difference" when subtracting two ratios
 
 	//--------------------------------------------------------------------------------
 	// The format of the GenDurSpec string is one to four pairs of the the following
@@ -320,6 +317,7 @@ type AppConfig struct {
 	DtStop               CustomDate                        // simulation ends on this date
 	COAStrategy          string                            // course of action strategy used by Investors (choices are: DistributedDecision)
 	LoopCount            int                               // how many times to loop over DtStart to DtStop
+	TopInvestorCount     int                               // how many top investors to include in financial report
 	HoldWindowPos        float64                           // positive space to consider as "no difference" when subtracting two ratios
 	HoldWindowNeg        float64                           // negative space to consider as "no difference" when subtracting two ratios
 	GenDurSpec           string                            // gen dur spec
@@ -494,6 +492,9 @@ func LoadConfig(cfname string) (AppConfig, error) {
 		cfg.LoopCount = 1
 		cfg.Generations = 1
 		cfg.PopulationSize = 1
+	}
+	if cfg.TopInvestorCount < 1 {
+		cfg.TopInvestorCount = 10 // guarantee a reasonable number
 	}
 
 	return cfg, nil

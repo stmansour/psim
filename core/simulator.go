@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"time"
 
 	"github.com/stmansour/psim/util"
@@ -12,7 +13,7 @@ import (
 )
 
 // SimulationStatistics contains relevant metrics for each generation simulated
-// ------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 type SimulationStatistics struct {
 	ProfitableInvestors  int       // number of Investors that were profitable in this generation
 	AvgProfit            float64   // avg profitability for profitable Investors in this generation
@@ -27,6 +28,18 @@ type SimulationStatistics struct {
 	DtActualStop         time.Time // the date we actually stopped the simulation after trying to settle remaining C2 after DtGenStop
 	UnsettledC2          float64   // the amount of C2 held across all Investors when simulation stopped.
 	EndOfDataReached     bool      // true if current day was reached before all C2 was sold
+}
+
+// TopInvestor maintains the subset of information we need to keep for top investors
+// in order to generate the financial report.
+// ------------------------------------------------------------------------------------
+type TopInvestor struct {
+	DtPV           time.Time // the date all C2 was settled if settled after the simalation end date
+	PortfolioValue float64   // value of the Investor's funds on the day the simulation ended
+	DNA            string    // DNA string to recreate this Investor
+	GenNo          int       // which generation did this Investor come from
+	BalanceC1      float64   // Investor's C1 balance on simulation end date
+	BalanceC2      float64   // Investor's C2 balance on simulation end date
 }
 
 // Simulator is a simulator object
@@ -46,6 +59,8 @@ type Simulator struct {
 	SimStop                    time.Time              // timestamp for simulation stop
 	StopTimeSet                bool                   // set to true once SimStop is set. If it's false either the simulation is still in progress or did not complete
 	WindDownInProgress         bool                   // initially false, set to true when we have a C2 balance on or after cfg.DtStop, when all C2 is sold this will return to being false
+	FinRpt                     *FinRep                // Financial Report generator
+	TopInvestors               []TopInvestor          // the top n Investors across all generations
 }
 
 // ResetSimulator is primarily to support tests. It resets the simulator
@@ -103,6 +118,7 @@ func (s *Simulator) Init(cfg *util.AppConfig, dayByDay, dumpTopInvestorInvestmen
 	s.dumpTopInvestorInvestments = dumpTopInvestorInvestments
 
 	s.factory.Init(s.cfg)
+	s.FinRpt = &FinRep{}
 
 	//------------------------------------------------------------------------
 	// Create an initial population of investors with just 1 investor for now
@@ -243,12 +259,20 @@ func (s *Simulator) Run() {
 				// Terminate MarkToEnd if all Investors have settled their C2
 				//-------------------------------------------------------------------
 				if s.WindDownInProgress && SettleC2 == 0 {
-					// s.cfg.DtSettle = T3  -- this is not correct, this is a simululation run value, not a configuration value
-					// DateSettled = T3
 					s.WindDownInProgress = false
 				}
-
 				//*********************** END SIMULATOR DAILY LOOP ***********************
+
+				//---------------------------------------------------------------------------
+				// We may update the portfolio value later, but for now we'll always set it
+				// on the last day of the simulation.
+				//---------------------------------------------------------------------------
+				if T3.Equal(dtGenEnd) {
+					for k := 0; k < len(s.Investors); k++ {
+						s.Investors[k].PortfolioValueC1 = s.Investors[k].PortfolioValue(T3)
+						s.Investors[k].DtPortfolioValue = T3
+					}
+				}
 
 				d = T3
 				T3 = T3.AddDate(0, 0, 1)
@@ -283,7 +307,7 @@ func (s *Simulator) Run() {
 			for j := 0; j < len(s.Investors); j++ {
 				unsettled += s.Investors[j].BalanceC2
 			}
-			fmt.Printf("Completed generation %d, %s - %s,  unsettled = %8.2f %s\n", s.GensCompleted, thisGenDtStart.Format("Jan _2, 2006"), d.Format("Jan _2, 2006"), unsettled, s.cfg.C2)
+			fmt.Printf("Completed generation %d, %s - %s,  unsettled = %12.2f %s\n", s.GensCompleted, thisGenDtStart.Format("Jan _2, 2006"), d.Format("Jan _2, 2006"), unsettled, s.cfg.C2)
 			if isGenDur {
 				genStart = dtGenEnd // Start next generation from the end of the last
 			}
@@ -291,7 +315,6 @@ func (s *Simulator) Run() {
 			//----------------------------------------------------------------------
 			// Compute scores and stats
 			//----------------------------------------------------------------------
-			// s.SettleC2Balance()  // no longer needed.  We do MarkToEnd in main loop
 			s.CalculateMaxVals()
 			s.CalculateAllFitnessScores()
 			s.SaveStats(thisGenDtStart, thisGenDtEnd, T3, EndOfDataReached)
@@ -300,6 +323,7 @@ func (s *Simulator) Run() {
 					log.Printf("ERROR: InvestmentsToCSV returned: %s\n", err)
 				}
 			}
+			s.UpdateTopInvestors() // used by financial report
 
 			//----------------------------------------------------------------------------------------------
 			// Now replace current generation with next generation unless this is the last generation...
@@ -390,7 +414,6 @@ func (s *Simulator) CalculateAllFitnessScores() {
 //
 // ----------------------------------------------------------------------------
 func (s *Simulator) CalculateMaxVals() {
-
 	//----------------------------------------------------
 	// Max investor profit needed for normalization...
 	//----------------------------------------------------
@@ -437,6 +460,57 @@ func (s *Simulator) CalculateMaxVals() {
 		s.Investors[i].maxProfit = s.maxProfitThisRun
 		s.Investors[i].maxPredictions = s.maxPredictions
 	}
+}
+
+// UpdateTopInvestors saves the best investors in s.TopInvestors
+// -----------------------------------------------------------------------------
+func (s *Simulator) UpdateTopInvestors() {
+	n := s.cfg.TopInvestorCount
+
+	//----------------------------------------------------------------
+	// First, sort Investors by PortfolioValueC1 in descending order
+	//----------------------------------------------------------------
+	sort.Slice(s.Investors, func(i, j int) bool {
+		return s.Investors[i].PortfolioValueC1 > s.Investors[j].PortfolioValueC1
+	})
+
+	//------------------------------------------------------------------------------------------
+	// Now, convert only the top n Investors (or less, if there are fewer than 'n' Investors)
+	// to TopInvestors and append them to a new slice
+	//------------------------------------------------------------------------------------------
+	newTopInvestors := make([]TopInvestor, 0, n)
+	for i := 0; i < len(s.Investors) && i < n; i++ {
+		newTopInvestor := TopInvestor{
+			DtPV:           s.Investors[i].DtPortfolioValue,
+			PortfolioValue: s.Investors[i].PortfolioValueC1,
+			BalanceC1:      s.Investors[i].BalanceC1,
+			BalanceC2:      s.Investors[i].BalanceC2,
+			DNA:            s.Investors[i].DNA(),
+			GenNo:          s.GensCompleted,
+		}
+		newTopInvestors = append(newTopInvestors, newTopInvestor)
+	}
+
+	//---------------------------------------------------------------
+	// Combine newTopInvestors with s.TopInvestors for comparison
+	//---------------------------------------------------------------
+	combinedTopInvestors := append(s.TopInvestors, newTopInvestors...)
+
+	//------------------------------------------------------------------------------------------
+	// Sort combinedTopInvestors by PortfolioValue in descending order, if needed
+	// Note: Depending on your logic, you may only need to sort if s.TopInvestors were not already sorted
+	//------------------------------------------------------------------------------------------
+	sort.Slice(combinedTopInvestors, func(i, j int) bool {
+		return combinedTopInvestors[i].PortfolioValue > combinedTopInvestors[j].PortfolioValue
+	})
+
+	//-----------------------------------------------------------------
+	// Truncate combinedTopInvestors to keep only the top 'n' entries
+	//-----------------------------------------------------------------
+	if len(combinedTopInvestors) > n {
+		combinedTopInvestors = combinedTopInvestors[:n]
+	}
+	s.TopInvestors = combinedTopInvestors // Update s.TopInvestors with the newly determined top 'n' performers
 }
 
 // SaveStats - dumps the top investor for the current generation into an array
@@ -616,7 +690,7 @@ func (s *Simulator) DumpStats() error {
 		if !s.SimStats[i].EndOfDataReached {
 			settled = "yes"
 		}
-		fmt.Fprintf(file, "%d,%q,%q,%d,%5.1f%%,%8.2f,%8.2f,%d,%d,%4.2f%%,%d,%d,%8.2f,%q,%q,%q\n",
+		fmt.Fprintf(file, "%d,%q,%q,%d,%8.2f%%,%12.2f,%12.2f,%d,%d,%4.2f%%,%d,%d,%12.2f,%q,%q,%q\n",
 			i, // 0
 			s.SimStats[i].DtGenStart.Format("1/2/2006"),                                    // 1
 			s.SimStats[i].DtGenStop.Format("1/2/2006"),                                     // 2
@@ -671,7 +745,7 @@ func (s *Simulator) InvestmentsToCSV(inv *Investor) error {
 	fmt.Fprintf(file, "\"Generation: %d\"\n", gen)
 	fmt.Fprintf(file, "\"Initial Funds: %10.2f\"\n", s.cfg.InitFunds)
 	fmt.Fprintf(file, "\"Ending Funds: %10.2f %s\"\n", inv.BalanceC1, inv.cfg.C1)
-	fmt.Fprintf(file, "\"Settled Funds: %10.2f %s  (converted to C1 due to simulation end prior to T4)\"\n", inv.BalanceSettled, inv.cfg.C1)
+	// fmt.Fprintf(file, "\"Settled Funds: %10.2f %s  (converted to C1 due to simulation end prior to T4)\"\n", inv.BalanceSettled, inv.cfg.C1)
 	fmt.Fprintf(file, "\"Random Seed: %d\"\n", s.cfg.RandNano)
 	fmt.Fprintf(file, "\"COA Strategy: %s\"\n", s.cfg.COAStrategy)
 
@@ -688,7 +762,7 @@ func (s *Simulator) InvestmentsToCSV(inv *Investor) error {
 		m := inv.Investments[i]
 		//                 0  1     2  3     4     5     6     7     8      9    10
 		//                 t3       t4       t3c1  buyc2 sellc2 balc1 balc2   t4c1  net
-		fmt.Fprintf(file, "%s,%8.2f,%s,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f,%8.2f\n",
+		fmt.Fprintf(file, "%s,%12.2f,%s,%12.2f,%12.2f,%12.2f,%12.2f,%12.2f,%12.2f,%12.2f,%12.2f,%12.2f,%12.2f\n",
 			m.T3.Format("1/2/2006"), // 0 - date on which purchase of C2 was made
 			m.ERT3,                  // 1 - the exchange rate on T3
 			m.T4.Format("1/2/2006"), // 2 - date on which C2 will be exchanged for C1
@@ -732,39 +806,6 @@ func (s *Simulator) influencersToCSV(file *os.File) {
 	}
 	fmt.Fprintf(file, "\n\n")
 }
-
-// // influencerMissingData - Dump Info regarding any time data was requested
-// //
-// //	by an influencer and got back a nildata error.
-// //
-// // ---------------------------------------------------------------------------
-// func (s *Simulator) influencerMissingData(file *os.File) {
-// 	n := 0 // num of subclasses that encountered missing data
-// 	t := "Missing Data Access: "
-// 	fmt.Fprintf(file, "%s", t)
-
-// 	for i := 0; i < len(util.InfluencerSubclasses); i++ {
-// 		subclass := util.InfluencerSubclasses[i]
-// 		tot := 0
-// 		for j := 0; j < len(s.Investors); j++ {
-// 			inf := s.Investors[j].Influencers
-// 			for k := 0; k < len(inf); k++ {
-// 				if inf[k].Subclass() == subclass && inf[k].GetNilDataCount() > 0 {
-// 					tot += inf[k].GetNilDataCount()
-// 				}
-// 			}
-// 		}
-// 		if tot > 0 {
-// 			n++
-// 			fmt.Fprintf(file, "\n%s: %d", subclass, tot)
-// 		}
-// 	}
-
-// 	if n == 0 {
-// 		fmt.Fprintf(file, "none")
-// 	}
-// 	fmt.Fprintf(file, "\n\n")
-// }
 
 // ShowTopInvestor - dumps the top investor to a file after the simulation.
 //
@@ -817,7 +858,7 @@ func (s *Simulator) ResultsByInvestor() {
 	}
 	fmt.Printf("-------------------------------------------------------------------------\n")
 	fmt.Printf("Profitable Investors:  %d / %d  (%6.3f%%)\n", profitable, s.cfg.PopulationSize, float64(profitable*100)/float64(s.cfg.PopulationSize))
-	fmt.Printf("Best Performer:  Investor %d.  Ending balance = %8.2f %s\n", idx, largestBalance, s.cfg.C1)
+	fmt.Printf("Best Performer:  Investor %d.  Ending balance = %12.2f %s\n", idx, largestBalance, s.cfg.C1)
 }
 
 // ResultsForInvestor - dumps results of investor [i]
@@ -862,14 +903,14 @@ func (s *Simulator) ResultsForInvestor(n int, v *Investor) string {
 			return err.Error()
 		}
 		c1Amt = amt / er4.EXClose
-		str += fmt.Sprintf("Pending Investments: %d, value: %8.2f %s  =  %8.2f %s\n", pending, amt, s.cfg.C2, c1Amt, s.cfg.C1)
+		str += fmt.Sprintf("Pending Investments: %d, value: %12.2f %s  =  %12.2f %s\n", pending, amt, s.cfg.C2, c1Amt, s.cfg.C1)
 	}
-	str += fmt.Sprintf("\t\tInitial Stake: %8.2f %s,  End Balance: %8.2f %s\n", s.cfg.InitFunds, s.cfg.C1, v.BalanceC1+c1Amt, s.cfg.C1)
+	str += fmt.Sprintf("\t\tInitial Stake: %12.2f %s,  End Balance: %12.2f %s\n", s.cfg.InitFunds, s.cfg.C1, v.BalanceC1+c1Amt, s.cfg.C1)
 
 	endingC1Balance := c1Amt + v.BalanceC1
 	netGain := endingC1Balance - s.cfg.InitFunds
 	pctGain := netGain / s.cfg.InitFunds
-	str += fmt.Sprintf("\t\tNet Gain:  %8.2f %s  (%3.3f%%)\n", netGain, s.cfg.C1, pctGain)
+	str += fmt.Sprintf("\t\tNet Gain:  %12.2f %s  (%3.3f%%)\n", netGain, s.cfg.C1, pctGain)
 
 	//-----------------------------------z--------------------------------------
 	// When this investor made a buy prediction, how often was it correct...

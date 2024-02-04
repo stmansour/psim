@@ -97,9 +97,20 @@ func displaySimulationResults(cfg *util.AppConfig) {
 	if err != nil {
 		fmt.Printf("Simulator DumpSimStats returned error: %s\n", err)
 	}
-	if app.showAllInvestors {
-		(&app.sim).ResultsByInvestor()
+
+	err = (&app.sim).DumpStats()
+	if err != nil {
+		fmt.Printf("Simulator DumpSimStats returned error: %s\n", err)
 	}
+
+	err = (&app.sim).FinRpt.GenerateFinRep(&app.sim)
+	if err != nil {
+		fmt.Printf("Simulator FinRep returned error: %s\n", err)
+	}
+
+	// if app.showAllInvestors {
+	// 	(&app.sim).ResultsByInvestor()
+	// }
 }
 
 func readCommandLineArgs() {

@@ -35,7 +35,8 @@ type Investor struct {
 	factory           *Factory        // used to create Influencers
 	BalanceC1         float64         // total amount of currency C1
 	BalanceC2         float64         // total amount of currency C2
-	BalanceSettled    float64         // amount of C2 converted to C1 because simulation ended before T4 arrived
+	PortfolioValueC1  float64         // the C1 value of BalanceC1 + BalanceC2 on DtPortfolioValue
+	DtPortfolioValue  time.Time       // the date for which PortfolioValueC1 was calculated
 	Delta4            int             // t4 = t3 + Delta4 - must be the same Delta4 for all influencers in this investor
 	Investments       []Investment    // a record of all investments made by this investor
 	Influencers       []Influencer    // all the influencerst that advise this Investor
@@ -47,6 +48,7 @@ type Investor struct {
 	Fitness           float64         // Fitness score calculated at the end of a simulation cycle
 	CreatedByDNA      bool            // some init steps must be skipped if it's created from DNA
 	ID                string          // unique id for this investor
+	// BalanceSettled    float64         // amount of C2 converted to C1 because simulation ended before T4 arrived
 }
 
 // Investment describes a full transaction when the Investor decides to buy.
@@ -412,6 +414,9 @@ func (i *Investor) ExecuteSell(T4 time.Time, pct float64) error {
 // plus BalanceC2 converted to C1 at t.
 // ------------------------------------------------------------------------------
 func (i *Investor) PortfolioValue(t time.Time) float64 {
+	if i.BalanceC2 == 0 {
+		return i.BalanceC1
+	}
 	er := data.CSVDBFindRecord(t)  // exchange rate for C2 at time t
 	C2 := i.BalanceC2 / er.EXClose // amount of C1 we get for BalanceC2 at this exchange rate
 	pv := i.BalanceC1 + C2
