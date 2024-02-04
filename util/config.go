@@ -315,6 +315,7 @@ type AppConfig struct {
 	C2                   string                            // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
 	DtStart              CustomDate                        // simulation begins on this date
 	DtStop               CustomDate                        // simulation ends on this date
+	EnforceStopDate      bool                              // stops on DtStop even if there is a C2 Balance, if false and C2 Balance > 0 on StopDate, simulation will continue in sell-only mode until C2 < 1.00
 	COAStrategy          string                            // course of action strategy used by Investors (choices are: DistributedDecision)
 	LoopCount            int                               // how many times to loop over DtStart to DtStop
 	TopInvestorCount     int                               // how many top investors to include in financial report

@@ -277,7 +277,7 @@ func (s *Simulator) Run() {
 				d = T3
 				T3 = T3.AddDate(0, 0, 1)
 
-				if !s.WindDownInProgress && !T3.Before(dtGenEnd) {
+				if !s.WindDownInProgress && !T3.Before(dtGenEnd) && !s.cfg.EnforceStopDate {
 					//----------------------------------------------------------------------
 					// if we get to this point, it means that we're about to drop out of
 					// the daily loop. See if any investor is holding C2. If so, we will
