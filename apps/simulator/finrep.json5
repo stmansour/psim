@@ -1,0 +1,157 @@
+//  PLATO SIMULATOR CONFIGURATION FILE
+//  JSON5 is being used primarily so that we can add comments to this file.
+//
+//  Notes:
+//    floating point numbers cannot begin with ".".  
+//    That is:  
+//       0.1 is valid
+//        .1 is not valid
+//----------------------------------------------------------------------------------
+{
+    //-----------------------------------------------------------------
+    //  SIMULATOR
+    //-----------------------------------------------------------------
+    "DtStart": "2015-06-01",    // simulation start date for each generation
+    "DtStop": "2015-12-31",     // simulation stop date for each generation
+    "LoopCount": 1,            // How many times to loop over DtStart to DtStop
+    "Generations": 10,           // how many generations should the simulator run. NOTE: This value is only valid if GenDurSpec is commented out.
+    // "GenDurSpec": "1 Y",        // How long is a generation.  EX:  "1 Y",  "6 M",  "8 W", "1 Y 6 M", "90 D"
+    "PopulationSize": 200,      // Total number Investors in the population
+    "C1": "USD",                // main currency  (ISO 4217 code)
+    "C2": "JPY",                // currency that we will invest in (ISO 4217 code)
+    "InitFunds": 100000.00,     // how much each Investor is funded at the start of a simulation cycle
+    "StdInvestment": 10000.00,  // the "standard" investment amount if a decision is made to invest in C2
+    "MutationRate": 1,          // number between 1 and 100, indicating the percentage of mutation
+    "DBSource": "CSV",          // { CSV | Database | OnlineService }
+    "HoldWindowPos": 0.1,       // positive hold area
+    "HoldWindowNeg": -0.1,      // negative hold area
+    "COAStrategy": "DistributedDecision", // course of action strategy.  Choose from (DistributedDecision)
+    "TopInvestorCount": 20,     // Save this number of top Investors from across all generations - used in Financial Report - finrep.csv
+
+    //-----------------------------------------------------------------
+    //  There may be times when we need to test or check the behavior
+    //  of a specific Investor, based on its DNA. In this case, looping
+    //  and generations are not relevant. Instead, we need the behavior
+    //  to be completely repeatable and predictable.
+    //  When "SingleInvestorMode" is true
+    //       LoopCount will be forced to 1
+    //       Generations will be forced  to 1
+    //  This would simulate things more like the production
+    //  version of this projects code will operate. 
+    //-----------------------------------------------------------------
+    "SingleInvestorMode": false,
+    "SingleInvestorDNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{SPInfluencer,Delta1=-27,Delta2=-5}]}",
+
+    //-----------------------------------------------------------------
+    //  INFLUENCER SUBCLASSES
+    //  1. Comment out the subclasses you don't want in the simulation
+    //     (insert double slashes // at the beginning of the lines 
+    //     containing the influencers you want to remove, then move them
+    //     outside of the square brackets [])
+    //  2. Uncomment subclasses you want in the simulation (remove the
+    //     double slashes //) and move them in the lines between the
+    //     square brackets 
+    //  3. Make sure the last line between the square brackets does
+    //     not have a comma at the end of the line
+    //-----------------------------------------------------------------
+    
+    // "IRInfluencer",
+    // "M2Influencer"
+    // "GDInfluencer",
+    // "M1Influencer",
+    // "CCInfluencer",
+    // "DRInfluencer",
+    // "URInfluencer",
+    "InfluencerSubclasses": [
+      "SPInfluencer"
+    ],
+
+    //-----------------------------------------------------------------
+    //  CC - Consumer Confidence
+    //-----------------------------------------------------------------
+    "CCMinDelta1": -180,        // greatest amount of time prior to T3 that T1 can be
+    "CCMaxDelta1": -90,         // least amount of time prior to T3 that T1 can be
+    "CCMinDelta2": -60,         // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "CCMaxDelta2": -30,         // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "CCW1": 0.6,                // DRInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: DRW1 + DRW2 = 1.0
+    "CCW2": 0.4,                // DRInfluencer Fitness Score weighting for number of predictions made. Constraint: DRW1 + DRW2 = 1.0
+
+    //-----------------------------------------------------------------
+    //  DR - Discount Rate
+    //-----------------------------------------------------------------
+    "DRMinDelta1": -30,         // greatest amount of time prior to T3 that T1 can be
+    "DRMaxDelta1": -6,          // least amount of time prior to T3 that T1 can be
+    "DRMinDelta2": -5,          // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "DRMaxDelta2": -1,          // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "DRW1": 0.6,                // DRInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: DRW1 + DRW2 = 1.0
+    "DRW2": 0.4,                // DRInfluencer Fitness Score weighting for number of predictions made. Constraint: DRW1 + DRW2 = 1.0
+
+    //-----------------------------------------------------------------
+    //  GD - Discount Rate
+    //-----------------------------------------------------------------
+    "GDMinDelta1": -730,        // greatest amount of time prior to T3 that T1 can be
+    "GDMaxDelta1": -630,        // least amount of time prior to T3 that T1 can be
+    "GDMinDelta2": -180,        // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "GDMaxDelta2": -120,        // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "GDW1": 0.6,                // GDInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: GDW1 + GDW2 = 1.0
+    "GDW2": 0.4,                // GDInfluencer Fitness Score weighting for number of predictions made. Constraint: GDW1 + GDW2 = 1.0
+
+    //-----------------------------------------------------------------
+    //  IR - Inflation Rate
+    //-----------------------------------------------------------------
+    "IRMinDelta1": -180,        // greatest amount of time prior to T3 
+    "IRMaxDelta1": -90,         // least amount of time prior to T3
+    "IRMinDelta2": -60,         // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "IRMaxDelta2": -30,         // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "IRW1": 0.6,                // IRInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: IRW1 + IRW2 = 1.0
+    "IRW2": 0.4,                // IRInfluencer Fitness Score weighting for number of predictions made. Constraint: IRW1 + IRW2 = 1.0
+
+    //-----------------------------------------------------------------
+    //  M1 - Money Supply - short term liquidity
+    //-----------------------------------------------------------------
+    "M1MinDelta1": -180,        // greatest amount of time prior to T3 
+    "M1MaxDelta1": -90,         // least amount of time prior to T3
+    "M1MinDelta2": -60,         // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "M1MaxDelta2": -30,         // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "M1W1": 0.6,                // M1Influencer Fitness Score weighting for "correctness" of predictions. Constraint: M1W1 + M1W2 = 1.0
+    "M1W2": 0.4,                // M1Influencer Fitness Score weighting for number of predictions made. Constraint: M1W1 + M1W2 = 1.0
+
+    //-----------------------------------------------------------------
+    //  M2 - Money Supply - long term liquidity
+    //-----------------------------------------------------------------
+    "M2MinDelta1": -180,        // greatest amount of time prior to T3 
+    "M2MaxDelta1": -90,         // least amount of time prior to T3
+    "M2MinDelta2": -60,         // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "M2MaxDelta2": -30,         // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "M2W1": 0.6,                // M2Influencer Fitness Score weighting for "correctness" of predictions. Constraint: M2W1 + M2W2 = 1.0
+    "M2W2": 0.4,                // M2Influencer Fitness Score weighting for number of predictions made. Constraint: M2W1 + M2W2 = 1.0
+
+    //-----------------------------------------------------------------
+    //  SP - Stock PRice
+    //-----------------------------------------------------------------
+		"SPMinDelta1": -90,
+		"SPMaxDelta1": -21,
+		"SPMinDelta2": -20,
+		"SPMaxDelta2": -1,
+    "SPW1": 0.6,                // M2Influencer Fitness Score weighting for "correctness" of predictions. Constraint: M2W1 + M2W2 = 1.0
+    "SPW2": 0.4,                // M2Influencer Fitness Score weighting for number of predictions made. Constraint: M2W1 + M2W2 = 1.0
+
+    //-----------------------------------------------------------------
+    //  UR - Unemployment Rate
+    //-----------------------------------------------------------------
+    "URMinDelta1": -180,        // least amount of time prior to T3
+    "URMaxDelta1": -90,         // closes time prior to T3
+    "URMinDelta2": -60,         // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "URMaxDelta2": -30,         // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "URW1": 0.6,                // URInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: URW1 + URW2 = 1.0
+    "URW2": 0.4,                // URInfluencer Fitness Score weighting for number of predictions made. Constraint: URW1 + URW2 = 1.0
+
+    //-----------------------------------------------------------------
+    //  INVESTOR
+    //-----------------------------------------------------------------
+    "MinDelta4":  1,            // shortest period of time after a "buy" on T3 that we can do a "sell" 
+    "MaxDelta4":  14,           // greatest period of time after a "buy" on T3 that we can do a "sell"
+    "InvW1": 0.5,               // Investor Fitness Score weighting for "correctness" of predictions. Constraint: InvW1 + InvW2 = 1.0
+    "InvW2": 0.5,               // Investor Fitness Score weighting for profit. Constraint: InvW1 + InvW2 = 1.0
+    "lastline": "ignore"
+}
