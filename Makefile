@@ -3,6 +3,28 @@ DIRS=util data core tools apps
 DIST=dist 
 TEST_FAILURE_FILE=fail
 
+# Temporary file for storing start time
+TIMER_FILE := .build_timer
+
+starttimer:
+	@echo $$(date +%s) > $(TIMER_FILE)
+
+stoptimer:
+	@start=$$(cat $(TIMER_FILE)); \
+	end=$$(date +%s); \
+	elapsed=$$((end - start)); \
+	hours=$$((elapsed / 3600)); \
+	minutes=$$(( (elapsed / 60) % 60 )); \
+	seconds=$$((elapsed % 60)); \
+	if [ $$hours -gt 0 ]; then \
+		echo "Elapsed time: $$hours hour(s) $$minutes minute(s) $$seconds second(s)"; \
+	elif [ $$minutes -gt 0 ]; then \
+		echo "Elapsed time: $$minutes minute(s) $$seconds second(s)"; \
+	else \
+		echo "Elapsed time: $$seconds second(s)"; \
+	fi; \
+	rm -f $(TIMER_FILE)
+
 .PHONY: test
 
 psim:
@@ -55,10 +77,10 @@ package:
 	for dir in $(DIRS); do make -C $$dir package;done
 	cd dist ; rm -f platosim.tar* ; tar cvf platosim.tar platosim ; gzip platosim.tar
 
-all: clean psim package test
+all: starttimer clean psim package test stoptimer
 	@echo "Completed"
 
-build: clean psim package
+build: starttimer clean psim package stoptimer
 
 
 stats:
