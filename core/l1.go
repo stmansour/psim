@@ -221,9 +221,9 @@ func (p *L1Influencer) GetPrediction(t3 time.Time) (string, float64, float64, fl
 	holdpos := p.cfg.HoldWindowPos
 
 	prediction = "hold" // we have the data and made the calculation.  Assume "hold"
-	if delta > holdpos {
+	if delta < holdpos { //HH reversed for negativity
 		prediction = "buy" // check buy condition
-	} else if delta < holdneg {
+	} else if delta > holdneg {  //HH reversed for negativity
 		prediction = "sell" // check sell condition
 	}
 
