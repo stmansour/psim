@@ -32,7 +32,7 @@ func TestLinguisticDNA(t *testing.T) {
 	app.randNano = -1
 	app.cfName = "linguistics.json5"
 	s := &app.sim
-	app.trace = true
+	app.trace = false
 	s.ResetSimulator()
 	doSimulation()
 }
@@ -40,7 +40,7 @@ func TestWTInfl(t *testing.T) {
 	app.randNano = -1
 	app.cfName = "wtconfig.json5"
 	s := &app.sim
-	app.trace = true
+	app.trace = false
 	s.ResetSimulator()
 	doSimulation()
 }

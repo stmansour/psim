@@ -78,11 +78,6 @@ func (f *FinRep) GenerateHeader() error {
 	f.Sim.influencersToCSV(f.file)
 	// f.Sim.influencerMissingData(f.file)
 
-	omr := float64(0)
-	if f.Sim.factory.MutateCalls > 0 {
-		omr = 100.0 * float64(f.Sim.factory.Mutations) / float64(f.Sim.factory.MutateCalls)
-	}
-	fmt.Fprintf(f.file, "\"Observed Mutation Rate: %6.3f%%\"\n", omr)
 	fmt.Fprintf(f.file, "\"Elapsed Run Time: %s\"\n", et)
 	fmt.Fprintf(f.file, "\"\"\n")
 
@@ -99,6 +94,7 @@ func (f *FinRep) GenerateRows() error {
 		"Date",
 		"Generation",
 		"Portfolio Value",
+		"Annualized Return",
 		c1b,
 		c2b,
 		"DNA",
@@ -125,11 +121,16 @@ func (f *FinRep) GenerateRows() error {
 	// WRITE COLUMNS...
 	//------------------------------------------------------------------------
 	for i, t := range f.Sim.TopInvestors {
-		fmt.Fprintf(f.file, "%d,%s,%d,%12.2f,%12.2f,%12.2f,%q\n",
+		ar, err := util.AnnualizedReturn(f.Sim.cfg.InitFunds, t.PortfolioValue, time.Time(f.Sim.cfg.DtStart), time.Time(f.Sim.cfg.DtStop).AddDate(0, 0, 1))
+		if err != nil {
+			fmt.Printf("Error calculating annualized return: %s\n", err.Error())
+		}
+		fmt.Fprintf(f.file, "%d,%s,%d,%12.2f,%.2f,%12.2f,%12.2f,%q\n",
 			i+1,                       // rank
 			t.DtPV.Format("1/2/2006"), // date
 			t.GenNo,                   // generation number
 			t.PortfolioValue,          // portfolio
+			ar*100,                    // annualized return
 			t.BalanceC1,               // C1
 			t.BalanceC2,               // C2
 			t.DNA,

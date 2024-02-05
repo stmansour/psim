@@ -6,7 +6,22 @@ import (
 	"github.com/stmansour/psim/util"
 )
 
-// LINGUISTIC INFLUENCER LIST
+//****  LOCALE-BASED  ****
+//  BCInfluencer
+//  BPInfluencer
+//  CCInfluencer - Consumer Confidence
+//  DRInfluencer - discount rate
+//  GDInfluencer
+//  IRInfluencer - inflation rate
+//  M1Influencer - money supply short term
+//  M2Influencer - money supply long term
+//  SPInfluencer - stock price
+//  URInfluencer - unemployment rate
+
+//****  NOT-LOCALE-BASED  ****
+//  WTInfluencer - West Texas Oil
+
+//****  LINGUISTIC INFLUENCER LIST  ****
 //  L0 - uses LxxxLSPScore_ECON   -   Lexicoder Sentiment Positivity - where xxx is the ISO currency code:  USD, AUD, JPY, ...
 // 	L1 - uses LxxxLSNScore_ECON   -   Lexicoder Sentiment Negativity
 // 	L2 - uses LxxxWHAScore_ECON
@@ -28,6 +43,13 @@ import (
 //	LI - LALLWDPCount
 //	LJ - LALLWDMCount
 
+//****  TO-DO  ****
+//  CUInfluencer
+//  HSInfluencer - housing starts
+//  IEInfluencer
+//  IPInfluencer
+//  RSInfluencer
+
 // Steps to create a new Influencer:
 //
 // 1. Update the Influencer name in data/init.go (this may be obsolete now)
@@ -47,7 +69,7 @@ import (
 // of these recommendations, the Investor will decide whether to "buy" or
 // "hold". Also, each Influencer keeps a list of its predictions to assess
 // its own performance.
-// ----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 type Prediction struct {
 	Delta1      int64     // research start offset
 	Delta2      int64     // research stop offset
