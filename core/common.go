@@ -230,3 +230,16 @@ func getLinguisticRec(t time.Time, datatype string) (float64, error) {
 	}
 	return c1val, nil
 }
+
+func getDataRecByColName(t time.Time, colname string) (float64, error) {
+	rec := data.CSVDBFindLRecord(t)
+	if rec == nil {
+		err := fmt.Errorf("nildata: data.LinguisticDataRecord for %s not found", t.Format("1/2/2006"))
+		return 0, err
+	}
+	c1val, err := data.GetValueByColName(rec, colname)
+	if err != nil {
+		log.Panicf("error getting %s value: %s", colname, err.Error())
+	}
+	return c1val, nil
+}

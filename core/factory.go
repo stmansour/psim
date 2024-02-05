@@ -958,6 +958,17 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 			cfg:     f.cfg,
 		}
 		return &x, nil
+
+	case "WTInfluencer":
+		x := WTInfluencer{
+			Delta1:  Delta1,
+			Delta2:  Delta2,
+			HoldMin: data.DBInfo.HoldSpace["WTRatio"].Mn,
+			HoldMax: data.DBInfo.HoldSpace["WTRatio"].Mx,
+			cfg:     f.cfg,
+		}
+		return &x, nil
+
 	default:
 		return nil, errors.New("unknown subclass")
 	}

@@ -56,6 +56,7 @@ type LinguisticDataRecord struct {
 	LJPYWDFCount_ECON float64
 	LJPYWDPCount_ECON float64
 	LJPYLIMCount_ECON float64
+	WTOILClose        float64
 }
 
 // RatesAndRatiosRecord is the basic structure of discount rate data

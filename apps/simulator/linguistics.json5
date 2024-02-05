@@ -367,6 +367,16 @@
     "URW2": 0.4,                // URInfluencer Fitness Score weighting for number of predictions made. Constraint: URW1 + URW2 = 1.0
 
     //-----------------------------------------------------------------
+    //  WT - West Texas Oil
+    //-----------------------------------------------------------------
+    "WTMinDelta1": -90,         // greatest amount of time prior to T3 
+    "WTMaxDelta1": -15,         // least amount of time prior to T3
+    "WTMinDelta2": -14,         // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "WTMaxDelta2": -1,          // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "WTW1": 0.6,                // WTInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: WTW1 + WTW2 = 1.0
+    "WTW2": 0.4,                // WTInfluencer Fitness Score weighting for number of predictions made. Constraint: WTW1 + WTW2 = 1.0
+
+    //-----------------------------------------------------------------
     //  INVESTOR
     //-----------------------------------------------------------------
     "MinDelta4":  1,            // shortest period of time after a "buy" on T3 that we can do a "sell" 

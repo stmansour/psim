@@ -352,13 +352,12 @@ func LoadLinguistics(lines [][]string) error {
 	var records []LinguisticDataRecord
 	var err error
 	cols := make(map[string]int, 100)
+
 	for i, line := range lines {
 		if i == 0 {
 			for j := 0; j < len(line); j++ {
-				if line[j][0] == 'L' {
-					cols[line[j]] = j
-					// fmt.Printf("col %d = %s\n", j, lines[0][j])
-				}
+				cols[line[j]] = j
+				// fmt.Printf("col %d = %s\n", j, lines[0][j])
 			}
 			continue // we've done all we need to do with lines[0]
 		}
@@ -375,74 +374,75 @@ func LoadLinguistics(lines [][]string) error {
 				continue
 			}
 			// Assuming all fields are float64 as per your struct
-			if value, err := strconv.ParseFloat(line[index], 64); err == nil {
-				switch columnName {
-				case "LALLLSNScore":
-					rec.LALLLSNScore = value
-				case "LALLLSPScore":
-					rec.LALLLSPScore = value
-				case "LALLWHAScore":
-					rec.LALLWHAScore = value
-				case "LALLWHOScore":
-					rec.LALLWHOScore = value
-				case "LALLWHLScore":
-					rec.LALLWHLScore = value
-				case "LALLWPAScore":
-					rec.LALLWPAScore = value
-				case "LALLWDECount":
-					rec.LALLWDECount = value
-				case "LALLWDFCount":
-					rec.LALLWDFCount = value
-				case "LALLWDPCount":
-					rec.LALLWDPCount = value
-				case "LALLWDMCount":
-					rec.LALLWDMCount = value
-				case "LUSDLSNScore_ECON":
-					rec.LUSDLSNScore_ECON = value
-				case "LUSDLSPScore_ECON":
-					rec.LUSDLSPScore_ECON = value
-				case "LUSDWHAScore_ECON":
-					rec.LUSDWHAScore_ECON = value
-				case "LUSDWHOScore_ECON":
-					rec.LUSDWHOScore_ECON = value
-				case "LUSDWHLScore_ECON":
-					rec.LUSDWHLScore_ECON = value
-				case "LUSDWPAScore_ECON":
-					rec.LUSDWPAScore_ECON = value
-				case "LUSDWDECount_ECON":
-					rec.LUSDWDECount_ECON = value
-				case "LUSDWDFCount_ECON":
-					rec.LUSDWDFCount_ECON = value
-				case "LUSDWDPCount_ECON":
-					rec.LUSDWDPCount_ECON = value
-				case "LUSDLIMCount_ECON":
-					rec.LUSDLIMCount_ECON = value
-				case "LJPYLSNScore_ECON":
-					rec.LJPYLSNScore_ECON = value
-				case "LJPYLSPScore_ECON":
-					rec.LJPYLSPScore_ECON = value
-				case "LJPYWHAScore_ECON":
-					rec.LJPYWHAScore_ECON = value
-				case "LJPYWHOScore_ECON":
-					rec.LJPYWHOScore_ECON = value
-				case "LJPYWHLScore_ECON":
-					rec.LJPYWHLScore_ECON = value
-				case "LJPYWPAScore_ECON":
-					rec.LJPYWPAScore_ECON = value
-				case "LJPYWDECount_ECON":
-					rec.LJPYWDECount_ECON = value
-				case "LJPYWDFCount_ECON":
-					rec.LJPYWDFCount_ECON = value
-				case "LJPYWDPCount_ECON":
-					rec.LJPYWDPCount_ECON = value
-				case "LJPYLIMCount_ECON":
-					rec.LJPYLIMCount_ECON = value
-				default:
-					// Optionally handle unknown column names
-				}
-			} else {
-				// Handle error in conversion
-				fmt.Printf("Error converting value for %s: %v", columnName, err)
+			value, err := strconv.ParseFloat(line[index], 64)
+			switch columnName {
+			case "LALLLSNScore":
+				rec.LALLLSNScore = value
+			case "LALLLSPScore":
+				rec.LALLLSPScore = value
+			case "LALLWHAScore":
+				rec.LALLWHAScore = value
+			case "LALLWHOScore":
+				rec.LALLWHOScore = value
+			case "LALLWHLScore":
+				rec.LALLWHLScore = value
+			case "LALLWPAScore":
+				rec.LALLWPAScore = value
+			case "LALLWDECount":
+				rec.LALLWDECount = value
+			case "LALLWDFCount":
+				rec.LALLWDFCount = value
+			case "LALLWDPCount":
+				rec.LALLWDPCount = value
+			case "LALLWDMCount":
+				rec.LALLWDMCount = value
+			case "LUSDLSNScore_ECON":
+				rec.LUSDLSNScore_ECON = value
+			case "LUSDLSPScore_ECON":
+				rec.LUSDLSPScore_ECON = value
+			case "LUSDWHAScore_ECON":
+				rec.LUSDWHAScore_ECON = value
+			case "LUSDWHOScore_ECON":
+				rec.LUSDWHOScore_ECON = value
+			case "LUSDWHLScore_ECON":
+				rec.LUSDWHLScore_ECON = value
+			case "LUSDWPAScore_ECON":
+				rec.LUSDWPAScore_ECON = value
+			case "LUSDWDECount_ECON":
+				rec.LUSDWDECount_ECON = value
+			case "LUSDWDFCount_ECON":
+				rec.LUSDWDFCount_ECON = value
+			case "LUSDWDPCount_ECON":
+				rec.LUSDWDPCount_ECON = value
+			case "LUSDLIMCount_ECON":
+				rec.LUSDLIMCount_ECON = value
+			case "LJPYLSNScore_ECON":
+				rec.LJPYLSNScore_ECON = value
+			case "LJPYLSPScore_ECON":
+				rec.LJPYLSPScore_ECON = value
+			case "LJPYWHAScore_ECON":
+				rec.LJPYWHAScore_ECON = value
+			case "LJPYWHOScore_ECON":
+				rec.LJPYWHOScore_ECON = value
+			case "LJPYWHLScore_ECON":
+				rec.LJPYWHLScore_ECON = value
+			case "LJPYWPAScore_ECON":
+				rec.LJPYWPAScore_ECON = value
+			case "LJPYWDECount_ECON":
+				rec.LJPYWDECount_ECON = value
+			case "LJPYWDFCount_ECON":
+				rec.LJPYWDFCount_ECON = value
+			case "LJPYWDPCount_ECON":
+				rec.LJPYWDPCount_ECON = value
+			case "LJPYLIMCount_ECON":
+				rec.LJPYLIMCount_ECON = value
+			case "WTOILClose":
+				rec.WTOILClose = value
+			default:
+				err = nil // in this code, we should only be getting float64s.  If there was an error on a column we don't care about, ignore it
+			}
+			if err != nil {
+				fmt.Printf("Data error in csv file, col = %s.  Err = %s\n", columnName, err.Error())
 			}
 		}
 		records = append(records, rec)
@@ -461,7 +461,6 @@ func subclassIsUsedInSimulation(ss string) bool {
 	s := ss[:2] // we only need the first 2 chars
 	for i := 0; i < len(DInfo.cfg.InfluencerSubclasses); i++ {
 		if s == DInfo.cfg.InfluencerSubclasses[i][:2] {
-
 			return true
 		}
 	}

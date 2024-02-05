@@ -15,7 +15,7 @@
     "DtStop": "2015-12-31",     // simulation stop date for each generation
     "EnforceStopDate": true,    // stops on DtStop even if there is a C2 Balance, if false and C2 Balance > 0 on StopDate, simulation will continue in sell-only mode until C2 < 1.00
     "LoopCount": 1,             // How many times to loop over DtStart to DtStop
-    "Generations": 10,          // how many generations should the simulator run. NOTE: This value is only valid if GenDurSpec is commented out.
+    "Generations": 20,          // how many generations should the simulator run. NOTE: This value is only valid if GenDurSpec is commented out.
     // "GenDurSpec": "1 Y",     // How long is a generation.  EX:  "1 Y",  "6 M",  "8 W", "1 Y 6 M", "90 D"
     "PopulationSize": 200,      // Total number Investors in the population
     "C1": "USD",                // main currency  (ISO 4217 code)
@@ -84,7 +84,7 @@
     ],
 
     //-----------------------------------------------------------------
-    // "URInfluencer",
+    //  CC - Consumer Confidence
     //-----------------------------------------------------------------
     "CCMinDelta1": -180,        // greatest amount of time prior to T3 that T1 can be
     "CCMaxDelta1": -90,         // least amount of time prior to T3 that T1 can be
@@ -362,6 +362,16 @@
     "URMaxDelta2": -30,         // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
     "URW1": 0.6,                // URInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: URW1 + URW2 = 1.0
     "URW2": 0.4,                // URInfluencer Fitness Score weighting for number of predictions made. Constraint: URW1 + URW2 = 1.0
+
+    //-----------------------------------------------------------------
+    //  WT - West Texas Oil
+    //-----------------------------------------------------------------
+    "WTMinDelta1": -90,         // greatest amount of time prior to T3 
+    "WTMaxDelta1": -15,         // least amount of time prior to T3
+    "WTMinDelta2": -14,         // greatest amount of time prior to T3 that T2 can be, constraint: MaxDelta2 > MaxDelta1
+    "WTMaxDelta2": -1,          // least amount of time prior to T3 that T2 can be, with the constraint that MinDelta1 < MaxDelta2
+    "WTW1": 0.6,                // WTInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: WTW1 + WTW2 = 1.0
+    "WTW2": 0.4,                // WTInfluencer Fitness Score weighting for number of predictions made. Constraint: WTW1 + WTW2 = 1.0
 
     //-----------------------------------------------------------------
     //  INVESTOR

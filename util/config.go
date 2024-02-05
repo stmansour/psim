@@ -67,6 +67,7 @@ var ValidInfluencerSubclasses = []string{
 	"RSInfluencer",
 	"SPInfluencer", // stock price
 	"URInfluencer", // unemployment rate
+	"WTInfluencer", // unemployment rate
 }
 
 // InfluencerSubclasses is an array of strings with all the subclasses of
@@ -222,6 +223,10 @@ type FileConfig struct {
 	LJMinDelta2          int
 	LJMaxDelta1          int
 	LJMaxDelta2          int
+	WTMinDelta1          int // research boundary
+	WTMinDelta2          int
+	WTMaxDelta1          int
+	WTMaxDelta2          int
 	M1MinDelta1          int     // research boundary
 	M1MaxDelta1          int     // research boundary
 	M1MinDelta2          int     // research boundary
@@ -284,6 +289,8 @@ type FileConfig struct {
 	LIW2                 float64
 	LJW1                 float64
 	LJW2                 float64
+	WTW1                 float64
+	WTW2                 float64
 	M1W1                 float64 // weighting in fitness calculation
 	M1W2                 float64 // weighting in fitness calculation
 	M2W1                 float64 // weighting in fitness calculation
@@ -547,6 +554,7 @@ func CreateTestingCFG() *AppConfig {
 		"L3Influencer",
 		"L4Influencer",
 		"L5Influencer",
+		"WTInfluencer",
 		// "M1Influencer",
 		// "M2Influencer",
 		"URInfluencer",
@@ -771,6 +779,12 @@ func CreateTestingCFG() *AppConfig {
 			MaxDelta1: -90,
 			MinDelta2: -50,
 			MaxDelta2: -20,
+		},
+		"WT": {
+			MinDelta1: -90,
+			MaxDelta1: -30,
+			MinDelta2: -29,
+			MaxDelta2: -1,
 		},
 	}
 	cfg.SCInfo = mapper

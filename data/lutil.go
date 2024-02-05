@@ -5,6 +5,11 @@ import "fmt"
 // GetLValue returns a particular field from the supplied lrec
 func GetLValue(rec *LinguisticDataRecord, cur, droot string) (float64, error) {
 	columnName := "L" + cur + droot
+	return GetValueByColName(rec, columnName)
+}
+
+// GetValueByColName returns a particular field from the supplied lrec
+func GetValueByColName(rec *LinguisticDataRecord, columnName string) (float64, error) {
 	switch columnName {
 	case "LALLLSNScore":
 		return rec.LALLLSNScore, nil
@@ -66,6 +71,8 @@ func GetLValue(rec *LinguisticDataRecord, cur, droot string) (float64, error) {
 		return rec.LJPYWDPCount_ECON, nil
 	case "LJPYLIMCount_ECON":
 		return rec.LJPYLIMCount_ECON, nil
+	case "WTOILClose":
+		return rec.WTOILClose, nil
 	}
 	return 0, fmt.Errorf("field %s not found", columnName)
 }
