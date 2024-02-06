@@ -92,19 +92,20 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 		}
 	}
 	//-------------------------------------------
-	// Check for too many Influencers...
+	// Check for duplicate Influencers...
 	//-------------------------------------------
-	max := len(util.InfluencerSubclasses)
-	count := 0
-	for i := 0; i < len(newPopulation); i++ {
-		if len(newPopulation[i].Influencers) > max {
-			util.DPrintf("newPopulation[%d] has %d Influencers\n", i, len(newPopulation[i].Influencers))
-			count++
-		}
-	}
-	if count > 0 {
-		log.Panicf("Fount %d Investors with number of Influencers > %d\n", count, max)
-	}
+
+	// max := len(util.InfluencerSubclasses)
+	// count := 0
+	// for i := 0; i < len(newPopulation); i++ {
+	// 	if len(newPopulation[i].Influencers) > max {
+	// 		util.DPrintf("newPopulation[%d] has %d Influencers\n", i, len(newPopulation[i].Influencers))
+	// 		count++
+	// 	}
+	// }
+	// if count > 0 {
+	// 	log.Panicf("Fount %d Investors with number of Influencers > %d\n", count, max)
+	// }
 
 	return newPopulation, nil
 }
@@ -181,100 +182,19 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		}
 	}
 
-	//-----------------------------------------------------------------------
-	// Determine the count of new influencers as a random number between
-	// the counts of parent influencers
-	//-----------------------------------------------------------------------
-	p1Influencers := parent1.Influencers
-	p2Influencers := parent2.Influencers
-
-	//-----------------------------------------------------------------------
-	// To generate new Investor's Influencers, we use a random, parental-based
-	// approach:
-	//
-	// Influencers Count: Randomly choose the number of Influencers from
-	//     either parent. For example, if Parent1 has 3 and Parent2 has 2
-	//     Influencers, the offspring gets 2 or 3 Influencers.
-	//
-	// Influencer Types: Select Influencer types based on the frequency in
-	//     both parents. The first selected type is removed from subsequent
-	//     selection to avoid duplicate Influencer subclasses in the new Investor.
-	//
-	// DNA Configuration: Several strategies can be employed:
-	//     a) Use the parents' Influencer DNA when both have the same Influencer
-	//        type. Treat single occurrences as dominant.
-	//     b) Apply roulette selection from the population for DNA selection,
-	//        favoring more successful Influencers.
-	//     c) Utilize parents' DNA when possible, and resort to roulette selection
-	//        from population for single occurrences.
-	//     d) Generate a random DNA string where needed.
-	//
-	// Strategies (a) and (c) seem most viable. (b) is simple but potentially
-	//     suboptimal. (d) might be superfluous due to the mutation phase.
-	//
-	// For now, I'm going with option (a). We can make a configuration
-	// option to flip it to (c) if we do not get the result's we're seeking
-	// with (a).
-	//-----------------------------------------------------------------------
-	parentInfluencers := append(p1Influencers, p2Influencers...)
-
-	//-------------------------------------------------------------------
-	// Select influencers based on what the parents had.
-	// Build a list of InfluencerDNA structs that we'll create next
-	//-------------------------------------------------------------------
-	newInfluencersDNA := []InfluencerDNA{} // we're going to pick our Influencers now...
 	parent := parents[util.RandomInRange(0, 1)]
 	newInfCount := len(parent.Influencers) // use the count from one of the parents
 	if newInfCount == 0 {
-		log.Panicf("newInfCount == 0, we cannot have an influencer with 0 investors\n")
+		log.Panicf("newInfCount == 0, we cannot have an Investor with 0 Influencers\n")
 	}
-	if newInfCount > len(util.InfluencerSubclasses) {
-		fmt.Printf("Uh oh:  newInfCount = %d, len(util.InfluencerSubclasses) = %d\n", newInfCount, len(util.InfluencerSubclasses))
-		fmt.Printf("\tutil.InfluencerSubclasses:")
-		for i := 0; i < len(util.InfluencerSubclasses); i++ {
-			fmt.Printf("%2d: %s\n", i, util.InfluencerSubclasses[i])
-		}
-		log.Panicf("Factory.BreedNewInvestor.newInfCount = %d\n", newInfCount)
-	}
-
-	//-------------------------------------------------------------------
-	// Seletct Influencer types...  We build a list of DNA strings of
-	// the parents' DNA
-	//-------------------------------------------------------------------
-	for i := 0; i < newInfCount && len(parentInfluencers) > 0; i++ {
-		idx := util.UtilData.Rand.Intn(len(parentInfluencers)) // select a random subclass
-		newInfluencerDNA := InfluencerDNA{
-			Subclass: parentInfluencers[idx].Subclass(),
-			DNA1:     parentInfluencers[idx].DNA(),
-		}
-		selectedInfluencer := parentInfluencers[idx]
-
-		//-----------------------------------------------------------------
-		// Remove all occurrences of the selected subclass from the list
-		// because the Investor can only have one instance of a particular
-		// subclass
-		//-----------------------------------------------------------------
-		var tmp []Influencer
-		for _, inf := range parentInfluencers {
-			if inf.Subclass() != selectedInfluencer.Subclass() {
-				tmp = append(tmp, inf) // we keep it if it's not the same subclass
-			} else {
-				if inf.GetID() != selectedInfluencer.GetID() {
-					newInfluencerDNA.DNA2 = inf.DNA() // save the second DNA if encountered it
-				}
-			}
-		}
-		parentInfluencers = tmp
-		newInfluencersDNA = append(newInfluencersDNA, newInfluencerDNA)
-	}
-
+	newInfluencersDNA := f.createInfluencerDNAList(&parent1, &parent2, newInfCount)
 	if newInfCount > len(util.InfluencerSubclasses) {
 		log.Panicf("Factory.BreedNewInvestorlen(newInvestor.Influencers) = %d\n", len(newInvestor.Influencers))
 	}
 
 	//------------------------------------------------------------------------------------
 	// The slice newInfluencersDNA now has one entry for each Influencer we must create.
-	// It also has 1 or 2 DNAs for these Influences.  If both parents had the subclass
+	// It also has 1 or 2 DNAs for these Influencers.  If both parents had the subclass
 	// then the entry will have 2 DNAs otherwise it will have one.
 	// Spin through the list and create the new Influencers.  If there are 2 DNAs, do a
 	// crossover.  Otherwise, we'll just use the one DNA we have and assume it's dominant
@@ -343,6 +263,66 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	return newInvestor
 }
 
+// createInfluencerDNAList returns
+func (f *Factory) createInfluencerDNAList(parent1, parent2 *Investor, n int) []InfluencerDNA {
+
+	// Validate n
+	minInfluencers := f.min(len(parent1.Influencers), len(parent2.Influencers))
+	maxInfluencers := f.max(len(parent1.Influencers), len(parent2.Influencers))
+	if n < minInfluencers || n > maxInfluencers {
+		fmt.Printf("n must be between %d and %d; adjusting to %d\n", minInfluencers, maxInfluencers, minInfluencers)
+		n = minInfluencers
+	}
+
+	subclassMap := make(map[string]InfluencerDNA)
+	for _, investor := range []*Investor{parent1, parent2} {
+		for _, influencer := range investor.Influencers {
+			subclass := influencer.Subclass()
+			if _, exists := subclassMap[subclass]; !exists {
+				subclassMap[subclass] = InfluencerDNA{Subclass: subclass, DNA1: influencer.DNA()}
+			} else {
+				// If already exists and DNA1 is filled, fill DNA2
+				dna := subclassMap[subclass]
+				if dna.DNA1 != "" && dna.DNA2 == "" {
+					dna.DNA2 = influencer.DNA()
+					subclassMap[subclass] = dna
+				}
+			}
+		}
+	}
+
+	// Convert map to slice
+	allInfluencersDNA := make([]InfluencerDNA, 0, len(subclassMap))
+	for _, dna := range subclassMap {
+		allInfluencersDNA = append(allInfluencersDNA, dna)
+	}
+
+	// Shuffle slice to randomize
+	util.UtilData.Rand.Shuffle(len(allInfluencersDNA), func(i, j int) {
+		allInfluencersDNA[i], allInfluencersDNA[j] = allInfluencersDNA[j], allInfluencersDNA[i]
+	})
+
+	// Select n Influencers, ensuring uniqueness
+	if n > len(allInfluencersDNA) {
+		n = len(allInfluencersDNA)
+	}
+	return allInfluencersDNA[:n]
+}
+
+func (f *Factory) min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func (f *Factory) max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
 // Mutate - there's a one percent chance that something will get completely changed.
 //
 //	TODO - add code that may increase or decrease the number of Influencers
@@ -397,6 +377,7 @@ func (f *Factory) Mutate(inv *Investor) {
 		inv.W1 = 1.0 - w
 	case "Influencers":
 		f.MutateInfluencer(inv)
+
 	default:
 		log.Panicf("*** PANIC ERROR *** Unhandled key from DNA: %s\n", randomKey)
 	}
@@ -441,6 +422,7 @@ func (f *Factory) MutateInfluencer(inv *Investor) {
 				}
 				inf.Init(inv, inv.cfg, inv.Delta4)
 				inv.Influencers = append(inv.Influencers, inf)
+
 			}
 		} else {
 			//--------------------------------------------------------------------
@@ -449,6 +431,7 @@ func (f *Factory) MutateInfluencer(inv *Investor) {
 			if len(inv.Influencers) > 1 {
 				index := util.UtilData.Rand.Intn(len(inv.Influencers))
 				inv.Influencers = append(inv.Influencers[:index], inv.Influencers[index+1:]...)
+
 			}
 		}
 	} else {
@@ -466,23 +449,50 @@ func (f *Factory) MutateInfluencer(inv *Investor) {
 		}
 		r.Init(inv, inv.cfg, inv.Delta4) // intialize it
 		inv.Influencers[idx] = r         // and replace it in the slot we chose randomly
+
 	}
+
 }
 
-// RandomUnusedSubclass looks at the subclasses in the Investor's Influencers
-// and returns a randomly selected subclass that is NOT in the Investor's Influencers
-// ---------------------------------------------------------------------------------------
-func (*Factory) RandomUnusedSubclass(inv *Investor) string {
-	found := false
-	index := -1
-	for !found {
-		index = util.UtilData.Rand.Intn(len(util.InfluencerSubclasses))
-		for i := 0; i < len(inv.Influencers) && !found; i++ {
-			found = (inv.Influencers[i].Subclass() == util.InfluencerSubclasses[index])
+// RandomUnusedSubclass selects a random subclass not yet present in the given Investor's Influencers.
+func (f *Factory) RandomUnusedSubclass(inv *Investor) string {
+	// Map to track existing subclasses
+	existingSubclasses := make(map[string]bool)
+	for _, influencer := range inv.Influencers {
+		existingSubclasses[influencer.Subclass()] = true
+	}
+
+	// Filter the util.InfluencerSubclasses to find those not in existingSubclasses
+	var availableSubclasses []string
+	for _, subclass := range util.InfluencerSubclasses {
+		if !existingSubclasses[subclass] {
+			availableSubclasses = append(availableSubclasses, subclass)
 		}
 	}
-	return util.InfluencerSubclasses[index]
+
+	// If there are no available subclasses, return an empty string
+	if len(availableSubclasses) == 0 {
+		return ""
+	}
+
+	// Randomly select a new subclass from the available ones
+	return availableSubclasses[util.UtilData.Rand.Intn(len(availableSubclasses))]
 }
+
+// // RandomUnusedSubclass looks at the subclasses in the Investor's Influencers
+// // and returns a randomly selected subclass that is NOT in the Investor's Influencers
+// // ---------------------------------------------------------------------------------------
+// func (*Factory) RandomUnusedSubclass(inv *Investor) string {
+// 	found := false
+// 	index := -1
+// 	for !found {
+// 		index = util.UtilData.Rand.Intn(len(util.InfluencerSubclasses))
+// 		for i := 0; i < len(inv.Influencers) && !found; i++ {
+// 			found = (inv.Influencers[i].Subclass() == util.InfluencerSubclasses[index])
+// 		}
+// 	}
+// 	return util.InfluencerSubclasses[index]
+// }
 
 // NewInvestorFromDNA creates a new investor from supplied DNA.
 // -----------------------------------------------------------------------------

@@ -16,7 +16,7 @@
     "LoopCount": 1,            // How many times to loop over DtStart to DtStop
     "Generations": 50,           // how many generations should the simulator run. NOTE: This value is only valid if GenDurSpec is commented out.
     // "GenDurSpec": "1 Y",        // How long is a generation.  EX:  "1 Y",  "6 M",  "8 W", "1 Y 6 M", "90 D"
-    "PopulationSize": 400,      // Total number Investors in the population
+    "PopulationSize": 200,      // Total number Investors in the population
     "C1": "USD",                // main currency  (ISO 4217 code)
     "C2": "JPY",                // currency that we will invest in (ISO 4217 code)
     "InitFunds": 100000.00,     // how much each Investor is funded at the start of a simulation cycle
@@ -25,7 +25,7 @@
     "DBSource": "CSV",          // { CSV | Database | OnlineService }
     "HoldWindowPos": 0.1,       // positive hold area
     "HoldWindowNeg": -0.1,      // negative hold area
-    "COAStrategy": "MajorityRules", // course of action strategy.  Choose from (DistributedDecision, MajorityRules)
+    "COAStrategy": "DistributedDecision", // course of action strategy.  Choose from (DistributedDecision, MajorityRules)
     "TopInvestorCount": 20,     // Save this number of top Investors from across all generations - used in Financial Report - finrep.csv
 
     //-----------------------------------------------------------------
