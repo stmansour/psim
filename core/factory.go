@@ -109,10 +109,10 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 		if idxParent2 == idxParent1 {
 			// use desperate measures
 			found := false
-			for i := 0; i < len(population) && !found; i++ {
-				if i != idxParent1 {
+			for j := 0; j < len(population) && !found; j++ {
+				if j != idxParent1 {
 					found = true
-					idxParent2 = i
+					idxParent2 = j
 				}
 			}
 			if !found {
