@@ -308,8 +308,29 @@ type FileConfig struct {
 	//--------------------------------------------------------------------------------------------------------------------
 	// Single Investor mode...  LoopCount will be set to 1, Generations will be set to 1, PopulationSize will be set to 1
 	//--------------------------------------------------------------------------------------------------------------------
-	SingleInvestorMode bool   // default is false, when true it means we're running a single investor... more like the production code will run
-	SingleInvestorDNA  string // DNA of the single investor
+	SingleInvestorMode bool                   // default is false, when true it means we're running a single investor... more like the production code will run
+	SingleInvestorDNA  string                 // DNA of the single investor
+	CruciblePeriods    []CustomCruciblePeriod // we read in from the config file here -- it gets changed to time.Time vals in the AppConfig struct at the end of LoadConfig
+}
+
+// TopInvestor is a struct containing the DNA for a top-performing Investor and an associated name
+type TopInvestor struct {
+	Name string
+	DNA  string
+}
+
+// CustomCruciblePeriod is a struct containing a start and end time for the simulation of TopInvestors
+// The CustomDate type is used to force our custome string to date function when it is read in through
+// the csv file
+type CustomCruciblePeriod struct {
+	DtStart CustomDate // simulation begins on this date
+	DtStop  CustomDate // simulation ends on this date
+}
+
+// CruciblePeriod defines the start and end time for a simulation of top investors
+type CruciblePeriod struct {
+	DtStart time.Time // simulation begins on this date
+	DtStop  time.Time // simulation ends on this date
 }
 
 // AppConfig is the struct of config data used throughout the code by the Simulator,
@@ -354,6 +375,9 @@ type AppConfig struct {
 	Trace                bool                              // use this flag to cause full trace information to be printed regarding every Investor decision every day.
 	SingleInvestorMode   bool                              // default is false, when true it means we're running a single investor... more like the production code will run
 	SingleInvestorDNA    string                            // DNA of the single investor
+	TopInvestors         []TopInvestor                     // a list of top investors
+	CrucibleSpans        []CruciblePeriod                  // list of times to run the simulation
+	CrucibleMode         bool                              // if true then run all TopInvestor DNA through the CrucibleSpans
 }
 
 func hasPrefix(tag string, prefixes []string, mod string) bool {
@@ -496,7 +520,7 @@ func LoadConfig(cfname string) (AppConfig, error) {
 		}
 	}
 
-	if cfg.SingleInvestorMode {
+	if cfg.SingleInvestorMode || cfg.CrucibleMode {
 		cfg.LoopCount = 1
 		cfg.Generations = 1
 		cfg.PopulationSize = 1
@@ -505,6 +529,24 @@ func LoadConfig(cfname string) (AppConfig, error) {
 		cfg.TopInvestorCount = 10 // guarantee a reasonable number
 	}
 
+	//-------------------------------------------------------------------
+	// CRUCIBLE processing...
+	//-------------------------------------------------------------------
+	for i := 0; i < len(cfg.TopInvestors); i++ {
+		if len(cfg.TopInvestors[i].Name) == 0 {
+			cfg.TopInvestors[i].Name = fmt.Sprintf("TopInvestor%d", i)
+		}
+	}
+	//-------------------------------------------------------------------
+	// Convert the dates now, it's much easier to deal with time.Time
+	// values after they've be read in.
+	//-------------------------------------------------------------------
+	for i := 0; i < len(fcfg.CruciblePeriods); i++ {
+		var cp CruciblePeriod
+		cp.DtStart = time.Time(fcfg.CruciblePeriods[i].DtStart)
+		cp.DtStop = time.Time(fcfg.CruciblePeriods[i].DtStop)
+		cfg.CrucibleSpans = append(cfg.CrucibleSpans, cp)
+	}
 	return cfg, nil
 }
 

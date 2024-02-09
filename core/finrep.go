@@ -30,7 +30,7 @@ type FinRep struct {
 // -----------------------------------------------------------------------------
 func (f *FinRep) GenerateFinRep(sim *Simulator) error {
 	var err error
-	fname := "finrep.csv"
+	fname := "finrep-" + sim.ReportTimestamp + ".csv"
 	f.file, err = os.Create(fname)
 	if err != nil {
 		return err

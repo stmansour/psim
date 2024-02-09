@@ -263,7 +263,8 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	return newInvestor
 }
 
-// createInfluencerDNAList returns
+// createInfluencerDNAList returns a list of subclasses to be created for a newly bred
+// Investor. It also includes the relevant DNA of the parents for each subclass.
 func (f *Factory) createInfluencerDNAList(parent1, parent2 *Investor, n int) []InfluencerDNA {
 
 	// Validate n

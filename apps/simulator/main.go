@@ -23,6 +23,7 @@ var app struct {
 	InfPredDebug               bool
 	trace                      bool
 	cfName                     string // override default with this file
+	cfg                        *util.AppConfig
 }
 
 func dateIsInDataRange(a time.Time) string {
@@ -93,24 +94,19 @@ func displaySimulationResults(cfg *util.AppConfig) {
 	fmt.Printf("Observed Mutation Rate: %6.3f%%\n", omr)
 	s, _ := app.sim.GetSimulationRunTime()
 	fmt.Printf("Elapsed time: %s\n", s)
+
+	// GENERATE  simstats.csv
 	err := (&app.sim).DumpStats()
 	if err != nil {
 		fmt.Printf("Simulator DumpSimStats returned error: %s\n", err)
 	}
 
-	err = (&app.sim).DumpStats()
-	if err != nil {
-		fmt.Printf("Simulator DumpSimStats returned error: %s\n", err)
-	}
-
+	// GENERATE  finrep.csv
 	err = (&app.sim).FinRpt.GenerateFinRep(&app.sim)
 	if err != nil {
 		fmt.Printf("Simulator FinRep returned error: %s\n", err)
 	}
 
-	// if app.showAllInvestors {
-	// 	(&app.sim).ResultsByInvestor()
-	// }
 }
 
 func readCommandLineArgs() {
@@ -144,9 +140,15 @@ func doSimulation() {
 		os.Exit(1)
 	}
 	cfg.Trace = app.trace
+	app.cfg = &cfg
 
 	if err = data.Init(&cfg); err != nil {
 		log.Fatalf("Error initilizing data subsystem: %s\n", err)
+	}
+
+	if cfg.CrucibleMode {
+		crucible()
+		os.Exit(0)
 	}
 
 	displaySimulationDetails(&cfg)
@@ -160,6 +162,21 @@ func doSimulation() {
 		if err != nil {
 			fmt.Printf("Error writing Top Investor profile: %s\n", err.Error())
 		}
+	}
+}
+
+func crucible() {
+	for i := 0; i < len(app.cfg.TopInvestors); i++ {
+		for j := 0; j < len(app.cfg.CrucibleSpans); j++ {
+			var sim core.Simulator
+			app.cfg.DtStart = util.CustomDate(app.cfg.CrucibleSpans[j].DtStart)
+			app.cfg.DtStop = util.CustomDate(app.cfg.CrucibleSpans[j].DtStop)
+			app.cfg.SingleInvestorDNA = app.cfg.TopInvestors[i].DNA
+			app.cfg.SingleInvestorMode = true
+			sim.Init(app.cfg, false, false)
+			sim.Run()
+		}
+
 	}
 }
 

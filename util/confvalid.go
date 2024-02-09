@@ -17,6 +17,12 @@ func ValidateConfig(cfg *AppConfig) error {
 	var err error
 	err = nil // assume everything is fine.  It will be set if any error conditions are hit
 
+	if cfg.SingleInvestorMode && cfg.CrucibleMode {
+		err = fmt.Errorf("SingleInvestorMode and CrucibleMode cannot both be set to true in the same config file")
+		fmt.Printf("** Configuration Error **  %s\n", err)
+		return err
+	}
+
 	//-----------------------------------------------------------------------------------
 	// Validate Influencer research time.
 	//

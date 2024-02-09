@@ -42,6 +42,28 @@
     "SingleInvestorDNA": "",
 
     //-----------------------------------------------------------------
+    // Saved DNA of the Top Investors
+    //-----------------------------------------------------------------
+    "TopInvestors": [
+      {
+        "DNA": "{Investor;InvW1=0.0362;InvW2=0.9638;Influencers=[{LEInfluencer,Delta1=-55,Delta2=-1}|{LAInfluencer,Delta1=-27,Delta2=-2}|{LFInfluencer,Delta1=-36,Delta2=-10}]}"
+      },
+      {
+        "Name": "Sequoia",
+        "DNA": "{Investor;InvW1=0.0284;InvW2=0.9716;Influencers=[{CCInfluencer,Delta1=-91,Delta2=-34}|{LEInfluencer,Delta1=-55,Delta2=-1}]}"
+      },
+      {
+        "Name": "Buffet",
+        "DNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{LEInfluencer,Delta1=-55,Delta2=-1}|{CCInfluencer,Delta1=-129,Delta2=-45}]}"
+      }
+    ],
+
+    "CruciblePeriods": [
+      { "DtStart": "2015-06-01", "DtStop": "2015-09-30", },
+      { "DtStart": "2015-09-01", "DtStop": "2015-12-31", },
+    ],
+
+    //-----------------------------------------------------------------
     //  INFLUENCER SUBCLASSES
     //  1. Comment out the subclasses you don't want in the simulation
     //     (insert double slashes // at the beginning of the lines 

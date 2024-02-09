@@ -61,6 +61,7 @@ type Simulator struct {
 	WindDownInProgress         bool                   // initially false, set to true when we have a C2 balance on or after cfg.DtStop, when all C2 is sold this will return to being false
 	FinRpt                     *FinRep                // Financial Report generator
 	TopInvestors               []TopInvestor          // the top n Investors across all generations
+	ReportTimestamp            string                 // use this timestamp in the filenames we generate
 }
 
 // ResetSimulator is primarily to support tests. It resets the simulator
@@ -341,6 +342,7 @@ func (s *Simulator) Run() {
 
 	s.SimStop = time.Now()
 	s.StopTimeSet = true
+	s.ReportTimestamp = s.SimStop.Format("2006-01-02T15-04-05")
 }
 
 // Helper function to calculate the total days in a generation.  It is not
@@ -614,7 +616,7 @@ func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time, eodr bool) {
 //
 // ----------------------------------------------------------------------------
 func (s *Simulator) DumpStats() error {
-	fname := "SimStats.csv"
+	fname := "simstats-" + s.ReportTimestamp + ".csv"
 	file, err := os.Create(fname)
 	if err != nil {
 		return err

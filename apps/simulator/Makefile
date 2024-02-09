@@ -12,7 +12,7 @@ dr: *.go
 
 clean:
 	go clean
-	rm -rf fail t[0-9] simulator data c*.json5 config.bak SimStats.csv coverage.out IList*.csv investorProfile.txt *Influencer.csv
+	rm -rf fail t[0-9] simulator data c*.json5 config.bak simstats*.csv finrep*.csv coverage.out IList*.csv investorProfile.txt *Influencer.csv
 	@echo "*** ${THISDIR}: completed clean ***"
 
 test: config db
