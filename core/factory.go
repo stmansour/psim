@@ -71,18 +71,52 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 		}
 	}
 
+	// // Build the new population... Select parents, create a new Investor
+	// for i := 0; i < f.cfg.PopulationSize; i++ {
+	// 	idxParent1 := f.rouletteSelect(population, fitnessSum, -1)         // parent 1
+	// 	idxParent2 := f.rouletteSelect(population, fitnessSum, idxParent1) // parent 2
+
+	// 	// ensure idxParent2 is different from idxParent1
+	// 	dbgCounter := 0
+	// 	for idxParent2 == idxParent1 {
+	// 		idxParent2 = f.rouletteSelect(population, fitnessSum, idxParent1)
+	// 		dbgCounter++
+	// 		if dbgCounter > 3 {
+	// 			log.Panicf("Looks like we're stuck in the loop\n")
+	// 		}
+	// 	}
+
+	// 	newPopulation[i] = f.BreedNewInvestor(&population, idxParent1, idxParent2)
+	// 	if newPopulation[i].factory == nil {
+	// 		log.Panicf("BreedNewInvestor returned a new Investor with a nil factory\n")
+	// 	}
+	// }
+
 	// Build the new population... Select parents, create a new Investor
 	for i := 0; i < f.cfg.PopulationSize; i++ {
-		idxParent1 := f.rouletteSelect(population, fitnessSum, -1)         // parent 1
-		idxParent2 := f.rouletteSelect(population, fitnessSum, idxParent1) // parent 2
+		idxParent1 := f.rouletteSelect(population, fitnessSum, -1) // parent 1
+		var idxParent2 int
+		retryLimit := 10 // Set a sensible retry limit to prevent infinite loops
+		for j := 0; j < retryLimit; j++ {
+			idxParent2 = f.rouletteSelect(population, fitnessSum, idxParent1) // attempt to select parent 2
+			if idxParent2 != idxParent1 {
+				break // We found a different parent, exit the loop
+			}
+			// Optional: Log or handle the case where the same index is selected
+		}
 
-		// ensure idxParent2 is different from idxParent1
-		dbgCounter := 0
-		for idxParent2 == idxParent1 {
-			idxParent2 = f.rouletteSelect(population, fitnessSum, idxParent1)
-			dbgCounter++
-			if dbgCounter > 3 {
-				log.Panicf("Looks like we're stuck in the loop\n")
+		// Check if a different parent was successfully selected
+		if idxParent2 == idxParent1 {
+			// use desperate measures
+			found := false
+			for i := 0; i < len(population) && !found; i++ {
+				if i != idxParent1 {
+					found = true
+					idxParent2 = i
+				}
+			}
+			if !found {
+				log.Panicf("Unable to select a different parent\n")
 			}
 		}
 
@@ -91,6 +125,7 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 			log.Panicf("BreedNewInvestor returned a new Investor with a nil factory\n")
 		}
 	}
+
 	//-------------------------------------------
 	// Check for duplicate Influencers...
 	//-------------------------------------------
