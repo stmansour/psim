@@ -31,7 +31,7 @@ config:
 	cp ${TOP}/util/config.json5 .
 
 db:
-	mkdir -p data;cp ${TOP}/data/data/platodb.csv data/
+	mkdir -p data;cp ${TOP}/newdata/data/platodb.csv data/;cp ${TOP}/newcore/data
 
 package:
 	mkdir -p ${BINDIR}/

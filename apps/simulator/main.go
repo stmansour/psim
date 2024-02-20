@@ -7,30 +7,29 @@ import (
 	"os"
 	"time"
 
-	"github.com/stmansour/psim/core"
-
+	"github.com/stmansour/psim/newcore"
+	"github.com/stmansour/psim/newdata"
 	"github.com/stmansour/psim/util"
-
-	"github.com/stmansour/psim/data"
 )
 
 var app struct {
 	dumpTopInvestorInvestments bool
 	dayByDayResults            bool
 	showAllInvestors           bool // adds all investors to the output in the simulation results
-	sim                        core.Simulator
+	sim                        newcore.Simulator
 	randNano                   int64
 	InfPredDebug               bool
 	trace                      bool
 	cfName                     string // override default with this file
 	cfg                        *util.AppConfig
+	db                         *newdata.Database
 }
 
 func dateIsInDataRange(a time.Time) string {
-	if a.Before(data.DInfo.DtStart) {
+	if a.Before(app.db.CSVData.DtStart) {
 		return "prior to Discount Rate data range"
 	}
-	if a.After(data.DInfo.DtStop) {
+	if a.After(app.db.CSVData.DtStop) {
 		return "after to Discount Rate data range"
 	}
 	return "√"
@@ -142,9 +141,14 @@ func doSimulation() {
 	cfg.Trace = app.trace
 	app.cfg = &cfg
 
-	if err = data.Init(&cfg); err != nil {
-		log.Fatalf("Error initilizing data subsystem: %s\n", err)
+	db, err := newdata.NewDatabase("CSV", &cfg)
+	if err != nil {
+		log.Panicf("*** PANIC ERROR ***  NewDatabase returned error: %s\n", err)
 	}
+	if err := db.Init(); err != nil {
+		log.Panicf("*** PANIC ERROR ***  db.Init returned error: %s\n", err)
+	}
+	app.db = db
 
 	if cfg.CrucibleMode {
 		crucible()
@@ -152,7 +156,7 @@ func doSimulation() {
 	}
 
 	displaySimulationDetails(&cfg)
-	app.sim.Init(&cfg, app.dayByDayResults, app.dumpTopInvestorInvestments)
+	app.sim.Init(&cfg, db, app.dayByDayResults, app.dumpTopInvestorInvestments)
 	app.sim.Run()
 
 	displaySimulationResults(&cfg)
@@ -168,12 +172,12 @@ func doSimulation() {
 func crucible() {
 	for i := 0; i < len(app.cfg.TopInvestors); i++ {
 		for j := 0; j < len(app.cfg.CrucibleSpans); j++ {
-			var sim core.Simulator
+			var sim newcore.Simulator
 			app.cfg.DtStart = util.CustomDate(app.cfg.CrucibleSpans[j].DtStart)
 			app.cfg.DtStop = util.CustomDate(app.cfg.CrucibleSpans[j].DtStop)
 			app.cfg.SingleInvestorDNA = app.cfg.TopInvestors[i].DNA
 			app.cfg.SingleInvestorMode = true
-			sim.Init(app.cfg, false, false)
+			sim.Init(app.cfg, app.db, false, false)
 			sim.Run()
 		}
 

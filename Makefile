@@ -1,5 +1,5 @@
 # test comment
-DIRS=util data core tools apps
+DIRS=util newdata newcore tools apps
 DIST=dist 
 TEST_FAILURE_FILE=fail
 

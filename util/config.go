@@ -347,6 +347,8 @@ type AppConfig struct {
 	COAStrategy          string                            // course of action strategy used by Investors (choices are: DistributedDecision)
 	LoopCount            int                               // how many times to loop over DtStart to DtStop
 	TopInvestorCount     int                               // how many top investors to include in financial report
+	MinInfluencers       int                               // minimum number of influencers per Investor
+	MaxInfluencers       int                               // maximum number of influencers per Investor
 	HoldWindowPos        float64                           // positive space to consider as "no difference" when subtracting two ratios
 	HoldWindowNeg        float64                           // negative space to consider as "no difference" when subtracting two ratios
 	GenDurSpec           string                            // gen dur spec
@@ -565,6 +567,8 @@ func CreateTestingCFG() *AppConfig {
 		C2:             "JPY",   // currency that we will invest in (ISO 4217 code)
 		InitFunds:      1000.00, // how much each Investor is funded at the start of a simulation cycle
 		StdInvestment:  100.00,  // the "standard" investment amount if a decision is made to invest in C2
+		MinInfluencers: 1,       // at least this many per Investor
+		MaxInfluencers: 10,      // no more than this many
 		MinDelta4:      1,       // shortest period of time after a "buy" on T3 that we can do a "sell"
 		MaxDelta4:      14,      // greatest period of time after a "buy" on T3 that we can do a "sell"
 		DRW1:           0.6,     // DRInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: DRW1 + DRW2 = 1.0

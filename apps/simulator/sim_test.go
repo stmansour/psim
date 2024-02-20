@@ -44,3 +44,12 @@ func TestWTInfl(t *testing.T) {
 	s.ResetSimulator()
 	doSimulation()
 }
+
+func TestBug(t *testing.T) {
+	app.randNano = -1
+	app.cfName = "dna-0-jun-2022.json5"
+	s := &app.sim
+	app.trace = false
+	s.ResetSimulator()
+	doSimulation()
+}

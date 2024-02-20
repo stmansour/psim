@@ -28,6 +28,8 @@
     "HoldWindowNeg": -0.1,      // negative hold area
     "COAStrategy": "DistributedDecision", // course of action strategy.  Choose from (DistributedDecision, MajorityRules)
     "TopInvestorCount": 10,     // Save this number of top Investors from across all generations - used in Financial Report - finrep.csv
+    "MinInfluencers": 2,        // Minimum # of Influencers per Investor
+    "MaxInfluencers": 10,       // Maximum # of Influencers per Investor
 
     //-----------------------------------------------------------------
     //  There may be times when we need to test or check the performance
