@@ -155,6 +155,7 @@ func (s *Simulator) NewPopulation() error {
 				v = s.factory.NewInvestorFromDNA(s.cfg.SingleInvestorDNA)
 			} else {
 				v.ID = s.factory.GenerateInvestorID()
+				v.Init(s.cfg, &s.factory, s.mim, s.db)
 			}
 			s.Investors = append(s.Investors, v)
 		}
@@ -649,7 +650,7 @@ func (s *Simulator) DumpStats() error {
 	fmt.Fprintf(file, "\"Population: %d\"\n", s.cfg.PopulationSize)
 	fmt.Fprintf(file, "\"COA Strategy: %s\"\n", s.cfg.COAStrategy)
 
-	s.influencersToCSV(file)
+	// s.influencersToCSV(file)
 	// s.influencerMissingData(file)
 
 	omr := float64(0)
@@ -751,7 +752,7 @@ func (s *Simulator) InvestmentsToCSV(inv *Investor) error {
 	//------------------------------------------------------------------------
 	// Influencers for this investor.
 	//------------------------------------------------------------------------
-	s.influencersToCSV(file)
+	// s.influencersToCSV(file)
 
 	// the header row                                         0          1                2        3                  4                     5                      6                 7                 8             9       10      11                 12
 	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q\n", "T3", "Exchange Rate (T3)", "T4", "Exchange Rate (T4)", "Purchase Amount C1", "Purchase Amount (C2)", "BalanceC1 (T3)", "BalanceC2 (T3)", "T4 C2 Sold", "T4 C1", "Gain", "Balance C1 (T4)", "Balance C2 (T4)")
@@ -780,31 +781,31 @@ func (s *Simulator) InvestmentsToCSV(inv *Investor) error {
 	return nil
 }
 
-// influencersToCSV - single place to call to dump Influencers to CSV file
-// ---------------------------------------------------------------------------
-func (s *Simulator) influencersToCSV(file *os.File) {
-	t := "Influencers: "
-	fmt.Fprintf(file, "%s", t)
-	n := len(t)
-	namesThisLine := 0
-	for i := 0; i < len(util.InfluencerSubclasses); i++ {
-		subclass := util.InfluencerSubclasses[i]
-		if namesThisLine > 0 {
-			fmt.Fprintf(file, " ")
-			n++
-		}
-		if n+len(subclass) > 77 {
-			t = "        "
-			fmt.Fprintf(file, "\n%s", t)
-			n = len(t)
-			namesThisLine = 0
-		}
-		fmt.Fprintf(file, "%s", subclass)
-		n += len(subclass)
-		namesThisLine++
-	}
-	fmt.Fprintf(file, "\n\n")
-}
+// // influencersToCSV - single place to call to dump Influencers to CSV file
+// // ---------------------------------------------------------------------------
+// func (s *Simulator) influencersToCSV(file *os.File) {
+// 	t := "Influencers: "
+// 	fmt.Fprintf(file, "%s", t)
+// 	n := len(t)
+// 	namesThisLine := 0
+// 	for i := 0; i < len(util.InfluencerSubclasses); i++ {
+// 		subclass := util.InfluencerSubclasses[i]
+// 		if namesThisLine > 0 {
+// 			fmt.Fprintf(file, " ")
+// 			n++
+// 		}
+// 		if n+len(subclass) > 77 {
+// 			t = "        "
+// 			fmt.Fprintf(file, "\n%s", t)
+// 			n = len(t)
+// 			namesThisLine = 0
+// 		}
+// 		fmt.Fprintf(file, "%s", subclass)
+// 		n += len(subclass)
+// 		namesThisLine++
+// 	}
+// 	fmt.Fprintf(file, "\n\n")
+// }
 
 // ShowTopInvestor - dumps the top investor to a file after the simulation.
 //

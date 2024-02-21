@@ -11,8 +11,9 @@
     //-----------------------------------------------------------------
     //  SIMULATOR
     //-----------------------------------------------------------------
-    "DtStart": "2015-05-01",    // simulation start date for each generation
-    "DtStop": "2015-05-31",     // simulation stop date for each generation
+    "DtStart": "2018-01-01",    // simulation start date for each generation
+    "DtStop": "2018-12-31",     // simulation stop date for each generation
+    "EnforceStopDate": true,    // stops on DtStop even if there is a C2 Balance, if false and C2 Balance > 0 on StopDate, simulation will continue in sell-only mode until C2 < 1.00
     "LoopCount": 20,            // How many times to loop over DtStart to DtStop
     "Generations": 1,           // how many generations should the simulator run. NOTE: This value is only valid if GenDurSpec is commented out.
     // "GenDurSpec": "1 Y",        // How long is a generation.  EX:  "1 Y",  "6 M",  "8 W", "1 Y 6 M", "90 D"
@@ -25,20 +26,42 @@
     "DBSource": "CSV",          // { CSV | Database | OnlineService }
     "HoldWindowPos": 0.1,       // positive hold area
     "HoldWindowNeg": -0.1,      // negative hold area
-    "COAStrategy": "DistributedDecision", // course of action strategy.  Choose from (DistributedDecision)
-    "MinInfluencers": 1,        // An investor cannot have fewer than this many influencers
-    "MaxInfluencers": 5,        // An investor can have no more than this many Influencers
+    "COAStrategy": "DistributedDecision", // course of action strategy.  Choose from (DistributedDecision, MajorityRules)
+    "TopInvestorCount": 10,     // Save this number of top Investors from across all generations - used in Financial Report - finrep.csv
+    "MinInfluencers": 1,        // Minimum # of Influencers per Investor
+    "MaxInfluencers": 5,       // Maximum # of Influencers per Investor
 
     //-----------------------------------------------------------------
-    //  There may be times when we need to test or check the behavior
+    //  There may be times when we need to test or check the performance
     //  of a specific Investor, based on its DNA. In this case, looping
-    //  and generations are not relevant. Instead, we need the behavior
-    //  to be completely repeatable and predictable.
-    //  When "SingleInvestorMode" is
+    //  and generations are not relevant. This mode of operation simulates
+    //  how a specific Investor will do.  When "SingleInvestorMode" is
     //  true, LoopCount will be forced to 1, Generations will be forced
     //  to 1.  This would simulate things more like the production
     //  version of this projects code will operate. 
     //-----------------------------------------------------------------
-    "SingleInvestorMode": true,
-    "SingleInvestorDNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-27,Delta2=-5,Metric=SP}]}",
+    "SingleInvestorMode": false,
+    "SingleInvestorDNA": "",
+
+    //-----------------------------------------------------------------
+    // Saved DNA of the Top Investors
+    //-----------------------------------------------------------------
+    "TopInvestors": [
+      {
+        "DNA": "{Investor;InvW1=0.0362;InvW2=0.9638;Influencers=[{LEInfluencer,Delta1=-55,Delta2=-1}|{LAInfluencer,Delta1=-27,Delta2=-2}|{LFInfluencer,Delta1=-36,Delta2=-10}]}"
+      },
+      {
+        "Name": "Sequoia",
+        "DNA": "{Investor;InvW1=0.0284;InvW2=0.9716;Influencers=[{CCInfluencer,Delta1=-91,Delta2=-34}|{LEInfluencer,Delta1=-55,Delta2=-1}]}"
+      },
+      {
+        "Name": "Buffet",
+        "DNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{LEInfluencer,Delta1=-55,Delta2=-1}|{CCInfluencer,Delta1=-129,Delta2=-45}]}"
+      }
+    ],
+
+    "CruciblePeriods": [
+      { "DtStart": "2015-06-01", "DtStop": "2015-09-30", },
+      { "DtStart": "2015-09-01", "DtStop": "2015-12-31", },
+    ],
 }

@@ -206,7 +206,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	}
 	newInfluencersDNA := f.createInfluencerDNAList(&parent1, &parent2, newInfCount)
 	if newInfCount > len(util.InfluencerSubclasses) {
-		log.Panicf("Factory.BreedNewInvestorlen(newInvestor.Influencers) = %d\n", len(newInvestor.Influencers))
+		log.Panicf("Factory.BreedNewInvestor len(newInvestor.Influencers) = %d\n", len(newInvestor.Influencers))
 	}
 
 	//------------------------------------------------------------------------------------

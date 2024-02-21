@@ -75,7 +75,7 @@ func (f *FinRep) GenerateHeader() error {
 	fmt.Fprintf(f.file, "\"Population: %d\"\n", f.Sim.cfg.PopulationSize)
 	fmt.Fprintf(f.file, "\"COA Strategy: %s\"\n", f.Sim.cfg.COAStrategy)
 
-	f.Sim.influencersToCSV(f.file)
+	// f.Sim.influencersToCSV(f.file)
 	// f.Sim.influencerMissingData(f.file)
 
 	fmt.Fprintf(f.file, "\"Elapsed Run Time: %s\"\n", et)

@@ -10,10 +10,13 @@ dr: *.go
 	go build
 	@echo "*** ${THISDIR}: completed ${THISDIR} ***"
 
-clean:
+clean: cleancsv
 	go clean
-	rm -rf fail t[0-9] simulator data c*.json5 config.bak simstats*.csv finrep*.csv coverage.out IList*.csv investorProfile.txt *Influencer.csv
+	rm -rf fail t[0-9] simulator data c*.json5 config.bak coverage.out IList*.csv investorProfile.txt
 	@echo "*** ${THISDIR}: completed clean ***"
+
+cleancsv:
+	rm -rf simstats*.csv finrep*.csv IList*.csv
 
 test: config db
 	@touch $(TEST_FAILURE_FILE)

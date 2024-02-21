@@ -23,6 +23,12 @@ func ValidateConfig(cfg *AppConfig) error {
 		return err
 	}
 
+	if cfg.MaxInfluencers == 0 && cfg.MinInfluencers == 0 {
+		err = fmt.Errorf("** Configuration Error **  MinInfluencers and MaxInfluencers are either missing or both set to 0")
+		fmt.Printf("** Configuration Error **  %s\n", err)
+		return err
+	}
+
 	//-----------------------------------------------------------------------------------
 	// Validate Influencer research time.
 	//
