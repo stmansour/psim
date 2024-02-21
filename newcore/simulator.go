@@ -43,25 +43,26 @@ type TopInvestor struct {
 
 // Simulator is a simulator object
 type Simulator struct {
-	cfg                        *util.AppConfig        // system-wide configuration info
-	factory                    Factory                // used to create Influencers
-	db                         *newdata.Database      // database to use in this simulation
-	Investors                  []Investor             // the population of the current generation
-	dayByDay                   bool                   // show day by day results, debug feature
-	dumpTopInvestorInvestments bool                   // dump the investment list for top investor at the end of each generation
-	maxProfitThisRun           float64                // the largest profit made by any investor during this simulation run
-	maxPredictions             map[string]int         // max predictions indexed by subclass
-	maxProfitInvestor          int                    // the investor that had the max profit for this generation
-	maxFitnessScore            float64                // maximum fitness score seen in this generation
-	GensCompleted              int                    // the current count of the number of generations completed in the simulation
-	SimStats                   []SimulationStatistics // keep track of what happened
-	SimStart                   time.Time              // timestamp for simulation start
-	SimStop                    time.Time              // timestamp for simulation stop
-	StopTimeSet                bool                   // set to true once SimStop is set. If it's false either the simulation is still in progress or did not complete
-	WindDownInProgress         bool                   // initially false, set to true when we have a C2 balance on or after cfg.DtStop, when all C2 is sold this will return to being false
-	FinRpt                     *FinRep                // Financial Report generator
-	TopInvestors               []TopInvestor          // the top n Investors across all generations
-	ReportTimestamp            string                 // use this timestamp in the filenames we generate
+	cfg                        *util.AppConfig          // system-wide configuration info
+	factory                    Factory                  // used to create Influencers
+	db                         *newdata.Database        // database to use in this simulation
+	mim                        *MetricInfluencerManager // metric influencer manager
+	Investors                  []Investor               // the population of the current generation
+	dayByDay                   bool                     // show day by day results, debug feature
+	dumpTopInvestorInvestments bool                     // dump the investment list for top investor at the end of each generation
+	maxProfitThisRun           float64                  // the largest profit made by any investor during this simulation run
+	maxPredictions             map[string]int           // max predictions indexed by subclass
+	maxProfitInvestor          int                      // the investor that had the max profit for this generation
+	maxFitnessScore            float64                  // maximum fitness score seen in this generation
+	GensCompleted              int                      // the current count of the number of generations completed in the simulation
+	SimStats                   []SimulationStatistics   // keep track of what happened
+	SimStart                   time.Time                // timestamp for simulation start
+	SimStop                    time.Time                // timestamp for simulation stop
+	StopTimeSet                bool                     // set to true once SimStop is set. If it's false either the simulation is still in progress or did not complete
+	WindDownInProgress         bool                     // initially false, set to true when we have a C2 balance on or after cfg.DtStop, when all C2 is sold this will return to being false
+	FinRpt                     *FinRep                  // Financial Report generator
+	TopInvestors               []TopInvestor            // the top n Investors across all generations
+	ReportTimestamp            string                   // use this timestamp in the filenames we generate
 }
 
 // ResetSimulator is primarily to support tests. It resets the simulator
@@ -71,6 +72,8 @@ type Simulator struct {
 func (s *Simulator) ResetSimulator() {
 	var f Factory
 	s.cfg = nil
+	s.mim = nil
+	s.db = nil
 	s.factory = f
 	s.Investors = nil
 	s.dayByDay = false
@@ -113,13 +116,14 @@ func (s *Simulator) GetSimulationRunTime() (string, time.Duration) {
 // Init initializes the simulation system, it also creates Investors and
 // calls their init functions.
 // ----------------------------------------------------------------------------
-func (s *Simulator) Init(cfg *util.AppConfig, db *newdata.Database, dayByDay, dumpTopInvestorInvestments bool) error {
+func (s *Simulator) Init(cfg *util.AppConfig, db *newdata.Database, mim *MetricInfluencerManager, dayByDay, dumpTopInvestorInvestments bool) error {
 	s.cfg = cfg
 	s.db = db
+	s.mim = mim
 	s.dayByDay = dayByDay
 	s.dumpTopInvestorInvestments = dumpTopInvestorInvestments
 
-	s.factory.Init(s.cfg)
+	s.factory.Init(s.cfg, db, mim)
 	s.FinRpt = &FinRep{}
 
 	//------------------------------------------------------------------------
@@ -153,10 +157,6 @@ func (s *Simulator) NewPopulation() error {
 				v.ID = s.factory.GenerateInvestorID()
 			}
 			s.Investors = append(s.Investors, v)
-		}
-		// Now initialize them all
-		for i := 0; i < len(s.Investors); i++ {
-			s.Investors[i].Init(s.cfg, &s.factory, s.db)
 		}
 		return nil
 	}

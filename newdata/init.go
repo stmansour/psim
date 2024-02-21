@@ -10,7 +10,7 @@ import (
 // EconometricsRecords is a type for an array of DR records
 type EconometricsRecords []EconometricsRecord
 
-// Database is the abstraction for the data source 
+// Database is the abstraction for the data source
 type Database struct {
 	cfg      *util.AppConfig // application configuration info
 	Datatype string          // "CSV", "MYSQL"
@@ -19,7 +19,7 @@ type Database struct {
 
 // CSVDatasource is the database structure definition for csv databases
 type CSVDatasource struct {
-	DBFname string // the csv file used as a database
+	DBFname string                 // the csv file used as a database
 	DBRecs  EconometricsRecords    // all records... temporary, until we have database
 	LRecs   []LinguisticDataRecord // all lingustic records
 	DtStart time.Time              // earliest date with data

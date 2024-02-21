@@ -13,11 +13,12 @@ import (
 
 // Factory contains methods to create objects based on a DNA string
 type Factory struct {
-	cfg         *util.AppConfig   // system-wide configuration info
-	db          *newdata.Database // db to provide to investors
-	MutateCalls int64             // how many calls were made to Mutate()
-	Mutations   int64             // how many times did mutation happen
-	InvCounter  int64             // used in ID generation
+	cfg         *util.AppConfig          // system-wide configuration info
+	db          *newdata.Database        // db to provide to investors
+	mim         *MetricInfluencerManager //metric influencer manager describes the influencers
+	MutateCalls int64                    // how many calls were made to Mutate()
+	Mutations   int64                    // how many times did mutation happen
+	InvCounter  int64                    // used in ID generation
 }
 
 // InfluencerDNA is a struct of information used during the process of
@@ -33,8 +34,10 @@ type InfluencerDNA struct {
 // Init - initializes the factory
 //
 // --------------------------------------------------------------------------------
-func (f *Factory) Init(cfg *util.AppConfig) {
+func (f *Factory) Init(cfg *util.AppConfig, db *newdata.Database, mim *MetricInfluencerManager) {
 	f.cfg = cfg
+	f.db = db
+	f.mim = mim
 }
 
 // NewPopulation creates a new population based on the current population
@@ -151,7 +154,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	newInvestor := Investor{
 		CreatedByDNA: true,
 	}
-	newInvestor.Init(f.cfg, f, f.db)
+	newInvestor.Init(f.cfg, f, f.mim, f.db)
 	newInvestor.FitnessCalculated = false
 	newInvestor.Fitness = 0.0
 	newInvestor.BalanceC1 = f.cfg.InitFunds
@@ -524,6 +527,8 @@ func (f *Factory) NewInvestorFromDNA(DNA string) Investor {
 	}
 	inv.cfg = f.cfg
 	inv.factory = f
+	inv.db = f.db
+	inv.mim = f.mim
 	inv.BalanceC1 = inv.cfg.InitFunds
 	inv.CreatedByDNA = true
 
@@ -624,6 +629,9 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 	if !ok {
 		log.Panicf("Could not get a string value for Metric!\n")
 	}
+	if _, ok := f.mim.MInfluencerSubclasses[metric]; !ok {
+		return nil, fmt.Errorf("unknown metric: %s", metric)
+	}
 	Delta1, Delta2, err := f.GenerateDeltas(metric, DNAmap)
 	if err != nil {
 		fmt.Printf("Error generating Delta1, Delta2: %s\n", err.Error())
@@ -639,12 +647,12 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 		x := LSMInfluencer{
 			Delta1:        Delta1,
 			Delta2:        Delta2,
-			HoldWindowNeg: MInfluencerSubclasses[metric].HoldWindowNeg,
-			HoldWindowPos: MInfluencerSubclasses[metric].HoldWindowPos,
+			HoldWindowNeg: f.mim.MInfluencerSubclasses[metric].HoldWindowNeg,
+			HoldWindowPos: f.mim.MInfluencerSubclasses[metric].HoldWindowPos,
 			Metric:        metric,
 			cfg:           f.cfg,
 		}
-		minf := MInfluencerSubclasses[metric]
+		minf := f.mim.MInfluencerSubclasses[metric]
 		x.Blocs = minf.Blocs
 		x.LocaleType = minf.LocaleType
 		x.Predictor = minf.Predictor
@@ -678,7 +686,7 @@ func (f *Factory) ParseInfluencerDNA(DNA string) (string, map[string]interface{}
 		//--------------------------------------
 		if i == 0 {
 			found := false
-			for _, v := range InfluencerSubclasses {
+			for _, v := range f.mim.InfluencerSubclasses {
 				if v == token {
 					found = true
 					break
@@ -724,28 +732,28 @@ func (f *Factory) ParseInfluencerDNA(DNA string) (string, map[string]interface{}
 func (f *Factory) GenerateDeltas(metric string, DNA map[string]interface{}) (Delta1 int, Delta2 int, err error) {
 	// Generate or validate Delta1
 	if val, ok := DNA["Delta1"].(int); ok {
-		if MInfluencerSubclasses[metric].MinDelta1 <= val && val <= MInfluencerSubclasses[metric].MaxDelta1 {
+		if f.mim.MInfluencerSubclasses[metric].MinDelta1 <= val && val <= f.mim.MInfluencerSubclasses[metric].MaxDelta1 {
 			Delta1 = val
 		} else {
-			util.DPrintf("MInfluencerSubclasses[%s] = %#v\n", metric, MInfluencerSubclasses[metric])
-			return 0, 0, fmt.Errorf("invalid Delta1 value: %d, it must be in the range %d to %d", val, MInfluencerSubclasses[metric].MinDelta1, MInfluencerSubclasses[metric].MaxDelta1)
+			util.DPrintf("f.mim.MInfluencerSubclasses[%s] = %#v\n", metric, f.mim.MInfluencerSubclasses[metric])
+			return 0, 0, fmt.Errorf("invalid Delta1 value: %d, it must be in the range %d to %d", val, f.mim.MInfluencerSubclasses[metric].MinDelta1, f.mim.MInfluencerSubclasses[metric].MaxDelta1)
 		}
 	} else {
 		// if no value found, generate based on configuration limits
-		Delta1 = util.RandomInRange(MInfluencerSubclasses[metric].MinDelta1, MInfluencerSubclasses[metric].MaxDelta1)
+		Delta1 = util.RandomInRange(f.mim.MInfluencerSubclasses[metric].MinDelta1, f.mim.MInfluencerSubclasses[metric].MaxDelta1)
 	}
 
 	// Generate or validate Delta2
 	if val, ok := DNA["Delta2"].(int); ok {
-		if MInfluencerSubclasses[metric].MinDelta2 <= val && val <= MInfluencerSubclasses[metric].MaxDelta2 {
+		if f.mim.MInfluencerSubclasses[metric].MinDelta2 <= val && val <= f.mim.MInfluencerSubclasses[metric].MaxDelta2 {
 			Delta2 = val
 		} else {
-			util.DPrintf("MInfluencerSubclasses[%s] = %#v\n", metric, MInfluencerSubclasses[metric])
-			return 0, 0, fmt.Errorf("invalid Delta2 value: %d, it must be in the range %d to %d", val, MInfluencerSubclasses[metric].MinDelta2, MInfluencerSubclasses[metric].MaxDelta2)
+			util.DPrintf("f.mim.MInfluencerSubclasses[%s] = %#v\n", metric, f.mim.MInfluencerSubclasses[metric])
+			return 0, 0, fmt.Errorf("invalid Delta2 value: %d, it must be in the range %d to %d", val, f.mim.MInfluencerSubclasses[metric].MinDelta2, f.mim.MInfluencerSubclasses[metric].MaxDelta2)
 		}
 	} else {
 		// if no value found, generate based on configuration limits
-		Delta2 = util.RandomInRange(MInfluencerSubclasses[metric].MinDelta2, MInfluencerSubclasses[metric].MaxDelta2)
+		Delta2 = util.RandomInRange(f.mim.MInfluencerSubclasses[metric].MinDelta2, f.mim.MInfluencerSubclasses[metric].MaxDelta2)
 	}
 
 	return Delta1, Delta2, nil

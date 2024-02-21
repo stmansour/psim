@@ -23,6 +23,7 @@ var app struct {
 	cfName                     string // override default with this file
 	cfg                        *util.AppConfig
 	db                         *newdata.Database
+	mim                        *newcore.MetricInfluencerManager
 }
 
 func dateIsInDataRange(a time.Time) string {
@@ -141,14 +142,18 @@ func doSimulation() {
 	cfg.Trace = app.trace
 	app.cfg = &cfg
 
-	db, err := newdata.NewDatabase("CSV", &cfg)
+	app.db, err = newdata.NewDatabase("CSV", &cfg)
 	if err != nil {
 		log.Panicf("*** PANIC ERROR ***  NewDatabase returned error: %s\n", err)
 	}
-	if err := db.Init(); err != nil {
+	if err := app.db.Init(); err != nil {
 		log.Panicf("*** PANIC ERROR ***  db.Init returned error: %s\n", err)
 	}
-	app.db = db
+
+	app.mim = newcore.NewInfluencerManager()
+	if err = app.mim.Init(); err != nil {
+		log.Panicf("*** PANIC ERROR ***  app.mim.Init() returned error: %s\n", err)
+	}
 
 	if cfg.CrucibleMode {
 		crucible()
@@ -156,7 +161,7 @@ func doSimulation() {
 	}
 
 	displaySimulationDetails(&cfg)
-	app.sim.Init(&cfg, db, app.dayByDayResults, app.dumpTopInvestorInvestments)
+	app.sim.Init(app.cfg, app.db, app.mim, app.dayByDayResults, app.dumpTopInvestorInvestments)
 	app.sim.Run()
 
 	displaySimulationResults(&cfg)
@@ -177,7 +182,7 @@ func crucible() {
 			app.cfg.DtStop = util.CustomDate(app.cfg.CrucibleSpans[j].DtStop)
 			app.cfg.SingleInvestorDNA = app.cfg.TopInvestors[i].DNA
 			app.cfg.SingleInvestorMode = true
-			sim.Init(app.cfg, app.db, false, false)
+			sim.Init(app.cfg, app.db, app.mim, false, false)
 			sim.Run()
 		}
 

@@ -41,38 +41,22 @@ var PredictorTypeMap = map[string]int{
 	"CustomPredict": CustomPredict,
 }
 
-// MInfluencerSubclass is the struct that defines a metric-based influencer
-type MInfluencerSubclass struct {
-	Name          string   // name of this type of influencer, if blank in the database it will be set to the Metric
-	Metric        string   // data type of subclass - THIS IS THE TABLE NAME
-	BlocType      int      // bloc type, only type LocaleBloc reads values from Blocs
-	Blocs         []string // list of associated countries. If associated with C1 & C2, blocs[0] must be associated with C1, blocs[1] with C2
-	LocaleType    int      // how to handle locales
-	Predictor     int      // which predictor to use
-	Subclass      string   // What subclass is the container for this metric-influencer
-	MinDelta1     int      // furthest back from t3 that t1 can be
-	MaxDelta1     int      // closest to t3 that t1 can be
-	MinDelta2     int      // furthest back from t3 that t2 can be
-	MaxDelta2     int      // closest to t3 that t2 can be
-	FitnessW1     float64  // weight for correctness
-	FitnessW2     float64  // weight for activity
-	HoldWindowPos float64  // positive hold area
-	HoldWindowNeg float64  // negative hold area
+type MetricInfluencerManager struct {
+	MInfluencerSubclasses        map[string]MInfluencerSubclass
+	MInfluencerSubclassesIndexer []string
+	InfluencerSubclasses         []string
 }
 
-// MInfluencerSubclasses is a map of all recognized influencers indexed by name
-var MInfluencerSubclasses = map[string]MInfluencerSubclass{}
+func NewInfluencerManager() *MetricInfluencerManager {
+	m := MetricInfluencerManager{}
+	return &m
+}
 
-// MInfluencerSubclassesIndexer is a list of names that can be used as keys into the map
-var MInfluencerSubclassesIndexer = []string{}
-
-// InfluencerSubclasses is a list of allowable subclasses of Influencer, the metric-specific subclasses are quasi subclasses of LSMInfluencer
-var InfluencerSubclasses = []string{"LSMInfluencer"}
-
-// Init initializes the core package
-func Init() error {
-	MInfluencerSubclasses = map[string]MInfluencerSubclass{}
-	LoadMInfluencerSubclasses()
+// Init initializes the MetricInfluencerManager
+func (m *MetricInfluencerManager) Init() error {
+	m.MInfluencerSubclasses = map[string]MInfluencerSubclass{}
+	m.LoadMInfluencerSubclasses()
+	m.InfluencerSubclasses = append(m.InfluencerSubclasses, "LSMInfluencer")
 	return nil
 }
 
@@ -80,7 +64,7 @@ func Init() error {
 // from in a table (or a CSV file) so that we don't have to create a Go
 // file for every one. It loads them into the MSInfluencer
 // (Metric Specific Influencer)
-func LoadMInfluencerSubclasses() error {
+func (m *MetricInfluencerManager) LoadMInfluencerSubclasses() error {
 	filename := "data/misubclasses.csv"
 	file, err := os.Open(filename)
 	if err != nil {
@@ -129,45 +113,37 @@ func LoadMInfluencerSubclasses() error {
 			case "Subclass":
 				inf.Subclass = record[index]
 			case "MinDelta1":
-				inf.MinDelta1 = parseAndCheckInt(record[index], filename, line)
+				inf.MinDelta1 = m.parseAndCheckInt(record[index], filename, line)
 			case "MaxDelta1":
-				inf.MaxDelta1 = parseAndCheckInt(record[index], filename, line)
+				inf.MaxDelta1 = m.parseAndCheckInt(record[index], filename, line)
 			case "MinDelta2":
-				inf.MinDelta2 = parseAndCheckInt(record[index], filename, line)
+				inf.MinDelta2 = m.parseAndCheckInt(record[index], filename, line)
 			case "MaxDelta2":
-				inf.MaxDelta2 = parseAndCheckInt(record[index], filename, line)
+				inf.MaxDelta2 = m.parseAndCheckInt(record[index], filename, line)
 			case "FitnessW1":
-				inf.FitnessW1 = parseAndCheckFloat64(record[index], filename, line)
+				inf.FitnessW1 = m.parseAndCheckFloat64(record[index], filename, line)
 			case "FitnessW2":
-				inf.FitnessW2 = parseAndCheckFloat64(record[index], filename, line)
+				inf.FitnessW2 = m.parseAndCheckFloat64(record[index], filename, line)
 			case "HoldWindowPos":
-				inf.HoldWindowPos = parseAndCheckFloat64(record[index], filename, line)
+				inf.HoldWindowPos = m.parseAndCheckFloat64(record[index], filename, line)
 			case "HoldWindowNeg":
-				inf.HoldWindowNeg = parseAndCheckFloat64(record[index], filename, line)
+				inf.HoldWindowNeg = m.parseAndCheckFloat64(record[index], filename, line)
 			}
 		}
-		MInfluencerSubclasses[inf.Metric] = inf
+		m.MInfluencerSubclasses[inf.Metric] = inf
 	}
 
 	//--------------------------------------------
 	// Create an indexer for random selection
 	//--------------------------------------------
-	for k := range MInfluencerSubclasses {
-		MInfluencerSubclassesIndexer = append(MInfluencerSubclassesIndexer, k)
+	for k := range m.MInfluencerSubclasses {
+		m.MInfluencerSubclassesIndexer = append(m.MInfluencerSubclassesIndexer, k)
 	}
 
 	return nil
 }
 
-// GetName returns the Name string or the Metric if len(Name) == 0
-func (p *MInfluencerSubclass) GetName() string {
-	if len(p.Name) == 0 {
-		return p.Metric
-	}
-	return p.Name
-}
-
-func parseAndCheckInt(s, filename string, line int) int {
+func (m *MetricInfluencerManager) parseAndCheckInt(s, filename string, line int) int {
 	var intValue int
 	var err error
 	if intValue, err = strconv.Atoi(s); err != nil {
@@ -177,7 +153,7 @@ func parseAndCheckInt(s, filename string, line int) int {
 	return intValue
 }
 
-func parseAndCheckFloat64(s, filename string, line int) float64 {
+func (m *MetricInfluencerManager) parseAndCheckFloat64(s, filename string, line int) float64 {
 	var x float64
 	var err error
 	if x, err = strconv.ParseFloat(s, 64); err != nil {

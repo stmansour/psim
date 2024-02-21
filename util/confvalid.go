@@ -39,37 +39,40 @@ func ValidateConfig(cfg *AppConfig) error {
 	//       |                      |<- Delta2 ->|<-Delta4->|
 	//       |<-----------  Delta1  ------------>|
 	//-----------------------------------------------------------------------------------
-	for k := range cfg.SCInfo {
-		if cfg.SCInfo[k].MinDelta2 >= 0 {
-			err = fmt.Errorf("MinDelta2 (%d) must be less than 0", cfg.SCInfo[k].MinDelta2)
-			fmt.Printf("** Configuration Error **  %s\n", err)
-		}
-		if !(cfg.SCInfo[k].MaxDelta1 < cfg.SCInfo[k].MinDelta2) {
-			err = fmt.Errorf("MaxDelta1 (%d) must be less than MinDelta2 (%d)", cfg.SCInfo[k].MaxDelta1, cfg.SCInfo[k].MinDelta2)
-			fmt.Printf("** Configuration Error **  %s\n", err)
-		}
-		if !(cfg.SCInfo[k].MinDelta1 < cfg.SCInfo[k].MaxDelta1) {
-			fmt.Printf("cfg[%s]:\n", k)
-			fmt.Printf("MinDelta1 = %d, MaxDelta1 = %d\n", cfg.SCInfo[k].MinDelta1, cfg.SCInfo[k].MaxDelta1)
-			err = fmt.Errorf("MaxDelta1 (%d) must be greater than MinDelta1 (%d)", cfg.SCInfo[k].MaxDelta1, cfg.SCInfo[k].MinDelta1)
-			fmt.Printf("** Configuration Error **  %s\n", err)
-		}
-		if !(cfg.SCInfo[k].MinDelta2 < cfg.SCInfo[k].MaxDelta2) {
-			fmt.Printf("cfg[%s]:\n", k)
-			fmt.Printf("MinDelta2 = %d, MaxDelta2 = %d\n", cfg.SCInfo[k].MinDelta2, cfg.SCInfo[k].MaxDelta2)
-			err = fmt.Errorf("MaxDelta2 (%d) must be greater than MinDelta2 (%d)", cfg.SCInfo[k].MaxDelta2, cfg.SCInfo[k].MinDelta2)
-			fmt.Printf("** Configuration Error **  %s\n", err)
-		}
+	/*
+		** THIS CODE IS NO LONGER NEEDED. We have misubclasses.csv
+		for k := range cfg.SCInfo {
+			if cfg.SCInfo[k].MinDelta2 >= 0 {
+				err = fmt.Errorf("MinDelta2 (%d) must be less than 0", cfg.SCInfo[k].MinDelta2)
+				fmt.Printf("** Configuration Error **  %s\n", err)
+			}
+			if !(cfg.SCInfo[k].MaxDelta1 < cfg.SCInfo[k].MinDelta2) {
+				err = fmt.Errorf("MaxDelta1 (%d) must be less than MinDelta2 (%d)", cfg.SCInfo[k].MaxDelta1, cfg.SCInfo[k].MinDelta2)
+				fmt.Printf("** Configuration Error **  %s\n", err)
+			}
+			if !(cfg.SCInfo[k].MinDelta1 < cfg.SCInfo[k].MaxDelta1) {
+				fmt.Printf("cfg[%s]:\n", k)
+				fmt.Printf("MinDelta1 = %d, MaxDelta1 = %d\n", cfg.SCInfo[k].MinDelta1, cfg.SCInfo[k].MaxDelta1)
+				err = fmt.Errorf("MaxDelta1 (%d) must be greater than MinDelta1 (%d)", cfg.SCInfo[k].MaxDelta1, cfg.SCInfo[k].MinDelta1)
+				fmt.Printf("** Configuration Error **  %s\n", err)
+			}
+			if !(cfg.SCInfo[k].MinDelta2 < cfg.SCInfo[k].MaxDelta2) {
+				fmt.Printf("cfg[%s]:\n", k)
+				fmt.Printf("MinDelta2 = %d, MaxDelta2 = %d\n", cfg.SCInfo[k].MinDelta2, cfg.SCInfo[k].MaxDelta2)
+				err = fmt.Errorf("MaxDelta2 (%d) must be greater than MinDelta2 (%d)", cfg.SCInfo[k].MaxDelta2, cfg.SCInfo[k].MinDelta2)
+				fmt.Printf("** Configuration Error **  %s\n", err)
+			}
 
-		if cfg.MinDelta4 < 1 {
-			err = fmt.Errorf("MinDelta4 (%d) must be > 0", cfg.MinDelta4)
-			fmt.Printf("** Configuration Error **  %s\n", err)
+			if cfg.MinDelta4 < 1 {
+				err = fmt.Errorf("MinDelta4 (%d) must be > 0", cfg.MinDelta4)
+				fmt.Printf("** Configuration Error **  %s\n", err)
+			}
+			if cfg.MinDelta4 >= cfg.MaxDelta4 {
+				err = fmt.Errorf("MinDelta4 (%d) must be less than MaxDelta4 (%d)", cfg.MinDelta4, cfg.MaxDelta4)
+				fmt.Printf("** Configuration Error **  %s\n", err)
+			}
 		}
-		if cfg.MinDelta4 >= cfg.MaxDelta4 {
-			err = fmt.Errorf("MinDelta4 (%d) must be less than MaxDelta4 (%d)", cfg.MinDelta4, cfg.MaxDelta4)
-			fmt.Printf("** Configuration Error **  %s\n", err)
-		}
-	}
+	*/
 
 	//-------------------------------------------------
 	// Standard Investment should be <= InitFunds/3
@@ -82,10 +85,11 @@ func ValidateConfig(cfg *AppConfig) error {
 	//-------------------------------------------------
 	// Weighting validation
 	//-------------------------------------------------
-	if cfg.DRW1+cfg.DRW2 != float64(1.0) {
-		err = fmt.Errorf("DRW1 (%4.2f) plus DRW2 (%4.2f) must equal 1.0", cfg.DRW1, cfg.DRW2)
-		fmt.Printf("** Configuration Error **  %s\n", err)
-	}
+	// THIS TEST IS OBSOLETE - we weight by Influencer type, not by a global factor
+	// if cfg.DRW1+cfg.DRW2 != float64(1.0) {
+	// 	err = fmt.Errorf("DRW1 (%4.2f) plus DRW2 (%4.2f) must equal 1.0", cfg.DRW1, cfg.DRW2)
+	// 	fmt.Printf("** Configuration Error **  %s\n", err)
+	// }
 
 	//-------------------------------------------------
 	// Ensure that mutation is in range 1 - 100

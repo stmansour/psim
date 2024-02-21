@@ -216,7 +216,7 @@ func (p *LSMInfluencer) GetPrediction(t3 time.Time) (*Prediction, error) {
 		log.Fatalf("Need to handle this case\n")
 	}
 
-	sc := MInfluencerSubclasses[p.Metric]
+	sc := p.myInvestor.mim.MInfluencerSubclasses[p.Metric]
 	pred.Action = "hold" // we have the data and made the calculation.  Assume "hold"
 
 	switch p.Predictor {
@@ -243,8 +243,8 @@ func (p *LSMInfluencer) GetPrediction(t3 time.Time) (*Prediction, error) {
 }
 
 func (p *LSMInfluencer) SetDataFields(pred *Prediction) error {
-	db := p.MyInvestor().db
-	sc := MInfluencerSubclasses[p.Metric]
+	db := p.myInvestor.db
+	sc := p.myInvestor.mim.MInfluencerSubclasses[p.Metric]
 
 	// the dates for the
 	t1 := pred.T3.AddDate(0, 0, pred.Delta1)
