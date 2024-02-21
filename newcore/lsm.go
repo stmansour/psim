@@ -242,6 +242,7 @@ func (p *LSMInfluencer) GetPrediction(t3 time.Time) (*Prediction, error) {
 	return &pred, nil
 }
 
+// SetDataFields files in the db record metric info for the Prediction
 func (p *LSMInfluencer) SetDataFields(pred *Prediction) error {
 	db := p.myInvestor.db
 	sc := p.myInvestor.mim.MInfluencerSubclasses[p.Metric]

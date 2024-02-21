@@ -900,7 +900,8 @@ func (s *Simulator) ResultsForInvestor(n int, v *Investor) string {
 		ss := []string{fld}
 		er4, err := s.db.Select(dt, ss) // get the exchange rate on t4
 		if err != nil {
-
+			err := fmt.Errorf("*** ERROR *** s.db.Select error: %s", err.Error())
+			return err.Error()
 		}
 		if er4 == nil {
 			err := fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found", dt.Format("1/2/2006"))

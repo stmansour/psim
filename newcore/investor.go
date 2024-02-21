@@ -6,7 +6,6 @@ import (
 	"math"
 	"math/rand"
 	"os"
-	"reflect"
 	"sort"
 	"strings"
 	"time"
@@ -214,7 +213,7 @@ func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 				return coa, err
 			}
 		}
-		pred.IType = reflect.TypeOf(i.Influencers[j]).String()
+		pred.IType = i.Influencers[j].GetMetric()
 		pred.ID = i.Influencers[j].GetID()
 		pred.Correct = false // don't know ye
 		recs = append(recs, *pred)
@@ -256,7 +255,7 @@ func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 // ----------------------------------------------------------------------------
 func (i *Investor) FormatPrediction(p *Prediction, T3 time.Time) {
 	fmt.Printf("\t%s: %s   (T1 %s [%4.2f] -  T2 %s [%4.2f])\n",
-		p.IType[6:8],
+		p.IType,
 		p.Action,
 		T3.AddDate(0, 0, int(p.Delta1)).Format("Jan _2, 2006"),
 		p.Val1,
@@ -615,11 +614,11 @@ func (i *Investor) InvestorProfile() error {
 	fmt.Fprintf(file, "              %14.2f %s\n", 0.0, i.cfg.C2)
 	fmt.Fprintf(file, "Ending cash:  %14.2f %s\n", i.BalanceC1, i.cfg.C1)
 	fmt.Fprintf(file, "              %14.2f %s\n", i.BalanceC2, i.cfg.C2)
-	fmt.Fprintf(file, "\nInfluencers:\n")
+	// fmt.Fprintf(file, "\nInfluencers:\n")
 
-	for j := 0; j < len(i.Influencers); j++ {
-		fmt.Fprintf(file, "%d. %s\n", j+1, i.Influencers[j].DNA())
-	}
+	// for j := 0; j < len(i.Influencers); j++ {
+	// 	fmt.Fprintf(file, "%d. %s\n", j+1, i.Influencers[j].DNA())
+	// }
 
 	return nil
 }

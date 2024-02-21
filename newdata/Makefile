@@ -1,6 +1,6 @@
 TOP=..
 BINDIR=${TOP}/dist/platosim
-THISDIR=data
+THISDIR=newdata
 TEST_FAILURE_FILE=fail
 
 data: *.go
@@ -16,9 +16,9 @@ clean:
 	@rm -rf *.out fail
 	@echo "*** ${THISDIR}: completed clean ***"
 
-test: db
+test:
 	@touch $(TEST_FAILURE_FILE)
-	@go test github.com/stmansour/psim/data && rm -f $(TEST_FAILURE_FILE)
+	@go test github.com/stmansour/psim/${THISDIR} && rm -f $(TEST_FAILURE_FILE)
 	@go test -coverprofile=coverage.out || (echo "*** ERROR ***  go test failed!" && exit 1)
 	@echo "*** ${THISDIR}: completed test ***"
 

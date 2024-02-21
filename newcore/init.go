@@ -41,12 +41,15 @@ var PredictorTypeMap = map[string]int{
 	"CustomPredict": CustomPredict,
 }
 
+// MetricInfluencerManager maintains the types and contextual info associated with
+// all metric influencers
 type MetricInfluencerManager struct {
 	MInfluencerSubclasses        map[string]MInfluencerSubclass
 	MInfluencerSubclassesIndexer []string
 	InfluencerSubclasses         []string
 }
 
+// NewInfluencerManager is the constructor for MetricInfluencerManager
 func NewInfluencerManager() *MetricInfluencerManager {
 	m := MetricInfluencerManager{}
 	return &m

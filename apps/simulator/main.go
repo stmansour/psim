@@ -59,27 +59,27 @@ func displaySimulationDetails(cfg *util.AppConfig) {
 	fmt.Printf("Duration:            %s\n", util.DateDiffString(a, c))
 	fmt.Printf("Population Size:     %d\n", cfg.PopulationSize)
 	fmt.Printf("COA Strategy:        %s\n", cfg.COAStrategy)
-	s := "Influencers:     "
-	fmt.Printf("%s", s)
-	n := len(s)
-	namesThisLine := 0
-	for i := 0; i < len(util.InfluencerSubclasses); i++ {
-		subclass := util.InfluencerSubclasses[i]
-		if namesThisLine > 0 {
-			fmt.Printf(", ")
-			n += 2
-		}
-		if n+len(subclass) > 77 {
-			s = "                 "
-			fmt.Printf("\n%s", s)
-			n = len(s)
-			namesThisLine = 0
-		}
-		fmt.Printf("%s", subclass)
-		n += len(subclass)
-		namesThisLine++
-	}
-	fmt.Printf("\n")
+	// s := "Influencers:     "
+	// fmt.Printf("%s", s)
+	// n := len(s)
+	// namesThisLine := 0
+	// for i := 0; i < len(util.InfluencerSubclasses); i++ {
+	// 	subclass := util.InfluencerSubclasses[i]
+	// 	if namesThisLine > 0 {
+	// 		fmt.Printf(", ")
+	// 		n += 2
+	// 	}
+	// 	if n+len(subclass) > 77 {
+	// 		s = "                 "
+	// 		fmt.Printf("\n%s", s)
+	// 		n = len(s)
+	// 		namesThisLine = 0
+	// 	}
+	// 	fmt.Printf("%s", subclass)
+	// 	n += len(subclass)
+	// 	namesThisLine++
+	// }
+	// fmt.Printf("\n")
 	fmt.Printf("*******************************************************************\n\n")
 }
 

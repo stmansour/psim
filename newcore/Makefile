@@ -1,6 +1,6 @@
 TOP=..
 BINDIR=${TOP}/dist/platosim
-THISDIR="core"
+THISDIR="newcore"
 TEST_FAILURE_FILE=fail
 
 core: *.go
@@ -18,7 +18,7 @@ clean:
 
 test: config.json5 db
 	@touch $(TEST_FAILURE_FILE)
-	@go test github.com/stmansour/psim/core && rm -f $(TEST_FAILURE_FILE)
+	@go test github.com/stmansour/psim/${THISDIR} && rm -f $(TEST_FAILURE_FILE)
 	@go test -coverprofile=coverage.out || (echo "*** ERROR ***  go test failed!" && exit 1)
 	@echo "*** ${THISDIR}: completed test ***"
 
