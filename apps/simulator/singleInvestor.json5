@@ -39,28 +39,4 @@
     //-----------------------------------------------------------------
     "SingleInvestorMode": true,
     "SingleInvestorDNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-27,Delta2=-5,Metric=SP}]}",
-
-    //-----------------------------------------------------------------
-    //  INFLUENCER SUBCLASSES
-    //  1. Comment out the subclasses you don't want in the simulation
-    //     (insert double slashes // at the beginning of the lines 
-    //     containing the influencers you want to remove, then move them
-    //     outside of the square brackets [])
-    //  2. Uncomment subclasses you want in the simulation (remove the
-    //     double slashes //) and move them in the lines between the
-    //     square brackets 
-    //  3. Make sure the last line between the square brackets does
-    //     not have a comma at the end of the line
-    //-----------------------------------------------------------------
-    
-    // "IRInfluencer",
-    // "M2Influencer"
-    // "GDInfluencer",
-    // "M1Influencer",
-    // "CCInfluencer",
-    // "DRInfluencer",
-    // "URInfluencer",
-    "InfluencerSubclasses": [
-      "SPInfluencer"
-    ],
 }
