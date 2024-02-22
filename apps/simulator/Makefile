@@ -2,17 +2,19 @@ TOP=../..
 BINDIR=${TOP}/dist/platosim
 THISDIR="apps/simulator"
 TEST_FAILURE_FILE=fail
+THISDIR := $(notdir $(PWD))
+BUILD_TIME := $(shell date "+%Y%m%d-%H%M%S")
 
-dr: *.go
+sim: *.go
 	go vet
 	golint
 	staticcheck
-	go build
-	@echo "*** ${THISDIR}: completed ${THISDIR} ***"
+	go build -ldflags "-X 'github.com/stmansour/psim/util.buildID=$(BUILD_TIME)'" -o simulator
+	@echo "*** $(THISDIR): completed $(THISDIR) ***"
 
 clean: cleancsv
 	go clean
-	rm -rf fail t[0-9] simulator data c*.json5 config.bak coverage.out IList*.csv investorProfile.txt
+	rm -rf fail [a-z][0-9] [a-z][0-9].normalized simulator data config.json5 config.bak coverage.out IList*.csv investorProfile.txt
 	@echo "*** ${THISDIR}: completed clean ***"
 
 cleancsv:
