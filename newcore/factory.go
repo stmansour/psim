@@ -409,52 +409,28 @@ func (f *Factory) Mutate(inv *Investor) {
 //
 // ----------------------------------------------------------------------------------------------------
 func (f *Factory) MutateInfluencer(inv *Investor) {
-	//---------------------------------------------
-	// 50% chance that we change influencer count
-	//---------------------------------------------
-	if util.RandomInRange(0, 1) == 0 {
-		//------------------------------------
-		// ADD or REMOVE
-		//------------------------------------
-		if util.RandomInRange(0, 1) == 0 { // 50% chance of adding
-			//-----------------------------------------------------------------------------
-			// ADD, but only if influencer count is < the number of influencer subclasses
-			// and also only if the total number of influencers is < the max allowed
-			//-----------------------------------------------------------------------------
-			if len(inv.Influencers) < len(f.mim.InfluencerSubclasses) && len(inv.Influencers) < f.cfg.MaxInfluencers {
-				//------------------------------------------------------------------
-				// Randomly select a new subclass until we find one that does not
-				// yet exist in the investor's influencers
-				//------------------------------------------------------------------
-				subclass, metric := f.RandomUnusedSubclassAndMetric(inv)
-				//-----------------------------------------------------------------
-				// Now that we know the subclass and metric, create it with random values...
-				//-----------------------------------------------------------------
-				newdna := fmt.Sprintf("{%s,Metric=%s}", subclass, metric)
-				inf, err := f.NewInfluencer(newdna)
-				if err != nil {
-					log.Panicf("NewInfluencer(%s) returned error: %s\n", subclass, err)
-				}
-				inf.Init(inv, inv.cfg)
-				inv.Influencers = append(inv.Influencers, inf)
+	mutation := util.RandomInRange(0, 2)
+	f.doMutateInfluencer(inv, mutation)
+}
 
-			}
-		} else {
-			//--------------------------------------------------------------------
-			// REMOVE - but only if there are more than MinInfluencers in the slice
-			//--------------------------------------------------------------------
-			if len(inv.Influencers) > f.cfg.MinInfluencers {
-				index := util.UtilData.Rand.Intn(len(inv.Influencers))
-				inv.Influencers = append(inv.Influencers[:index], inv.Influencers[index+1:]...)
-			}
+// doMutateInfluencer performs the mutation. This, in combination with MutateInfluencer() makes
+// this code much easier to test.
+// INPUTS
+//
+//	 inv: the investor
+//		mutation:  0 = add, 1 = delete, 2 = modify
+//
+// ----------------------------------------------------------------------------------------------------
+func (f *Factory) doMutateInfluencer(inv *Investor, mutation int) {
+	switch mutation {
+	case 0: // ADD
+		f.addInfluencer(inv)
+	case 1: // DELETE
+		if len(inv.Influencers) > f.cfg.MinInfluencers {
+			index := util.UtilData.Rand.Intn(len(inv.Influencers))
+			inv.Influencers = append(inv.Influencers[:index], inv.Influencers[index+1:]...)
 		}
-	} else {
-		//--------------------------------------------------------------------------------
-		// CHANGE EXISTING
-		// here we pick a random position... we'll delete the Influencer in that position
-		// but we will keep its subclass info, then we'll create a new one with random
-		// values to replace it.
-		//--------------------------------------------------------------------------------
+	case 2: // MODIFY
 		idx := util.RandomInRange(0, len(inv.Influencers)-1) // pick the one to mutate
 		dna := "{" + util.InfluencerSubclasses[idx] + "}"    // remember its subclass
 		r, err := f.NewInfluencer(dna)                       // create a new one
@@ -463,7 +439,43 @@ func (f *Factory) MutateInfluencer(inv *Investor) {
 		}
 		r.Init(inv, inv.cfg)     // intialize it
 		inv.Influencers[idx] = r // and replace it in the slot we chose randomly
+	default:
+		fmt.Printf("*** INVALID MUTATION OPERATION *** --> %d, ignored.\n", mutation)
 	}
+}
+
+func (f *Factory) addInfluencer(inv *Investor) {
+	//-----------------------------------------------------------------------------
+	// ADD, but only if influencer count is < the number of influencer subclasses
+	// and also only if the total number of influencers is < the max allowed
+	//-----------------------------------------------------------------------------
+	if len(inv.Influencers) < len(f.mim.MInfluencerSubclassesIndexer) && len(inv.Influencers) < f.cfg.MaxInfluencers {
+		if inf := f.createInfluencer(inv); inf != nil {
+			inv.Influencers = append(inv.Influencers, *inf)
+		}
+	}
+}
+
+// creates a new influencer with a metric that does not yet exist in inv.Influencers
+// If the return value is nil it means that the investor already has one Influencer
+// of every metric type.
+// -----------------------------------------------------------------------------------
+func (f *Factory) createInfluencer(inv *Investor) *Influencer {
+	//------------------------------------------------------------------
+	// Randomly select a new subclass until we find one that does not
+	// yet exist in the investor's influencers
+	//------------------------------------------------------------------
+	subclass, metric := f.RandomUnusedSubclassAndMetric(inv)
+	//-----------------------------------------------------------------
+	// Now that we know the subclass and metric, create it with random values...
+	//-----------------------------------------------------------------
+	newdna := fmt.Sprintf("{%s,Metric=%s}", subclass, metric)
+	inf, err := f.NewInfluencer(newdna)
+	if err != nil {
+		log.Panicf("NewInfluencer(%s) returned error: %s\n", subclass, err)
+	}
+	inf.Init(inv, inv.cfg)
+	return &inf
 }
 
 // RandomUnusedSubclassAndMetric selects a random subclass not yet present in the given Investor's Influencers.
@@ -477,7 +489,7 @@ func (f *Factory) RandomUnusedSubclassAndMetric(inv *Investor) (string, string) 
 
 	// Filter the util.InfluencerSubclasses to find those not in existingMetrics
 	var availableMetrics []string
-	for _, subclass := range util.InfluencerSubclasses {
+	for _, subclass := range f.mim.MInfluencerSubclassesIndexer {
 		if !existingMetrics[subclass] {
 			availableMetrics = append(availableMetrics, subclass)
 		}
@@ -491,21 +503,6 @@ func (f *Factory) RandomUnusedSubclassAndMetric(inv *Investor) (string, string) 
 	// Randomly select a new subclass from the available ones
 	return subclass, availableMetrics[util.UtilData.Rand.Intn(len(availableMetrics))]
 }
-
-// // RandomUnusedSubclassAndMetric looks at the subclasses in the Investor's Influencers
-// // and returns a randomly selected subclass that is NOT in the Investor's Influencers
-// // ---------------------------------------------------------------------------------------
-// func (*Factory) RandomUnusedSubclassAndMetric(inv *Investor) string {
-// 	found := false
-// 	index := -1
-// 	for !found {
-// 		index = util.UtilData.Rand.Intn(len(util.InfluencerSubclasses))
-// 		for i := 0; i < len(inv.Influencers) && !found; i++ {
-// 			found = (inv.Influencers[i].Subclass() == util.InfluencerSubclasses[index])
-// 		}
-// 	}
-// 	return util.InfluencerSubclasses[index]
-// }
 
 // NewInvestorFromDNA creates a new investor from supplied DNA.
 // -----------------------------------------------------------------------------
