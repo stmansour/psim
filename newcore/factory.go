@@ -457,6 +457,7 @@ func (f *Factory) addInfluencer(inv *Investor) {
 	}
 }
 
+// -----------------------------------------------------------------------------------
 // creates a new influencer with a metric that does not yet exist in inv.Influencers
 // If the return value is nil it means that the investor already has one Influencer
 // of every metric type.
@@ -479,7 +480,9 @@ func (f *Factory) createInfluencer(inv *Investor) *Influencer {
 	return &inf
 }
 
-// RandomUnusedSubclassAndMetric selects a random subclass not yet present in the given Investor's Influencers.
+// RandomUnusedSubclassAndMetric selects a random subclass not yet present in the
+// given Investor's Influencers.
+// -----------------------------------------------------------------------------------
 func (f *Factory) RandomUnusedSubclassAndMetric(inv *Investor) (string, string) {
 	subclass := "LSMInfluencer"
 	// Map to track existing subclasses
@@ -636,11 +639,7 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 		return nil, err
 	}
 
-	//============================================
-	// TODO:  Add mn,mx to the influencer data
-	//============================================
 	switch subclassName {
-
 	case "LSMInfluencer":
 		x := LSMInfluencer{
 			Delta1:        Delta1,
@@ -655,7 +654,6 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 		x.LocaleType = minf.LocaleType
 		x.Predictor = minf.Predictor
 		return &x, nil
-
 	default:
 		return nil, errors.New("unknown subclass")
 	}

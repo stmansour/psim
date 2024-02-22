@@ -1,8 +1,11 @@
 package newcore
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
-func TestMutateAddInfluencer(t *testing.T) {
+func TestMutateInfluencer(t *testing.T) {
 	f, _, _, cfg := createConfigAndFactory()
 
 	// set limits on the number of influencers we can have...
@@ -41,6 +44,34 @@ func TestMutateAddInfluencer(t *testing.T) {
 	f.doMutateInfluencer(&inv, 1)
 	if len(inv.Influencers) != 2 {
 		t.Errorf("doMutateInfluencer, mutation=1, reduced the influencer count below the min\n")
+	}
+
+	// make a list of the current Metric Influencer types...
+	fmt.Printf("Influencers prior to mutation:")
+	mm := map[string]bool{}
+	for _, j := range inv.Influencers {
+		mm[j.GetMetric()] = true
+		fmt.Printf("  {%s,Metric=%s}", j.Subclass(), j.GetMetric())
+	}
+	fmt.Printf("\n")
+	// Now mutate one of those influencers
+	f.doMutateInfluencer(&inv, 2)
+	// first, make sure we haven't increased or decreased the influencer count
+	if len(inv.Influencers) != 2 {
+		t.Errorf("doMutateInfluencer, mutation=2, has changed the total number of influencers rather than changed an existing one\n")
+	}
+	// now verify that there is exactly 1 change...
+	fmt.Printf("After doMutateInfluencer(inv,2): ")
+	n := 0
+	for _, j := range inv.Influencers {
+		if _, ok := mm[j.GetMetric()]; !ok {
+			n++ // count the change
+		}
+		fmt.Printf("  {%s,Metric=%s}", j.Subclass(), j.GetMetric())
+	}
+	fmt.Printf("\n")
+	if n != 1 {
+		t.Errorf("doMutateInfluencer, mutation=2, changed more than %d Influencers\n", n)
 	}
 
 }
