@@ -26,6 +26,8 @@
     "HoldWindowPos": 0.1,       // positive hold area
     "HoldWindowNeg": -0.1,      // negative hold area
     "COAStrategy": "DistributedDecision", // course of action strategy.  Choose from (DistributedDecision)
+    "MinInfluencers": 1,        // An investor cannot have fewer than this many influencers
+    "MaxInfluencers": 5,        // An investor can have no more than this many Influencers
 
     //-----------------------------------------------------------------
     //  There may be times when we need to test or check the behavior

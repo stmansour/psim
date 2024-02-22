@@ -783,6 +783,9 @@ func (s *Simulator) InvestmentsToCSV(inv *Investor) error {
 
 // // influencersToCSV - single place to call to dump Influencers to CSV file
 // // ---------------------------------------------------------------------------
+
+// sed -e 's/version [0-9]+\.[0-9]+-[0-9]+/version PLACEHOLDER/g' -e 's/[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}/DATE_PLACEHOLDER/g' t1
+
 // func (s *Simulator) influencersToCSV(file *os.File) {
 // 	t := "Influencers: "
 // 	fmt.Fprintf(file, "%s", t)
