@@ -5,6 +5,7 @@ RUNSINGLETEST=0
 TESTNAME="TestSimulator"
 TESTSUMMARY="Test simulator scenarios"
 TESTCOUNT=0
+ARCHIVE=arch
 
 usage() {
     cat <<EOF
@@ -55,11 +56,13 @@ compareToGold() {
     sed -E \
         -e 's/Version:[[:space:]]+[0-9]+\.[0-9]+-[0-9]{8}-[0-9]{6}/Version: VERSION_PLACEHOLDER/' \
         -e 's/Random number seed:[[:space:]]+[0-9]+/Random number seed: SEED_PLACEHOLDER/' \
+        -e 's/Archive directory:.*/Archive directory: PLACEHOLDER/' \
          "$reportFile" >"$normalizedFile"
 
     # Compare the normalized report to the gold standard
     if diff "$normalizedFile" "$goldFile"; then
         echo "PASSED"
+        rm "${normalizedFile}"
     else
         echo "Differences detected."
         # Prompt the user for action
@@ -109,6 +112,8 @@ done
 shift $((OPTIND - 1))
 ############################################################################################
 
+mkdir -p "${ARCHIVE}"
+
 #------------------------------------------------------------------------------
 #  TEST a
 #  ping the server
@@ -125,7 +130,7 @@ if [ "${SINGLETEST}${TFILES}" = "${TFILES}" -o "${SINGLETEST}${TFILES}" = "${TFI
     echo -n "Test ${TFILES} - "
     echo -n "Single Investor test... "
     RESFILE="${TFILES}${STEP}"
-    ./simulator -trace -c singleInvestor.json5 >"${RESFILE}"
+    ./simulator -a "${ARCHIVE}" -trace -c singleInvestor.json5 >"${RESFILE}"
     compareToGold ${RESFILE}
     ((TESTCOUNT++))
 fi
@@ -136,7 +141,7 @@ if [ "${SINGLETEST}${TFILES}" = "${TFILES}" -o "${SINGLETEST}${TFILES}" = "${TFI
     echo -n "Test ${TFILES} - "
     echo -n "Linguistic Influencers test... "
     RESFILE="${TFILES}${STEP}"
-    ./simulator -trace -c linguistics.json5 >"${RESFILE}"
+    ./simulator -a "${ARCHIVE}" -trace -c linguistics.json5 >"${RESFILE}"
     compareToGold ${RESFILE}
     ((TESTCOUNT++))
 fi

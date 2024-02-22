@@ -28,9 +28,12 @@ type FinRep struct {
 // GenerateFinRep generates the simulation's financial report.
 // The report is generated as a CSV file
 // -----------------------------------------------------------------------------
-func (f *FinRep) GenerateFinRep(sim *Simulator) error {
+func (f *FinRep) GenerateFinRep(sim *Simulator, dirname string) error {
 	var err error
 	fname := "finrep-" + sim.ReportTimestamp + ".csv"
+	if len(dirname) > 0 {
+		fname = dirname + "/" + fname
+	}
 	f.file, err = os.Create(fname)
 	if err != nil {
 		return err
@@ -53,6 +56,7 @@ func (f *FinRep) GenerateHeader() error {
 
 	// context information
 	fmt.Fprintf(f.file, "%q\n", "PLATO Simulator Financial Results")
+	fmt.Fprintf(f.file, "\"Program Version:  %s\"\n", util.Version())
 	fmt.Fprintf(f.file, "\"Configuration File:  %s\"\n", f.Sim.cfg.Filename)
 	fmt.Fprintf(f.file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(f.file, "\"Simulation Start Date: %s\"\n", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))

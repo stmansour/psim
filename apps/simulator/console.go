@@ -47,16 +47,36 @@ func displaySimulationResults(cfg *util.AppConfig) {
 	s, _ := app.sim.GetSimulationRunTime()
 	fmt.Printf("Elapsed time: %s\n", s)
 
+	arch, err := archiveResults(cfg.Filename, app.archiveBaseDir)
+	if err != nil {
+		fmt.Printf("archiveResults returned error: %s\n", err)
+	}
+	fmt.Printf("Archive directory: %s\n", arch)
+
 	// GENERATE  simstats.csv
-	err := (&app.sim).DumpStats()
+	err = (&app.sim).DumpStats(arch)
 	if err != nil {
 		fmt.Printf("Simulator DumpSimStats returned error: %s\n", err)
 	}
 
 	// GENERATE  finrep.csv
-	err = (&app.sim).FinRpt.GenerateFinRep(&app.sim)
+	err = (&app.sim).FinRpt.GenerateFinRep(&app.sim, arch)
 	if err != nil {
 		fmt.Printf("Simulator FinRep returned error: %s\n", err)
 	}
 
+}
+
+func archiveResults(configFilePath, baseDir string) (string, error) {
+	newDir, err := util.CreateTimestampedDir(baseDir)
+	if err != nil {
+		return "", fmt.Errorf("error creating archive directory: %s", err.Error())
+	}
+
+	err = util.FileCopy(configFilePath, newDir)
+	if err != nil {
+		return newDir, fmt.Errorf("error copying file: %s", err.Error())
+
+	}
+	return newDir, nil
 }

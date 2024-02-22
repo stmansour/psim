@@ -30,6 +30,7 @@
     "TopInvestorCount": 10,     // Save this number of top Investors from across all generations - used in Financial Report - finrep.csv
     "MinInfluencers": 2,        // Minimum # of Influencers per Investor
     "MaxInfluencers": 10,       // Maximum # of Influencers per Investor
+    "ArchiveBaseDir": "",       // base directory for archive directory to be created, the 0-length string defaults to the current directory
 
     //-----------------------------------------------------------------
     //  There may be times when we need to test or check the performance

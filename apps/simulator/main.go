@@ -25,6 +25,7 @@ var app struct {
 	cfg                        *util.AppConfig
 	db                         *newdata.Database
 	mim                        *newcore.MetricInfluencerManager
+	archiveBaseDir             string // where archives go
 }
 
 func dateIsInDataRange(a time.Time) string {
@@ -38,6 +39,7 @@ func dateIsInDataRange(a time.Time) string {
 }
 
 func readCommandLineArgs() {
+	aptr := flag.String("a", "", "base archive directory, default is current directory")
 	dptr := flag.Bool("d", false, "show day-by-day results")
 	Dptr := flag.Bool("D", false, "show prediction debug info - dumps a lot of data, use on short simulations, with minimal Influencers")
 	stiptr := flag.Bool("t", false, "for each generation, write top investor Investment List to IList-Gen-n.csv")
@@ -55,6 +57,7 @@ func readCommandLineArgs() {
 	app.trace = *traceptr
 	app.cfName = *cfptr
 	app.version = *vptr
+	app.archiveBaseDir = *aptr
 }
 
 func doSimulation() {

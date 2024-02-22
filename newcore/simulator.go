@@ -613,8 +613,11 @@ func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time, eodr bool) {
 //	any error encountered
 //
 // ----------------------------------------------------------------------------
-func (s *Simulator) DumpStats() error {
+func (s *Simulator) DumpStats(dirname string) error {
 	fname := "simstats-" + s.ReportTimestamp + ".csv"
+	if len(dirname) > 0 {
+		fname = dirname + "/" + fname
+	}
 	file, err := os.Create(fname)
 	if err != nil {
 		return err
@@ -628,6 +631,7 @@ func (s *Simulator) DumpStats() error {
 
 	// context information
 	fmt.Fprintf(file, "%q\n", "PLATO Simulator Results")
+	fmt.Fprintf(file, "\"Program Version:  %s\"\n", util.Version())
 	fmt.Fprintf(file, "\"Configuration File:  %s\"\n", s.cfg.Filename)
 	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Start Date: %s\"\n", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
@@ -780,35 +784,6 @@ func (s *Simulator) InvestmentsToCSV(inv *Investor) error {
 	}
 	return nil
 }
-
-// // influencersToCSV - single place to call to dump Influencers to CSV file
-// // ---------------------------------------------------------------------------
-
-// sed -e 's/version [0-9]+\.[0-9]+-[0-9]+/version PLACEHOLDER/g' -e 's/[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}/DATE_PLACEHOLDER/g' t1
-
-// func (s *Simulator) influencersToCSV(file *os.File) {
-// 	t := "Influencers: "
-// 	fmt.Fprintf(file, "%s", t)
-// 	n := len(t)
-// 	namesThisLine := 0
-// 	for i := 0; i < len(util.InfluencerSubclasses); i++ {
-// 		subclass := util.InfluencerSubclasses[i]
-// 		if namesThisLine > 0 {
-// 			fmt.Fprintf(file, " ")
-// 			n++
-// 		}
-// 		if n+len(subclass) > 77 {
-// 			t = "        "
-// 			fmt.Fprintf(file, "\n%s", t)
-// 			n = len(t)
-// 			namesThisLine = 0
-// 		}
-// 		fmt.Fprintf(file, "%s", subclass)
-// 		n += len(subclass)
-// 		namesThisLine++
-// 	}
-// 	fmt.Fprintf(file, "\n\n")
-// }
 
 // ShowTopInvestor - dumps the top investor to a file after the simulation.
 //
