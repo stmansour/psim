@@ -419,8 +419,9 @@ func (f *Factory) MutateInfluencer(inv *Investor) {
 		if util.RandomInRange(0, 1) == 0 { // 50% chance of adding
 			//-----------------------------------------------------------------------------
 			// ADD, but only if influencer count is < the number of influencer subclasses
+			// and also only if the total number of influencers is < the max allowed
 			//-----------------------------------------------------------------------------
-			if len(inv.Influencers) < len(util.InfluencerSubclasses) {
+			if len(inv.Influencers) < len(f.mim.InfluencerSubclasses) && len(inv.Influencers) < f.cfg.MaxInfluencers {
 				//------------------------------------------------------------------
 				// Randomly select a new subclass until we find one that does not
 				// yet exist in the investor's influencers
@@ -439,12 +440,11 @@ func (f *Factory) MutateInfluencer(inv *Investor) {
 			}
 		} else {
 			//--------------------------------------------------------------------
-			// REMOVE - but only if there are 2 or more Influencers in the slice
+			// REMOVE - but only if there are more than MinInfluencers in the slice
 			//--------------------------------------------------------------------
-			if len(inv.Influencers) > 1 {
+			if len(inv.Influencers) > f.cfg.MinInfluencers {
 				index := util.UtilData.Rand.Intn(len(inv.Influencers))
 				inv.Influencers = append(inv.Influencers[:index], inv.Influencers[index+1:]...)
-
 			}
 		}
 	} else {
@@ -462,9 +462,7 @@ func (f *Factory) MutateInfluencer(inv *Investor) {
 		}
 		r.Init(inv, inv.cfg)     // intialize it
 		inv.Influencers[idx] = r // and replace it in the slot we chose randomly
-
 	}
-
 }
 
 // RandomUnusedSubclass selects a random subclass not yet present in the given Investor's Influencers.
