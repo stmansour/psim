@@ -205,7 +205,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		log.Panicf("newInfCount == 0, we cannot have an Investor with 0 Influencers\n")
 	}
 	newInfluencersDNA := f.createInfluencerDNAList(&parent1, &parent2, newInfCount)
-	if newInfCount > len(util.InfluencerSubclasses) {
+	if newInfCount > len(f.mim.MInfluencerSubclassesIndexer) {
 		log.Panicf("Factory.BreedNewInvestor len(newInvestor.Influencers) = %d\n", len(newInvestor.Influencers))
 	}
 
@@ -260,7 +260,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		}
 		inf.SetMyInvestor(&newInvestor)
 		newInvestor.Influencers = append(newInvestor.Influencers, inf)
-		if len(newInvestor.Influencers) > len(util.InfluencerSubclasses) {
+		if len(newInvestor.Influencers) > len(f.mim.MInfluencerSubclassesIndexer) {
 			log.Panicf("Factory.BreedNewInvestor len(newInvestor.Influencers) = %d.  i = %d, newInfCount = %d\n", len(newInvestor.Influencers), i, newInfCount)
 		}
 	}
@@ -432,8 +432,9 @@ func (f *Factory) doMutateInfluencer(inv *Investor, mutation int) {
 		}
 	case 2: // MODIFY
 		idx := util.RandomInRange(0, len(inv.Influencers)-1) // pick the one to mutate
-		dna := "{" + util.InfluencerSubclasses[idx] + "}"    // remember its subclass
-		r, err := f.NewInfluencer(dna)                       // create a new one
+		subclass, metric := f.RandomUnusedSubclassAndMetric(inv)
+		dna := fmt.Sprintf("{%s,Metric=%s}", subclass, metric)
+		r, err := f.NewInfluencer(dna) // create a new one
 		if err != nil {
 			log.Panicf("*** PANIC ERROR NewInfluncer(%q) returned error: %s\n", dna, err)
 		}

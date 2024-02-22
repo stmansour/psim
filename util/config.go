@@ -71,7 +71,7 @@ var ValidInfluencerSubclasses = []string{
 // InfluencerSubclasses is an array of strings with all the subclasses of
 // Influencer that the factory knows how to create.
 // ---------------------------------------------------------------------------
-var InfluencerSubclasses []string
+// var InfluencerSubclasses []string
 
 // UnmarshalJSON implements an interface that allows our specially formatted
 // dates to be parsed by go's json unmarshaling code.
@@ -121,196 +121,6 @@ type FileConfig struct {
 	MaxInf          int                    // maximum number of influencers for any Investor
 	MinInf          int                    // minimum number of influencers for any Investor
 	CruciblePeriods []CustomCruciblePeriod // we read in from the config file here -- it gets changed to time.Time vals in the AppConfig struct at the end of LoadConfig
-	/*
-	   InfluencerSubclasses []string  // valid Influencer subclasses for this simulation
-	   CCMinDelta1          int       // negative integer, most number of days prior to T3 for Influencer research to begin
-	   CCMaxDelta1          int       // negative integer, fewest number of days prior to T3 for Invfluencer research to begin
-	   CCMinDelta2          int       // research boundary
-	   CCMaxDelta2          int       // research boundary
-	   DRMinDelta1          int       // negative integer, most number of days prior to T3 for Influencer research to begin
-	   DRMaxDelta1          int       // negative integer, fewest number of days prior to T3 for Invfluencer research to begin
-	   DRMinDelta2          int       // research boundary
-	   DRMaxDelta2          int       // research boundary
-	   GDMinDelta1          int       // negative integer, most number of days prior to T3 for Influencer research to begin
-	   GDMaxDelta1          int       // negative integer, fewest number of days prior to T3 for Invfluencer research to begin
-	   GDMinDelta2          int       // research boundary
-	   GDMaxDelta2          int       // research boundary
-	   URMinDelta1          int       // research boundary
-	   URMaxDelta1          int       // research boundary
-	   URMinDelta2          int       // research boundary
-	   URMaxDelta2          int       // research boundary
-	   IRMinDelta1          int       // research boundary
-	   IRMaxDelta1          int       // research boundary
-	   IRMinDelta2          int       // research boundary
-	   IRMaxDelta2          int       // research boundary
-	   L0MinDelta1          int       // research boundary
-	   L0MaxDelta1          int       // research boundary
-	   L0MinDelta2          int       // research boundary
-	   L0MaxDelta2          int       // research boundary
-	   L1MinDelta1          int       // research boundary
-	   L1MaxDelta1          int       // research boundary
-	   L1MinDelta2          int       // research boundary
-	   L1MaxDelta2          int       // research boundary
-	   L2MinDelta1          int       // research boundary
-	   L2MaxDelta1          int       // research boundary
-	   L2MinDelta2          int       // research boundary
-	   L2MaxDelta2          int       // research boundary
-	   L3MinDelta1          int       // research boundary
-	   L3MaxDelta1          int       // research boundary
-	   L3MinDelta2          int       // research boundary
-	   L3MaxDelta2          int       // research boundary
-	   L4MinDelta1          int       // research boundary
-	   L4MaxDelta1          int       // research boundary
-	   L4MinDelta2          int       // research boundary
-	   L4MaxDelta2          int       // research boundary
-	   L5MinDelta1          int       // research boundary
-	   L5MaxDelta1          int       // research boundary
-	   L5MinDelta2          int       // research boundary
-	   L5MaxDelta2          int       // research boundary
-	   L6MinDelta1          int       // research boundary
-	   L6MinDelta2          int
-	   L6MaxDelta1          int
-	   L6MaxDelta2          int
-	   L7MinDelta1          int // research boundary
-	   L7MinDelta2          int
-	   L7MaxDelta1          int
-	   L7MaxDelta2          int
-	   L8MinDelta1          int // research boundary
-	   L8MinDelta2          int
-	   L8MaxDelta1          int
-	   L8MaxDelta2          int
-	   L9MinDelta1          int // research boundary
-	   L9MinDelta2          int
-	   L9MaxDelta1          int
-	   L9MaxDelta2          int
-	   LAMinDelta1          int // research boundary
-	   LAMinDelta2          int
-	   LAMaxDelta1          int
-	   LAMaxDelta2          int
-	   LBMinDelta1          int // research boundary
-	   LBMinDelta2          int
-	   LBMaxDelta1          int
-	   LBMaxDelta2          int
-	   LCMinDelta1          int // research boundary
-	   LCMinDelta2          int
-	   LCMaxDelta1          int
-	   LCMaxDelta2          int
-	   LDMinDelta1          int // research boundary
-	   LDMinDelta2          int
-	   LDMaxDelta1          int
-	   LDMaxDelta2          int
-	   LEMinDelta1          int // research boundary
-	   LEMinDelta2          int
-	   LEMaxDelta1          int
-	   LEMaxDelta2          int
-	   LFMinDelta1          int // research boundary
-	   LFMinDelta2          int
-	   LFMaxDelta1          int
-	   LFMaxDelta2          int
-	   LGMinDelta1          int // research boundary
-	   LGMinDelta2          int
-	   LGMaxDelta1          int
-	   LGMaxDelta2          int
-	   LHMinDelta1          int // research boundary
-	   LHMinDelta2          int
-	   LHMaxDelta1          int
-	   LHMaxDelta2          int
-	   LIMinDelta1          int // research boundary
-	   LIMinDelta2          int
-	   LIMaxDelta1          int
-	   LIMaxDelta2          int
-	   LJMinDelta1          int // research boundary
-	   LJMinDelta2          int
-	   LJMaxDelta1          int
-	   LJMaxDelta2          int
-	   WTMinDelta1          int // research boundary
-	   WTMinDelta2          int
-	   WTMaxDelta1          int
-	   WTMaxDelta2          int
-	   M1MinDelta1          int     // research boundary
-	   M1MaxDelta1          int     // research boundary
-	   M1MinDelta2          int     // research boundary
-	   M1MaxDelta2          int     // research boundary
-	   M2MinDelta1          int     // research boundary
-	   M2MaxDelta1          int     // research boundary
-	   M2MinDelta2          int     // research boundary
-	   M2MaxDelta2          int     // research boundary
-	   SPMinDelta1          int     // research boundary
-	   SPMaxDelta1          int     // research boundary
-	   SPMinDelta2          int     // research boundary
-	   SPMaxDelta2          int     // research boundary
-	   MinDelta4            int     // closest to t3 that t4 can be
-	   MaxDelta4            int     // furthest out from t3 that t4 can be
-	   CCW1                 float64 // weighting in fitness calculation
-	   CCW2                 float64 // weighting in fitness calculation
-	   DRW1                 float64 // weighting in fitness calculation
-	   DRW2                 float64 // weighting in fitness calculation
-	   GDW1                 float64 // weighting in fitness calculation
-	   GDW2                 float64 // weighting in fitness calculation
-	   IRW1                 float64 // weighting in fitness calculation
-	   IRW2                 float64 // weighting in fitness calculation
-	   L0W1                 float64 // weighting in fitness calculation
-	   L0W2                 float64 // weighting in fitness calculation
-	   L1W1                 float64 // weighting in fitness calculation
-	   L1W2                 float64 // weighting in fitness calculation
-	   L2W1                 float64 // weighting in fitness calculation
-	   L2W2                 float64 // weighting in fitness calculation
-	   L3W1                 float64 // weighting in fitness calculation
-	   L3W2                 float64 // weighting in fitness calculation
-	   L4W1                 float64 // weighting in fitness calculation
-	   L4W2                 float64 // weighting in fitness calculation
-	   L5W1                 float64 // weighting in fitness calculation
-	   L5W2                 float64 // weighting in fitness calculation
-	   L6W1                 float64
-	   L6W2                 float64
-	   L7W1                 float64
-	   L7W2                 float64
-	   L8W1                 float64
-	   L8W2                 float64
-	   L9W1                 float64
-	   L9W2                 float64
-	   LAW1                 float64
-	   LAW2                 float64
-	   LBW1                 float64
-	   LBW2                 float64
-	   LCW1                 float64
-	   LCW2                 float64
-	   LDW1                 float64
-	   LDW2                 float64
-	   LEW1                 float64
-	   LEW2                 float64
-	   LFW1                 float64
-	   LFW2                 float64
-	   LGW1                 float64
-	   LGW2                 float64
-	   LHW1                 float64
-	   LHW2                 float64
-	   LIW1                 float64
-	   LIW2                 float64
-	   LJW1                 float64
-	   LJW2                 float64
-	   WTW1                 float64
-	   WTW2                 float64
-	   M1W1                 float64 // weighting in fitness calculation
-	   M1W2                 float64 // weighting in fitness calculation
-	   M2W1                 float64 // weighting in fitness calculation
-	   M2W2                 float64 // weighting in fitness calculation
-	   SPW1                 float64 // weighting in fitness calculation
-	   SPW2                 float64 // weighting in fitness calculation
-	   URW1                 float64 // weighting in fitness calculation
-	   URW2                 float64 // weighting in fitness calculation
-	   InvW1                float64 // weight for profit part of Investor FitnessScore
-	   InvW2                float64 // weight for correctness part of Investor FitnessScore
-	   MutationRate         int     // 1 - 100 indicating the % of mutation
-	   DBSource             string  // {CSV | Database | OnlineService}
-	   RandNano             int64   // random seed
-
-	   //--------------------------------------------------------------------------------------------------------------------
-	   // Single Investor mode...  LoopCount will be set to 1, Generations will be set to 1, PopulationSize will be set to 1
-	   //--------------------------------------------------------------------------------------------------------------------
-	   SingleInvestorMode bool                   // default is false, when true it means we're running a single investor... more like the production code will run
-	   SingleInvestorDNA  string                 // DNA of the single investor
-	*/
 }
 
 // TopInvestor is a struct containing the DNA for a top-performing Investor and an associated name
@@ -383,16 +193,6 @@ type AppConfig struct {
 	ArchiveBaseDir       string                            // directory where archive will be created.  If no value is supplied, current directory will be used
 }
 
-// func hasPrefix(tag string, prefixes []string, mod string) bool {
-// 	for i := 0; i < len(prefixes); i++ {
-// 		pfx := prefixes[i] + mod
-// 		if strings.HasPrefix(tag, pfx) {
-// 			return true
-// 		}
-// 	}
-// 	return false
-// }
-
 // LoadConfig reads the configuration data from config.json into an
 // internal struct and returns that struct.
 //
@@ -442,78 +242,6 @@ func LoadConfig(cfname string) (AppConfig, error) {
 		return cfg, fmt.Errorf("failed to unmarshal config data into fcfg: %v", err)
 	}
 
-	//--------------------------------------------------------
-	// First thing to do is set the InfluencerSubclasses...
-	//--------------------------------------------------------
-	// InfluencerSubclasses = fcfg.InfluencerSubclasses
-	// var prefixes []string
-	// for i := 0; i < len(InfluencerSubclasses); i++ {
-	// 	s := InfluencerSubclasses[i][:2]
-	// 	prefixes = append(prefixes, s)
-	// 	// DPrintf("LOAD - InfluencerSubclasses[%d] = %s", i, InfluencerSubclasses[i])
-	// }
-
-	//----------------------------------------------------
-	// now build the map[subclass]InfluencerSubclassInfo
-	//----------------------------------------------------
-	// mapper := make(map[string]InfluencerSubclassInfo)
-	// t := reflect.TypeOf(fcfg)
-	// v := reflect.ValueOf(fcfg)
-	// isi := []string{"W1", "W2", "Delta1", "Delta2"}
-
-	// for i := 0; i < t.NumField(); i++ {
-	// 	field := t.Field(i)
-	// 	jsonTag := field.Name
-	// 	value := v.Field(i).Interface()
-
-	// 	//--------------------------------------------------------
-	// 	// Check for values belonging to InfluencerSubclassInfo
-	// 	//--------------------------------------------------------
-	// 	isInfo := -1
-	// 	for j := 0; j < len(isi) && isInfo < 0; j++ {
-	// 		if strings.HasSuffix(jsonTag, isi[j]) {
-	// 			isInfo = j
-	// 		}
-	// 	}
-
-	// 	if isInfo >= 0 {
-	// 		//--------------------------------------------------------
-	// 		// make sure this subclass is included in the simulation
-	// 		//--------------------------------------------------------
-	// 		subclassName := jsonTag[:2]
-	// 		found := false
-	// 		for j := 0; j < len(InfluencerSubclasses) && !found; j++ {
-	// 			if subclassName == InfluencerSubclasses[j][0:2] {
-	// 				found = true
-	// 			}
-	// 		}
-	// 		if !found {
-	// 			continue // skip the limits if we're not even using this subclass
-	// 		}
-
-	// 		info := mapper[subclassName] // grab the current version
-	// 		switch isInfo {
-	// 		case 0: // W1
-	// 			info.FitnessW1 = value.(float64)
-	// 		case 1: // W2
-	// 			info.FitnessW2 = value.(float64)
-	// 		case 2: // Delta1
-	// 			if hasPrefix(jsonTag, prefixes, "Min") {
-	// 				info.MinDelta1 = value.(int)
-	// 			} else if hasPrefix(jsonTag, prefixes, "Max") {
-	// 				info.MaxDelta1 = value.(int)
-	// 			}
-	// 		case 3: // Delta2
-	// 			if hasPrefix(jsonTag, prefixes, "Min") {
-	// 				info.MinDelta2 = value.(int)
-	// 			} else if hasPrefix(jsonTag, prefixes, "Max") {
-	// 				info.MaxDelta2 = value.(int)
-	// 			}
-	// 		}
-	// 		mapper[subclassName] = info // save the updated version
-	// 	}
-	// }
-	// cfg.SCInfo = mapper
 	cfg.DtSettle = time.Time(cfg.DtStop) // start it here... it will be updated later if needed
 
 	if len(cfg.GenDurSpec) != 0 {
@@ -588,23 +316,6 @@ func CreateTestingCFG() *AppConfig {
 			// "M2Influencer",
 			"URInfluencer",
 		},
-	}
-
-	InfluencerSubclasses = []string{
-		"CCInfluencer",
-		"DRInfluencer",
-		// "GDInfluencer",
-		"IRInfluencer",
-		"L0Influencer",
-		"L1Influencer",
-		"L2Influencer",
-		"L3Influencer",
-		"L4Influencer",
-		"L5Influencer",
-		"WTInfluencer",
-		// "M1Influencer",
-		// "M2Influencer",
-		"URInfluencer",
 	}
 
 	cfg.DtStart = CustomDate(dt1)
