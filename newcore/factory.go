@@ -426,11 +426,12 @@ func (f *Factory) MutateInfluencer(inv *Investor) {
 				// Randomly select a new subclass until we find one that does not
 				// yet exist in the investor's influencers
 				//------------------------------------------------------------------
-				subclass := f.RandomUnusedSubclass(inv)
+				subclass, metric := f.RandomUnusedSubclassAndMetric(inv)
 				//-----------------------------------------------------------------
-				// Now that we know the subclass, create it with random values...
+				// Now that we know the subclass and metric, create it with random values...
 				//-----------------------------------------------------------------
-				inf, err := f.NewInfluencer("{" + subclass + "}")
+				newdna := fmt.Sprintf("{%s,Metric=%s}", subclass, metric)
+				inf, err := f.NewInfluencer(newdna)
 				if err != nil {
 					log.Panicf("NewInfluencer(%s) returned error: %s\n", subclass, err)
 				}
@@ -465,35 +466,36 @@ func (f *Factory) MutateInfluencer(inv *Investor) {
 	}
 }
 
-// RandomUnusedSubclass selects a random subclass not yet present in the given Investor's Influencers.
-func (f *Factory) RandomUnusedSubclass(inv *Investor) string {
+// RandomUnusedSubclassAndMetric selects a random subclass not yet present in the given Investor's Influencers.
+func (f *Factory) RandomUnusedSubclassAndMetric(inv *Investor) (string, string) {
+	subclass := "LSMInfluencer"
 	// Map to track existing subclasses
-	existingSubclasses := make(map[string]bool)
+	existingMetrics := make(map[string]bool)
 	for _, influencer := range inv.Influencers {
-		existingSubclasses[influencer.Subclass()] = true
+		existingMetrics[influencer.GetMetric()] = true
 	}
 
-	// Filter the util.InfluencerSubclasses to find those not in existingSubclasses
-	var availableSubclasses []string
+	// Filter the util.InfluencerSubclasses to find those not in existingMetrics
+	var availableMetrics []string
 	for _, subclass := range util.InfluencerSubclasses {
-		if !existingSubclasses[subclass] {
-			availableSubclasses = append(availableSubclasses, subclass)
+		if !existingMetrics[subclass] {
+			availableMetrics = append(availableMetrics, subclass)
 		}
 	}
 
 	// If there are no available subclasses, return an empty string
-	if len(availableSubclasses) == 0 {
-		return ""
+	if len(availableMetrics) == 0 {
+		return subclass, ""
 	}
 
 	// Randomly select a new subclass from the available ones
-	return availableSubclasses[util.UtilData.Rand.Intn(len(availableSubclasses))]
+	return subclass, availableMetrics[util.UtilData.Rand.Intn(len(availableMetrics))]
 }
 
-// // RandomUnusedSubclass looks at the subclasses in the Investor's Influencers
+// // RandomUnusedSubclassAndMetric looks at the subclasses in the Investor's Influencers
 // // and returns a randomly selected subclass that is NOT in the Investor's Influencers
 // // ---------------------------------------------------------------------------------------
-// func (*Factory) RandomUnusedSubclass(inv *Investor) string {
+// func (*Factory) RandomUnusedSubclassAndMetric(inv *Investor) string {
 // 	found := false
 // 	index := -1
 // 	for !found {
