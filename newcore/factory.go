@@ -62,17 +62,17 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 	}
 
 	newPopulation := make([]Investor, f.cfg.PopulationSize)
-	fitnessSum := float64(0.0)                              // used by rouletteSelect
-	influencerFitnessSums := make(map[string]float64)       // stores the fitness sum of each Influencer subclass
-	influencersBySubclass := make(map[string][]*Influencer) // stores pointers to each Influencer of each subclass
+	fitnessSum := float64(0.0) // used by rouletteSelect
+	// influencerFitnessSums := make(map[string]float64)       // stores the fitness sum of each Influencer subclass
+	// influencersBySubclass := make(map[string][]*Influencer) // stores pointers to each Influencer of each subclass
 
 	for i := 0; i < len(population); i++ {
 		fitnessSum += population[i].CalculateFitnessScore()
-		for j := range population[i].Influencers {
-			subclass := population[i].Influencers[j].Subclass()
-			influencerFitnessSums[subclass] += population[i].Influencers[j].CalculateFitnessScore()
-			influencersBySubclass[subclass] = append(influencersBySubclass[subclass], &population[i].Influencers[j])
-		}
+		// for j := range population[i].Influencers {
+		// 	infType := population[i].Influencers[j].GetMetric()
+		// 	influencerFitnessSums[infType] += population[i].Influencers[j].CalculateFitnessScore()
+		// 	influencersBySubclass[infType] = append(influencersBySubclass[infType], &population[i].Influencers[j])
+		// }
 	}
 
 	// Build the new population... Select parents, create a new Investor
@@ -108,21 +108,6 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 			log.Panicf("BreedNewInvestor returned a new Investor with a nil factory\n")
 		}
 	}
-
-	//-------------------------------------------
-	// Check for duplicate Influencers...
-	//-------------------------------------------
-	// max := len(util.InfluencerSubclasses)
-	// count := 0
-	// for i := 0; i < len(newPopulation); i++ {
-	// 	if len(newPopulation[i].Influencers) > max {
-	// 		util.DPrintf("newPopulation[%d] has %d Influencers\n", i, len(newPopulation[i].Influencers))
-	// 		count++
-	// 	}
-	// }
-	// if count > 0 {
-	// 	log.Panicf("Fount %d Investors with number of Influencers > %d\n", count, max)
-	// }
 
 	return newPopulation, nil
 }
@@ -195,8 +180,10 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 			newInvestor.W1 = 1 - val
 		}
 	}
-	if val, ok := maps[util.RandomInRange(0, 1)]["Strategy"].(int); ok {
-		newInvestor.Strategy = val
+	if util.RandomInRange(0, 1) == 0 {
+		newInvestor.Strategy = parent1.Strategy
+	} else {
+		newInvestor.Strategy = parent2.Strategy
 	}
 
 	parent := parents[util.RandomInRange(0, 1)]

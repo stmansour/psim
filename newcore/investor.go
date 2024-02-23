@@ -699,7 +699,7 @@ func (i *Investor) CalculateFitnessScore() float64 {
 	// util.DPrintf("i = %#v\n", *i)
 	// util.DPrintf("i.cfg.InitFunds: %8.2f\n", i.cfg.InitFunds)
 
-	dda := i.BalanceC1 - i.cfg.InitFunds
+	dda := i.PortfolioValueC1 - i.cfg.InitFunds
 	if math.IsNaN(dda) || math.IsInf(dda, 0) {
 		log.Panicf("Investor.FitnessSocre() is dda is invalid\n")
 	}

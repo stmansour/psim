@@ -26,6 +26,7 @@ var app struct {
 	db                         *newdata.Database
 	mim                        *newcore.MetricInfluencerManager
 	archiveBaseDir             string // where archives go
+	CrucibleMode               bool   // normal or crucible
 }
 
 func dateIsInDataRange(a time.Time) string {
@@ -48,6 +49,7 @@ func readCommandLineArgs() {
 	diptr := flag.Bool("i", false, "show all investors in the simulation results")
 	rndptr := flag.Int64("r", -1, "random number seed. ex: ./simulator -r 1687802336231490000")
 	cfptr := flag.String("c", "", "configuration file to use (instead of config.json)")
+	Cptr := flag.Bool("C", false, "Crucible mode. ")
 	flag.Parse()
 	app.dumpTopInvestorInvestments = *stiptr
 	app.dayByDayResults = *dptr
@@ -58,6 +60,7 @@ func readCommandLineArgs() {
 	app.cfName = *cfptr
 	app.version = *vptr
 	app.archiveBaseDir = *aptr
+	app.CrucibleMode = *Cptr
 }
 
 func doSimulation() {

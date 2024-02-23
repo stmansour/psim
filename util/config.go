@@ -278,6 +278,14 @@ func LoadConfig(cfname string) (AppConfig, error) {
 		cp.DtStop = time.Time(fcfg.CruciblePeriods[i].DtStop)
 		cfg.CrucibleSpans = append(cfg.CrucibleSpans, cp)
 	}
+	//-------------------------------------------------------------------
+	// If the weights were not specified, or they do not add up to 1
+	// then set default values here...
+	//-------------------------------------------------------------------
+	if cfg.InvW1+cfg.InvW2 != 1.0 {
+		cfg.InvW1 = 0.5
+		cfg.InvW2 = 0.5
+	}
 	return cfg, nil
 }
 

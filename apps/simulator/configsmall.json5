@@ -11,13 +11,13 @@
     //-----------------------------------------------------------------
     //  SIMULATOR
     //-----------------------------------------------------------------
-    "DtStart": "2018-01-01",    // simulation start date for each generation
-    "DtStop": "2018-12-31",     // simulation stop date for each generation
+    "DtStart": "2022-07-01",    // simulation start date for each generation
+    "DtStop": "2023-06-30",     // simulation stop date for each generation
     "EnforceStopDate": true,    // stops on DtStop even if there is a C2 Balance, if false and C2 Balance > 0 on StopDate, simulation will continue in sell-only mode until C2 < 1.00
-    "LoopCount": 20,            // How many times to loop over DtStart to DtStop
-    "Generations": 1,           // how many generations should the simulator run. NOTE: This value is only valid if GenDurSpec is commented out.
-    // "GenDurSpec": "1 Y",        // How long is a generation.  EX:  "1 Y",  "6 M",  "8 W", "1 Y 6 M", "90 D"
-    "PopulationSize": 200,      // Total number Investors in the population
+    "LoopCount": 1,             // How many times to loop over DtStart to DtStop
+    "Generations": 20,          // how many generations should the simulator run. NOTE: This value is only valid if GenDurSpec is commented out.
+    // "GenDurSpec": "1 Y",     // How long is a generation.  EX:  "1 Y",  "6 M",  "8 W", "1 Y 6 M", "90 D"
+    "PopulationSize": 2000,      // Total number Investors in the population
     "C1": "USD",                // main currency  (ISO 4217 code)
     "C2": "JPY",                // currency that we will invest in (ISO 4217 code)
     "InitFunds": 100000.00,     // how much each Investor is funded at the start of a simulation cycle
@@ -29,7 +29,7 @@
     "COAStrategy": "DistributedDecision", // course of action strategy.  Choose from (DistributedDecision, MajorityRules)
     "TopInvestorCount": 10,     // Save this number of top Investors from across all generations - used in Financial Report - finrep.csv
     "MinInfluencers": 1,        // Minimum # of Influencers per Investor
-    "MaxInfluencers": 5,       // Maximum # of Influencers per Investor
+    "MaxInfluencers": 5,        // Maximum # of Influencers per Investor
 
     //-----------------------------------------------------------------
     //  There may be times when we need to test or check the performance
