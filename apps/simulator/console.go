@@ -49,11 +49,15 @@ func displaySimulationResults(cfg *util.AppConfig, db *newdata.Database) {
 	s, _ := app.sim.GetSimulationRunTime()
 	fmt.Printf("Elapsed time: %s\n", s)
 
-	arch, err := archiveResults(cfg.Filename, app.archiveBaseDir)
-	if err != nil {
-		fmt.Printf("archiveResults returned error: %s\n", err)
+	var arch string
+	var err error
+	if app.archiveMode {
+		arch, err = archiveResults(cfg.Filename, app.archiveBaseDir)
+		if err != nil {
+			fmt.Printf("archiveResults returned error: %s\n", err)
+		}
+		fmt.Printf("Archive directory: %s\n", arch)
 	}
-	fmt.Printf("Archive directory: %s\n", arch)
 
 	// GENERATE  simstats.csv
 	err = (&app.sim).DumpStats(arch)

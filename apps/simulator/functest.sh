@@ -130,7 +130,7 @@ if [ "${SINGLETEST}${TFILES}" = "${TFILES}" -o "${SINGLETEST}${TFILES}" = "${TFI
     echo -n "Test ${TFILES} - "
     echo -n "Single Investor test... "
     RESFILE="${TFILES}${STEP}"
-    ./simulator -a "${ARCHIVE}" -trace -c singleInvestor.json5 >"${RESFILE}"
+    ./simulator -ar -adir "${ARCHIVE}" -trace -c singleInvestor.json5 >"${RESFILE}"
     compareToGold ${RESFILE}
     ((TESTCOUNT++))
 fi
@@ -141,7 +141,7 @@ if [ "${SINGLETEST}${TFILES}" = "${TFILES}" -o "${SINGLETEST}${TFILES}" = "${TFI
     echo -n "Test ${TFILES} - "
     echo -n "Linguistic Influencers test... "
     RESFILE="${TFILES}${STEP}"
-    ./simulator -a "${ARCHIVE}" -trace -c linguistics.json5 >"${RESFILE}"
+    ./simulator -ar -adir "${ARCHIVE}" -trace -c linguistics.json5 >"${RESFILE}"
     compareToGold ${RESFILE}
     ((TESTCOUNT++))
 fi

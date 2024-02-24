@@ -153,17 +153,31 @@ func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time, eodr bool) {
 	s.SimStats = append(s.SimStats, ss)
 }
 
-// DumpStats - dumps the top investor to a file after the simulation.
+func (s *Simulator) generateFName(basename string) string {
+	fname := basename
+	if s.cfg.ArchiveMode {
+		fname += "-" + s.ReportTimestamp
+		if len(s.cfg.ArchiveBaseDir) > 0 {
+			fname = s.cfg.ArchiveBaseDir + "/" + fname
+		}
+	}
+	fname += ".csv"
+
+	return fname
+}
+
+// dumpFitnessScores - dumps Investor fitness Scores for each generation
+// to a file
 //
 // RETURNS
 //
 //	any error encountered
 //
 // ----------------------------------------------------------------------------
-func (s *Simulator) dumpGeneticParentMap(dirname string) error {
-	fname := "dbgGeneticParentMap.csv"
+func (s *Simulator) dumpFitnessScores() error {
 	var file *os.File
 	var err error
+	fname := s.generateFName("fitnessScores")
 	if s.GensCompleted == 1 {
 		file, err = os.Create(fname)
 	} else {
@@ -225,10 +239,14 @@ func (s *Simulator) printNewPopStats(newpop []Investor) {
 //
 // ----------------------------------------------------------------------------
 func (s *Simulator) DumpStats(dirname string) error {
-	fname := "simstats-" + s.ReportTimestamp + ".csv"
-	if len(dirname) > 0 {
-		fname = dirname + "/" + fname
+	fname := "simstats"
+	if s.cfg.ArchiveMode {
+		fname += "-" + s.ReportTimestamp
+		if len(dirname) > 0 {
+			fname = dirname + "/" + fname
+		}
 	}
+	fname += ".csv"
 	file, err := os.Create(fname)
 	if err != nil {
 		return err

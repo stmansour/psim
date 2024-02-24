@@ -51,16 +51,17 @@ type Simulator struct {
 	maxProfitThisRun           float64                  // the largest profit made by any investor during this simulation run
 	maxPredictions             map[string]int           // max predictions indexed by subclass
 	maxProfitInvestor          int                      // the investor that had the max profit for this generation
-	// maxFitnessScore            float64                  // maximum fitness score seen in this generation
-	GensCompleted      int                    // the current count of the number of generations completed in the simulation
-	SimStats           []SimulationStatistics // keep track of what happened
-	SimStart           time.Time              // timestamp for simulation start
-	SimStop            time.Time              // timestamp for simulation stop
-	StopTimeSet        bool                   // set to true once SimStop is set. If it's false either the simulation is still in progress or did not complete
-	WindDownInProgress bool                   // initially false, set to true when we have a C2 balance on or after cfg.DtStop, when all C2 is sold this will return to being false
-	FinRpt             *FinRep                // Financial Report generator
-	TopInvestors       []TopInvestor          // the top n Investors across all generations
-	ReportTimestamp    string                 // use this timestamp in the filenames we generate
+	GensCompleted              int                      // the current count of the number of generations completed in the simulation
+	SimStats                   []SimulationStatistics   // keep track of what happened
+	SimStart                   time.Time                // timestamp for simulation start
+	SimStop                    time.Time                // timestamp for simulation stop
+	StopTimeSet                bool                     // set to true once SimStop is set. If it's false either the simulation is still in progress or did not complete
+	WindDownInProgress         bool                     // initially false, set to true when we have a C2 balance on or after cfg.DtStop, when all C2 is sold this will return to being false
+	FinRpt                     *FinRep                  // Financial Report generator
+	TopInvestors               []TopInvestor            // the top n Investors across all generations
+	ReportTimestamp            string                   // use this timestamp in the filenames we generate
+	GenInfluencerDistribution  bool                     // show Influencer distribution for each generation
+	FitnessScores              bool                     // save the fitness scores for each generation to dbgFitnessScores.csv
 }
 
 // ResetSimulator is primarily to support tests. It resets the simulator
@@ -170,12 +171,17 @@ func (s *Simulator) NewPopulation() error {
 		log.Panicf("*** PANIC ERROR ***  NewPopulation returned error: %s\n", err)
 	}
 
-	// Before we lose the information... save the parenting map
-	s.dumpGeneticParentMap("")
-	s.printNewPopStats(newPop)
+	//-------------------------------------
+	// Dump any reports requested...
+	//-------------------------------------
+	if s.FitnessScores {
+		s.dumpFitnessScores()
+	}
+	if s.GenInfluencerDistribution {
+		s.printNewPopStats(newPop)
+	}
 
 	s.Investors = newPop
-
 	return nil
 }
 
@@ -319,6 +325,10 @@ func (s *Simulator) Run() {
 			s.CalculateMaxVals(T3)
 			s.CalculateAllFitnessScores()
 			s.SaveStats(thisGenDtStart, thisGenDtEnd, T3, EndOfDataReached)
+
+			//----------------------------------------------------------------------
+			// handle any reports...
+			//----------------------------------------------------------------------
 			if s.dumpTopInvestorInvestments {
 				if err := s.InvestmentsToCSV(&s.Investors[s.maxProfitInvestor]); err != nil {
 					log.Printf("ERROR: InvestmentsToCSV returned: %s\n", err)

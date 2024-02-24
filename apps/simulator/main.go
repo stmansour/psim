@@ -26,7 +26,10 @@ var app struct {
 	db                         *newdata.Database
 	mim                        *newcore.MetricInfluencerManager
 	archiveBaseDir             string // where archives go
+	archiveMode                bool   // if true it copies the config file to an archive directory, places simstats and finrep there as well
 	CrucibleMode               bool   // normal or crucible
+	GenInfluencerDistribution  bool   // show Influencer distribution for each generation
+	FitnessScores              bool   // save the fitness scores for each generation to dbgFitnessScores.csv
 }
 
 func dateIsInDataRange(a time.Time) string {
@@ -40,27 +43,20 @@ func dateIsInDataRange(a time.Time) string {
 }
 
 func readCommandLineArgs() {
-	aptr := flag.String("a", "", "base archive directory, default is current directory")
-	dptr := flag.Bool("d", false, "show day-by-day results")
-	Dptr := flag.Bool("D", false, "show prediction debug info - dumps a lot of data, use on short simulations, with minimal Influencers")
-	stiptr := flag.Bool("t", false, "for each generation, write top investor Investment List to IList-Gen-n.csv")
-	traceptr := flag.Bool("trace", false, "trace decision-making process every day, all investors")
-	vptr := flag.Bool("v", false, "print the program version string")
-	diptr := flag.Bool("i", false, "show all investors in the simulation results")
-	rndptr := flag.Int64("r", -1, "random number seed. ex: ./simulator -r 1687802336231490000")
-	cfptr := flag.String("c", "", "configuration file to use (instead of config.json)")
-	Cptr := flag.Bool("C", false, "Crucible mode. ")
+	flag.StringVar(&app.archiveBaseDir, "adir", "", "base archive directory, default is current directory")
+	flag.BoolVar(&app.GenInfluencerDistribution, "idist", false, "report Influencer Distribution each time a generation completes")
+	flag.BoolVar(&app.FitnessScores, "fit", false, "generate a Fitness Report that shows the fitness of all Investors for each generation")
+	flag.BoolVar(&app.archiveMode, "ar", false, "create archive directory for config file, finrep, simstats, and all other reports. Also see -adir.")
+	flag.BoolVar(&app.dayByDayResults, "d", false, "show day-by-day results")
+	flag.BoolVar(&app.InfPredDebug, "D", false, "show prediction debug info - dumps a lot of data, use on short simulations, with minimal Influencers")
+	flag.BoolVar(&app.dumpTopInvestorInvestments, "t", false, "for each generation, write top investor Investment List to IList-Gen-n.csv")
+	flag.BoolVar(&app.trace, "trace", false, "trace decision-making process every day, all investors")
+	flag.BoolVar(&app.version, "v", false, "print the program version string")
+	flag.BoolVar(&app.showAllInvestors, "i", false, "show all investors in the simulation results")
+	flag.Int64Var(&app.randNano, "r", -1, "random number seed. ex: ./simulator -r 1687802336231490000")
+	flag.StringVar(&app.cfName, "c", "", "configuration file to use (instead of config.json)")
+	flag.BoolVar(&app.CrucibleMode, "C", false, "Crucible mode.")
 	flag.Parse()
-	app.dumpTopInvestorInvestments = *stiptr
-	app.dayByDayResults = *dptr
-	app.showAllInvestors = *diptr
-	app.randNano = *rndptr
-	app.InfPredDebug = *Dptr
-	app.trace = *traceptr
-	app.cfName = *cfptr
-	app.version = *vptr
-	app.archiveBaseDir = *aptr
-	app.CrucibleMode = *Cptr
 }
 
 func doSimulation() {
@@ -76,6 +72,8 @@ func doSimulation() {
 		os.Exit(1)
 	}
 	cfg.Trace = app.trace
+	cfg.ArchiveBaseDir = app.archiveBaseDir
+	cfg.ArchiveMode = app.archiveMode
 	app.cfg = &cfg
 
 	app.db, err = newdata.NewDatabase("CSV", &cfg)
@@ -98,6 +96,8 @@ func doSimulation() {
 
 	displaySimulationDetails(&cfg)
 	app.sim.Init(app.cfg, app.db, app.mim, app.dayByDayResults, app.dumpTopInvestorInvestments)
+	app.sim.GenInfluencerDistribution = app.GenInfluencerDistribution
+	app.sim.FitnessScores = app.FitnessScores
 	app.sim.Run()
 
 	displaySimulationResults(&cfg, app.db)

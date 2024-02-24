@@ -104,11 +104,6 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 		}
 		population[idxParent1].Parented++
 		population[idxParent2].Parented++
-
-		// DEBUGGING AID, REMOVE ASAP
-		if population[idxParent1].Parented > 10 || population[idxParent2].Parented > 10 {
-			fmt.Printf("")
-		}
 		newPopulation[i] = f.BreedNewInvestor(&population, idxParent1, idxParent2)
 		if newPopulation[i].factory == nil {
 			log.Panicf("BreedNewInvestor returned a new Investor with a nil factory\n")

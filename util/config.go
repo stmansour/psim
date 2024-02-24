@@ -191,6 +191,7 @@ type AppConfig struct {
 	CrucibleSpans        []CruciblePeriod                  // list of times to run the simulation
 	CrucibleMode         bool                              // if true then run all TopInvestor DNA through the CrucibleSpans
 	ArchiveBaseDir       string                            // directory where archive will be created.  If no value is supplied, current directory will be used
+	ArchiveMode          bool                              // archive reports to directory when true
 }
 
 // LoadConfig reads the configuration data from config.json into an
