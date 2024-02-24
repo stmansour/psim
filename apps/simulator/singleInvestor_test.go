@@ -16,8 +16,7 @@ func TestLinguisticsInfluencers(t *testing.T) {
 	app.randNano = -1
 	app.dumpTopInvestorInvestments = false
 	app.trace = false
-	// app.cfName = "linguistics.json5"
-	app.cfName = "lng.json5"
+	app.cfName = "linguistics.json5"
 	s := &app.sim
 	s.ResetSimulator()
 	doSimulation()
