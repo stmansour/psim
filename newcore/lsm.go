@@ -204,14 +204,14 @@ func (p *LSMInfluencer) GetPrediction(t3 time.Time) (*Prediction, error) {
 		}
 		pred.Val1 = rec1.Fields[pred.Fields[0]]
 		pred.Val2 = rec2.Fields[pred.Fields[0]]
-		res = pred.Val1 - pred.Val2
+		res = pred.Val2 - pred.Val1
 	case C1C2RatioGT, C1C2RatioLT:
 		if len(pred.Recs[0].Fields) != 2 || len(pred.Recs[1].Fields) != 2 {
 			return &pred, nil // need to abstain, the data was not available
 		}
 		pred.Val1 = rec1.Fields[pred.Fields[0]] / rec1.Fields[pred.Fields[1]]
 		pred.Val2 = rec2.Fields[pred.Fields[0]] / rec2.Fields[pred.Fields[1]]
-		res = pred.Val1 - pred.Val2
+		res = pred.Val2 - pred.Val1
 	default:
 		log.Fatalf("Need to handle this case\n")
 	}

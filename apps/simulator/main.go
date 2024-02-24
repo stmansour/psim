@@ -30,10 +30,10 @@ var app struct {
 }
 
 func dateIsInDataRange(a time.Time) string {
-	if a.Before(app.db.CSVData.DtStart) {
+	if a.Before(app.db.CSVDB.DtStart) {
 		return "prior to Discount Rate data range"
 	}
-	if a.After(app.db.CSVData.DtStop) {
+	if a.After(app.db.CSVDB.DtStop) {
 		return "after to Discount Rate data range"
 	}
 	return "√"
@@ -100,7 +100,7 @@ func doSimulation() {
 	app.sim.Init(app.cfg, app.db, app.mim, app.dayByDayResults, app.dumpTopInvestorInvestments)
 	app.sim.Run()
 
-	displaySimulationResults(&cfg)
+	displaySimulationResults(&cfg, app.db)
 
 	if app.dumpTopInvestorInvestments {
 		err := app.sim.ShowTopInvestor()

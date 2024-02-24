@@ -51,16 +51,16 @@ type Simulator struct {
 	maxProfitThisRun           float64                  // the largest profit made by any investor during this simulation run
 	maxPredictions             map[string]int           // max predictions indexed by subclass
 	maxProfitInvestor          int                      // the investor that had the max profit for this generation
-	maxFitnessScore            float64                  // maximum fitness score seen in this generation
-	GensCompleted              int                      // the current count of the number of generations completed in the simulation
-	SimStats                   []SimulationStatistics   // keep track of what happened
-	SimStart                   time.Time                // timestamp for simulation start
-	SimStop                    time.Time                // timestamp for simulation stop
-	StopTimeSet                bool                     // set to true once SimStop is set. If it's false either the simulation is still in progress or did not complete
-	WindDownInProgress         bool                     // initially false, set to true when we have a C2 balance on or after cfg.DtStop, when all C2 is sold this will return to being false
-	FinRpt                     *FinRep                  // Financial Report generator
-	TopInvestors               []TopInvestor            // the top n Investors across all generations
-	ReportTimestamp            string                   // use this timestamp in the filenames we generate
+	// maxFitnessScore            float64                  // maximum fitness score seen in this generation
+	GensCompleted      int                    // the current count of the number of generations completed in the simulation
+	SimStats           []SimulationStatistics // keep track of what happened
+	SimStart           time.Time              // timestamp for simulation start
+	SimStop            time.Time              // timestamp for simulation stop
+	StopTimeSet        bool                   // set to true once SimStop is set. If it's false either the simulation is still in progress or did not complete
+	WindDownInProgress bool                   // initially false, set to true when we have a C2 balance on or after cfg.DtStop, when all C2 is sold this will return to being false
+	FinRpt             *FinRep                // Financial Report generator
+	TopInvestors       []TopInvestor          // the top n Investors across all generations
+	ReportTimestamp    string                 // use this timestamp in the filenames we generate
 }
 
 // ResetSimulator is primarily to support tests. It resets the simulator
@@ -79,7 +79,7 @@ func (s *Simulator) ResetSimulator() {
 	s.maxProfitThisRun = 0
 	s.maxPredictions = make(map[string]int)
 	s.maxProfitInvestor = 0
-	s.maxFitnessScore = 0
+	// s.maxFitnessScore = 0
 	s.GensCompleted = 0
 	s.SimStats = make([]SimulationStatistics, 0)
 	s.StopTimeSet = false
@@ -136,8 +136,7 @@ func (s *Simulator) Init(cfg *util.AppConfig, db *newdata.Database, mim *MetricI
 }
 
 // NewPopulation create a new population. If this is generation 0, it will be
-// a random population.  If
-//
+// a random population.
 // ----------------------------------------------------------------------------
 func (s *Simulator) NewPopulation() error {
 	//----------------------------------------------------------------------------
@@ -145,7 +144,7 @@ func (s *Simulator) NewPopulation() error {
 	// and the max fitness score is 0, then treat it like the first generation...
 	// In other words, just make it a random population.
 	//----------------------------------------------------------------------------
-	if s.GensCompleted == 0 || s.maxFitnessScore == 0 {
+	if s.GensCompleted == 0 {
 		s.Investors = make([]Investor, 0)
 		for i := 0; i < s.cfg.PopulationSize; i++ {
 			var v Investor
@@ -170,6 +169,11 @@ func (s *Simulator) NewPopulation() error {
 	if newPop, err = s.factory.NewPopulation(s.Investors); err != nil {
 		log.Panicf("*** PANIC ERROR ***  NewPopulation returned error: %s\n", err)
 	}
+
+	// Before we lose the information... save the parenting map
+	s.dumpGeneticParentMap("")
+	s.printNewPopStats(newPop)
+
 	s.Investors = newPop
 
 	return nil
@@ -389,17 +393,31 @@ func (s *Simulator) CalculateAllFitnessScores() {
 	// Investor fitness scores. Then call each Influencer
 	// to compute its score.
 	//----------------------------------------------------
-	max := float64(0)
+	min := float64(99999999)
+	max := float64(-99999999)
 	for i := 0; i < len(s.Investors); i++ {
 		x := s.Investors[i].CalculateFitnessScore()
+		if x < min {
+			min = x
+		}
 		if x > max {
 			max = x
 		}
-		for j := 0; j < len(s.Investors[i].Influencers); j++ {
-			s.Investors[i].Influencers[j].CalculateFitnessScore()
-		}
 	}
-	s.maxFitnessScore = max
+
+	// // DEBUG
+	// if max <= 0 {
+	// 	fmt.Printf("")
+	// }
+	// //-------------------------------------------------------------------
+	// // now that we know what the minimum fitness score is, subtract it
+	// // from all the investors fitness scores so that the lowest
+	// // score will be 0
+	// //-------------------------------------------------------------------
+	// for i := 0; i < len(s.Investors); i++ {
+	// 	s.Investors[i].Fitness -= min
+	// 	s.Investors[i].Fitness++
+	// }
 }
 
 // CalculateMaxVals - calculates values over all the Influncers and Investors
@@ -429,26 +447,6 @@ func (s *Simulator) CalculateMaxVals(t3 time.Time) {
 	}
 	s.maxProfitThisRun = maxInvestorProfit
 
-	//-------------------------------------------------------
-	// Max number of buy recommendations that can be indexed
-	// by Influencer subclass... or, in this case Subclass.Metric    *** I THINK THIS SECTION OF CODE IS BOGUS AND UNUSED ***
-	//-------------------------------------------------------
-	maxBuyRecommendations := make(map[string]int)
-	for i := 0; i < len(s.Investors); i++ {
-		for j := 0; j < len(s.Investors[i].Influencers); j++ {
-			subclass := s.Investors[i].Influencers[j].Subclass() + "." + s.Investors[i].Influencers[j].GetMetric()
-			buyPredictions := s.Investors[i].Influencers[j].GetLenMyPredictions() // only "buy" predictions are saved
-			if val, ok := maxBuyRecommendations[subclass]; ok {
-				if buyPredictions > val {
-					maxBuyRecommendations[subclass] = buyPredictions // the largest so far
-				}
-			} else {
-				maxBuyRecommendations[subclass] = buyPredictions // the initial value
-			}
-		}
-	}
-	s.maxPredictions = maxBuyRecommendations
-
 	//---------------------------------------------------------------------------
 	// We need to let all the Investors know the maximum # of buy
 	// recommendations during this cycle so that they can calculate their
@@ -458,7 +456,7 @@ func (s *Simulator) CalculateMaxVals(t3 time.Time) {
 	//---------------------------------------------------------------------------
 	for i := 0; i < len(s.Investors); i++ {
 		s.Investors[i].maxProfit = s.maxProfitThisRun
-		s.Investors[i].maxPredictions = s.maxPredictions
+		// s.Investors[i].maxPredictions = s.maxPredictions
 	}
 }
 
@@ -482,6 +480,7 @@ func (s *Simulator) SetAllPortfolioValues(t time.Time) error {
 		}
 		C2 := s.Investors[i].BalanceC2 / exch // amount of C1 we get for BalanceC2 at this exchange rate
 		s.Investors[i].PortfolioValueC1 = s.Investors[i].BalanceC1 + C2
+		s.Investors[i].DtPortfolioValue = t
 	}
 	return nil
 }

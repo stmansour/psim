@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/stmansour/psim/newdata"
 	"github.com/stmansour/psim/util"
 )
 
@@ -35,7 +36,7 @@ func displaySimulationDetails(cfg *util.AppConfig) {
 	fmt.Printf("*******************************************************************\n\n")
 }
 
-func displaySimulationResults(cfg *util.AppConfig) {
+func displaySimulationResults(cfg *util.AppConfig, db *newdata.Database) {
 	f := app.sim.GetFactory()
 	omr := float64(0)
 	if f.MutateCalls > 0 {
@@ -44,6 +45,7 @@ func displaySimulationResults(cfg *util.AppConfig) {
 	fmt.Printf("\n**************  S I M U L A T I O N   R E S U L T S  **************\n")
 	fmt.Printf("Number of generations: %d\n", app.sim.GensCompleted)
 	fmt.Printf("Observed Mutation Rate: %6.3f%%\n", omr)
+	fmt.Printf("nil data requests: %d\n", db.CSVDB.Nildata)
 	s, _ := app.sim.GetSimulationRunTime()
 	fmt.Printf("Elapsed time: %s\n", s)
 

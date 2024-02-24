@@ -14,7 +14,7 @@ type EconometricsRecords []EconometricsRecord
 type Database struct {
 	cfg      *util.AppConfig // application configuration info
 	Datatype string          // "CSV", "MYSQL"
-	CSVData  *CSVDatasource  // valid when Datatype is "CSV"
+	CSVDB    *CSVDatasource  // valid when Datatype is "CSV"
 }
 
 // CSVDatasource is the database structure definition for csv databases
@@ -27,6 +27,7 @@ type CSVDatasource struct {
 	DTypes  []string               // the list of Influencers, each has their own data type
 	CSVMap  map[string]int         // which columns are where? Map the data type to a CSV column
 	ColIdx  []string               // the inverse of CSVMap: supply the index to get the column name
+	Nildata int64                  // data at the requested date/time did not exist
 }
 
 // EconometricsRecord is the basic structure of discount rate data
@@ -120,7 +121,7 @@ func NewDatabase(dtype string, cfg *util.AppConfig) (*Database, error) {
 			cfg:      cfg,
 			Datatype: "CSV",
 		}
-		d.CSVData = &CSVDatasource{}
+		d.CSVDB = &CSVDatasource{}
 		return &d, nil
 
 	default:
@@ -142,7 +143,7 @@ func (d *Database) Init() error {
 // SetCSVFilename sets the CSV filename
 // ---------------------------------------------------------------------------------
 func (d *Database) SetCSVFilename(f string) {
-	d.CSVData.DBFname = f
+	d.CSVDB.DBFname = f
 }
 
 // CSVInit calls the initialize routine for all data types
@@ -151,7 +152,7 @@ func (d *Database) SetCSVFilename(f string) {
 // dbfname - db file name override.  If nil or len() == 0 then it uses the default
 // --------------------------------------------------------------------------------
 func (d *Database) CSVInit() error {
-	if err := d.CSVData.LoadCsvDB(); err != nil {
+	if err := d.CSVDB.LoadCsvDB(); err != nil {
 		return err
 	}
 	return nil

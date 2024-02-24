@@ -7,18 +7,22 @@ import (
 )
 
 // AnnualizedReturn computes the annualized return on an investment.
-// startingValue and endingValue are the initial and final values of the investment.
-// startDate and endDate are of type time.Time representing the start and end dates of the investment period.
-func AnnualizedReturn(startingValue, endingValue float64, startDate, endDate time.Time) (float64, error) {
-	// Ensure the start date is before the end date
-	if startDate.After(endDate) {
+// INPUTS:
+//
+//	startingValue initial value of the investment
+//	endingValue   final value of the investment
+//	dtStart       investment period start date
+//	dtEnd         investment period end date
+//
+// -----------------------------------------------------------------------------
+func AnnualizedReturn(startingValue, endingValue float64, dtStart, dtEnd time.Time) (float64, error) {
+	if dtStart.After(dtEnd) {
 		return 0, fmt.Errorf("start date must be before end date")
 	}
 
-	duration := endDate.Sub(startDate).Hours() / 24 // Calculate the total duration in days
-	years := duration / 365.25                      // Convert duration from days to years
+	duration := dtEnd.Sub(dtStart).Hours() / 24 // Calculate the total duration in days
+	years := duration / 365.25                  // Convert duration from days to years
 
-	// Calculate the annualized return
 	if years <= 0 {
 		return 0, fmt.Errorf("investment period must be greater than 0")
 	}

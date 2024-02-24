@@ -55,7 +55,6 @@ type Investor struct {
 	Investments       []Investment             // a record of all investments made by this investor
 	Influencers       []Influencer             // all the influencerst that advise this Investor
 	maxProfit         float64                  // maximum profit of ALL Investors during this simulation cycle, set by simulator at the end of each simulation cycle, used when calculating fitness
-	maxPredictions    map[string]int           // max predictions indexed by Influencer subclass, set by simulator at the end of each simulation cycle
 	W1                float64                  // weight for profit in Fitness Score
 	W2                float64                  // weight for correctness
 	FitnessCalculated bool                     // true after fitness score is calculated and stored in Fitness
@@ -63,6 +62,8 @@ type Investor struct {
 	CreatedByDNA      bool                     // some init steps must be skipped if it's created from DNA
 	Strategy          int                      // which strategy to use for predictions
 	ID                string                   // unique id for this investor
+	Parented          int64                    // how many times was this Investor a parent for the next gen?
+	// maxPredictions    map[string]int           // max predictions indexed by Influencer subclass, set by simulator at the end of each simulation cycle
 	// maxPredictions    map[string]int    // max predictions indexed by Influencer subclass, set by simulator at the end of each simulation cycle, used when calculating fitness
 }
 
@@ -254,7 +255,9 @@ func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 // FormatPrediction prints a readable version of the Influencers predictions
 // ----------------------------------------------------------------------------
 func (i *Investor) FormatPrediction(p *Prediction, T3 time.Time) {
-	fmt.Printf("\t%s: %s   (T1 %s [%4.2f] -  T2 %s [%4.2f])\n",
+	name := i.mim.MInfluencerSubclasses[p.IType].Name
+	fmt.Printf("\t%s %s:  %s   (T1 %s [%4.2f] -  T2 %s [%4.2f])\n",
+		name,
 		p.IType,
 		p.Action,
 		T3.AddDate(0, 0, int(p.Delta1)).Format("Jan _2, 2006"),
@@ -693,40 +696,31 @@ func (i *Investor) CalculateFitnessScore() float64 {
 		correctness = float64(float64(correct) / float64(total))
 	}
 
-	// And now the fitness score
-	// util.DPrintf("FitnessScore:  Investor dna is %s\n", i.DNA())
-	// util.DPrintf("i.Balance: %6.2f\n", i.BalanceC1)
-	// util.DPrintf("i = %#v\n", *i)
-	// util.DPrintf("i.cfg.InitFunds: %8.2f\n", i.cfg.InitFunds)
-
-	dda := i.PortfolioValueC1 - i.cfg.InitFunds
-	if math.IsNaN(dda) || math.IsInf(dda, 0) {
-		log.Panicf("Investor.FitnessSocre() is dda is invalid\n")
+	profit := i.PortfolioValueC1 - i.cfg.InitFunds
+	if math.IsNaN(profit) || math.IsInf(profit, 0) {
+		log.Panicf("Investor.FitnessSocre() is profit is invalid\n")
 	}
 
-	ddb := float64(0)
+	weightedProfit := float64(0)
 	if i.maxProfit > 0 {
-		ddb = float64(i.W1 * dda / i.maxProfit)
+		weightedProfit = float64(i.W1 * profit / i.maxProfit)
 	}
-	if math.IsNaN(ddb) || math.IsInf(ddb, 0) {
-		log.Panicf("Investor.FitnessSocre() is ddb is invalid.  i.W1 = %4.2f, dda = %8.2f, i.maxProfit = %8.2f\n", i.W1, dda, i.maxProfit)
+	if math.IsNaN(weightedProfit) || math.IsInf(weightedProfit, 0) {
+		log.Panicf("Investor.FitnessSocre() is weightedProfit is invalid.  i.W1 = %4.2f, profit = %8.2f, i.maxProfit = %8.2f\n", i.W1, profit, i.maxProfit)
 	}
-	ddc := float64(i.W2 * correctness)
+	weightedCorrectness := float64(i.W2 * correctness)
 
-	if math.IsNaN(ddc) || math.IsInf(ddc, 0) {
-		log.Panicf("Investor.FitnessSocre() is ddc is invalid\n")
+	if math.IsNaN(weightedCorrectness) || math.IsInf(weightedCorrectness, 0) {
+		log.Panicf("Investor.FitnessSocre() is weightedCorrectness is invalid\n")
 	}
 
-	i.Fitness = ddb + ddc
+	i.Fitness = weightedProfit + weightedCorrectness
+
 	if i.Fitness < 0 {
 		i.Fitness = 0
 	}
-	// i.Fitness = float64(i.W1*(i.BalanceC1-i.cfg.InitFunds)/i.maxProfit) + float64(i.W2*correctness)
-	i.FitnessCalculated = true
 
-	// util.DPrintf("W1 = %3.1f, BalanceC1 = %6.2f, InitFunds = %6.2f, maxProfit = %6.2f, W2 = %3.1f, correctness = %d / %d = %6.2f  ",
-	// 	i.W1, i.BalanceC1, i.cfg.InitFunds, i.maxProfit, i.W2, correct, total, correctness)
-	// util.DPrintf("Fitness = %6.3f\n", i.Fitness)
+	i.FitnessCalculated = true
 
 	if math.IsNaN(i.Fitness) || math.IsInf(i.Fitness, 0) {
 		log.Panicf("Investor.FitnessSocre() is STORING AN INVALID FITNESS!!!!\n")

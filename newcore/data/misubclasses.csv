@@ -1,5 +1,5 @@
 Name,Metric,Subclass,LocaleType,Blocs,Predictor,MinDelta1,MaxDelta1,MinDelta2,MaxDelta2,FitnessW1,FitnessW2,HoldWindowPos,HoldWindowNeg
-LA,LSNScore,LSMInfluencer,LocaleNone,,SingleValGT,-90,-31,-30,-1,0.6,0.4,0.1,-0.1
+LA,LSNScore,LSMInfluencer,LocaleNone,,SingleValLT,-90,-31,-30,-1,0.6,0.4,0.1,-0.1
 LB,LSPScore,LSMInfluencer,LocaleNone,,SingleValGT,-90,-31,-30,-1,0.6,0.4,0.1,-0.1
 LG,WDECount,LSMInfluencer,LocaleNone,,SingleValGT,-90,-31,-30,-1,0.6,0.4,0.1,-0.1
 LH,WDFCount,LSMInfluencer,LocaleNone,,SingleValGT,-90,-31,-30,-1,0.6,0.4,0.1,-0.1
@@ -19,7 +19,7 @@ LF,WPAScore,LSMInfluencer,LocaleNone,,SingleValLT,-90,-31,-30,-1,0.6,0.4,0.1,-0.
 ,IP,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-180,-90,-60,-30,0.6,0.4,0.1,-0.1
 ,IR,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-180,-90,-60,-30,0.6,0.4,0.1,-0.1
 L9,LIMCount_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-90,-15,-14,-1,0.6,0.4,0.1,-0.1
-L1,LSNScore_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-90,-15,-14,-1,0.6,0.4,0.1,-0.1
+L1,LSNScore_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioLT,-90,-15,-14,-1,0.6,0.4,0.1,-0.1
 L0,LSPScore_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-90,-15,-14,-1,0.6,0.4,0.1,-0.1
 ,M1,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-180,-90,-60,-30,0.6,0.4,0.1,-0.1
 ,M2,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-180,-90,-60,-30,0.6,0.4,0.1,-0.1
@@ -31,7 +31,7 @@ L6,WDECount_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-90,-31,-30,-1,0.6,0.4,0.
 L7,WDFCount_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-90,-31,-30,-1,0.6,0.4,0.1,-0.1
 L8,WDPCount_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-90,-31,-30,-1,0.6,0.4,0.1,-0.1
 L2,WHAScore_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-90,-31,-30,-1,0.6,0.4,0.1,-0.1
-L4,WHLScore_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-90,-31,-30,-1,0.6,0.4,0.1,-0.1
+L4,WHLScore_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioLT,-90,-31,-30,-1,0.6,0.4,0.1,-0.1
 L3,WHOScore_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-90,-31,-30,-1,0.6,0.4,0.1,-0.1
-L5,WPAScore_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-90,-31,-30,-1,0.6,0.4,0.1,-0.1
+L5,WPAScore_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioLT,-90,-31,-30,-1,0.6,0.4,0.1,-0.1
 ,WTOILClose,LSMInfluencer,LocaleNone,,SingleValGT,-90,-31,-30,-1,0.6,0.4,0.1,-0.1

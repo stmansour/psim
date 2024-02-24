@@ -11,7 +11,7 @@ func (d *Database) Select(dt time.Time, fields []string) (*EconometricsRecord, e
 	var err error
 	switch d.cfg.DBSource {
 	case "CSV":
-		return d.CSVData.Select(dt, fields)
+		return d.CSVDB.Select(dt, fields)
 	default:
 		err = fmt.Errorf("unrecognized data source: %s", d.cfg.DBSource)
 		return nil, err
@@ -48,6 +48,8 @@ func (d *CSVDatasource) mapSubset(rec *EconometricsRecord, ss []string) *Econome
 	for _, key := range ss {
 		if value, exists := rec.Fields[key]; exists {
 			nr.Fields[key] = value
+		} else {
+			d.Nildata++
 		}
 		// Optionally, handle the "not exists" case here, if needed.
 	}

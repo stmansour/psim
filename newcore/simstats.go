@@ -160,6 +160,70 @@ func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time, eodr bool) {
 //	any error encountered
 //
 // ----------------------------------------------------------------------------
+func (s *Simulator) dumpGeneticParentMap(dirname string) error {
+	fname := "dbgGeneticParentMap.csv"
+	var file *os.File
+	var err error
+	if s.GensCompleted == 1 {
+		file, err = os.Create(fname)
+	} else {
+		file, err = os.OpenFile(fname, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	}
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	if s.GensCompleted == 1 {
+		fmt.Fprintf(file, "%q,%q,%q,%q,%q\n", "Generation", "Portfolio Value", "Fitness Score", "Parented", "DNA")
+	}
+
+	for _, inv := range s.Investors {
+		fmt.Fprintf(file, "%d,%9.2f,%9.4f,%d,%q\n", s.GensCompleted, inv.PortfolioValueC1, inv.CalculateFitnessScore(), inv.Parented, inv.DNA())
+	}
+	return nil
+}
+
+// printNewPopStats - total up all the counts for different types of influencers
+// and print.
+func (s *Simulator) printNewPopStats(newpop []Investor) {
+	m := map[string]int{}
+	tot := 0
+	for _, v := range newpop {
+		for _, inf := range v.Influencers {
+			m[inf.GetMetric()]++
+		}
+		tot += len(v.Influencers)
+	}
+	avg := float64(tot) / float64(len(newpop))
+	fmt.Printf("------------------------------\n")
+	fmt.Printf("New Population:  size: %d,  avg # Infl: %5.2f,   unique: %d\n", len(newpop), avg, len(m))
+
+	// Create a slice to hold the keys
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+
+	// Sort the keys slice
+	sort.Strings(keys)
+
+	// Iterate over the sorted keys to print key-value pairs
+	fmt.Printf("%15s %s  %s\n", "Metric", "Count", "Percent")
+	for _, k := range keys {
+		count := m[k]
+		fmt.Printf("%15s %5d %8.2f\n", k, count, float64(count*100)/float64(tot))
+	}
+	fmt.Printf("------------------------------\n")
+}
+
+// DumpStats - dumps the top investor to a file after the simulation.
+//
+// RETURNS
+//
+//	any error encountered
+//
+// ----------------------------------------------------------------------------
 func (s *Simulator) DumpStats(dirname string) error {
 	fname := "simstats-" + s.ReportTimestamp + ".csv"
 	if len(dirname) > 0 {

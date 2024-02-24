@@ -25,11 +25,11 @@ var LocaleTypeMap = map[string]int{
 
 // Predictor type defines how the influencer will do predictions with the metric
 const (
-	SingleValGT   = iota // use a single value at T1 and T2, predict "buy" for val@T1 > val@T2
-	SingleValLT          // use a single value at T1 and T2, preduct "buy" for val@T1 < val@T2
-	C1C2RatioGT          // use ratio, predict "buy" for valT1C1/valT1C2 > valT2C1/valT2C2
-	C1C2RatioLT          // use ratio, predict "buy" for valT1C1/valT1C2 < valT2C1/valT2C2
-	CustomPredict        // values for metric must be handled by a custom handler
+	SingleValGT   = iota // 0. use a single value at T1 and T2, predict "buy" for val@T1 > val@T2
+	SingleValLT          // 1. use a single value at T1 and T2, preduct "buy" for val@T1 < val@T2
+	C1C2RatioGT          // 2. use ratio, predict "buy" for valT1C1/valT1C2 > valT2C1/valT2C2
+	C1C2RatioLT          // 3. use ratio, predict "buy" for valT1C1/valT1C2 < valT2C1/valT2C2
+	CustomPredict        // 4. values for metric must be handled by a custom handler
 )
 
 // PredictorTypeMap is used in unmarshalling
