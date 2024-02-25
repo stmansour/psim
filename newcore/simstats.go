@@ -82,9 +82,9 @@ func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time, eodr bool) {
 	totalC2 := float64(0)
 
 	for i := 0; i < len(s.Investors); i++ {
-		if s.Investors[i].BalanceC1 > s.cfg.InitFunds {
+		if s.Investors[i].PortfolioValueC1 > s.cfg.InitFunds {
 			prof++
-			profit := s.Investors[i].BalanceC1 - s.cfg.InitFunds
+			profit := s.Investors[i].PortfolioValueC1 - s.cfg.InitFunds
 			avgProfit += profit
 			if profit > maxProfit {
 				maxProfit = profit

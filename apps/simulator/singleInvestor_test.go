@@ -36,7 +36,8 @@ func TestConfigSmall(t *testing.T) {
 	app.randNano = -1
 	app.dumpTopInvestorInvestments = false
 	app.trace = false
-	app.cfName = "configsmall.json5"
+	app.cfName = "sm.json5"
+	// app.cfName = "configsmall.json5"
 	s := &app.sim
 	s.ResetSimulator()
 	doSimulation()
