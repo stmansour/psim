@@ -112,6 +112,17 @@ done
 shift $((OPTIND - 1))
 ############################################################################################
 
+if [ ! -d data ]; then
+    echo "there is no data/ directory"
+    echo "please run 'make db' or create data/ and put a csv database in it" 
+    exit 1
+fi
+if [ ! -f data/platodb.csv ]; then
+    echo "there is no database in data/"
+    echo "please run 'make db' or put a csv database in data/"
+    exit 1
+fi
+
 mkdir -p "${ARCHIVE}"
 
 #------------------------------------------------------------------------------
@@ -142,6 +153,17 @@ if [ "${SINGLETEST}${TFILES}" = "${TFILES}" -o "${SINGLETEST}${TFILES}" = "${TFI
     echo -n "Linguistic Influencers test... "
     RESFILE="${TFILES}${STEP}"
     ./simulator -ar -adir "${ARCHIVE}" -trace -c linguistics.json5 >"${RESFILE}"
+    compareToGold ${RESFILE}
+    ((TESTCOUNT++))
+fi
+
+TFILES="c"
+STEP=0
+if [ "${SINGLETEST}${TFILES}" = "${TFILES}" -o "${SINGLETEST}${TFILES}" = "${TFILES}${TFILES}" ]; then
+    echo -n "Test ${TFILES} - "
+    echo -n "Crucible test..."
+    RESFILE="${TFILES}${STEP}"
+    ./simulator -C -c confcru.json5 >"${RESFILE}"
     compareToGold ${RESFILE}
     ((TESTCOUNT++))
 fi
