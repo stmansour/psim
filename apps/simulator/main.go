@@ -74,6 +74,7 @@ func doSimulation() {
 	cfg.Trace = app.trace
 	cfg.ArchiveBaseDir = app.archiveBaseDir
 	cfg.ArchiveMode = app.archiveMode
+	cfg.CrucibleMode = app.CrucibleMode
 	app.cfg = &cfg
 
 	app.db, err = newdata.NewDatabase("CSV", &cfg)
@@ -90,12 +91,14 @@ func doSimulation() {
 	}
 
 	if cfg.CrucibleMode {
-		crucible()
+		c := newcore.NewCrucible()
+		c.Init(&cfg, app.db, app.mim, &app.sim)
+		c.Run()
 		os.Exit(0)
 	}
 
 	displaySimulationDetails(&cfg)
-	app.sim.Init(app.cfg, app.db, app.mim, app.dayByDayResults, app.dumpTopInvestorInvestments)
+	app.sim.Init(app.cfg, app.db, app.mim, nil, app.dayByDayResults, app.dumpTopInvestorInvestments)
 	app.sim.GenInfluencerDistribution = app.GenInfluencerDistribution
 	app.sim.FitnessScores = app.FitnessScores
 	app.sim.Run()
@@ -106,22 +109,6 @@ func doSimulation() {
 		err := app.sim.ShowTopInvestor()
 		if err != nil {
 			fmt.Printf("Error writing Top Investor profile: %s\n", err.Error())
-		}
-	}
-}
-
-func crucible() {
-	c := NewCrucible()
-	c.Init(app.cfg)
-	for i := 0; i < len(app.cfg.TopInvestors); i++ {
-		for j := 0; j < len(app.cfg.CrucibleSpans); j++ {
-			var sim newcore.Simulator
-			app.cfg.DtStart = util.CustomDate(app.cfg.CrucibleSpans[j].DtStart)
-			app.cfg.DtStop = util.CustomDate(app.cfg.CrucibleSpans[j].DtStop)
-			app.cfg.SingleInvestorDNA = app.cfg.TopInvestors[i].DNA
-			app.cfg.SingleInvestorMode = true
-			sim.Init(app.cfg, app.db, app.mim, false, false)
-			sim.Run()
 		}
 	}
 }

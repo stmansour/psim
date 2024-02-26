@@ -1,0 +1,70 @@
+//  PLATO SIMULATOR CONFIGURATION FILE
+//  JSON5 is being used primarily so that we can add comments to this file.
+//
+//  Notes:
+//    floating point numbers cannot begin with ".".  
+//    That is:  
+//       0.1 is valid
+//        .1 is not valid
+//----------------------------------------------------------------------------------
+{
+    //-----------------------------------------------------------------
+    //  SIMULATOR
+    //-----------------------------------------------------------------
+    "DtStart": "2022-01-01",    // simulation start date for each generation
+    "DtStop": "2022-12-31",     // simulation stop date for each generation
+    "EnforceStopDate": true,    // stops on DtStop even if there is a C2 Balance, if false and C2 Balance > 0 on StopDate, simulation will continue in sell-only mode until C2 < 1.00
+    "LoopCount": 20,            // How many times to loop over DtStart to DtStop
+    "Generations": 1,           // how many generations should the simulator run. NOTE: This value is only valid if GenDurSpec is commented out.
+    // "GenDurSpec": "1 Y",        // How long is a generation.  EX:  "1 Y",  "6 M",  "8 W", "1 Y 6 M", "90 D"
+    "PopulationSize": 200,      // Total number Investors in the population
+    "C1": "USD",                // main currency  (ISO 4217 code)
+    "C2": "JPY",                // currency that we will invest in (ISO 4217 code)
+    "InitFunds": 100000.00,     // how much each Investor is funded at the start of a simulation cycle
+    "StdInvestment": 10000.00,  // the "standard" investment amount if a decision is made to invest in C2
+    "MutationRate": 1,          // number between 1 and 100, indicating the percentage of mutation
+    "DBSource": "CSV",          // { CSV | Database | OnlineService }
+    "COAStrategy": "MajorityRules", // course of action strategy.  Choose from (DistributedDecision, MajorityRules)
+    "MinInfluencers": 1,        // An investor cannot have fewer than this many influencers
+    "MaxInfluencers": 10,        // An investor can have no more than this many Influencers
+
+    //-----------------------------------------------------------------
+    //  There may be times when we need to test or check the behavior
+    //  of a specific Investor, based on its DNA. In this case, looping
+    //  and generations are not relevant. Instead, we need the behavior
+    //  to be completely repeatable and predictable.
+    //  When "SingleInvestorMode" is
+    //  true, LoopCount will be forced to 1, Generations will be forced
+    //  to 1.  This would simulate things more like the production
+    //  version of this projects code will operate. 
+    //-----------------------------------------------------------------
+    "SingleInvestorMode": false,
+    "SingleInvestorDNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Metric=LSNScore,Delta1=-45,Delta2=-5}|{LSMInfluencer,Metric=LSPScore,Delta1=-45,Delta2=-5}|{LSMInfluencer,Metric=WDECount,Delta1=-45,Delta2=-5}|{LSMInfluencer,Metric=WDFCount,Delta1=-45,Delta2=-5}|{LSMInfluencer,Metric=WDMCount,Delta1=-45,Delta2=-5}|{LSMInfluencer,Metric=WDPCount,Delta1=-45,Delta2=-5}|{LSMInfluencer,Metric=WHAScore,Delta1=-45,Delta2=-5}|{LSMInfluencer,Metric=WHLScore,Delta1=-45,Delta2=-5}|{LSMInfluencer,Metric=WHOScore,Delta1=-45,Delta2=-5}|{LSMInfluencer,Metric=WPAScore,Delta1=-45,Delta2=-5}|{LSMInfluencer,Metric=LIMCount_ECON,Delta1=-45,Delta2=-5}|{LSMInfluencer,Metric=LSNScore_ECON,Delta1=-45,Delta2=-5}|{LSMInfluencer,Metric=LSPScore_ECON,Delta1=-45,Delta2=-5}|{LSMInfluencer,Metric=WDECount_ECON,Delta1=-45,Delta2=-5}|{LSMInfluencer,Metric=WDFCount_ECON,Delta1=-45,Delta2=-5}|{LSMInfluencer,Metric=WDPCount_ECON,Delta1=-45,Delta2=-5}|{LSMInfluencer,Metric=WHAScore_ECON,Delta1=-45,Delta2=-5}|{LSMInfluencer,Metric=WHLScore_ECON,Delta1=-45,Delta2=-5}|{LSMInfluencer,Metric=WHOScore_ECON,Delta1=-45,Delta2=-5}|{LSMInfluencer,Metric=WPAScore_ECON,Delta1=-45,Delta2=-5}]}",
+
+    //-----------------------------------------------------------------
+    // Saved DNA of the Top Investors
+    //-----------------------------------------------------------------
+    "TopInvestors": [
+      {
+        "DNA": "{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-120,Delta2=-34,Metric=RS}|{LSMInfluencer,Delta1=-96,Delta2=-43,Metric=MP}|{LSMInfluencer,Delta1=-57,Delta2=-11,Metric=WDPCount_ECON}|{LSMInfluencer,Delta1=-88,Delta2=-10,Metric=WDECount}|{LSMInfluencer,Delta1=-53,Delta2=-30,Metric=WPAScore_ECON}]}",
+      },
+      {
+        "Name": "Sequoia",
+        "DNA": "{Investor;Strategy=MajorityWins;InvW1=0.0911;InvW2=0.9089;Influencers=[{LSMInfluencer,Delta1=-120,Delta2=-34,Metric=RS}|{LSMInfluencer,Delta1=-112,Delta2=-31,Metric=IR}|{LSMInfluencer,Delta1=-28,Delta2=-9,Metric=LIMCount_ECON}|{LSMInfluencer,Delta1=-102,Delta2=-53,Metric=CC}|{LSMInfluencer,Delta1=-100,Delta2=-48,Metric=MP}]}"
+      },
+      {
+        "Name": "Buffet",
+        "DNA": "{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-65,Delta2=-24,Metric=WDECount}|{LSMInfluencer,Delta1=-86,Delta2=-6,Metric=WPAScore}|{LSMInfluencer,Delta1=-85,Delta2=-13,Metric=LSPScore}|{LSMInfluencer,Delta1=-75,Delta2=-19,Metric=WDMCount}|{LSMInfluencer,Delta1=-102,Delta2=-38,Metric=MP}|{LSMInfluencer,Delta1=-143,Delta2=-33,Metric=RS}|{LSMInfluencer,Delta1=-157,Delta2=-59,Metric=IP}|{LSMInfluencer,Delta1=-48,Delta2=-1,Metric=SP}|{LSMInfluencer,Delta1=-160,Delta2=-60,Metric=CC}]}"
+      }
+    ],
+
+    "CruciblePeriods": [
+      { "DtStart": "2015-06-01", "DtStop": "2015-09-30", },
+      { "DtStart": "2015-09-01", "DtStop": "2015-12-31", },
+      { "DtStart": "2021-01-01", "DtStop": "2021-12-31", },
+      { "DtStart": "2022-01-01", "DtStop": "2022-12-31", },
+    ],
+
+}
+
+

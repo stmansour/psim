@@ -45,6 +45,7 @@ type Simulator struct {
 	factory                    Factory                  // used to create Influencers
 	db                         *newdata.Database        // database to use in this simulation
 	mim                        *MetricInfluencerManager // metric influencer manager
+	crucible                   *Crucible                // must not be nil when cfg.CrucibleMode is true, pointer to crucible object
 	Investors                  []Investor               // the population of the current generation
 	dayByDay                   bool                     // show day by day results, debug feature
 	dumpTopInvestorInvestments bool                     // dump the investment list for top investor at the end of each generation
@@ -115,10 +116,11 @@ func (s *Simulator) GetSimulationRunTime() (string, time.Duration) {
 // Init initializes the simulation system, it also creates Investors and
 // calls their init functions.
 // ----------------------------------------------------------------------------
-func (s *Simulator) Init(cfg *util.AppConfig, db *newdata.Database, mim *MetricInfluencerManager, dayByDay, dumpTopInvestorInvestments bool) error {
+func (s *Simulator) Init(cfg *util.AppConfig, db *newdata.Database, mim *MetricInfluencerManager, crucible *Crucible, dayByDay, dumpTopInvestorInvestments bool) error {
 	s.cfg = cfg
 	s.db = db
 	s.mim = mim
+	s.crucible = crucible
 	s.dayByDay = dayByDay
 	s.dumpTopInvestorInvestments = dumpTopInvestorInvestments
 
@@ -314,7 +316,9 @@ func (s *Simulator) Run() {
 			for j := 0; j < len(s.Investors); j++ {
 				unsettled += s.Investors[j].BalanceC2
 			}
-			fmt.Printf("Completed generation %d, %s - %s,  unsettled = %12.2f %s\n", s.GensCompleted, thisGenDtStart.Format("Jan _2, 2006"), d.Format("Jan _2, 2006"), unsettled, s.cfg.C2)
+			if !s.cfg.CrucibleMode {
+				fmt.Printf("Completed generation %d, %s - %s,  unsettled = %12.2f %s\n", s.GensCompleted, thisGenDtStart.Format("Jan _2, 2006"), d.Format("Jan _2, 2006"), unsettled, s.cfg.C2)
+			}
 			if isGenDur {
 				genStart = dtGenEnd // Start next generation from the end of the last
 			}
@@ -335,6 +339,9 @@ func (s *Simulator) Run() {
 				}
 			}
 			s.UpdateTopInvestors() // used by financial report
+			if s.cfg.CrucibleMode {
+				s.crucible.DumpResults()
+			}
 
 			//----------------------------------------------------------------------------------------------
 			// Now replace current generation with next generation unless this is the last generation...
@@ -347,7 +354,9 @@ func (s *Simulator) Run() {
 			}
 			s.WindDownInProgress = false
 		}
-		fmt.Printf("loop %d completed.  %s - %s\n", lc, thisGenDtStart.Format("Jan _2, 2006"), thisGenDtEnd.Format("Jan _2, 2006"))
+		if !s.cfg.CrucibleMode {
+			fmt.Printf("loop %d completed.  %s - %s\n", lc, thisGenDtStart.Format("Jan _2, 2006"), thisGenDtEnd.Format("Jan _2, 2006"))
+		}
 	}
 
 	s.SimStop = time.Now()
