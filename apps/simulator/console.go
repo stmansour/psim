@@ -60,7 +60,7 @@ func displaySimulationResults(cfg *util.AppConfig, db *newdata.Database) {
 	}
 
 	// GENERATE  simstats.csv
-	err = (&app.sim).DumpStats(arch)
+	err = (&app.sim).SimStats(arch)
 	if err != nil {
 		fmt.Printf("Simulator DumpSimStats returned error: %s\n", err)
 	}
@@ -70,7 +70,6 @@ func displaySimulationResults(cfg *util.AppConfig, db *newdata.Database) {
 	if err != nil {
 		fmt.Printf("Simulator FinRep returned error: %s\n", err)
 	}
-
 }
 
 func archiveResults(configFilePath, baseDir string) (string, error) {

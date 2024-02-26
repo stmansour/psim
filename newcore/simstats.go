@@ -150,7 +150,7 @@ func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time, eodr bool) {
 		UnsettledC2:          totalC2,
 		EndOfDataReached:     eodr,
 	}
-	s.SimStats = append(s.SimStats, ss)
+	s.GenStats = append(s.GenStats, ss)
 }
 
 func (s *Simulator) generateFName(basename string) string {
@@ -231,22 +231,15 @@ func (s *Simulator) printNewPopStats(newpop []Investor) {
 	fmt.Printf("------------------------------\n")
 }
 
-// DumpStats - dumps the top investor to a file after the simulation.
+// SimStats - dumps the top investor to a file after the simulation.
 //
 // RETURNS
 //
 //	any error encountered
 //
 // ----------------------------------------------------------------------------
-func (s *Simulator) DumpStats(dirname string) error {
-	fname := "simstats"
-	if s.cfg.ArchiveMode {
-		fname += "-" + s.ReportTimestamp
-		if len(dirname) > 0 {
-			fname = dirname + "/" + fname
-		}
-	}
-	fname += ".csv"
+func (s *Simulator) SimStats(dirname string) error {
+	fname := s.generateFName("simstats")
 	file, err := os.Create(fname)
 	if err != nil {
 		return err
@@ -314,32 +307,32 @@ func (s *Simulator) DumpStats(dirname string) error {
 		"DNA")                    // 15
 
 	// investment rows
-	for i := 0; i < len(s.SimStats); i++ {
+	for i := 0; i < len(s.GenStats); i++ {
 		pctProfPred := float64(0)
-		if s.SimStats[i].TotalBuys > 0 {
-			pctProfPred = 100.0 * float64(s.SimStats[i].ProfitableBuys) / float64(s.SimStats[i].TotalBuys)
+		if s.GenStats[i].TotalBuys > 0 {
+			pctProfPred = 100.0 * float64(s.GenStats[i].ProfitableBuys) / float64(s.GenStats[i].TotalBuys)
 		}
 		settled := "no"
-		if !s.SimStats[i].EndOfDataReached {
+		if !s.GenStats[i].EndOfDataReached {
 			settled = "yes"
 		}
 		fmt.Fprintf(file, "%d,%q,%q,%d,%8.2f%%,%12.2f,%12.2f,%d,%d,%4.2f%%,%d,%d,%12.2f,%q,%q,%q\n",
 			i, // 0
-			s.SimStats[i].DtGenStart.Format("1/2/2006"),                                    // 1
-			s.SimStats[i].DtGenStop.Format("1/2/2006"),                                     // 2
-			s.SimStats[i].ProfitableInvestors,                                              // 3
-			100.0*float64(s.SimStats[i].ProfitableInvestors)/float64(s.cfg.PopulationSize), // 4
-			s.SimStats[i].AvgProfit,                                                        // 5
-			s.SimStats[i].MaxProfit,                                                        // 6
-			s.SimStats[i].TotalBuys,                                                        // 7
-			s.SimStats[i].ProfitableBuys,                                                   // 8
+			s.GenStats[i].DtGenStart.Format("1/2/2006"),                                    // 1
+			s.GenStats[i].DtGenStop.Format("1/2/2006"),                                     // 2
+			s.GenStats[i].ProfitableInvestors,                                              // 3
+			100.0*float64(s.GenStats[i].ProfitableInvestors)/float64(s.cfg.PopulationSize), // 4
+			s.GenStats[i].AvgProfit,                                                        // 5
+			s.GenStats[i].MaxProfit,                                                        // 6
+			s.GenStats[i].TotalBuys,                                                        // 7
+			s.GenStats[i].ProfitableBuys,                                                   // 8
 			pctProfPred,                                                                    // 9
-			s.SimStats[i].TotalNilDataRequests,                                             // 10
-			s.SimStats[i].TotalHoldingC2,                                                   // 11
-			s.SimStats[i].UnsettledC2,                                                      // 12
-			s.SimStats[i].DtActualStop.Format("1/2/2006"),                                  // 13
+			s.GenStats[i].TotalNilDataRequests,                                             // 10
+			s.GenStats[i].TotalHoldingC2,                                                   // 11
+			s.GenStats[i].UnsettledC2,                                                      // 12
+			s.GenStats[i].DtActualStop.Format("1/2/2006"),                                  // 13
 			settled,                    // 14
-			s.SimStats[i].MaxProfitDNA) // 15
+			s.GenStats[i].MaxProfitDNA) // 15
 	}
 	return nil
 }
@@ -438,111 +431,4 @@ func (s *Simulator) ShowTopInvestor() error {
 		return err
 	}
 	return nil
-}
-
-// ResultsByInvestor - dumps results of each investor
-//
-// RETURNS
-//
-//	nothing at this time
-//
-// ----------------------------------------------------------------------------
-func (s *Simulator) ResultsByInvestor() {
-	largestBalance := -100000000.0 // a very low number
-	profitable := 0                // count of profitable investors in this population
-	idx := -1
-
-	for i := 0; i < len(s.Investors); i++ {
-		fmt.Printf("Investor %3d. DNA: %s\n", i, s.Investors[i].DNA())
-		fmt.Printf("%s\n", s.ResultsForInvestor(i, &s.Investors[i]))
-		if s.Investors[i].BalanceC1 > s.cfg.InitFunds {
-			profitable++
-		}
-		if s.Investors[i].BalanceC1 > largestBalance {
-			idx = i
-			largestBalance = s.Investors[i].BalanceC1
-		}
-	}
-	fmt.Printf("-------------------------------------------------------------------------\n")
-	fmt.Printf("Profitable Investors:  %d / %d  (%6.3f%%)\n", profitable, s.cfg.PopulationSize, float64(profitable*100)/float64(s.cfg.PopulationSize))
-	fmt.Printf("Best Performer:  Investor %d.  Ending balance = %12.2f %s\n", idx, largestBalance, s.cfg.C1)
-}
-
-// ResultsForInvestor - dumps results of investor [i]
-//
-// ADD: % correct predictions
-//
-// INPUTS
-//
-//	n =      The index of this investor in the list
-//	inv =    Pointer to the investor
-//
-// RETURNS
-//
-//	nothing at this time
-//
-// ----------------------------------------------------------------------------
-func (s *Simulator) ResultsForInvestor(n int, v *Investor) string {
-	c1Amt := float64(0)
-	dt := time.Time(s.cfg.DtStop)
-	pending := len(v.Investments)
-	//-------------------------------------------------------------------------
-	// Determine the amount of C1 currency that is still invested in C2...
-	// store in:  amt
-	//-------------------------------------------------------------------------
-	amt := float64(0)
-	for j := 0; j < pending; j++ {
-		if !v.Investments[j].Completed {
-			amt += v.Investments[j].T3C2Buy
-		}
-	}
-
-	str := ""
-
-	//-------------------------------------------------------------------------
-	// Convert amt to C1 currency on the day of the simulation end...
-	// store in:   c1Amt
-	//-------------------------------------------------------------------------
-	if amt > 0 {
-		fld := s.cfg.C1 + s.cfg.C2 + "EXClose"
-		ss := []string{fld}
-		er4, err := s.db.Select(dt, ss) // get the exchange rate on t4
-		if err != nil {
-			err := fmt.Errorf("*** ERROR *** s.db.Select error: %s", err.Error())
-			return err.Error()
-		}
-		if er4 == nil {
-			err := fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found", dt.Format("1/2/2006"))
-			return err.Error()
-		}
-		c1Amt = amt / er4.Fields[fld]
-		str += fmt.Sprintf("Pending Investments: %d, value: %12.2f %s  =  %12.2f %s\n", pending, amt, s.cfg.C2, c1Amt, s.cfg.C1)
-	}
-	str += fmt.Sprintf("\t\tInitial Stake: %12.2f %s,  End Balance: %12.2f %s\n", s.cfg.InitFunds, s.cfg.C1, v.BalanceC1+c1Amt, s.cfg.C1)
-
-	endingC1Balance := c1Amt + v.BalanceC1
-	netGain := endingC1Balance - s.cfg.InitFunds
-	pctGain := netGain / s.cfg.InitFunds
-	str += fmt.Sprintf("\t\tNet Gain:  %12.2f %s  (%3.3f%%)\n", netGain, s.cfg.C1, pctGain)
-
-	//-----------------------------------z--------------------------------------
-	// When this investor made a buy prediction, how often was it correct...
-	//-------------------------------------------------------------------------
-	m := 0 // number of times the prediction was "correct" (resulted in a profit)
-	for i := 0; i < len(v.Investments); i++ {
-		for _, p := range v.Investments[i].Profitable {
-			if p {
-				m++
-			}
-		}
-	}
-	str += fmt.Sprintf("\t\tPrediction Accuracy:  %d / %d  = %3.3f%%\n", m, len(v.Investments), (float64(m*100) / float64(len(v.Investments))))
-
-	str += fmt.Sprintf("\t\tFitness Score:       %6.2f\n", v.CalculateFitnessScore())
-	str += "\t\tInfluencer Fitness Scores:\n"
-	for i := 0; i < len(v.Influencers); i++ {
-		str += fmt.Sprintf("\t\t    %d: [%s] %6.2f\n", i, v.Influencers[i].DNA(), v.Influencers[i].CalculateFitnessScore())
-	}
-
-	return str
 }

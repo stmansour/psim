@@ -111,6 +111,8 @@ func doSimulation() {
 }
 
 func crucible() {
+	c := NewCrucible()
+	c.Init(app.cfg)
 	for i := 0; i < len(app.cfg.TopInvestors); i++ {
 		for j := 0; j < len(app.cfg.CrucibleSpans); j++ {
 			var sim newcore.Simulator
@@ -121,7 +123,6 @@ func crucible() {
 			sim.Init(app.cfg, app.db, app.mim, false, false)
 			sim.Run()
 		}
-
 	}
 }
 

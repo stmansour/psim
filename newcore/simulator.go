@@ -52,7 +52,7 @@ type Simulator struct {
 	maxPredictions             map[string]int           // max predictions indexed by subclass
 	maxProfitInvestor          int                      // the investor that had the max profit for this generation
 	GensCompleted              int                      // the current count of the number of generations completed in the simulation
-	SimStats                   []SimulationStatistics   // keep track of what happened
+	GenStats                   []SimulationStatistics   // keep track of what happened
 	SimStart                   time.Time                // timestamp for simulation start
 	SimStop                    time.Time                // timestamp for simulation stop
 	StopTimeSet                bool                     // set to true once SimStop is set. If it's false either the simulation is still in progress or did not complete
@@ -82,7 +82,7 @@ func (s *Simulator) ResetSimulator() {
 	s.maxProfitInvestor = 0
 	// s.maxFitnessScore = 0
 	s.GensCompleted = 0
-	s.SimStats = make([]SimulationStatistics, 0)
+	s.GenStats = make([]SimulationStatistics, 0)
 	s.StopTimeSet = false
 	s.WindDownInProgress = false
 }
