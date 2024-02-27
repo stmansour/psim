@@ -82,6 +82,9 @@ func (f *FinRep) GenerateHeader() error {
 
 	fmt.Fprintf(f.file, "\"Population: %d\"\n", f.Sim.cfg.PopulationSize)
 	fmt.Fprintf(f.file, "\"COA Strategy: %s\"\n", f.Sim.cfg.COAStrategy)
+	if f.Sim.cfg.PreserveElite {
+		fmt.Fprintf(f.file, "\"Preserve Elite: %5.2f%%\"\n", f.Sim.cfg.PreserveElitePct)
+	}
 
 	// f.Sim.influencersToCSV(f.file)
 	// f.Sim.influencerMissingData(f.file)

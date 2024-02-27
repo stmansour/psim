@@ -31,6 +31,8 @@
     "MinInfluencers": 2,        // Minimum # of Influencers per Investor
     "MaxInfluencers": 10,       // Maximum # of Influencers per Investor
     "ArchiveBaseDir": "",       // base directory for archive directory to be created, the 0-length string defaults to the current directory
+    "PreserveElite": true,      // when true it replicates the top PreserverElitePct of DNA from gen x to gen x+1
+    "PreserveElitePct": 5.0,    // floating point value representing the amount of DNA to preserve. 0.0 to 100.0
 
     //-----------------------------------------------------------------
     //  There may be times when we need to test or check the performance

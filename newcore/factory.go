@@ -61,22 +61,16 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 		return nil, errors.New("population size must be at least 2")
 	}
 
-	newPopulation := make([]Investor, f.cfg.PopulationSize)
+	popCount := f.cfg.PopulationSize - f.cfg.EliteCount
+	newPopulation := make([]Investor, popCount)
 	fitnessSum := float64(0.0) // used by rouletteSelect
-	// influencerFitnessSums := make(map[string]float64)       // stores the fitness sum of each Influencer subclass
-	// influencersBySubclass := make(map[string][]*Influencer) // stores pointers to each Influencer of each subclass
 
-	for i := 0; i < len(population); i++ {
+	for i := 0; i < popCount; i++ {
 		fitnessSum += population[i].CalculateFitnessScore()
-		// for j := range population[i].Influencers {
-		// 	infType := population[i].Influencers[j].GetMetric()
-		// 	influencerFitnessSums[infType] += population[i].Influencers[j].CalculateFitnessScore()
-		// 	influencersBySubclass[infType] = append(influencersBySubclass[infType], &population[i].Influencers[j])
-		// }
 	}
 
 	// Build the new population... Select parents, create a new Investor
-	for i := 0; i < f.cfg.PopulationSize; i++ {
+	for i := 0; i < popCount; i++ {
 		idxParent1 := f.rouletteSelect(population, fitnessSum, -1) // parent 1
 		var idxParent2 int
 		retryLimit := 10 // Set a sensible retry limit to prevent infinite loops
@@ -85,7 +79,7 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 			if idxParent2 != idxParent1 {
 				break // We found a different parent, exit the loop
 			}
-			// Optional: Log or handle the case where the same index is selected
+			// IF NEEDED: Log or handle the case where the same index is selected
 		}
 
 		// Check if a different parent was successfully selected

@@ -275,6 +275,9 @@ func (s *Simulator) SimStats(dirname string) error {
 
 	fmt.Fprintf(file, "\"Population: %d\"\n", s.cfg.PopulationSize)
 	fmt.Fprintf(file, "\"COA Strategy: %s\"\n", s.cfg.COAStrategy)
+	if s.cfg.PreserveElite {
+		fmt.Fprintf(file, "\"Preserve Elite: %5.2f%%\"\n", s.cfg.PreserveElitePct)
+	}
 
 	// s.influencersToCSV(file)
 	// s.influencerMissingData(file)

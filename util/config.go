@@ -192,6 +192,9 @@ type AppConfig struct {
 	CrucibleMode         bool                              // if true then run all TopInvestor DNA through the CrucibleSpans
 	ArchiveBaseDir       string                            // directory where archive will be created.  If no value is supplied, current directory will be used
 	ArchiveMode          bool                              // archive reports to directory when true
+	PreserveElite        bool                              // when true it replicates the top PreserverElitePct of DNA from gen x to gen x+1
+	PreserveElitePct     float64                           // floating point value representing the amount of DNA to preserve. 0.0 to 100.0
+	EliteCount           int                               // calculated by the simulator
 }
 
 // LoadConfig reads the configuration data from config.json into an

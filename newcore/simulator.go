@@ -127,6 +127,10 @@ func (s *Simulator) Init(cfg *util.AppConfig, db *newdata.Database, mim *MetricI
 	s.factory.Init(s.cfg, db, mim)
 	s.FinRpt = &FinRep{}
 
+	if s.cfg.PreserveElite {
+		s.cfg.EliteCount = int(s.cfg.PreserveElitePct*float64(s.cfg.PopulationSize)/100 + 0.5)
+	}
+
 	//------------------------------------------------------------------------
 	// Create an initial population of investors with just 1 investor for now
 	//------------------------------------------------------------------------
@@ -163,6 +167,16 @@ func (s *Simulator) NewPopulation() error {
 	}
 
 	//-----------------------------------------------------------------------
+	// If we're in PreserveElite mode, save the elite members of the current
+	// generation now.  The Investors have already been sorted so that the
+	// top investors start at Investors[0]
+	//-----------------------------------------------------------------------
+	elite := []Investor{}
+	if s.cfg.PreserveElite {
+		elite = s.Investors[0:s.cfg.EliteCount]
+	}
+
+	//-----------------------------------------------------------------------
 	// If we have run a full simulation cycle, the next generation is based
 	// on the genetic algorithm.
 	//-----------------------------------------------------------------------
@@ -178,6 +192,22 @@ func (s *Simulator) NewPopulation() error {
 	//-------------------------------------
 	if s.FitnessScores {
 		s.dumpFitnessScores()
+	}
+	if s.cfg.PreserveElite {
+		//---------------------------------------------------------------------
+		// They may be elite, but they cannot carry their balance forward :-)
+		//---------------------------------------------------------------------
+		for k := 0; k < len(elite); k++ {
+			elite[k].BalanceC1 = s.cfg.InitFunds
+			elite[k].BalanceC2 = 0
+			elite[k].PortfolioValueC1 = 0
+		}
+		//--------------------------------------
+		// add the elites to the new population
+		//--------------------------------------
+		popCount := s.cfg.PopulationSize - s.cfg.EliteCount
+		newPop = newPop[0:popCount]
+		newPop = append(newPop, elite...)
 	}
 	if s.GenInfluencerDistribution {
 		s.printNewPopStats(newPop)
@@ -203,6 +233,12 @@ func (s *Simulator) Run() {
 	// var DateSettled time.Time
 
 	for lc := 0; lc < s.cfg.LoopCount; lc++ {
+
+		for k, v := range s.Investors {
+			if v.BalanceC1 > s.cfg.InitFunds || v.BalanceC2 != 0 {
+				fmt.Printf("Investor %d has C1 = %8.2f and C2 = %8.2f\n", k, v.BalanceC1, v.BalanceC2)
+			}
+		}
 
 		dtStop := time.Time(s.cfg.DtStop)
 		// DateSettled = dtStop
