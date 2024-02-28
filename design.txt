@@ -1,44 +1,188 @@
-We’re designing a system to help us predict when to buy and sell currencies.
-We want to develop a prediction engine that can look at different types of historical
-data and current events and from that make a prediction about when we should buy or
-sell a currency.  In order to see how well our predictive engine works, we want to
-develop a simulator that has access to historical data and we can try our predictive
-engine using historical data to see how it does.  The predictive engine will be based
-on two major object types: an Investor and an Influencer.  The first object type is
-an influencer. Influencer is a base class from which many other classes will be
-derived.  Two examples of Influencers are: DiscountRate and Unemployment.
-These influencer subclasses will examine a specific datum. Its prediction method
-must be called with a date for which it makes a prediction regarding a particular
-currency. The prediction is one of 3 actions:  "Buy", "Hold", or "Sell".
-Along with the predicted action, it returns a probability between 0 and 1 that
-represents how certain it is of its prediction.  Each derived Influencer class will
-have its own internal variables that must be tuned to provide the most accurate
-predictions. Many tests will need to be performed with
-different values for these internal variables to determine the values that maximize the
-accuracy of its predictions. The second object type is an Investor, which buys and
-sells a particular currency type.  Its purpose is to make as much money as possible.
-To do this,
-it will have a collection of one or more Influencers. Given a particular date, an
-Investor will ask its Influencers for a prediction, then it will do its own weighting
-on the predictions they make and decide whether it will (a) Buy a currency and how much
-it will buy, or (b) Sell a currency and decide how much it will sell, or (c) hold 
-the currency that it has. It will develop its own strategy on whether to buy, hold,
-or sell a currency based on its Influencers predictions. Investors also have internal variables
-that can be adjusted to affect its decisions on when to buy, hold, and sell. Each
-Investor will have one or more Influencers as well as other variables whose values
-affect how well it performs at making more money. Thus, a unique Investor is defined
-by its Influencers and the variable values of 
-itself and its influencers.  This makes it possible to have an almost infinite number of
-unique Investors. We will need to try many unique Investors to determine what Influencers
-and variable values result in making the most money. We want to build a simulation program
-to test as many unique
-investors as we can to find the best ones. The success of a unique Investor is
-determined by how well its predictions lead to profitable currency trading.  That
-is, as currencies are bought and sold using its predictions, the Investors that
-generate the most profit in trading currencies are considered to be the best.  If
-an Investor’s prediction generate a loss, it is considered a bad Investor. Since
-the number of combinations of different Investors is, for all practical purposes,
-infinite, we want to use a Genetic algorithm to find the best ones. We would run
-simulations cycles and successive generations that hopefully become better and
-better investors. I would like you to help me design this simulator. 
+The PLATO System
 
+We’re designing a system to help us predict when to buy and sell
+currencies.  We want to develop a prediction engine that can look at
+different types of historical data and current events and from that make
+a prediction about when we should buy or sell a currency.  In order to
+see how well our predictive engine works, we want to develop a simulator
+that has access to historical data and we can try our predictive engine
+using historical data to see how it does.
+
+The predictive engine is based on two major object types: an Investor
+and an Influencer.
+
+The first object type is an influencer.  Influencer is a base class from
+which many other classes will be derived. These influencer subclasses
+will examine a specific type. At present, our Influencers are examining
+two types of data. First are econometric data. For example, Inflation
+Rate, Housing Starts, Discount Rate, Stock Indexes, Oil prices, etc.
+The second type of data includes various sentiment analysis values
+derived from of news articles. We get this information from project
+GDELT.  An Influencer is asked to make a prediction for a particular
+date regarding two currencies (C1 and C2 defined below).  The prediction
+is one of 3 actions:  "Buy", "Hold", or "Sell".  Along with the
+predicted action, it returns two factors that can be applied to the
+prediction: probability and weighting. Unfortunately, no viable approach
+has been identified for weighting the validity of a preduction. The
+reasons are a bit complicated, but I will discuss those later. And no
+study has yet been done to determine the weighting of a preduction...
+again it is complicated for reasons I will discuss later. For now, it
+always return 1 for the probability and 1 for the weight. The code can
+be easily updated once we have determined how to calculate weight and
+probability.
+
+Each derived Influencer class will have its own internal variables that
+must be tuned to provide the most accurate predictions. For example,
+let's say that an Influencer is asked to make a prediction for date T3.
+To make its prediction an Influencer will look back in time at how its
+associated metric has performed. The time period that it looks at is T3
+- Delta1 to T3 - Delta2.  So, two important variables in every
+Influencer are its values for Delta1 and Delta2. We can externally set
+limitations on the magnitude of Delta1 and Delta2. This makes it (a)
+easier to calculate the random values since we have some boundaries to
+work within, and (b) keeps us from wasting simulation cycles on values
+that will not be relevant -- the assumption here is that the value for
+DiscountRate 30 years ago is not going to provide much predictive value
+for something happening today. So, we externally impose reasonable
+limits on what some of these variables can be.
+
+The second object type is an Investor, which manages an investment fund.
+The fund is intialized at the beginning of each new generation to a
+configurable value (InitFunds).  The currency type of this fund is C1
+(currency 1).  The investor will exchange its C1 for a different
+currency, C2 (currency 2), and eventually it will convert the C2 back to
+C1 and, hopefully, make a profit doing so.  The purpose of an Investor
+is to make as much money as possible.  To do this, it has a one or more
+Influencers that give it recommendations on what to do.  Given a
+particular date, an Investor will ask its Influencers for a prediction
+from each Influencer and based those predictions it will decide whether
+it will (a) Buy a currency and how much it will buy (there is an
+internal value called StdInvestment which is set to how much the
+Investor will invest when the Influencers indicate that investing is the
+right thing to do), or (b) Sell a currency and decide how much it will
+sell, or (c) hold the currency that it has.  It makes its decisions
+using something called a COAStrategy (Course Of Action Strategy).  We
+have implemented two simple COAStrategies so far.  One is called
+"Majority Rules" and the other is called "Distributed Decision".  The
+Majority Rules strategy is simple, if the majority of the Influencers
+recommend a buy, then the Investor exchange the StdInvestment of C1 for
+C2.  If the majority of Influencers recomment a sell, then the Investor
+will exchange all its C2 holdings for C1. If there is a tie such that
+there are the same number of recommendations for a buy and a sell, then
+the Investor holds its C1 and C2.  The Distributed Decision strategy is
+a little more complicated, and probably most easily explained by
+example.  Let's suppose we have an Investor using the Distributed
+Decision strategy who has 10 Influencers. If all 10 recommend a buy,
+then the Investor will exchange StdCurrency C1 for C2. If all 10
+recommend a sell, then the Investor will exchange all its C2 for C1 If 6
+recommend sell and 4 recommend buy, then since 6 > 4 the Investor will
+sell, but it will only sell 6/10 of its C2. Similarly, if 3 Influencers
+recommend sell and 7 recommend buy, then since 7 > 3, it will buy, but
+it will only exchange 7/10 * StdInvestment for C2.  If 4 Influencers
+recommend buy, 2 recommend hold, and 4 recommend sell, the then the
+Investor will hold because the buy and sell votes are equal.  If 4
+Influencers recommend buy, 3 recommend hold, and 3 recommend sell, then
+the 4 buy recommendations are > the 3 sell recommendations so it will
+sell, but the amount is reduced as follows: 4 buy votes - 3 sell votes =
+1 buy vote.  So the Investor will exchange 1/10 * StdInvestment of C1
+for C2.  Similarly, if there are 8 sell recommendations, 1 hold, and 1
+buy recommendation, then 8 sell - 1 buy = 7 sell votes.  So the Investor
+will exchange 7/10 of its C2 holdings for C1.
+
+The particular number, combinations, and settings for the Influencers
+that an Investor has are refined by the genetics code. As you will see
+below, While it is possible to have the simulator create specific
+Investors with Influencers, new generations use the genetics code to
+find what Influencers work best and how to set their variables.
+
+Investors also have internal variables that can be adjusted to affect
+its decisions on when to buy, hold, and sell. Each Investor will have
+one or more Influencers as well as other variables whose values affect
+how well it performs at making more money. Thus, a unique Investor is
+defined by its Influencers and the variable values of itself and its
+Influencers.  This makes it possible to have an almost infinite number
+of unique Investors. We will need to try many unique Investors to
+determine what Influencers and variable values result in making the most
+money. We want to build a simulation program to test as many unique
+investors as we can to find the best ones. The success of a unique
+Investor is determined by how well its predictions lead to profitable
+currency trading.  That is, as currencies are bought and sold using its
+predictions, the Investors that generate the most profit in trading
+currencies are considered to be the best.  If an Investor’s prediction
+generate a loss, it is considered a bad Investor. Since the number of
+combinations of different Investors is, for all practical purposes,
+infinite, we want to use a Genetic algorithm to find the best ones. We
+would run simulations cycles and successive generations that hopefully
+become better and better investors.
+
+The current state of this program is that I have implemented all the
+things needed implement the simulator and I have implementations of the
+Investor and 36 different Influencers. We have 36 different metrics, and
+each metric has an associated Influencer. There is a configuration file
+that provides many different options for the person running the
+simulation including the start and stop dates for the simulation, the
+size of the population of Investors, the maximum and minimum numbers of
+Influencers that Investors can have, the number of generations to run
+before stopping, the currency of the investment fund (C1) and the
+currency the fund will invest in (C2), the mutation rate (a percentage)
+to use when creating a new generation, and quite a few other things. I
+want to describe a few of the other things in more detail a little
+further below.
+
+I have reports that show me that the genetics code is actually working
+as I had hoped.  The simstats.csv report summarizes how each generation
+performed.  For example, it has one column of information that shows the
+percentage of Investors that were profitable at the end of the
+simulation. This allows me to get a high level view of how the genetics
+code is working -- we should see the investors get better over multiple
+generations -- and if they don't, I know that something is broken in the
+genetics code. Another report is called finrep.csv and it provides
+output that allows the performance of the investors to be viewed from a
+financial perspective. For example, one column shows the annualized
+return on investment achieved by the most profitable Investor in that
+generation along with its DNA. The DNA is a string that can be used to
+precisely recreate this Investor and its Influencers and all their
+internal variable settings.
+
+One option is SingleInvestorMode in which we have only a single Investor
+being simulated. That particular investor is created from a DNA string
+that is provided in the config file.  It runs the simulator for that
+single Investor over the simulation time period. No new generations are
+created, it simply runs that one investor and produces the output
+reports. This provides a great debugging tool for both me as the
+programmer and others who want to look closer at how an Influencer or
+multiple Influencers perform so that we can make sure they're
+functioning as we expect them to and that we have something to use to
+try to optimize them.
+
+Another useful option is called TopInvestorCount. This allows us to set
+the number of Top Investors that we want detailed information about in
+the reports.  Along with their financial performance, the output
+includes their DNA.
+
+Another interesting option is called PreserveElite.  This option allows
+us to set a percentage of the best performing Investors from generation
+n that will be precisely recreated in generation n+1.  Though this is
+not part of the standard genetics algorithms, I have found that this
+improves the overall performance of Investors by about 1%.
+
+Another very useful capability is called Crucible.  The Crucible
+consists of a list called TopInvestors containing Investor DNA, whatever
+DNA the user wants to give it. And a separate list of CruciblePeriods,
+essentially a list of start and stop dates for simulations. So a user
+can create a list of time periods over which a simulation will run.  The
+Crucible runs each Investor from the TopInvestors list through a
+simulation for each date range in CruciblePeriods and generates a
+consolidated report containing, among other things, the annualized
+return the Investor achieved during each period.
+
+
+Appendix A.  Assessing An Influencer's accuracy Assessing the
+probability of correctness of each Influencer type is a deceptively
+complicated task. I'm not sure that there's a good way to do it.  The
+issue, in a nutshell is this:  for any given date on which it is asked
+to make a prediction, (a) there is a variable time from prior to that
+date over which it can do its research to make the prediction -- the
+genetics vary this time range wildly, (b) if the influencer predicts a
+buy, there is no set date after it makes the prediction when the
+currency is

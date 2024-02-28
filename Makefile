@@ -2,9 +2,19 @@
 DIRS=util newdata newcore tools apps
 DIST=dist 
 TEST_FAILURE_FILE=fail
+.PHONY: install-tools golint staticcheck
 
 # Temporary file for storing start time
 TIMER_FILE := .build_timer
+
+install-tools: golint staticcheck
+
+golint:
+	go install golang.org/x/lint/golint@latest
+
+staticcheck:
+	go install honnef.co/go/tools/cmd/staticcheck@latest
+
 
 starttimer:
 	@echo $$(date +%s) > $(TIMER_FILE)
