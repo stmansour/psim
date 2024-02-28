@@ -2,40 +2,10 @@
 DIRS=util newdata newcore tools apps
 DIST=dist 
 TEST_FAILURE_FILE=fail
-.PHONY: install-tools golint staticcheck
-
 # Temporary file for storing start time
 TIMER_FILE := .build_timer
 
-install-tools: golint staticcheck
-
-golint:
-	go install golang.org/x/lint/golint@latest
-
-staticcheck:
-	go install honnef.co/go/tools/cmd/staticcheck@latest
-
-
-starttimer:
-	@echo $$(date +%s) > $(TIMER_FILE)
-
-stoptimer:
-	@start=$$(cat $(TIMER_FILE)); \
-	end=$$(date +%s); \
-	elapsed=$$((end - start)); \
-	hours=$$((elapsed / 3600)); \
-	minutes=$$(( (elapsed / 60) % 60 )); \
-	seconds=$$((elapsed % 60)); \
-	if [ $$hours -gt 0 ]; then \
-		echo "Elapsed time: $$hours hour(s) $$minutes minute(s) $$seconds second(s)"; \
-	elif [ $$minutes -gt 0 ]; then \
-		echo "Elapsed time: $$minutes minute(s) $$seconds second(s)"; \
-	else \
-		echo "Elapsed time: $$seconds second(s)"; \
-	fi; \
-	rm -f $(TIMER_FILE)
-
-.PHONY: test
+.PHONY: install-tools golint staticcheck test
 
 psim:
 	for dir in $(DIRS); do make -C $$dir;done
@@ -95,3 +65,31 @@ build: starttimer clean psim package stoptimer
 
 stats:
 	@find . -name "*.go" | srcstats
+
+install-tools: golint staticcheck
+
+golint:
+	go install golang.org/x/lint/golint@latest
+
+staticcheck:
+	go install honnef.co/go/tools/cmd/staticcheck@latest
+
+starttimer:
+	@echo $$(date +%s) > $(TIMER_FILE)
+
+stoptimer:
+	@start=$$(cat $(TIMER_FILE)); \
+	end=$$(date +%s); \
+	elapsed=$$((end - start)); \
+	hours=$$((elapsed / 3600)); \
+	minutes=$$(( (elapsed / 60) % 60 )); \
+	seconds=$$((elapsed % 60)); \
+	if [ $$hours -gt 0 ]; then \
+		echo "Elapsed time: $$hours hour(s) $$minutes minute(s) $$seconds second(s)"; \
+	elif [ $$minutes -gt 0 ]; then \
+		echo "Elapsed time: $$minutes minute(s) $$seconds second(s)"; \
+	else \
+		echo "Elapsed time: $$seconds second(s)"; \
+	fi; \
+	rm -f $(TIMER_FILE)
+

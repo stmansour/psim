@@ -59,6 +59,17 @@ compareToGold() {
         -e 's/Archive directory:.*/Archive directory: PLACEHOLDER/' \
          "$reportFile" >"$normalizedFile"
 
+    # Check if running on Windows
+    if [[ "$(uname -s)" =~ MINGW|CYGWIN|MSYS ]]; then
+        echo "Detected Windows OS. Normalizing line endings for ${normalizedFile}."
+
+        # Use sed to replace CRLF with LF, output to temp file
+        sed 's/\r$//' "${normalizedFile}" > "${normalizedFile}.tmp"
+
+        # Move the temp file to the original file
+        mv "${normalizedFile}.tmp" "${normalizedFile}"
+    fi
+
     # Compare the normalized report to the gold standard
     if diff "$normalizedFile" "$goldFile"; then
         echo "PASSED"
