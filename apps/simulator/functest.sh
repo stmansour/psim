@@ -65,7 +65,7 @@ compareToGold() {
 
         # Use sed to replace CRLF with LF, output to temp file
         sed 's/\r$//' "${normalizedFile}" > "${goldFile}.tmp"
-	goldFile="${goldFile.tmp}"
+	goldFile="${goldFile}.tmp"
     fi
 
     # Compare the normalized report to the gold standard
