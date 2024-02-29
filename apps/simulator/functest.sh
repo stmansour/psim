@@ -64,14 +64,12 @@ compareToGold() {
         echo "Detected Windows OS. Normalizing line endings for ${normalizedFile}."
 
         # Use sed to replace CRLF with LF, output to temp file
-        sed 's/\r$//' "${normalizedFile}" > "${normalizedFile}.tmp"
-
-        # Move the temp file to the original file
-        mv "${normalizedFile}.tmp" "${normalizedFile}"
+        sed 's/\r$//' "${normalizedFile}" > "${goldFile}.tmp"
+	goldFile="${goldFile.tmp}"
     fi
 
     # Compare the normalized report to the gold standard
-    if diff "$normalizedFile" "$goldFile"; then
+    if diff "${normalizedFile}" "${goldFile}"; then
         echo "PASSED"
         rm "${normalizedFile}"
     else
