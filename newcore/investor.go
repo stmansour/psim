@@ -44,25 +44,24 @@ var InvestmentStrategies = []string{
 // investment strategy in currency exchange.
 // ----------------------------------------------------------------------------
 type Investor struct {
-	cfg               *util.AppConfig          // program wide configuration values
-	factory           *Factory                 // used to create Influencers
-	db                *newdata.Database        // where to get the data needed
-	mim               *MetricInfluencerManager //metric influencer manager describes the influencers
-	BalanceC1         float64                  // total amount of currency C1
-	BalanceC2         float64                  // total amount of currency C2
-	PortfolioValueC1  float64                  // the C1 value of BalanceC1 + BalanceC2 on DtPortfolioValue
-	DtPortfolioValue  time.Time                // the date for which PortfolioValueC1 was calculated
-	Investments       []Investment             // a record of all investments made by this investor
-	Influencers       []Influencer             // all the influencerst that advise this Investor
-	maxProfit         float64                  // maximum profit of ALL Investors during this simulation cycle, set by simulator at the end of each simulation cycle, used when calculating fitness
-	W1                float64                  // weight for profit in Fitness Score
-	W2                float64                  // weight for correctness
-	FitnessCalculated bool                     // true after fitness score is calculated and stored in Fitness
-	Fitness           float64                  // Fitness score calculated at the end of a simulation cycle
-	CreatedByDNA      bool                     // some init steps must be skipped if it's created from DNA
-	Strategy          int                      // which strategy to use for predictions
-	ID                string                   // unique id for this investor
-	Parented          int64                    // how many times was this Investor a parent for the next gen?
+	cfg               *util.AppConfig   // program wide configuration values
+	factory           *Factory          // used to create Influencers
+	db                *newdata.Database // where to get the data needed
+	BalanceC1         float64           // total amount of currency C1
+	BalanceC2         float64           // total amount of currency C2
+	PortfolioValueC1  float64           // the C1 value of BalanceC1 + BalanceC2 on DtPortfolioValue
+	DtPortfolioValue  time.Time         // the date for which PortfolioValueC1 was calculated
+	Investments       []Investment      // a record of all investments made by this investor
+	Influencers       []Influencer      // all the influencerst that advise this Investor
+	maxProfit         float64           // maximum profit of ALL Investors during this simulation cycle, set by simulator at the end of each simulation cycle, used when calculating fitness
+	W1                float64           // weight for profit in Fitness Score
+	W2                float64           // weight for correctness
+	FitnessCalculated bool              // true after fitness score is calculated and stored in Fitness
+	Fitness           float64           // Fitness score calculated at the end of a simulation cycle
+	CreatedByDNA      bool              // some init steps must be skipped if it's created from DNA
+	Strategy          int               // which strategy to use for predictions
+	ID                string            // unique id for this investor
+	Parented          int64             // how many times was this Investor a parent for the next gen?
 	// maxPredictions    map[string]int           // max predictions indexed by Influencer subclass, set by simulator at the end of each simulation cycle
 	// maxPredictions    map[string]int    // max predictions indexed by Influencer subclass, set by simulator at the end of each simulation cycle, used when calculating fitness
 }
@@ -104,20 +103,20 @@ func (i *Investor) GetDB() *newdata.Database {
 // SelectNUniqueSubclasses shuffles the indexes to the map of MInfluencerSubclasses
 // then selects the first n, and returns the list
 // ----------------------------------------------------------------------------------
-func (i *Investor) SelectNUniqueSubclasses(n int) []MInfluencerSubclass {
-	if n <= 0 || n > len(i.mim.MInfluencerSubclasses) {
+func (i *Investor) SelectNUniqueSubclasses(n int) []newdata.MInfluencerSubclass {
+	if n <= 0 || n > len(i.db.Mim.MInfluencerSubclasses) {
 		fmt.Println("Invalid n; it must be in range 1 to len(m)")
 		return nil
 	}
 
 	// Shuffle the keys slice
-	rand.Shuffle(len(i.mim.MInfluencerSubclassesIndexer), func(k, j int) {
-		i.mim.MInfluencerSubclassesIndexer[k], i.mim.MInfluencerSubclassesIndexer[j] = i.mim.MInfluencerSubclassesIndexer[j], i.mim.MInfluencerSubclassesIndexer[k]
+	rand.Shuffle(len(i.db.Mim.MInfluencerSubclassesIndexer), func(k, j int) {
+		i.db.Mim.MInfluencerSubclassesIndexer[k], i.db.Mim.MInfluencerSubclassesIndexer[j] = i.db.Mim.MInfluencerSubclassesIndexer[j], i.db.Mim.MInfluencerSubclassesIndexer[k]
 	})
 
-	selected := make([]MInfluencerSubclass, n)
-	for j, key := range i.mim.MInfluencerSubclassesIndexer[:n] {
-		selected[j] = i.mim.MInfluencerSubclasses[key]
+	selected := make([]newdata.MInfluencerSubclass, n)
+	for j, key := range i.db.Mim.MInfluencerSubclassesIndexer[:n] {
+		selected[j] = i.db.Mim.MInfluencerSubclasses[key]
 	}
 
 	return selected
@@ -126,14 +125,13 @@ func (i *Investor) SelectNUniqueSubclasses(n int) []MInfluencerSubclass {
 // Init is called during Generation 1 to get things started.  All settable
 // fields are set to random values.
 // ----------------------------------------------------------------------------
-func (i *Investor) Init(cfg *util.AppConfig, f *Factory, mim *MetricInfluencerManager, db *newdata.Database) {
+func (i *Investor) Init(cfg *util.AppConfig, f *Factory, db *newdata.Database) {
 	i.cfg = cfg
 
 	i.BalanceC1 = cfg.InitFunds
 	i.FitnessCalculated = false
 	i.Fitness = float64(0)
 	i.factory = f
-	i.mim = mim
 	i.db = db
 
 	if !i.CreatedByDNA {
@@ -152,7 +150,7 @@ func (i *Investor) Init(cfg *util.AppConfig, f *Factory, mim *MetricInfluencerMa
 	// Create a team of influencers.
 	//------------------------------------------------------------------
 	min := 1
-	max := len(i.mim.MInfluencerSubclasses)
+	max := len(i.db.Mim.MInfluencerSubclasses)
 	if i.cfg.MaxInfluencers < max {
 		max = i.cfg.MaxInfluencers
 	}
@@ -255,7 +253,7 @@ func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 // FormatPrediction prints a readable version of the Influencers predictions
 // ----------------------------------------------------------------------------
 func (i *Investor) FormatPrediction(p *Prediction, T3 time.Time) {
-	name := i.mim.MInfluencerSubclasses[p.IType].Name
+	name := i.db.Mim.MInfluencerSubclasses[p.IType].Name
 	fmt.Printf("\t%s %s:  %s   (T1 %s [%4.2f] -  T2 %s [%4.2f])\n",
 		name,
 		p.IType,

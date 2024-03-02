@@ -12,7 +12,7 @@ import (
 )
 
 // Convenience function
-func createConfigAndFactory() (*Factory, *MetricInfluencerManager, *newdata.Database, *util.AppConfig) {
+func createConfigAndFactory() (*Factory, *newdata.Database, *util.AppConfig) {
 	var f Factory
 	util.Init(-1)
 	cfg := util.CreateTestingCFG()
@@ -26,23 +26,18 @@ func createConfigAndFactory() (*Factory, *MetricInfluencerManager, *newdata.Data
 	if err := db.Init(); err != nil {
 		log.Panicf("*** PANIC ERROR ***  db.Init returned error: %s\n", err)
 	}
-	mim := NewInfluencerManager()
-	if err = mim.Init(); err != nil {
-		log.Panicf("*** PANIC ERROR ***  app.mim.Init() returned error: %s\n", err)
-	}
-
-	f.Init(cfg, db, mim)
-	return &f, mim, db, cfg
+	f.Init(cfg, db)
+	return &f, db, cfg
 }
 
 // TestInfluencerPredictions
 func TestInfluencerPredictions(t *testing.T) {
-	f, mim, db, cfg := createConfigAndFactory()
+	f, db, cfg := createConfigAndFactory()
 	inv := Investor{}
-	inv.Init(cfg, f, mim, db)
+	inv.Init(cfg, f, db)
 
 	// create one of each Influencer
-	for _, v := range mim.MInfluencerSubclasses {
+	for _, v := range db.Mim.MInfluencerSubclasses {
 		// fmt.Printf("k = %v, v = %v\n", k, v)
 		dna := fmt.Sprintf("{%s,Metric=%s}", v.Subclass, v.Metric)
 		inf, err := f.NewInfluencer(dna)
@@ -75,10 +70,10 @@ func TestNewInvestorFromDNA(t *testing.T) {
 		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-38,Delta2=-15,Metric=WDPCount}|{LSMInfluencer,Delta1=-31,Delta2=-5,Metric=WHOScore}|{LSMInfluencer,Delta1=-166,Delta2=-44,Metric=BC}]}",
 		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-32,Delta2=-27,Metric=LSNScore}|{LSMInfluencer,Delta1=-44,Delta2=-14,Metric=WHLScore}|{LSMInfluencer,Delta1=-37,Delta2=-16,Metric=WDFCount}|{LSMInfluencer,Delta1=-47,Delta2=-6,Metric=WHAScore}|{LSMInfluencer,Delta1=-59,Delta2=-16,Metric=LSNScore}|{LSMInfluencer,Delta1=-84,Delta2=-16,Metric=WPAScore_ECON}|{LSMInfluencer,Delta1=-167,Delta2=-43,Metric=M2}|{LSMInfluencer,Delta1=-97,Delta2=-34,Metric=CC}]}",
 	}
-	f, mim, db, cfg := createConfigAndFactory()
+	f, db, cfg := createConfigAndFactory()
 	for i := 0; i < len(dnas); i++ {
 		inv := f.NewInvestorFromDNA(dnas[i])
-		inv.Init(cfg, f, mim, db)
+		inv.Init(cfg, f, db)
 		fmt.Printf("InvestorID = %s\n", inv.ID)
 		li := len(inv.Influencers)
 		for j := 0; j < li; j++ {
@@ -93,7 +88,7 @@ func TestNewInvestorFromDNA(t *testing.T) {
 
 // TestNewPopulation - test generating a new population
 func TestNewPopulation(t *testing.T) {
-	f, mim, db, cfg := createConfigAndFactory()
+	f, db, cfg := createConfigAndFactory()
 
 	Investors := make([]Investor, 0)
 	for i := 0; i < 50; i++ {
@@ -103,14 +98,14 @@ func TestNewPopulation(t *testing.T) {
 	}
 	// Now initialize them all
 	for i := 0; i < len(Investors); i++ {
-		Investors[i].Init(cfg, f, mim, db)
+		Investors[i].Init(cfg, f, db)
 		fmt.Printf("%s\n", Investors[i].DNA())
 	}
 }
 
 // TestInvestorFromParents - test generating a new investor from two parent investors
 func TestInvestorFromParents(t *testing.T) {
-	f, _, _, cfg := createConfigAndFactory()
+	f, _, cfg := createConfigAndFactory()
 	// t.Fail()
 
 	parent1 := Investor{Strategy: 1, W1: 0.5, W2: 0.5}
@@ -172,21 +167,5 @@ func TestParseInvestorDNA(t *testing.T) {
 			}
 			t.Errorf("parseInvestorDNA(%q) map = %v, want %v", tt.input, gotMap, tt.wantMap)
 		}
-	}
-}
-
-func TestLoadInfSubclasses(t *testing.T) {
-	var err error
-	mim := NewInfluencerManager()
-	if err = mim.Init(); err != nil {
-		log.Panicf("*** PANIC ERROR ***  app.mim.Init() returned error: %s\n", err)
-	}
-	if err != nil {
-		fmt.Println("Error reading CSV file:", err)
-		return
-	}
-
-	for _, influencer := range mim.InfluencerSubclasses {
-		fmt.Printf("%+v\n", influencer)
 	}
 }

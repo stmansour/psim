@@ -14,11 +14,12 @@ type EconometricsRecords []EconometricsRecord
 
 // Database is the abstraction for the data source
 type Database struct {
-	cfg      *util.AppConfig         // application configuration info
-	extres   *util.ExternalResources // the db may require secrets
-	Datatype string                  // "CSV", "MYSQL"
-	CSVDB    *DatasourceCSV          // valid when Datatype is "CSV"
-	SQLDB    *DatabaseSQL            // valid when Datatype is "SQL"
+	cfg      *util.AppConfig          // application configuration info
+	extres   *util.ExternalResources  // the db may require secrets
+	Datatype string                   // "CSV", "MYSQL"
+	CSVDB    *DatasourceCSV           // valid when Datatype is "CSV"
+	SQLDB    *DatabaseSQL             // valid when Datatype is "SQL"
+	Mim      *MetricInfluencerManager // metrics manager
 }
 
 // EconometricsRecord is the basic structure of discount rate data
@@ -79,8 +80,10 @@ func (p *Database) ensureDatabase() error {
 // Open opens the database for use
 func (p *Database) Open() error {
 	var err error
+	p.Mim = NewInfluencerManager()
 	switch p.Datatype {
 	case "CSV":
+		p.Mim.Init(p)
 		return p.CSVDB.LoadCsvDB()
 	case "SQL":
 		// Open a connection to MySQL without specifying a database
@@ -98,6 +101,7 @@ func (p *Database) Open() error {
 		if strings.Contains(err.Error(), "Unknown database") {
 			_, err = p.SQLDB.DB.Exec("DROP DATABASE IF EXISTS plato;CREATE DATABASE IF NOT EXISTS plato;")
 		}
+		p.Mim.Init(p)
 		return err
 	default:
 		return fmt.Errorf("unknown database type: %s", p.Datatype)

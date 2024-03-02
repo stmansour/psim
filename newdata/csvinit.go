@@ -59,6 +59,7 @@ var Currencies = []CurrencyInfo{
 // Init initializes the database
 // ---------------------------------------------------------------------------------
 func (d *Database) Init() error {
+	d.Mim = NewInfluencerManager()
 	switch d.Datatype {
 	case "CSV":
 		return d.CSVInit()
@@ -79,6 +80,9 @@ func (d *Database) SetCSVFilename(f string) {
 // dbfname - db file name override.  If nil or len() == 0 then it uses the default
 // --------------------------------------------------------------------------------
 func (d *Database) CSVInit() error {
+	if err := d.Mim.Init(d); err != nil {
+		return err
+	}
 	if err := d.CSVDB.LoadCsvDB(); err != nil {
 		return err
 	}

@@ -55,16 +55,51 @@
       {
         "Name": "Buffet",
         "DNA": "{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-65,Delta2=-24,Metric=WDECount}|{LSMInfluencer,Delta1=-86,Delta2=-6,Metric=WPAScore}|{LSMInfluencer,Delta1=-85,Delta2=-13,Metric=LSPScore}|{LSMInfluencer,Delta1=-75,Delta2=-19,Metric=WDMCount}|{LSMInfluencer,Delta1=-102,Delta2=-38,Metric=MP}|{LSMInfluencer,Delta1=-143,Delta2=-33,Metric=RS}|{LSMInfluencer,Delta1=-157,Delta2=-59,Metric=IP}|{LSMInfluencer,Delta1=-48,Delta2=-1,Metric=SP}|{LSMInfluencer,Delta1=-160,Delta2=-60,Metric=CC}]}"
-      }
+      },
+      {
+        "Name": "Graham",
+        "DNA": "{Investor;Strategy=MajorityWins;InvW1=0.6763;InvW2=0.3237;Influencers=[{LSMInfluencer,Delta1=-119,Delta2=-31,Metric=CC}|{LSMInfluencer,Delta1=-36,Delta2=-5,Metric=WHLScore_ECON}|{LSMInfluencer,Delta1=-145,Delta2=-39,Metric=MP}|{LSMInfluencer,Delta1=-154,Delta2=-34,Metric=IP}|{LSMInfluencer,Delta1=-167,Delta2=-53,Metric=IE}|{LSMInfluencer,Delta1=-110,Delta2=-31,Metric=RS}|{LSMInfluencer,Delta1=-47,Delta2=-22,Metric=WDPCount}|{LSMInfluencer,Delta1=-61,Delta2=-9,Metric=WHOScore}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BC}|{LSMInfluencer,Delta1=-69,Delta2=-26,Metric=WPAScore_ECON}]}"
+      },
+      {
+        "Name": "Lynch",
+        "DNA": "{Investor;Strategy=DistributedDecision;InvW1=0.4031;InvW2=0.5969;Influencers=[{LSMInfluencer,Delta1=-57,Delta2=-6,Metric=LIMCount_ECON}|{LSMInfluencer,Delta1=-180,Delta2=-52,Metric=UR}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BC}|{LSMInfluencer,Delta1=-119,Delta2=-59,Metric=CC}|{LSMInfluencer,Delta1=-29,Delta2=-1,Metric=DR}|{LSMInfluencer,Delta1=-94,Delta2=-36,Metric=MP}|{LSMInfluencer,Delta1=-96,Delta2=-42,Metric=M1}|{LSMInfluencer,Delta1=-76,Delta2=-3,Metric=WDFCount}|{LSMInfluencer,Delta1=-77,Delta2=-20,Metric=LSPScore}]}"
+      },
+      {
+        "Name": "Bogel",
+        "DNA": "{Investor;Strategy=MajorityWins;InvW1=0.1764;InvW2=0.8236;Influencers=[{LSMInfluencer,Delta1=-98,Delta2=-39,Metric=MP}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RS}|{LSMInfluencer,Delta1=-171,Delta2=-52,Metric=UR}|{LSMInfluencer,Delta1=-138,Delta2=-30,Metric=HS}|{LSMInfluencer,Delta1=-114,Delta2=-39,Metric=M2}|{LSMInfluencer,Delta1=-85,Delta2=-6,Metric=LIMCount_ECON}|{LSMInfluencer,Delta1=-47,Delta2=-22,Metric=WDPCount}|{LSMInfluencer,Delta1=-119,Delta2=-58,Metric=CC}|{LSMInfluencer,Delta1=-45,Delta2=-15,Metric=WDECount}|{LSMInfluencer,Delta1=-61,Delta2=-10,Metric=LSNScore}]}"
+      },
+      {
+        "Name": "Ichan",
+        "DNA": "{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-98,Delta2=-36,Metric=MP}|{LSMInfluencer,Delta1=-12,Delta2=-1,Metric=DR}|{LSMInfluencer,Delta1=-75,Delta2=-11,Metric=WHOScore_ECON}|{LSMInfluencer,Delta1=-111,Delta2=-42,Metric=M1}|{LSMInfluencer,Delta1=-98,Delta2=-30,Metric=HS}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BC}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RS}|{LSMInfluencer,Delta1=-69,Delta2=-20,Metric=LSPScore}|{LSMInfluencer,Delta1=-52,Delta2=-16,Metric=WDFCount}|{LSMInfluencer,Delta1=-154,Delta2=-34,Metric=IP}]}"
+      },
+      {
+        "Name": "Khosla",
+        "DNA": "{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-71,Delta2=-20,Metric=LSPScore}|{LSMInfluencer,Delta1=-690,Delta2=-175,Metric=GD}|{LSMInfluencer,Delta1=-31,Delta2=-17,Metric=WDECount_ECON}|{LSMInfluencer,Delta1=-95,Delta2=-40,Metric=MP}|{LSMInfluencer,Delta1=-153,Delta2=-34,Metric=IP}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RS}]}"
+      },
+      {
+        "DNA": "{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-69,Delta2=-20,Metric=LSPScore}|{LSMInfluencer,Delta1=-12,Delta2=-1,Metric=DR}|{LSMInfluencer,Delta1=-97,Delta2=-59,Metric=CC}|{LSMInfluencer,Delta1=-56,Delta2=-7,Metric=LSNScore_ECON}|{LSMInfluencer,Delta1=-111,Delta2=-42,Metric=M1}|{LSMInfluencer,Delta1=-94,Delta2=-36,Metric=MP}|{LSMInfluencer,Delta1=-75,Delta2=-11,Metric=WHOScore_ECON}]}"
+      },
+      {
+        "DNA": "{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-36,Delta2=-5,Metric=WHLScore_ECON}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BC}|{LSMInfluencer,Delta1=-154,Delta2=-34,Metric=IP}|{LSMInfluencer,Delta1=-47,Delta2=-22,Metric=WDPCount}|{LSMInfluencer,Delta1=-110,Delta2=-33,Metric=RS}|{LSMInfluencer,Delta1=-167,Delta2=-53,Metric=IE}|{LSMInfluencer,Delta1=-45,Delta2=-15,Metric=WDECount}|{LSMInfluencer,Delta1=-69,Delta2=-20,Metric=LSPScore}]}"
+      },
+      {
+        "DNA": "{Investor;Strategy=MajorityWins;InvW1=0.8959;InvW2=0.1041;Influencers=[{LSMInfluencer,Delta1=-153,Delta2=-34,Metric=IP}|{LSMInfluencer,Delta1=-36,Delta2=-5,Metric=WHLScore_ECON}|{LSMInfluencer,Delta1=-110,Delta2=-31,Metric=RS}|{LSMInfluencer,Delta1=-61,Delta2=-9,Metric=WHOScore}|{LSMInfluencer,Delta1=-31,Delta2=-14,Metric=WPAScore}|{LSMInfluencer,Delta1=-69,Delta2=-26,Metric=WPAScore_ECON}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BC}|{LSMInfluencer,Delta1=-75,Delta2=-11,Metric=WHOScore_ECON}|{LSMInfluencer,Delta1=-45,Delta2=-15,Metric=WDECount}|{LSMInfluencer,Delta1=-47,Delta2=-22,Metric=WDPCount}]}"
+      },
+      {
+        "DNA": "{Investor;Strategy=MajorityWins;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-94,Delta2=-36,Metric=MP}|{LSMInfluencer,Delta1=-74,Delta2=-14,Metric=WDFCount_ECON}|{LSMInfluencer,Delta1=-34,Delta2=-6,Metric=LIMCount_ECON}|{LSMInfluencer,Delta1=-69,Delta2=-16,Metric=LSPScore}|{LSMInfluencer,Delta1=-43,Delta2=-20,Metric=WDMCount}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BC}|{LSMInfluencer,Delta1=-97,Delta2=-31,Metric=CC}|{LSMInfluencer,Delta1=-180,Delta2=-56,Metric=UR}|{LSMInfluencer,Delta1=-144,Delta2=-54,Metric=IR}|{LSMInfluencer,Delta1=-120,Delta2=-41,Metric=M2}]}"
+      },
+      {
+        "DNA": "{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-154,Delta2=-34,Metric=IP}|{LSMInfluencer,Delta1=-52,Delta2=-3,Metric=WDFCount}|{LSMInfluencer,Delta1=-43,Delta2=-20,Metric=WDMCount}|{LSMInfluencer,Delta1=-120,Delta2=-31,Metric=RS}|{LSMInfluencer,Delta1=-36,Delta2=-11,Metric=SP}|{LSMInfluencer,Delta1=-97,Delta2=-59,Metric=CC}|{LSMInfluencer,Delta1=-44,Delta2=-14,Metric=WPAScore}|{LSMInfluencer,Delta1=-29,Delta2=-4,Metric=DR}]}"
+      },
     ],
 
     "CruciblePeriods": [
       { "DtStart": "2015-06-01", "DtStop": "2015-09-30", },
       { "DtStart": "2015-09-01", "DtStop": "2015-12-31", },
+      { "DtStart": "2015-04-01", "DtStop": "2015-12-31", },
       { "DtStart": "2021-01-01", "DtStop": "2021-12-31", },
       { "DtStart": "2022-01-01", "DtStop": "2022-12-31", },
     ],
 
 }
-
 

@@ -13,12 +13,11 @@ import (
 
 // Factory contains methods to create objects based on a DNA string
 type Factory struct {
-	cfg         *util.AppConfig          // system-wide configuration info
-	db          *newdata.Database        // db to provide to investors
-	mim         *MetricInfluencerManager //metric influencer manager describes the influencers
-	MutateCalls int64                    // how many calls were made to Mutate()
-	Mutations   int64                    // how many times did mutation happen
-	InvCounter  int64                    // used in ID generation
+	cfg         *util.AppConfig   // system-wide configuration info
+	db          *newdata.Database // db to provide to investors
+	MutateCalls int64             // how many calls were made to Mutate()
+	Mutations   int64             // how many times did mutation happen
+	InvCounter  int64             // used in ID generation
 }
 
 // InfluencerDNA is a struct of information used during the process of
@@ -34,10 +33,9 @@ type InfluencerDNA struct {
 // Init - initializes the factory
 //
 // --------------------------------------------------------------------------------
-func (f *Factory) Init(cfg *util.AppConfig, db *newdata.Database, mim *MetricInfluencerManager) {
+func (f *Factory) Init(cfg *util.AppConfig, db *newdata.Database) {
 	f.cfg = cfg
 	f.db = db
-	f.mim = mim
 }
 
 // NewPopulation creates a new population based on the current population
@@ -134,7 +132,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	newInvestor := Investor{
 		CreatedByDNA: true,
 	}
-	newInvestor.Init(f.cfg, f, f.mim, f.db)
+	newInvestor.Init(f.cfg, f, f.db)
 	newInvestor.FitnessCalculated = false
 	newInvestor.Fitness = 0.0
 	newInvestor.BalanceC1 = f.cfg.InitFunds
@@ -190,7 +188,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		log.Panicf("newInfCount == 0, we cannot have an Investor with 0 Influencers\n")
 	}
 	newInfluencersDNA := f.createInfluencerDNAList(&parent1, &parent2, newInfCount)
-	if newInfCount > len(f.mim.MInfluencerSubclassesIndexer) {
+	if newInfCount > len(f.db.Mim.MInfluencerSubclassesIndexer) {
 		log.Panicf("Factory.BreedNewInvestor len(newInvestor.Influencers) = %d\n", len(newInvestor.Influencers))
 	}
 
@@ -245,7 +243,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		}
 		inf.SetMyInvestor(&newInvestor)
 		newInvestor.Influencers = append(newInvestor.Influencers, inf)
-		if len(newInvestor.Influencers) > len(f.mim.MInfluencerSubclassesIndexer) {
+		if len(newInvestor.Influencers) > len(f.db.Mim.MInfluencerSubclassesIndexer) {
 			log.Panicf("Factory.BreedNewInvestor len(newInvestor.Influencers) = %d.  i = %d, newInfCount = %d\n", len(newInvestor.Influencers), i, newInfCount)
 		}
 	}
@@ -435,7 +433,7 @@ func (f *Factory) addInfluencer(inv *Investor) {
 	// ADD, but only if influencer count is < the number of influencer subclasses
 	// and also only if the total number of influencers is < the max allowed
 	//-----------------------------------------------------------------------------
-	if len(inv.Influencers) < len(f.mim.MInfluencerSubclassesIndexer) && len(inv.Influencers) < f.cfg.MaxInfluencers {
+	if len(inv.Influencers) < len(f.db.Mim.MInfluencerSubclassesIndexer) && len(inv.Influencers) < f.cfg.MaxInfluencers {
 		if inf := f.createInfluencer(inv); inf != nil {
 			inv.Influencers = append(inv.Influencers, *inf)
 		}
@@ -478,7 +476,7 @@ func (f *Factory) RandomUnusedSubclassAndMetric(inv *Investor) (string, string) 
 
 	// Filter the util.InfluencerSubclasses to find those not in existingMetrics
 	var availableMetrics []string
-	for _, subclass := range f.mim.MInfluencerSubclassesIndexer {
+	for _, subclass := range f.db.Mim.MInfluencerSubclassesIndexer {
 		if !existingMetrics[subclass] {
 			availableMetrics = append(availableMetrics, subclass)
 		}
@@ -514,7 +512,6 @@ func (f *Factory) NewInvestorFromDNA(DNA string) Investor {
 	inv.cfg = f.cfg
 	inv.factory = f
 	inv.db = f.db
-	inv.mim = f.mim
 	inv.BalanceC1 = inv.cfg.InitFunds
 	inv.CreatedByDNA = true
 
@@ -615,7 +612,7 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 	if !ok {
 		log.Panicf("Could not get a string value for Metric!\n")
 	}
-	if _, ok := f.mim.MInfluencerSubclasses[metric]; !ok {
+	if _, ok := f.db.Mim.MInfluencerSubclasses[metric]; !ok {
 		return nil, fmt.Errorf("unknown metric: %s", metric)
 	}
 	Delta1, Delta2, err := f.GenerateDeltas(metric, DNAmap)
@@ -629,12 +626,12 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 		x := LSMInfluencer{
 			Delta1:        Delta1,
 			Delta2:        Delta2,
-			HoldWindowNeg: f.mim.MInfluencerSubclasses[metric].HoldWindowNeg,
-			HoldWindowPos: f.mim.MInfluencerSubclasses[metric].HoldWindowPos,
+			HoldWindowNeg: f.db.Mim.MInfluencerSubclasses[metric].HoldWindowNeg,
+			HoldWindowPos: f.db.Mim.MInfluencerSubclasses[metric].HoldWindowPos,
 			Metric:        metric,
 			cfg:           f.cfg,
 		}
-		minf := f.mim.MInfluencerSubclasses[metric]
+		minf := f.db.Mim.MInfluencerSubclasses[metric]
 		x.Blocs = minf.Blocs
 		x.LocaleType = minf.LocaleType
 		x.Predictor = minf.Predictor
@@ -667,7 +664,7 @@ func (f *Factory) ParseInfluencerDNA(DNA string) (string, map[string]interface{}
 		//--------------------------------------
 		if i == 0 {
 			found := false
-			for _, v := range f.mim.InfluencerSubclasses {
+			for _, v := range f.db.Mim.InfluencerSubclasses {
 				if v == token {
 					found = true
 					break
@@ -713,28 +710,28 @@ func (f *Factory) ParseInfluencerDNA(DNA string) (string, map[string]interface{}
 func (f *Factory) GenerateDeltas(metric string, DNA map[string]interface{}) (Delta1 int, Delta2 int, err error) {
 	// Generate or validate Delta1
 	if val, ok := DNA["Delta1"].(int); ok {
-		if f.mim.MInfluencerSubclasses[metric].MinDelta1 <= val && val <= f.mim.MInfluencerSubclasses[metric].MaxDelta1 {
+		if f.db.Mim.MInfluencerSubclasses[metric].MinDelta1 <= val && val <= f.db.Mim.MInfluencerSubclasses[metric].MaxDelta1 {
 			Delta1 = val
 		} else {
-			util.DPrintf("f.mim.MInfluencerSubclasses[%s] = %#v\n", metric, f.mim.MInfluencerSubclasses[metric])
-			return 0, 0, fmt.Errorf("invalid Delta1 value: %d, it must be in the range %d to %d", val, f.mim.MInfluencerSubclasses[metric].MinDelta1, f.mim.MInfluencerSubclasses[metric].MaxDelta1)
+			util.DPrintf("f.db.Mim.MInfluencerSubclasses[%s] = %#v\n", metric, f.db.Mim.MInfluencerSubclasses[metric])
+			return 0, 0, fmt.Errorf("invalid Delta1 value: %d, it must be in the range %d to %d", val, f.db.Mim.MInfluencerSubclasses[metric].MinDelta1, f.db.Mim.MInfluencerSubclasses[metric].MaxDelta1)
 		}
 	} else {
 		// if no value found, generate based on configuration limits
-		Delta1 = util.RandomInRange(f.mim.MInfluencerSubclasses[metric].MinDelta1, f.mim.MInfluencerSubclasses[metric].MaxDelta1)
+		Delta1 = util.RandomInRange(f.db.Mim.MInfluencerSubclasses[metric].MinDelta1, f.db.Mim.MInfluencerSubclasses[metric].MaxDelta1)
 	}
 
 	// Generate or validate Delta2
 	if val, ok := DNA["Delta2"].(int); ok {
-		if f.mim.MInfluencerSubclasses[metric].MinDelta2 <= val && val <= f.mim.MInfluencerSubclasses[metric].MaxDelta2 {
+		if f.db.Mim.MInfluencerSubclasses[metric].MinDelta2 <= val && val <= f.db.Mim.MInfluencerSubclasses[metric].MaxDelta2 {
 			Delta2 = val
 		} else {
-			util.DPrintf("f.mim.MInfluencerSubclasses[%s] = %#v\n", metric, f.mim.MInfluencerSubclasses[metric])
-			return 0, 0, fmt.Errorf("invalid Delta2 value: %d, it must be in the range %d to %d", val, f.mim.MInfluencerSubclasses[metric].MinDelta2, f.mim.MInfluencerSubclasses[metric].MaxDelta2)
+			util.DPrintf("f.db.Mim.MInfluencerSubclasses[%s] = %#v\n", metric, f.db.Mim.MInfluencerSubclasses[metric])
+			return 0, 0, fmt.Errorf("invalid Delta2 value: %d, it must be in the range %d to %d", val, f.db.Mim.MInfluencerSubclasses[metric].MinDelta2, f.db.Mim.MInfluencerSubclasses[metric].MaxDelta2)
 		}
 	} else {
 		// if no value found, generate based on configuration limits
-		Delta2 = util.RandomInRange(f.mim.MInfluencerSubclasses[metric].MinDelta2, f.mim.MInfluencerSubclasses[metric].MaxDelta2)
+		Delta2 = util.RandomInRange(f.db.Mim.MInfluencerSubclasses[metric].MinDelta2, f.db.Mim.MInfluencerSubclasses[metric].MaxDelta2)
 	}
 
 	return Delta1, Delta2, nil

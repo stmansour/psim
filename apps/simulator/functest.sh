@@ -52,6 +52,11 @@ compareToGold() {
     local goldFile="gold/${reportFile}.gold"
     local normalizedFile="${reportFile}.normalized"
 
+    # if it's a csv file, delete to the first blank line...
+    if [[ ${reportFile} =~ \.csv$ ]]; then
+        awk 'flag; /^$/ {flag=1}' "${reportFile}" > "${reportFile}.tmp" && mv "${reportFile}.tmp" "${reportFile}"
+    fi
+
     # Normalize the report file
     sed -E \
         -e 's/Version:[[:space:]]+[0-9]+\.[0-9]+-[0-9]{8}-[0-9]{6}/Version: VERSION_PLACEHOLDER/' \
@@ -65,7 +70,7 @@ compareToGold() {
 
         # Use sed to replace CRLF with LF, output to temp file
         sed 's/\r$//' "${normalizedFile}" > "${goldFile}.tmp"
-	goldFile="${goldFile}.tmp"
+	    goldFile="${goldFile}.tmp"
     fi
 
     # Compare the normalized report to the gold standard
@@ -174,5 +179,7 @@ if [ "${SINGLETEST}${TFILES}" = "${TFILES}" -o "${SINGLETEST}${TFILES}" = "${TFI
     RESFILE="${TFILES}${STEP}"
     ./simulator -C -c confcru.json5 >"${RESFILE}"
     compareToGold ${RESFILE}
+    mv crep.csv c1.csv
+    compareToGold c1.csv
     ((TESTCOUNT++))
 fi

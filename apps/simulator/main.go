@@ -24,7 +24,7 @@ var app struct {
 	cfName                     string // override default with this file
 	cfg                        *util.AppConfig
 	db                         *newdata.Database
-	mim                        *newcore.MetricInfluencerManager
+	mim                        *newdata.MetricInfluencerManager
 	archiveBaseDir             string // where archives go
 	archiveMode                bool   // if true it copies the config file to an archive directory, places simstats and finrep there as well
 	CrucibleMode               bool   // normal or crucible
@@ -85,20 +85,15 @@ func doSimulation() {
 		log.Panicf("*** PANIC ERROR ***  db.Init returned error: %s\n", err)
 	}
 
-	app.mim = newcore.NewInfluencerManager()
-	if err = app.mim.Init(); err != nil {
-		log.Panicf("*** PANIC ERROR ***  app.mim.Init() returned error: %s\n", err)
-	}
-
 	if cfg.CrucibleMode {
 		c := newcore.NewCrucible()
-		c.Init(&cfg, app.db, app.mim, &app.sim)
+		c.Init(&cfg, app.db, &app.sim)
 		c.Run()
 		os.Exit(0)
 	}
 
 	displaySimulationDetails(&cfg)
-	app.sim.Init(app.cfg, app.db, app.mim, nil, app.dayByDayResults, app.dumpTopInvestorInvestments)
+	app.sim.Init(app.cfg, app.db, nil, app.dayByDayResults, app.dumpTopInvestorInvestments)
 	app.sim.GenInfluencerDistribution = app.GenInfluencerDistribution
 	app.sim.FitnessScores = app.FitnessScores
 	app.sim.Run()

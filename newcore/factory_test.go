@@ -6,7 +6,7 @@ import (
 )
 
 func TestMutateInfluencer(t *testing.T) {
-	f, _, _, cfg := createConfigAndFactory()
+	f, _, cfg := createConfigAndFactory()
 
 	// set limits on the number of influencers we can have...
 	cfg.MaxInfluencers = 3

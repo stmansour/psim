@@ -198,14 +198,14 @@ func (p *LSMInfluencer) GetPrediction(t3 time.Time) (*Prediction, error) {
 	rec2 := pred.Recs[1]
 
 	switch p.Predictor {
-	case SingleValGT, SingleValLT:
+	case newdata.SingleValGT, newdata.SingleValLT:
 		if len(pred.Recs[0].Fields) != 1 {
 			return &pred, nil // need to abstain, the data was not available
 		}
 		pred.Val1 = rec1.Fields[pred.Fields[0]]
 		pred.Val2 = rec2.Fields[pred.Fields[0]]
 		res = pred.Val2 - pred.Val1
-	case C1C2RatioGT, C1C2RatioLT:
+	case newdata.C1C2RatioGT, newdata.C1C2RatioLT:
 		if len(pred.Recs[0].Fields) != 2 || len(pred.Recs[1].Fields) != 2 {
 			return &pred, nil // need to abstain, the data was not available
 		}
@@ -216,17 +216,17 @@ func (p *LSMInfluencer) GetPrediction(t3 time.Time) (*Prediction, error) {
 		log.Fatalf("Need to handle this case\n")
 	}
 
-	sc := p.myInvestor.mim.MInfluencerSubclasses[p.Metric]
+	sc := p.myInvestor.db.Mim.MInfluencerSubclasses[p.Metric]
 	pred.Action = "hold" // we have the data and made the calculation.  Assume "hold"
 
 	switch p.Predictor {
-	case SingleValGT, C1C2RatioGT:
+	case newdata.SingleValGT, newdata.C1C2RatioGT:
 		if res > sc.HoldWindowPos {
 			pred.Action = "buy"
 		} else if res < sc.HoldWindowNeg {
 			pred.Action = "sell"
 		}
-	case SingleValLT, C1C2RatioLT:
+	case newdata.SingleValLT, newdata.C1C2RatioLT:
 		if res < sc.HoldWindowNeg {
 			pred.Action = "buy" // check buy condition
 		} else if res > sc.HoldWindowPos {
@@ -245,7 +245,7 @@ func (p *LSMInfluencer) GetPrediction(t3 time.Time) (*Prediction, error) {
 // SetDataFields files in the db record metric info for the Prediction
 func (p *LSMInfluencer) SetDataFields(pred *Prediction) error {
 	db := p.myInvestor.db
-	sc := p.myInvestor.mim.MInfluencerSubclasses[p.Metric]
+	sc := p.myInvestor.db.Mim.MInfluencerSubclasses[p.Metric]
 
 	// the dates for the
 	t1 := pred.T3.AddDate(0, 0, pred.Delta1)
@@ -253,22 +253,22 @@ func (p *LSMInfluencer) SetDataFields(pred *Prediction) error {
 
 	// the fields for the Select
 	switch sc.LocaleType {
-	case LocaleNone:
+	case newdata.LocaleNone:
 		pred.Fields = []string{p.Metric} // just the metric as-is
 
-	case LocaleC1C2:
+	case newdata.LocaleC1C2:
 		f1 := p.MyInvestor().cfg.C1 + p.Metric
 		f2 := p.MyInvestor().cfg.C2 + p.Metric
 		pred.Fields = []string{f1, f2}
 
-	case LocaleBloc:
+	case newdata.LocaleBloc:
 		log.Fatalf("Need to implement this!")
 	}
 
 	// Do the Select(s)
 	var rec1, rec2 *newdata.EconometricsRecord
 	var err error
-	if sc.LocaleType == LocaleNone || sc.LocaleType == LocaleC1C2 {
+	if sc.LocaleType == newdata.LocaleNone || sc.LocaleType == newdata.LocaleC1C2 {
 		rec1, err = db.Select(t1, pred.Fields)
 		if err != nil {
 			return err

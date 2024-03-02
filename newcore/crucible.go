@@ -15,7 +15,6 @@ import (
 type Crucible struct {
 	cfg   *util.AppConfig
 	db    *newdata.Database
-	mim   *MetricInfluencerManager
 	sim   *Simulator
 	idx   int    // index of currently running investor
 	fname string // name of the crucible report file
@@ -29,10 +28,9 @@ func NewCrucible() *Crucible {
 }
 
 // Init initializes the crucible object
-func (c *Crucible) Init(cfg *util.AppConfig, db *newdata.Database, mim *MetricInfluencerManager, sim *Simulator) {
+func (c *Crucible) Init(cfg *util.AppConfig, db *newdata.Database, sim *Simulator) {
 	c.cfg = cfg
 	c.db = db
-	c.mim = mim
 	c.sim = sim
 	c.sim.cfg = cfg // required for generateFName
 	c.sim.SetReportDirectory()
@@ -63,7 +61,7 @@ func (c *Crucible) Run() {
 			c.cfg.PopulationSize = 1
 			c.cfg.LoopCount = 1
 			c.cfg.Generations = 1
-			c.sim.Init(c.cfg, c.db, c.mim, c, false, false)
+			c.sim.Init(c.cfg, c.db, c, false, false)
 			c.sim.Run()
 		}
 	}
