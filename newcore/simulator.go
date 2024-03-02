@@ -405,6 +405,9 @@ func (s *Simulator) Run() {
 // ----------------------------------------------------------------------------------------
 func (s *Simulator) SetReportDirectory() {
 	if !s.cfg.ReportDirSet {
+		if s.SimStart.Year() < 1900 {
+			s.SimStart = time.Now()
+		}
 		s.cfg.ReportTimestamp = s.SimStart.Format("2006-01-02T15-04-05.05.000000000")
 		s.cfg.ReportDirectory = s.cfg.ArchiveBaseDir
 		if s.cfg.ArchiveMode {
