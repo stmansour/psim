@@ -183,6 +183,10 @@ complicated task. I'm not sure that there's a good way to do it.  The
 issue, in a nutshell is this:  for any given date on which it is asked
 to make a prediction, (a) there is a variable time from prior to that
 date over which it can do its research to make the prediction -- the
-genetics vary this time range wildly, (b) if the influencer predicts a
+genetics will vary this time range wildly, (b) if the influencer predicts a
 buy, there is no set date after it makes the prediction when the
-currency is
+currency is sold and (c) tying a sale back to a specific buy prediction
+may not be possible in many ways. A purchase may have been in the amount
+of 10,000 but the sales may occur in much smaller amounts across multiple
+sales.
+

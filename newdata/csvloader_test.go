@@ -16,7 +16,7 @@ func TestCSVDataAccess(t *testing.T) {
 	if err := util.ValidateConfig(cfg); err != nil {
 		log.Panicf("*** PANIC ERROR ***  ValidateConfig returned error: %s\n", err)
 	}
-	d, err := NewDatabase("CSV", cfg)
+	d, err := NewDatabase("CSV", cfg, nil)
 	if err != nil {
 		t.Errorf("error creating database: %s", err.Error())
 		os.Exit(1)

@@ -30,20 +30,19 @@ type FinRep struct {
 // -----------------------------------------------------------------------------
 func (f *FinRep) GenerateFinRep(sim *Simulator, dirname string) error {
 	var err error
-	fname := "finrep"
-	if sim.cfg.ArchiveMode {
-		fname += "-" + sim.ReportTimestamp
-		if len(dirname) > 0 {
-			fname = dirname + "/" + fname
-		}
-	}
-	fname += ".csv"
+	f.Sim = sim
+	fname := f.Sim.generateFName("finrep")
+
+	// fname := f.Sim.cfg.ReportDirectory + "/" + basename
+	// if s.cfg.ArchiveMode {
+	// 	fname += s.cfg.ReportTimestamp
+	// }
+	// fname += ".csv"
 	f.file, err = os.Create(fname)
 	if err != nil {
 		return err
 	}
 	defer f.file.Close()
-	f.Sim = sim
 	f.GenerateHeader()
 	f.GenerateRows()
 

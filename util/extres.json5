@@ -1,0 +1,9 @@
+{
+    "Env": 0,  // DEV = 0, QA = 1, PROD = 2
+    "Dbuser": "stevemansour",
+    "Dbname": "plato",
+    "Dbpass": "",
+    "Dbhost": "localhost",
+    "Dbport": 3306,
+    "Dbtype": "mysql",
+}

@@ -190,6 +190,9 @@ type AppConfig struct {
 	TopInvestors         []TopInvestor                     // a list of top investors
 	CrucibleSpans        []CruciblePeriod                  // list of times to run the simulation
 	CrucibleMode         bool                              // if true then run all TopInvestor DNA through the CrucibleSpans
+	ReportDirectory      string                            // final directory where all reports should be
+	ReportTimestamp      string                            // timestamp to used for archived reports
+	ReportDirSet         bool                              // when false the info needs to be set, when true it's already set
 	ArchiveBaseDir       string                            // directory where archive will be created.  If no value is supplied, current directory will be used
 	ArchiveMode          bool                              // archive reports to directory when true
 	PreserveElite        bool                              // when true it replicates the top PreserverElitePct of DNA from gen x to gen x+1

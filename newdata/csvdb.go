@@ -38,7 +38,7 @@ import (
 
 // LoadCsvDB - Read in the data from the CSV file
 // -----------------------------------------------------------------------------
-func (d *CSVDatasource) LoadCsvDB() error {
+func (d *DatasourceCSV) LoadCsvDB() error {
 	fname := PLATODB // this is the default: data/platodb.csv
 	if len(d.DBFname) > 0 {
 		fname = d.DBFname
@@ -142,7 +142,7 @@ func (r EconometricsRecords) Swap(i, j int) {
 //	nil - record was not found
 //
 // ---------------------------------------------------------------------------
-func (d *CSVDatasource) CSVDBFindRecord(dt time.Time) *EconometricsRecord {
+func (d *DatasourceCSV) CSVDBFindRecord(dt time.Time) *EconometricsRecord {
 	left := 0
 	right := len(d.DBRecs) - 1
 
@@ -150,35 +150,6 @@ func (d *CSVDatasource) CSVDBFindRecord(dt time.Time) *EconometricsRecord {
 		mid := left + (right-left)/2
 		if d.DBRecs[mid].Date.Year() == dt.Year() && d.DBRecs[mid].Date.Month() == dt.Month() && d.DBRecs[mid].Date.Day() == dt.Day() {
 			return &d.DBRecs[mid]
-		} else if d.DBRecs[mid].Date.Before(dt) {
-			left = mid + 1
-		} else {
-			right = mid - 1
-		}
-	}
-	return nil
-}
-
-// CSVDBFindLRecord returns the lingustics record associated with the input date
-//
-// INPUTS
-//
-//	dt = date of record to return
-//
-// RETURNS
-//
-//	pointer to the record on the supplied date
-//	nil - record was not found
-//
-// ---------------------------------------------------------------------------
-func (d *CSVDatasource) CSVDBFindLRecord(dt time.Time) *LinguisticDataRecord {
-	left := 0
-	right := len(d.DBRecs) - 1
-
-	for left <= right {
-		mid := left + (right-left)/2
-		if d.DBRecs[mid].Date.Year() == dt.Year() && d.DBRecs[mid].Date.Month() == dt.Month() && d.DBRecs[mid].Date.Day() == dt.Day() {
-			return &d.LRecs[mid]
 		} else if d.DBRecs[mid].Date.Before(dt) {
 			left = mid + 1
 		} else {

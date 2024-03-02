@@ -35,6 +35,7 @@ func (c *Crucible) Init(cfg *util.AppConfig, db *newdata.Database, mim *MetricIn
 	c.mim = mim
 	c.sim = sim
 	c.sim.cfg = cfg // required for generateFName
+	c.sim.SetReportDirectory()
 	c.fname = c.sim.generateFName("crep")
 	file, err := os.Create(c.fname)
 	if err != nil {
@@ -42,7 +43,7 @@ func (c *Crucible) Init(cfg *util.AppConfig, db *newdata.Database, mim *MetricIn
 		os.Exit(1)
 	}
 	defer file.Close()
-	fmt.Fprintf(file, "PLATO - Crucible Report\n")
+	fmt.Fprintf(file, "\"PLATO - Crucible Report\"\n")
 	fmt.Fprintf(file, "\"Program Version:  %s\"\n", util.Version())
 	fmt.Fprintf(file, "\"Configuration File:  %s\"\n", c.cfg.Filename)
 	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))

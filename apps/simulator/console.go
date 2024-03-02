@@ -52,11 +52,19 @@ func displaySimulationResults(cfg *util.AppConfig, db *newdata.Database) {
 	var arch string
 	var err error
 	if app.archiveMode {
-		arch, err = archiveResults(cfg.Filename, app.archiveBaseDir)
+		arch, err = app.sim.ArchiveResults(cfg.Filename)
 		if err != nil {
 			fmt.Printf("archiveResults returned error: %s\n", err)
 		}
 		fmt.Printf("Archive directory: %s\n", arch)
+	} else {
+		if len(app.archiveBaseDir) > 0 {
+			arch = app.archiveBaseDir
+			if len(arch) > 0 && arch[len(arch)-1] != '/' {
+				arch += "/"
+			}
+			fmt.Printf("Archive directory: %s\n", arch)
+		}
 	}
 
 	// GENERATE  simstats.csv
@@ -70,18 +78,4 @@ func displaySimulationResults(cfg *util.AppConfig, db *newdata.Database) {
 	if err != nil {
 		fmt.Printf("Simulator FinRep returned error: %s\n", err)
 	}
-}
-
-func archiveResults(configFilePath, baseDir string) (string, error) {
-	newDir, err := util.CreateTimestampedDir(baseDir)
-	if err != nil {
-		return "", fmt.Errorf("error creating archive directory: %s", err.Error())
-	}
-
-	err = util.FileCopy(configFilePath, newDir)
-	if err != nil {
-		return newDir, fmt.Errorf("error copying file: %s", err.Error())
-
-	}
-	return newDir, nil
 }

@@ -77,7 +77,7 @@ func doSimulation() {
 	cfg.CrucibleMode = app.CrucibleMode
 	app.cfg = &cfg
 
-	app.db, err = newdata.NewDatabase("CSV", &cfg)
+	app.db, err = newdata.NewDatabase("CSV", &cfg, nil)
 	if err != nil {
 		log.Panicf("*** PANIC ERROR ***  NewDatabase returned error: %s\n", err)
 	}

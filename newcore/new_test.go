@@ -19,7 +19,7 @@ func createConfigAndFactory() (*Factory, *MetricInfluencerManager, *newdata.Data
 	if err := util.ValidateConfig(cfg); err != nil {
 		log.Panicf("*** PANIC ERROR ***  ValidateConfig returned error: %s\n", err)
 	}
-	db, err := newdata.NewDatabase("CSV", cfg)
+	db, err := newdata.NewDatabase("CSV", cfg, nil)
 	if err != nil {
 		log.Panicf("*** PANIC ERROR ***  NewDatabase returned error: %s\n", err)
 	}

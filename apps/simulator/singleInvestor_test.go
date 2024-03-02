@@ -7,6 +7,8 @@ func TestSingleInvestorMode(t *testing.T) {
 	app.dumpTopInvestorInvestments = true
 	app.trace = true
 	app.cfName = "singleInvestor.json5"
+	app.archiveBaseDir = "arch"
+	app.archiveMode = true
 	s := &app.sim
 	s.ResetSimulator()
 	doSimulation()
@@ -27,7 +29,11 @@ func TestFinRep(t *testing.T) {
 	app.dumpTopInvestorInvestments = false
 	app.trace = false
 	app.cfName = "finrep.json5"
+	app.FitnessScores = true
+	app.archiveBaseDir = "arch"
+	app.archiveMode = true
 	s := &app.sim
+	s.FitnessScores = app.FitnessScores
 	s.ResetSimulator()
 	doSimulation()
 }

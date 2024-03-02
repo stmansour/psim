@@ -230,10 +230,11 @@ func (s *Simulator) Run() {
 	now := time.Now()
 	iteration := 0
 	s.SimStart = time.Now()
+	s.SetReportDirectory()
+
 	// var DateSettled time.Time
 
 	for lc := 0; lc < s.cfg.LoopCount; lc++ {
-
 		for k, v := range s.Investors {
 			if v.BalanceC1 > s.cfg.InitFunds || v.BalanceC2 != 0 {
 				fmt.Printf("Investor %d has C1 = %8.2f and C2 = %8.2f\n", k, v.BalanceC1, v.BalanceC2)
@@ -397,7 +398,26 @@ func (s *Simulator) Run() {
 
 	s.SimStop = time.Now()
 	s.StopTimeSet = true
-	s.ReportTimestamp = s.SimStop.Format("2006-01-02T15-04-05")
+}
+
+// SetReportDirectory ensures that all the directory and file information for reports is
+// set in s.cfg.
+// ----------------------------------------------------------------------------------------
+func (s *Simulator) SetReportDirectory() {
+	if !s.cfg.ReportDirSet {
+		s.cfg.ReportTimestamp = s.SimStart.Format("2006-01-02T15-04-05.05.000000000")
+		s.cfg.ReportDirectory = s.cfg.ArchiveBaseDir
+		if s.cfg.ArchiveMode {
+			s.cfg.ReportDirectory += "/" + s.cfg.ReportTimestamp
+		}
+		if len(s.cfg.ReportDirectory) > 0 {
+			_, err := util.VerifyOrCreateDirectory(s.cfg.ReportDirectory)
+			if err != nil {
+				log.Fatalf("Could not create directory %s, err = %s\n", s.cfg.ReportDirectory, err.Error())
+			}
+		}
+		s.cfg.ReportDirSet = true
+	}
 }
 
 // Helper function to calculate the total days in a generation.  It is not
@@ -433,6 +453,29 @@ func (s *Simulator) getGenerationDays(gd *util.GenerationDuration) int {
 // 		}
 // 	}
 // }
+
+// CreateArchiveDirectory ensures that the directory exists
+func (s *Simulator) CreateArchiveDirectory(baseDir string) (string, error) {
+	newDir, err := util.VerifyOrCreateDirectory(baseDir)
+	if err != nil {
+		return "", fmt.Errorf("error creating archive directory: %s", err.Error())
+	}
+	return newDir, err
+}
+
+// ArchiveResults creates an archive directory if needed and copies the config file there
+func (s *Simulator) ArchiveResults(configFilePath string) (string, error) {
+	newDir, err := s.CreateArchiveDirectory(s.cfg.ReportDirectory)
+	if err != nil {
+		return newDir, err
+	}
+	err = util.FileCopy(configFilePath, newDir)
+	if err != nil {
+		return newDir, fmt.Errorf("error copying file: %s", err.Error())
+
+	}
+	return newDir, nil
+}
 
 // CalculateAllFitnessScores - calculates values over all the Influncers and Investors
 //

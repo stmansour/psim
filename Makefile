@@ -66,12 +66,9 @@ build: starttimer clean psim package stoptimer
 stats:
 	@find . -name "*.go" | srcstats
 
-install-tools: golint staticcheck
-
-golint:
+install-tools:
+	go get -u github.com/go-sql-driver/mysql
 	go install golang.org/x/lint/golint@latest
-
-staticcheck:
 	go install honnef.co/go/tools/cmd/staticcheck@latest
 
 starttimer:

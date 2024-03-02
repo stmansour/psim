@@ -154,15 +154,15 @@ func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time, eodr bool) {
 }
 
 func (s *Simulator) generateFName(basename string) string {
-	fname := basename
+	fname := ""
+	if len(s.cfg.ReportDirectory) > 0 {
+		fname = s.cfg.ReportDirectory + "/"
+	}
+	fname += basename
 	if s.cfg.ArchiveMode {
-		fname += "-" + s.ReportTimestamp
-		if len(s.cfg.ArchiveBaseDir) > 0 {
-			fname = s.cfg.ArchiveBaseDir + "/" + fname
-		}
+		fname += s.cfg.ReportTimestamp
 	}
 	fname += ".csv"
-
 	return fname
 }
 
@@ -238,8 +238,17 @@ func (s *Simulator) printNewPopStats(newpop []Investor) {
 //	any error encountered
 //
 // ----------------------------------------------------------------------------
-func (s *Simulator) SimStats(dirname string) error {
+func (s *Simulator) SimStats(d string) error {
 	fname := s.generateFName("simstats")
+	// if len(d) > 0 && d[len(d)-1] != '/' {
+	// 	d += "/"
+	// }
+	// fname := d + "simstats"
+	// if s.cfg.ArchiveMode {
+	// 	fname += "-" + s.ReportTimestamp
+	// }
+	// fname += ".csv"
+
 	file, err := os.Create(fname)
 	if err != nil {
 		return err
