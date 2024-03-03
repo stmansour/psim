@@ -1,9 +1,7 @@
 #!/bin/bash
 
-ASKMODE=0
 RUNSINGLETEST=0
 TESTNAME="TestSimulator"
-TESTSUMMARY="Test simulator scenarios"
 TESTCOUNT=0
 ARCHIVE=arch
 
@@ -54,7 +52,7 @@ compareToGold() {
 
     # if it's a csv file, delete to the first blank line...
     if [[ ${reportFile} =~ \.csv$ ]]; then
-        awk 'flag; /^$/ {flag=1}' "${reportFile}" > "${reportFile}.tmp" && mv "${reportFile}.tmp" "${reportFile}"
+        awk 'flag; /^$/ {flag=1}' "${reportFile}" >"${reportFile}.tmp" && mv "${reportFile}.tmp" "${reportFile}"
     fi
 
     # Normalize the report file
@@ -62,15 +60,15 @@ compareToGold() {
         -e 's/Version:[[:space:]]+[0-9]+\.[0-9]+-[0-9]{8}-[0-9]{6}/Version: VERSION_PLACEHOLDER/' \
         -e 's/Random number seed:[[:space:]]+[0-9]+/Random number seed: SEED_PLACEHOLDER/' \
         -e 's/Archive directory:.*/Archive directory: PLACEHOLDER/' \
-         "$reportFile" >"$normalizedFile"
+        "$reportFile" >"$normalizedFile"
 
     # Check if running on Windows
     if [[ "$(uname -s)" =~ MINGW|CYGWIN|MSYS ]]; then
         echo "Detected Windows OS. Normalizing line endings for ${normalizedFile}."
 
         # Use sed to replace CRLF with LF, output to temp file
-        sed 's/\r$//' "${normalizedFile}" > "${goldFile}.tmp"
-	    goldFile="${goldFile}.tmp"
+        sed 's/\r$//' "${normalizedFile}" >"${goldFile}.tmp"
+        goldFile="${goldFile}.tmp"
     fi
 
     # Compare the normalized report to the gold standard
@@ -80,26 +78,28 @@ compareToGold() {
     else
         echo "Differences detected."
         # Prompt the user for action
-        while true; do
-            read -p "Choose action - Continue (C), Move (M), or eXit (X) [C]: " choice
-            choice=${choice:-C} # Default to 'C' if no input
-            case "$choice" in
-            C | "")
-                echo "Continuing..."
-                return 0
-                ;; 
-            M | m)
-                echo "Moving normalized file to gold standard..."
-                mv "$normalizedFile" "$goldFile"
-                return 0
-                ;;
-            X | x)
-                echo "Exiting..."
-                exit 1
-                ;;
-            *) echo "Invalid choice. Please choose C, M, or X." ;;
-            esac
-        done
+        if [[ "${ASKBEFOREEXIT}" == 1 ]]; then
+            while true; do
+                read -rp "Choose action - Continue (C), Move (M), or eXit (X) [C]: " choice
+                choice=${choice:-C} # Default to 'C' if no input
+                case "$choice" in
+                C | "")
+                    echo "Continuing..."
+                    return 0
+                    ;;
+                M | m)
+                    echo "Moving normalized file to gold standard..."
+                    mv "$normalizedFile" "$goldFile"
+                    return 0
+                    ;;
+                X | x)
+                    echo "Exiting..."
+                    exit 1
+                    ;;
+                *) echo "Invalid choice. Please choose C, M, or X." ;;
+                esac
+            done
+        fi
     fi
 }
 
@@ -128,7 +128,7 @@ shift $((OPTIND - 1))
 
 if [ ! -d data ]; then
     echo "there is no data/ directory"
-    echo "please run 'make db' or create data/ and put a csv database in it" 
+    echo "please run 'make db' or create data/ and put a csv database in it"
     exit 1
 fi
 if [ ! -f data/platodb.csv ]; then
@@ -151,7 +151,7 @@ mkdir -p "${ARCHIVE}"
 #------------------------------------------------------------------------------
 TFILES="a"
 STEP=0
-if [ "${SINGLETEST}${TFILES}" = "${TFILES}" -o "${SINGLETEST}${TFILES}" = "${TFILES}${TFILES}" ]; then
+if [[ "${SINGLETEST}${TFILES}" = "${TFILES}" || "${SINGLETEST}${TFILES}" = "${TFILES}${TFILES}" ]]; then
     echo -n "Test ${TFILES} - "
     echo -n "Single Investor test... "
     RESFILE="${TFILES}${STEP}"
@@ -162,7 +162,7 @@ fi
 
 TFILES="b"
 STEP=0
-if [ "${SINGLETEST}${TFILES}" = "${TFILES}" -o "${SINGLETEST}${TFILES}" = "${TFILES}${TFILES}" ]; then
+if [[ "${SINGLETEST}${TFILES}" = "${TFILES}" || "${SINGLETEST}${TFILES}" = "${TFILES}${TFILES}" ]]; then
     echo -n "Test ${TFILES} - "
     echo -n "Linguistic Influencers test... "
     RESFILE="${TFILES}${STEP}"
@@ -173,7 +173,7 @@ fi
 
 TFILES="c"
 STEP=0
-if [ "${SINGLETEST}${TFILES}" = "${TFILES}" -o "${SINGLETEST}${TFILES}" = "${TFILES}${TFILES}" ]; then
+if [[ "${SINGLETEST}${TFILES}" = "${TFILES}" || "${SINGLETEST}${TFILES}" = "${TFILES}${TFILES}" ]]; then
     echo -n "Test ${TFILES} - "
     echo -n "Crucible test..."
     RESFILE="${TFILES}${STEP}"

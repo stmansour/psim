@@ -15,6 +15,12 @@ type DatabaseSQL struct {
 	Name string // database name
 }
 
+type LocaleRecord struct {
+	LID         int
+	Name        string
+	Description sql.NullString
+}
+
 // CreateDatabase drops the current 'plato' database if it exists then
 // creates a new one.
 // ---------------------------------------------------------------------
@@ -28,6 +34,22 @@ func (p *DatabaseSQL) CreateDatabase() error {
 			LID INT AUTO_INCREMENT PRIMARY KEY,
 			Name VARCHAR(255) NOT NULL,
 			Description TEXT
+		);`,
+		`CREATE TABLE MISubclasses (
+			MID INT AUTO_INCREMENT PRIMARY KEY,
+			Name VARCHAR(80) NOT NULL,
+			Metric VARCHAR(80) NOT NULL,
+			Subclass VARCHAR(80) NOT NULL,
+			LocaleType TINYINT NOT NULL,
+			Predictor TINYINT NOT NULL,
+			MinDelta1 DECIMAL(13,6) NOT NULL,
+			MaxDelta1 DECIMAL(13,6) NOT NULL,
+			MinDelta2 DECIMAL(13,6) NOT NULL,
+			MaxDelta2 DECIMAL(13,6) NOT NULL,
+			FitnessW1 DECIMAL(13,6) NOT NULL,
+			FitnessW2 DECIMAL(13,6) NOT NULL,
+			HoldWindowPos DECIMAL(13,6) NOT NULL,
+			HoldWindowNeg DECIMAL(13,6) NOT NULL
 		);`,
 	}
 
