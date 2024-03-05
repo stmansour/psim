@@ -34,8 +34,8 @@ test: config csvdb
 
 csvdb:
 	$(DO_CMD)mkdir -p data
-	$(DO_CMD)cp ../data/platodb.csv data/
-	$(DO_CMD)cp ../data/misubclasses.csv data/
+	$(DO_CMD)cp ${TOP}/newdata/data/platodb.csv data/
+	$(DO_CMD)cp ${TOP}/newdata/data/misubclasses.csv data/
 
 package:
 	$(DO_CMD)@echo "*** PACKAGE completed in ${THISDIR} ***"

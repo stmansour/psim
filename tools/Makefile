@@ -1,31 +1,19 @@
-TOP=..
-BINDIR=${TOP}/dist/platosim
-THISDIR="tools"
-TEST_FAILURE_FILE=fail
+DIRS=csvtosql
+THISDIR=tools
 
-tools: *.go
-	go vet
-	golint
-	staticcheck
-	go build
-	mv tools csvfixer
-	@echo "*** ${THISDIR}: completed ${THISDIR} ***"
+apps:
+	for dir in $(DIRS); do make -C $$dir;done
+	@echo "*** ${THISDIR}: completed compile ***"
 
 clean:
-	go clean
-	rm -rf csvfixer *.out fail
+	for dir in $(DIRS); do make -C $$dir clean;done
 	@echo "*** ${THISDIR}: completed clean ***"
 
 test:
-	@touch $(TEST_FAILURE_FILE)
-	@go test github.com/stmansour/psim/tools && rm -f $(TEST_FAILURE_FILE)
-	@go test -coverprofile=coverage.out || (echo "*** ERROR ***  go test failed!" && exit 1)
+	for dir in $(DIRS); do make -C $$dir test;done
 	@echo "*** ${THISDIR}: completed test ***"
 
-coverage:
-	go tool cover -html=coverage.out
-
 package:
-	mkdir -p ${BINDIR}
-	cp csvfixer ${BINDIR}/
+	for dir in $(DIRS); do make -C $$dir package;done
 	@echo "*** ${THISDIR}: completed package ***"
+

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"testing"
 	"time"
 
@@ -18,6 +19,10 @@ type AppTest struct {
 }
 
 func TestSQLFuncs(t *testing.T) {
+	if os.Getenv("MYSQL_AVAILABLE") != "1" {
+		t.Skip("MySQL not available, skipping this test")
+	}
+
 	var err error
 	var app AppTest
 
