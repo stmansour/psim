@@ -1,6 +1,7 @@
 package newdata
 
 import (
+	"crypto/sha256"
 	"database/sql"
 	"fmt"
 	"strings"
@@ -17,7 +18,7 @@ type Database struct {
 	cfg      *util.AppConfig          // application configuration info
 	extres   *util.ExternalResources  // the db may require secrets
 	Datatype string                   // "CSV", "MYSQL"
-	CSVDB    *DatasourceCSV           // valid when Datatype is "CSV"
+	CSVDB    *DatabaseCSV             // valid when Datatype is "CSV"
 	SQLDB    *DatabaseSQL             // valid when Datatype is "SQL"
 	Mim      *MetricInfluencerManager // metrics manager
 }
@@ -26,6 +27,30 @@ type Database struct {
 type EconometricsRecord struct {
 	Date   time.Time
 	Fields map[string]float64
+}
+
+// GetMetricBucket calculates or retrieves from MetricIDCache the bucket
+// for the supplied metric name
+// ------------------------------------------------------------------
+func (p *DatabaseSQL) GetMetricBucket(s string) int {
+	// Get it from the MetricIDCache if possible
+	if bucketNumber, found := p.MetricIDCache[s]; found {
+		return bucketNumber
+	}
+
+	//-----------------------------------------------
+	// If not in MetricIDCache, calculate the bucket number
+	// and store it in the hash
+	//-----------------------------------------------
+	hash := sha256.Sum256([]byte(s))
+	hashInt := 0
+	for _, b := range hash[:] {
+		hashInt += int(b)
+	}
+	bucketNumber := hashInt % p.BucketCount
+	p.MetricIDCache[s] = bucketNumber
+
+	return bucketNumber
 }
 
 // NewDatabase creates a new database structure
@@ -38,7 +63,7 @@ func NewDatabase(dtype string, cfg *util.AppConfig, ex *util.ExternalResources) 
 			cfg:      cfg,
 			Datatype: "CSV",
 		}
-		db.CSVDB = &DatasourceCSV{}
+		db.CSVDB = &DatabaseCSV{}
 		return &db, nil
 
 	case "SQL":
@@ -48,8 +73,10 @@ func NewDatabase(dtype string, cfg *util.AppConfig, ex *util.ExternalResources) 
 			extres:   ex,
 		}
 		db.SQLDB = &DatabaseSQL{
-			Name: "plato",
+			Name:        "plato",
+			BucketCount: 4, // we will adjust as needed
 		}
+		db.SQLDB.MetricIDCache = make(map[string]int)
 		return &db, nil
 
 	default:
@@ -57,7 +84,42 @@ func NewDatabase(dtype string, cfg *util.AppConfig, ex *util.ExternalResources) 
 	}
 }
 
+// DropDatabase deletes the sql database.  Use this with caution
+// ---------------------------------------------------------------------------------
+func (p *Database) DropDatabase() error {
+	if p.Datatype == "CSV" {
+		return nil
+	}
+	if p.Datatype != "SQL" {
+		return fmt.Errorf("unknown database type: %s", p.Datatype)
+	}
+	// Construct DSN for the initial MySQL connection without specifying a database
+	host := "tcp(127.0.0.1:3306)"
+	dsnWithoutDB := fmt.Sprintf("%s:%s@%s/", p.extres.DbUser, p.extres.DbPass, host)
+
+	// Connect to MySQL without specifying a database
+	db, err := sql.Open("mysql", dsnWithoutDB)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	// delete it!
+	_, err = db.Exec("DROP DATABASE IF EXISTS " + p.extres.DbName)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (p *Database) ensureDatabase() error {
+	if p.Datatype == "CSV" {
+		return fmt.Errorf("this function is not valid for database type: %s", p.Datatype)
+	}
+	if p.Datatype != "SQL" {
+		return fmt.Errorf("unknown database type: %s", p.Datatype)
+	}
+
 	// Construct DSN for the initial MySQL connection without specifying a database
 	host := "tcp(127.0.0.1:3306)"
 	dsnWithoutDB := fmt.Sprintf("%s:%s@%s/", p.extres.DbUser, p.extres.DbPass, host)
@@ -77,14 +139,16 @@ func (p *Database) ensureDatabase() error {
 	return nil
 }
 
-// Open opens the database for use
+// Open opens the database for use. It creates the SQL DATABASE if needed,
+// but it does not create any TABLES.
+// ------------------------------------------------------------------------------
 func (p *Database) Open() error {
 	var err error
 	p.Mim = NewInfluencerManager()
 	switch p.Datatype {
 	case "CSV":
-		p.Mim.Init(p)
-		return p.CSVDB.LoadCsvDB()
+		p.CSVDB.ParentDB = p
+		return nil // nothing to do here at this point
 	case "SQL":
 		// Open a connection to MySQL without specifying a database
 		if err = p.ensureDatabase(); err != nil {
@@ -99,22 +163,42 @@ func (p *Database) Open() error {
 			return nil
 		}
 		if strings.Contains(err.Error(), "Unknown database") {
-			_, err = p.SQLDB.DB.Exec("DROP DATABASE IF EXISTS plato;CREATE DATABASE IF NOT EXISTS plato;")
+			if _, err = p.SQLDB.DB.Exec("DROP DATABASE IF EXISTS plato;"); err != nil {
+				return err
+			}
+			if _, err = p.SQLDB.DB.Exec("CREATE DATABASE IF NOT EXISTS plato;"); err != nil {
+				return err
+			}
 		}
-		p.Mim.Init(p)
 		return err
 	default:
 		return fmt.Errorf("unknown database type: %s", p.Datatype)
 	}
 }
 
-// CreateDatabase opens the database for use
-func (p *Database) CreateDatabase() error {
+// CreateDatabasePart1 opens the database for use. If you're going to create a database, call it
+// after Open() but before Init() to ensure that internal caches are properly loaded.
+// -----------------------------------------------------------------------------------------
+func (p *Database) CreateDatabasePart1() error {
 	switch p.Datatype {
 	case "CSV":
 		return nil
 	case "SQL":
-		return p.SQLDB.CreateDatabase()
+		return p.SQLDB.CreateDatabasePart1()
+	default:
+		return fmt.Errorf("unknown database type: %s", p.Datatype)
+	}
+}
+
+// Init loads the databases internal caches and other initialization. Make this call
+// after CreateDatabasePart1 or MigrateCSVtoSQL so that caches are loaded with the copied data.
+// -------------------------------------------------------------------------------------------
+func (p *Database) Init() error {
+	switch p.Datatype {
+	case "CSV":
+		return p.CSVDB.CSVInit()
+	case "SQL":
+		return p.SQLDB.SQLInit()
 	default:
 		return fmt.Errorf("unknown database type: %s", p.Datatype)
 	}

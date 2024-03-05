@@ -81,6 +81,9 @@ func doSimulation() {
 	if err != nil {
 		log.Panicf("*** PANIC ERROR ***  NewDatabase returned error: %s\n", err)
 	}
+	if err := app.db.Open(); err != nil {
+		log.Panicf("*** PANIC ERROR ***  db.Open returned error: %s\n", err)
+	}
 	if err := app.db.Init(); err != nil {
 		log.Panicf("*** PANIC ERROR ***  db.Init returned error: %s\n", err)
 	}

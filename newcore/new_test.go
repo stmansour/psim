@@ -23,6 +23,9 @@ func createConfigAndFactory() (*Factory, *newdata.Database, *util.AppConfig) {
 	if err != nil {
 		log.Panicf("*** PANIC ERROR ***  NewDatabase returned error: %s\n", err)
 	}
+	if err := db.Open(); err != nil {
+		log.Panicf("*** PANIC ERROR ***  db.Init returned error: %s\n", err)
+	}
 	if err := db.Init(); err != nil {
 		log.Panicf("*** PANIC ERROR ***  db.Init returned error: %s\n", err)
 	}

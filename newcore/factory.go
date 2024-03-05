@@ -188,7 +188,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		log.Panicf("newInfCount == 0, we cannot have an Investor with 0 Influencers\n")
 	}
 	newInfluencersDNA := f.createInfluencerDNAList(&parent1, &parent2, newInfCount)
-	if newInfCount > len(f.db.Mim.MInfluencerSubclassesIndexer) {
+	if newInfCount > len(f.db.Mim.MInfluencerSubclassMetricNames) {
 		log.Panicf("Factory.BreedNewInvestor len(newInvestor.Influencers) = %d\n", len(newInvestor.Influencers))
 	}
 
@@ -243,7 +243,7 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 		}
 		inf.SetMyInvestor(&newInvestor)
 		newInvestor.Influencers = append(newInvestor.Influencers, inf)
-		if len(newInvestor.Influencers) > len(f.db.Mim.MInfluencerSubclassesIndexer) {
+		if len(newInvestor.Influencers) > len(f.db.Mim.MInfluencerSubclassMetricNames) {
 			log.Panicf("Factory.BreedNewInvestor len(newInvestor.Influencers) = %d.  i = %d, newInfCount = %d\n", len(newInvestor.Influencers), i, newInfCount)
 		}
 	}
@@ -433,7 +433,7 @@ func (f *Factory) addInfluencer(inv *Investor) {
 	// ADD, but only if influencer count is < the number of influencer subclasses
 	// and also only if the total number of influencers is < the max allowed
 	//-----------------------------------------------------------------------------
-	if len(inv.Influencers) < len(f.db.Mim.MInfluencerSubclassesIndexer) && len(inv.Influencers) < f.cfg.MaxInfluencers {
+	if len(inv.Influencers) < len(f.db.Mim.MInfluencerSubclassMetricNames) && len(inv.Influencers) < f.cfg.MaxInfluencers {
 		if inf := f.createInfluencer(inv); inf != nil {
 			inv.Influencers = append(inv.Influencers, *inf)
 		}
@@ -476,7 +476,7 @@ func (f *Factory) RandomUnusedSubclassAndMetric(inv *Investor) (string, string) 
 
 	// Filter the util.InfluencerSubclasses to find those not in existingMetrics
 	var availableMetrics []string
-	for _, subclass := range f.db.Mim.MInfluencerSubclassesIndexer {
+	for _, subclass := range f.db.Mim.MInfluencerSubclassMetricNames {
 		if !existingMetrics[subclass] {
 			availableMetrics = append(availableMetrics, subclass)
 		}
@@ -632,7 +632,6 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 			cfg:           f.cfg,
 		}
 		minf := f.db.Mim.MInfluencerSubclasses[metric]
-		x.Blocs = minf.Blocs
 		x.LocaleType = minf.LocaleType
 		x.Predictor = minf.Predictor
 		return &x, nil

@@ -110,12 +110,12 @@ func (i *Investor) SelectNUniqueSubclasses(n int) []newdata.MInfluencerSubclass 
 	}
 
 	// Shuffle the keys slice
-	rand.Shuffle(len(i.db.Mim.MInfluencerSubclassesIndexer), func(k, j int) {
-		i.db.Mim.MInfluencerSubclassesIndexer[k], i.db.Mim.MInfluencerSubclassesIndexer[j] = i.db.Mim.MInfluencerSubclassesIndexer[j], i.db.Mim.MInfluencerSubclassesIndexer[k]
+	rand.Shuffle(len(i.db.Mim.MInfluencerSubclassMetricNames), func(k, j int) {
+		i.db.Mim.MInfluencerSubclassMetricNames[k], i.db.Mim.MInfluencerSubclassMetricNames[j] = i.db.Mim.MInfluencerSubclassMetricNames[j], i.db.Mim.MInfluencerSubclassMetricNames[k]
 	})
 
 	selected := make([]newdata.MInfluencerSubclass, n)
-	for j, key := range i.db.Mim.MInfluencerSubclassesIndexer[:n] {
+	for j, key := range i.db.Mim.MInfluencerSubclassMetricNames[:n] {
 		selected[j] = i.db.Mim.MInfluencerSubclasses[key]
 	}
 

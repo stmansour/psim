@@ -20,7 +20,7 @@ func (d *Database) Select(dt time.Time, fields []string) (*EconometricsRecord, e
 
 // Select does the select function for CSV databases
 // ----------------------------------------------------------------------------
-func (d *DatasourceCSV) Select(dt time.Time, fields []string) (*EconometricsRecord, error) {
+func (d *DatabaseCSV) Select(dt time.Time, fields []string) (*EconometricsRecord, error) {
 	left := 0
 	right := len(d.DBRecs) - 1
 
@@ -41,17 +41,25 @@ func (d *DatasourceCSV) Select(dt time.Time, fields []string) (*EconometricsReco
 // mapSubset is a utility function to populate a map with only the fields
 // the caller requested.
 // ----------------------------------------------------------------------------
-func (d *DatasourceCSV) mapSubset(rec *EconometricsRecord, ss []string) *EconometricsRecord {
+func (d *DatabaseCSV) mapSubset(rec *EconometricsRecord, ss []string) *EconometricsRecord {
 	var nr EconometricsRecord
 	nr.Date = rec.Date
-	nr.Fields = make(map[string]float64, len(ss))
-	for _, key := range ss {
-		if value, exists := rec.Fields[key]; exists {
-			nr.Fields[key] = value
-		} else {
-			d.Nildata++
+	if len(ss) > 0 {
+		nr.Fields = make(map[string]float64, len(ss))
+		for _, key := range ss {
+			if value, exists := rec.Fields[key]; exists {
+				nr.Fields[key] = value
+			} else {
+				d.Nildata++
+			}
+			// Optionally, handle the "not exists" case here, if needed.
 		}
-		// Optionally, handle the "not exists" case here, if needed.
+	} else {
+		fields := map[string]float64{}
+		for k, v := range rec.Fields {
+			fields[k] = v
+		}
+		nr.Fields = fields
 	}
 	return &nr
 }

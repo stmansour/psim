@@ -22,7 +22,7 @@ func TestCSVDataAccess(t *testing.T) {
 		os.Exit(1)
 	}
 	d.SetCSVFilename("") // use default.  This call is not actually necessary, but this is when you'd set the override filename if you need to
-	err = d.Init()       // opens the database. In the CSV case, loads it into memory
+	err = d.Open()       // opens the database. In the CSV case, loads it into memory
 	if err != nil {
 		t.Errorf("error initializing database: %s", err.Error())
 		os.Exit(1)

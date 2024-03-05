@@ -2,7 +2,7 @@ TOP=..
 BINDIR=${TOP}/dist/platosim
 THISDIR=newdata
 TEST_FAILURE_FILE=fail
-DIRS=dbtest
+DIRS=csvtosql
 
 data: *.go
 	go vet

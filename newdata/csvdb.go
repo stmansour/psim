@@ -38,7 +38,7 @@ import (
 
 // LoadCsvDB - Read in the data from the CSV file
 // -----------------------------------------------------------------------------
-func (d *DatasourceCSV) LoadCsvDB() error {
+func (d *DatabaseCSV) LoadCsvDB() error {
 	fname := PLATODB // this is the default: data/platodb.csv
 	if len(d.DBFname) > 0 {
 		fname = d.DBFname
@@ -142,7 +142,7 @@ func (r EconometricsRecords) Swap(i, j int) {
 //	nil - record was not found
 //
 // ---------------------------------------------------------------------------
-func (d *DatasourceCSV) CSVDBFindRecord(dt time.Time) *EconometricsRecord {
+func (d *DatabaseCSV) CSVDBFindRecord(dt time.Time) *EconometricsRecord {
 	left := 0
 	right := len(d.DBRecs) - 1
 

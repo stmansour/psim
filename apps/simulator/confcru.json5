@@ -23,7 +23,7 @@
     "InitFunds": 100000.00,     // how much each Investor is funded at the start of a simulation cycle
     "StdInvestment": 10000.00,  // the "standard" investment amount if a decision is made to invest in C2
     "MutationRate": 1,          // number between 1 and 100, indicating the percentage of mutation
-    "DBSource": "CSV",          // { CSV | Database | OnlineService }
+    "DBSource": "CSV",          // { CSV | SQL }
     "COAStrategy": "MajorityRules", // course of action strategy.  Choose from (DistributedDecision, MajorityRules)
     "MinInfluencers": 1,        // An investor cannot have fewer than this many influencers
     "MaxInfluencers": 10,        // An investor can have no more than this many Influencers
