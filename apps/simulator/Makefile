@@ -34,6 +34,7 @@ coverage:
 
 config:
 	cp ${TOP}/util/config.json5 .
+	cp ${TOP}/util/extres.json5 .
 
 db:
 	mkdir -p data;cp ${TOP}/newdata/data/platodb.csv data/;cp ${TOP}/newdata/data/misubclasses.csv data/
