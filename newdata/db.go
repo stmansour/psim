@@ -84,6 +84,21 @@ func NewDatabase(dtype string, cfg *util.AppConfig, ex *util.ExternalResources) 
 	}
 }
 
+// Select reads and returns data from the database.
+// ----------------------------------------------------------------------------
+func (p *Database) Select(dt time.Time, fields []string) (*EconometricsRecord, error) {
+	var err error
+	switch p.Datatype {
+	case "CSV":
+		return p.CSVDB.Select(dt, fields)
+	case "SQL":
+		return p.SQLDB.Select(dt, fields)
+	default:
+		err = fmt.Errorf("unrecognized data source: %s", p.cfg.DBSource)
+		return nil, err
+	}
+}
+
 // DropDatabase deletes the sql database.  Use this with caution
 // ---------------------------------------------------------------------------------
 func (p *Database) DropDatabase() error {
@@ -199,6 +214,20 @@ func (p *Database) Init() error {
 		return p.CSVDB.CSVInit()
 	case "SQL":
 		return p.SQLDB.SQLInit()
+	default:
+		return fmt.Errorf("unknown database type: %s", p.Datatype)
+	}
+}
+
+// Insert inserts the Econometrics record into the database
+// after CreateDatabasePart1 or MigrateCSVtoSQL so that caches are loaded with the copied data.
+// -------------------------------------------------------------------------------------------
+func (p *Database) Insert(rec *EconometricsRecord) error {
+	switch p.Datatype {
+	case "CSV":
+		return fmt.Errorf("this function is not valid for database type: %s", p.Datatype)
+	case "SQL":
+		return p.SQLDB.Insert(rec)
 	default:
 		return fmt.Errorf("unknown database type: %s", p.Datatype)
 	}

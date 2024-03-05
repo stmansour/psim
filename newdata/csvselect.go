@@ -1,22 +1,8 @@
 package newdata
 
 import (
-	"fmt"
 	"time"
 )
-
-// Select reads and returns data from the database.
-// ----------------------------------------------------------------------------
-func (d *Database) Select(dt time.Time, fields []string) (*EconometricsRecord, error) {
-	var err error
-	switch d.cfg.DBSource {
-	case "CSV":
-		return d.CSVDB.Select(dt, fields)
-	default:
-		err = fmt.Errorf("unrecognized data source: %s", d.cfg.DBSource)
-		return nil, err
-	}
-}
 
 // Select does the select function for CSV databases
 // ----------------------------------------------------------------------------
