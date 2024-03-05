@@ -18,7 +18,7 @@ clean: cleancsv
 	@echo "*** ${THISDIR}: completed clean ***"
 
 cleancsv:
-	rm -rf crep*.csv simstats*.csv finrep*.csv IList*.csv arch/* dbg*.csv
+	rm -rf crep*.csv simstats*.csv finrep*.csv IList*.csv arch/* dbg*.csv fitnessScores.csv
 
 test: config db
 	@touch $(TEST_FAILURE_FILE)
