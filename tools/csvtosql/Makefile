@@ -32,6 +32,8 @@ test: config csvdb
 	$(DO_CMD)./csvtosql
 	$(DO_CMD)@echo "*** TEST completed in ${THISDIR} ***"
 
+db: csvdb
+
 csvdb:
 	$(DO_CMD)mkdir -p data
 	$(DO_CMD)cp ${TOP}/newdata/data/platodb.csv data/

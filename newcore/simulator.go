@@ -532,13 +532,23 @@ func (s *Simulator) CalculateMaxVals(t3 time.Time) {
 // ------------------------------------------------------------------------------
 func (s *Simulator) SetAllPortfolioValues(t time.Time) error {
 	// First, get today's closing price
-	field := fmt.Sprintf("%s%sEXClose", s.cfg.C1, s.cfg.C2)
-	ss := []string{field}
+	field := newdata.FieldSelector{
+		Metric:  "EXClose",
+		Locale:  s.cfg.C1,
+		Locale2: s.cfg.C2,
+	}
+	// field := fmt.Sprintf("%s%sEXClose", s.cfg.C1, s.cfg.C2)
+	// ss := []string{field}
+	ss := []newdata.FieldSelector{}
+	ss = append(ss, field)
 	er, err := s.db.Select(t, ss) // exchange rate for C2 at time t
 	if err != nil {
 		log.Fatalf("Error getting exchange close rate")
 	}
-	exch := er.Fields[field] // exchange rate at time t
+	exch := er.Fields[field.FQMetric()] // exchange rate at time t
+	if exch < 0.0001 {
+		log.Panicf("exch = %12.6f\n", exch)
+	}
 
 	for i := 0; i < len(s.Investors); i++ {
 		if s.Investors[i].BalanceC2 == 0 {

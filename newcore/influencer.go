@@ -20,7 +20,7 @@ type Prediction struct {
 	Delta2      int                           // research stop offset
 	T3          time.Time                     // date of buy
 	Recs        []*newdata.EconometricsRecord // one, two, or more records of data, depending on the LocaleType
-	Fields      []string                      // names of database fields
+	Fields      []newdata.FieldSelector       // names of database fields
 	Val1        float64                       // ratio at time T1
 	Val2        float64                       // ratio at time T2
 	IType       string                        // specific influencer type

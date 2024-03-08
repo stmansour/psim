@@ -58,11 +58,6 @@ func TestSQLFuncs(t *testing.T) {
 		return
 	}
 
-	//----------------------------------------------------------------------
-	// Set the bucket count
-	//----------------------------------------------------------------------
-	app.BucketCount = 4
-
 	//---------------------------------------------------------------------
 	// open the MySQL database
 	//---------------------------------------------------------------------
@@ -116,7 +111,7 @@ func TestSQLFuncs(t *testing.T) {
 
 	// grab a record from the csv file, something that's fully populated...
 	dt := time.Date(2022, time.January, 1, 0, 0, 0, 0, time.UTC)
-	fields := []string{}                     // an empty slice
+	fields := []newdata.FieldSelector{}      // an empty slice
 	rec, err := app.csvdb.Select(dt, fields) // empty slice gets all fields
 	if err != nil {
 		return

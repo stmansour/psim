@@ -168,6 +168,9 @@ func (m *MetricInfluencerManager) loadMInfluencerSubclassesSQL() error {
 		return err
 	}
 	m.MInfluencerSubclasses = subclasses
+	for k := range m.MInfluencerSubclasses {
+		m.MInfluencerSubclassMetricNames = append(m.MInfluencerSubclassMetricNames, k)
+	}
 
 	return nil
 }

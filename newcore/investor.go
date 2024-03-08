@@ -397,7 +397,7 @@ func (i *Investor) ExecuteBuy(T3 time.Time, pct float64) error {
 	}
 	inv.T3 = T3
 	s := i.PrefixMetricC1C2("EXClose")
-	ss := []string{s}
+	ss := []newdata.FieldSelector{s}
 	er3, err := i.db.Select(inv.T3, ss)
 	if err != nil {
 		return err
@@ -406,7 +406,7 @@ func (i *Investor) ExecuteBuy(T3 time.Time, pct float64) error {
 		return fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found", inv.T3.Format("1/2/2006"))
 	}
 
-	inv.ERT3 = er3.Fields[s]                   // exchange rate on T3
+	inv.ERT3 = er3.Fields[s.FQMetric()]        // exchange rate on T3
 	inv.T3C2Buy = inv.T3C1 * inv.ERT3          // amount of C2 we purchased on T3
 	inv.T4C2Sold = 0                           // just being explicit, haven't sold any of it yet
 	i.BalanceC1 -= inv.T3C1                    // we spent this much C1...
@@ -456,21 +456,27 @@ func (i *Investor) PortfolioValue(t time.Time) float64 {
 		return i.BalanceC1
 	}
 	s := i.PrefixMetricC1C2("EXClose")
-	ss := []string{s}
+	ss := []newdata.FieldSelector{}
+	ss = append(ss, s)
 	er, err := i.db.Select(t, ss) // exchange rate for C2 at time t
 	if err != nil {
 		log.Fatalf("Error getting exchange close rate")
 	}
-	C2 := i.BalanceC2 / er.Fields[s] // amount of C1 we get for BalanceC2 at this exchange rate
+	C2 := i.BalanceC2 / er.Fields[s.FQMetric()] // amount of C1 we get for BalanceC2 at this exchange rate
 	pv := i.BalanceC1 + C2
 	return pv
 }
 
-// PrefixMetricC1C2 returns the name of the datacolumn for the supplied metric
+// PrefixMetricC1C2 returns the FieldSelector for the supplied metric
 // prefixed with the two associated currencies
 // -----------------------------------------------------------------------------
-func (i *Investor) PrefixMetricC1C2(s string) string {
-	return fmt.Sprintf("%s%s%s", i.cfg.C1, i.cfg.C2, s)
+func (i *Investor) PrefixMetricC1C2(s string) newdata.FieldSelector {
+	x := newdata.FieldSelector{
+		Metric:  s,
+		Locale:  i.cfg.C1,
+		Locale2: i.cfg.C2,
+	}
+	return x
 }
 
 // settleInvestment - this code was moved to a method as it needed to be done
@@ -499,7 +505,8 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 	// Save the exchange rate on the day of sale, t4
 	//-------------------------------------------------
 	s := i.PrefixMetricC1C2("EXClose")
-	ss := []string{s}
+	ss := []newdata.FieldSelector{}
+	ss = append(ss, s)
 	er4, err := i.db.Select(t4, ss)
 	if err != nil {
 		return sellAmount, err
@@ -520,7 +527,10 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 	//-------------------------------------------------------------------
 	for j := 0; j < len(i.Investments); j++ {
 		if !i.Investments[j].Completed {
-			i.Investments[j].ERT4 = er4.Fields[s] // exchange rate on T4... just applies to this sale, we don't touch completed Investments
+			if er4.Fields[s.FQMetric()] < 0.0001 {
+				log.Panicf("Invalid exchange rate: %12.6f\n", er4.Fields[s.Metric])
+			}
+			i.Investments[j].ERT4 = er4.Fields[s.FQMetric()] // exchange rate on T4... just applies to this sale, we don't touch completed Investments
 		}
 	}
 	i.sortInvestmentsDescending()

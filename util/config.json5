@@ -24,13 +24,10 @@
     "StdInvestment": 10000.00,  // the "standard" investment amount if a decision is made to invest in C2
     "MutationRate": 1,          // number between 1 and 100, indicating the percentage of mutation
     "DBSource": "CSV",          // { CSV | Database | OnlineService }
-    "HoldWindowPos": 0.1,       // positive hold area
-    "HoldWindowNeg": -0.1,      // negative hold area
     "COAStrategy": "DistributedDecision", // course of action strategy.  Choose from (DistributedDecision, MajorityRules)
     "TopInvestorCount": 10,     // Save this number of top Investors from across all generations - used in Financial Report - finrep.csv
     "MinInfluencers": 2,        // Minimum # of Influencers per Investor
     "MaxInfluencers": 10,       // Maximum # of Influencers per Investor
-    "ArchiveBaseDir": "",       // base directory for archive directory to be created, the 0-length string defaults to the current directory
     "PreserveElite": true,      // when true it replicates the top PreserverElitePct of DNA from gen x to gen x+1
     "PreserveElitePct": 5.0,    // floating point value representing the amount of DNA to preserve. 0.0 to 100.0
 

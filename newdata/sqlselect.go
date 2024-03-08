@@ -12,6 +12,7 @@ type MetricRecord struct {
 	Date        time.Time
 	MID         int
 	LID         int
+	LID2        int
 	MetricValue float64
 }
 
@@ -25,28 +26,35 @@ type ShardInfo struct {
 	Table        string
 }
 
-func (p *DatabaseSQL) getShardInfo(Date time.Time, k string) *ShardInfo {
-	shard := ShardInfo{}
-	shard.BucketNumber = p.GetMetricBucket(k)
-	shard.Metric, shard.MID, shard.Currency, shard.LID = p.CSVKeyToSQL(k)
+func (p *DatabaseSQL) getShardInfo(Date time.Time, f *FieldSelector) {
+	f.BucketNumber = p.GetMetricBucket(f.Metric)
+	p.FieldSelectorToSQL(f)
 	decade := (Date.Year() / 10) * 10
-	shard.Table = fmt.Sprintf("Metrics_%d_%d\n", shard.BucketNumber, decade)
-	return &shard
+	f.Table = fmt.Sprintf("Metrics_%d_%d", f.BucketNumber, decade)
 }
 
 // Insert does a sql insert of all the metrics in the supplied record
 func (p *DatabaseSQL) Insert(rec *EconometricsRecord) error {
+	var err error
 	for k, v := range rec.Fields {
-		si := p.getShardInfo(rec.Date, k)
+		var f FieldSelector
+		p.FieldSelectorFromCSVColName(k, &f)
+		p.getShardInfo(rec.Date, &f)
 		m := MetricRecord{
 			Date:        rec.Date,
-			MID:         si.MID,
-			LID:         si.LID,
+			MID:         f.MID,
+			LID:         f.LID,
+			LID2:        f.LID2,
 			MetricValue: v,
 		}
+		if f.LID2 != 1 && f.MID == -1 {
+			query := `INSERT INTO ExchangeRate (Date,LID,LID2,EXClose) VALUES (?,?,?,?)`
+			_, err = p.DB.Exec(query, m.Date, m.LID, m.LID2, m.MetricValue)
+		} else {
+			query := fmt.Sprintf(`INSERT INTO %s (Date,MID,LID,MetricValue) VALUES (?,?,?,?)`, f.Table)
+			_, err = p.DB.Exec(query, m.Date, m.MID, m.LID, m.MetricValue)
+		}
 
-		query := fmt.Sprintf(`INSERT INTO %s (Date,MID,LID,MetricValue) VALUES (?,?,?,?)`, si.Table)
-		_, err := p.DB.Exec(query, m.Date, m.MID, m.LID, m.MetricValue)
 		if err != nil {
 			return err
 		}
@@ -54,34 +62,50 @@ func (p *DatabaseSQL) Insert(rec *EconometricsRecord) error {
 	return nil
 }
 
-// Select reads the requested fields from the sql database
+// Select reads the requested fields from the sql database.
+// If ss is nil or zero length then it uses all known metrics
 // --------------------------------------------------------------------
-func (p *DatabaseSQL) Select(dt time.Time, ss []string) (*EconometricsRecord, error) {
+func (p *DatabaseSQL) Select(dt time.Time, ss []FieldSelector) (*EconometricsRecord, error) {
+	var err error
 	rec := EconometricsRecord{
-		Date: dt,
+		Date:   dt,
+		Fields: map[string]float64{},
 	}
-	for _, v := range ss {
-		si := p.getShardInfo(dt, v)
-		var m MetricRecord
 
-		// Prepare the query
-		query := `SELECT MEID, Date, MID, LID, MetricValue FROM Metrics WHERE Date=? AND MID=? AND LID=? LIMIT 1`
+	for _, v := range ss {
+		p.getShardInfo(dt, &v)
+		var m MetricRecord
 
 		// Considering date precision in MySQL DATETIME(6), it's important to format the time in a supported layout
 		// MySQL DATETIME(6) format: "2006-01-02 15:04:05.999999"
-		dateStr := dt.Format("2006-01-02 15:04:05.999999")
+		dateStr := dt.Format("2006-01-02")
 
-		// Execute the query
-		err := p.DB.QueryRow(query, dateStr, si.MID, si.LID).Scan(&m.MEID, &m.Date, &m.MID, &m.LID, &m.MetricValue)
-		if err != nil {
-			if err == sql.ErrNoRows {
-				// Handle the case where no rows are returned
-				return nil, fmt.Errorf("no record found matching the criteria")
+		if v.Metric == "EXClose" {
+			query := `SELECT XID,Date,LID,LID2, EXClose FROM ExchangeRate WHERE Date=? AND LID=? AND LID2=? LIMIT 1`
+			err = p.DB.QueryRow(query, dateStr, v.LID, v.LID2).Scan(&m.MEID, &m.Date, &m.LID, &m.LID2, &m.MetricValue)
+			if err != nil {
+				if err == sql.ErrNoRows {
+					continue // nothing to store in Fields
+				}
+				return nil, err
 			}
-			// Handle other potential errors
-			return nil, err
+			rec.Fields[v.FQMetric()] = m.MetricValue
+		} else {
+			// Prepare the query
+			query := fmt.Sprintf(`SELECT MEID,Date,MID,LID,LID2, MetricValue FROM %s WHERE Date=? AND MID=? AND LID=? LIMIT 1`, v.Table)
+			var nullint sql.NullInt64
+			err = p.DB.QueryRow(query, dateStr, v.MID, v.LID).Scan(&m.MEID, &m.Date, &m.MID, &m.LID, &nullint, &m.MetricValue)
+			if err != nil {
+				if err == sql.ErrNoRows {
+					continue // nothing to store in Fields
+				}
+				return nil, err
+			}
+			if nullint.Valid {
+				v.LID2 = int(nullint.Int64)
+			}
+			rec.Fields[v.FQMetric()] = m.MetricValue
 		}
-		rec.Fields[si.Metric] = m.MetricValue
 	}
 	return &rec, nil
 }

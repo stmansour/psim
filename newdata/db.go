@@ -29,6 +29,14 @@ type EconometricsRecord struct {
 	Fields map[string]float64
 }
 
+// GlobalSQLSettings is a struct used to control how the SQL subsystem
+// works.
+var GlobalSQLSettings = struct {
+	BucketCount int
+}{
+	BucketCount: 7, // The number of shards per decade, all metrics are hashed modulo this number to determine which shard they are in
+}
+
 // GetMetricBucket calculates or retrieves from MetricIDCache the bucket
 // for the supplied metric name
 // ------------------------------------------------------------------
@@ -74,7 +82,7 @@ func NewDatabase(dtype string, cfg *util.AppConfig, ex *util.ExternalResources) 
 		}
 		db.SQLDB = &DatabaseSQL{
 			Name:        "plato",
-			BucketCount: 4, // we will adjust as needed
+			BucketCount: GlobalSQLSettings.BucketCount, // we will adjust as needed
 		}
 		db.SQLDB.MetricIDCache = make(map[string]int)
 		return &db, nil
@@ -86,7 +94,7 @@ func NewDatabase(dtype string, cfg *util.AppConfig, ex *util.ExternalResources) 
 
 // Select reads and returns data from the database.
 // ----------------------------------------------------------------------------
-func (p *Database) Select(dt time.Time, fields []string) (*EconometricsRecord, error) {
+func (p *Database) Select(dt time.Time, fields []FieldSelector) (*EconometricsRecord, error) {
 	var err error
 	switch p.Datatype {
 	case "CSV":
@@ -213,6 +221,7 @@ func (p *Database) Init() error {
 	case "CSV":
 		return p.CSVDB.CSVInit()
 	case "SQL":
+		p.SQLDB.ParentDB = p
 		return p.SQLDB.SQLInit()
 	default:
 		return fmt.Errorf("unknown database type: %s", p.Datatype)

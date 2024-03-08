@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"time"
 
 	"github.com/stmansour/psim/newdata"
 	"github.com/stmansour/psim/util"
@@ -24,6 +26,7 @@ var app Application
 // -----------------------------------------------------------------------------
 func main() {
 	var err error
+	start := time.Now()
 
 	//----------------------------------------------------------------------
 	// Now get any other info we need for the databases
@@ -52,10 +55,17 @@ func main() {
 		log.Panicf("*** PANIC ERROR ***  db.Init returned error: %s\n", err)
 	}
 
-	//----------------------------------------------------------------------
-	// Set the bucket count
-	//----------------------------------------------------------------------
-	app.BucketCount = 4
+	//------------------------------------
+	// We delete the database first...
+	//------------------------------------
+	// db, err := newdata.NewDatabase("SQL", app.cfg, app.extres)
+	// if err != nil {
+	// 	log.Fatalf("Error from NewDatabase: %s\n", err.Error())
+
+	// }
+	// if err = db.DropDatabase(); err != nil {
+	// 	log.Fatalf("Error from DropDatabase: %s\n", err.Error())
+	// }
 
 	//---------------------------------------------------------------------
 	// open the MySQL database
@@ -102,5 +112,25 @@ func main() {
 	if err = MigrateTimeSeriesData(); err != nil {
 		log.Fatalf("Error from MigrateTimeSeriesData: %s\n", err.Error())
 	}
+	end := time.Now()
+	FormatDuration(start, end)
 
+}
+
+// FormatDuration prints the duration between two times
+func FormatDuration(start, end time.Time) {
+	duration := end.Sub(start)
+
+	// Print the duration in a human-readable format
+	fmt.Println("Duration:", duration)
+
+	// For more control over the format, you can use the individual components of the duration:
+	hours := duration / time.Hour
+	duration -= hours * time.Hour
+	minutes := duration / time.Minute
+	duration -= minutes * time.Minute
+	seconds := duration / time.Second
+	duration -= seconds * time.Second
+	milliseconds := duration / time.Millisecond
+	fmt.Printf("Elapsed: %02d hr %02d min %02d sec %03d msec\n", hours, minutes, seconds, milliseconds)
 }

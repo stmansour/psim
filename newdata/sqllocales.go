@@ -73,7 +73,7 @@ func (p *DatabaseSQL) LoadLocaleCache() error {
 	return nil
 }
 
-// CSVKeyToSQL this function takes the CSV column name and splits it into
+// FieldSelectorToSQL this function takes the CSV column name and splits it into
 // a key and LID for use in a SQL table.
 // INPUTS
 //
@@ -84,23 +84,20 @@ func (p *DatabaseSQL) LoadLocaleCache() error {
 //	SQL metric, MID, locale.Currency  and LID
 //
 // -----------------------------------------------------------------
-func (p *DatabaseSQL) CSVKeyToSQL(s string) (string, int, string, int) {
-	// Default locale to "NON"
-	locale := "NON"
-	metric := ""
-
-	// Check if the first three characters represent a known locale
-	prefix := s[:3]
-	if _, ok := p.LocaleIDCache[prefix]; ok {
-		locale = prefix
-		metric = s[3:]
-	} else {
-		// If not a known locale, the entire string is considered the metric name
-		metric = s
-		prefix = ""
+func (p *DatabaseSQL) FieldSelectorToSQL(f *FieldSelector) {
+	f.LID = 1  // assume no locale
+	f.LID2 = 1 // assume no locale2
+	if len(f.Locale) > 0 {
+		f.LID = p.LocaleIDCache[f.Locale]
 	}
-	LID := p.LocaleIDCache[locale]
-	MID := p.ParentDB.Mim.MInfluencerSubclasses[metric].MID
-
-	return metric, MID, locale, LID
+	if len(f.Locale2) > 0 {
+		f.LID2 = p.LocaleIDCache[f.Locale2]
+	}
+	// Handle special cases, and the general case as the default
+	switch f.Metric {
+	case "EXClose":
+		f.MID = -1
+	default:
+		f.MID = p.ParentDB.Mim.MInfluencerSubclasses[f.Metric].MID
+	}
 }

@@ -6,7 +6,7 @@ import (
 
 // Select does the select function for CSV databases
 // ----------------------------------------------------------------------------
-func (d *DatabaseCSV) Select(dt time.Time, fields []string) (*EconometricsRecord, error) {
+func (d *DatabaseCSV) Select(dt time.Time, fields []FieldSelector) (*EconometricsRecord, error) {
 	left := 0
 	right := len(d.DBRecs) - 1
 
@@ -27,9 +27,14 @@ func (d *DatabaseCSV) Select(dt time.Time, fields []string) (*EconometricsRecord
 // mapSubset is a utility function to populate a map with only the fields
 // the caller requested.
 // ----------------------------------------------------------------------------
-func (d *DatabaseCSV) mapSubset(rec *EconometricsRecord, ss []string) *EconometricsRecord {
+func (d *DatabaseCSV) mapSubset(rec *EconometricsRecord, fs []FieldSelector) *EconometricsRecord {
 	var nr EconometricsRecord
 	nr.Date = rec.Date
+	ss := []string{}
+	for _, v := range fs {
+		ss = append(ss, v.FQMetric())
+	}
+
 	if len(ss) > 0 {
 		nr.Fields = make(map[string]float64, len(ss))
 		for _, key := range ss {

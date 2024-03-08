@@ -159,8 +159,6 @@ type AppConfig struct {
 	TopInvestorCount     int                               // how many top investors to include in financial report
 	MinInfluencers       int                               // minimum number of influencers per Investor
 	MaxInfluencers       int                               // maximum number of influencers per Investor
-	HoldWindowPos        float64                           // positive space to consider as "no difference" when subtracting two ratios
-	HoldWindowNeg        float64                           // negative space to consider as "no difference" when subtracting two ratios
 	GenDurSpec           string                            // gen dur spec
 	GenDur               *GenerationDuration               // parsed gen dur spec
 	DtSettle             time.Time                         // later of DtStop or date on which the last sale was made

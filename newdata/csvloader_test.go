@@ -29,7 +29,12 @@ func TestCSVDataAccess(t *testing.T) {
 	}
 
 	dt := time.Date(2023, time.January, 15, 0, 0, 0, 0, time.UTC)
-	ss := []string{"USDSP", "JPYDR", "LSNScore_ECON"}
+	// ss := []string{"USDSP", "JPYDR", "LSNScore_ECON"}
+	ss := []FieldSelector{
+		{Metric: "SP", Locale: "USD"},
+		{Metric: "DR", Locale: "JPY"},
+		{Metric: "LSNScore_ECON"},
+	}
 	p, err := d.Select(dt, ss)
 	if err != nil {
 		t.Errorf("error selecting record for date %s: %s", dt.Format("Jan 2, 2006"), err.Error())

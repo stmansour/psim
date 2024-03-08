@@ -73,6 +73,14 @@ func (p *DatabaseSQL) CreateDatabasePart1() error {
 			HoldWindowPos DECIMAL(13,6) NOT NULL,
 			HoldWindowNeg DECIMAL(13,6) NOT NULL
 		);`,
+		`CREATE TABLE IF NOT EXISTS ExchangeRate (
+			XID INT AUTO_INCREMENT PRIMARY KEY,
+			Date DATETIME(6) NOT NULL,
+			LID INT NOT NULL,
+			LID2 INT,
+			EXClose FLOAT,
+			INDEX(Date)
+		);`,
 	}
 
 	// Execute the SQL statement to create the table
@@ -81,9 +89,7 @@ func (p *DatabaseSQL) CreateDatabasePart1() error {
 			return err
 		}
 	}
-	numShards := 4
-	executeSQL := true
-	if err := p.createShardedTables(numShards, executeSQL); err != nil {
+	if err := p.createShardedTables(GlobalSQLSettings.BucketCount, true); err != nil {
 		log.Fatalf("Failed to process sharded tables: %v", err)
 	}
 
@@ -101,6 +107,7 @@ CREATE TABLE IF NOT EXISTS %s (
     Date DATETIME(6) NOT NULL,
 	MID INT NOT NULL,
 	LID INT NOT NULL,
+	LID2 INT,
     MetricValue FLOAT,
     INDEX(Date)
 );`, tableName)
@@ -148,4 +155,40 @@ func (p *DatabaseSQL) GrantFullAccess(usernames []string) error {
 		return fmt.Errorf("failed to flush privileges: %v", err)
 	}
 	return nil
+}
+
+// FieldSelectorsFromRecord creates an array of field selectors based
+// on the supplied record.
+// Improved version of FieldSelectorsFromRecord
+func (p *DatabaseSQL) FieldSelectorsFromRecord(rec *EconometricsRecord) []FieldSelector {
+	var ff []FieldSelector
+	for k := range rec.Fields {
+		var f FieldSelector
+		p.FieldSelectorFromCSVColName(k, &f)
+		ff = append(ff, f)
+	}
+	return ff
+}
+
+// FieldSelectorFromCSVColName updates f with the fields derived from k, a CSV column name
+func (p *DatabaseSQL) FieldSelectorFromCSVColName(k string, f *FieldSelector) {
+	// Attempt to extract up to two locales from the prefix of the key
+	for i := 0; i < 2; i++ {
+		if len(k) >= 3 {
+			s := k[:3]
+			if _, ok := p.LocaleIDCache[s]; ok {
+				// If a locale is found, assign it and update the key to remove the found locale
+				if i == 0 {
+					f.Locale = s
+				} else if i == 1 {
+					f.Locale2 = s
+				}
+				k = k[3:]
+				continue
+			}
+		}
+		break // Break when no locale is found, or the remaining key is shorter than 3 characters
+	}
+	// what's left in k is the Metric
+	f.Metric = k
 }

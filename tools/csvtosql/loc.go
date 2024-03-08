@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/stmansour/psim/newdata"
 )
 
@@ -45,11 +43,10 @@ func PopulateLocales() error {
 
 	// Iterate over the locales slice and insert each into the database
 	for _, locale := range locales {
-		lastInsertID, err := app.sqldb.InsertLocale(&locale)
+		_, err := app.sqldb.InsertLocale(&locale)
 		if err != nil {
 			return err
 		}
-		fmt.Printf("Locale inserted with ID: %d\n", lastInsertID)
 	}
 	return nil
 }
