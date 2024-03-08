@@ -407,7 +407,9 @@ func (f *Factory) MutateInfluencer(inv *Investor) {
 func (f *Factory) doMutateInfluencer(inv *Investor, mutation int) {
 	switch mutation {
 	case 0: // ADD
-		f.addInfluencer(inv)
+		if len(inv.Influencers) < f.cfg.MaxInfluencers {
+			f.addInfluencer(inv)
+		}
 	case 1: // DELETE
 		if len(inv.Influencers) > f.cfg.MinInfluencers {
 			index := util.UtilData.Rand.Intn(len(inv.Influencers))
@@ -416,6 +418,9 @@ func (f *Factory) doMutateInfluencer(inv *Investor, mutation int) {
 	case 2: // MODIFY
 		idx := util.RandomInRange(0, len(inv.Influencers)-1) // pick the one to mutate
 		subclass, metric := f.RandomUnusedSubclassAndMetric(inv)
+		if len(metric) == 0 {
+			metric = inv.Influencers[idx].GetMetric()
+		}
 		dna := fmt.Sprintf("{%s,Metric=%s}", subclass, metric)
 		r, err := f.NewInfluencer(dna) // create a new one
 		if err != nil {
@@ -451,6 +456,9 @@ func (f *Factory) createInfluencer(inv *Investor) *Influencer {
 	// yet exist in the investor's influencers
 	//------------------------------------------------------------------
 	subclass, metric := f.RandomUnusedSubclassAndMetric(inv)
+	if metric == "" {
+		return nil
+	}
 	//-----------------------------------------------------------------
 	// Now that we know the subclass and metric, create it with random values...
 	//-----------------------------------------------------------------

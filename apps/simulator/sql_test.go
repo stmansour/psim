@@ -20,7 +20,7 @@ type AppTest struct {
 
 func TestSQLFuncs(t *testing.T) {
 	if os.Getenv("MYSQL_AVAILABLE") != "1" {
-		t.Skip("MySQL not available, skipping this test")
+		t.Skip("SQL not available, skipping this test")
 	}
 
 	var err error
@@ -59,7 +59,7 @@ func TestSQLFuncs(t *testing.T) {
 	}
 
 	//---------------------------------------------------------------------
-	// open the MySQL database
+	// open the SQL database
 	//---------------------------------------------------------------------
 	app.sqldb, err = newdata.NewDatabase("SQL", app.cfg, app.extres)
 	if err != nil {

@@ -5,8 +5,9 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"time"
 
-	// Register the MySQL driver
+	// Register the SQL driver
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -18,6 +19,9 @@ type DatabaseSQL struct {
 	MetricIDCache map[string]int // metric name to bucket number
 	LocaleIDCache map[string]int // locale name to LID
 	ParentDB      *Database      // the database that contains me
+	DtStart       time.Time      // earliest date with data
+	DtStop        time.Time      // latest date with data
+
 }
 
 // GetBucketForString returns the modulo number for the supplied
@@ -108,7 +112,7 @@ CREATE TABLE IF NOT EXISTS %s (
 	MID INT NOT NULL,
 	LID INT NOT NULL,
 	LID2 INT,
-    MetricValue FLOAT,
+    MetricValue DOUBLE,
     INDEX(Date)
 );`, tableName)
 

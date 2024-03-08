@@ -5,7 +5,7 @@ import (
 )
 
 // ValidDBSources contains the valid configuration choices for database
-var ValidDBSources = []string{"CSV", "Database", "OnlineService"}
+var ValidDBSources = []string{"CSV", "SQL"}
 
 // ValidateConfig ensures that all the configuration file numbers are valid, that no
 //

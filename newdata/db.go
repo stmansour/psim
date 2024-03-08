@@ -116,11 +116,11 @@ func (p *Database) DropDatabase() error {
 	if p.Datatype != "SQL" {
 		return fmt.Errorf("unknown database type: %s", p.Datatype)
 	}
-	// Construct DSN for the initial MySQL connection without specifying a database
+	// Construct DSN for the initial SQL connection without specifying a database
 	host := "tcp(127.0.0.1:3306)"
 	dsnWithoutDB := fmt.Sprintf("%s:%s@%s/", p.extres.DbUser, p.extres.DbPass, host)
 
-	// Connect to MySQL without specifying a database
+	// Connect to SQL without specifying a database
 	db, err := sql.Open("mysql", dsnWithoutDB)
 	if err != nil {
 		return err
@@ -143,11 +143,11 @@ func (p *Database) ensureDatabase() error {
 		return fmt.Errorf("unknown database type: %s", p.Datatype)
 	}
 
-	// Construct DSN for the initial MySQL connection without specifying a database
+	// Construct DSN for the initial SQL connection without specifying a database
 	host := "tcp(127.0.0.1:3306)"
 	dsnWithoutDB := fmt.Sprintf("%s:%s@%s/", p.extres.DbUser, p.extres.DbPass, host)
 
-	// Connect to MySQL without specifying a database
+	// Connect to SQL without specifying a database
 	db, err := sql.Open("mysql", dsnWithoutDB)
 	if err != nil {
 		return err
@@ -173,7 +173,7 @@ func (p *Database) Open() error {
 		p.CSVDB.ParentDB = p
 		return nil // nothing to do here at this point
 	case "SQL":
-		// Open a connection to MySQL without specifying a database
+		// Open a connection to SQL without specifying a database
 		if err = p.ensureDatabase(); err != nil {
 			return err
 		}

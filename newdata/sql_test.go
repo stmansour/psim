@@ -18,7 +18,7 @@ type AppTest struct {
 
 func TestFieldSelectorBuilder(t *testing.T) {
 	if os.Getenv("MYSQL_AVAILABLE") != "1" {
-		t.Skip("MySQL not available, skipping this test")
+		t.Skip("SQL not available, skipping this test")
 	}
 
 	var err error
@@ -57,7 +57,7 @@ func TestFieldSelectorBuilder(t *testing.T) {
 	}
 
 	//---------------------------------------------------------------------
-	// open the MySQL database
+	// open the SQL database
 	//---------------------------------------------------------------------
 	app.sqldb, err = NewDatabase("SQL", app.cfg, app.extres)
 	if err != nil {

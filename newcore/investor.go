@@ -149,16 +149,19 @@ func (i *Investor) Init(cfg *util.AppConfig, f *Factory, db *newdata.Database) {
 	//------------------------------------------------------------------
 	// Create a team of influencers.
 	//------------------------------------------------------------------
-	min := 1
-	max := len(i.db.Mim.MInfluencerSubclasses)
-	if i.cfg.MaxInfluencers < max {
-		max = i.cfg.MaxInfluencers
+	min := i.cfg.MinInfluencers
+	max := i.cfg.MaxInfluencers
+	if max > len(i.db.Mim.MInfluencerSubclasses) {
+		log.Fatalf("The config file has MaxInfluencers set to %d, however there are only %d Influencers available.\n", max, len(i.db.Mim.MInfluencerSubclasses))
 	}
-	if i.cfg.MinInfluencers > min {
-		if i.cfg.MinInfluencers <= max {
-			min = i.cfg.MinInfluencers
-		}
-	}
+	// if i.cfg.MaxInfluencers < max {
+	// 	max = i.cfg.MaxInfluencers
+	// }
+	// if i.cfg.MinInfluencers > min {
+	// 	if i.cfg.MinInfluencers <= max {
+	// 		min = i.cfg.MinInfluencers
+	// 	}
+	// }
 
 	numInfluencers := util.RandomInRange(min, max) // create this many
 	inflist := i.SelectNUniqueSubclasses(numInfluencers)

@@ -76,8 +76,8 @@ func (p *DatabaseSQL) Select(dt time.Time, ss []FieldSelector) (*EconometricsRec
 		p.getShardInfo(dt, &v)
 		var m MetricRecord
 
-		// Considering date precision in MySQL DATETIME(6), it's important to format the time in a supported layout
-		// MySQL DATETIME(6) format: "2006-01-02 15:04:05.999999"
+		// Considering date precision in SQL DATETIME(6), it's important to format the time in a supported layout
+		// SQL DATETIME(6) format: "2006-01-02 15:04:05.999999"
 		dateStr := dt.Format("2006-01-02")
 
 		if v.Metric == "EXClose" {

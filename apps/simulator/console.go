@@ -32,7 +32,7 @@ func displaySimulationDetails(cfg *util.AppConfig) {
 	}
 	fmt.Printf("Duration:            %s\n", util.DateDiffString(a, c))
 	fmt.Printf("Population Size:     %d\n", cfg.PopulationSize)
-	fmt.Printf("COA Strategy:        %s\n", cfg.COAStrategy)
+	// fmt.Printf("COA Strategy:        %s\n", cfg.COAStrategy)
 	fmt.Printf("*******************************************************************\n\n")
 }
 
@@ -45,7 +45,13 @@ func displaySimulationResults(cfg *util.AppConfig, db *newdata.Database) {
 	fmt.Printf("\n**************  S I M U L A T I O N   R E S U L T S  **************\n")
 	fmt.Printf("Number of generations: %d\n", app.sim.GensCompleted)
 	fmt.Printf("Observed Mutation Rate: %6.3f%%\n", omr)
-	fmt.Printf("nil data requests: %d\n", db.CSVDB.Nildata)
+	switch db.Datatype {
+	case "CSV":
+		fmt.Printf("nil data requests: %d\n", db.CSVDB.Nildata)
+	case "SQL":
+	default:
+	}
+
 	s, _ := app.sim.GetSimulationRunTime()
 	fmt.Printf("Elapsed time: %s\n", s)
 

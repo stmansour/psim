@@ -10,7 +10,7 @@ MYSQL_FOUND := $(shell command -v mysql 2> /dev/null)
 ifdef MYSQL_FOUND
 DO_CMD=
 else
-DO_CMD=@echo "MySQL not found, skipping target"; exit 0;
+DO_CMD=@echo "SQL not found, skipping target"; exit 0;
 endif
 
 schema: *.go

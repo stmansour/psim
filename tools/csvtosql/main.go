@@ -16,6 +16,8 @@ type Application struct {
 	cfg         *util.AppConfig
 	extres      *util.ExternalResources
 	BucketCount int
+	DtStart     time.Time
+	DtStop      time.Time
 }
 
 var app Application
@@ -40,6 +42,8 @@ func main() {
 		log.Fatalf("failed to read config file: %v\n", err)
 	}
 	app.cfg = &cfg
+	app.DtStart = time.Date(2010, time.January, 1, 0, 0, 0, 0, time.UTC)
+	app.DtStop = time.Date(2023, time.December, 31, 0, 0, 0, 0, time.UTC)
 
 	//----------------------------------------------------------------------
 	// open the CSV database from which we'll be pulling data
@@ -55,20 +59,8 @@ func main() {
 		log.Panicf("*** PANIC ERROR ***  db.Init returned error: %s\n", err)
 	}
 
-	//------------------------------------
-	// We delete the database first...
-	//------------------------------------
-	// db, err := newdata.NewDatabase("SQL", app.cfg, app.extres)
-	// if err != nil {
-	// 	log.Fatalf("Error from NewDatabase: %s\n", err.Error())
-
-	// }
-	// if err = db.DropDatabase(); err != nil {
-	// 	log.Fatalf("Error from DropDatabase: %s\n", err.Error())
-	// }
-
 	//---------------------------------------------------------------------
-	// open the MySQL database
+	// open the SQL database
 	//---------------------------------------------------------------------
 	app.sqldb, err = newdata.NewDatabase("SQL", app.cfg, app.extres)
 	if err != nil {
@@ -76,6 +68,10 @@ func main() {
 	}
 	if err = app.sqldb.Open(); err != nil {
 		log.Fatalf("db.Open returned error: %s\n", err.Error())
+	}
+
+	if app.DtStop.After(app.csvdb.CSVDB.DtStop) {
+		fmt.Printf("Stop date provided goes beyond the end of the data available in platodb.csv (which ends %s)\n", app.csvdb.CSVDB.DtStop.Format("2006-Jan-02"))
 	}
 
 	defer app.sqldb.SQLDB.DB.Close()
