@@ -1,4 +1,4 @@
-DIRS=csvtosql
+DIRS=csvtosql validator
 THISDIR=tools
 
 apps:

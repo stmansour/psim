@@ -1,6 +1,6 @@
 TOP="../.."
 DIST=${TOP}/dist/platosim
-THISDIR=csvtosql
+THISDIR=validator
 TEST_FAILURE_FILE=fail
 
 # Check for mysql and set a variable
@@ -29,10 +29,8 @@ config:
 	$(DO_CMD)cp ${TOP}/util/config.json5 .
 
 test: config csvdb
-	$(DO_CMD)./csvtosql
+	$(DO_CMD)./validator
 	$(DO_CMD)@echo "*** TEST completed in ${THISDIR} ***"
-
-db: csvdb
 
 csvdb:
 	$(DO_CMD)mkdir -p data

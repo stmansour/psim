@@ -13,7 +13,7 @@ core: *.go
 
 clean:
 	go clean
-	rm -rf *.out fail data/platodb.csv config.json5 extres.json5
+	rm -rf data *.out fail config.json5 extres.json5
 	@echo "*** ${THISDIR}: completed clean ***"
 
 test: config db
