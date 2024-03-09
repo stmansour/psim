@@ -3,6 +3,7 @@ package util
 import (
 	"fmt"
 	"os"
+	"os/user"
 
 	json5 "github.com/yosuke-furukawa/json5/encoding/json5"
 )
@@ -66,6 +67,39 @@ func GetSQLOpenString(dbname string, a *ExternalResources) string {
 // ReadExternalResources reads the contents of extres.json5 and fills the ExternalResources struct.
 func ReadExternalResources() (*ExternalResources, error) {
 	filename := "extres.json5"
+	//---------------------------------------------
+	// Initialize to something reasonable...
+	//---------------------------------------------
+	var resources = ExternalResources{
+		DbHost: "localhost",
+		DbName: "plato",
+		DbPort: 3306,
+		DbType: "mysql",
+	}
+
+	//--------------------------------------------------------
+	// If there is no extres file, set the DbUser to
+	// the currently logged in user and return. Everything
+	// should continue to work provided they have acces to
+	// the database named 'plato'
+	//--------------------------------------------------------
+	if _, err := os.Stat(filename); err != nil {
+		if os.IsNotExist(err) {
+			currentUser, err := user.Current()
+			if err != nil {
+				return &resources, err
+			}
+			resources.DbUser = currentUser.Username
+			return &resources, nil
+		} else {
+			// File may exist but there's another error (e.g., permission issues)
+			return &resources, err
+		}
+	}
+
+	//---------------------------------------
+	// The extres file was found.  Use it.
+	//---------------------------------------
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err
@@ -73,7 +107,6 @@ func ReadExternalResources() (*ExternalResources, error) {
 	defer file.Close()
 
 	// Decode the JSON5 data into the ExternalResources struct
-	var resources ExternalResources
 	err = json5.NewDecoder(file).Decode(&resources)
 	if err != nil {
 		return nil, err
