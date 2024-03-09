@@ -25,7 +25,7 @@ data: *.go
 
 clean:
 	go clean
-	@rm -rf *.out fail config.json5 extres.json5
+	@rm -rf *.out fail config.json5
 	for dir in $(DIRS); do make -C $$dir clean;done
 	@echo "*** ${THISDIR}: completed clean ***"
 
@@ -41,7 +41,6 @@ sql:
 
 config:
 	@cp ${TOP}/util/config.json5 .
-	@cp ${TOP}/util/extres.json5 .
 
 coverage:
 	go tool cover -html=coverage.out

@@ -14,7 +14,7 @@ sim: *.go
 
 clean: cleancsv
 	go clean
-	rm -rf fail [a-z][0-9] [a-z][0-9].normalized simulator data config.json5 config.bak coverage.out IList*.csv investorProfile.txt extres.json5
+	rm -rf fail [a-z][0-9] [a-z][0-9].normalized simulator data config.json5 config.bak coverage.out IList*.csv investorProfile.txt
 	@echo "*** ${THISDIR}: completed clean ***"
 
 cleancsv:
@@ -34,7 +34,6 @@ coverage:
 
 config:
 	cp ${TOP}/util/config.json5 .
-	cp ${TOP}/util/extres.json5 .
 
 db:
 	mkdir -p data;cp ${TOP}/newdata/data/platodb.csv data/;cp ${TOP}/newdata/data/misubclasses.csv data/

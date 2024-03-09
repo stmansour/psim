@@ -13,7 +13,7 @@ core: *.go
 
 clean:
 	go clean
-	rm -rf data *.out fail config.json5 extres.json5
+	rm -rf data *.out fail config.json5
 	@echo "*** ${THISDIR}: completed clean ***"
 
 test: config db
@@ -24,7 +24,6 @@ test: config db
 
 config:
 	cp ${TOP}/util/config.json5 .
-	cp ${TOP}/util/extres.json5 .
 
 db:
 	mkdir -p data;cp ${TOP}/newdata/data/platodb.csv data/

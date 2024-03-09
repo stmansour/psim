@@ -21,11 +21,10 @@ schema: *.go
 	$(DO_CMD)@echo "*** completed in ${THISDIR} ***"
 
 clean:
-	rm -rf data fail extres.json5 config.json5 "${THISDIR}"
+	rm -rf data fail config.json5 "${THISDIR}"
 	@echo "*** CLEAN completed in ${THISDIR} ***"
 
 config:
-	$(DO_CMD)cp ${TOP}/util/extres.json5 .
 	$(DO_CMD)cp ${TOP}/util/config.json5 .
 
 test: config csvdb
