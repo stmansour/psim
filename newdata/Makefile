@@ -48,6 +48,6 @@ coverage:
 
 package:
 	mkdir -p ${BINDIR}/data
-	cd data;cp platodb.csv ../${BINDIR}/data;cd ..
+	cd data;cp platodb.csv misubclasses.csv ../${BINDIR}/data;cd ..
 	for dir in $(DIRS); do make -C $$dir package;done
 	@echo "*** ${THISDIR}: completed package ***"

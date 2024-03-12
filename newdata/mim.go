@@ -7,6 +7,8 @@ import (
 	"io"
 	"os"
 	"strconv"
+
+	"github.com/stmansour/psim/util"
 )
 
 // LocaleType defines how the Influencer uses locales in its prediction
@@ -176,7 +178,11 @@ func (m *MetricInfluencerManager) loadMInfluencerSubclassesSQL() error {
 }
 
 func (m *MetricInfluencerManager) loadMInfluencerSubclassesCSV() error {
-	filename := "data/misubclasses.csv"
+	dir, err := util.GetExecutableDir()
+	if err != nil {
+		return fmt.Errorf("error getting executable directory: %s", err.Error())
+	}
+	filename := dir + "/data/misubclasses.csv"
 	file, err := os.Open(filename)
 	if err != nil {
 		return err
