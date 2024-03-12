@@ -30,14 +30,14 @@ type CourseOfAction struct {
 // ----------------------------------------------------------------------------
 var InvestmentStrategyMap = map[string]int{
 	"DistributedDecision": 0,
-	"MajorityWins":        1,
+	"MajorityRules":       1,
 }
 
 // InvestmentStrategies is a slice of investment strategy names
 // ----------------------------------------------------------------------------
 var InvestmentStrategies = []string{
 	"DistributedDecision",
-	"MajorityWins",
+	"MajorityRules",
 }
 
 // Investor is the class that manages one or more influencers to pursue an
