@@ -13,7 +13,7 @@ func TestSingleInvestorMode(t *testing.T) {
 		t.Errorf("LoadConfig failed: %s", err)
 		return
 	}
-	if err := ValidateConfig(&cfg); err != nil {
+	if err := ValidateConfig(cfg); err != nil {
 		t.Errorf("ValidateConfig failed: %s", err)
 	}
 	if !cfg.SingleInvestorMode {
@@ -49,7 +49,7 @@ func TestLoadConfig(t *testing.T) {
 		return
 	}
 
-	if err := ValidateConfig(&cfg); err != nil {
+	if err := ValidateConfig(cfg); err != nil {
 		t.Errorf("ValidateConfig failed: %s", err)
 	}
 

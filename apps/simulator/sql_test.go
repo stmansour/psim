@@ -39,7 +39,7 @@ func TestSQLFuncs(t *testing.T) {
 		t.Errorf("failed to read config file: %v\n", err)
 		return
 	}
-	app.cfg = &cfg
+	app.cfg = cfg
 
 	//----------------------------------------------------------------------
 	// open the CSV database from which we'll be pulling data

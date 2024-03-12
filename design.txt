@@ -190,3 +190,18 @@ may not be possible in many ways. A purchase may have been in the amount
 of 10,000 but the sales may occur in much smaller amounts across multiple
 sales.
 
+Appendix B. External Resources
+Sometimes special recources are needed that must be maintained
+secret and secure. These are typically credentials to access paid sites
+(such as financial institutions, data vendors) or critical services (
+such as a shared database).  A file containing these is typically not
+kept in a source repository as it can easily be mistakenly (or purposely)
+exposed.
+
+For the plato suite of tools, resources like this will be maintained
+in a separate file called extres.json5.  If this file is present in
+either the current directory from which a tool is run, or the
+directory containing the executable, it will be read in and used
+by the program. Otherwise, a default ExternalResources struct will be
+created and populated with only the process owners username (no
+password), and the default info for a local MySQL instance.

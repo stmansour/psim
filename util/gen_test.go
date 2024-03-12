@@ -2,6 +2,7 @@ package util
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 )
 
@@ -74,5 +75,11 @@ func TestReadGenerationDur(t *testing.T) {
 			t.Errorf("Expecting GenDur to show 1 year duration, found: years = %d, months = %d, weeks = %d, days = %d", cfg.GenDur.Years, cfg.GenDur.Months, cfg.GenDur.Weeks, cfg.GenDur.Days)
 		}
 	}
+
+	extres, err := ReadExternalResources()
+	if err != nil {
+		t.Errorf("ReadExternalResources failed: %s", err)
+	}
+	fmt.Printf("username = %s\n", extres.DbUser)
 
 }

@@ -36,7 +36,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to read config file: %v\n", err)
 	}
-	app.cfg = &cfg
+	app.cfg = cfg
 
 	//----------------------------------------------------------------------
 	// open the CSV database from which we'll be pulling data

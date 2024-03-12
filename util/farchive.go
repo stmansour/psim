@@ -52,3 +52,17 @@ func FileCopy(src, destDir string) error {
 	_, err = io.Copy(destFile, srcFile)
 	return err
 }
+
+// GetExecutableDir returns the directory containing the executable that started the current process.
+func GetExecutableDir() (string, error) {
+	// Get the full path of the executable.
+	execPath, err := os.Executable()
+	if err != nil {
+		return "", err
+	}
+
+	// Get the directory from the executable path.
+	execDir := filepath.Dir(execPath)
+
+	return execDir, nil
+}

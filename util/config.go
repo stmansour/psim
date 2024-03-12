@@ -196,6 +196,7 @@ type AppConfig struct {
 	PreserveElite        bool                              // when true it replicates the top PreserverElitePct of DNA from gen x to gen x+1
 	PreserveElitePct     float64                           // floating point value representing the amount of DNA to preserve. 0.0 to 100.0
 	EliteCount           int                               // calculated by the simulator
+	ExecutableFilePath   string                            // path to the executable
 }
 
 // LoadConfig reads the configuration data from config.json into an
@@ -212,23 +213,56 @@ type AppConfig struct {
 //	any error encountered
 //
 // ---------------------------------------------------------------------
-func LoadConfig(cfname string) (AppConfig, error) {
+func LoadConfig(cfname string) (*AppConfig, error) {
 	var cfg AppConfig
 	var fcfg FileConfig
+	var err error
+
+	// load executable directory
+	cfg.ExecutableFilePath, err = GetExecutableDir()
+	if err != nil {
+		return &cfg, err
+	}
+
+	confFileProfided := len(cfname) > 0
 
 	fname := "config.json5"
-	if len(cfname) > 0 {
+	if confFileProfided {
 		fname = cfname
 	}
+
+	//--------------------------------------------------------
+	// If no config file is provided, look first in current
+	// directory.
+	//--------------------------------------------------------
+	if _, err = os.Stat(fname); err != nil {
+		if !os.IsNotExist(err) {
+			return &cfg, err
+		}
+		//--------------------------------------------------
+		// if we're looking for the default config, check
+		// the release directory
+		//--------------------------------------------------
+		if !confFileProfided {
+			fname = cfg.ExecutableFilePath + "/" + fname
+			if _, err = os.Stat(fname); err != nil {
+				if !os.IsNotExist(err) {
+					return &cfg, err
+				}
+			}
+		}
+		return &cfg, fmt.Errorf("no configuration file was found")
+	}
+
 	configFile, err := os.Open(fname)
 	if err != nil {
-		return cfg, fmt.Errorf("failed to open config file: %v", err)
+		return &cfg, fmt.Errorf("failed to open config file: %v", err)
 	}
 	defer configFile.Close()
 	cfg.Filename = fname
 	byteValue, err := io.ReadAll(configFile)
 	if err != nil {
-		return cfg, fmt.Errorf("failed to read config file: %v", err)
+		return &cfg, fmt.Errorf("failed to read config file: %v", err)
 	}
 
 	//-------------------------------------
@@ -236,7 +270,7 @@ func LoadConfig(cfname string) (AppConfig, error) {
 	//-------------------------------------
 	err = json5.Unmarshal(byteValue, &cfg)
 	if err != nil {
-		return cfg, fmt.Errorf("failed to unmarshal config data into cfg: %v", err)
+		return &cfg, fmt.Errorf("failed to unmarshal config data into cfg: %v", err)
 	}
 
 	//------------------------------------------------------
@@ -244,7 +278,7 @@ func LoadConfig(cfname string) (AppConfig, error) {
 	//------------------------------------------------------
 	err = json5.Unmarshal(byteValue, &fcfg)
 	if err != nil {
-		return cfg, fmt.Errorf("failed to unmarshal config data into fcfg: %v", err)
+		return &cfg, fmt.Errorf("failed to unmarshal config data into fcfg: %v", err)
 	}
 
 	cfg.DtSettle = time.Time(cfg.DtStop) // start it here... it will be updated later if needed
@@ -291,7 +325,7 @@ func LoadConfig(cfname string) (AppConfig, error) {
 		cfg.InvW1 = 0.5
 		cfg.InvW2 = 0.5
 	}
-	return cfg, nil
+	return &cfg, nil
 }
 
 // CreateTestingCFG is a function that creates a test cfg file with no secrets

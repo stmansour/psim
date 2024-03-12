@@ -41,7 +41,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to read config file: %v\n", err)
 	}
-	app.cfg = &cfg
+	app.cfg = cfg
 	app.DtStart = time.Date(2010, time.January, 1, 0, 0, 0, 0, time.UTC)
 	app.DtStop = time.Date(2023, time.December, 31, 0, 0, 0, 0, time.UTC)
 

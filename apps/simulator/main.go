@@ -84,7 +84,7 @@ func doSimulation() {
 		log.Fatalf("failed to read config file: %v", err)
 	}
 	cfg.InfPredDebug = app.InfPredDebug
-	if err = util.ValidateConfig(&cfg); err != nil {
+	if err = util.ValidateConfig(cfg); err != nil {
 		fmt.Printf("Please fix errors in the simulator configuration file, config.json5, and try again\n")
 		os.Exit(1)
 	}
@@ -92,9 +92,9 @@ func doSimulation() {
 	cfg.ArchiveBaseDir = app.archiveBaseDir
 	cfg.ArchiveMode = app.archiveMode
 	cfg.CrucibleMode = app.CrucibleMode
-	app.cfg = &cfg
+	app.cfg = cfg
 
-	app.db, err = newdata.NewDatabase(cfg.DBSource, &cfg, app.extres)
+	app.db, err = newdata.NewDatabase(cfg.DBSource, cfg, app.extres)
 	if err != nil {
 		log.Panicf("*** PANIC ERROR ***  NewDatabase returned error: %s\n", err)
 	}
@@ -107,18 +107,18 @@ func doSimulation() {
 
 	if cfg.CrucibleMode {
 		c := newcore.NewCrucible()
-		c.Init(&cfg, app.db, &app.sim)
+		c.Init(cfg, app.db, &app.sim)
 		c.Run()
 		os.Exit(0)
 	}
 
-	displaySimulationDetails(&cfg)
+	displaySimulationDetails(cfg)
 	app.sim.Init(app.cfg, app.db, nil, app.dayByDayResults, app.dumpTopInvestorInvestments)
 	app.sim.GenInfluencerDistribution = app.GenInfluencerDistribution
 	app.sim.FitnessScores = app.FitnessScores
 	app.sim.Run()
 
-	displaySimulationResults(&cfg, app.db)
+	displaySimulationResults(cfg, app.db)
 
 	if app.dumpTopInvestorInvestments {
 		err := app.sim.ShowTopInvestor()

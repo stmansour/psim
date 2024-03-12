@@ -66,7 +66,8 @@ func GetSQLOpenString(dbname string, a *ExternalResources) string {
 
 // ReadExternalResources reads the contents of extres.json5 and fills the ExternalResources struct.
 func ReadExternalResources() (*ExternalResources, error) {
-	filename := "extres.json5"
+	fname := "extres.json5"
+	found := false
 	//---------------------------------------------
 	// Initialize to something reasonable...
 	//---------------------------------------------
@@ -83,24 +84,40 @@ func ReadExternalResources() (*ExternalResources, error) {
 	// should continue to work provided they have acces to
 	// the database named 'plato'
 	//--------------------------------------------------------
-	if _, err := os.Stat(filename); err != nil {
+
+	// check for extres.json5 in the current directory
+	if _, err := os.Stat(fname); err != nil {
 		if os.IsNotExist(err) {
+			// check for it in the executable directory...
+			exdir, err := GetExecutableDir()
+			if err != nil {
+				return &resources, err
+			}
+			found = true
+
+			fname = exdir + "/" + fname
+			if _, err = os.Stat(fname); err != nil {
+				if !os.IsNotExist(err) {
+					return &resources, err // error is something other than "doesn't exist"
+				}
+				found = false
+			}
+		}
+
+		if !found {
 			currentUser, err := user.Current()
 			if err != nil {
 				return &resources, err
 			}
 			resources.DbUser = currentUser.Username
 			return &resources, nil
-		} else {
-			// File may exist but there's another error (e.g., permission issues)
-			return &resources, err
 		}
 	}
 
 	//---------------------------------------
 	// The extres file was found.  Use it.
 	//---------------------------------------
-	file, err := os.Open(filename)
+	file, err := os.Open(fname)
 	if err != nil {
 		return nil, err
 	}
