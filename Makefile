@@ -66,6 +66,9 @@ build: starttimer clean psim package stoptimer
 stats:
 	@find . -name "*.go" | srcstats
 
+release:
+	cp -r dist/platosim /usr/local/plato/;cd /usr/local/plato;mv platosim bin;
+
 install-tools:
 	go get -u github.com/go-sql-driver/mysql
 	go install golang.org/x/lint/golint@latest
