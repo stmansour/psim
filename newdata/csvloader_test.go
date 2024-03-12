@@ -21,8 +21,20 @@ func TestCSVDataAccess(t *testing.T) {
 		t.Errorf("error creating database: %s", err.Error())
 		os.Exit(1)
 	}
-	d.SetCSVFilename("") // use default.  This call is not actually necessary, but this is when you'd set the override filename if you need to
-	err = d.Open()       // opens the database. In the CSV case, loads it into memory
+
+	path, err := os.Getwd()
+	if err != nil {
+		t.Errorf("error getting current directory: %s", err.Error())
+		os.Exit(1)
+	}
+	d.SetCSVFilename(path + "/data/platodb.csv") // This call is not actually necessary, but this is when you'd set the override filename if you need to
+	err = d.Open()                               // opens the database. In the CSV case, loads it into memory
+	if err != nil {
+		t.Errorf("error opening database: %s", err.Error())
+		os.Exit(1)
+	}
+
+	err = d.Init() // read it in
 	if err != nil {
 		t.Errorf("error initializing database: %s", err.Error())
 		os.Exit(1)

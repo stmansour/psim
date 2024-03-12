@@ -205,3 +205,8 @@ directory containing the executable, it will be read in and used
 by the program. Otherwise, a default ExternalResources struct will be
 created and populated with only the process owners username (no
 password), and the default info for a local MySQL instance.
+
+Appendix C.  CSV Database Files
+The default database is platodb.csv located in the data/ directory
+of the executables in the distribution. You can override this database
+with the -db command line option. 

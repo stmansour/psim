@@ -239,12 +239,14 @@ func LoadConfig(cfname string) (*AppConfig, error) {
 		if !os.IsNotExist(err) {
 			return &cfg, err
 		}
+		fmt.Printf("No config file found in current directory\n")
 		//--------------------------------------------------
 		// if we're looking for the default config, check
 		// the release directory
 		//--------------------------------------------------
 		if !confFileProfided {
 			fname = cfg.ExecutableFilePath + "/" + fname
+			fmt.Printf("will attempt to load: %s\n", fname)
 			if _, err = os.Stat(fname); err != nil {
 				if !os.IsNotExist(err) {
 					return &cfg, err

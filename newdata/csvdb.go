@@ -43,6 +43,7 @@ func (d *DatabaseCSV) LoadCsvDB() error {
 	if len(d.DBFname) > 0 {
 		fname = d.DBFname
 	}
+
 	file, err := os.Open(fname)
 	if err != nil {
 		fmt.Println(err)

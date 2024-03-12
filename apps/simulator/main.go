@@ -31,6 +31,7 @@ var app struct {
 	CrucibleMode               bool   // normal or crucible
 	GenInfluencerDistribution  bool   // show Influencer distribution for each generation
 	FitnessScores              bool   // save the fitness scores for each generation to dbgFitnessScores.csv
+	dbfilename                 string // override database name with this name
 }
 
 func dateIsInDataRange(a time.Time) string {
@@ -66,6 +67,7 @@ func readCommandLineArgs() {
 	flag.BoolVar(&app.showAllInvestors, "i", false, "show all investors in the simulation results")
 	flag.Int64Var(&app.randNano, "r", -1, "random number seed. ex: ./simulator -r 1687802336231490000")
 	flag.StringVar(&app.cfName, "c", "", "configuration file to use (instead of config.json)")
+	flag.StringVar(&app.dbfilename, "db", "", "override CSV datatbase name")
 	flag.BoolVar(&app.CrucibleMode, "C", false, "Crucible mode.")
 	flag.Parse()
 }
@@ -98,6 +100,7 @@ func doSimulation() {
 	if err != nil {
 		log.Panicf("*** PANIC ERROR ***  NewDatabase returned error: %s\n", err)
 	}
+	app.db.SetCSVFilename(app.dbfilename) // This call is not actually necessary, but this is when you'd set the override filename if you need to
 	if err := app.db.Open(); err != nil {
 		log.Panicf("*** PANIC ERROR ***  db.Open returned error: %s\n", err)
 	}
