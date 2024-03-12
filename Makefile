@@ -67,7 +67,7 @@ stats:
 	@find . -name "*.go" | srcstats
 
 release:
-	cp -r dist/platosim /usr/local/plato/;cd /usr/local/plato;mv platosim bin;
+	cp -r dist/platosim /usr/local/plato/;cd /usr/local/plato;rm -rf bin;mv platosim bin;
 
 install-tools:
 	go get -u github.com/go-sql-driver/mysql
