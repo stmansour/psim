@@ -38,7 +38,9 @@ var GlobalSQLSettings = struct {
 }
 
 // GetMetricBucket calculates or retrieves from MetricIDCache the bucket
-// for the supplied metric name
+// for the supplied metric name. Note, the metric should not include
+// locale information in the metric name.  That is, you should not
+// supply a string like "JPYBC", you should supply "BC"
 // ------------------------------------------------------------------
 func (p *DatabaseSQL) GetMetricBucket(s string) int {
 	// Get it from the MetricIDCache if possible
@@ -46,18 +48,21 @@ func (p *DatabaseSQL) GetMetricBucket(s string) int {
 		return bucketNumber
 	}
 
-	//-----------------------------------------------
-	// If not in MetricIDCache, calculate the bucket number
-	// and store it in the hash
-	//-----------------------------------------------
+	bucketNumber := GetMetricBucketCore(s)
+	p.MetricIDCache[s] = bucketNumber
+	return bucketNumber
+}
+
+// GetMetricBucketCore calculates the bucket number
+// for the supplied string.
+// --------------------------------------------------------
+func GetMetricBucketCore(s string) int {
 	hash := sha256.Sum256([]byte(s))
 	hashInt := 0
 	for _, b := range hash[:] {
 		hashInt += int(b)
 	}
-	bucketNumber := hashInt % p.BucketCount
-	p.MetricIDCache[s] = bucketNumber
-
+	bucketNumber := hashInt % GlobalSQLSettings.BucketCount
 	return bucketNumber
 }
 

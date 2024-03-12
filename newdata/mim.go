@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"strconv"
 
 	"github.com/stmansour/psim/util"
@@ -178,11 +179,19 @@ func (m *MetricInfluencerManager) loadMInfluencerSubclassesSQL() error {
 }
 
 func (m *MetricInfluencerManager) loadMInfluencerSubclassesCSV() error {
-	dir, err := util.GetExecutableDir()
-	if err != nil {
-		return fmt.Errorf("error getting executable directory: %s", err.Error())
+	var dir string
+	var err error
+	filename := ""
+	if len(m.ParentDB.CSVDB.DBFname) > 0 {
+		dir = filepath.Dir(m.ParentDB.CSVDB.DBFname)
+		filename = dir + "/misubclasses.csv"
+	} else {
+		dir, err = util.GetExecutableDir()
+		if err != nil {
+			return fmt.Errorf("error getting executable directory: %s", err.Error())
+		}
+		filename = dir + "/data/misubclasses.csv"
 	}
-	filename := dir + "/data/misubclasses.csv"
 	file, err := os.Open(filename)
 	if err != nil {
 		return err

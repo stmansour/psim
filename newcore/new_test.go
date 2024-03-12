@@ -3,6 +3,7 @@ package newcore
 import (
 	"fmt"
 	"log"
+	"os"
 	"reflect"
 	"testing"
 	"time"
@@ -26,6 +27,11 @@ func createConfigAndFactory() (*Factory, *newdata.Database, *util.AppConfig) {
 	if err := db.Open(); err != nil {
 		log.Panicf("*** PANIC ERROR ***  db.Init returned error: %s\n", err)
 	}
+	dir, err := os.Getwd()
+	if err != nil {
+		log.Panicf("Could not get current working directory: %s\n", err.Error())
+	}
+	db.SetCSVFilename(dir + "/data/platodb.csv")
 	if err := db.Init(); err != nil {
 		log.Panicf("*** PANIC ERROR ***  db.Init returned error: %s\n", err)
 	}

@@ -1,11 +1,16 @@
 package main
 
-import "testing"
+import (
+	"fmt"
+	"os"
+	"testing"
+)
 
 func TestInvestorDNA(t *testing.T) {
 	app.randNano = -1
 	app.cfName = "configsmall.json5"
 	app.dumpTopInvestorInvestments = true
+	setDBLocation()
 	s := &app.sim
 	s.ResetSimulator()
 
@@ -15,6 +20,7 @@ func TestInvestorDNA(t *testing.T) {
 func TestLinguisticDNA(t *testing.T) {
 	app.randNano = -1
 	app.cfName = "linguistics.json5"
+	setDBLocation()
 	s := &app.sim
 	app.trace = false
 	s.ResetSimulator()
@@ -23,8 +29,21 @@ func TestLinguisticDNA(t *testing.T) {
 func TestWTInfl(t *testing.T) {
 	app.randNano = -1
 	app.cfName = "wtconfig.json5"
+	setDBLocation()
 	s := &app.sim
 	app.trace = false
 	s.ResetSimulator()
 	doSimulation()
+}
+
+// setDBLocation sets the correct db location.  When running tests from within
+// VS Code, it creates an executable in some location under /var . It's not the
+// directory we expect, so it doesn't have the data in it.
+func setDBLocation() {
+	dir, err := os.Getwd()
+	if err != nil {
+		fmt.Println("Error getting current directory:", err)
+		return
+	}
+	app.dbfilename = dir + "/data/platodb.csv"
 }

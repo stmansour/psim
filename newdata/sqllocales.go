@@ -93,6 +93,7 @@ func (p *DatabaseSQL) FieldSelectorToSQL(f *FieldSelector) {
 	if len(f.Locale2) > 0 {
 		f.LID2 = p.LocaleIDCache[f.Locale2]
 	}
+
 	// Handle special cases, and the general case as the default
 	switch f.Metric {
 	case "EXClose":

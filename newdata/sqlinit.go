@@ -23,7 +23,7 @@ func (p *DatabaseSQL) SQLInit() error {
 // GetMinMaxDates fetches the earliest and latest dates from the given table.
 // ---------------------------------------------------------------------------
 func (p *DatabaseSQL) GetMinMaxDates() (err error) {
-	queryMin := "SELECT MIN(Date) FROM Metrics_0_2010"
+	queryMin := "SELECT MIN(Date) FROM Metrics_0_2020"
 	queryMax := "SELECT MAX(Date) FROM Metrics_0_2020"
 
 	err = p.DB.QueryRow(queryMin).Scan(&p.DtStart)

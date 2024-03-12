@@ -53,6 +53,11 @@ func TestSQLFuncs(t *testing.T) {
 		t.Errorf("*** PANIC ERROR ***  db.Init returned error: %s\n", err)
 		return
 	}
+	dir, err := os.Getwd()
+	if err != nil {
+		t.Errorf("Could not get current working directory: %s", err.Error())
+	}
+	app.csvdb.SetCSVFilename(dir + "/data/platodb.csv")
 	if err := app.csvdb.Init(); err != nil {
 		t.Errorf("*** PANIC ERROR ***  db.Init returned error: %s\n", err)
 		return
@@ -117,10 +122,20 @@ func TestSQLFuncs(t *testing.T) {
 		return
 	}
 
+	i := 0
+	for k := range rec.Fields {
+		f := newdata.FieldSelector{}
+		app.sqldb.SQLDB.FieldSelectorFromCSVColName(k, &f) // populate the components of a field selector from the CSV Column name
+		fields = append(fields, f)
+		i++
+	}
+
 	// Write it to the database...
 	if err = app.sqldb.Insert(rec); err != nil {
 		return
 	}
+
+	// select the fields we want (all of them)
 
 	// now read it back and make sure we have the same values...
 	rec1, err := app.sqldb.Select(dt, fields)

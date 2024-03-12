@@ -77,7 +77,7 @@ func main() {
 	// compare and notify on any discrepancy
 	//---------------------------------------------------------------------
 	fields := []newdata.FieldSelector{} // an empty slice
-	dtStart := time.Date(2010, time.January, 1, 0, 0, 0, 0, time.UTC)
+	dtStart := time.Date(2020, time.January, 1, 0, 0, 0, 0, time.UTC)
 	dtEnd := app.csvdb.CSVDB.DtStop.AddDate(0, 0, 1)
 	count := 0
 	for dt := dtStart; dt.Before(dtEnd); dt = dt.AddDate(0, 0, 1) {
