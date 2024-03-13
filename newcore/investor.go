@@ -257,14 +257,18 @@ func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 // ----------------------------------------------------------------------------
 func (i *Investor) FormatPrediction(p *Prediction, T3 time.Time) {
 	name := i.db.Mim.MInfluencerSubclasses[p.IType].Name
-	fmt.Printf("\t%s %s:  %s   (T1 %s [%4.2f] -  T2 %s [%4.2f])\n",
+	fmt.Printf("\t%s %s:  %s   (T1 %s [%4.2f] -  T2 %s [%4.2f]   Ann. Change: %4.2f%%   HoldWin(%5.2f%% - %5.2f%%))\n",
 		name,
 		p.IType,
 		p.Action,
 		T3.AddDate(0, 0, int(p.Delta1)).Format("Jan _2, 2006"),
 		p.Val1,
 		T3.AddDate(0, 0, int(p.Delta2)).Format("Jan _2, 2006"),
-		p.Val2)
+		p.Val2,
+		p.DeltaPct*100,
+		i.db.Mim.MInfluencerSubclasses[p.IType].HoldWindowNeg*100,
+		i.db.Mim.MInfluencerSubclasses[p.IType].HoldWindowPos*100,
+	)
 }
 
 // FormatCOA prints a readable version of the Influencers predictions

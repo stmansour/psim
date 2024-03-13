@@ -21,8 +21,9 @@ type Prediction struct {
 	T3          time.Time                     // date of buy
 	Recs        []*newdata.EconometricsRecord // one, two, or more records of data, depending on the LocaleType
 	Fields      []newdata.FieldSelector       // names of database fields
-	Val1        float64                       // ratio at time T1
-	Val2        float64                       // ratio at time T2
+	Val1        float64                       // value or ratio at time T1
+	Val2        float64                       // value ratio at time T2
+	DeltaPct    float64                       // percent change from T1 to T2
 	IType       string                        // specific influencer type
 	ID          string                        // id of this influencer
 	Correct     bool                          // was this profitable (correct)?

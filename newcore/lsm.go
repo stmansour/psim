@@ -193,7 +193,7 @@ func (p *LSMInfluencer) GetPrediction(t3 time.Time) (*Prediction, error) {
 		return &pred, err
 	}
 
-	var res float64
+	var delta float64
 	rec1 := pred.Recs[0]
 	rec2 := pred.Recs[1]
 
@@ -204,37 +204,56 @@ func (p *LSMInfluencer) GetPrediction(t3 time.Time) (*Prediction, error) {
 		}
 		pred.Val1 = rec1.Fields[pred.Fields[0].FQMetric()]
 		pred.Val2 = rec2.Fields[pred.Fields[0].FQMetric()]
-		res = pred.Val2 - pred.Val1
 	case newdata.C1C2RatioGT, newdata.C1C2RatioLT:
 		if len(pred.Recs[0].Fields) != 2 || len(pred.Recs[1].Fields) != 2 {
 			return &pred, nil // need to abstain, the data was not available
 		}
 		pred.Val1 = rec1.Fields[pred.Fields[0].FQMetric()] / rec1.Fields[pred.Fields[1].FQMetric()]
 		pred.Val2 = rec2.Fields[pred.Fields[0].FQMetric()] / rec2.Fields[pred.Fields[1].FQMetric()]
-		res = pred.Val2 - pred.Val1
+
 	default:
 		log.Fatalf("Need to handle this case\n")
 	}
 
 	sc := p.myInvestor.db.Mim.MInfluencerSubclasses[p.Metric]
-	pred.Action = "hold" // we have the data and made the calculation.  Assume "hold"
 
-	switch p.Predictor {
-	case newdata.SingleValGT, newdata.C1C2RatioGT:
-		if res > sc.HoldWindowPos {
-			pred.Action = "buy"
-		} else if res < sc.HoldWindowNeg {
-			pred.Action = "sell"
-		}
-	case newdata.SingleValLT, newdata.C1C2RatioLT:
-		if res < sc.HoldWindowNeg {
-			pred.Action = "buy" // check buy condition
-		} else if res > sc.HoldWindowPos {
-			pred.Action = "sell" // check sell condition
-		}
-	default:
-		log.Fatalf("Need to handle this case\n")
+	delta = pred.Val2 - pred.Val1
+	percentChange := (delta / pred.Val1)                      // this is over the time period T1 to T2
+	numDays := p.Delta2 - p.Delta1                            // number of days between T1 and T2
+	percentChange = float64(numDays) * percentChange / 365.25 // scale to the annualized values we use for comparison below
+	pred.DeltaPct = percentChange
+
+	//--------------------------------------------------------------------------
+	// delta is the change in metric value between T1 and T2.
+	// percentChange is the percent of change in the metric between T1 and T2
+	// We predict "buy" if the percent change is greater than HoldWindowPos
+	// We predict "sell" if the percent change is less than HoldWindowNeg
+	// Otherwise, we "hold"
+	//--------------------------------------------------------------------------
+	if percentChange < sc.HoldWindowNeg {
+		pred.Action = "buy" // check buy condition
+	} else if percentChange > sc.HoldWindowPos {
+		pred.Action = "sell" // check sell condition
+	} else {
+		pred.Action = "hold" // we have the data and made the calculation.  Assume "hold"
 	}
+
+	// switch p.Predictor {
+	// case newdata.SingleValGT, newdata.C1C2RatioGT:
+	// 	if percentChange > sc.HoldWindowPos {
+	// 		pred.Action = "buy"
+	// 	} else if percentChange < sc.HoldWindowNeg {
+	// 		pred.Action = "sell"
+	// 	}
+	// case newdata.SingleValLT, newdata.C1C2RatioLT:
+	// 	if percentChange < sc.HoldWindowNeg {
+	// 		pred.Action = "buy" // check buy condition
+	// 	} else if percentChange > sc.HoldWindowPos {
+	// 		pred.Action = "sell" // check sell condition
+	// 	}
+	// default:
+	// 	log.Fatalf("Need to handle this case\n")
+	// }
 
 	// todo - return proper probability and weight
 	pred.Probability = 1.0
