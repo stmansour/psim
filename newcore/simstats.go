@@ -131,8 +131,8 @@ func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time, eodr bool) {
 		// Note that when we sell, we try to sell at a loss first. So
 		// this might not be a good way to determine profitable buys
 		//----------------------------------------------------------------
-		for j := 0; j < len(investment.Profitable); j++ {
-			if investment.Profitable[j] {
+		for j := 0; j < len(investment.Chunks); j++ {
+			if investment.Chunks[j].Profitable {
 				pro++
 			}
 		}

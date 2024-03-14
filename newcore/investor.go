@@ -68,6 +68,17 @@ type Investor struct {
 	// maxPredictions    map[string]int    // max predictions indexed by Influencer subclass, set by simulator at the end of each simulation cycle, used when calculating fitness
 }
 
+// SellInfo is used to record all relevant information about the exchange of C2 back to C1.
+// Since any given investment in C2 may be sold in chunks, this info is used to preserve
+// all info about each chunk sold.
+type SellInfo struct {
+	T4         time.Time // date of exchange
+	ERT4       float64   // exchange rate used in the exchange
+	T4C2Sold   float64   // how much was sold in this chunk
+	T4C1       float64   // amount of C1 resulting from the exchange
+	Profitable bool      // was this exchange profitable
+}
+
 // Investment describes a full transaction when the Investor decides to buy.
 // The buy-related info is filled in at the time the purchase is made.  T4
 // is also set at buy time.  When T4 arrives in the simulation, the
@@ -76,23 +87,23 @@ type Investor struct {
 // to a CSV file for analysis.
 // ----------------------------------------------------------------------------
 type Investment struct {
-	id          string    // investment id
-	T3          time.Time // date on which purchase of C2 was made
-	T4          time.Time // date on which C2 will be exchanged for C1
-	T3BalanceC1 float64   // C1 balance after exchange on T3
-	T3BalanceC2 float64   // C2 balance after exchange on T3
-	T4BalanceC1 float64   // C1 balance after exchange on T4
-	T4BalanceC2 float64   // C2 balance after exchange on T4
-	T3C1        float64   // amount of C1 exchanged for C2 on T3
-	T3C2Buy     float64   // the amount of currency in C2 that T3C1 purchased on T3
-	T4C2Sold    float64   // we may need to sell it off over multiple transactions. This keeps track of how much we've sold.
-	ERT3        float64   // the exchange rate on T3
-	ERT4        float64   // the exchange rate on T4
-	T4C1        float64   // amount of currency C1 we were able to purchase with C2 on T4 at exchange rate ERT4
-	Delta4      int       // t4 = t3 + Delta4 - "sell" date
-	Completed   bool      // true when the investmnet has been exchanged C2 for C1
-	Profitable  []bool    // was this a profitable investment?  Can be multiple if sold across multiple sales.
-	RetryCount  int       // how many times was this retried
+	id          string     // investment id
+	T3          time.Time  // date on which exchange for C2 was made
+	T4          time.Time  // date of exchange back to C1
+	T3BalanceC1 float64    // C1 balance after exchange on T3
+	T3BalanceC2 float64    // C2 balance after exchange on T3
+	T4BalanceC1 float64    // C1 balance after exchange on T4
+	T4BalanceC2 float64    // C2 balance after exchange on T4
+	T3C1        float64    // amount of C1 exchanged for C2 on T3
+	T3C2Buy     float64    // the amount of currency in C2 that T3C1 purchased on T3
+	T4C2Sold    float64    // we may need to sell it off over multiple transactions. This keeps track of how much we've sold.
+	ERT3        float64    // the exchange rate on T3
+	ERT4        float64    // the exchange rate on T4
+	T4C1        float64    // amount of currency C1 we were able to purchase with C2 on T4 at exchange rate ERT4
+	Completed   bool       // true when the entire original buy amount of C2 has been exchanged for C1
+	Chunks      []SellInfo // was this a profitable investment?  Can be multiple if sold across multiple sales.
+	RetryCount  int        // how many times was this retried
+	// Delta4      int       // t4 = t3 + Delta4 - "sell" date
 }
 
 var rnderr = float64(0.01) // if we have less than this amount of C2 remaining, just assume we're done.
@@ -157,21 +168,11 @@ func (i *Investor) Init(cfg *util.AppConfig, f *Factory, db *newdata.Database) {
 	if max > len(i.db.Mim.MInfluencerSubclasses) {
 		log.Fatalf("The config file has MaxInfluencers set to %d, however there are only %d Influencers available.\n", max, len(i.db.Mim.MInfluencerSubclasses))
 	}
-	// if i.cfg.MaxInfluencers < max {
-	// 	max = i.cfg.MaxInfluencers
-	// }
-	// if i.cfg.MinInfluencers > min {
-	// 	if i.cfg.MinInfluencers <= max {
-	// 		min = i.cfg.MinInfluencers
-	// 	}
-	// }
-
 	numInfluencers := util.RandomInRange(min, max) // create this many
 	inflist := i.SelectNUniqueSubclasses(numInfluencers)
 	for j := 0; j < len(inflist); j++ {
 		subclass := inflist[j].Subclass
 		dna := fmt.Sprintf("{%s,Metric=%s"+"}", subclass, inflist[j].Metric)
-
 		inf, err := f.NewInfluencer(dna) // create with minimal DNA -- this causes random values to be generated where needed
 		if err != nil {
 			fmt.Printf("*** ERROR ***  From Influencer Factory: %s\n", err.Error())
@@ -590,8 +591,18 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 		i.Investments[j].T4C2Sold += thisSaleC2         // add what we're selling now to what's already been sold
 		i.Investments[j].T4C1 += thisSaleC1             // add the C1 we got back to the cumulative total for this investment
 
-		p := i.Investments[j].ERT4 < i.Investments[j].ERT3                   // this is the profitability condition at its simplest
-		i.Investments[j].Profitable = append(i.Investments[j].Profitable, p) // was this transaction profitable?  Save it in the list
+		//------------------------------------------------------------------------
+		// Create a new chunk for this investment to capture all relevant details
+		//------------------------------------------------------------------------
+		p := i.Investments[j].ERT4 < i.Investments[j].ERT3 // this is the profitability condition at its simplest
+		chunk := SellInfo{
+			T4:         t4,                    // date of exchange
+			ERT4:       i.Investments[j].ERT4, // exchange rate used in the exchange
+			T4C2Sold:   thisSaleC2,            // how much was sold in this chunk
+			T4C1:       thisSaleC1,            // amount of C1 resulting from the exchange
+			Profitable: p,                     // was this exchange profitable
+		}
+		i.Investments[j].Chunks = append(i.Investments[j].Chunks, chunk) // was this transaction profitable?  Save it in the list
 
 		i.Investments[j].Completed = (i.Investments[j].T4C2Sold+rnderr >= i.Investments[j].T3C2Buy) // we're completed when we've sold as much as we bought
 
@@ -618,9 +629,9 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 func (i *Investor) showSell(inv *Investment, tsc1, tsc2 float64) {
 	gains := 0
 	losses := 0
-	n := len(inv.Profitable)
+	n := len(inv.Chunks)
 	for j := 0; j < n; j++ {
-		if inv.Profitable[j] {
+		if inv.Chunks[j].Profitable {
 			gains++
 		} else {
 			losses++
@@ -721,10 +732,10 @@ func (i *Investor) CalculateFitnessScore() float64 {
 	jlen := len(i.Investments)
 	for j := 0; j < jlen; j++ {
 		if i.Investments[j].Completed {
-			pl := i.Investments[j].Profitable
+			pl := i.Investments[j].Chunks
 			for k := 0; k < len(pl); k++ {
 				total++
-				if pl[k] {
+				if pl[k].Profitable {
 					correct++
 				}
 			}
