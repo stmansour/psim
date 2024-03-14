@@ -50,6 +50,7 @@ type Investor struct {
 	BalanceC1         float64           // total amount of currency C1
 	BalanceC2         float64           // total amount of currency C2
 	StopLossThreshold float64           // value of portfolio where stoploss occurs
+	StopLossCount     int               // how many times stoploss was invoked
 	PortfolioValueC1  float64           // the C1 value of BalanceC1 + BalanceC2 on DtPortfolioValue
 	DtPortfolioValue  time.Time         // the date for which PortfolioValueC1 was calculated
 	Investments       []Investment      // a record of all investments made by this investor
@@ -223,6 +224,7 @@ func (i *Investor) DecideCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 		if i.cfg.Trace {
 			fmt.Printf("        <<<STOP LOSS>>>  %s StopLoss, PV = %8.2f, new StopLoss amount: %8.2f\n", i.ID, pv, i.StopLossThreshold)
 		}
+		i.StopLossCount++
 	}
 
 	//---------------------------------------------------------------------

@@ -25,6 +25,7 @@ type SimulationStatistics struct {
 	DtActualStop         time.Time // the date we actually stopped the simulation after trying to settle remaining C2 after DtGenStop
 	UnsettledC2          float64   // the amount of C2 held across all Investors when simulation stopped.
 	EndOfDataReached     bool      // true if current day was reached before all C2 was sold
+	StopLossCount        int       // how many times this investor invoked stoploss
 }
 
 // TopInvestor maintains the subset of information we need to keep for top investors
@@ -37,6 +38,7 @@ type TopInvestor struct {
 	GenNo          int       // which generation did this Investor come from
 	BalanceC1      float64   // Investor's C1 balance on simulation end date
 	BalanceC2      float64   // Investor's C2 balance on simulation end date
+	StopLossCount  int       // number of times the investor invoked StopLoss
 }
 
 // Simulator is a simulator object

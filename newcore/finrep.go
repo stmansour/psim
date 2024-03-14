@@ -105,6 +105,7 @@ func (f *FinRep) GenerateRows() error {
 		"Generation",
 		"Portfolio Value",
 		"Annualized Return",
+		"Stop Loss Count",
 		c1b,
 		c2b,
 		"DNA",
@@ -135,12 +136,13 @@ func (f *FinRep) GenerateRows() error {
 		if err != nil {
 			fmt.Printf("Error calculating annualized return: %s\n", err.Error())
 		}
-		fmt.Fprintf(f.file, "%d,%s,%d,%12.2f,%.2f,%12.2f,%12.2f,%q\n",
+		fmt.Fprintf(f.file, "%d,%s,%d,%12.2f,%.2f,%d,%12.2f,%12.2f,%q\n",
 			i+1,                       // rank
 			t.DtPV.Format("1/2/2006"), // date
 			t.GenNo,                   // generation number
 			t.PortfolioValue,          // portfolio
 			ar*100,                    // annualized return
+			t.StopLossCount,           // count of stoploss invocations
 			t.BalanceC1,               // C1
 			t.BalanceC2,               // C2
 			t.DNA,

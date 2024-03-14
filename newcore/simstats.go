@@ -34,6 +34,7 @@ func (s *Simulator) UpdateTopInvestors() {
 			BalanceC2:      s.Investors[i].BalanceC2,
 			DNA:            s.Investors[i].DNA(),
 			GenNo:          s.GensCompleted,
+			StopLossCount:  s.Investors[i].StopLossCount,
 		}
 		newTopInvestors = append(newTopInvestors, newTopInvestor)
 	}
@@ -101,11 +102,13 @@ func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time, eodr bool) {
 		avgProfit = avgProfit / float64(prof) // average profit among the profitable
 	}
 
-	// Compute the total number of nildata errors across all Influencers
-
+	// Compute the total number of nildata errors across all Influencers.
+	// Also compute the total number of stoploss invocations in the generation.
 	totNil := 0
+	stoploss := 0
 	for j := 0; j < len(s.Investors); j++ {
 		inf := s.Investors[j].Influencers
+		stoploss += s.Investors[j].StopLossCount
 		for k := 0; k < len(inf); k++ {
 			if inf[k].GetNilDataCount() > 0 {
 				totNil += inf[k].GetNilDataCount()
@@ -149,6 +152,7 @@ func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time, eodr bool) {
 		DtActualStop:         dtSettled,
 		UnsettledC2:          totalC2,
 		EndOfDataReached:     eodr,
+		StopLossCount:        stoploss,
 	}
 	s.GenStats = append(s.GenStats, ss)
 }
@@ -287,6 +291,7 @@ func (s *Simulator) SimStats(d string) error {
 	if s.cfg.PreserveElite {
 		fmt.Fprintf(file, "\"Preserve Elite: %5.2f%%\"\n", s.cfg.PreserveElitePct)
 	}
+	fmt.Fprintf(file, "\"Stop Loss: %.2f%%\"\n", s.cfg.StopLoss*100)
 
 	// s.influencersToCSV(file)
 	// s.influencerMissingData(file)
@@ -299,8 +304,8 @@ func (s *Simulator) SimStats(d string) error {
 	fmt.Fprintf(file, "\"Elapsed Run Time: %s\"\n", et)
 	fmt.Fprintf(file, "\"\"\n")
 
-	// the header row   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
-	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q\n",
+	// the header row   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16
+	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q\n",
 		"Generation",             // 0
 		"Gen Start",              // 1
 		"Gen Stop",               // 2
@@ -311,12 +316,13 @@ func (s *Simulator) SimStats(d string) error {
 		"Total Buys",             // 7
 		"Profitable Buys",        // 8
 		"% Profitable Buys",      // 9
-		"Nil Data Requests",      // 10
-		"Investors Holding C2",   // 11
-		"Total Unsettled C2",     // 12
-		"Actual Stop Date",       // 13
-		"All Investors Settled",  // 14
-		"DNA")                    // 15
+		"Stop Loss",              // 10
+		"Nil Data Requests",      // 11
+		"Investors Holding C2",   // 12
+		"Total Unsettled C2",     // 13
+		"Actual Stop Date",       // 14
+		"All Investors Settled",  // 15
+		"DNA")                    // 16
 
 	// investment rows
 	for i := 0; i < len(s.GenStats); i++ {
@@ -328,7 +334,7 @@ func (s *Simulator) SimStats(d string) error {
 		if !s.GenStats[i].EndOfDataReached {
 			settled = "yes"
 		}
-		fmt.Fprintf(file, "%d,%q,%q,%d,%8.2f%%,%12.2f,%12.2f,%d,%d,%4.2f%%,%d,%d,%12.2f,%q,%q,%q\n",
+		fmt.Fprintf(file, "%d,%q,%q,%d,%8.2f%%,%12.2f,%12.2f,%d,%d,%4.2f%%,%d,%d,%d,%12.2f,%q,%q,%q\n",
 			i, // 0
 			s.GenStats[i].DtGenStart.Format("1/2/2006"),                                    // 1
 			s.GenStats[i].DtGenStop.Format("1/2/2006"),                                     // 2
@@ -339,12 +345,13 @@ func (s *Simulator) SimStats(d string) error {
 			s.GenStats[i].TotalBuys,                                                        // 7
 			s.GenStats[i].ProfitableBuys,                                                   // 8
 			pctProfPred,                                                                    // 9
-			s.GenStats[i].TotalNilDataRequests,                                             // 10
-			s.GenStats[i].TotalHoldingC2,                                                   // 11
-			s.GenStats[i].UnsettledC2,                                                      // 12
-			s.GenStats[i].DtActualStop.Format("1/2/2006"),                                  // 13
-			settled,                    // 14
-			s.GenStats[i].MaxProfitDNA) // 15
+			s.GenStats[i].StopLossCount,                                                    // 10
+			s.GenStats[i].TotalNilDataRequests,                                             // 11
+			s.GenStats[i].TotalHoldingC2,                                                   // 12
+			s.GenStats[i].UnsettledC2,                                                      // 13
+			s.GenStats[i].DtActualStop.Format("1/2/2006"),                                  // 14
+			settled,                    // 15
+			s.GenStats[i].MaxProfitDNA) // 16
 	}
 	return nil
 }
