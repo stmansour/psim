@@ -28,6 +28,7 @@
     "COAStrategy": "DistributedDecision", // course of action strategy.  Choose from (DistributedDecision)
     "MinInfluencers": 1,        // An investor cannot have fewer than this many influencers
     "MaxInfluencers": 5,        // An investor can have no more than this many Influencers
+    "StopLoss": 0.10,           // Expressed as a percentage of the Portfolio Value. That is, 0.12 means 12%.  Sell all C2 immediately if the PV has lost this much of the initial funding.
 
     //-----------------------------------------------------------------
     //  There may be times when we need to test or check the behavior

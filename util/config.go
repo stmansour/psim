@@ -197,6 +197,7 @@ type AppConfig struct {
 	PreserveElitePct     float64                           // floating point value representing the amount of DNA to preserve. 0.0 to 100.0
 	EliteCount           int                               // calculated by the simulator
 	ExecutableFilePath   string                            // path to the executable
+	StopLoss             float64                           // Expressed as a percentage of the Portfolio Value. That is, use 0.10 for 10%.  Sell all C2 immediately if the PV has lost this much of the initial funding.
 }
 
 // LoadConfig reads the configuration data from config.json into an
@@ -240,7 +241,7 @@ func LoadConfig(cfname string) (*AppConfig, error) {
 			return &cfg, err
 		}
 		if confFileProfided {
-		    return &cfg, fmt.Errorf("no configuration file was found")
+			return &cfg, fmt.Errorf("no configuration file was found")
 		}
 		fname = cfg.ExecutableFilePath + "/" + fname
 		if _, err = os.Stat(fname); err != nil {

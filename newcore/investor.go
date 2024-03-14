@@ -49,6 +49,7 @@ type Investor struct {
 	db                *newdata.Database // where to get the data needed
 	BalanceC1         float64           // total amount of currency C1
 	BalanceC2         float64           // total amount of currency C2
+	StopLossThreshold float64           // value of portfolio where stoploss occurs
 	PortfolioValueC1  float64           // the C1 value of BalanceC1 + BalanceC2 on DtPortfolioValue
 	DtPortfolioValue  time.Time         // the date for which PortfolioValueC1 was calculated
 	Investments       []Investment      // a record of all investments made by this investor
@@ -129,6 +130,7 @@ func (i *Investor) Init(cfg *util.AppConfig, f *Factory, db *newdata.Database) {
 	i.cfg = cfg
 
 	i.BalanceC1 = cfg.InitFunds
+	i.StopLossThreshold = (1 - cfg.StopLoss) * i.BalanceC1
 	i.FitnessCalculated = false
 	i.Fitness = float64(0)
 	i.factory = f
@@ -197,15 +199,35 @@ func (i *Investor) DNA() string {
 	return s
 }
 
-// GetCourseOfAction returns the Investor's "buy", "sell", "hold", or "abstain"
+// DecideCourseOfAction returns the Investor's "buy", "sell", "hold", or "abstain"
 // prediction for T3
 // --------------------------------------------------------------------------------
-func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
-	// T4 := T3.AddDate(0, 0, i.Delta4) // here if we need it
+func (i *Investor) DecideCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 	var coa CourseOfAction
 	coa.Action = "abstain" // the prediction, assume the worst for now
 	var recs []Prediction
 
+	//---------------------------------------------------------------------
+	// Before doing anything, see if we have a stop-loss situation...
+	// For this, we look at the PortfolioValue. If it is less than
+	// the Initial Funding then we have lost money.  Then we look at the
+	// StopLoss percentage.  If we have lost that percentage or more then
+	// We convert everything back to C1 (we don't hold C2 any longer).
+	//---------------------------------------------------------------------
+	pv := i.PortfolioValue(T3)
+	if pv < i.StopLossThreshold {
+		if err := i.ExecuteSell(T3, 1); err != nil {
+			return coa, err
+		}
+		i.StopLossThreshold = (1 - i.cfg.StopLoss) * i.BalanceC1
+		if i.cfg.Trace {
+			fmt.Printf("        <<<STOP LOSS>>>  %s StopLoss, PV = %8.2f, new StopLoss amount: %8.2f\n", i.ID, pv, i.StopLossThreshold)
+		}
+	}
+
+	//---------------------------------------------------------------------
+	// No stop-loss. So carry on with determiniing the coarse of action
+	//---------------------------------------------------------------------
 	for j := 0; j < len(i.Influencers); j++ {
 		pred, err := i.Influencers[j].GetPrediction(T3)
 		if err != nil {
@@ -217,7 +239,7 @@ func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 		}
 		pred.IType = i.Influencers[j].GetMetric()
 		pred.ID = i.Influencers[j].GetID()
-		pred.Correct = false // don't know ye
+		pred.Correct = false // don't know yet
 		recs = append(recs, *pred)
 
 	}
@@ -257,7 +279,7 @@ func (i *Investor) GetCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 // ----------------------------------------------------------------------------
 func (i *Investor) FormatPrediction(p *Prediction, T3 time.Time) {
 	name := i.db.Mim.MInfluencerSubclasses[p.IType].Name
-	fmt.Printf("\t%s %s:  %s   (T1 %s [%4.2f] -  T2 %s [%4.2f]   Ann. Change: %4.2f%%   HoldWin(%5.2f%% - %5.2f%%))\n",
+	fmt.Printf("\t%s %s:  %s   (T1 %s [%4.2f] -  T2 %s [%4.2f]   Ann. Change: %4.2f%%   HoldWin(%5.2f%% to %5.2f%%))\n",
 		name,
 		p.IType,
 		p.Action,
@@ -355,7 +377,7 @@ func (i *Investor) DailyRun(T3 time.Time, winddown bool) error {
 	if i.cfg.Trace {
 		fmt.Printf("%s - %s\n", T3.Format("Jan _2, 2006"), i.ID)
 	}
-	coa, err := i.GetCourseOfAction(T3)
+	coa, err := i.DecideCourseOfAction(T3)
 	if err != nil {
 		return err
 	}
