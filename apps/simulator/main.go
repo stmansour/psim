@@ -61,7 +61,7 @@ func readCommandLineArgs() {
 	flag.BoolVar(&app.archiveMode, "ar", false, "create archive directory for config file, finrep, simstats, and all other reports. Also see -adir.")
 	flag.BoolVar(&app.dayByDayResults, "d", false, "show day-by-day results")
 	flag.BoolVar(&app.InfPredDebug, "D", false, "show prediction debug info - dumps a lot of data, use on short simulations, with minimal Influencers")
-	flag.BoolVar(&app.dumpTopInvestorInvestments, "t", false, "for each generation, write top investor Investment List to IList-Gen-n.csv")
+	flag.BoolVar(&app.dumpTopInvestorInvestments, "inv", false, "for each generation, write top investors Investment List to invrep.csv")
 	flag.BoolVar(&app.trace, "trace", false, "trace decision-making process every day, all investors")
 	flag.BoolVar(&app.version, "v", false, "print the program version string")
 	flag.BoolVar(&app.showAllInvestors, "i", false, "show all investors in the simulation results")

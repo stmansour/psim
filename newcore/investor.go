@@ -72,11 +72,12 @@ type Investor struct {
 // Since any given investment in C2 may be sold in chunks, this info is used to preserve
 // all info about each chunk sold.
 type SellInfo struct {
-	T4         time.Time // date of exchange
-	ERT4       float64   // exchange rate used in the exchange
-	T4C2Sold   float64   // how much was sold in this chunk
-	T4C1       float64   // amount of C1 resulting from the exchange
-	Profitable bool      // was this exchange profitable
+	T4            time.Time // date of exchange
+	ERT4          float64   // exchange rate used in the exchange
+	T4C2Sold      float64   // how much was sold in this chunk
+	T4C2Remaining float64   // how much C2 remains?
+	T4C1          float64   // amount of C1 resulting from the exchange
+	Profitable    bool      // was this exchange profitable
 }
 
 // Investment describes a full transaction when the Investor decides to buy.
@@ -590,24 +591,25 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 		thisSaleC1 = thisSaleC2 / i.Investments[j].ERT4 // This is the sell. The Amount of C1 we got back by selling "sellAmount"
 		i.Investments[j].T4C2Sold += thisSaleC2         // add what we're selling now to what's already been sold
 		i.Investments[j].T4C1 += thisSaleC1             // add the C1 we got back to the cumulative total for this investment
+		i.BalanceC1 += thisSaleC1                       // we recovered this much C1...
+		i.BalanceC2 -= thisSaleC2                       // by selling this C2
 
 		//------------------------------------------------------------------------
 		// Create a new chunk for this investment to capture all relevant details
 		//------------------------------------------------------------------------
 		p := i.Investments[j].ERT4 < i.Investments[j].ERT3 // this is the profitability condition at its simplest
 		chunk := SellInfo{
-			T4:         t4,                    // date of exchange
-			ERT4:       i.Investments[j].ERT4, // exchange rate used in the exchange
-			T4C2Sold:   thisSaleC2,            // how much was sold in this chunk
-			T4C1:       thisSaleC1,            // amount of C1 resulting from the exchange
-			Profitable: p,                     // was this exchange profitable
+			T4:            t4,                    // date of exchange
+			ERT4:          i.Investments[j].ERT4, // exchange rate used in the exchange
+			T4C2Sold:      thisSaleC2,            // how much was sold in this chunk
+			T4C2Remaining: i.BalanceC2,           // how much C2 remains from the original exchange
+			T4C1:          thisSaleC1,            // amount of C1 resulting from the exchange
+			Profitable:    p,                     // was this exchange profitable
 		}
 		i.Investments[j].Chunks = append(i.Investments[j].Chunks, chunk) // was this transaction profitable?  Save it in the list
 
 		i.Investments[j].Completed = (i.Investments[j].T4C2Sold+rnderr >= i.Investments[j].T3C2Buy) // we're completed when we've sold as much as we bought
 
-		i.BalanceC1 += thisSaleC1                  // we recovered this much C1...
-		i.BalanceC2 -= thisSaleC2                  // by selling this C2
 		i.Investments[j].T4BalanceC1 = i.BalanceC1 // amount of C1 after this exchange
 		i.Investments[j].T4BalanceC2 = i.BalanceC2 // amount of C2 after this exchange
 		i.Investments[j].T4 = t4                   // the date on which this particular sale was done (we don't save all dates of sale)

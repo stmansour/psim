@@ -43,27 +43,27 @@ type TopInvestor struct {
 
 // Simulator is a simulator object
 type Simulator struct {
-	cfg                        *util.AppConfig        // system-wide configuration info
-	factory                    Factory                // used to create Influencers
-	db                         *newdata.Database      // database to use in this simulation
-	crucible                   *Crucible              // must not be nil when cfg.CrucibleMode is true, pointer to crucible object
-	Investors                  []Investor             // the population of the current generation
-	dayByDay                   bool                   // show day by day results, debug feature
-	dumpTopInvestorInvestments bool                   // dump the investment list for top investor at the end of each generation
-	maxProfitThisRun           float64                // the largest profit made by any investor during this simulation run
-	maxPredictions             map[string]int         // max predictions indexed by subclass
-	maxProfitInvestor          int                    // the investor that had the max profit for this generation
-	GensCompleted              int                    // the current count of the number of generations completed in the simulation
-	GenStats                   []SimulationStatistics // keep track of what happened
-	SimStart                   time.Time              // timestamp for simulation start
-	SimStop                    time.Time              // timestamp for simulation stop
-	StopTimeSet                bool                   // set to true once SimStop is set. If it's false either the simulation is still in progress or did not complete
-	WindDownInProgress         bool                   // initially false, set to true when we have a C2 balance on or after cfg.DtStop, when all C2 is sold this will return to being false
-	FinRpt                     *FinRep                // Financial Report generator
-	TopInvestors               []TopInvestor          // the top n Investors across all generations
-	ReportTimestamp            string                 // use this timestamp in the filenames we generate
-	GenInfluencerDistribution  bool                   // show Influencer distribution for each generation
-	FitnessScores              bool                   // save the fitness scores for each generation to dbgFitnessScores.csv
+	cfg                          *util.AppConfig        // system-wide configuration info
+	factory                      Factory                // used to create Influencers
+	db                           *newdata.Database      // database to use in this simulation
+	crucible                     *Crucible              // must not be nil when cfg.CrucibleMode is true, pointer to crucible object
+	Investors                    []Investor             // the population of the current generation
+	dayByDay                     bool                   // show day by day results, debug feature
+	reportTopInvestorInvestments bool                   // dump the investment list for top investor at the end of each generation
+	maxProfitThisRun             float64                // the largest profit made by any investor during this simulation run
+	maxPredictions               map[string]int         // max predictions indexed by subclass
+	maxProfitInvestor            int                    // the investor that had the max profit for this generation
+	GensCompleted                int                    // the current count of the number of generations completed in the simulation
+	GenStats                     []SimulationStatistics // keep track of what happened
+	SimStart                     time.Time              // timestamp for simulation start
+	SimStop                      time.Time              // timestamp for simulation stop
+	StopTimeSet                  bool                   // set to true once SimStop is set. If it's false either the simulation is still in progress or did not complete
+	WindDownInProgress           bool                   // initially false, set to true when we have a C2 balance on or after cfg.DtStop, when all C2 is sold this will return to being false
+	FinRpt                       *FinRep                // Financial Report generator
+	TopInvestors                 []TopInvestor          // the top n Investors across all generations
+	ReportTimestamp              string                 // use this timestamp in the filenames we generate
+	GenInfluencerDistribution    bool                   // show Influencer distribution for each generation
+	FitnessScores                bool                   // save the fitness scores for each generation to dbgFitnessScores.csv
 }
 
 // ResetSimulator is primarily to support tests. It resets the simulator
@@ -77,7 +77,7 @@ func (s *Simulator) ResetSimulator() {
 	s.factory = f
 	s.Investors = nil
 	s.dayByDay = false
-	s.dumpTopInvestorInvestments = false
+	s.reportTopInvestorInvestments = false
 	s.maxProfitThisRun = 0
 	s.maxPredictions = make(map[string]int)
 	s.maxProfitInvestor = 0
@@ -116,12 +116,12 @@ func (s *Simulator) GetSimulationRunTime() (string, time.Duration) {
 // Init initializes the simulation system, it also creates Investors and
 // calls their init functions.
 // ----------------------------------------------------------------------------
-func (s *Simulator) Init(cfg *util.AppConfig, db *newdata.Database, crucible *Crucible, dayByDay, dumpTopInvestorInvestments bool) error {
+func (s *Simulator) Init(cfg *util.AppConfig, db *newdata.Database, crucible *Crucible, dayByDay, reportTopInvestorInvestments bool) error {
 	s.cfg = cfg
 	s.db = db
 	s.crucible = crucible
 	s.dayByDay = dayByDay
-	s.dumpTopInvestorInvestments = dumpTopInvestorInvestments
+	s.reportTopInvestorInvestments = reportTopInvestorInvestments
 
 	s.factory.Init(s.cfg, db)
 	s.FinRpt = &FinRep{}
@@ -365,18 +365,18 @@ func (s *Simulator) Run() {
 			s.CalculateMaxVals(T3)
 			s.CalculateAllFitnessScores()
 			s.SaveStats(thisGenDtStart, thisGenDtEnd, T3, EndOfDataReached)
+			s.UpdateTopInvestors() // NOTE: s.Investors is sorted by Portfolio value upon return
 
-			//----------------------------------------------------------------------
-			// handle any reports...
-			//----------------------------------------------------------------------
-			if s.dumpTopInvestorInvestments {
-				if err := s.InvestmentsToCSV(&s.Investors[s.maxProfitInvestor]); err != nil {
-					log.Printf("ERROR: InvestmentsToCSV returned: %s\n", err)
-				}
-			}
-			s.UpdateTopInvestors() // used by financial report
+			//---------------------------------------
+			// End of generation reports...
+			//---------------------------------------
 			if s.cfg.CrucibleMode {
 				s.crucible.DumpResults()
+			}
+			if s.reportTopInvestorInvestments {
+				if err := s.dumpTopInvestorsDetail(); err != nil {
+					log.Printf("ERROR: dumpTopInvestorsDetail returned: %s\n", err)
+				}
 			}
 
 			//----------------------------------------------------------------------------------------------
