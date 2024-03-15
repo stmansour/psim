@@ -599,12 +599,12 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 		//------------------------------------------------------------------------
 		p := i.Investments[j].ERT4 < i.Investments[j].ERT3 // this is the profitability condition at its simplest
 		chunk := SellInfo{
-			T4:            t4,                    // date of exchange
-			ERT4:          i.Investments[j].ERT4, // exchange rate used in the exchange
-			T4C2Sold:      thisSaleC2,            // how much was sold in this chunk
-			T4C2Remaining: i.BalanceC2,           // how much C2 remains from the original exchange
-			T4C1:          thisSaleC1,            // amount of C1 resulting from the exchange
-			Profitable:    p,                     // was this exchange profitable
+			T4:            t4,                        // date of exchange
+			ERT4:          i.Investments[j].ERT4,     // exchange rate used in the exchange
+			T4C2Sold:      thisSaleC2,                // how much was sold in this chunk
+			T4C2Remaining: i.Investments[j].T4C2Sold, // how much C2 remains from the original exchange
+			T4C1:          thisSaleC1,                // amount of C1 resulting from the exchange
+			Profitable:    p,                         // was this exchange profitable
 		}
 		i.Investments[j].Chunks = append(i.Investments[j].Chunks, chunk) // was this transaction profitable?  Save it in the list
 
