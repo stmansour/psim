@@ -30,7 +30,7 @@
     "MaxInfluencers": 10,       // Maximum # of Influencers per Investor
     "PreserveElite": false,     // when true it replicates the top PreserverElitePct of DNA from gen x to gen x+1
     "PreserveElitePct": 5.0,    // floating point value representing the amount of DNA to preserve. 0.0 to 100.0
-	  "StopLoss": 0.10,           // Expressed as a percentage of the Portfolio Value. That is, 0.12 means 12%.  Sell all C2 immediately if the PV has lost this much of the initial funding.
+    "StopLoss": 0.10,           // Expressed as a percentage of the Portfolio Value. That is, 0.12 means 12%.  Sell all C2 immediately if the PV has lost this much of the initial funding.
 
     //-----------------------------------------------------------------
     //  There may be times when we need to test or check the performance
