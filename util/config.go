@@ -198,6 +198,8 @@ type AppConfig struct {
 	EliteCount           int                               // calculated by the simulator
 	ExecutableFilePath   string                            // path to the executable
 	StopLoss             float64                           // Expressed as a percentage of the Portfolio Value. That is, use 0.10 for 10%.  Sell all C2 immediately if the PV has lost this much of the initial funding.
+	TxnFeeFactor         float64                           // cost per transaction that is multiplied by the amount. 0.0002 == 2 basis points, 0 if not set
+	TxnFee               float64                           // a flat cost that is added for each transaction, 0 if not set
 }
 
 // LoadConfig reads the configuration data from config.json into an

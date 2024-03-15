@@ -5,7 +5,6 @@ import (
 	"log"
 	"math"
 	"math/rand"
-	"os"
 	"sort"
 	"strings"
 	"time"
@@ -77,6 +76,7 @@ type SellInfo struct {
 	T4C2Sold      float64   // how much was sold in this chunk
 	T4C2Remaining float64   // how much C2 remains?
 	T4C1          float64   // amount of C1 resulting from the exchange
+	Fee           float64   // cost of making this transaction
 	Profitable    bool      // was this exchange profitable
 }
 
@@ -101,6 +101,7 @@ type Investment struct {
 	ERT3        float64    // the exchange rate on T3
 	ERT4        float64    // the exchange rate on T4
 	T4C1        float64    // amount of currency C1 we were able to purchase with C2 on T4 at exchange rate ERT4
+	Fee         float64    // Fee for converting C1 to C2, the "buy fee".  Sell fees are in the chunks
 	Completed   bool       // true when the entire original buy amount of C2 has been exchanged for C1
 	Chunks      []SellInfo // was this a profitable investment?  Can be multiple if sold across multiple sales.
 	RetryCount  int        // how many times was this retried
@@ -439,14 +440,15 @@ func (i *Investor) ExecuteBuy(T3 time.Time, pct float64) error {
 		return fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found", inv.T3.Format("1/2/2006"))
 	}
 
-	inv.ERT3 = er3.Fields[s.FQMetric()]        // exchange rate on T3
-	inv.T3C2Buy = inv.T3C1 * inv.ERT3          // amount of C2 we purchased on T3
-	inv.T4C2Sold = 0                           // just being explicit, haven't sold any of it yet
-	i.BalanceC1 -= inv.T3C1                    // we spent this much C1...
-	i.BalanceC2 += inv.T3C2Buy                 // to purchase this much more C2
-	inv.T3BalanceC1 = i.BalanceC1              // C1 balance after exchange
-	inv.T3BalanceC2 = i.BalanceC2              // C2 balance after exchange
-	i.Investments = append(i.Investments, inv) // add it to the list of investments
+	inv.ERT3 = er3.Fields[s.FQMetric()]                      // exchange rate on T3
+	inv.T3C2Buy = inv.T3C1 * inv.ERT3                        // amount of C2 we purchased on T3
+	inv.Fee = (inv.T3C1 * i.cfg.TxnFeeFactor) + i.cfg.TxnFee // cost of the ttransaction
+	inv.T4C2Sold = 0                                         // just being explicit, haven't sold any of it yet
+	i.BalanceC1 -= (inv.T3C1 + inv.Fee)                      // we spent this much C1...
+	i.BalanceC2 += inv.T3C2Buy                               // to purchase this much more C2
+	inv.T3BalanceC1 = i.BalanceC1                            // C1 balance after exchange
+	inv.T3BalanceC2 = i.BalanceC2                            // C2 balance after exchange
+	i.Investments = append(i.Investments, inv)               // add it to the list of investments
 
 	if i.cfg.Trace {
 		i.showBuy(&inv)
@@ -456,7 +458,7 @@ func (i *Investor) ExecuteBuy(T3 time.Time, pct float64) error {
 }
 
 func (i *Investor) showBuy(inv *Investment) {
-	fmt.Printf("        *** BUY ***   %8.2f %s (%8.2f %s)\n", inv.T4C1, i.cfg.C1, inv.T3C2Buy, i.cfg.C2)
+	fmt.Printf("        *** BUY ***   %8.2f %s (%8.2f %s, fee = %6.2f)\n", inv.T4C1, i.cfg.C1, inv.T3C2Buy, i.cfg.C2, inv.Fee)
 }
 
 // ExecuteSell does an exchange of C2 for C1 on T4. It will purchase pct*i.cfg.StdInvestment
@@ -586,13 +588,13 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 		} else {
 			thisSaleC2 = sellAmount // sellAmount is < what we have. So we'll sell a portion
 		}
-
 		sellAmount -= thisSaleC2                        // this will be what's left to sell, now that we know how much to sell in this exchange
 		thisSaleC1 = thisSaleC2 / i.Investments[j].ERT4 // This is the sell. The Amount of C1 we got back by selling "sellAmount"
-		i.Investments[j].T4C2Sold += thisSaleC2         // add what we're selling now to what's already been sold
-		i.Investments[j].T4C1 += thisSaleC1             // add the C1 we got back to the cumulative total for this investment
-		i.BalanceC1 += thisSaleC1                       // we recovered this much C1...
-		i.BalanceC2 -= thisSaleC2                       // by selling this C2
+		fee := (thisSaleC1 * i.cfg.TxnFeeFactor) + i.cfg.TxnFee
+		i.Investments[j].T4C2Sold += thisSaleC2 // add what we're selling now to what's already been sold
+		i.Investments[j].T4C1 += thisSaleC1     // add the C1 we got back to the cumulative total for this investment
+		i.BalanceC1 += (thisSaleC1 - fee)       // we recovered this much C1...
+		i.BalanceC2 -= thisSaleC2               // by selling this C2
 
 		//------------------------------------------------------------------------
 		// Create a new chunk for this investment to capture all relevant details
@@ -605,6 +607,7 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 			T4C2Remaining: i.Investments[j].T4C2Sold, // how much C2 remains from the original exchange
 			T4C1:          thisSaleC1,                // amount of C1 resulting from the exchange
 			Profitable:    p,                         // was this exchange profitable
+			Fee:           fee,                       // cost of this transaction
 		}
 		i.Investments[j].Chunks = append(i.Investments[j].Chunks, chunk) // was this transaction profitable?  Save it in the list
 
@@ -621,14 +624,14 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 			i.Influencers[k].FinalizePrediction(i.Investments[j].T3, t4, p)
 		}
 		if i.cfg.Trace {
-			i.showSell(&i.Investments[j], thisSaleC1, thisSaleC2)
+			i.showSell(&i.Investments[j], thisSaleC1, thisSaleC2, fee)
 		}
 	}
 
 	return sellAmount, nil
 }
 
-func (i *Investor) showSell(inv *Investment, tsc1, tsc2 float64) {
+func (i *Investor) showSell(inv *Investment, tsc1, tsc2, fee float64) {
 	gains := 0
 	losses := 0
 	n := len(inv.Chunks)
@@ -639,7 +642,7 @@ func (i *Investor) showSell(inv *Investment, tsc1, tsc2 float64) {
 			losses++
 		}
 	}
-	fmt.Printf("        *** SELL ***  %8.2f %s, [%8.2f %s], investments affected: %d -->  %d profited, %d lost\n", tsc1, i.cfg.C1, tsc2, i.cfg.C2, n, gains, losses)
+	fmt.Printf("        *** SELL ***  %8.2f %s (fee: %6.2f), [%8.2f %s], investments affected: %d -->  %d profited, %d lost\n", tsc1, i.cfg.C1, fee, tsc2, i.cfg.C2, n, gains, losses)
 }
 
 // sortInvestmentsDescending uses the E
@@ -657,41 +660,25 @@ func (i *Investor) sortInvestmentsDescending() {
 //	any error encountered or nil if no error
 //
 // ------------------------------------------------------------------------------------
-func (i *Investor) InvestorProfile() error {
-	file, err := os.Create("investorProfile.txt")
-	if err != nil {
-		return err
-	}
-	defer file.Close()
+// func (i *Investor) InvestorProfile() error {
+// 	file, err := os.Create("investorProfile.txt")
+// 	if err != nil {
+// 		return err
+// 	}
+// 	defer file.Close()
 
-	fmt.Fprintf(file, "INVESTOR PROFILE\n")
-	fmt.Fprintf(file, "Initial cash: %14.2f %s\n", i.cfg.InitFunds, i.cfg.C1)
-	fmt.Fprintf(file, "              %14.2f %s\n", 0.0, i.cfg.C2)
-	fmt.Fprintf(file, "Ending cash:  %14.2f %s\n", i.BalanceC1, i.cfg.C1)
-	fmt.Fprintf(file, "              %14.2f %s\n", i.BalanceC2, i.cfg.C2)
-	// fmt.Fprintf(file, "\nInfluencers:\n")
+// 	fmt.Fprintf(file, "INVESTOR PROFILE\n")
+// 	fmt.Fprintf(file, "Initial cash: %14.2f %s\n", i.cfg.InitFunds, i.cfg.C1)
+// 	fmt.Fprintf(file, "              %14.2f %s\n", 0.0, i.cfg.C2)
+// 	fmt.Fprintf(file, "Ending cash:  %14.2f %s\n", i.BalanceC1, i.cfg.C1)
+// 	fmt.Fprintf(file, "              %14.2f %s\n", i.BalanceC2, i.cfg.C2)
+// 	// fmt.Fprintf(file, "\nInfluencers:\n")
 
-	// for j := 0; j < len(i.Influencers); j++ {
-	// 	fmt.Fprintf(file, "%d. %s\n", j+1, i.Influencers[j].DNA())
-	// }
+// 	// for j := 0; j < len(i.Influencers); j++ {
+// 	// 	fmt.Fprintf(file, "%d. %s\n", j+1, i.Influencers[j].DNA())
+// 	// }
 
-	return nil
-}
-
-// // ToString simply returns a printable version of the Investment struct as a string.
-// // ------------------------------------------------------------------------------------
-// func (i *Investment) ToString() string {
-// 	s := fmt.Sprintf("    id		= %s\n", i.id)
-// 	s += fmt.Sprintf("    T3		= %s\n", i.T3)
-// 	s += fmt.Sprintf("    T4		= %s\n", i.T4)
-// 	s += fmt.Sprintf("    T3C1		= %8.2f\n", i.T3C1)
-// 	s += fmt.Sprintf("    T3C2Buy		= %8.2f\n", i.T3C2Buy)
-// 	s += fmt.Sprintf("    T4C2Sold	= %8.2f\n", i.T4C2Sold)
-// 	s += fmt.Sprintf("    ERT3		= %8.2f\n", i.ERT3)
-// 	s += fmt.Sprintf("    ERT4		= %8.2f\n", i.ERT4)
-// 	s += fmt.Sprintf("    T4C1	= %8.2f\n", i.T4C1)
-// 	s += fmt.Sprintf("    Delta4	= %d\n", i.Delta4)
-// 	return s
+// 	return nil
 // }
 
 // CalculateFitnessScore calculates the fitness score for an Investor.

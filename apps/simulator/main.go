@@ -123,12 +123,12 @@ func doSimulation() {
 
 	displaySimulationResults(cfg, app.db)
 
-	if app.dumpTopInvestorInvestments {
-		err := app.sim.ShowTopInvestor()
-		if err != nil {
-			fmt.Printf("Error writing Top Investor profile: %s\n", err.Error())
-		}
-	}
+	// if app.dumpTopInvestorInvestments {
+	// 	err := app.sim.ShowTopInvestor()
+	// 	if err != nil {
+	// 		fmt.Printf("Error writing Top Investor profile: %s\n", err.Error())
+	// 	}
+	// }
 }
 
 func main() {

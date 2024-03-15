@@ -425,20 +425,20 @@ func (s *Simulator) SimStats(d string) error {
 //	otherwise = error encountered
 //
 // ----------------------------------------------------------------------------
-func (s *Simulator) ShowTopInvestor() error {
-	if len(s.Investors) < 1 {
-		return fmt.Errorf("Simulator has 0 Investors")
-	}
-	topBalance := s.Investors[0].BalanceC1
-	topInvestorIdx := 0
-	for i := 1; i < len(s.Investors); i++ {
-		if s.Investors[i].BalanceC1 > topBalance {
-			topBalance = s.Investors[i].BalanceC1
-			topInvestorIdx = i
-		}
-	}
-	if err := s.Investors[topInvestorIdx].InvestorProfile(); err != nil {
-		return err
-	}
-	return nil
-}
+// func (s *Simulator) ShowTopInvestor() error {
+// 	if len(s.Investors) < 1 {
+// 		return fmt.Errorf("Simulator has 0 Investors")
+// 	}
+// 	topBalance := s.Investors[0].BalanceC1
+// 	topInvestorIdx := 0
+// 	for i := 1; i < len(s.Investors); i++ {
+// 		if s.Investors[i].BalanceC1 > topBalance {
+// 			topBalance = s.Investors[i].BalanceC1
+// 			topInvestorIdx = i
+// 		}
+// 	}
+// 	if err := s.Investors[topInvestorIdx].InvestorProfile(); err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
