@@ -246,3 +246,17 @@ func (p *Database) Insert(rec *EconometricsRecord) error {
 		return fmt.Errorf("unknown database type: %s", p.Datatype)
 	}
 }
+
+// InsertMetricsSources writes the supplied slice of MetricsSource structs to the database.
+// after CreateDatabasePart1 or MigrateCSVtoSQL so that caches are loaded with the copied data.
+// -------------------------------------------------------------------------------------------
+func (p *Database) InsertMetricsSources(locations []MetricsSource) error {
+	switch p.Datatype {
+	case "CSV":
+		return p.CSVDB.InsertMetricsSources(locations)
+	case "SQL":
+		return p.SQLDB.InsertMetricsSources(locations)
+	default:
+		return fmt.Errorf("unknown database type: %s", p.Datatype)
+	}
+}

@@ -49,27 +49,27 @@ func (p *DatabaseSQL) InsertLocale(loc *Locale) (int64, error) {
 
 // LoadLocaleCache inserts a new Locale into the Locales table.
 func (p *DatabaseSQL) LoadLocaleCache() error {
-	var lid int
-	var name string
-	localesMap := make(map[string]int)
-	rows, err := p.DB.Query("SELECT LID, Currency FROM Locales")
+	var loc Locale
+
+	localesMap := make(map[string]Locale)
+	rows, err := p.DB.Query("SELECT LID, Name, Currency, Description FROM Locales")
 	if err != nil {
 		return err
 	}
 	defer rows.Close()
 
 	for rows.Next() {
-		if err := rows.Scan(&lid, &name); err != nil {
+		if err := rows.Scan(&loc.LID, &loc.Name, &loc.Currency, &loc.Description); err != nil {
 			return err
 		}
-		localesMap[name] = lid
+		localesMap[loc.Currency] = loc
 	}
 
 	// Check for errors from iterating over rows
 	if err := rows.Err(); err != nil {
 		return err
 	}
-	p.LocaleIDCache = localesMap
+	p.LocaleCache = localesMap
 	return nil
 }
 
@@ -88,10 +88,10 @@ func (p *DatabaseSQL) FieldSelectorToSQL(f *FieldSelector) {
 	f.LID = 1  // assume no locale
 	f.LID2 = 1 // assume no locale2
 	if len(f.Locale) > 0 {
-		f.LID = p.LocaleIDCache[f.Locale]
+		f.LID = int(p.LocaleCache[f.Locale].LID)
 	}
 	if len(f.Locale2) > 0 {
-		f.LID2 = p.LocaleIDCache[f.Locale2]
+		f.LID2 = int(p.LocaleCache[f.Locale2].LID)
 	}
 
 	// Handle special cases, and the general case as the default

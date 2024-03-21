@@ -13,14 +13,15 @@ import (
 
 // DatabaseSQL is the struct for the SQL database object
 type DatabaseSQL struct {
-	DB            *sql.DB
-	Name          string         // database name
-	BucketCount   int            // number of shards by metric name
-	MetricIDCache map[string]int // metric name to bucket number
-	LocaleIDCache map[string]int // locale name to LID
-	ParentDB      *Database      // the database that contains me
-	DtStart       time.Time      // earliest date with data
-	DtStop        time.Time      // latest date with data
+	DB             *sql.DB
+	Name           string            // database name
+	BucketCount    int               // number of shards by metric name
+	MetricIDCache  map[string]int    // metric name to bucket number
+	LocaleCache    map[string]Locale // locale name to LID
+	MetricSrcCache []MetricsSource   // known data sources
+	ParentDB       *Database         // the database that contains me
+	DtStart        time.Time         // earliest date with data
+	DtStop         time.Time         // latest date with data
 
 }
 
@@ -77,13 +78,23 @@ func (p *DatabaseSQL) CreateDatabasePart1() error {
 			HoldWindowPos DECIMAL(13,6) NOT NULL,
 			HoldWindowNeg DECIMAL(13,6) NOT NULL
 		);`,
+		`CREATE TABLE IF NOT EXISTS MetricsSources (
+			MSID INT AUTO_INCREMENT PRIMARY KEY,
+			LastUpdate DATETIME(6) NOT NULL,
+			URL VARCHAR(255) NOT NULL,
+			Name VARCHAR(80) NOT NULL
+		);`,
 		`CREATE TABLE IF NOT EXISTS ExchangeRate (
 			XID INT AUTO_INCREMENT PRIMARY KEY,
 			Date DATETIME(6) NOT NULL,
-			LID INT NOT NULL,
-			LID2 INT,
-			EXClose FLOAT,
-			INDEX(Date)
+			LID INT NOT NULL,             -- locale associated with this exchange rate, foreign key to Locales
+			LID2 INT NOT NULL,            -- second locale (optional) associated with this exchange rate, foreign key to Locales
+			MSID INT NOT NULL DEFAULT 0,  -- metric source, the provider for this exchange rate, foreign key to MetricsSources
+			EXClose DOUBLE NOT NULL,
+			INDEX(Date),
+			CONSTRAINT fk_ExchangeRate_Locales1 FOREIGN KEY (LID) REFERENCES Locales(LID),
+			CONSTRAINT fk_ExchangeRate_Locales2 FOREIGN KEY (LID2) REFERENCES Locales(LID),
+			CONSTRAINT fk_ExchangeRate_MetricsSources FOREIGN KEY (MSID) REFERENCES MetricsSources(MSID)
 		);`,
 	}
 
@@ -102,19 +113,22 @@ func (p *DatabaseSQL) CreateDatabasePart1() error {
 
 // createShardedTables creates or prints SQL statements for table creation based on the executeSQL flag.
 func (p *DatabaseSQL) createShardedTables(numShards int, executeSQL bool) error {
-	for decade := 2000; decade <= 2020; decade += 10 {
+	for decade := 2010; decade <= 2020; decade += 10 {
 		for shardIndex := 0; shardIndex < numShards; shardIndex++ {
 			tableName := fmt.Sprintf("Metrics_%d_%d", shardIndex, decade)
 			createTableSQL := fmt.Sprintf(`
 CREATE TABLE IF NOT EXISTS %s (
     MEID INT AUTO_INCREMENT PRIMARY KEY,
     Date DATETIME(6) NOT NULL,
-	MID INT NOT NULL,
-	LID INT NOT NULL,
-	LID2 INT,
+	MID INT NOT NULL,  -- which metric
+	LID INT NOT NULL,  -- locale associated with this metric
+	MSID INT,  -- metric source - the provider for this metric
     MetricValue DOUBLE,
-    INDEX(Date)
-);`, tableName)
+    INDEX(Date),
+	CONSTRAINT fk_Metrics_%d_%d_MISubclasses FOREIGN KEY (MID) REFERENCES MISubclasses(MID),
+    CONSTRAINT fk_Metrics_%d_%d_Locales FOREIGN KEY (LID) REFERENCES Locales(LID),
+    CONSTRAINT fk_Metrics_%d_%d_MetricsSources FOREIGN KEY (MSID) REFERENCES MetricsSources(MSID)
+);`, tableName, shardIndex, decade, shardIndex, decade, shardIndex, decade)
 
 			// Depending on the executeSQL flag, print or execute the SQL statement
 			if executeSQL {
@@ -180,7 +194,7 @@ func (p *DatabaseSQL) FieldSelectorFromCSVColName(k string, f *FieldSelector) {
 	for i := 0; i < 2; i++ {
 		if len(k) >= 3 {
 			s := k[:3]
-			if _, ok := p.LocaleIDCache[s]; ok {
+			if _, ok := p.LocaleCache[s]; ok {
 				// If a locale is found, assign it and update the key to remove the found locale
 				if i == 0 {
 					f.Locale = s

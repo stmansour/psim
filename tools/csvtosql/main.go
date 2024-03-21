@@ -42,7 +42,7 @@ func main() {
 		log.Fatalf("failed to read config file: %v\n", err)
 	}
 	app.cfg = cfg
-	app.DtStart = time.Date(2020, time.January, 1, 0, 0, 0, 0, time.UTC)
+	app.DtStart = time.Date(2010, time.January, 1, 0, 0, 0, 0, time.UTC)
 	app.DtStop = time.Date(2023, time.December, 31, 0, 0, 0, 0, time.UTC)
 
 	//----------------------------------------------------------------------
@@ -87,8 +87,17 @@ func main() {
 
 	//----------------------------------------------------------------------
 	// We have a new sql database now. Tables are defined, but contain
-	// no data at this point. First thing to do is populate the ancillary
-	// SQL tables.
+	// no data at this point.  So, now we populate the tables:
+	//
+	//         Tables             Description
+	//      -----------           -------------------------------
+	//       1. Locales           locale names:  USA USD, JPN JPY, etc..
+	//       2. MISubclasses      Metric Influencers
+	//       3. Exchange Rate
+	//       4. Metrics_n_decade
+	//
+	//
+	//
 	//----------------------------------------------------------------------
 	if err = PopulateLocales(); err != nil {
 		log.Fatalf("Error from PopulateLocales: %s\n", err.Error())
@@ -100,9 +109,14 @@ func main() {
 	if err = CopyCsvMISubclassesToSQL(); err != nil {
 		log.Fatalf("Error from CopyCsvMISubclassesToSql: %s\n", err.Error())
 	}
+
 	// now that the MISubclasses table has been loaded, we'll need to cache it for use in MigrateTimeSeriesData
 	app.sqldb.Mim.ParentDB = app.sqldb
 	if err = app.sqldb.Mim.LoadMInfluencerSubclasses(); err != nil {
+		log.Fatalf("Error from LoadMInfluencerSubclasses: %s\n", err.Error())
+	}
+
+	if err = app.sqldb.InsertMetricsSources(app.csvdb.CSVDB.MetricSrcCache); err != nil {
 		log.Fatalf("Error from LoadMInfluencerSubclasses: %s\n", err.Error())
 	}
 	if err = MigrateTimeSeriesData(); err != nil {

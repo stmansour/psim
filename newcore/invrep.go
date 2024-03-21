@@ -55,7 +55,7 @@ func (s *Simulator) dumpTopInvestorsDetail() error {
 			runningTotal := float64(0)
 			for _, v := range m.Chunks {
 				runningTotal += v.T4C1
-				fmt.Fprintf(file, ",,,,,,,,,%s,%12.2f,%12.2f,%8.4f,%12.2f,%12.2f,%12.2f\n",
+				fmt.Fprintf(file, ",,,,,,,,,%s,%12.2f,%12.2f,%8.4f,%12.2f,%12.2f,%12.2f,%12.2f\n",
 					v.T4.Format("1/2/2006"), // T4
 					v.ERT4,                  // Exchange Rate on T4
 					v.T4C2Sold,              // how much C2 was sold in this transaction
@@ -63,6 +63,7 @@ func (s *Simulator) dumpTopInvestorsDetail() error {
 					v.T4C2Remaining,         // how much C2 is left
 					v.T4C1,                  // amount of C1 we were able to purchase on T4 at exchange rate ERT4
 					runningTotal,            // running total of C1 recovered by all exchanges
+					v.ChunkProfit,           // profit or loss
 				)
 			}
 
@@ -90,9 +91,9 @@ func (s *Simulator) dumpInvestmentReportHeader(file *os.File) {
 	fmt.Fprintf(file, "\"Initial Funds: %10.2f\"\n", s.cfg.InitFunds)
 
 	// the header row
-	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q\n",
+	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q\n",
 		"Generation", "Investor",
 		"T3", "Exchange Rate (T3)", "Purchase Amount C1",
 		"Purchase Amount (C2)", "Fee", "BalanceC1 (T3)", "BalanceC2 (T3)", "T4", "Exch Rate",
-		"T4 C2", "Fee", "C2 Remaining", "C1", "Total C1")
+		"T4 C2", "Fee", "C2 Remaining", "C1", "Total C1", "Chunk Profit")
 }

@@ -9,6 +9,7 @@ type FieldSelector struct {
 	LID          int
 	Locale2      string
 	LID2         int
+	MSID         int // metrics source
 	Table        string
 	BucketNumber int
 	FQname       string

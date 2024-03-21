@@ -32,7 +32,7 @@ May  1, 2015 - Investor1
 	L4 WHLScore_ECON:  sell   (T1 Mar 17, 2015 [1.00] -  T2 Apr 26, 2015 [1.11]   Ann. Change: 1.18%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  buy   (T1 Mar 17, 2015 [1.14] -  T2 Apr 26, 2015 [0.97]   Ann. Change: -1.65%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  hold   (T1 Mar 17, 2015 [1.00] -  T2 Apr 26, 2015 [1.00]   Ann. Change: 0.04%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 7.00, hold: 2.00, sell: 11.00, abs: 0.00)
+	COA:  Action: sell   55%  (buy: 7.00, hold: 2.00, sell: 11.00, abs: 0.00)
 	C1bal = 100000.00 USD, C2bal =   0.00 JPY, PV = 100000.00 USD
 
 May  2, 2015 - Investor1
@@ -56,7 +56,7 @@ May  2, 2015 - Investor1
 	L4 WHLScore_ECON:  buy   (T1 Mar 18, 2015 [1.03] -  T2 Apr 27, 2015 [0.85]   Ann. Change: -1.92%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  sell   (T1 Mar 18, 2015 [1.01] -  T2 Apr 27, 2015 [1.06]   Ann. Change: 0.55%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  hold   (T1 Mar 18, 2015 [1.09] -  T2 Apr 27, 2015 [1.09]   Ann. Change: 0.06%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 3.00, hold: 2.00, sell: 15.00, abs: 0.00)
+	COA:  Action: sell   75%  (buy: 3.00, hold: 2.00, sell: 15.00, abs: 0.00)
 	C1bal = 100000.00 USD, C2bal =   0.00 JPY, PV = 100000.00 USD
 
 May  3, 2015 - Investor1
@@ -80,7 +80,7 @@ May  3, 2015 - Investor1
 	L4 WHLScore_ECON:  buy   (T1 Mar 19, 2015 [1.00] -  T2 Apr 28, 2015 [0.87]   Ann. Change: -1.42%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  sell   (T1 Mar 19, 2015 [0.99] -  T2 Apr 28, 2015 [1.09]   Ann. Change: 1.14%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  sell   (T1 Mar 19, 2015 [0.86] -  T2 Apr 28, 2015 [1.10]   Ann. Change: 3.14%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 2.00, hold: 3.00, sell: 15.00, abs: 0.00)
+	COA:  Action: sell   75%  (buy: 2.00, hold: 3.00, sell: 15.00, abs: 0.00)
 	C1bal = 100000.00 USD, C2bal =   0.00 JPY, PV = 100000.00 USD
 
 May  4, 2015 - Investor1
@@ -104,7 +104,7 @@ May  4, 2015 - Investor1
 	L4 WHLScore_ECON:  buy   (T1 Mar 20, 2015 [1.09] -  T2 Apr 29, 2015 [1.01]   Ann. Change: -0.79%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  sell   (T1 Mar 20, 2015 [0.97] -  T2 Apr 29, 2015 [1.16]   Ann. Change: 2.09%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  buy   (T1 Mar 20, 2015 [0.99] -  T2 Apr 29, 2015 [0.94]   Ann. Change: -0.59%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 5.00, hold: 3.00, sell: 12.00, abs: 0.00)
+	COA:  Action: sell   60%  (buy: 5.00, hold: 3.00, sell: 12.00, abs: 0.00)
 	C1bal = 100000.00 USD, C2bal =   0.00 JPY, PV = 100000.00 USD
 
 May  5, 2015 - Investor1
@@ -128,7 +128,7 @@ May  5, 2015 - Investor1
 	L4 WHLScore_ECON:  sell   (T1 Mar 21, 2015 [0.99] -  T2 Apr 30, 2015 [1.05]   Ann. Change: 0.74%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  buy   (T1 Mar 21, 2015 [1.09] -  T2 Apr 30, 2015 [0.96]   Ann. Change: -1.27%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  sell   (T1 Mar 21, 2015 [0.92] -  T2 Apr 30, 2015 [1.19]   Ann. Change: 3.27%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 5.00, hold: 3.00, sell: 12.00, abs: 0.00)
+	COA:  Action: sell   60%  (buy: 5.00, hold: 3.00, sell: 12.00, abs: 0.00)
 	C1bal = 100000.00 USD, C2bal =   0.00 JPY, PV = 100000.00 USD
 
 May  6, 2015 - Investor1
@@ -152,7 +152,7 @@ May  6, 2015 - Investor1
 	L4 WHLScore_ECON:  sell   (T1 Mar 22, 2015 [0.84] -  T2 May  1, 2015 [1.19]   Ann. Change: 4.58%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  buy   (T1 Mar 22, 2015 [1.09] -  T2 May  1, 2015 [0.98]   Ann. Change: -1.15%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  buy   (T1 Mar 22, 2015 [1.05] -  T2 May  1, 2015 [0.96]   Ann. Change: -0.92%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 7.00, hold: 3.00, sell: 10.00, abs: 0.00)
+	COA:  Action: sell   50%  (buy: 7.00, hold: 3.00, sell: 10.00, abs: 0.00)
 	C1bal = 100000.00 USD, C2bal =   0.00 JPY, PV = 100000.00 USD
 
 May  7, 2015 - Investor1
@@ -176,8 +176,9 @@ May  7, 2015 - Investor1
 	L4 WHLScore_ECON:  hold   (T1 Mar 23, 2015 [0.94] -  T2 May  2, 2015 [0.94]   Ann. Change: 0.00%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  buy   (T1 Mar 23, 2015 [1.00] -  T2 May  2, 2015 [0.94]   Ann. Change: -0.65%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  buy   (T1 Mar 23, 2015 [1.18] -  T2 May  2, 2015 [0.93]   Ann. Change: -2.28%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 10.00, hold: 2.00, sell: 8.00, abs: 0.00)
-	C1bal = 100000.00 USD, C2bal =   0.00 JPY, PV = 100000.00 USD
+	COA:  Action: buy   50%  (buy: 10.00, hold: 2.00, sell: 8.00, abs: 0.00)
+        *** BUY ***       0.00 USD (598700.00 JPY, fee =   0.00)
+	C1bal = 95000.00 USD, C2bal = 598700.00 JPY, PV = 100000.00 USD
 
 May  8, 2015 - Investor1
 	LA LSNScore:  sell   (T1 Mar 24, 2015 [19.09] -  T2 May  3, 2015 [22.26]   Ann. Change: 1.82%   HoldWin(-0.10% to  0.10%))
@@ -200,8 +201,9 @@ May  8, 2015 - Investor1
 	L4 WHLScore_ECON:  sell   (T1 Mar 24, 2015 [0.96] -  T2 May  3, 2015 [1.21]   Ann. Change: 2.81%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  sell   (T1 Mar 24, 2015 [0.87] -  T2 May  3, 2015 [0.90]   Ann. Change: 0.42%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  buy   (T1 Mar 24, 2015 [1.06] -  T2 May  3, 2015 [0.92]   Ann. Change: -1.44%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 8.00, hold: 0.00, sell: 12.00, abs: 0.00)
-	C1bal = 100000.00 USD, C2bal =   0.00 JPY, PV = 100000.00 USD
+	COA:  Action: sell   60%  (buy: 8.00, hold: 0.00, sell: 12.00, abs: 0.00)
+        *** SELL ***   2999.00 USD (fee:   0.00), [359220.00 JPY], investments affected: 1 -->  0 profited, 1 lost
+	C1bal = 97999.00 USD, C2bal = 239480.00 JPY, PV = 99998.33 USD
 
 May  9, 2015 - Investor1
 	LA LSNScore:  sell   (T1 Mar 25, 2015 [19.39] -  T2 May  4, 2015 [19.96]   Ann. Change: 0.32%   HoldWin(-0.10% to  0.10%))
@@ -224,9 +226,9 @@ May  9, 2015 - Investor1
 	L4 WHLScore_ECON:  buy   (T1 Mar 25, 2015 [1.20] -  T2 May  4, 2015 [0.91]   Ann. Change: -2.64%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  buy   (T1 Mar 25, 2015 [1.14] -  T2 May  4, 2015 [0.88]   Ann. Change: -2.48%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  buy   (T1 Mar 25, 2015 [1.19] -  T2 May  4, 2015 [0.89]   Ann. Change: -2.74%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: buy  100%  (buy: 12.00, hold: 4.00, sell: 4.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1197800.00 JPY)
-	C1bal = 90000.00 USD, C2bal = 1197800.00 JPY, PV = 100000.00 USD
+	COA:  Action: buy   60%  (buy: 12.00, hold: 4.00, sell: 4.00, abs: 0.00)
+        *** BUY ***       0.00 USD (718680.00 JPY, fee =   0.00)
+	C1bal = 91999.00 USD, C2bal = 958160.00 JPY, PV = 99998.33 USD
 
 May 10, 2015 - Investor1
 	LA LSNScore:  buy   (T1 Mar 26, 2015 [19.39] -  T2 May  5, 2015 [19.21]   Ann. Change: -0.10%   HoldWin(-0.10% to  0.10%))
@@ -249,9 +251,9 @@ May 10, 2015 - Investor1
 	L4 WHLScore_ECON:  sell   (T1 Mar 26, 2015 [0.98] -  T2 May  5, 2015 [1.22]   Ann. Change: 2.67%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  buy   (T1 Mar 26, 2015 [1.02] -  T2 May  5, 2015 [0.96]   Ann. Change: -0.59%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  hold   (T1 Mar 26, 2015 [1.02] -  T2 May  5, 2015 [1.02]   Ann. Change: -0.04%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: buy  100%  (buy: 12.00, hold: 4.00, sell: 4.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1197800.00 JPY)
-	C1bal = 80000.00 USD, C2bal = 2395600.00 JPY, PV = 100000.00 USD
+	COA:  Action: buy   60%  (buy: 12.00, hold: 4.00, sell: 4.00, abs: 0.00)
+        *** BUY ***       0.00 USD (718680.00 JPY, fee =   0.00)
+	C1bal = 85999.00 USD, C2bal = 1676840.00 JPY, PV = 99998.33 USD
 
 May 11, 2015 - Investor1
 	LA LSNScore:  hold   (T1 Mar 27, 2015 [19.51] -  T2 May  6, 2015 [19.36]   Ann. Change: -0.08%   HoldWin(-0.10% to  0.10%))
@@ -274,8 +276,9 @@ May 11, 2015 - Investor1
 	L4 WHLScore_ECON:  buy   (T1 Mar 27, 2015 [1.10] -  T2 May  6, 2015 [1.04]   Ann. Change: -0.52%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  buy   (T1 Mar 27, 2015 [1.04] -  T2 May  6, 2015 [0.99]   Ann. Change: -0.50%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  buy   (T1 Mar 27, 2015 [1.05] -  T2 May  6, 2015 [1.04]   Ann. Change: -0.14%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 10.00, hold: 7.00, sell: 3.00, abs: 0.00)
-	C1bal = 80000.00 USD, C2bal = 2395600.00 JPY, PV = 99955.02 USD
+	COA:  Action: buy   50%  (buy: 10.00, hold: 7.00, sell: 3.00, abs: 0.00)
+        *** BUY ***       0.00 USD (600250.00 JPY, fee =   0.00)
+	C1bal = 80999.00 USD, C2bal = 2277090.00 JPY, PV = 99966.84 USD
 
 May 12, 2015 - Investor1
 	LA LSNScore:  buy   (T1 Mar 28, 2015 [20.45] -  T2 May  7, 2015 [19.23]   Ann. Change: -0.65%   HoldWin(-0.10% to  0.10%))
@@ -298,8 +301,8 @@ May 12, 2015 - Investor1
 	L4 WHLScore_ECON:  buy   (T1 Mar 28, 2015 [1.08] -  T2 May  7, 2015 [1.06]   Ann. Change: -0.23%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  hold   (T1 Mar 28, 2015 [0.98] -  T2 May  7, 2015 [0.98]   Ann. Change: -0.05%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  buy   (T1 Mar 28, 2015 [0.99] -  T2 May  7, 2015 [0.92]   Ann. Change: -0.72%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 9.00, hold: 2.00, sell: 9.00, abs: 0.00)
-	C1bal = 80000.00 USD, C2bal = 2395600.00 JPY, PV = 99996.66 USD
+	COA:  Action: hold   10%  (buy: 9.00, hold: 2.00, sell: 9.00, abs: 0.00)
+	C1bal = 80999.00 USD, C2bal = 2277090.00 JPY, PV = 100006.43 USD
 
 May 13, 2015 - Investor1
 	LA LSNScore:  buy   (T1 Mar 29, 2015 [20.50] -  T2 May  8, 2015 [19.62]   Ann. Change: -0.47%   HoldWin(-0.10% to  0.10%))
@@ -322,10 +325,11 @@ May 13, 2015 - Investor1
 	L4 WHLScore_ECON:  sell   (T1 Mar 29, 2015 [1.12] -  T2 May  8, 2015 [1.23]   Ann. Change: 1.01%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  buy   (T1 Mar 29, 2015 [1.01] -  T2 May  8, 2015 [0.95]   Ann. Change: -0.60%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  sell   (T1 Mar 29, 2015 [1.04] -  T2 May  8, 2015 [1.38]   Ann. Change: 3.61%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 4.00, hold: 5.00, sell: 11.00, abs: 0.00)
-        *** SELL ***  10057.94 USD, [1197800.00 JPY], investments affected: 1 -->  1 profited, 0 lost
-        *** SELL ***  10057.94 USD, [1197800.00 JPY], investments affected: 1 -->  1 profited, 0 lost
-	C1bal = 100115.88 USD, C2bal =   0.00 JPY, PV = 100115.88 USD
+	COA:  Action: sell   55%  (buy: 4.00, hold: 5.00, sell: 11.00, abs: 0.00)
+        *** SELL ***   2010.92 USD (fee:   0.00), [239480.00 JPY], investments affected: 2 -->  1 profited, 1 lost
+        *** SELL ***   6034.76 USD (fee:   0.00), [718680.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***   2470.73 USD (fee:   0.00), [294239.50 JPY], investments affected: 1 -->  1 profited, 0 lost
+	C1bal = 91515.41 USD, C2bal = 1024690.50 JPY, PV = 100119.75 USD
 
 May 14, 2015 - Investor1
 	LA LSNScore:  sell   (T1 Mar 30, 2015 [19.02] -  T2 May  9, 2015 [20.88]   Ann. Change: 1.07%   HoldWin(-0.10% to  0.10%))
@@ -348,8 +352,9 @@ May 14, 2015 - Investor1
 	L4 WHLScore_ECON:  sell   (T1 Mar 30, 2015 [1.00] -  T2 May  9, 2015 [1.16]   Ann. Change: 1.79%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  buy   (T1 Mar 30, 2015 [1.08] -  T2 May  9, 2015 [1.05]   Ann. Change: -0.30%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  sell   (T1 Mar 30, 2015 [1.10] -  T2 May  9, 2015 [1.25]   Ann. Change: 1.53%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 10.00, hold: 1.00, sell: 9.00, abs: 0.00)
-	C1bal = 100115.88 USD, C2bal =   0.00 JPY, PV = 100115.88 USD
+	COA:  Action: buy   50%  (buy: 10.00, hold: 1.00, sell: 9.00, abs: 0.00)
+        *** BUY ***       0.00 USD (596000.00 JPY, fee =   0.00)
+	C1bal = 86515.41 USD, C2bal = 1620690.50 JPY, PV = 100111.81 USD
 
 May 15, 2015 - Investor1
 	LA LSNScore:  sell   (T1 Mar 31, 2015 [19.05] -  T2 May 10, 2015 [21.13]   Ann. Change: 1.19%   HoldWin(-0.10% to  0.10%))
@@ -372,8 +377,9 @@ May 15, 2015 - Investor1
 	L4 WHLScore_ECON:  buy   (T1 Mar 31, 2015 [1.08] -  T2 May 10, 2015 [0.86]   Ann. Change: -2.23%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  hold   (T1 Mar 31, 2015 [1.01] -  T2 May 10, 2015 [1.01]   Ann. Change: -0.07%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  sell   (T1 Mar 31, 2015 [1.10] -  T2 May 10, 2015 [1.15]   Ann. Change: 0.51%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 10.00, hold: 2.00, sell: 8.00, abs: 0.00)
-	C1bal = 100115.88 USD, C2bal =   0.00 JPY, PV = 100115.88 USD
+	COA:  Action: buy   50%  (buy: 10.00, hold: 2.00, sell: 8.00, abs: 0.00)
+        *** BUY ***       0.00 USD (596800.00 JPY, fee =   0.00)
+	C1bal = 81515.41 USD, C2bal = 2217490.50 JPY, PV = 100093.58 USD
 
 May 16, 2015 - Investor1
 	LA LSNScore:  sell   (T1 Apr  1, 2015 [19.20] -  T2 May 11, 2015 [19.66]   Ann. Change: 0.26%   HoldWin(-0.10% to  0.10%))
@@ -396,8 +402,9 @@ May 16, 2015 - Investor1
 	L4 WHLScore_ECON:  buy   (T1 Apr  1, 2015 [1.11] -  T2 May 11, 2015 [1.04]   Ann. Change: -0.66%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  sell   (T1 Apr  1, 2015 [1.08] -  T2 May 11, 2015 [1.21]   Ann. Change: 1.36%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  sell   (T1 Apr  1, 2015 [1.04] -  T2 May 11, 2015 [1.08]   Ann. Change: 0.44%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 9.00, hold: 5.00, sell: 6.00, abs: 0.00)
-	C1bal = 100115.88 USD, C2bal =   0.00 JPY, PV = 100115.88 USD
+	COA:  Action: buy   45%  (buy: 9.00, hold: 5.00, sell: 6.00, abs: 0.00)
+        *** BUY ***       0.00 USD (537120.00 JPY, fee =   0.00)
+	C1bal = 77015.41 USD, C2bal = 2754610.50 JPY, PV = 100093.58 USD
 
 May 17, 2015 - Investor1
 	LA LSNScore:  buy   (T1 Apr  2, 2015 [19.32] -  T2 May 12, 2015 [19.09]   Ann. Change: -0.13%   HoldWin(-0.10% to  0.10%))
@@ -420,9 +427,9 @@ May 17, 2015 - Investor1
 	L4 WHLScore_ECON:  buy   (T1 Apr  2, 2015 [1.11] -  T2 May 12, 2015 [1.01]   Ann. Change: -0.96%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  buy   (T1 Apr  2, 2015 [1.13] -  T2 May 12, 2015 [0.96]   Ann. Change: -1.64%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  buy   (T1 Apr  2, 2015 [1.18] -  T2 May 12, 2015 [1.07]   Ann. Change: -1.01%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: buy  100%  (buy: 12.00, hold: 4.00, sell: 4.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1193600.00 JPY)
-	C1bal = 90115.88 USD, C2bal = 1193600.00 JPY, PV = 100115.88 USD
+	COA:  Action: buy   60%  (buy: 12.00, hold: 4.00, sell: 4.00, abs: 0.00)
+        *** BUY ***       0.00 USD (716160.00 JPY, fee =   0.00)
+	C1bal = 71015.41 USD, C2bal = 3470770.50 JPY, PV = 100093.58 USD
 
 May 18, 2015 - Investor1
 	LA LSNScore:  buy   (T1 Apr  3, 2015 [20.01] -  T2 May 13, 2015 [19.39]   Ann. Change: -0.34%   HoldWin(-0.10% to  0.10%))
@@ -445,9 +452,9 @@ May 18, 2015 - Investor1
 	L4 WHLScore_ECON:  sell   (T1 Apr  3, 2015 [0.98] -  T2 May 13, 2015 [1.11]   Ann. Change: 1.52%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  buy   (T1 Apr  3, 2015 [1.09] -  T2 May 13, 2015 [1.02]   Ann. Change: -0.70%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  sell   (T1 Apr  3, 2015 [0.97] -  T2 May 13, 2015 [1.09]   Ann. Change: 1.40%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: buy  100%  (buy: 11.00, hold: 4.00, sell: 5.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1198200.00 JPY)
-	C1bal = 80115.88 USD, C2bal = 2391800.00 JPY, PV = 100077.49 USD
+	COA:  Action: buy   55%  (buy: 11.00, hold: 4.00, sell: 5.00, abs: 0.00)
+        *** BUY ***       0.00 USD (659010.00 JPY, fee =   0.00)
+	C1bal = 65515.41 USD, C2bal = 4129780.50 JPY, PV = 99981.95 USD
 
 May 19, 2015 - Investor1
 	LA LSNScore:  buy   (T1 Apr  4, 2015 [20.84] -  T2 May 14, 2015 [19.31]   Ann. Change: -0.80%   HoldWin(-0.10% to  0.10%))
@@ -470,10 +477,13 @@ May 19, 2015 - Investor1
 	L4 WHLScore_ECON:  buy   (T1 Apr  4, 2015 [1.06] -  T2 May 14, 2015 [1.05]   Ann. Change: -0.15%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  buy   (T1 Apr  4, 2015 [1.06] -  T2 May 14, 2015 [1.00]   Ann. Change: -0.59%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  sell   (T1 Apr  4, 2015 [1.00] -  T2 May 14, 2015 [1.09]   Ann. Change: 0.92%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 8.00, hold: 1.00, sell: 11.00, abs: 0.00)
-        *** SELL ***   9898.82 USD, [1193600.00 JPY], investments affected: 1 -->  0 profited, 1 lost
-        *** SELL ***   9936.97 USD, [1198200.00 JPY], investments affected: 1 -->  0 profited, 1 lost
-	C1bal = 99951.67 USD, C2bal =   0.00 JPY, PV = 99951.67 USD
+	COA:  Action: sell   55%  (buy: 8.00, hold: 1.00, sell: 11.00, abs: 0.00)
+        *** SELL ***   3519.99 USD (fee:   0.00), [424440.50 JPY], investments affected: 2 -->  1 profited, 1 lost
+        *** SELL ***   4978.02 USD (fee:   0.00), [600250.00 JPY], investments affected: 1 -->  0 profited, 1 lost
+        *** SELL ***   4942.78 USD (fee:   0.00), [596000.00 JPY], investments affected: 1 -->  0 profited, 1 lost
+        *** SELL ***   4949.41 USD (fee:   0.00), [596800.00 JPY], investments affected: 1 -->  0 profited, 1 lost
+        *** SELL ***    446.91 USD (fee:   0.00), [53888.78 JPY], investments affected: 1 -->  0 profited, 1 lost
+	C1bal = 84352.52 USD, C2bal = 1858401.22 JPY, PV = 99764.71 USD
 
 May 20, 2015 - Investor1
 	LA LSNScore:  buy   (T1 Apr  5, 2015 [21.25] -  T2 May 15, 2015 [19.51]   Ann. Change: -0.90%   HoldWin(-0.10% to  0.10%))
@@ -496,8 +506,9 @@ May 20, 2015 - Investor1
 	L4 WHLScore_ECON:  buy   (T1 Apr  5, 2015 [1.25] -  T2 May 15, 2015 [1.08]   Ann. Change: -1.45%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  buy   (T1 Apr  5, 2015 [1.15] -  T2 May 15, 2015 [1.05]   Ann. Change: -0.96%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  buy   (T1 Apr  5, 2015 [1.03] -  T2 May 15, 2015 [0.89]   Ann. Change: -1.47%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 9.00, hold: 4.00, sell: 7.00, abs: 0.00)
-	C1bal = 99951.67 USD, C2bal =   0.00 JPY, PV = 99951.67 USD
+	COA:  Action: buy   45%  (buy: 9.00, hold: 4.00, sell: 7.00, abs: 0.00)
+        *** BUY ***       0.00 USD (545760.00 JPY, fee =   0.00)
+	C1bal = 79852.52 USD, C2bal = 2404161.22 JPY, PV = 99675.75 USD
 
 May 21, 2015 - Investor1
 	LA LSNScore:  sell   (T1 Apr  6, 2015 [19.85] -  T2 May 16, 2015 [20.57]   Ann. Change: 0.40%   HoldWin(-0.10% to  0.10%))
@@ -520,8 +531,9 @@ May 21, 2015 - Investor1
 	L4 WHLScore_ECON:  buy   (T1 Apr  6, 2015 [1.16] -  T2 May 16, 2015 [1.04]   Ann. Change: -1.14%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  buy   (T1 Apr  6, 2015 [1.10] -  T2 May 16, 2015 [0.89]   Ann. Change: -2.08%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  buy   (T1 Apr  6, 2015 [1.09] -  T2 May 16, 2015 [0.87]   Ann. Change: -2.17%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 9.00, hold: 4.00, sell: 7.00, abs: 0.00)
-	C1bal = 99951.67 USD, C2bal =   0.00 JPY, PV = 99951.67 USD
+	COA:  Action: buy   45%  (buy: 9.00, hold: 4.00, sell: 7.00, abs: 0.00)
+        *** BUY ***       0.00 USD (544770.00 JPY, fee =   0.00)
+	C1bal = 75352.52 USD, C2bal = 2948931.22 JPY, PV = 99711.78 USD
 
 May 22, 2015 - Investor1
 	LA LSNScore:  sell   (T1 Apr  7, 2015 [19.18] -  T2 May 17, 2015 [20.86]   Ann. Change: 0.96%   HoldWin(-0.10% to  0.10%))
@@ -544,8 +556,12 @@ May 22, 2015 - Investor1
 	L4 WHLScore_ECON:  sell   (T1 Apr  7, 2015 [0.77] -  T2 May 17, 2015 [1.25]   Ann. Change: 6.75%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  sell   (T1 Apr  7, 2015 [0.75] -  T2 May 17, 2015 [1.07]   Ann. Change: 4.63%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  sell   (T1 Apr  7, 2015 [0.83] -  T2 May 17, 2015 [1.09]   Ann. Change: 3.38%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 3.00, hold: 1.00, sell: 16.00, abs: 0.00)
-	C1bal = 99951.67 USD, C2bal =   0.00 JPY, PV = 99951.67 USD
+	COA:  Action: sell   80%  (buy: 3.00, hold: 1.00, sell: 16.00, abs: 0.00)
+        *** SELL ***   3978.85 USD (fee:   0.00), [483231.22 JPY], investments affected: 2 -->  0 profited, 2 lost
+        *** SELL ***   5896.75 USD (fee:   0.00), [716160.00 JPY], investments affected: 1 -->  0 profited, 1 lost
+        *** SELL ***   5426.18 USD (fee:   0.00), [659010.00 JPY], investments affected: 1 -->  0 profited, 1 lost
+        *** SELL ***   4123.04 USD (fee:   0.00), [500743.76 JPY], investments affected: 1 -->  0 profited, 1 lost
+	C1bal = 94777.35 USD, C2bal = 589786.24 JPY, PV = 99633.56 USD
 
 May 23, 2015 - Investor1
 	LA LSNScore:  sell   (T1 Apr  8, 2015 [19.35] -  T2 May 18, 2015 [19.91]   Ann. Change: 0.32%   HoldWin(-0.10% to  0.10%))
@@ -568,8 +584,10 @@ May 23, 2015 - Investor1
 	L4 WHLScore_ECON:  buy   (T1 Apr  8, 2015 [1.08] -  T2 May 18, 2015 [0.97]   Ann. Change: -1.10%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  sell   (T1 Apr  8, 2015 [1.00] -  T2 May 18, 2015 [1.03]   Ann. Change: 0.28%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  sell   (T1 Apr  8, 2015 [0.96] -  T2 May 18, 2015 [1.23]   Ann. Change: 2.98%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 8.00, hold: 2.00, sell: 10.00, abs: 0.00)
-	C1bal = 99951.67 USD, C2bal =   0.00 JPY, PV = 99951.67 USD
+	COA:  Action: sell   50%  (buy: 8.00, hold: 2.00, sell: 10.00, abs: 0.00)
+        *** SELL ***    370.66 USD (fee:   0.00), [45016.24 JPY], investments affected: 2 -->  0 profited, 2 lost
+        *** SELL ***   2057.45 USD (fee:   0.00), [249876.88 JPY], investments affected: 1 -->  0 profited, 1 lost
+	C1bal = 97205.45 USD, C2bal = 294893.12 JPY, PV = 99633.56 USD
 
 May 24, 2015 - Investor1
 	LA LSNScore:  hold   (T1 Apr  9, 2015 [18.94] -  T2 May 19, 2015 [19.06]   Ann. Change: 0.07%   HoldWin(-0.10% to  0.10%))
@@ -592,9 +610,9 @@ May 24, 2015 - Investor1
 	L4 WHLScore_ECON:  buy   (T1 Apr  9, 2015 [1.15] -  T2 May 19, 2015 [1.05]   Ann. Change: -0.97%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  buy   (T1 Apr  9, 2015 [1.07] -  T2 May 19, 2015 [0.99]   Ann. Change: -0.79%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  sell   (T1 Apr  9, 2015 [1.00] -  T2 May 19, 2015 [1.10]   Ann. Change: 1.04%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: buy  100%  (buy: 11.00, hold: 2.00, sell: 7.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1214500.00 JPY)
-	C1bal = 89951.67 USD, C2bal = 1214500.00 JPY, PV = 99951.67 USD
+	COA:  Action: buy   55%  (buy: 11.00, hold: 2.00, sell: 7.00, abs: 0.00)
+        *** BUY ***       0.00 USD (667975.00 JPY, fee =   0.00)
+	C1bal = 91705.45 USD, C2bal = 962868.12 JPY, PV = 99633.56 USD
 
 May 25, 2015 - Investor1
 	LA LSNScore:  buy   (T1 Apr 10, 2015 [19.62] -  T2 May 20, 2015 [18.89]   Ann. Change: -0.40%   HoldWin(-0.10% to  0.10%))
@@ -617,8 +635,10 @@ May 25, 2015 - Investor1
 	L4 WHLScore_ECON:  sell   (T1 Apr 10, 2015 [1.01] -  T2 May 20, 2015 [1.09]   Ann. Change: 0.79%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  sell   (T1 Apr 10, 2015 [0.89] -  T2 May 20, 2015 [0.95]   Ann. Change: 0.77%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  sell   (T1 Apr 10, 2015 [0.94] -  T2 May 20, 2015 [1.14]   Ann. Change: 2.30%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 8.00, hold: 3.00, sell: 9.00, abs: 0.00)
-	C1bal = 89951.67 USD, C2bal = 1214500.00 JPY, PV = 99951.67 USD
+	COA:  Action: sell   45%  (buy: 8.00, hold: 3.00, sell: 9.00, abs: 0.00)
+        *** SELL ***   2428.10 USD (fee:   0.00), [294893.12 JPY], investments affected: 2 -->  0 profited, 2 lost
+        *** SELL ***   1139.54 USD (fee:   0.00), [138397.53 JPY], investments affected: 1 -->  0 profited, 1 lost
+	C1bal = 95273.10 USD, C2bal = 529577.47 JPY, PV = 99633.56 USD
 
 May 26, 2015 - Investor1
 	LA LSNScore:  buy   (T1 Apr 11, 2015 [20.45] -  T2 May 21, 2015 [19.05]   Ann. Change: -0.75%   HoldWin(-0.10% to  0.10%))
@@ -641,9 +661,9 @@ May 26, 2015 - Investor1
 	L4 WHLScore_ECON:  sell   (T1 Apr 11, 2015 [1.06] -  T2 May 21, 2015 [1.18]   Ann. Change: 1.15%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  sell   (T1 Apr 11, 2015 [0.86] -  T2 May 21, 2015 [1.18]   Ann. Change: 4.12%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  buy   (T1 Apr 11, 2015 [1.02] -  T2 May 21, 2015 [0.98]   Ann. Change: -0.42%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 8.00, hold: 1.00, sell: 11.00, abs: 0.00)
-        *** SELL ***   9867.57 USD, [1214500.00 JPY], investments affected: 1 -->  0 profited, 1 lost
-	C1bal = 99819.24 USD, C2bal =   0.00 JPY, PV = 99819.24 USD
+	COA:  Action: sell   55%  (buy: 8.00, hold: 1.00, sell: 11.00, abs: 0.00)
+        *** SELL ***   2366.49 USD (fee:   0.00), [291267.61 JPY], investments affected: 2 -->  0 profited, 2 lost
+	C1bal = 97639.59 USD, C2bal = 238309.86 JPY, PV = 99575.81 USD
 
 May 27, 2015 - Investor1
 	LA LSNScore:  buy   (T1 Apr 12, 2015 [21.47] -  T2 May 22, 2015 [19.31]   Ann. Change: -1.10%   HoldWin(-0.10% to  0.10%))
@@ -666,8 +686,8 @@ May 27, 2015 - Investor1
 	L4 WHLScore_ECON:  sell   (T1 Apr 12, 2015 [1.03] -  T2 May 22, 2015 [1.15]   Ann. Change: 1.30%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  buy   (T1 Apr 12, 2015 [1.13] -  T2 May 22, 2015 [1.10]   Ann. Change: -0.25%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  sell   (T1 Apr 12, 2015 [0.87] -  T2 May 22, 2015 [1.11]   Ann. Change: 3.02%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 10.00, hold: 0.00, sell: 10.00, abs: 0.00)
-	C1bal = 99819.24 USD, C2bal =   0.00 JPY, PV = 99819.24 USD
+	COA:  Action: hold    0%  (buy: 10.00, hold: 0.00, sell: 10.00, abs: 0.00)
+	C1bal = 97639.59 USD, C2bal = 238309.86 JPY, PV = 99565.17 USD
 
 May 28, 2015 - Investor1
 	LA LSNScore:  sell   (T1 Apr 13, 2015 [19.59] -  T2 May 23, 2015 [20.39]   Ann. Change: 0.45%   HoldWin(-0.10% to  0.10%))
@@ -690,9 +710,9 @@ May 28, 2015 - Investor1
 	L4 WHLScore_ECON:  buy   (T1 Apr 13, 2015 [1.16] -  T2 May 23, 2015 [0.82]   Ann. Change: -3.21%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  buy   (T1 Apr 13, 2015 [1.19] -  T2 May 23, 2015 [0.93]   Ann. Change: -2.33%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  buy   (T1 Apr 13, 2015 [1.10] -  T2 May 23, 2015 [0.90]   Ann. Change: -1.97%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: buy  100%  (buy: 13.00, hold: 1.00, sell: 6.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1241800.00 JPY)
-	C1bal = 89819.24 USD, C2bal = 1241800.00 JPY, PV = 99819.24 USD
+	COA:  Action: buy   65%  (buy: 13.00, hold: 1.00, sell: 6.00, abs: 0.00)
+        *** BUY ***       0.00 USD (807170.00 JPY, fee =   0.00)
+	C1bal = 91139.59 USD, C2bal = 1045479.86 JPY, PV = 99558.66 USD
 
 May 29, 2015 - Investor1
 	LA LSNScore:  sell   (T1 Apr 14, 2015 [19.04] -  T2 May 24, 2015 [21.47]   Ann. Change: 1.40%   HoldWin(-0.10% to  0.10%))
@@ -715,9 +735,9 @@ May 29, 2015 - Investor1
 	L4 WHLScore_ECON:  buy   (T1 Apr 14, 2015 [1.14] -  T2 May 24, 2015 [1.05]   Ann. Change: -0.86%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  hold   (T1 Apr 14, 2015 [1.04] -  T2 May 24, 2015 [1.04]   Ann. Change: 0.07%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  buy   (T1 Apr 14, 2015 [0.94] -  T2 May 24, 2015 [0.87]   Ann. Change: -0.82%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: buy  100%  (buy: 11.00, hold: 1.00, sell: 8.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1239800.00 JPY)
-	C1bal = 79819.24 USD, C2bal = 2481600.00 JPY, PV = 99835.37 USD
+	COA:  Action: buy   55%  (buy: 11.00, hold: 1.00, sell: 8.00, abs: 0.00)
+        *** BUY ***       0.00 USD (681890.00 JPY, fee =   0.00)
+	C1bal = 85639.59 USD, C2bal = 1727369.86 JPY, PV = 99572.24 USD
 
 May 30, 2015 - Investor1
 	LA LSNScore:  sell   (T1 Apr 15, 2015 [19.08] -  T2 May 25, 2015 [20.24]   Ann. Change: 0.67%   HoldWin(-0.10% to  0.10%))
@@ -740,8 +760,9 @@ May 30, 2015 - Investor1
 	L4 WHLScore_ECON:  sell   (T1 Apr 15, 2015 [1.08] -  T2 May 25, 2015 [1.10]   Ann. Change: 0.24%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  buy   (T1 Apr 15, 2015 [1.08] -  T2 May 25, 2015 [1.03]   Ann. Change: -0.55%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  sell   (T1 Apr 15, 2015 [1.07] -  T2 May 25, 2015 [1.10]   Ann. Change: 0.29%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 10.00, hold: 1.00, sell: 9.00, abs: 0.00)
-	C1bal = 79819.24 USD, C2bal = 2481600.00 JPY, PV = 99835.37 USD
+	COA:  Action: buy   50%  (buy: 10.00, hold: 1.00, sell: 9.00, abs: 0.00)
+        *** BUY ***       0.00 USD (619900.00 JPY, fee =   0.00)
+	C1bal = 80639.59 USD, C2bal = 2347269.86 JPY, PV = 99572.24 USD
 
 May 31, 2015 - Investor1
 	LA LSNScore:  sell   (T1 Apr 16, 2015 [19.02] -  T2 May 26, 2015 [19.28]   Ann. Change: 0.15%   HoldWin(-0.10% to  0.10%))
@@ -764,11 +785,11 @@ May 31, 2015 - Investor1
 	L4 WHLScore_ECON:  buy   (T1 Apr 16, 2015 [1.05] -  T2 May 26, 2015 [1.04]   Ann. Change: -0.11%   HoldWin(-0.10% to  0.10%))
 	L3 WHOScore_ECON:  sell   (T1 Apr 16, 2015 [1.04] -  T2 May 26, 2015 [1.06]   Ann. Change: 0.14%   HoldWin(-0.10% to  0.10%))
 	L5 WPAScore_ECON:  buy   (T1 Apr 16, 2015 [1.03] -  T2 May 26, 2015 [0.97]   Ann. Change: -0.64%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: buy  100%  (buy: 11.00, hold: 6.00, sell: 3.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1239800.00 JPY)
-	C1bal = 69819.24 USD, C2bal = 3721400.00 JPY, PV = 99835.37 USD
+	COA:  Action: buy   55%  (buy: 11.00, hold: 6.00, sell: 3.00, abs: 0.00)
+        *** BUY ***       0.00 USD (681890.00 JPY, fee =   0.00)
+	C1bal = 75139.59 USD, C2bal = 3029159.86 JPY, PV = 99572.24 USD
 
-Completed generation 1, May  1, 2015 - May 31, 2015,  unsettled =   3721400.00 JPY
+Completed generation 1, May  1, 2015 - May 31, 2015,  unsettled =   3029159.86 JPY
 loop 0 completed.  May  1, 2015 - May 31, 2015
 
 **************  S I M U L A T I O N   R E S U L T S  **************

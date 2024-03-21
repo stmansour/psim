@@ -120,21 +120,20 @@ func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time, eodr bool) {
 	// Compute details about Investor with max profit...
 	//----------------------------------------------------
 	idx := s.maxProfitInvestor
-	tot := 0
 	pro := 0
 	for _, investment := range s.Investors[idx].Investments {
-		if investment.Completed {
-			tot++
-		}
-
 		//----------------------------------------------------------------
 		// Note that when we sell, we try to sell at a loss first. So
 		// this might not be a good way to determine profitable buys
 		//----------------------------------------------------------------
+		chunkProfit := float64(0)
 		for j := 0; j < len(investment.Chunks); j++ {
 			if investment.Chunks[j].Profitable {
-				pro++
+				chunkProfit += investment.Chunks[j].ChunkProfit
 			}
+		}
+		if chunkProfit > 0 {
+			pro++
 		}
 	}
 
@@ -143,7 +142,7 @@ func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time, eodr bool) {
 		AvgProfit:            avgProfit,
 		MaxProfit:            maxProfit,
 		MaxProfitDNA:         maxProfitDNA,
-		TotalBuys:            tot,
+		TotalBuys:            len(s.Investors[idx].Investments),
 		ProfitableBuys:       pro,
 		TotalNilDataRequests: totNil,
 		DtGenStart:           dtStart,

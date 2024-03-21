@@ -43,12 +43,13 @@ func (d *DatabaseCSV) LoadCsvDB() error {
 	if len(d.DBFname) > 0 {
 		fname = d.DBFname
 	} else {
-	    dir, err := util.GetExecutableDir()
-	    if err != nil {
-		    fmt.Println("Error getting executable directory:", err)
-		    os.Exit(1)
-	    }
-	    fname = dir + "/" + PLATODB
+		dir, err := util.GetExecutableDir()
+		if err != nil {
+			fmt.Println("Error getting executable directory:", err)
+			os.Exit(1)
+		}
+		fname = dir + "/" + PLATODB
+		d.DBFname = fname
 	}
 
 	file, err := os.Open(fname)

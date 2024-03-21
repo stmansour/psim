@@ -76,6 +76,7 @@ type SellInfo struct {
 	T4C2Sold      float64   // how much was sold in this chunk
 	T4C2Remaining float64   // how much C2 remains?
 	T4C1          float64   // amount of C1 resulting from the exchange
+	ChunkProfit   float64   // amount of profit in this chunk
 	Fee           float64   // cost of making this transaction
 	Profitable    bool      // was this exchange profitable
 }
@@ -269,7 +270,7 @@ func (i *Investor) DecideCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 		}
 	}
 
-	setCourseOfAction(&coa, i.cfg.COAStrategy) // use course of action strategy called out in the config file
+	setCourseOfAction(&coa, InvestmentStrategies[i.Strategy]) // use course of action strategy called out in the config file
 	if i.cfg.Trace {
 		for j := 0; j < len(recs); j++ {
 			i.FormatPrediction(&recs[j], T3)
@@ -442,7 +443,7 @@ func (i *Investor) ExecuteBuy(T3 time.Time, pct float64) error {
 
 	inv.ERT3 = er3.Fields[s.FQMetric()]                      // exchange rate on T3
 	inv.T3C2Buy = inv.T3C1 * inv.ERT3                        // amount of C2 we purchased on T3
-	inv.Fee = (inv.T3C1 * i.cfg.TxnFeeFactor) + i.cfg.TxnFee // cost of the ttransaction
+	inv.Fee = (inv.T3C1 * i.cfg.TxnFeeFactor) + i.cfg.TxnFee // cost of the transaction: flat fee plus percentage is here because a buy is wholly done here, not in chunks as with sells
 	inv.T4C2Sold = 0                                         // just being explicit, haven't sold any of it yet
 	i.BalanceC1 -= (inv.T3C1 + inv.Fee)                      // we spent this much C1...
 	i.BalanceC2 += inv.T3C2Buy                               // to purchase this much more C2
@@ -590,11 +591,13 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 		}
 		sellAmount -= thisSaleC2                        // this will be what's left to sell, now that we know how much to sell in this exchange
 		thisSaleC1 = thisSaleC2 / i.Investments[j].ERT4 // This is the sell. The Amount of C1 we got back by selling "sellAmount"
-		fee := (thisSaleC1 * i.cfg.TxnFeeFactor) + i.cfg.TxnFee
-		i.Investments[j].T4C2Sold += thisSaleC2 // add what we're selling now to what's already been sold
-		i.Investments[j].T4C1 += thisSaleC1     // add the C1 we got back to the cumulative total for this investment
-		i.BalanceC1 += (thisSaleC1 - fee)       // we recovered this much C1...
-		i.BalanceC2 -= thisSaleC2               // by selling this C2
+		fee := thisSaleC1 * i.cfg.TxnFeeFactor          // for each chunk, add the fee factor
+		i.Investments[j].T4C2Sold += thisSaleC2         // add what we're selling now to what's already been sold
+		i.Investments[j].T4C1 += thisSaleC1             // add the C1 we got back to the cumulative total for this investment
+		i.BalanceC1 += (thisSaleC1 - fee)               // we recovered this much C1...
+		i.BalanceC2 -= thisSaleC2                       // by selling this C2
+
+		chunkt3c1 := thisSaleC2 / i.Investments[j].ERT3 // amount of C1 in this transaction
 
 		//------------------------------------------------------------------------
 		// Create a new chunk for this investment to capture all relevant details
@@ -607,6 +610,7 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 			T4C2Remaining: i.Investments[j].T4C2Sold, // how much C2 remains from the original exchange
 			T4C1:          thisSaleC1,                // amount of C1 resulting from the exchange
 			Profitable:    p,                         // was this exchange profitable
+			ChunkProfit:   thisSaleC1 - chunkt3c1,    // how much profit
 			Fee:           fee,                       // cost of this transaction
 		}
 		i.Investments[j].Chunks = append(i.Investments[j].Chunks, chunk) // was this transaction profitable?  Save it in the list
@@ -626,6 +630,27 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 		if i.cfg.Trace {
 			i.showSell(&i.Investments[j], thisSaleC1, thisSaleC2, fee)
 		}
+	}
+	// One final fee... if there is an flat-fee for the transaction, add it here
+	if i.cfg.TxnFee > 0 {
+		fee := Investment{
+			T3:          t4,                         // date on which exchange for C2 was made
+			T4:          t4,                         // date of exchange back to C1
+			T3BalanceC1: i.BalanceC1,                // C1 balance after exchange on T3
+			T3BalanceC2: i.BalanceC2,                // C2 balance after exchange on T3
+			T4BalanceC1: i.BalanceC1 - i.cfg.TxnFee, // C1 balance after exchange on T4
+			T4BalanceC2: i.BalanceC2,                // C2 balance after exchange on T4
+			T3C1:        0,                          // amount of C1 exchanged for C2 on T3
+			T3C2Buy:     0,                          // the amount of currency in C2 that T3C1 purchased on T3
+			T4C2Sold:    0,                          // we may need to sell it off over multiple transactions. This keeps track of how much we've sold.
+			ERT3:        0,                          // the exchange rate on T3
+			ERT4:        0,                          // the exchange rate on T4
+			T4C1:        0,                          // amount of currency C1 we were able to purchase with C2 on T4 at exchange rate ERT4
+			Fee:         i.cfg.TxnFee,               // Fee for converting C1 to C2, the "buy fee".  Sell fees are in the chunks
+			Completed:   true,                       // true when the entire original buy amount of C2 has been exchanged for C1
+			RetryCount:  0,                          // how many times was this retried
+		}
+		i.Investments = append(i.Investments, fee)
 	}
 
 	return sellAmount, nil

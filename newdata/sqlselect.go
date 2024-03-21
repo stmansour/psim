@@ -13,6 +13,7 @@ type MetricRecord struct {
 	MID         int
 	LID         int
 	LID2        int
+	MSID        int // metrics source
 	MetricValue float64
 }
 
@@ -45,19 +46,21 @@ func (p *DatabaseSQL) Insert(rec *EconometricsRecord) error {
 			MID:         f.MID,
 			LID:         f.LID,
 			LID2:        f.LID2,
+			MSID:        1, // NOTE:  hardcode
 			MetricValue: v,
 		}
 		if f.LID2 != 1 && f.MID == -1 {
-			query := `INSERT INTO ExchangeRate (Date,LID,LID2,EXClose) VALUES (?,?,?,?)`
-			_, err = p.DB.Exec(query, m.Date, m.LID, m.LID2, m.MetricValue)
+			query := `INSERT INTO ExchangeRate (Date,LID,LID2,MSID,EXClose) VALUES (?,?,?,?,?)`
+			if _, err = p.DB.Exec(query, m.Date, m.LID, m.LID2, m.MSID, m.MetricValue); err != nil {
+				return err
+			}
 		} else {
 			query := fmt.Sprintf(`INSERT INTO %s (Date,MID,LID,MetricValue) VALUES (?,?,?,?)`, f.Table)
-			_, err = p.DB.Exec(query, m.Date, m.MID, m.LID, m.MetricValue)
+			if _, err = p.DB.Exec(query, m.Date, m.MID, m.LID, m.MetricValue); err != nil {
+				return err
+			}
 		}
 
-		if err != nil {
-			return err
-		}
 	}
 	return nil
 }
@@ -92,7 +95,7 @@ func (p *DatabaseSQL) Select(dt time.Time, ss []FieldSelector) (*EconometricsRec
 			rec.Fields[v.FQMetric()] = m.MetricValue
 		} else {
 			// Prepare the query
-			query := fmt.Sprintf(`SELECT MEID,Date,MID,LID,LID2, MetricValue FROM %s WHERE Date=? AND MID=? AND LID=? LIMIT 1`, v.Table)
+			query := fmt.Sprintf(`SELECT MEID,Date,MID,LID,MSID, MetricValue FROM %s WHERE Date=? AND MID=? AND LID=? LIMIT 1`, v.Table)
 			var nullint sql.NullInt64
 			err = p.DB.QueryRow(query, dateStr, v.MID, v.LID).Scan(&m.MEID, &m.Date, &m.MID, &m.LID, &nullint, &m.MetricValue)
 			if err != nil {
@@ -102,7 +105,7 @@ func (p *DatabaseSQL) Select(dt time.Time, ss []FieldSelector) (*EconometricsRec
 				return nil, err
 			}
 			if nullint.Valid {
-				v.LID2 = int(nullint.Int64)
+				v.MSID = int(nullint.Int64)
 			}
 			rec.Fields[v.FQMetric()] = m.MetricValue
 		}

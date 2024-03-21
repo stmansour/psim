@@ -80,6 +80,12 @@ func (f *FinRep) GenerateHeader() error {
 	fmt.Fprintf(f.file, "\"C2: %s\"\n", f.Sim.cfg.C2)
 
 	fmt.Fprintf(f.file, "\"Population: %d\"\n", f.Sim.cfg.PopulationSize)
+	omr := float64(0)
+
+	if f.Sim.factory.MutateCalls > 0 {
+		omr = 100.0 * float64(f.Sim.factory.Mutations) / float64(f.Sim.factory.MutateCalls)
+	}
+	fmt.Fprintf(f.file, "\"Observed Mutation Rate: %6.3f%%\"\n", omr)
 	fmt.Fprintf(f.file, "\"COA Strategy: %s\"\n", f.Sim.cfg.COAStrategy)
 	if f.Sim.cfg.PreserveElite {
 		fmt.Fprintf(f.file, "\"Preserve Elite: %5.2f%%\"\n", f.Sim.cfg.PreserveElitePct)
