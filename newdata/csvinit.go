@@ -160,8 +160,9 @@ func (d *DatabaseCSV) LoadMetricsSourceCache() error {
 			}
 		}
 
-		d.MetricSrcCache = append(metrics, m)
+		metrics = append(metrics, m)
 	}
+	d.MetricSrcCache = metrics
 
 	return nil
 }
