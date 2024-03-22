@@ -84,8 +84,8 @@ func TestSQLFuncs(t *testing.T) {
 	}
 	app.sqldb.SQLDB.ParentDB = app.sqldb // we will need this even before we call Init()
 
-	if err = app.sqldb.CreateDatabasePart1(); err != nil {
-		t.Errorf("CreateDatabasePart1 returned error: %s\n", err.Error())
+	if err = app.sqldb.CreateDatabaseTables(); err != nil {
+		t.Errorf("CreateDatabaseTables returned error: %s\n", err.Error())
 		return
 	}
 
@@ -94,8 +94,8 @@ func TestSQLFuncs(t *testing.T) {
 	// no data at this point. First thing to do is populate the ancillary
 	// SQL tables.
 	//----------------------------------------------------------------------
-	if err = PopulateLocales(&app); err != nil {
-		t.Errorf("Error from PopulateLocales: %s\n", err.Error())
+	if err = CopyCsvLocalesToSQL(&app); err != nil {
+		t.Errorf("Error from CopyCsvLocalesToSQL: %s\n", err.Error())
 		return
 	}
 	// now we need to load the sqldb's locale cache. It's needed by MigrateTimeSeriesData
@@ -169,8 +169,8 @@ func CopyCsvMISubclassesToSQL(app *AppTest) error {
 	return nil
 }
 
-// PopulateLocales initilizes the Locale table in sql
-func PopulateLocales(app *AppTest) error {
+// CopyCsvLocalesToSQL initilizes the Locale table in sql
+func CopyCsvLocalesToSQL(app *AppTest) error {
 	// Slice of Locale structs with country, currency, and a simple description
 	locales := []newdata.Locale{
 		{Name: "NON", Currency: "NON", Description: "No locale association"},

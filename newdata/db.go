@@ -204,22 +204,22 @@ func (p *Database) Open() error {
 	}
 }
 
-// CreateDatabasePart1 opens the database for use. If you're going to create a database, call it
+// CreateDatabaseTables opens the database for use. If you're going to create a database, call it
 // after Open() but before Init() to ensure that internal caches are properly loaded.
 // -----------------------------------------------------------------------------------------
-func (p *Database) CreateDatabasePart1() error {
+func (p *Database) CreateDatabaseTables() error {
 	switch p.Datatype {
 	case "CSV":
 		return nil
 	case "SQL":
-		return p.SQLDB.CreateDatabasePart1()
+		return p.SQLDB.CreateDatabaseTables()
 	default:
 		return fmt.Errorf("unknown database type: %s", p.Datatype)
 	}
 }
 
 // Init loads the databases internal caches and other initialization. Make this call
-// after CreateDatabasePart1 or MigrateCSVtoSQL so that caches are loaded with the copied data.
+// after CreateDatabaseTables or MigrateCSVtoSQL so that caches are loaded with the copied data.
 // -------------------------------------------------------------------------------------------
 func (p *Database) Init() error {
 	switch p.Datatype {
@@ -234,7 +234,7 @@ func (p *Database) Init() error {
 }
 
 // Insert inserts the Econometrics record into the database
-// after CreateDatabasePart1 or MigrateCSVtoSQL so that caches are loaded with the copied data.
+// after CreateDatabaseTables or MigrateCSVtoSQL so that caches are loaded with the copied data.
 // -------------------------------------------------------------------------------------------
 func (p *Database) Insert(rec *EconometricsRecord) error {
 	switch p.Datatype {
@@ -247,15 +247,15 @@ func (p *Database) Insert(rec *EconometricsRecord) error {
 	}
 }
 
-// InsertMetricsSources writes the supplied slice of MetricsSource structs to the database.
-// after CreateDatabasePart1 or MigrateCSVtoSQL so that caches are loaded with the copied data.
+// CopyCsvMetricsSourcesToSQL writes the supplied slice of MetricsSource structs to the database.
+// after CreateDatabaseTables or MigrateCSVtoSQL so that caches are loaded with the copied data.
 // -------------------------------------------------------------------------------------------
-func (p *Database) InsertMetricsSources(locations []MetricsSource) error {
+func (p *Database) CopyCsvMetricsSourcesToSQL(locations []MetricsSource) error {
 	switch p.Datatype {
 	case "CSV":
-		return p.CSVDB.InsertMetricsSources(locations)
+		return p.CSVDB.CopyCsvMetricsSourcesToSQL(locations)
 	case "SQL":
-		return p.SQLDB.InsertMetricsSources(locations)
+		return p.SQLDB.CopyCsvMetricsSourcesToSQL(locations)
 	default:
 		return fmt.Errorf("unknown database type: %s", p.Datatype)
 	}

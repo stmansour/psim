@@ -1,8 +1,10 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/stmansour/psim/newdata"
@@ -20,13 +22,20 @@ type Application struct {
 	BucketCount int
 	DtStart     time.Time
 	DtStop      time.Time
+	ShardMetric string
 }
 
 var app Application
 
+func readCommandLineArgs() {
+	flag.StringVar(&app.ShardMetric, "s", "", "print the shard info for the supplied metric (as seen in CSV column header)")
+	flag.Parse()
+}
+
 func main() {
 	var err error
 	start := time.Now()
+	readCommandLineArgs()
 
 	//----------------------------------------------------------------------
 	// Get ancillary data...
@@ -50,14 +59,21 @@ func main() {
 	if err = app.sqldb.Open(); err != nil {
 		log.Fatalf("db.Open returned error: %s\n", err.Error())
 	}
-
+	if err = app.sqldb.Init(); err != nil {
+		log.Fatalf("db.Init returned error: %s\n", err.Error())
+	}
+	defer app.sqldb.SQLDB.DB.Close()
 	if err = app.sqldb.Init(); err != nil {
 		log.Fatalf("db.Init returned error: %s\n", err.Error())
 	}
 
-	defer app.sqldb.SQLDB.DB.Close()
-	if err = app.sqldb.Init(); err != nil {
-		log.Fatalf("db.Init returned error: %s\n", err.Error())
+	//---------------------------------------------------------------------
+	// If the only thing requested was shard info for a metric
+	// handle it now and exit
+	//---------------------------------------------------------------------
+	if len(app.ShardMetric) > 0 {
+		PrintShardInfo()
+		os.Exit(0)
 	}
 
 	//----------------------------------------------------------------------
@@ -78,27 +94,30 @@ func main() {
 	// Copy the tables one by one...
 	//   1. MetricsSources
 	//----------------------------------------------------------------------
-	if err = app.csvdb.InsertMetricsSources(app.sqldb.SQLDB.MetricSrcCache); err != nil {
-		log.Fatalf("*** FATAL ERROR ***  InsertMetricsSources returned error: %s\n", err)
+	if err = app.csvdb.CopyCsvMetricsSourcesToSQL(app.sqldb.SQLDB.MetricSrcCache); err != nil {
+		log.Fatalf("*** FATAL ERROR ***  CopyCsvMetricsSourcesToSQL returned error: %s\n", err)
 	}
 
 	//----------------------------------------------------------------------
 	//   2. Locales
 	//----------------------------------------------------------------------
 	if err = app.csvdb.CSVDB.WriteLocalesToCSV(app.sqldb.SQLDB.LocaleCache); err != nil {
-		log.Fatalf("*** FATAL ERROR ***  InsertMetricsSources returned error: %s\n", err)
+		log.Fatalf("*** FATAL ERROR ***  CopyCsvMetricsSourcesToSQL returned error: %s\n", err)
 	}
 
 	//----------------------------------------------------------------------
 	//   3. MISubclasses
 	//----------------------------------------------------------------------
 	if err = app.csvdb.CSVDB.WriteMISubclassesToCSV(app.sqldb.Mim.MInfluencerSubclasses); err != nil {
-		log.Fatalf("*** FATAL ERROR ***  InsertMetricsSources returned error: %s\n", err)
+		log.Fatalf("*** FATAL ERROR ***  CopyCsvMetricsSourcesToSQL returned error: %s\n", err)
 	}
 
 	//----------------------------------------------------------------------
-	//   4. Exchange Rates
+	//   4. Sharded Metrics  (includes EXClose which is not sharded)
 	//----------------------------------------------------------------------
+	if err = app.csvdb.CSVDB.CopySQLRecsToCSV(app.sqldb); err != nil {
+		log.Fatalf("*** FATAL ERROR ***  CopyCsvMetricsSourcesToSQL returned error: %s\n", err)
+	}
 
 	//----------------------------------------------------------------------
 	// All done, let the user know where it was created
@@ -124,4 +143,32 @@ func FormatDuration(start, end time.Time) {
 	duration -= seconds * time.Second
 	milliseconds := duration / time.Millisecond
 	fmt.Printf("Elapsed: %02d hr %02d min %02d sec %03d msec\n", hours, minutes, seconds, milliseconds)
+}
+
+// PrintShardInfo prints the MID and BucketNumber for the metric in app.ShardMetric.
+// This is a developer debug feature, it may not be of any value to others.
+// --------------------------------------------------------------------------------------
+func PrintShardInfo() {
+	dt := time.Date(2023, time.January, 1, 0, 0, 0, 0, time.UTC)
+	f := newdata.FieldSelector{
+		Metric: app.ShardMetric,
+	}
+	app.sqldb.SQLDB.FieldSelectorFromCSVColName(app.ShardMetric, &f)
+	app.sqldb.SQLDB.GetShardInfo(dt, &f)
+
+	fmt.Printf(
+		`            date: %s
+          Metric: %s
+             MID: %d
+          Locale: %s
+             LID: %d
+         Locale2: %s
+            LID2: %d
+            MSID: %d
+           Table: %s
+    BucketNumber: %d
+          FQname: %s
+`,
+		dt.Format("January 2, 2006"), f.Metric, f.MID, f.Locale, f.LID, f.Locale2, f.LID2, f.MSID, f.Table, f.BucketNumber, f.FQMetric())
+
 }

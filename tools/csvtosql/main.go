@@ -69,20 +69,25 @@ func main() {
 	if err = app.sqldb.Open(); err != nil {
 		log.Fatalf("db.Open returned error: %s\n", err.Error())
 	}
-
+	defer app.sqldb.SQLDB.DB.Close()
 	if app.DtStop.After(app.csvdb.CSVDB.DtStop) {
 		fmt.Printf("Stop date provided goes beyond the end of the data available in platodb.csv (which ends %s)\n", app.csvdb.CSVDB.DtStop.Format("2006-Jan-02"))
 	}
 
-	defer app.sqldb.SQLDB.DB.Close()
-
+	//------------------------------------------------------------------
+	//  DELETE THE CURRENT SQL DATABASE.   THIS PROGRAM SHOULD ONLY
+	//  BE RUN IF YOU REALLY KNOW WHAT YOU ARE DOING...
+	//------------------------------------------------------------------
 	if err = app.sqldb.DropDatabase(); err != nil {
 		log.Fatalf("DropDatabase returned error: %s\n", err.Error())
 	}
 	app.sqldb.SQLDB.ParentDB = app.sqldb // we will need this even before we call Init()
 
-	if err = app.sqldb.CreateDatabasePart1(); err != nil {
-		log.Fatalf("CreateDatabasePart1 returned error: %s\n", err.Error())
+	//-------------------------
+	// Create TABLES
+	//-------------------------
+	if err = app.sqldb.CreateDatabaseTables(); err != nil {
+		log.Fatalf("CreateDatabaseTables returned error: %s\n", err.Error())
 	}
 
 	//----------------------------------------------------------------------
@@ -93,16 +98,17 @@ func main() {
 	//      -----------           -------------------------------
 	//       1. Locales           locale names:  USA USD, JPN JPY, etc..
 	//       2. MISubclasses      Metric Influencers
-	//       3. Exchange Rate
-	//       4. Metrics_n_decade
-	//
-	//
-	//
+	//       3  MetricsSources    Where the metrics come from
+	//       4. Exchange Rate     Currency exchange rates
+	//       4. Metrics_n_decade  all metrics
 	//----------------------------------------------------------------------
-	if err = PopulateLocales(); err != nil {
-		log.Fatalf("Error from PopulateLocales: %s\n", err.Error())
+	if err = CopyCsvLocalesToSQL(); err != nil {
+		log.Fatalf("Error from CopyCsvLocalesToSQL: %s\n", err.Error())
 	}
-	// now we need to load the sqldb's locale cache. It's needed by MigrateTimeSeriesData
+	//-------------------------------------------------------------------------------------
+	// Now we need to load the sqldb's locale cache. It's needed by MigrateTimeSeriesData.
+	// This normally happens in Init, but we don't use Init in this case only
+	//-------------------------------------------------------------------------------------
 	if err = app.sqldb.SQLDB.LoadLocaleCache(); err != nil {
 		log.Fatalf("Error from LoadLocalCache: %s\n", err.Error())
 	}
@@ -110,21 +116,23 @@ func main() {
 		log.Fatalf("Error from CopyCsvMISubclassesToSql: %s\n", err.Error())
 	}
 
-	// now that the MISubclasses table has been loaded, we'll need to cache it for use in MigrateTimeSeriesData
+	//-------------------------------------------------------------------------------------
+	// The MISubclasses table has been loaded, we'll need to cache it for use in
+	// MigrateTimeSeriesData. So load it now
+	//-------------------------------------------------------------------------------------
 	app.sqldb.Mim.ParentDB = app.sqldb
 	if err = app.sqldb.Mim.LoadMInfluencerSubclasses(); err != nil {
 		log.Fatalf("Error from LoadMInfluencerSubclasses: %s\n", err.Error())
 	}
-
-	if err = app.sqldb.InsertMetricsSources(app.csvdb.CSVDB.MetricSrcCache); err != nil {
-		log.Fatalf("Error from LoadMInfluencerSubclasses: %s\n", err.Error())
+	if err = app.sqldb.CopyCsvMetricsSourcesToSQL(app.csvdb.CSVDB.MetricSrcCache); err != nil {
+		log.Fatalf("Error from CopyCsvMetricsSourcesToSQL: %s\n", err.Error())
 	}
 	if err = MigrateTimeSeriesData(); err != nil {
 		log.Fatalf("Error from MigrateTimeSeriesData: %s\n", err.Error())
 	}
+
 	end := time.Now()
 	FormatDuration(start, end)
-
 }
 
 // FormatDuration prints the duration between two times

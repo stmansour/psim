@@ -26,8 +26,8 @@ func (d *DatabaseCSV) EnsureDataDirectory() (string, error) {
 	return dataPath, nil
 }
 
-// InsertMetricsSources takes a slice of MetricsSource and creates a CSV file.
-func (d *DatabaseCSV) InsertMetricsSources(locations []MetricsSource) error {
+// CopyCsvMetricsSourcesToSQL takes a slice of MetricsSource and creates a CSV file.
+func (d *DatabaseCSV) CopyCsvMetricsSourcesToSQL(locations []MetricsSource) error {
 	FullyQualifiedFileName := filepath.Join(d.DBPath, "metricsources.csv")
 
 	file, err := os.Create(FullyQualifiedFileName)
@@ -158,5 +158,96 @@ func (d *DatabaseCSV) WriteMISubclassesToCSV(subclassesMap map[string]MInfluence
 		return fmt.Errorf("error flushing data to CSV file: %v", err)
 	}
 
+	return nil
+}
+
+// CopySQLRecsToCSV copies SQL data records into a new CSV file called platodb.csv
+// that can be used as a database for the simulator
+// -----------------------------------------------------------------------------------
+func (d *DatabaseCSV) CopySQLRecsToCSV(sqldb *Database) error {
+	//----------------------------------------------
+	// Create database CSV file:  platodb.csv
+	//----------------------------------------------
+	FullyQualifiedFileName := filepath.Join(d.DBPath, "platodb.csv")
+	file, err := os.Create(FullyQualifiedFileName)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	s := []string{}
+
+	//------------------------------------------------
+	// Prepare field selectors...
+	//------------------------------------------------
+	startDate := time.Date(2015, time.February, 1, 0, 0, 0, 0, time.UTC)
+	endDate := time.Date(2023, time.December, 31, 0, 0, 0, 0, time.UTC)
+	loc1 := "USD"
+	loc2 := "JPY"
+
+	f := FieldSelector{
+		Metric:  "EXClose",
+		Locale:  loc1,
+		Locale2: loc2,
+	}
+	fields := []FieldSelector{
+		f,
+	}
+
+	//----------------------------
+	// Write the header row
+	//----------------------------
+	fmt.Fprintf(file, "%q", "Date")        // special case 1:  date
+	fmt.Fprintf(file, ",%q", f.FQMetric()) // special case 2: EXClose
+	for _, v := range sqldb.Mim.MInfluencerSubclasses {
+		switch v.LocaleType {
+		case LocaleNone:
+			field := FieldSelector{
+				Metric: v.Metric, // no prepending needed
+			}
+			fmt.Fprintf(file, ",%q", v.Metric)
+			fields = append(fields, field)
+			s = append(s, v.Metric)
+		case LocaleC1C2: // create 2 columns... one with C1 + metric, the other with C2 + metric
+			// field 1
+			field1 := FieldSelector{
+				Metric: v.Metric, // no prepending needed
+				Locale: d.ParentDB.cfg.C1,
+			}
+			fields = append(fields, field1)
+			fld := field1.Locale + v.Metric
+			fmt.Fprintf(file, ",%q", fld)
+			s = append(s, fld)
+
+			// field 2
+			field2 := FieldSelector{
+				Metric: v.Metric, // no prepending needed
+				Locale: d.ParentDB.cfg.C2,
+			}
+			fields = append(fields, field2)
+			fld = field2.Locale + v.Metric
+			fmt.Fprintf(file, ",%q", fld)
+			s = append(s, fld)
+		default:
+			return fmt.Errorf("unrecognized LocaleType on metric %s: %d", v.Metric, v.LocaleType)
+		}
+	}
+
+	for dt := startDate; dt.Before(endDate) || dt.Equal(endDate); dt = dt.AddDate(0, 0, 1) {
+		rec, err := sqldb.Select(dt, fields)
+		if err != nil {
+			return err
+		}
+		fmt.Fprintf(file, "%q", rec.Date.Format("1/2/2006")) // special case 1: Date
+		fmt.Fprintf(file, ",%.6f", rec.Fields[f.FQMetric()]) // special case 2: EXClose
+
+		// Now the remaining metrics
+		for i := 0; i < len(s); i++ {
+			fld := s[i]
+			val := rec.Fields[fld]
+			fmt.Fprintf(file, ",%.6f", val)
+		}
+		fmt.Fprintf(file, "\n")
+	}
 	return nil
 }

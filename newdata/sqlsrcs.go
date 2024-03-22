@@ -52,8 +52,8 @@ func (p *DatabaseSQL) InsertMetricsSource(loc *MetricsSource) (int64, error) {
 	return lastInsertID, nil
 }
 
-// InsertMetricsSources takes a slice of MetricsSource and inserts them into the database.
-func (p *DatabaseSQL) InsertMetricsSources(locations []MetricsSource) error {
+// CopyCsvMetricsSourcesToSQL takes a slice of MetricsSource and inserts them into the database.
+func (p *DatabaseSQL) CopyCsvMetricsSourcesToSQL(locations []MetricsSource) error {
 	for _, loc := range locations {
 		_, err := p.InsertMetricsSource(&loc)
 		if err != nil {

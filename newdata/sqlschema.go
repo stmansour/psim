@@ -48,10 +48,10 @@ func (p *DatabaseSQL) GetBucketForString(s string) int {
 	return bucketNumber
 }
 
-// CreateDatabasePart1 drops the current 'plato' database if it exists then
+// CreateDatabaseTables drops the current 'plato' database if it exists then
 // creates a new one.
 // ---------------------------------------------------------------------
-func (p *DatabaseSQL) CreateDatabasePart1() error {
+func (p *DatabaseSQL) CreateDatabaseTables() error {
 	cmds := []string{
 		"CREATE DATABASE IF NOT EXISTS plato",
 		"USE plato",
@@ -68,6 +68,7 @@ func (p *DatabaseSQL) CreateDatabasePart1() error {
 			Metric VARCHAR(80) NOT NULL,
 			Subclass VARCHAR(80) NOT NULL,
 			LocaleType TINYINT NOT NULL,
+			MetricType TINYINT NOT NULL,  -- 1 = econometric, 2 = linguistic
 			Predictor TINYINT NOT NULL,
 			MinDelta1 INT NOT NULL,
 			MaxDelta1 INT NOT NULL,
@@ -87,9 +88,9 @@ func (p *DatabaseSQL) CreateDatabasePart1() error {
 		`CREATE TABLE IF NOT EXISTS ExchangeRate (
 			XID INT AUTO_INCREMENT PRIMARY KEY,
 			Date DATETIME(6) NOT NULL,
-			LID INT NOT NULL,             -- locale associated with this exchange rate, foreign key to Locales
-			LID2 INT NOT NULL,            -- second locale (optional) associated with this exchange rate, foreign key to Locales
-			MSID INT NOT NULL DEFAULT 0,  -- metric source, the provider for this exchange rate, foreign key to MetricsSources
+			LID INT NOT NULL,
+			LID2 INT NOT NULL,
+			MSID INT NOT NULL,
 			EXClose DOUBLE NOT NULL,
 			INDEX(Date),
 			CONSTRAINT fk_ExchangeRate_Locales1 FOREIGN KEY (LID) REFERENCES Locales(LID),
@@ -177,7 +178,7 @@ func (p *DatabaseSQL) GrantFullAccess(usernames []string) error {
 
 // FieldSelectorsFromRecord creates an array of field selectors based
 // on the supplied record.
-// Improved version of FieldSelectorsFromRecord
+// --------------------------------------------------------------------------------
 func (p *DatabaseSQL) FieldSelectorsFromRecord(rec *EconometricsRecord) []FieldSelector {
 	var ff []FieldSelector
 	for k := range rec.Fields {
@@ -188,7 +189,9 @@ func (p *DatabaseSQL) FieldSelectorsFromRecord(rec *EconometricsRecord) []FieldS
 	return ff
 }
 
-// FieldSelectorFromCSVColName updates f with the fields derived from k, a CSV column name
+// FieldSelectorFromCSVColName updates f with the fields derived from k,
+// a fully qualified metric name as seen in the column header of a CSV file
+// --------------------------------------------------------------------------------
 func (p *DatabaseSQL) FieldSelectorFromCSVColName(k string, f *FieldSelector) {
 	// Attempt to extract up to two locales from the prefix of the key
 	for i := 0; i < 2; i++ {

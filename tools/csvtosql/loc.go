@@ -4,8 +4,8 @@ import (
 	"github.com/stmansour/psim/newdata"
 )
 
-// PopulateLocales initilizes the Locale table in sql
-func PopulateLocales() error {
+// CopyCsvLocalesToSQL initilizes the Locale table in sql
+func CopyCsvLocalesToSQL() error {
 	// Slice of Locale structs with country, currency, and a simple description
 	locales := []newdata.Locale{
 		{Name: "NON", Currency: "NON", Description: "No locale association"},

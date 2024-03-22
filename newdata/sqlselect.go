@@ -27,7 +27,10 @@ type ShardInfo struct {
 	Table        string
 }
 
-func (p *DatabaseSQL) getShardInfo(Date time.Time, f *FieldSelector) {
+// GetShardInfo is a function that populates a field selector with the information
+// needed for the SQL code to read or write the metric in the SQL database.
+// ------------------------------------------------------------------------------------
+func (p *DatabaseSQL) GetShardInfo(Date time.Time, f *FieldSelector) {
 	f.BucketNumber = p.GetMetricBucket(f.Metric)
 	p.FieldSelectorToSQL(f)
 	decade := (Date.Year() / 10) * 10
@@ -40,7 +43,7 @@ func (p *DatabaseSQL) Insert(rec *EconometricsRecord) error {
 	for k, v := range rec.Fields {
 		var f FieldSelector
 		p.FieldSelectorFromCSVColName(k, &f)
-		p.getShardInfo(rec.Date, &f)
+		p.GetShardInfo(rec.Date, &f)
 		m := MetricRecord{
 			Date:        rec.Date,
 			MID:         f.MID,
@@ -76,7 +79,7 @@ func (p *DatabaseSQL) Select(dt time.Time, ss []FieldSelector) (*EconometricsRec
 	}
 
 	for _, v := range ss {
-		p.getShardInfo(dt, &v)
+		p.GetShardInfo(dt, &v)
 		var m MetricRecord
 
 		// Considering date precision in SQL DATETIME(6), it's important to format the time in a supported layout

@@ -51,6 +51,7 @@ type MInfluencerSubclass struct {
 	Metric        string  // data type of subclass - THIS IS THE TABLE NAME
 	BlocType      int     // bloc type, only type LocaleBloc reads values from Blocs
 	LocaleType    int     // how to handle locales
+	MetricType    int     // 1 = econometric, 2 = linguistic
 	Predictor     int     // which predictor to use
 	Subclass      string  // What subclass is the container for this metric-influencer
 	MinDelta1     int     // furthest back from t3 that t1 can be
@@ -133,7 +134,7 @@ func (m *MetricInfluencerManager) loadMInfluencerSubclassesSQL() error {
 	query :=
 		`SELECT MID, Name, Metric, Subclass, LocaleType, Predictor,
         MinDelta1, MaxDelta1, MinDelta2, MaxDelta2,
-		FitnessW1, FitnessW2, HoldWindowPos, HoldWindowNeg FROM MISubclasses`
+		FitnessW1, FitnessW2, HoldWindowPos, HoldWindowNeg, MetricType FROM MISubclasses`
 	rows, err := m.ParentDB.SQLDB.DB.Query(query)
 	if err != nil {
 		return err
@@ -150,7 +151,7 @@ func (m *MetricInfluencerManager) loadMInfluencerSubclassesSQL() error {
 		// Scan each row's columns into the struct
 		if err := rows.Scan(&mi.MID, &name, &mi.Metric, &mi.Subclass, &loc, &pred,
 			&mi.MinDelta1, &mi.MaxDelta1, &mi.MinDelta2, &mi.MaxDelta2,
-			&mi.FitnessW1, &mi.FitnessW2, &mi.HoldWindowPos, &mi.HoldWindowNeg); err != nil {
+			&mi.FitnessW1, &mi.FitnessW2, &mi.HoldWindowPos, &mi.HoldWindowNeg, &mi.MetricType); err != nil {
 			return err
 		}
 		mi.LocaleType = int(loc)
@@ -292,9 +293,9 @@ func (m *MetricInfluencerManager) parseAndCheckFloat64(s, filename string, line 
 // InsertMInfluencerSubclass inserts a new MInfluencerSubclass into the database
 func (p *DatabaseSQL) InsertMInfluencerSubclass(m *MInfluencerSubclass) error {
 	query := `
-INSERT INTO MISubclasses (Name, Metric, LocaleType, Predictor, Subclass, MinDelta1, MaxDelta1, MinDelta2, MaxDelta2, FitnessW1, FitnessW2, HoldWindowPos, HoldWindowNeg) 
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-	_, err := p.DB.Exec(query, m.Name, m.Metric, m.LocaleType, m.Predictor, m.Subclass, m.MinDelta1, m.MaxDelta1, m.MinDelta2, m.MaxDelta2, m.FitnessW1, m.FitnessW2, m.HoldWindowPos, m.HoldWindowNeg)
+INSERT INTO MISubclasses (Name, Metric, LocaleType, Predictor, Subclass, MinDelta1, MaxDelta1, MinDelta2, MaxDelta2, FitnessW1, FitnessW2, HoldWindowPos, HoldWindowNeg, MetricType) 
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+	_, err := p.DB.Exec(query, m.Name, m.Metric, m.LocaleType, m.Predictor, m.Subclass, m.MinDelta1, m.MaxDelta1, m.MinDelta2, m.MaxDelta2, m.FitnessW1, m.FitnessW2, m.HoldWindowPos, m.HoldWindowNeg, m.MetricType)
 	if err != nil {
 		return err
 	}
