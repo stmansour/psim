@@ -284,9 +284,8 @@ func (i *Investor) DecideCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 // FormatPrediction prints a readable version of the Influencers predictions
 // ----------------------------------------------------------------------------
 func (i *Investor) FormatPrediction(p *Prediction, T3 time.Time) {
-	name := i.db.Mim.MInfluencerSubclasses[p.IType].Name
-	fmt.Printf("\t%s %s:  %s   (T1 %s [%4.2f] -  T2 %s [%4.2f]   Ann. Change: %4.2f%%   HoldWin(%5.2f%% to %5.2f%%))\n",
-		name,
+	// name := i.db.Mim.MInfluencerSubclasses[p.IType].Name
+	fmt.Printf("\t%s:  %s   (T1 %s [%4.2f] -  T2 %s [%4.2f]   Ann. Change: %4.2f%%   HoldWin(%5.2f%% to %5.2f%%))\n",
 		p.IType,
 		p.Action,
 		T3.AddDate(0, 0, int(p.Delta1)).Format("Jan _2, 2006"),

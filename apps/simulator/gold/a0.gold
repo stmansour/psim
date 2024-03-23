@@ -12,177 +12,190 @@ Population Size:     1
 *******************************************************************
 
 May  1, 2015 - Investor1
-	 SP:  buy   (T1 Apr  4, 2015 [0.95] -  T2 Apr 26, 2015 [0.90]   Ann. Change: -0.30%   HoldWin(-0.10% to  0.10%))
+	SP:  buy   (T1 Feb 23, 2015 [0.98] -  T2 Apr 26, 2015 [0.90]   Ann. Change: -1.35%   HoldWin(-0.10% to  0.10%))
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
         *** BUY ***       0.00 USD (1202100.00 JPY, fee =   2.00)
 	C1bal = 89998.00 USD, C2bal = 1202100.00 JPY, PV = 99998.00 USD
 
 May  2, 2015 - Investor1
-	 SP:  buy   (T1 Apr  5, 2015 [0.95] -  T2 Apr 27, 2015 [0.90]   Ann. Change: -0.30%   HoldWin(-0.10% to  0.10%))
+	SP:  buy   (T1 Feb 24, 2015 [0.98] -  T2 Apr 27, 2015 [0.90]   Ann. Change: -1.32%   HoldWin(-0.10% to  0.10%))
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
         *** BUY ***       0.00 USD (1202100.00 JPY, fee =   2.00)
 	C1bal = 79996.00 USD, C2bal = 2404200.00 JPY, PV = 99996.00 USD
 
 May  3, 2015 - Investor1
-	 SP:  sell   (T1 Apr  6, 2015 [0.87] -  T2 Apr 28, 2015 [0.90]   Ann. Change: 0.21%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
-        *** SELL ***  10000.00 USD (fee:   2.00), [1202100.00 JPY], investments affected: 1 -->  0 profited, 1 lost
-        *** SELL ***  10000.00 USD (fee:   2.00), [1202100.00 JPY], investments affected: 1 -->  0 profited, 1 lost
-	C1bal = 99992.00 USD, C2bal =   0.00 JPY, PV = 99992.00 USD
+	SP:  buy   (T1 Feb 25, 2015 [0.98] -  T2 Apr 28, 2015 [0.90]   Ann. Change: -1.35%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (1202100.00 JPY, fee =   2.00)
+	C1bal = 69994.00 USD, C2bal = 3606300.00 JPY, PV = 99994.00 USD
 
 May  4, 2015 - Investor1
-	 SP:  sell   (T1 Apr  7, 2015 [0.87] -  T2 Apr 29, 2015 [0.90]   Ann. Change: 0.18%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
-	C1bal = 99992.00 USD, C2bal =   0.00 JPY, PV = 99992.00 USD
+	SP:  buy   (T1 Feb 26, 2015 [0.97] -  T2 Apr 29, 2015 [0.90]   Ann. Change: -1.23%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (1202500.00 JPY, fee =   2.00)
+	C1bal = 59992.00 USD, C2bal = 4808800.00 JPY, PV = 99982.02 USD
 
 May  5, 2015 - Investor1
-	 SP:  sell   (T1 Apr  8, 2015 [0.87] -  T2 Apr 30, 2015 [0.91]   Ann. Change: 0.29%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
-	C1bal = 99992.00 USD, C2bal =   0.00 JPY, PV = 99992.00 USD
+	SP:  buy   (T1 Feb 27, 2015 [0.96] -  T2 Apr 30, 2015 [0.91]   Ann. Change: -0.89%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (1198700.00 JPY, fee =   2.00)
+	C1bal = 49990.00 USD, C2bal = 6007500.00 JPY, PV = 100106.79 USD
 
 May  6, 2015 - Investor1
-	 SP:  sell   (T1 Apr  9, 2015 [1.01] -  T2 May  1, 2015 [1.04]   Ann. Change: 0.16%   HoldWin(-0.10% to  0.10%))
+	SP:  sell   (T1 Feb 28, 2015 [0.96] -  T2 May  1, 2015 [1.04]   Ann. Change: 1.24%   HoldWin(-0.10% to  0.10%))
 	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
-	C1bal = 99992.00 USD, C2bal =   0.00 JPY, PV = 99992.00 USD
+        *** SELL ***  10066.15 USD (fee:   2.01), [1202100.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***  10066.15 USD (fee:   2.01), [1202100.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***  10066.15 USD (fee:   2.01), [1202100.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***  10069.50 USD (fee:   2.01), [1202500.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***  10037.68 USD (fee:   2.01), [1198700.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+	C1bal = 100285.58 USD, C2bal =   0.00 JPY, PV = 100285.58 USD
 
 May  7, 2015 - Investor1
-	 SP:  hold   (T1 Apr 10, 2015 [1.01] -  T2 May  2, 2015 [1.03]   Ann. Change: 0.09%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 0.00, hold: 1.00, sell: 0.00, abs: 0.00)
-	C1bal = 99992.00 USD, C2bal =   0.00 JPY, PV = 99992.00 USD
+	SP:  sell   (T1 Mar  1, 2015 [0.96] -  T2 May  2, 2015 [1.03]   Ann. Change: 1.14%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
+	C1bal = 100285.58 USD, C2bal =   0.00 JPY, PV = 100285.58 USD
 
 May  8, 2015 - Investor1
-	 SP:  hold   (T1 Apr 11, 2015 [0.95] -  T2 May  3, 2015 [0.96]   Ann. Change: 0.04%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 0.00, hold: 1.00, sell: 0.00, abs: 0.00)
-	C1bal = 99992.00 USD, C2bal =   0.00 JPY, PV = 99992.00 USD
+	SP:  buy   (T1 Mar  2, 2015 [1.05] -  T2 May  3, 2015 [0.96]   Ann. Change: -1.51%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (1197800.00 JPY, fee =   2.00)
+	C1bal = 90283.58 USD, C2bal = 1197800.00 JPY, PV = 100283.58 USD
 
 May  9, 2015 - Investor1
-	 SP:  sell   (T1 Apr 12, 2015 [0.93] -  T2 May  4, 2015 [0.96]   Ann. Change: 0.25%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
-	C1bal = 99992.00 USD, C2bal =   0.00 JPY, PV = 99992.00 USD
+	SP:  hold   (T1 Mar  3, 2015 [0.97] -  T2 May  4, 2015 [0.96]   Ann. Change: -0.07%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: hold  100%  (buy: 0.00, hold: 1.00, sell: 0.00, abs: 0.00)
+	C1bal = 90283.58 USD, C2bal = 1197800.00 JPY, PV = 100283.58 USD
 
 May 10, 2015 - Investor1
-	 SP:  hold   (T1 Apr 13, 2015 [0.90] -  T2 May  5, 2015 [0.92]   Ann. Change: 0.10%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 0.00, hold: 1.00, sell: 0.00, abs: 0.00)
-	C1bal = 99992.00 USD, C2bal =   0.00 JPY, PV = 99992.00 USD
+	SP:  buy   (T1 Mar  4, 2015 [0.93] -  T2 May  5, 2015 [0.92]   Ann. Change: -0.24%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (1197800.00 JPY, fee =   2.00)
+	C1bal = 80281.58 USD, C2bal = 2395600.00 JPY, PV = 100281.58 USD
 
 May 11, 2015 - Investor1
-	 SP:  buy   (T1 Apr 14, 2015 [0.91] -  T2 May  6, 2015 [0.87]   Ann. Change: -0.23%   HoldWin(-0.10% to  0.10%))
+	SP:  buy   (T1 Mar  5, 2015 [0.93] -  T2 May  6, 2015 [0.87]   Ann. Change: -1.11%   HoldWin(-0.10% to  0.10%))
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
         *** BUY ***       0.00 USD (1200500.00 JPY, fee =   2.00)
-	C1bal = 89990.00 USD, C2bal = 1200500.00 JPY, PV = 99990.00 USD
+	C1bal = 70279.58 USD, C2bal = 3596100.00 JPY, PV = 100234.60 USD
 
 May 12, 2015 - Investor1
-	 SP:  buy   (T1 Apr 15, 2015 [0.91] -  T2 May  7, 2015 [0.88]   Ann. Change: -0.23%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1198000.00 JPY, fee =   2.00)
-	C1bal = 79988.00 USD, C2bal = 2398500.00 JPY, PV = 100008.87 USD
+	SP:  hold   (T1 Mar  6, 2015 [0.87] -  T2 May  7, 2015 [0.88]   Ann. Change: 0.07%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: hold  100%  (buy: 0.00, hold: 1.00, sell: 0.00, abs: 0.00)
+	C1bal = 70279.58 USD, C2bal = 3596100.00 JPY, PV = 100297.11 USD
 
 May 13, 2015 - Investor1
-	 SP:  buy   (T1 Apr 16, 2015 [0.91] -  T2 May  8, 2015 [0.88]   Ann. Change: -0.19%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1190900.00 JPY, fee =   2.00)
-	C1bal = 69986.00 USD, C2bal = 3589400.00 JPY, PV = 100126.23 USD
+	SP:  sell   (T1 Mar  7, 2015 [0.87] -  T2 May  8, 2015 [0.88]   Ann. Change: 0.26%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
+        *** SELL ***  10057.94 USD (fee:   2.01), [1197800.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***  10057.94 USD (fee:   2.01), [1197800.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***  10080.61 USD (fee:   2.02), [1200500.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+	C1bal = 100470.03 USD, C2bal =   0.00 JPY, PV = 100470.03 USD
 
 May 14, 2015 - Investor1
-	 SP:  buy   (T1 Apr 17, 2015 [0.91] -  T2 May  9, 2015 [0.88]   Ann. Change: -0.16%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1192000.00 JPY, fee =   2.00)
-	C1bal = 59984.00 USD, C2bal = 4781400.00 JPY, PV = 100096.42 USD
+	SP:  sell   (T1 Mar  8, 2015 [0.87] -  T2 May  9, 2015 [0.88]   Ann. Change: 0.26%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
+	C1bal = 100470.03 USD, C2bal =   0.00 JPY, PV = 100470.03 USD
 
 May 15, 2015 - Investor1
-	 SP:  sell   (T1 Apr 18, 2015 [0.91] -  T2 May 10, 2015 [1.01]   Ann. Change: 0.69%   HoldWin(-0.10% to  0.10%))
+	SP:  sell   (T1 Mar  9, 2015 [0.99] -  T2 May 10, 2015 [1.01]   Ann. Change: 0.35%   HoldWin(-0.10% to  0.10%))
 	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
-        *** SELL ***  10057.81 USD (fee:   2.01), [1200500.00 JPY], investments affected: 1 -->  1 profited, 0 lost
-        *** SELL ***  10036.86 USD (fee:   2.01), [1198000.00 JPY], investments affected: 1 -->  1 profited, 0 lost
-        *** SELL ***   9977.38 USD (fee:   2.00), [1190900.00 JPY], investments affected: 1 -->  0 profited, 1 lost
-        *** SELL ***   9986.60 USD (fee:   2.00), [1192000.00 JPY], investments affected: 1 -->  0 profited, 1 lost
-	C1bal = 100034.63 USD, C2bal =   0.00 JPY, PV = 100034.63 USD
+	C1bal = 100470.03 USD, C2bal =   0.00 JPY, PV = 100470.03 USD
 
 May 16, 2015 - Investor1
-	 SP:  sell   (T1 Apr 19, 2015 [0.91] -  T2 May 11, 2015 [0.95]   Ann. Change: 0.27%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
-	C1bal = 100034.63 USD, C2bal =   0.00 JPY, PV = 100034.63 USD
+	SP:  buy   (T1 Mar 10, 2015 [0.97] -  T2 May 11, 2015 [0.95]   Ann. Change: -0.43%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (1193600.00 JPY, fee =   2.00)
+	C1bal = 90468.03 USD, C2bal = 1193600.00 JPY, PV = 100468.03 USD
 
 May 17, 2015 - Investor1
-	 SP:  sell   (T1 Apr 20, 2015 [0.92] -  T2 May 12, 2015 [0.95]   Ann. Change: 0.17%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
-	C1bal = 100034.63 USD, C2bal =   0.00 JPY, PV = 100034.63 USD
+	SP:  buy   (T1 Mar 11, 2015 [0.97] -  T2 May 12, 2015 [0.95]   Ann. Change: -0.43%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (1193600.00 JPY, fee =   2.00)
+	C1bal = 80466.03 USD, C2bal = 2387200.00 JPY, PV = 100466.03 USD
 
 May 18, 2015 - Investor1
-	 SP:  hold   (T1 Apr 21, 2015 [0.90] -  T2 May 13, 2015 [0.91]   Ann. Change: 0.08%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 0.00, hold: 1.00, sell: 0.00, abs: 0.00)
-	C1bal = 100034.63 USD, C2bal =   0.00 JPY, PV = 100034.63 USD
+	SP:  sell   (T1 Mar 12, 2015 [0.90] -  T2 May 13, 2015 [0.91]   Ann. Change: 0.31%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
+        *** SELL ***   9961.61 USD (fee:   1.99), [1193600.00 JPY], investments affected: 1 -->  0 profited, 1 lost
+        *** SELL ***   9961.61 USD (fee:   1.99), [1193600.00 JPY], investments affected: 1 -->  0 profited, 1 lost
+	C1bal = 100385.27 USD, C2bal =   0.00 JPY, PV = 100385.27 USD
 
 May 19, 2015 - Investor1
-	 SP:  sell   (T1 Apr 22, 2015 [0.90] -  T2 May 14, 2015 [0.93]   Ann. Change: 0.25%   HoldWin(-0.10% to  0.10%))
+	SP:  sell   (T1 Mar 13, 2015 [0.92] -  T2 May 14, 2015 [0.93]   Ann. Change: 0.20%   HoldWin(-0.10% to  0.10%))
 	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
-	C1bal = 100034.63 USD, C2bal =   0.00 JPY, PV = 100034.63 USD
+	C1bal = 100385.27 USD, C2bal =   0.00 JPY, PV = 100385.27 USD
 
 May 20, 2015 - Investor1
-	 SP:  sell   (T1 Apr 23, 2015 [0.89] -  T2 May 15, 2015 [0.93]   Ann. Change: 0.21%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
-	C1bal = 100034.63 USD, C2bal =   0.00 JPY, PV = 100034.63 USD
+	SP:  hold   (T1 Mar 14, 2015 [0.92] -  T2 May 15, 2015 [0.93]   Ann. Change: 0.08%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: hold  100%  (buy: 0.00, hold: 1.00, sell: 0.00, abs: 0.00)
+	C1bal = 100385.27 USD, C2bal =   0.00 JPY, PV = 100385.27 USD
 
 May 21, 2015 - Investor1
-	 SP:  sell   (T1 Apr 24, 2015 [0.90] -  T2 May 16, 2015 [0.93]   Ann. Change: 0.15%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
-	C1bal = 100034.63 USD, C2bal =   0.00 JPY, PV = 100034.63 USD
+	SP:  hold   (T1 Mar 15, 2015 [0.92] -  T2 May 16, 2015 [0.93]   Ann. Change: 0.08%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: hold  100%  (buy: 0.00, hold: 1.00, sell: 0.00, abs: 0.00)
+	C1bal = 100385.27 USD, C2bal =   0.00 JPY, PV = 100385.27 USD
 
 May 22, 2015 - Investor1
-	 SP:  sell   (T1 Apr 25, 2015 [0.90] -  T2 May 17, 2015 [0.93]   Ann. Change: 0.15%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
-	C1bal = 100034.63 USD, C2bal =   0.00 JPY, PV = 100034.63 USD
+	SP:  buy   (T1 Mar 16, 2015 [0.93] -  T2 May 17, 2015 [0.93]   Ann. Change: -0.15%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (1214500.00 JPY, fee =   2.00)
+	C1bal = 90383.27 USD, C2bal = 1214500.00 JPY, PV = 100383.27 USD
 
 May 23, 2015 - Investor1
-	 SP:  sell   (T1 Apr 26, 2015 [0.90] -  T2 May 18, 2015 [0.92]   Ann. Change: 0.11%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
-	C1bal = 100034.63 USD, C2bal =   0.00 JPY, PV = 100034.63 USD
+	SP:  hold   (T1 Mar 17, 2015 [0.92] -  T2 May 18, 2015 [0.92]   Ann. Change: 0.03%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: hold  100%  (buy: 0.00, hold: 1.00, sell: 0.00, abs: 0.00)
+	C1bal = 90383.27 USD, C2bal = 1214500.00 JPY, PV = 100383.27 USD
 
 May 24, 2015 - Investor1
-	 SP:  hold   (T1 Apr 27, 2015 [0.90] -  T2 May 19, 2015 [0.91]   Ann. Change: 0.08%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 0.00, hold: 1.00, sell: 0.00, abs: 0.00)
-	C1bal = 100034.63 USD, C2bal =   0.00 JPY, PV = 100034.63 USD
+	SP:  buy   (T1 Mar 18, 2015 [0.92] -  T2 May 19, 2015 [0.91]   Ann. Change: -0.19%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (1214500.00 JPY, fee =   2.00)
+	C1bal = 80381.27 USD, C2bal = 2429000.00 JPY, PV = 100381.27 USD
 
 May 25, 2015 - Investor1
-	 SP:  hold   (T1 Apr 28, 2015 [0.90] -  T2 May 20, 2015 [0.91]   Ann. Change: 0.02%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 0.00, hold: 1.00, sell: 0.00, abs: 0.00)
-	C1bal = 100034.63 USD, C2bal =   0.00 JPY, PV = 100034.63 USD
+	SP:  buy   (T1 Mar 19, 2015 [0.92] -  T2 May 20, 2015 [0.91]   Ann. Change: -0.31%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (1214500.00 JPY, fee =   2.00)
+	C1bal = 70379.27 USD, C2bal = 3643500.00 JPY, PV = 100379.27 USD
 
 May 26, 2015 - Investor1
-	 SP:  hold   (T1 Apr 29, 2015 [0.90] -  T2 May 21, 2015 [0.91]   Ann. Change: 0.04%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 0.00, hold: 1.00, sell: 0.00, abs: 0.00)
-	C1bal = 100034.63 USD, C2bal =   0.00 JPY, PV = 100034.63 USD
+	SP:  buy   (T1 Mar 20, 2015 [0.93] -  T2 May 21, 2015 [0.91]   Ann. Change: -0.40%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (1230800.00 JPY, fee =   2.00)
+	C1bal = 60377.27 USD, C2bal = 4874300.00 JPY, PV = 99979.96 USD
 
 May 27, 2015 - Investor1
-	 SP:  hold   (T1 Apr 30, 2015 [0.91] -  T2 May 22, 2015 [0.90]   Ann. Change: -0.09%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: hold  100%  (buy: 0.00, hold: 1.00, sell: 0.00, abs: 0.00)
-	C1bal = 100034.63 USD, C2bal =   0.00 JPY, PV = 100034.63 USD
+	SP:  buy   (T1 Mar 21, 2015 [0.93] -  T2 May 22, 2015 [0.90]   Ann. Change: -0.50%   HoldWin(-0.10% to  0.10%))
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (1237600.00 JPY, fee =   2.00)
+	C1bal = 50375.27 USD, C2bal = 6111900.00 JPY, PV = 99760.37 USD
 
 May 28, 2015 - Investor1
-	 SP:  buy   (T1 May  1, 2015 [1.04] -  T2 May 23, 2015 [0.90]   Ann. Change: -0.79%   HoldWin(-0.10% to  0.10%))
+	SP:  buy   (T1 Mar 22, 2015 [0.93] -  T2 May 23, 2015 [0.90]   Ann. Change: -0.50%   HoldWin(-0.10% to  0.10%))
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
         *** BUY ***       0.00 USD (1241800.00 JPY, fee =   2.00)
-	C1bal = 90032.63 USD, C2bal = 1241800.00 JPY, PV = 100032.63 USD
+	C1bal = 40373.27 USD, C2bal = 7353700.00 JPY, PV = 99591.34 USD
 
 May 29, 2015 - Investor1
-	 SP:  buy   (T1 May  2, 2015 [1.03] -  T2 May 24, 2015 [0.90]   Ann. Change: -0.76%   HoldWin(-0.10% to  0.10%))
+	SP:  buy   (T1 Mar 23, 2015 [0.92] -  T2 May 24, 2015 [0.90]   Ann. Change: -0.32%   HoldWin(-0.10% to  0.10%))
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
         *** BUY ***       0.00 USD (1239800.00 JPY, fee =   2.00)
-	C1bal = 80030.63 USD, C2bal = 2481600.00 JPY, PV = 100046.77 USD
+	C1bal = 30371.27 USD, C2bal = 8593500.00 JPY, PV = 99684.87 USD
 
 May 30, 2015 - Investor1
-	 SP:  buy   (T1 May  3, 2015 [0.96] -  T2 May 25, 2015 [0.89]   Ann. Change: -0.43%   HoldWin(-0.10% to  0.10%))
+	SP:  buy   (T1 Mar 24, 2015 [0.91] -  T2 May 25, 2015 [0.89]   Ann. Change: -0.38%   HoldWin(-0.10% to  0.10%))
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
         *** BUY ***       0.00 USD (1239800.00 JPY, fee =   2.00)
-	C1bal = 70028.63 USD, C2bal = 3721400.00 JPY, PV = 100044.77 USD
+	C1bal = 20369.27 USD, C2bal = 9833300.00 JPY, PV = 99682.87 USD
 
 May 31, 2015 - Investor1
-	 SP:  buy   (T1 May  4, 2015 [0.96] -  T2 May 26, 2015 [0.88]   Ann. Change: -0.51%   HoldWin(-0.10% to  0.10%))
+	SP:  buy   (T1 Mar 25, 2015 [0.90] -  T2 May 26, 2015 [0.88]   Ann. Change: -0.28%   HoldWin(-0.10% to  0.10%))
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
         *** BUY ***       0.00 USD (1239800.00 JPY, fee =   2.00)
-	C1bal = 60026.63 USD, C2bal = 4961200.00 JPY, PV = 100042.77 USD
+	C1bal = 10367.27 USD, C2bal = 11073100.00 JPY, PV = 99680.87 USD
 
-Completed generation 1, May  1, 2015 - May 31, 2015,  unsettled =   4961200.00 JPY
+Completed generation 1, May  1, 2015 - May 31, 2015,  unsettled =  11073100.00 JPY
 loop 0 completed.  May  1, 2015 - May 31, 2015
 
 **************  S I M U L A T I O N   R E S U L T S  **************

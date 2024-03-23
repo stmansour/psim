@@ -73,11 +73,11 @@ func TestInfluencerPredictions(t *testing.T) {
 // TestNewInfestorFromDNA - create Investors from DNA
 func TestNewInvestorFromDNA(t *testing.T) {
 	dnas := []string{
-		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-77,Delta2=-14,Metric=WTOILClose}|{LSMInfluencer,Delta1=-83,Delta2=-13,Metric=WDMCount}|{LSMInfluencer,Delta1=-33,Delta2=-21,Metric=WHLScore_ECON}|{LSMInfluencer,Delta1=-77,Delta2=-10,Metric=WHOScore}|{LSMInfluencer,Delta1=-95,Delta2=-30,Metric=IR}|{LSMInfluencer,Delta1=-53,Delta2=-26,Metric=WDFCount}|{LSMInfluencer,Delta1=-32,Delta2=-9,Metric=LSPScore_ECON}|{LSMInfluencer,Delta1=-163,Delta2=-35,Metric=M2}|{LSMInfluencer,Delta1=-49,Delta2=-3,Metric=WDPCount}|{LSMInfluencer,Delta1=-104,Delta2=-42,Metric=BC}]}",
+		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-77,Delta2=-14,Metric=WTOILClose}|{LSMInfluencer,Delta1=-83,Delta2=-13,Metric=WDMCount}|{LSMInfluencer,Delta1=-63,Delta2=-21,Metric=WHLScore_ECON}|{LSMInfluencer,Delta1=-77,Delta2=-10,Metric=WHOScore}|{LSMInfluencer,Delta1=-95,Delta2=-30,Metric=IR}|{LSMInfluencer,Delta1=-149,Delta2=-26,Metric=WDFCount}|{LSMInfluencer,Delta1=-132,Delta2=-9,Metric=LSPScore_ECON}|{LSMInfluencer,Delta1=-163,Delta2=-35,Metric=M2}|{LSMInfluencer,Delta1=-249,Delta2=-3,Metric=WDPCount}|{LSMInfluencer,Delta1=-104,Delta2=-42,Metric=BC}]}",
 		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-63,Delta2=-23,Metric=WDECount_ECON}]}",
-		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-80,Delta2=-24,Metric=WDFCount_ECON}|{LSMInfluencer,Delta1=-42,Delta2=-5,Metric=WDPCount_ECON}]}",
-		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-38,Delta2=-15,Metric=WDPCount}|{LSMInfluencer,Delta1=-31,Delta2=-5,Metric=WHOScore}|{LSMInfluencer,Delta1=-166,Delta2=-44,Metric=BC}]}",
-		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-32,Delta2=-27,Metric=LSNScore}|{LSMInfluencer,Delta1=-44,Delta2=-14,Metric=WHLScore}|{LSMInfluencer,Delta1=-37,Delta2=-16,Metric=WDFCount}|{LSMInfluencer,Delta1=-47,Delta2=-6,Metric=WHAScore}|{LSMInfluencer,Delta1=-59,Delta2=-16,Metric=LSNScore}|{LSMInfluencer,Delta1=-84,Delta2=-16,Metric=WPAScore_ECON}|{LSMInfluencer,Delta1=-167,Delta2=-43,Metric=M2}|{LSMInfluencer,Delta1=-97,Delta2=-34,Metric=CC}]}",
+		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-80,Delta2=-24,Metric=WDFCount_ECON}|{LSMInfluencer,Delta1=-242,Delta2=-5,Metric=WDPCount_ECON}]}",
+		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-138,Delta2=-15,Metric=WDPCount}|{LSMInfluencer,Delta1=-71,Delta2=-5,Metric=WHOScore}|{LSMInfluencer,Delta1=-166,Delta2=-44,Metric=BC}]}",
+		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-132,Delta2=-27,Metric=LSNScore}|{LSMInfluencer,Delta1=-144,Delta2=-14,Metric=WHLScore}|{LSMInfluencer,Delta1=-137,Delta2=-16,Metric=WDFCount}|{LSMInfluencer,Delta1=-147,Delta2=-6,Metric=WHAScore}|{LSMInfluencer,Delta1=-159,Delta2=-16,Metric=LSNScore}|{LSMInfluencer,Delta1=-84,Delta2=-16,Metric=WPAScore_ECON}|{LSMInfluencer,Delta1=-167,Delta2=-43,Metric=M2}|{LSMInfluencer,Delta1=-97,Delta2=-34,Metric=CC}]}",
 	}
 	f, db, cfg := createConfigAndFactory()
 	for i := 0; i < len(dnas); i++ {
@@ -118,8 +118,8 @@ func TestInvestorFromParents(t *testing.T) {
 	// t.Fail()
 
 	parent1 := Investor{Strategy: 1, W1: 0.5, W2: 0.5}
-	dr := LSMInfluencer{Metric: "WTOILClose", Delta1: -45, Delta2: -2}
-	ir := LSMInfluencer{Metric: "SP", Delta1: -29, Delta2: -5}
+	dr := LSMInfluencer{Metric: "WTOILClose", Delta1: -145, Delta2: -2}
+	ir := LSMInfluencer{Metric: "SP", Delta1: -89, Delta2: -5}
 	dr.Init(&parent1, cfg)
 	dr.SetID()
 	ir.Init(&parent1, cfg)
@@ -128,7 +128,7 @@ func TestInvestorFromParents(t *testing.T) {
 
 	parent2 := Investor{Strategy: 0, W1: 0.5, W2: 0.5}
 	dr2 := LSMInfluencer{Metric: "CC", Delta1: -95, Delta2: -30}
-	ur2 := LSMInfluencer{Metric: "DR", Delta1: -29, Delta2: -1}
+	ur2 := LSMInfluencer{Metric: "DR", Delta1: -89, Delta2: -1}
 	dr2.Init(&parent2, cfg)
 	dr2.SetID()
 	ur2.Init(&parent2, cfg)
