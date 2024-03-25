@@ -6,6 +6,26 @@ import (
 	"testing"
 )
 
+func TestGenDur(t *testing.T) {
+	app.randNano = -1
+	app.cfName = "gendur.json5"
+	setDBLocation()
+	s := &app.sim
+	s.ResetSimulator()
+
+	doSimulation()
+}
+
+func TestCrucible(t *testing.T) {
+	app.randNano = -1
+	app.cfName = "confcru.json5"
+	setDBLocation()
+	s := &app.sim
+	s.ResetSimulator()
+
+	doSimulation()
+}
+
 func TestInvestorDNA(t *testing.T) {
 	app.randNano = -1
 	app.cfName = "configsmall.json5"

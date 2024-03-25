@@ -7,7 +7,6 @@ import (
 	"os"
 	"sort"
 	"strconv"
-	"time"
 
 	"github.com/stmansour/psim/util"
 )
@@ -137,33 +136,4 @@ func (r EconometricsRecords) Less(i, j int) bool {
 // Swap is used to do exactly what you think it does
 func (r EconometricsRecords) Swap(i, j int) {
 	r[i], r[j] = r[j], r[i]
-}
-
-// CSVDBFindRecord returns the record associated with the input date
-//
-// INPUTS
-//
-//	dt = date of record to return
-//
-// RETURNS
-//
-//	pointer to the record on the supplied date
-//	nil - record was not found
-//
-// ---------------------------------------------------------------------------
-func (d *DatabaseCSV) CSVDBFindRecord(dt time.Time) *EconometricsRecord {
-	left := 0
-	right := len(d.DBRecs) - 1
-
-	for left <= right {
-		mid := left + (right-left)/2
-		if d.DBRecs[mid].Date.Year() == dt.Year() && d.DBRecs[mid].Date.Month() == dt.Month() && d.DBRecs[mid].Date.Day() == dt.Day() {
-			return &d.DBRecs[mid]
-		} else if d.DBRecs[mid].Date.Before(dt) {
-			left = mid + 1
-		} else {
-			right = mid - 1
-		}
-	}
-	return nil
 }

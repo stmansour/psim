@@ -18,6 +18,7 @@ type Application struct {
 	sqldb       *newdata.Database
 	csvdb       *newdata.Database
 	cfg         *util.AppConfig
+	cfName      string // override default config file name with this file
 	extres      *util.ExternalResources
 	BucketCount int
 	DtStart     time.Time
@@ -29,6 +30,7 @@ var app Application
 
 func readCommandLineArgs() {
 	flag.StringVar(&app.ShardMetric, "s", "", "print the shard info for the supplied metric (as seen in CSV column header)")
+	flag.StringVar(&app.cfName, "c", "", "configuration file to use (instead of config.json)")
 	flag.Parse()
 }
 
@@ -44,7 +46,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("ReadExternalResources returned error: %s\n", err.Error())
 	}
-	cfg, err := util.LoadConfig("")
+	cfg, err := util.LoadConfig(app.cfName)
 	if err != nil {
 		log.Fatalf("failed to read config file: %v\n", err)
 	}
@@ -94,29 +96,29 @@ func main() {
 	// Copy the tables one by one...
 	//   1. MetricsSources
 	//----------------------------------------------------------------------
-	if err = app.csvdb.CopyCsvMetricsSourcesToSQL(app.sqldb.SQLDB.MetricSrcCache); err != nil {
-		log.Fatalf("*** FATAL ERROR ***  CopyCsvMetricsSourcesToSQL returned error: %s\n", err)
+	if err = app.csvdb.WriteMetricsSources(app.sqldb.SQLDB.MetricSrcCache); err != nil {
+		log.Fatalf("*** FATAL ERROR ***  WriteMetricsSources returned error: %s\n", err)
 	}
 
 	//----------------------------------------------------------------------
 	//   2. Locales
 	//----------------------------------------------------------------------
 	if err = app.csvdb.CSVDB.WriteLocalesToCSV(app.sqldb.SQLDB.LocaleCache); err != nil {
-		log.Fatalf("*** FATAL ERROR ***  CopyCsvMetricsSourcesToSQL returned error: %s\n", err)
+		log.Fatalf("*** FATAL ERROR ***  WriteMetricsSourcesToSQL returned error: %s\n", err)
 	}
 
 	//----------------------------------------------------------------------
 	//   3. MISubclasses
 	//----------------------------------------------------------------------
 	if err = app.csvdb.CSVDB.WriteMISubclassesToCSV(app.sqldb.Mim.MInfluencerSubclasses); err != nil {
-		log.Fatalf("*** FATAL ERROR ***  CopyCsvMetricsSourcesToSQL returned error: %s\n", err)
+		log.Fatalf("*** FATAL ERROR ***  WriteMetricsSourcesToSQL returned error: %s\n", err)
 	}
 
 	//----------------------------------------------------------------------
 	//   4. Sharded Metrics  (includes EXClose which is not sharded)
 	//----------------------------------------------------------------------
 	if err = app.csvdb.CSVDB.CopySQLRecsToCSV(app.sqldb); err != nil {
-		log.Fatalf("*** FATAL ERROR ***  CopyCsvMetricsSourcesToSQL returned error: %s\n", err)
+		log.Fatalf("*** FATAL ERROR ***  WriteMetricsSourcesToSQL returned error: %s\n", err)
 	}
 
 	//----------------------------------------------------------------------

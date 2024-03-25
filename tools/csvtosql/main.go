@@ -124,8 +124,8 @@ func main() {
 	if err = app.sqldb.Mim.LoadMInfluencerSubclasses(); err != nil {
 		log.Fatalf("Error from LoadMInfluencerSubclasses: %s\n", err.Error())
 	}
-	if err = app.sqldb.CopyCsvMetricsSourcesToSQL(app.csvdb.CSVDB.MetricSrcCache); err != nil {
-		log.Fatalf("Error from CopyCsvMetricsSourcesToSQL: %s\n", err.Error())
+	if err = app.sqldb.WriteMetricsSources(app.csvdb.CSVDB.MetricSrcCache); err != nil {
+		log.Fatalf("Error from WriteMetricsSources: %s\n", err.Error())
 	}
 	if err = MigrateTimeSeriesData(); err != nil {
 		log.Fatalf("Error from MigrateTimeSeriesData: %s\n", err.Error())

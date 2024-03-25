@@ -28,16 +28,11 @@ func TestConfig(t *testing.T) {
 	Init(-1)
 	cfg := CreateTestingCFG()
 
-	for k, v := range cfg.SCInfo {
-		fmt.Printf("Key: %s, Value: %#v\n", k, v)
-	}
+	// for k, v := range cfg.SCInfo {
+	// 	fmt.Printf("Key: %s, Value: %#v\n", k, v)
+	// }
 	if err := ValidateConfig(cfg); err != nil {
 		t.Errorf("ValidateConfig failed: %s", err)
-	}
-
-	cfg.InfluencerSubclasses = append(cfg.InfluencerSubclasses, "URInfluencer,")
-	if err := ValidateConfig(cfg); err == nil {
-		t.Errorf("ValidateConfig failed: %q is not a valid Influencer subclass", "URInfluencer,")
 	}
 }
 
@@ -52,11 +47,6 @@ func TestLoadConfig(t *testing.T) {
 	if err := ValidateConfig(cfg); err != nil {
 		t.Errorf("ValidateConfig failed: %s", err)
 	}
-
-	for i := 0; i < len(cfg.InfluencerSubclasses); i++ {
-		fmt.Printf("%d: %s\n", i, cfg.InfluencerSubclasses[i])
-	}
-
 }
 
 func TestDateFunctions(t *testing.T) {
@@ -96,7 +86,7 @@ func TestGenerateRefNo(t *testing.T) {
 	r := GenerateRefNo()
 	Console("r = %s\n", r)
 	EnableConsole()
-	DPrintf("r = %s\n", r)
+	DPrintf("r = %s.  THIS IS OUTPUT FROM A TEST\n", r)
 	Console("len(r) = %d\n", len(r))
 	if len(r) != 20 {
 		t.Errorf("expecting len(r) to be 20, got %d\n", len(r))

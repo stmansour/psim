@@ -26,8 +26,8 @@ func (d *DatabaseCSV) EnsureDataDirectory() (string, error) {
 	return dataPath, nil
 }
 
-// CopyCsvMetricsSourcesToSQL takes a slice of MetricsSource and creates a CSV file.
-func (d *DatabaseCSV) CopyCsvMetricsSourcesToSQL(locations []MetricsSource) error {
+// WriteMetricsSourcesToCSV takes a slice of MetricsSource and creates a CSV file.
+func (d *DatabaseCSV) WriteMetricsSourcesToCSV(locations []MetricsSource) error {
 	FullyQualifiedFileName := filepath.Join(d.DBPath, "metricsources.csv")
 
 	file, err := os.Create(FullyQualifiedFileName)

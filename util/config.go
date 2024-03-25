@@ -26,48 +26,6 @@ type InfluencerSubclassInfo struct {
 	FitnessW2 float64 // weight for activity
 }
 
-// ValidInfluencerSubclasses anything other than these values is an error
-// ---------------------------------------------------------------------------
-var ValidInfluencerSubclasses = []string{
-	"BCInfluencer",
-	"BPInfluencer",
-	"CCInfluencer",
-	"CUInfluencer",
-	"DRInfluencer", // discount rate
-	"GDInfluencer",
-	"HSInfluencer", // housing starts
-	"IEInfluencer",
-	"IPInfluencer",
-	"IRInfluencer", // inflation rate
-	"L0Influencer", // LSPScore_ECON - linguistic sentiment positive
-	"L1Influencer", //
-	"L2Influencer", //
-	"L3Influencer", //
-	"L4Influencer", //
-	"L5Influencer", //
-	"L6Influencer",
-	"L7Influencer",
-	"L8Influencer",
-	"L9Influencer",
-	"LAInfluencer",
-	"LBInfluencer",
-	"LCInfluencer",
-	"LDInfluencer",
-	"LEInfluencer",
-	"LFInfluencer",
-	"LGInfluencer",
-	"LHInfluencer",
-	"LIInfluencer",
-	"LJInfluencer",
-	"M1Influencer", // money supply short term
-	"M2Influencer", // money supply long term
-	"MPInfluencer",
-	"RSInfluencer",
-	"SPInfluencer", // stock price
-	"URInfluencer", // unemployment rate
-	"WTInfluencer", // unemployment rate
-}
-
 // InfluencerSubclasses is an array of strings with all the subclasses of
 // Influencer that the factory knows how to create.
 // ---------------------------------------------------------------------------
@@ -98,7 +56,6 @@ type FileConfig struct {
 	DtStart          CustomDate // simulation begins on this date
 	DtStop           CustomDate // simulation ends on this date. Guaranteed that no "buys" happen after this date
 	LoopCount        int        // how many times to loop over DtStart to DtStop
-	COAStrategy      string     // course of action strategy used by Investors (choices are: DistributedDecision)
 	TopInvestorCount int        // how many top investors to include in financial report
 	HoldWindowPos    float64    // positive space to consider as "no difference" when subtracting two ratios
 	HoldWindowNeg    float64    // negative space to consider as "no difference" when subtracting two ratios
@@ -148,58 +105,63 @@ type CruciblePeriod struct {
 // to all areas of code in this project
 // ---------------------------------------------------------------------------
 type AppConfig struct {
-	Filename             string                            // filename of the configuration file read
-	C1                   string                            // Currency1 - the currency that we're trying to maximize
-	C2                   string                            // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
-	DtStart              CustomDate                        // simulation begins on this date
-	DtStop               CustomDate                        // simulation ends on this date
-	EnforceStopDate      bool                              // stops on DtStop even if there is a C2 Balance, if false and C2 Balance > 0 on StopDate, simulation will continue in sell-only mode until C2 < 1.00
-	COAStrategy          string                            // course of action strategy used by Investors (choices are: DistributedDecision)
-	LoopCount            int                               // how many times to loop over DtStart to DtStop
-	TopInvestorCount     int                               // how many top investors to include in financial report
-	MinInfluencers       int                               // minimum number of influencers per Investor
-	MaxInfluencers       int                               // maximum number of influencers per Investor
-	GenDurSpec           string                            // gen dur spec
-	GenDur               *GenerationDuration               // parsed gen dur spec
-	DtSettle             time.Time                         // later of DtStop or date on which the last sale was made
-	PopulationSize       int                               // how many investors are in this population
-	InitFunds            float64                           // amount of funds each Investor is "staked" at the outset of the simulation
-	StdInvestment        float64                           // standard investment amount
-	TradingDay           int                               // this needs to be completely re-thought -- it's like a recurrence rule
-	TradingTime          time.Time                         // time of day when buy/sell is executed
-	Generations          int                               // current generation in the simulator
-	MaxInf               int                               // maximum number of influencers for any Investor
-	MinInf               int                               // minimum number of influencers for any Investor
-	SCInfo               map[string]InfluencerSubclassInfo // map from Influencer subtype to its research time limits
-	MinDelta4            int                               // closest to t3 that t4 can be
-	MaxDelta4            int                               // furthest out from t3 that t4 can be
-	DRW1                 float64                           // weighting for correctness part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
-	DRW2                 float64                           // weighting for prediction count part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
-	InvW1                float64                           // weight for profit part of Investor FitnessScore
-	InvW2                float64                           // weight for correctness part of Investor FitnessScore
-	MutationRate         int                               // 1 - 100 indicating the % of mutation
-	DBSource             string                            // {CSV | Database | OnlineService}
-	InfluencerSubclasses []string                          // allowable Influencer subclasses for this run
-	RandNano             int64                             // random number seed used for this simulation
-	InfPredDebug         bool                              // print debug info about every prediction
-	Trace                bool                              // use this flag to cause full trace information to be printed regarding every Investor decision every day.
-	SingleInvestorMode   bool                              // default is false, when true it means we're running a single investor... more like the production code will run
-	SingleInvestorDNA    string                            // DNA of the single investor
-	TopInvestors         []TopInvestor                     // a list of top investors
-	CrucibleSpans        []CruciblePeriod                  // list of times to run the simulation
-	CrucibleMode         bool                              // if true then run all TopInvestor DNA through the CrucibleSpans
-	ReportDirectory      string                            // final directory where all reports should be
-	ReportTimestamp      string                            // timestamp to used for archived reports
-	ReportDirSet         bool                              // when false the info needs to be set, when true it's already set
-	ArchiveBaseDir       string                            // directory where archive will be created.  If no value is supplied, current directory will be used
-	ArchiveMode          bool                              // archive reports to directory when true
-	PreserveElite        bool                              // when true it replicates the top PreserverElitePct of DNA from gen x to gen x+1
-	PreserveElitePct     float64                           // floating point value representing the amount of DNA to preserve. 0.0 to 100.0
-	EliteCount           int                               // calculated by the simulator
-	ExecutableFilePath   string                            // path to the executable
-	StopLoss             float64                           // Expressed as a percentage of the Portfolio Value. That is, use 0.10 for 10%.  Sell all C2 immediately if the PV has lost this much of the initial funding.
-	TxnFeeFactor         float64                           // cost per transaction that is multiplied by the amount. 0.0002 == 2 basis points, 0 if not set
-	TxnFee               float64                           // a flat cost that is added for each transaction, 0 if not set
+	Filename         string              // filename of the configuration file read
+	C1               string              // Currency1 - the currency that we're trying to maximize
+	C2               string              // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
+	DtStart          CustomDate          // simulation begins on this date
+	DtStop           CustomDate          // simulation ends on this date
+	EnforceStopDate  bool                // stops on DtStop even if there is a C2 Balance, if false and C2 Balance > 0 on StopDate, simulation will continue in sell-only mode until C2 < 1.00
+	COAStrategy      string              // course of action strategy used by Investors (choices are: DistributedDecision)
+	LoopCount        int                 // how many times to loop over DtStart to DtStop
+	TopInvestorCount int                 // how many top investors to include in financial report
+	MinInfluencers   int                 // minimum number of influencers per Investor
+	MaxInfluencers   int                 // maximum number of influencers per Investor
+	GenDurSpec       string              // gen dur spec
+	GenDur           *GenerationDuration // parsed gen dur spec
+	DtSettle         time.Time           // later of DtStop or date on which the last sale was made
+	PopulationSize   int                 // how many investors are in this population
+	InitFunds        float64             // amount of funds each Investor is "staked" at the outset of the simulation
+	StdInvestment    float64             // standard investment amount
+	TradingDay       int                 // this needs to be completely re-thought -- it's like a recurrence rule
+	TradingTime      time.Time           // time of day when buy/sell is executed
+	Generations      int                 // current generation in the simulator
+	MaxInf           int                 // maximum number of influencers for any Investor
+	MinInf           int                 // minimum number of influencers for any Investor
+	MinDelta4        int                 // closest to t3 that t4 can be
+	MaxDelta4        int                 // furthest out from t3 that t4 can be
+	DRW1             float64             // weighting for correctness part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
+	DRW2             float64             // weighting for prediction count part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
+	InvW1            float64             // weight for profit part of Investor FitnessScore
+	InvW2            float64             // weight for correctness part of Investor FitnessScore
+	MutationRate     int                 // 1 - 100 indicating the % of mutation
+	DBSource         string              // {CSV | Database | OnlineService}
+	// InfluencerSubclasses []string                          // allowable Influencer subclasses for this run
+	RandNano           int64            // random number seed used for this simulation
+	InfPredDebug       bool             // print debug info about every prediction
+	Trace              bool             // use this flag to cause full trace information to be printed regarding every Investor decision every day.
+	SingleInvestorMode bool             // default is false, when true it means we're running a single investor... more like the production code will run
+	SingleInvestorDNA  string           // DNA of the single investor
+	TopInvestors       []TopInvestor    // a list of top investors
+	CrucibleSpans      []CruciblePeriod // list of times to run the simulation
+	CrucibleMode       bool             // if true then run all TopInvestor DNA through the CrucibleSpans
+	ReportDirectory    string           // final directory where all reports should be
+	ReportTimestamp    string           // timestamp to used for archived reports
+	ReportDirSet       bool             // when false the info needs to be set, when true it's already set
+	ArchiveBaseDir     string           // directory where archive will be created.  If no value is supplied, current directory will be used
+	ArchiveMode        bool             // archive reports to directory when true
+	PreserveElite      bool             // when true it replicates the top PreserverElitePct of DNA from gen x to gen x+1
+	PreserveElitePct   float64          // floating point value representing the amount of DNA to preserve. 0.0 to 100.0
+	EliteCount         int              // calculated by the simulator
+	ExecutableFilePath string           // path to the executable
+	StopLoss           float64          // Expressed as a percentage of the Portfolio Value. That is, use 0.10 for 10%.  Sell all C2 immediately if the PV has lost this much of the initial funding.
+	TxnFeeFactor       float64          // cost per transaction that is multiplied by the amount. 0.0002 == 2 basis points, 0 if not set
+	TxnFee             float64          // a flat cost that is added for each transaction, 0 if not set
+}
+
+// Helper function to check if a file exists
+func checkFileExists(fname string) bool {
+	_, err := os.Stat(fname)
+	return err == nil
 }
 
 // LoadConfig reads the configuration data from config.json into an
@@ -217,40 +179,37 @@ type AppConfig struct {
 //
 // ---------------------------------------------------------------------
 func LoadConfig(cfname string) (*AppConfig, error) {
-	var cfg AppConfig
 	var fcfg FileConfig
-	var err error
-
-	// load executable directory
-	cfg.ExecutableFilePath, err = GetExecutableDir()
-	if err != nil {
-		return &cfg, err
-	}
-
-	confFileProfided := len(cfname) > 0
-
+	var cfg AppConfig
 	fname := "config.json5"
-	if confFileProfided {
+	fnameSet := false
+
+	// Check if a config file name was provided
+	if len(cfname) > 0 {
 		fname = cfname
+		fnameSet = true
 	}
 
-	//--------------------------------------------------------
-	// If no config file is provided, look first in current
-	// directory.
-	//--------------------------------------------------------
-	if _, err = os.Stat(fname); err != nil {
-		if !os.IsNotExist(err) {
+	// Check if the config file exists in the current directory
+	if !fnameSet && checkFileExists(fname) {
+		fnameSet = true
+	}
+
+	// If the config file was not found in the current directory, try the executable directory
+	if !fnameSet {
+		exePath, err := GetExecutableDir()
+		if err != nil {
 			return &cfg, err
 		}
-		if confFileProfided {
+		fname = exePath + "/" + fname
+	}
+
+	// If the config file still wasn't found, return an error
+	if !checkFileExists(fname) {
+		if len(cfname) > 0 {
 			return &cfg, fmt.Errorf("no configuration file was found")
 		}
-		fname = cfg.ExecutableFilePath + "/" + fname
-		if _, err = os.Stat(fname); err != nil {
-			if !os.IsNotExist(err) {
-				return &cfg, err
-			}
-		}
+		return &cfg, fmt.Errorf("no configuration file was found in the current directory or the executable directory")
 	}
 
 	configFile, err := os.Open(fname)
@@ -353,245 +312,11 @@ func CreateTestingCFG() *AppConfig {
 		MutationRate:   1,       // percentage number, from 1 - 100, what percent of the time does mutation occur
 		DBSource:       "CSV",   // {CSV | Database | OnlineService}
 		COAStrategy:    "DistributedDecision",
-		InfluencerSubclasses: []string{ // default case is to enable all Influencer subclasses
-			"CCInfluencer",
-			"DRInfluencer",
-			// "GDInfluencer",
-			// "IRInfluencer",
-			// "M1Influencer",
-			// "M2Influencer",
-			"URInfluencer",
-		},
 	}
 
 	cfg.DtStart = CustomDate(dt1)
 	cfg.DtStop = CustomDate(dt2)
 
-	mapper := map[string]InfluencerSubclassInfo{
-		"BC": {
-			MinDelta1: -180,
-			MaxDelta1: -90,
-			MinDelta2: -50,
-			MaxDelta2: -20,
-		},
-		"BP": {
-			MinDelta1: -180,
-			MaxDelta1: -90,
-			MinDelta2: -50,
-			MaxDelta2: -20,
-		},
-		"CC": {
-			MinDelta1: -180,
-			MaxDelta1: -90,
-			MinDelta2: -50,
-			MaxDelta2: -20,
-		},
-		"CU": {
-			MinDelta1: -180,
-			MaxDelta1: -90,
-			MinDelta2: -50,
-			MaxDelta2: -20,
-		},
-		"DR": {
-			MinDelta1: -30,
-			MaxDelta1: -7,
-			MinDelta2: -6,
-			MaxDelta2: -1,
-		},
-		"GD": {
-			MinDelta1: -730,
-			MaxDelta1: -630,
-			MinDelta2: -180,
-			MaxDelta2: -120,
-		},
-		"HS": {
-			MinDelta1: -180,
-			MaxDelta1: -90,
-			MinDelta2: -60,
-			MaxDelta2: -30,
-		},
-		"IE": {
-			MinDelta1: -180,
-			MaxDelta1: -90,
-			MinDelta2: -60,
-			MaxDelta2: -30,
-		},
-		"IP": {
-			MinDelta1: -180,
-			MaxDelta1: -90,
-			MinDelta2: -60,
-			MaxDelta2: -30,
-		},
-		"IR": {
-			MinDelta1: -180,
-			MaxDelta1: -90,
-			MinDelta2: -60,
-			MaxDelta2: -30,
-		},
-		"L0": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-		"L1": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-		"L2": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-		"L3": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-		"L4": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-		"L5": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-		"L6": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-		"L7": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-		"L8": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-		"L9": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-		"LA": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-		"LB": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-		"LC": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-		"LD": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-		"LE": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-		"LF": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-		"LG": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-		"LH": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-		"LI": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-		"LJ": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-		"M1": {
-			MinDelta1: -180,
-			MaxDelta1: -90,
-			MinDelta2: -50,
-			MaxDelta2: -20,
-		},
-		"M2": {
-			MinDelta1: -180,
-			MaxDelta1: -90,
-			MinDelta2: -50,
-			MaxDelta2: -20,
-		},
-		"MR": {
-			MinDelta1: -180,
-			MaxDelta1: -90,
-			MinDelta2: -50,
-			MaxDelta2: -20,
-		},
-		"RS": {
-			MinDelta1: -180,
-			MaxDelta1: -90,
-			MinDelta2: -50,
-			MaxDelta2: -20,
-		},
-		"SP": {
-			MinDelta1: -30,
-			MaxDelta1: -6,
-			MinDelta2: -5,
-			MaxDelta2: -1,
-		},
-		"UR": {
-			MinDelta1: -180,
-			MaxDelta1: -90,
-			MinDelta2: -50,
-			MaxDelta2: -20,
-		},
-		"WT": {
-			MinDelta1: -90,
-			MaxDelta1: -30,
-			MinDelta2: -29,
-			MaxDelta2: -1,
-		},
-	}
-	cfg.SCInfo = mapper
 	cfg.DtSettle = time.Time(cfg.DtStop)
 
 	return &cfg

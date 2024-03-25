@@ -238,23 +238,6 @@ func (p *LSMInfluencer) GetPrediction(t3 time.Time) (*Prediction, error) {
 		pred.Action = "hold" // we have the data and made the calculation.  Assume "hold"
 	}
 
-	// switch p.Predictor {
-	// case newdata.SingleValGT, newdata.C1C2RatioGT:
-	// 	if percentChange > sc.HoldWindowPos {
-	// 		pred.Action = "buy"
-	// 	} else if percentChange < sc.HoldWindowNeg {
-	// 		pred.Action = "sell"
-	// 	}
-	// case newdata.SingleValLT, newdata.C1C2RatioLT:
-	// 	if percentChange < sc.HoldWindowNeg {
-	// 		pred.Action = "buy" // check buy condition
-	// 	} else if percentChange > sc.HoldWindowPos {
-	// 		pred.Action = "sell" // check sell condition
-	// 	}
-	// default:
-	// 	log.Fatalf("Need to handle this case\n")
-	// }
-
 	// todo - return proper probability and weight
 	pred.Probability = 1.0
 	pred.Weight = 1.0
@@ -317,40 +300,5 @@ func (p *LSMInfluencer) SetDataFields(pred *Prediction) error {
 // RETURNS - the fitness score
 // ------------------------------------------------------------------------------------
 func (p *LSMInfluencer) CalculateFitnessScore() float64 {
-	/*
-	**  I don't think this makes sense here. I think it needs to be calculated
-	**  outside the context of the simulator.  The simulator does not determine
-	**  if the influencer's predictions are correct. We only really determine
-	**  if the Investor is correct.  And the CreateInfluencerFromDNA function
-	**  does not base its creation of Influencers on their fitness values
-	 */
-
-	// //---------------------------------------------------
-	// // If it's already been calculated, just return it
-	// //---------------------------------------------------
-	// if p.IsFitnessCalculated() {
-	// 	return p.GetFitnessScore()
-	// }
-	// myPredictions := p.GetMyPredictions()
-
-	// t := float64(len(myPredictions))
-	// if t == 0 {
-	// 	return 0
-	// }
-	// cp := 0
-	// for i := 0; i < len(myPredictions); i++ {
-	// 	if myPredictions[i].Correct {
-	// 		cp++
-	// 	}
-	// }
-	// c := float64(cp)
-
-	// subclassKey := p.Subclass()[:2] // Extract the first two characters of the subclass name
-
-	// // FitnessScore := W1 * Correctness  +  W2 * TotalPredictions/(MaxPredictions+1)    --- NOTE: we add 1 to MaxPredictions to prevent division by 0
-	// x := cfg.SCInfo[subclassKey].FitnessW1*(c/t) + cfg.SCInfo[subclassKey].FitnessW2*(t/float64(1+p.MyInvestor().maxPredictions[subclassKey]))
-	// p.SetFitnessScore(x)
-
-	// return x
 	return 1
 }

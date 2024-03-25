@@ -11,12 +11,12 @@
     //-----------------------------------------------------------------
     //  SIMULATOR
     //-----------------------------------------------------------------
-    "DtStart": "2018-01-01",    // simulation start date for each generation
-    "DtStop": "2018-12-31",     // simulation stop date for each generation
+    "DtStart": "2020-08-17",    // simulation start date for each generation
+    "DtStop": "2023-08-17",     // simulation stop date for each generation
     "EnforceStopDate": true,    // stops on DtStop even if there is a C2 Balance, if false and C2 Balance > 0 on StopDate, simulation will continue in sell-only mode until C2 < 1.00
-    "LoopCount": 20,            // How many times to loop over DtStart to DtStop
+    "LoopCount": 5,            // How many times to loop over DtStart to DtStop
     "Generations": 1,           // how many generations should the simulator run. NOTE: This value is only valid if GenDurSpec is commented out.
-    // "GenDurSpec": "1 Y",        // How long is a generation.  EX:  "1 Y",  "6 M",  "8 W", "1 Y 6 M", "90 D"
+    "GenDurSpec": "6 M",        // How long is a generation.  EX:  "1 Y",  "6 M",  "8 W", "1 Y 6 M", "90 D"
     "PopulationSize": 200,      // Total number Investors in the population
     "C1": "USD",                // main currency  (ISO 4217 code)
     "C2": "JPY",                // currency that we will invest in (ISO 4217 code)
@@ -30,8 +30,8 @@
     "PreserveElite": false,     // when true it replicates the top PreserverElitePct of DNA from gen x to gen x+1
     "PreserveElitePct": 5.0,    // floating point value representing the amount of DNA to preserve. 0.0 to 100.0
     "StopLoss": 0.10,           // Expressed as a percentage of the Portfolio Value. That is, 0.12 means 12%.  Sell all C2 immediately if the PV has lost this much of the initial funding.
-	  "TxnFeeFactor": 0.0002,     // cost, in C1, per transaction that is multiplied by the amount. .0002 == 2 basis points, 0 if not set
-	  "TxnFee": 0,                // a flat cost, in C1, that is added for each transaction, 0 if not set
+	"TxnFeeFactor": 0.0002,     // cost, in C1, per transaction that is multiplied by the amount. .0002 == 2 basis points, 0 if not set
+	"TxnFee": 0,                // a flat cost, in C1, that is added for each transaction, 0 if not set
 
     //-----------------------------------------------------------------
     //  There may be times when we need to test or check the performance
@@ -46,16 +46,8 @@
     "SingleInvestorDNA": "",
 
     //-----------------------------------------------------------------
-    //    C R U C I B L E
-    //
     // Saved DNA of the Top Investors
     //-----------------------------------------------------------------
-    "CrucibleMode": false,
-    "CruciblePeriods": [
-      { "DtStart": "2015-06-01", "DtStop": "2015-09-30", },
-      { "DtStart": "2015-09-01", "DtStop": "2015-12-31", },
-    ],
-
     "TopInvestors": [
       {
         "DNA": "{Investor;InvW1=0.0362;InvW2=0.9638;Influencers=[{LEInfluencer,Delta1=-55,Delta2=-1}|{LAInfluencer,Delta1=-27,Delta2=-2}|{LFInfluencer,Delta1=-36,Delta2=-10}]}"
@@ -70,4 +62,8 @@
       }
     ],
 
+    "CruciblePeriods": [
+      { "DtStart": "2015-06-01", "DtStop": "2015-09-30", },
+      { "DtStart": "2015-09-01", "DtStop": "2015-12-31", },
+    ],
 }

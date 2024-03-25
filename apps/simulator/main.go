@@ -93,7 +93,11 @@ func doSimulation() {
 	cfg.Trace = app.trace
 	cfg.ArchiveBaseDir = app.archiveBaseDir
 	cfg.ArchiveMode = app.archiveMode
-	cfg.CrucibleMode = app.CrucibleMode
+
+	// need this if statement to support unit testing
+	if !cfg.CrucibleMode {
+		cfg.CrucibleMode = app.CrucibleMode
+	}
 	app.cfg = cfg
 
 	app.db, err = newdata.NewDatabase(cfg.DBSource, cfg, app.extres)
@@ -112,7 +116,7 @@ func doSimulation() {
 		c := newcore.NewCrucible()
 		c.Init(cfg, app.db, &app.sim)
 		c.Run()
-		os.Exit(0)
+		return
 	}
 
 	displaySimulationDetails(cfg)

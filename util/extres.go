@@ -28,24 +28,24 @@ const (
 )
 
 // EnvironmentToCode maps an environment input string to a corresponding code.
-func EnvironmentToCode(env string) int {
-	switch env {
-	case "DEV":
-		return DEV
-	case "QA":
-		return QA
-	case "PROD":
-		return PROD
-	default:
-		return -1 // Return -1 or another value to indicate an unknown environment
-	}
-}
+// func EnvironmentToCode(env string) int {
+// 	switch env {
+// 	case "DEV":
+// 		return DEV
+// 	case "QA":
+// 		return QA
+// 	case "PROD":
+// 		return PROD
+// 	default:
+// 		return -1 // Return -1 or another value to indicate an unknown environment
+// 	}
+// }
 
 // GetSQLOpenString builds the string to use for opening an sql database.
 // Input string is the name of the database:  "accord" for phonebook, "rentroll" for RentRoll
 // Returns:  a string to pass to sql.Open()
 // =======================================================================================
-func GetSQLOpenString(dbname string, a *ExternalResources) string {
+func (a *ExternalResources) GetSQLOpenString(dbname string) string {
 	s := ""
 	switch a.Env {
 	case DEV: //development
@@ -59,7 +59,7 @@ func GetSQLOpenString(dbname string, a *ExternalResources) string {
 			a.DbUser, a.DbPass, a.DbHost, a.DbPort, dbname)
 	default:
 		fmt.Printf("Unhandled configuration environment: %d\n", a.Env)
-		os.Exit(1)
+		return ""
 	}
 	return s
 }

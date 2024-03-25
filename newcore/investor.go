@@ -3,7 +3,6 @@ package newcore
 import (
 	"fmt"
 	"log"
-	"math"
 	"math/rand"
 	"sort"
 	"strings"
@@ -563,7 +562,7 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 	for j := 0; j < len(i.Investments); j++ {
 		if !i.Investments[j].Completed {
 			if er4.Fields[s.FQMetric()] < 0.0001 {
-				log.Panicf("Invalid exchange rate: %12.6f\n", er4.Fields[s.Metric])
+				log.Panicf("Invalid exchange rate on %s: %12.6f\n", er4.Date.Format("1/2/2006"), er4.Fields[s.Metric])
 			}
 			i.Investments[j].ERT4 = er4.Fields[s.FQMetric()] // exchange rate on T4... just applies to this sale, we don't touch completed Investments
 		}
@@ -760,34 +759,15 @@ func (i *Investor) CalculateFitnessScore() float64 {
 	}
 
 	profit := i.PortfolioValueC1 - i.cfg.InitFunds
-	if math.IsNaN(profit) || math.IsInf(profit, 0) {
-		log.Panicf("Investor.FitnessSocre() is profit is invalid\n")
-	}
-
 	weightedProfit := float64(0)
 	if i.maxProfit > 0 {
 		weightedProfit = float64(i.W1 * profit / i.maxProfit)
 	}
-	if math.IsNaN(weightedProfit) || math.IsInf(weightedProfit, 0) {
-		log.Panicf("Investor.FitnessSocre() is weightedProfit is invalid.  i.W1 = %4.2f, profit = %8.2f, i.maxProfit = %8.2f\n", i.W1, profit, i.maxProfit)
-	}
 	weightedCorrectness := float64(i.W2 * correctness)
-
-	if math.IsNaN(weightedCorrectness) || math.IsInf(weightedCorrectness, 0) {
-		log.Panicf("Investor.FitnessSocre() is weightedCorrectness is invalid\n")
-	}
-
 	i.Fitness = weightedProfit + weightedCorrectness
-
 	if i.Fitness < 0 {
 		i.Fitness = 0
 	}
-
 	i.FitnessCalculated = true
-
-	if math.IsNaN(i.Fitness) || math.IsInf(i.Fitness, 0) {
-		log.Panicf("Investor.FitnessSocre() is STORING AN INVALID FITNESS!!!!\n")
-	}
-
 	return i.Fitness
 }

@@ -182,7 +182,7 @@ func (p *Database) Open() error {
 		if err = p.ensureDatabase(); err != nil {
 			return err
 		}
-		dsn := util.GetSQLOpenString("plato", p.extres)
+		dsn := p.extres.GetSQLOpenString("plato")
 		p.SQLDB.DB, err = sql.Open("mysql", dsn)
 		if err != nil {
 			return err
@@ -247,15 +247,15 @@ func (p *Database) Insert(rec *EconometricsRecord) error {
 	}
 }
 
-// CopyCsvMetricsSourcesToSQL writes the supplied slice of MetricsSource structs to the database.
+// WriteMetricsSources writes the supplied slice of MetricsSource structs to the database.
 // after CreateDatabaseTables or MigrateCSVtoSQL so that caches are loaded with the copied data.
 // -------------------------------------------------------------------------------------------
-func (p *Database) CopyCsvMetricsSourcesToSQL(locations []MetricsSource) error {
+func (p *Database) WriteMetricsSources(locations []MetricsSource) error {
 	switch p.Datatype {
 	case "CSV":
-		return p.CSVDB.CopyCsvMetricsSourcesToSQL(locations)
+		return p.CSVDB.WriteMetricsSourcesToCSV(locations)
 	case "SQL":
-		return p.SQLDB.CopyCsvMetricsSourcesToSQL(locations)
+		return p.SQLDB.WriteMetricsSourcesToSQL(locations)
 	default:
 		return fmt.Errorf("unknown database type: %s", p.Datatype)
 	}

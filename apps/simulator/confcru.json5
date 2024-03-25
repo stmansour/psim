@@ -93,6 +93,7 @@
       },
     ],
 
+    "CrucibleMode": true,
     "CruciblePeriods": [
       { "DtStart": "2015-06-01", "DtStop": "2015-09-30", },
       { "DtStart": "2015-09-01", "DtStop": "2015-12-31", },
