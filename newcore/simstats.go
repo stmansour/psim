@@ -347,10 +347,15 @@ func (s *Simulator) ReportHeader(file *os.File, bSim bool) {
 	fmt.Fprintf(file, "\"C2: %s\"\n", s.cfg.C2)
 
 	fmt.Fprintf(file, "\"Population: %d\"\n", s.cfg.PopulationSize)
-	if s.cfg.PreserveElite {
-		fmt.Fprintf(file, "\"Preserve Elite: %5.2f%%\"\n", s.cfg.PreserveElitePct)
-	}
+	fmt.Fprintf(file, "\"Influencers: min %d,  max %d\"\n", s.cfg.MinInfluencers, s.cfg.MaxInfluencers)
+	fmt.Fprintf(file, "\"Initial Funds: %.2f %s\"\n", s.cfg.InitFunds, s.cfg.C1)
+	fmt.Fprintf(file, "\"Standard Investment: %.2f %s\"\n", s.cfg.StdInvestment, s.cfg.C1)
 	fmt.Fprintf(file, "\"Stop Loss: %.2f%%\"\n", s.cfg.StopLoss*100)
+	fmt.Fprintf(file, "\"Preserve Elite: %v  (%5.2f%%)\"\n", s.cfg.PreserveElite, s.cfg.PreserveElitePct)
+	fmt.Fprintf(file, "\"Stop Loss: %.2f%%\"\n", s.cfg.StopLoss*100)
+	fmt.Fprintf(file, "\"Transaction Fee: %.2f (flat rate)  %5.1f bps\"\n", s.cfg.TxnFee, s.cfg.TxnFeeFactor*10000)
+	fmt.Fprintf(file, "\"Investor Bonus Plan: %v\"\n", s.cfg.InvestorBonusPlan)
+	fmt.Fprintf(file, "\"Gen 0 Elites: %v\"\n", s.cfg.Gen0Elites)
 
 	omr := float64(0)
 	if s.factory.MutateCalls > 0 {

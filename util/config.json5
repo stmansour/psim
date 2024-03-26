@@ -33,6 +33,7 @@
     "TxnFeeFactor": 0.0002,     // cost, in C1, per transaction that is multiplied by the amount. .0002 == 2 basis points, 0 if not set
     "TxnFee": 0,                // a flat cost, in C1, that is added for each transaction, 0 if not set
     "InvestorBonusPlan": true,  // rewards Investors earning high ROI by giving a bonus to their FitnessScore.  PV >= 110% receive 100% bonus, PV >= 115% get 200%, PV >= 120% get 300%, and PV >= 400% get 500%
+    "Gen0Elites": false,        // Insert TopInvestors DNA into Generation 0
 
     //-----------------------------------------------------------------
     //  There may be times when we need to test or check the performance
@@ -59,16 +60,17 @@
 
     "TopInvestors": [
       {
-        "DNA": "{Investor;InvW1=0.0362;InvW2=0.9638;Influencers=[{LEInfluencer,Delta1=-55,Delta2=-1}|{LAInfluencer,Delta1=-27,Delta2=-2}|{LFInfluencer,Delta1=-36,Delta2=-10}]}"
+        "Name": "Bogel",
+        "DNA": "{Investor;Strategy=MajorityRules;InvW1=0.1764;InvW2=0.8236;Influencers=[{LSMInfluencer,Delta1=-98,Delta2=-39,Metric=MP}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RS}|{LSMInfluencer,Delta1=-171,Delta2=-52,Metric=UR}|{LSMInfluencer,Delta1=-138,Delta2=-30,Metric=HS}|{LSMInfluencer,Delta1=-114,Delta2=-39,Metric=M2}|{LSMInfluencer,Delta1=-88,Delta2=-6,Metric=LIMCount_ECON}|{LSMInfluencer,Delta1=-77,Delta2=-22,Metric=WDPCount}|{LSMInfluencer,Delta1=-119,Delta2=-58,Metric=CC}|{LSMInfluencer,Delta1=-65,Delta2=-15,Metric=WDECount}|{LSMInfluencer,Delta1=-62,Delta2=-10,Metric=LSNScore}]}"
       },
       {
-        "Name": "Sequoia",
-        "DNA": "{Investor;InvW1=0.0284;InvW2=0.9716;Influencers=[{CCInfluencer,Delta1=-91,Delta2=-34}|{LEInfluencer,Delta1=-55,Delta2=-1}]}"
+        "Name": "Ichan",
+        "DNA": "{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-98,Delta2=-36,Metric=MP}|{LSMInfluencer,Delta1=-72,Delta2=-1,Metric=DR}|{LSMInfluencer,Delta1=-75,Delta2=-11,Metric=WHOScore_ECON}|{LSMInfluencer,Delta1=-111,Delta2=-42,Metric=M1}|{LSMInfluencer,Delta1=-98,Delta2=-30,Metric=HS}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BC}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RS}|{LSMInfluencer,Delta1=-69,Delta2=-20,Metric=LSPScore}|{LSMInfluencer,Delta1=-82,Delta2=-16,Metric=WDFCount}|{LSMInfluencer,Delta1=-154,Delta2=-34,Metric=IP}]}"
       },
       {
-        "Name": "Buffet",
-        "DNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{LEInfluencer,Delta1=-55,Delta2=-1}|{CCInfluencer,Delta1=-129,Delta2=-45}]}"
-      }
+        "Name": "Khosla",
+        "DNA": "{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-71,Delta2=-20,Metric=LSPScore}|{LSMInfluencer,Delta1=-690,Delta1=-457,Metric=GD}|{LSMInfluencer,Delta1=-200,Delta2=-17,Metric=WDECount_ECON}|{LSMInfluencer,Delta1=-95,Delta2=-40,Metric=MP}|{LSMInfluencer,Delta1=-153,Delta2=-34,Metric=IP}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RS}]}"
+      },
     ],
 
 }

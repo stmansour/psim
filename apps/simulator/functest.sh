@@ -141,13 +141,7 @@ mkdir -p "${ARCHIVE}"
 
 #------------------------------------------------------------------------------
 #  TEST a
-#  ping the server
-#
-#  Scenario:
-#  Execute the url to ping the server
-#
-#  Expected Results:
-#   1.  It should return the server version
+#  single investor test with trace
 #------------------------------------------------------------------------------
 TFILES="a"
 STEP=0
@@ -160,6 +154,10 @@ if [[ "${SINGLETEST}${TFILES}" = "${TFILES}" || "${SINGLETEST}${TFILES}" = "${TF
     ((TESTCOUNT++))
 fi
 
+#------------------------------------------------------------------------------
+#  TEST b
+#  test linguistic influencer
+#------------------------------------------------------------------------------
 TFILES="b"
 STEP=0
 if [[ "${SINGLETEST}${TFILES}" = "${TFILES}" || "${SINGLETEST}${TFILES}" = "${TFILES}${TFILES}" ]]; then
@@ -171,6 +169,10 @@ if [[ "${SINGLETEST}${TFILES}" = "${TFILES}" || "${SINGLETEST}${TFILES}" = "${TF
     ((TESTCOUNT++))
 fi
 
+#------------------------------------------------------------------------------
+#  TEST c
+#  test crucible
+#------------------------------------------------------------------------------
 TFILES="c"
 STEP=0
 if [[ "${SINGLETEST}${TFILES}" = "${TFILES}" || "${SINGLETEST}${TFILES}" = "${TFILES}${TFILES}" ]]; then

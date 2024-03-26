@@ -29,7 +29,7 @@ func TestCrucible(t *testing.T) {
 func TestInvestorDNA(t *testing.T) {
 	app.randNano = -1
 	app.cfName = "configsmall.json5"
-	app.dumpTopInvestorInvestments = true
+	app.ReportTopInvestorInvestments = true
 	setDBLocation()
 	s := &app.sim
 	s.ResetSimulator()
@@ -48,8 +48,7 @@ func TestLinguisticDNA(t *testing.T) {
 }
 func TestWTInfl(t *testing.T) {
 	app.randNano = -1
-	// app.cfName = "wtconfig.json5"
-	app.cfName = "config.json5"
+	app.cfName = "wtconfig.json5"
 	setDBLocation()
 	s := &app.sim
 	app.trace = false

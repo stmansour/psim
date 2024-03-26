@@ -12,27 +12,30 @@ import (
 	"github.com/stmansour/psim/util"
 )
 
-var app struct {
-	dumpTopInvestorInvestments bool
-	dayByDayResults            bool
-	showAllInvestors           bool // adds all investors to the output in the simulation results
-	sim                        newcore.Simulator
-	randNano                   int64
-	InfPredDebug               bool
-	trace                      bool
-	version                    bool
-	cfName                     string // override default with this file
-	cfg                        *util.AppConfig
-	extres                     *util.ExternalResources
-	db                         *newdata.Database
-	mim                        *newdata.MetricInfluencerManager
-	archiveBaseDir             string // where archives go
-	archiveMode                bool   // if true it copies the config file to an archive directory, places simstats and finrep there as well
-	CrucibleMode               bool   // normal or crucible
-	GenInfluencerDistribution  bool   // show Influencer distribution for each generation
-	FitnessScores              bool   // save the fitness scores for each generation to dbgFitnessScores.csv
-	dbfilename                 string // override database name with this name
+// SimApp is the main application
+type SimApp struct {
+	ReportTopInvestorInvestments bool
+	DayByDay                     bool
+	showAllInvestors             bool // adds all investors to the output in the simulation results
+	sim                          newcore.Simulator
+	randNano                     int64
+	InfPredDebug                 bool
+	trace                        bool
+	version                      bool
+	cfName                       string // override default with this file
+	cfg                          *util.AppConfig
+	extres                       *util.ExternalResources
+	db                           *newdata.Database
+	archiveBaseDir               string // where archives go
+	archiveMode                  bool   // if true it copies the config file to an archive directory, places simstats and finrep there as well
+	CrucibleMode                 bool   // normal or crucible
+	GenInfluencerDistribution    bool   // show Influencer distribution for each generation
+	FitnessScores                bool   // save the fitness scores for each generation to dbgFitnessScores.csv
+	dbfilename                   string // override database name with this name
+	// mim                          *newdata.MetricInfluencerManager
 }
+
+var app SimApp
 
 func dateIsInDataRange(a time.Time) string {
 	switch app.db.Datatype {
@@ -59,9 +62,9 @@ func readCommandLineArgs() {
 	flag.BoolVar(&app.GenInfluencerDistribution, "idist", false, "report Influencer Distribution each time a generation completes")
 	flag.BoolVar(&app.FitnessScores, "fit", false, "generate a Fitness Report that shows the fitness of all Investors for each generation")
 	flag.BoolVar(&app.archiveMode, "ar", false, "create archive directory for config file, finrep, simstats, and all other reports. Also see -adir.")
-	flag.BoolVar(&app.dayByDayResults, "d", false, "show day-by-day results")
+	flag.BoolVar(&app.DayByDay, "d", false, "show day-by-day results")
 	flag.BoolVar(&app.InfPredDebug, "D", false, "show prediction debug info - dumps a lot of data, use on short simulations, with minimal Influencers")
-	flag.BoolVar(&app.dumpTopInvestorInvestments, "inv", false, "for each generation, write top investors Investment List to invrep.csv")
+	flag.BoolVar(&app.ReportTopInvestorInvestments, "inv", false, "for each generation, write top investors Investment List to invrep.csv")
 	flag.BoolVar(&app.trace, "trace", false, "trace decision-making process every day, all investors")
 	flag.BoolVar(&app.version, "v", false, "print the program version string")
 	flag.BoolVar(&app.showAllInvestors, "i", false, "show all investors in the simulation results")
@@ -117,20 +120,22 @@ func doSimulation() {
 
 	if cfg.CrucibleMode {
 		c := newcore.NewCrucible()
+		c.ReportTopInvestorInvestments = app.ReportTopInvestorInvestments
+		c.DayByDay = app.DayByDay
 		c.Init(cfg, app.db, &app.sim)
 		c.Run()
 		return
 	}
 
 	displaySimulationDetails(cfg)
-	app.sim.Init(app.cfg, app.db, nil, app.dayByDayResults, app.dumpTopInvestorInvestments)
+	app.sim.Init(app.cfg, app.db, nil, app.DayByDay, app.ReportTopInvestorInvestments)
 	app.sim.GenInfluencerDistribution = app.GenInfluencerDistribution
 	app.sim.FitnessScores = app.FitnessScores
 	app.sim.Run()
 
 	displaySimulationResults(cfg, app.db)
 
-	// if app.dumpTopInvestorInvestments {
+	// if app.ReportTopInvestorInvestments {
 	// 	err := app.sim.ShowTopInvestor()
 	// 	if err != nil {
 	// 		fmt.Printf("Error writing Top Investor profile: %s\n", err.Error())

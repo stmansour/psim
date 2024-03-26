@@ -4,7 +4,7 @@ import "testing"
 
 func TestSingleInvestorMode(t *testing.T) {
 	app.randNano = -1
-	app.dumpTopInvestorInvestments = true
+	app.ReportTopInvestorInvestments = true
 	app.trace = true
 	app.cfName = "singleInvestor.json5"
 	app.archiveBaseDir = "arch"
@@ -16,7 +16,7 @@ func TestSingleInvestorMode(t *testing.T) {
 
 func TestLinguisticsInfluencers(t *testing.T) {
 	app.randNano = -1
-	app.dumpTopInvestorInvestments = false
+	app.ReportTopInvestorInvestments = false
 	app.trace = false
 	app.cfName = "linguistics.json5"
 	s := &app.sim
@@ -26,7 +26,7 @@ func TestLinguisticsInfluencers(t *testing.T) {
 
 func TestFinRep(t *testing.T) {
 	app.randNano = -1
-	app.dumpTopInvestorInvestments = false
+	app.ReportTopInvestorInvestments = false
 	app.trace = false
 	app.cfName = "finrep.json5"
 	app.FitnessScores = true
@@ -40,7 +40,7 @@ func TestFinRep(t *testing.T) {
 
 func TestConfigSmall(t *testing.T) {
 	app.randNano = -1
-	app.dumpTopInvestorInvestments = false
+	app.ReportTopInvestorInvestments = false
 	app.trace = false
 	app.cfName = "configsmall.json5"
 	s := &app.sim

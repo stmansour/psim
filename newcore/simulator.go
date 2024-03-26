@@ -47,9 +47,10 @@ type Simulator struct {
 	factory                      Factory                // used to create Influencers
 	db                           *newdata.Database      // database to use in this simulation
 	crucible                     *Crucible              // must not be nil when cfg.CrucibleMode is true, pointer to crucible object
+	ir                           *InvestorReport        // investment table of investors
 	Investors                    []Investor             // the population of the current generation
-	dayByDay                     bool                   // show day by day results, debug feature
-	reportTopInvestorInvestments bool                   // dump the investment list for top investor at the end of each generation
+	DayByDay                     bool                   // show day by day results, debug feature
+	ReportTopInvestorInvestments bool                   // dump the investment list for top investor at the end of each generation
 	maxProfitThisRun             float64                // the largest profit made by any investor during this simulation run
 	maxPredictions               map[string]int         // max predictions indexed by subclass
 	maxProfitInvestor            int                    // the investor that had the max profit for this generation
@@ -76,8 +77,8 @@ func (s *Simulator) ResetSimulator() {
 	s.db = nil
 	s.factory = f
 	s.Investors = nil
-	s.dayByDay = false
-	s.reportTopInvestorInvestments = false
+	s.DayByDay = false
+	s.ReportTopInvestorInvestments = false
 	s.maxProfitThisRun = 0
 	s.maxPredictions = make(map[string]int)
 	s.maxProfitInvestor = 0
@@ -116,13 +117,17 @@ func (s *Simulator) GetSimulationRunTime() (string, time.Duration) {
 // Init initializes the simulation system, it also creates Investors and
 // calls their init functions.
 // ----------------------------------------------------------------------------
-func (s *Simulator) Init(cfg *util.AppConfig, db *newdata.Database, crucible *Crucible, dayByDay, reportTopInvestorInvestments bool) error {
+func (s *Simulator) Init(cfg *util.AppConfig, db *newdata.Database, crucible *Crucible, DayByDay, ReportTopInvestorInvestments bool) error {
 	s.cfg = cfg
 	s.db = db
 	s.crucible = crucible
-	s.dayByDay = dayByDay
-	s.reportTopInvestorInvestments = reportTopInvestorInvestments
-
+	s.DayByDay = DayByDay
+	s.ReportTopInvestorInvestments = ReportTopInvestorInvestments
+	if s.crucible != nil {
+		s.crucible.DayByDay = DayByDay
+		s.crucible.ReportTopInvestorInvestments = ReportTopInvestorInvestments
+	}
+	s.ir = NewInvestorReport(s)
 	s.factory.Init(s.cfg, db)
 	s.FinRpt = &FinRep{}
 
@@ -152,7 +157,19 @@ func (s *Simulator) NewPopulation() error {
 	//----------------------------------------------------------------------------
 	if s.GensCompleted == 0 {
 		s.Investors = make([]Investor, 0)
-		for i := 0; i < s.cfg.PopulationSize; i++ {
+
+		//------------------------------------------
+		// introduce Gen0Elites if requested...
+		//------------------------------------------
+		gen0elites := 0
+		if s.cfg.Gen0Elites {
+			gen0elites = len(s.cfg.TopInvestors)
+			for i := 0; i < gen0elites; i++ {
+				v := s.factory.NewInvestorFromDNA(s.cfg.TopInvestors[i].DNA)
+				s.Investors = append(s.Investors, v)
+			}
+		}
+		for i := 0; i < s.cfg.PopulationSize-gen0elites; i++ {
 			var v Investor
 			if s.cfg.SingleInvestorMode {
 				v = s.factory.NewInvestorFromDNA(s.cfg.SingleInvestorDNA)
@@ -373,8 +390,8 @@ func (s *Simulator) Run() {
 			if s.cfg.CrucibleMode {
 				s.crucible.DumpResults()
 			}
-			if s.reportTopInvestorInvestments {
-				if err := s.dumpTopInvestorsDetail(); err != nil {
+			if s.ReportTopInvestorInvestments {
+				if err := s.ir.dumpTopInvestorsDetail(); err != nil {
 					log.Printf("ERROR: dumpTopInvestorsDetail returned: %s\n", err)
 				}
 			}

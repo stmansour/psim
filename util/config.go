@@ -125,14 +125,6 @@ type AppConfig struct {
 	TradingDay         int                 // this needs to be completely re-thought -- it's like a recurrence rule
 	TradingTime        time.Time           // time of day when buy/sell is executed
 	Generations        int                 // current generation in the simulator
-	MaxInf             int                 // maximum number of influencers for any Investor
-	MinInf             int                 // minimum number of influencers for any Investor
-	MinDelta4          int                 // closest to t3 that t4 can be
-	MaxDelta4          int                 // furthest out from t3 that t4 can be
-	DRW1               float64             // weighting for correctness part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
-	DRW2               float64             // weighting for prediction count part of DR Fitness Score calculation, (0 to 1), DRW1 + DRW2 must = 1
-	InvW1              float64             // weight for profit part of Investor FitnessScore
-	InvW2              float64             // weight for correctness part of Investor FitnessScore
 	MutationRate       int                 // 1 - 100 indicating the % of mutation
 	DBSource           string              // {CSV | Database | OnlineService}
 	RandNano           int64               // random number seed used for this simulation
@@ -156,7 +148,7 @@ type AppConfig struct {
 	TxnFeeFactor       float64             // cost per transaction that is multiplied by the amount. 0.0002 == 2 basis points, 0 if not set
 	TxnFee             float64             // a flat cost that is added for each transaction, 0 if not set
 	InvestorBonusPlan  bool                // rewards Investors earning high ROI by giving a bonus to their FitnessScore.  PV >= 110% receive 100% bonus, PV >= 115% get 200%, PV >= 120% get 300%, and PV >= 400% get 500%
-
+	Gen0Elites         bool                // if true, introduce TopInvestors DNA into the initial population
 }
 
 // Helper function to check if a file exists
@@ -276,14 +268,14 @@ func LoadConfig(cfname string) (*AppConfig, error) {
 		cp.DtStop = time.Time(fcfg.CruciblePeriods[i].DtStop)
 		cfg.CrucibleSpans = append(cfg.CrucibleSpans, cp)
 	}
-	//-------------------------------------------------------------------
-	// If the weights were not specified, or they do not add up to 1
-	// then set default values here...
-	//-------------------------------------------------------------------
-	if cfg.InvW1+cfg.InvW2 != 1.0 {
-		cfg.InvW1 = 0.5
-		cfg.InvW2 = 0.5
-	}
+	// //-------------------------------------------------------------------
+	// // If the weights were not specified, or they do not add up to 1
+	// // then set default values here...
+	// //-------------------------------------------------------------------
+	// if cfg.InvW1+cfg.InvW2 != 1.0 {
+	// 	cfg.InvW1 = 0.5
+	// 	cfg.InvW2 = 0.5
+	// }
 	cfg.DtStart = fcfg.DtStart
 	cfg.DtStop = fcfg.DtStop
 	return &cfg, nil
@@ -306,12 +298,6 @@ func CreateTestingCFG() *AppConfig {
 		StdInvestment:  100.00,  // the "standard" investment amount if a decision is made to invest in C2
 		MinInfluencers: 1,       // at least this many per Investor
 		MaxInfluencers: 10,      // no more than this many
-		MinDelta4:      1,       // shortest period of time after a "buy" on T3 that we can do a "sell"
-		MaxDelta4:      14,      // greatest period of time after a "buy" on T3 that we can do a "sell"
-		DRW1:           0.6,     // DRInfluencer Fitness Score weighting for "correctness" of predictions. Constraint: DRW1 + DRW2 = 1.0
-		DRW2:           0.4,     // DRInfluencer Fitness Score weighting for number of predictions made. Constraint: DRW1 + DRW2 = 1.0
-		InvW1:          0.5,     // Investor Fitness Score weighting for "correctness" of predictions. Constraint: InvW1 + InvW2 = 1.0
-		InvW2:          0.5,     // Investor Fitness Score weighting for profit. Constraint: InvW1 + InvW2 = 1.0
 		MutationRate:   1,       // percentage number, from 1 - 100, what percent of the time does mutation occur
 		DBSource:       "CSV",   // {CSV | Database | OnlineService}
 	}

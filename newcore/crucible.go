@@ -13,12 +13,13 @@ import (
 // series of simulations on a list of Investor DNA
 // ---------------------------------------------------------------------------
 type Crucible struct {
-	cfg   *util.AppConfig
-	db    *newdata.Database
-	sim   *Simulator
-	idx   int    // index of currently running investor
-	fname string // name of the crucible report file
-	// file     *os.File // crucible file
+	cfg                          *util.AppConfig
+	db                           *newdata.Database
+	sim                          *Simulator
+	idx                          int    // index of currently running investor
+	fname                        string // name of the crucible report file
+	ReportTopInvestorInvestments bool
+	DayByDay                     bool
 }
 
 // NewCrucible returns a pointer to a new crucible object
@@ -48,6 +49,9 @@ func (c *Crucible) Init(cfg *util.AppConfig, db *newdata.Database, sim *Simulato
 
 // Run sends the crucible report to a csv file
 func (c *Crucible) Run() {
+	ir := NewInvestorReport(c.sim)
+	ir.Cru = c
+	ir.CrucibleMode = true
 	for i := 0; i < len(c.cfg.TopInvestors); i++ {
 		c.idx = i // mark the investor we're testing
 		c.SubHeader()
@@ -60,7 +64,8 @@ func (c *Crucible) Run() {
 			c.cfg.PopulationSize = 1
 			c.cfg.LoopCount = 1
 			c.cfg.Generations = 1
-			c.sim.Init(c.cfg, c.db, c, false, false)
+			c.sim.Init(c.cfg, c.db, c, c.DayByDay, c.ReportTopInvestorInvestments)
+			c.sim.ir = ir // we need to override the simulators new creation of this with our ongoing report
 			c.sim.Run()
 		}
 	}

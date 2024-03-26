@@ -6,6 +6,24 @@ import (
 	"time"
 )
 
+// InvestorReport is the class that implements and reports on an investor
+type InvestorReport struct {
+	s                     *Simulator
+	ReportHeaderCompleted bool
+	CrucibleMode          bool
+	Cru                   *Crucible
+}
+
+// NewInvestorReport creates a new InvestorReport instance.
+//
+// It takes a pointer to a Simulator as a parameter and returns a pointer to an InvestorReport.
+func NewInvestorReport(sim *Simulator) *InvestorReport {
+	r := InvestorReport{
+		s: sim,
+	}
+	return &r
+}
+
 // dumpTopInvestorsDetail - dumps Investor investments for the TopInvestors
 // to a file
 //
@@ -14,11 +32,11 @@ import (
 //	any error encountered
 //
 // ----------------------------------------------------------------------------
-func (s *Simulator) dumpTopInvestorsDetail() error {
+func (ir *InvestorReport) dumpTopInvestorsDetail() error {
 	var file *os.File
 	var err error
-	fname := s.generateFName("invrep")
-	if s.GensCompleted == 1 {
+	fname := ir.s.generateFName("invrep")
+	if !ir.ReportHeaderCompleted {
 		file, err = os.Create(fname)
 	} else {
 		file, err = os.OpenFile(fname, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -28,16 +46,21 @@ func (s *Simulator) dumpTopInvestorsDetail() error {
 	}
 	defer file.Close()
 
-	if s.GensCompleted == 1 {
-		s.dumpInvestmentReportHeader(file)
+	if !ir.ReportHeaderCompleted {
+		ir.dumpInvestmentReportHeader(file)
+		ir.ReportHeaderCompleted = true
 	}
-	lim := s.cfg.TopInvestorCount
-	if lim > len(s.Investors) {
-		lim = len(s.Investors)
+	lim := ir.s.cfg.TopInvestorCount
+	if lim > len(ir.s.Investors) {
+		lim = len(ir.s.Investors)
 	}
 	for i := 0; i < lim; i++ {
-		inv := s.Investors[i]
-		fmt.Fprintf(file, "%d,%q\n", s.GensCompleted, inv.ID)
+		inv := ir.s.Investors[i]
+		name := inv.ID
+		if ir.CrucibleMode && len(ir.s.cfg.TopInvestors[ir.Cru.idx].Name) > 0 {
+			name = ir.s.cfg.TopInvestors[ir.Cru.idx].Name
+		}
+		fmt.Fprintf(file, "%d,%q,,,,,,,,,,,,,,,,%q\n", ir.s.GensCompleted, name, inv.DNA())
 		for i := 0; i < len(inv.Investments); i++ {
 			m := inv.Investments[i]
 			//                   0  1      4      5             6      7
@@ -73,27 +96,27 @@ func (s *Simulator) dumpTopInvestorsDetail() error {
 	return nil
 }
 
-func (s *Simulator) dumpInvestmentReportHeader(file *os.File) {
-	a := time.Time(s.cfg.DtStart)
-	b := time.Time(s.cfg.DtStop)
+func (ir *InvestorReport) dumpInvestmentReportHeader(file *os.File) {
+	a := time.Time(ir.s.cfg.DtStart)
+	b := time.Time(ir.s.cfg.DtStop)
 	c := b.AddDate(0, 0, 1)
 	//------------------------------------------------------------------------
 	// context information
 	//------------------------------------------------------------------------
 	fmt.Fprintf(file, "%q\n", "PLATO Simulator - Top Investor Investment Details")
-	fmt.Fprintf(file, "\"Configuration File:  %s\"\n", s.cfg.Filename)
+	fmt.Fprintf(file, "\"Configuration File:  %s\"\n", ir.s.cfg.Filename)
 	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Start Date: %s\"\n", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Stop Date: %s\"\n", c.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	// fmt.Fprintf(file, "\"Simulation Loop Count: %d\"\n", s.cfg.LoopCount)
-	fmt.Fprintf(file, "\"C1: %s\"\n", s.cfg.C1)
-	fmt.Fprintf(file, "\"C2: %s\"\n", s.cfg.C2)
-	fmt.Fprintf(file, "\"Initial Funds: %10.2f\"\n", s.cfg.InitFunds)
+	fmt.Fprintf(file, "\"C1: %s\"\n", ir.s.cfg.C1)
+	fmt.Fprintf(file, "\"C2: %s\"\n", ir.s.cfg.C2)
+	fmt.Fprintf(file, "\"Initial Funds: %10.2f\"\n", ir.s.cfg.InitFunds)
 
 	// the header row
-	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q\n",
+	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q\n",
 		"Generation", "Investor",
 		"T3", "Exchange Rate (T3)", "Purchase Amount C1",
 		"Purchase Amount (C2)", "Fee", "BalanceC1 (T3)", "BalanceC2 (T3)", "T4", "Exch Rate",
-		"T4 C2", "Fee", "C2 Remaining", "C1", "Total C1", "Chunk Profit")
+		"T4 C2", "Fee", "C2 Remaining", "C1", "Total C1", "Chunk Profit", "DNA")
 }
