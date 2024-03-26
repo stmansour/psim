@@ -9,7 +9,9 @@ import (
 	"github.com/stmansour/psim/util"
 )
 
-// LSMInfluencer is the Influencer that predicts based on Money Supply
+// LSMInfluencer is the base class for all influencers. It implements the
+// Influencer interface. LSMInfluencer is derived from Locale Specific Influencer
+// where one of those locales is "none".
 type LSMInfluencer struct {
 	Metric              string   // data type of subclass
 	Blocs               []string // list of associated countries. If associated with C1 & C2, blocs[0] must be associated with C1, blocs[1] with C2

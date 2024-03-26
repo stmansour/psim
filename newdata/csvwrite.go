@@ -28,7 +28,7 @@ func (d *DatabaseCSV) EnsureDataDirectory() (string, error) {
 
 // WriteMetricsSourcesToCSV takes a slice of MetricsSource and creates a CSV file.
 func (d *DatabaseCSV) WriteMetricsSourcesToCSV(locations []MetricsSource) error {
-	FullyQualifiedFileName := filepath.Join(d.DBPath, "metricsources.csv")
+	FullyQualifiedFileName := filepath.Join(d.DBPath, "metricssources.csv")
 
 	file, err := os.Create(FullyQualifiedFileName)
 	if err != nil {
@@ -49,7 +49,7 @@ func (d *DatabaseCSV) WriteMetricsSourcesToCSV(locations []MetricsSource) error 
 	for _, m := range locations {
 		row := []string{
 			strconv.Itoa(m.MSID),
-			m.LastUpdate.Format(time.RFC3339), // Format time as RFC3339
+			m.LastUpdate.Format("01/02/2006"),
 			m.URL,
 			m.Name,
 		}
@@ -180,10 +180,10 @@ func (d *DatabaseCSV) CopySQLRecsToCSV(sqldb *Database) error {
 	//------------------------------------------------
 	// Prepare field selectors...
 	//------------------------------------------------
-	startDate := time.Date(2015, time.February, 1, 0, 0, 0, 0, time.UTC)
-	endDate := time.Date(2023, time.December, 31, 0, 0, 0, 0, time.UTC)
-	loc1 := "USD"
-	loc2 := "JPY"
+	startDate := time.Date(2015, time.January, 1, 0, 0, 0, 0, time.UTC) // GDELT data starts at 2015
+	endDate := time.Date(2023, time.December, 31, 0, 0, 0, 0, time.UTC) // time.Date(2023, time.December, 31, 0, 0, 0, 0, time.UTC)
+	loc1 := d.ParentDB.cfg.C1
+	loc2 := d.ParentDB.cfg.C2
 
 	f := FieldSelector{
 		Metric:  "EXClose",
@@ -232,7 +232,13 @@ func (d *DatabaseCSV) CopySQLRecsToCSV(sqldb *Database) error {
 			return fmt.Errorf("unrecognized LocaleType on metric %s: %d", v.Metric, v.LocaleType)
 		}
 	}
+	fmt.Fprintf(file, "\n") // end the line
 
+	//----------------------------
+	// Write the data rows
+	//----------------------------
+	year := 0
+	month := 0
 	for dt := startDate; dt.Before(endDate) || dt.Equal(endDate); dt = dt.AddDate(0, 0, 1) {
 		rec, err := sqldb.Select(dt, fields)
 		if err != nil {
@@ -248,6 +254,11 @@ func (d *DatabaseCSV) CopySQLRecsToCSV(sqldb *Database) error {
 			fmt.Fprintf(file, ",%.6f", val)
 		}
 		fmt.Fprintf(file, "\n")
+		if dt.Year() != year || dt.Month() != time.Month(month) {
+			year = dt.Year()
+			month = int(dt.Month())
+			fmt.Printf("%4d-%02d\r", year, month)
+		}
 	}
 	return nil
 }

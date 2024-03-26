@@ -100,6 +100,9 @@ func doSimulation() {
 	}
 	app.cfg = cfg
 
+	//--------------------------
+	// OPEN THE DATABASE...
+	//--------------------------
 	app.db, err = newdata.NewDatabase(cfg.DBSource, cfg, app.extres)
 	if err != nil {
 		log.Panicf("*** PANIC ERROR ***  NewDatabase returned error: %s\n", err)

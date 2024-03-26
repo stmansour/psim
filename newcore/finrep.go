@@ -33,11 +33,6 @@ func (f *FinRep) GenerateFinRep(sim *Simulator, dirname string) error {
 	f.Sim = sim
 	fname := f.Sim.generateFName("finrep")
 
-	// fname := f.Sim.cfg.ReportDirectory + "/" + basename
-	// if s.cfg.ArchiveMode {
-	// 	fname += s.cfg.ReportTimestamp
-	// }
-	// fname += ".csv"
 	f.file, err = os.Create(fname)
 	if err != nil {
 		return err
@@ -52,51 +47,8 @@ func (f *FinRep) GenerateFinRep(sim *Simulator, dirname string) error {
 // GenerateHeader prints the header lines to the csv file
 // ----------------------------------------------------------
 func (f *FinRep) GenerateHeader() error {
-	et, _ := f.Sim.GetSimulationRunTime()
-	a := time.Time(f.Sim.cfg.DtStart)
-	b := time.Time(f.Sim.cfg.DtStop)
-	c := b.AddDate(0, 0, 1)
-
-	// context information
 	fmt.Fprintf(f.file, "%q\n", "PLATO Simulator Financial Results")
-	fmt.Fprintf(f.file, "\"Program Version:  %s\"\n", util.Version())
-	fmt.Fprintf(f.file, "\"Configuration File:  %s\"\n", f.Sim.cfg.Filename)
-	fmt.Fprintf(f.file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
-	fmt.Fprintf(f.file, "\"Simulation Start Date: %s\"\n", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
-	fmt.Fprintf(f.file, "\"Simulation Stop Date: %s\"\n", b.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
-
-	if f.Sim.cfg.SingleInvestorMode {
-		fmt.Fprintf(f.file, "\"Single Investor Mode\"\n")
-		fmt.Fprintf(f.file, "\"DNA: %s\"\n", f.Sim.cfg.SingleInvestorDNA)
-	} else {
-		fmt.Fprintf(f.file, "\"Generations: %d\"\n", f.Sim.GensCompleted)
-		if len(f.Sim.cfg.GenDurSpec) > 0 {
-			fmt.Fprintf(f.file, "\"Generation Lifetime: %s\"\n", util.FormatGenDur(f.Sim.cfg.GenDur))
-		}
-		fmt.Fprintf(f.file, "\"Simulation Loop Count: %d\"\n", f.Sim.cfg.LoopCount)
-		fmt.Fprintf(f.file, "\"Simulation Time Duration: %s\"\n", util.DateDiffString(a, c))
-	}
-	fmt.Fprintf(f.file, "\"C1: %s\"\n", f.Sim.cfg.C1)
-	fmt.Fprintf(f.file, "\"C2: %s\"\n", f.Sim.cfg.C2)
-
-	fmt.Fprintf(f.file, "\"Population: %d\"\n", f.Sim.cfg.PopulationSize)
-	omr := float64(0)
-
-	if f.Sim.factory.MutateCalls > 0 {
-		omr = 100.0 * float64(f.Sim.factory.Mutations) / float64(f.Sim.factory.MutateCalls)
-	}
-	fmt.Fprintf(f.file, "\"Observed Mutation Rate: %6.3f%%\"\n", omr)
-	fmt.Fprintf(f.file, "\"COA Strategy: %s\"\n", f.Sim.cfg.COAStrategy)
-	if f.Sim.cfg.PreserveElite {
-		fmt.Fprintf(f.file, "\"Preserve Elite: %5.2f%%\"\n", f.Sim.cfg.PreserveElitePct)
-	}
-
-	// f.Sim.influencersToCSV(f.file)
-	// f.Sim.influencerMissingData(f.file)
-
-	fmt.Fprintf(f.file, "\"Elapsed Run Time: %s\"\n", et)
-	fmt.Fprintf(f.file, "\"\"\n")
-
+	f.Sim.ReportHeader(f.file, false)
 	return nil
 }
 

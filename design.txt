@@ -1,9 +1,10 @@
 The PLATO System
 
-We’re designing a system to help us predict when to buy and sell
-currencies.  We want to develop a prediction engine that can look at
+The Plato Project uses genetic algorithms to predict how to invest
+in foreign currencies. The idea is to develop a prediction engine that examines
 different types of historical data and current events and from that make
-a prediction about when we should buy or sell a currency.  In order to
+a prediction about how relative currency values will change. Specifically,
+we will create populations of investors, In order to
 see how well our predictive engine works, we want to develop a simulator
 that has access to historical data and we can try our predictive engine
 using historical data to see how it does.

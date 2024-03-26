@@ -768,6 +768,43 @@ func (i *Investor) CalculateFitnessScore() float64 {
 	if i.Fitness < 0 {
 		i.Fitness = 0
 	}
+
+	//-----------------------------------------------------------
+	// if bonus plan is in effect, add it to the fitness score
+	//-----------------------------------------------------------
+	if i.cfg.InvestorBonusPlan {
+		if len(i.cfg.GenDurSpec) > 0 {
+			fmt.Printf("fitness bonus for GenDurSpec: %s needs to be coded\n", i.cfg.GenDurSpec)
+		} else {
+			dtStart := time.Time(i.cfg.DtStart)
+			dtStop := time.Time(i.cfg.DtStop)
+			pv := i.PortfolioValue(dtStop)
+			ar, err := util.AnnualizedReturn(i.cfg.InitFunds, pv, dtStart, dtStop)
+			if err != nil {
+				fmt.Printf("Investor.CalculatFitnessScore: Error calculating annualized return: %s\n", err.Error())
+			} else {
+				bonus := fitnessBonus(ar)
+				if bonus > 1.0 {
+					i.Fitness *= bonus
+					// fmt.Printf("Investor %s received fitness bonus = %f\n", i.ID, bonus)
+				}
+			}
+		}
+	}
+
 	i.FitnessCalculated = true
 	return i.Fitness
+}
+
+func fitnessBonus(ar float64) float64 {
+	if ar >= 0.1 && ar < 0.15 {
+		return 2 + ar*5
+	} else if ar >= 0.15 && ar < 0.2 {
+		return 3 + ar*6
+	} else if ar >= 0.2 && ar < 0.25 {
+		return 4 + ar*7
+	} else if ar >= 0.25 {
+		return 5 + ar*8
+	}
+	return 1
 }

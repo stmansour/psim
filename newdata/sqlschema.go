@@ -114,7 +114,7 @@ func (p *DatabaseSQL) CreateDatabaseTables() error {
 
 // createShardedTables creates or prints SQL statements for table creation based on the executeSQL flag.
 func (p *DatabaseSQL) createShardedTables(numShards int, executeSQL bool) error {
-	for decade := 2010; decade <= 2020; decade += 10 {
+	for decade := 2000; decade <= 2020; decade += 10 {
 		for shardIndex := 0; shardIndex < numShards; shardIndex++ {
 			tableName := fmt.Sprintf("Metrics_%d_%d", shardIndex, decade)
 			createTableSQL := fmt.Sprintf(`

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"sort"
 	"strconv"
 
@@ -42,13 +43,21 @@ func (d *DatabaseCSV) LoadCsvDB() error {
 	if len(d.DBFname) > 0 {
 		fname = d.DBFname
 	} else {
-		dir, err := util.GetExecutableDir()
-		if err != nil {
-			fmt.Println("Error getting executable directory:", err)
-			os.Exit(1)
+		// look in current directory first...
+		fname = "data/platodb.csv"
+		if _, err := os.Stat(fname); err != nil {
+			// not there, try the executable
+			if !os.IsNotExist(err) {
+				log.Fatalf("Error accessing %s: %s\n", fname, err)
+			}
+			dir, err := util.GetExecutableDir()
+			if err != nil {
+				fmt.Println("Error getting executable directory:", err)
+				os.Exit(1)
+			}
+			fname = dir + "/" + PLATODB
+			d.DBFname = fname
 		}
-		fname = dir + "/" + PLATODB
-		d.DBFname = fname
 	}
 
 	file, err := os.Open(fname)
@@ -57,11 +66,13 @@ func (d *DatabaseCSV) LoadCsvDB() error {
 		os.Exit(1)
 	}
 	defer file.Close()
+	d.DBFname = fname
+	d.DBPath = filepath.Dir(fname)
 
 	reader := csv.NewReader(file)
 	lines, err := reader.ReadAll()
 	if err != nil {
-		fmt.Println(err)
+		fmt.Printf("Error reading %s: %s\n", fname, err)
 		os.Exit(1)
 	}
 	//----------------------------------------------------------------------

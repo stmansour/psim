@@ -34,6 +34,7 @@ func (c *Crucible) Init(cfg *util.AppConfig, db *newdata.Database, sim *Simulato
 	c.sim = sim
 	c.sim.cfg = cfg // required for generateFName
 	c.sim.SetReportDirectory()
+	c.sim.db = db
 	c.fname = c.sim.generateFName("crep")
 	file, err := os.Create(c.fname)
 	if err != nil {
@@ -42,9 +43,7 @@ func (c *Crucible) Init(cfg *util.AppConfig, db *newdata.Database, sim *Simulato
 	}
 	defer file.Close()
 	fmt.Fprintf(file, "\"PLATO - Crucible Report\"\n")
-	fmt.Fprintf(file, "\"Program Version:  %s\"\n", util.Version())
-	fmt.Fprintf(file, "\"Configuration File:  %s\"\n", c.cfg.Filename)
-	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
+	c.sim.ReportHeader(file, false)
 }
 
 // Run sends the crucible report to a csv file
@@ -77,7 +76,7 @@ func (c *Crucible) SubHeader() {
 		os.Exit(1)
 	}
 	defer file.Close()
-	fmt.Fprintf(file, "\n\"DNA Name: %s\"\n", c.cfg.TopInvestors[c.idx].Name)
+	fmt.Fprintf(file, "\n\"DNA Name: %s\",,,,,%q\n", c.cfg.TopInvestors[c.idx].Name, c.cfg.TopInvestors[c.idx].DNA)
 	fmt.Fprintf(file, "%q,%q,%q,%q,%q\n", "Start", "End", "Opening Portfolio Value", "Ending Portfolio Value", "Annualized Return")
 }
 

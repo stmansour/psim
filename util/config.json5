@@ -30,8 +30,9 @@
     "PreserveElite": false,     // when true it replicates the top PreserverElitePct of DNA from gen x to gen x+1
     "PreserveElitePct": 5.0,    // floating point value representing the amount of DNA to preserve. 0.0 to 100.0
     "StopLoss": 0.10,           // Expressed as a percentage of the Portfolio Value. That is, 0.12 means 12%.  Sell all C2 immediately if the PV has lost this much of the initial funding.
-	  "TxnFeeFactor": 0.0002,     // cost, in C1, per transaction that is multiplied by the amount. .0002 == 2 basis points, 0 if not set
-	  "TxnFee": 0,                // a flat cost, in C1, that is added for each transaction, 0 if not set
+    "TxnFeeFactor": 0.0002,     // cost, in C1, per transaction that is multiplied by the amount. .0002 == 2 basis points, 0 if not set
+    "TxnFee": 0,                // a flat cost, in C1, that is added for each transaction, 0 if not set
+    "InvestorBonusPlan": true,  // rewards Investors earning high ROI by giving a bonus to their FitnessScore.  PV >= 110% receive 100% bonus, PV >= 115% get 200%, PV >= 120% get 300%, and PV >= 400% get 500%
 
     //-----------------------------------------------------------------
     //  There may be times when we need to test or check the performance

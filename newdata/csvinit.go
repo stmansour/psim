@@ -90,10 +90,10 @@ func (d *Database) SetCSVFilename(f string) {
 // dbfname - db file name override.  If nil or len() == 0 then it uses the default
 // --------------------------------------------------------------------------------
 func (d *DatabaseCSV) CSVInit() error {
-	if err := d.ParentDB.Mim.Init(d.ParentDB); err != nil {
+	if err := d.LoadCsvDB(); err != nil {
 		return err
 	}
-	if err := d.LoadCsvDB(); err != nil {
+	if err := d.ParentDB.Mim.Init(d.ParentDB); err != nil {
 		return err
 	}
 	if err := d.LoadMetricsSourceCache(); err != nil {
