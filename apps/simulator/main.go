@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"runtime"
+	"runtime/pprof"
 	"time"
 
 	"github.com/stmansour/psim/newcore"
@@ -32,7 +34,8 @@ type SimApp struct {
 	GenInfluencerDistribution    bool   // show Influencer distribution for each generation
 	FitnessScores                bool   // save the fitness scores for each generation to dbgFitnessScores.csv
 	dbfilename                   string // override database name with this name
-	// mim                          *newdata.MetricInfluencerManager
+	CPUProfile                   string // where is time being spent?
+	MemProfile                   string // where is memory being consumed?
 }
 
 var app SimApp
@@ -72,6 +75,8 @@ func readCommandLineArgs() {
 	flag.StringVar(&app.cfName, "c", "", "configuration file to use (instead of config.json)")
 	flag.StringVar(&app.dbfilename, "db", "", "override CSV datatbase name")
 	flag.BoolVar(&app.CrucibleMode, "C", false, "Crucible mode.")
+	flag.StringVar(&app.CPUProfile, "cpuprofile", "", "write cpu profile to file")
+	flag.StringVar(&app.MemProfile, "memprofile", "", "write memory profile to this file")
 	flag.Parse()
 }
 
@@ -144,6 +149,9 @@ func doSimulation() {
 }
 
 func main() {
+	var f *os.File
+	var err error
+
 	app.randNano = -1
 	app.cfName = "config.json5"
 	readCommandLineArgs()
@@ -151,5 +159,32 @@ func main() {
 		fmt.Printf("PLATO Simulator version %s\n", util.Version())
 		os.Exit(0)
 	}
+
+	// CPU profiling
+	if app.CPUProfile != "" {
+		f, err = os.Create(app.CPUProfile)
+		if err != nil {
+			log.Fatalf("could not create CPU profile: %v", err)
+		}
+		if err := pprof.StartCPUProfile(f); err != nil {
+			log.Fatalf("could not start CPU profile: %v", err)
+		}
+	}
+
 	doSimulation()
+	pprof.StopCPUProfile()
+	f.Close()
+
+	// Memory profiling
+	if app.MemProfile != "" {
+		f, err := os.Create(app.MemProfile)
+		if err != nil {
+			log.Fatalf("could not create memory profile: %v", err)
+		}
+		runtime.GC() // get up-to-date statistics
+		if err := pprof.WriteHeapProfile(f); err != nil {
+			log.Fatalf("could not write memory profile: %v", err)
+		}
+		f.Close()
+	}
 }
