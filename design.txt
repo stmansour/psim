@@ -13,7 +13,6 @@ capital and invests over a simulation period, with the aim of improving
 investment strategies and returns over successive generations.  The predictive
 engine is based on two major object types: an Investor and an Influencer.
 
-
 The 'Influencer' class is one cornerstone of our architecture, acting as a base
 for a variety of derived classes. Each subclass is designed to analyze a
 distinct metric. The metrics fall into two categories: econometric indicators
@@ -33,7 +32,6 @@ are crucial as they define the timeframe for data analysis. While external
 constraints are applied to these values to improve computational efficiency and
 focus on relevant data, the genetic algorithm does the heavy lifting to
 fine-tune Delta1 and Delta2 to the optimal values.
-
 
 The second cornerstone class within our architecture is the 'Investor', tasked
 with managing its own private team of Influencers, and an investment fund. Its
@@ -68,7 +66,6 @@ of StdInvestment into C2, based on the differential between buy and sell votes.
 This detailed mechanism enables the Investor to dynamically adjust its trading
 actions, leveraging the collective intelligence of Influencers to navigate
 currency markets more effectively.
-
 
 The composition, number, and configuration of Influencers associated with an
 Investor are optimized using genetic algorithms. Although it's feasible to
@@ -183,7 +180,6 @@ population is entirely randomized. Incorporating proven genetic material early
 on effectively primes the simulation with a foundation of excellence, offering a
 significant "head start" in the evolutionary process.
 
-
 Appendix A: Assessing an Influencer's Accuracy
 
 Determining the predictive accuracy of each Influencer type presents a complex
@@ -211,33 +207,10 @@ underscore the difficulty in directly linking an Influencer's predictions with
 the eventual financial outcomes of transactions, highlighting the nuanced
 challenges inherent in assessing prediction accuracy within the simulation.
 
-
-
-
 Complex Sale Attribution: Associating specific sales with their preceding buy
 predictions is fraught with difficulty. A single buy prediction might lead to
 purchases of varying amounts, with subsequent sales fragmented across multiple
 transactions.
-
-This appendix outlines the inherent challenges in accurately measuring the
-effectiveness of Influencer predictions, reflecting the nuanced dynamics of the
-simulation's operational environment.
-
-
-
-
-Appendix A.  Assessing An Influencer's Accuracy
-
-Assessing the probability of correctness of each Influencer type is a
-deceptively complicated task. I'm not sure that there's a good way to do it.
-The issue, in a nutshell is this:  for any given date on which it is asked to
-make a prediction, (a) there is a variable time from prior to that date over
-which it can do its research to make the prediction -- the genetics will vary
-this time range wildly, (b) if the influencer predicts a buy, there is no set
-date after it makes the prediction when the currency is sold and (c) tying a
-sale back to a specific buy prediction may not be possible in many ways. A
-purchase may have been in the amount of 10,000 but the sales may occur in much
-smaller amounts across multiple sales.
 
 Appendix B: Managing External Resources
 
