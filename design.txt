@@ -2,51 +2,57 @@ The PLATO System Design
 
 The Plato Project utilizes genetic algorithms for predicting investment
 strategies in foreign currency markets. The objective is to develop a prediction
-engine that analyzes historical data and current events to forecast changes in
-currency values. The method involves creating simulated investors with initial
-capital, allowing them to invest in foreign currencies. These investors go
+engine that analyzes historical data (traditional econometrics) and current
+events (via linguistics metrics) to forecast changes in currency values. The
+genetics algorithm was chosen as the solution we want to use involves a nearly
+inconceivable number of configuration options and the genetic algorithm seemed
+like a good way to find the best configuration solutions in a (relatively) short
+period of time. The method involves creating simulated Investors with initial
+capital and allowing them to invest in foreign currencies. These Investors go
 through simulated periods of investment, after which a new generation is created
 using principles of genetic algorithms. This process selectively breeds
-investors based on their performance, with more successful ones having a higher
-chance of influencing the next generation. Each generation starts with initial
-capital and invests over a simulation period, with the aim of improving
-investment strategies and returns over successive generations.  The predictive
-engine is based on two major object types: an Investor and an Influencer.
+Investors for a new generation based on the financial performance of Investors
+from the prior generation, with more successful ones having a higher chance of
+influencing the next generation. Each Investor in the new generation starts with
+initial capital and invests over a simulation period. The goal is to use the
+genetics algorithm to breed the most financially successful investors over
+successive generations.  The predictive engine is based on two major object
+types: an Investor and an Influencer.
 
-The 'Influencer' class is one cornerstone of our architecture, acting as a base
+The 'Influencer' class is one cornerstone of the architecture, acting as a base
 for a variety of derived classes. Each subclass is designed to analyze a
 distinct metric. The metrics fall into two categories: econometric indicators
 (such as Inflation Rate, Housing Starts, Discount Rate, Stock Indexes, and Oil
-Prices) and sentiment analysis metrics derived from news articles, with data
-sourced from the GDELT project. Influencers are tasked with predicting the
-movement of currency values between two predefined currencies, C1 and C2,
+Prices) and linguistic sentiment analysis metrics derived from news articles,
+with data sourced from the GDELT project. Influencers are tasked with predicting
+the movement of currency values between two predefined currencies, C1 and C2,
 recommending one of three actions: "Buy", "Hold", or "Sell". Currently, the
 predictions include a probability and weighting factor, both of which are
 defaulted to 1 until a workable method for their determination is developed.
 
-Subclasses of the Influencer have specific internal settings vital for enhancing
-the accuracy of their predictions. For example, in forecasting the movement for
-a target date T3, an Influencer examines historical data within a specified
-window, from T3 - Delta1 to T3 - Delta2. These parameters, Delta1 and Delta2,
-are crucial as they define the timeframe for data analysis. While external
-constraints are applied to these values to improve computational efficiency and
-focus on relevant data, the genetic algorithm does the heavy lifting to
-fine-tune Delta1 and Delta2 to the optimal values.
+Influencer subclasses have specific internal settings that affect the accuracy
+of their predictions. For example, in forecasting the movement for a target date
+T3, an Influencer examines historical data within a specified window, from
+T3-Delta1 to T3-Delta2. These parameters, Delta1 and Delta2, are crucial as they
+define the timeframe for data analysis. While external constraints are applied
+to these values to improve computational efficiency and focus on relevant data,
+the genetic algorithm does the heavy lifting to fine-tune Delta1 and Delta2 to
+optimal values.
 
-The second cornerstone class within our architecture is the 'Investor', tasked
-with managing its own private team of Influencers, and an investment fund. Its
-investment fund is initialized at the start of each new generation to a
-predefined value (InitFunds), denominated in a primary currency, C1. The
-Investor's goal is to maximize returns by trading C1 for a secondary currency,
-C2, and back, based on recommendations from its team of Influencers.
+The second cornerstone class is the 'Investor', tasked with managing its own
+private team of Influencers, and an investment fund. Its investment fund is
+initialized at the start of each new generation to a predefined value
+(InitFunds), denominated in a primary currency, C1. The Investor's goal is to
+maximize its fund by trading C1 for a secondary currency, C2, and back, based on
+recommendations from its team of Influencers.
 
 On a given date, the Investor solicits predictions from its Influencers to
-inform its actions: buying C2 with C1, selling C2 for C1, or holding its current
-positions. Investment decisions hinge on a predetermined internal value,
-StdInvestment, which represents the default investment amount when conditions
-favor buying. These decisions are guided by a COAStrategy (Course Of Action
-Strategy), with two primary strategies implemented: "Majority Rules" and
-"Distributed Decision."
+inform its potential action: buying C2 with C1, or selling C2 for C1, or holding
+its current positions. Investment decisions hinge on a predetermined internal
+value, StdInvestment, the default investment amount when conditions favor
+buying. These decisions are guided by a COAStrategy (Course Of Action Strategy),
+with two primary strategies implemented: "Majority Rules" and "Distributed
+Decision."
 
 Majority Rules: A straightforward approach where the Investor acts based on the
 majority recommendation from Influencers. A majority for 'buy' translates to
@@ -60,89 +66,111 @@ selling, the Investor sells 60% of its C2 holdings. A buy recommendation from 7
 out of 10 Influencers leads to purchasing C2 with 70% of the StdInvestment. The
 strategy also accounts for 'hold' recommendations, adjusting the action
 proportionally. For instance, if the recommendations are split with 4 buys, 3
-holds, and 3 sells, the net result favors a reduced buy action, converting 10%
-of StdInvestment into C2, based on the differential between buy and sell votes.
-
-This detailed mechanism enables the Investor to dynamically adjust its trading
-actions, leveraging the collective intelligence of Influencers to navigate
-currency markets more effectively.
+holds, and 3 sells, the net result favors a reduced buy action, converting 40%
+of StdInvestment into C2, based on the differential between buy, hold, and sell
+votes (4/(4+3+3) = 40%). A tie occurs when the number of buy recommendations
+equals the number of sell recommendations.  When a tie occurs, the Investor's
+action will be to hold.
 
 The composition, number, and configuration of Influencers associated with an
-Investor are optimized using genetic algorithms. Although it's feasible to
-manually configure specific Investors with designated Influencers, our genetic
-algorithm dynamically identifies the most effective combinations and settings
-across generations.
+Investor, and even the strategy used by the Investor, are optimized using
+genetic algorithms. That is, the process of creating a new generation is
+influenced primarily by the most successful Investors of the prior generation.
+Instead of trying to go through every possible combination of Influencers and
+every possible configuration of each of their settings, we let the genetic
+algorithms find the ones that work.  Although it's possible to manually (or even
+programmatically) configure specific Investors with designated Influencers, the
+genetic algorithms effectively find the composition and settings that work the
+best quickly over successive generations.
 
 An Investor's performance in generating profit is influenced not only by its
 team of Influencers but also by various other parameters. Essentially, the
-identity of an Investor is characterized by the constellation of its Influencers
-and their respective configurations, in addition to the Investor's own settings.
-This framework allows for the creation of a vast array of distinct Investors,
+identity of an Investor is characterized by the constellation of its
+Influencers, their respective configurations, and the Investor's own settings.
+This framework allows for the creation of a vast number of distinct Investors,
 each with the potential to achieve optimal investment outcomes. To ascertain the
 most effective configurations, we use a simulation program designed to evaluate
-a multitude of unique Investors. The efficacy of each Investor is measured by
-its ability to leverage predictions for successful currency trading.  Those that
-accrue significant profits are deemed superior, whereas those resulting in
-losses are classified as inferior. Given the immense variety of possible
-Investor configurations, we rely on a genetic algorithm to navigate this
-complexity, aiming to progressively identify and refine the best performers
-through simulated cycles and successive generations.
+a population of unique Investors. The efficacy of each Investor is measured by
+the amount of money it made over the course of the simulation period. The
+simulator uses historical econometric data and incorporates linguistic metrics
+derived from news articles, magazines, and other relevant sources to account for
+real-world events, sentiments, and narratives that could influence currency
+exchange rates. It also applies industry-standard fees to transactions. For
+transactions occurring at time T, the Influencers and Investors have access to
+historical data up to time T, as well as the linguistic metrics up to time T.
+This approach ensures that the costs and information available reflect real-life
+conditions to the greatest extent possible. Those Investors that accrue
+significant profits are deemed superior, whereas those resulting in losses are
+classified as inferior. Given the immense variety of possible Investor
+configurations, we rely on the genetic algorithm to navigate this complexity,
+aiming to progressively identify and refine the best performers through
+simulation cycles and successive generations.
 
-A special mode of operation available in the simulator is called "the crucible".
-By feeding the simulator a curated list of DNA strings along with specified time
-periods, the crucible reconstitutes each Investor and subjects them to a series
-of investment simulations across the designated intervals. This process not only
-tests the adaptability and robustness of each strategy across varying market
-conditions but also consolidates the findings into a comprehensive report
-suitable for financial analysis and highlighting the performance metrics of each
-Investor. This targeted approach allows us to isolate and analyze the
+The Plato system uses DNA much like real biological DNA. In Plato, DNA strings
+provide a complete representation of the investor, its settings, its team of
+Influencers, and their settings. An Investor and its team of Influencers and all
+their settings can be fully reconstituted from the DNA string.
+
+There is a special mode of operation in the simulator called "the crucible".  By
+feeding the simulator a curated list of DNA strings along with specified time
+periods, the crucible reconstitutes each of the Investors and subjects them to a
+series of investment simulations across the designated time period. This process
+tests the adaptability and robustness of each Investor's strategy across varying
+market conditions. This targeted approach allows us to isolate and analyze the
 effectiveness of top-performing Investors, ensuring that only the most resilient
 and profitable Investors are used in actual investing. The crucible, therefore,
-stands as a critical component of our system, bridging the gap between
+stands as a critical component of the system, bridging the gap between
 theoretical optimization and practical, real-world application.
 
-"Single Investor Mode" is another specialized operational mode within the
-simulator. In this mode, the simulation focuses exclusively on a single
-Investor, which is configured using a DNA string specified in the configuration
-file. This mode allows the simulator to run through the designated simulation
-period for this particular Investor without generating new generations, thereby
-streamlining the output reports. To enhance the depth of analysis, "Single
-Investor Mode" can be paired with "trace" mode. This combination offers detailed
-insights into the decision-making process of the Investor and its team of
-Influencers, facilitating a comprehensive validation of the code and the
-strategies employed. As a result, this mode serves as an invaluable debugging
-and optimization tool, enabling both developers and researchers to scrutinize
-the performance of Influencers as well as an Investor's strategy, ensuring they
-operate as intended and contribute effectively to the Investor's performance.
+"Single Investor Mode" is another special operational mode within the simulator.
+In this mode, the simulation focuses exclusively on a single Investor, defined
+by its DNA. This mode allows the simulator to run through the designated
+simulation period for only this Investor, resulting in very focused and minimal
+output reports.  This makes it practical to perform a deeper analysis.  The
+"Single Investor Mode" can be combined with the "trace" mode to provide a
+complete picture of the decision-making process of the Investor and its team of
+Influencers. The trace mode breaks down every decision made by the investment
+team. It shows the metric data processed by each Influencer and its prediction
+based on that data.  It also shows the overall decision made by the Investor
+based on the predictions from its team of Influencers. If a buy or sell is
+performed, it shows the transaction details as well as the total amount of C1
+and C2 after the transaction.  This facilitates comprehensive code validation.
+It serves as an invaluable debugging and optimization tool, enabling both
+developers and researchers to scrutinize the performance of Influencers as well
+as an Investor's strategy, ensuring everything operates as intended and
+contributes effectively to the Investor's performance.
 
 The simulator has several different reports that provide insight into how the
 code is working and the performance of the Investors. The reports are all in CSV
-format to help facilitate experimentation, research, and graphing. Here is a
-summary of reports.
+format to help facilitate experimentation, research, and graphing. Here are a
+few of the key reports.
 
-simstats.csv - The Simulation Statistics report. This was the first report
-developed. It provided insight into how the genetics perform.  For each
-generation in the simulation it lists indicators that suggest whether the
-successive generations are becoming better or worse. It includes information
-such as the percentage of Investors that were profitable by the end of the
-simulation period, the percentage of buys that turned out to be profitable, and
-the most profitable Investor of the generation. It also lists the DNA of the
-most profitable Investor for each generation.
+simstats.csv - The Simulation Statistics report provides key insights into the
+effectiveness of the genetic algorithm. It tracks various metrics across
+generations, including the percentage of Investors that become profitable by the
+end of the simulation period. This profitability rate is a crucial indicator of
+the algorithm's success. In our observations, the percentage of profitable
+Investors often starts low (around 20% - 50%) in early generations, but then
+rises significantly, reaching 85-90% after just 4 or 5 generations. By
+generation 10, simulations typically see the percentage of profitable Investors
+high 90s, with some generations even achieving 100% of the Investor population
+achieving profits. This rapid increase strongly suggests that the genetic
+algorithm is effectively identifying and breeding successful Investor
+configurations. The report also lists the DNA of the most profitable Investor
+for each generation.
 
-finrep.csv - The Financial Report. The key information in this report includes
-the maximum annualized return for the top n Investors across all generations of
-the simulation, in which generation that Investor appeared, and its DNA.
+finrep.csv - The Financial Report. Key information in this report includes the
+maximum annualized return for the top n Investors across all generations of the
+simulation, the generation in which that Investor appeared, and its DNA.
 
-crep.csv - The Crucible Report.  The crucible is a special run of the simulator.
-The simulator is provided a list of DNA strings and time periods.  For each DNA
-string, it reconstitutes the Investor and runs an investment simulation for that
-individual Investor over all the time periods provided. It then summarizes the
-results in the same way as the Financial Report.  As many simulations are done
-over time, the DNA of investors that do exceptionally well can be saved. The
-crucible can be used to validate their performance.
+crep.csv - The Crucible Report. The simulator is fed a list of DNA strings and a
+separate list of time periods.  For each DNA string provided, it reconstitutes
+the Investor and runs an investment simulation for that individual Investor over
+all the time periods provided. It then summarizes the results similar to the
+Financial Report.
 
 invrep.csv - The Investment Report.  This report provides a detailed transaction
-log for one or more investors. It lists all details of every exchange, the
+log for one or more Investors. It lists all details of every exchange, the
 exchange rates, and for sells (exchanging C2 for C1) it lists the profit or loss
 on that transaction. If the Investor's investment strategy is Distributed
 Decision then it is likely that a buy (an exchange of C1 for C2) will be sold in
@@ -152,83 +180,90 @@ There are other modes and capabilities of the simulator. A few key ones are the
 following:
 
 Top Investor Count Feature: This configurable option allows users to specify the
-number of top-performing Investors for which detailed reports are generated.
-These reports not only cover their financial performance but also include the
-unique DNA configuration that underpins their strategies. This feature
-facilitates targeted analysis and replication of successful investment
-behaviors.
+number of top-performing Investors for which detailed reports are generated. The
+simulator will keep track of the top-performing investors across all
+generations. That is, if the user configures a simulation for 50 generations,
+with 1000 Investors per generation, and sets the Top Investor Count to 10, then
+at the end of the simulation the financial report will include the 10 best
+Investors over all 50 generations, their financial performance, and will also
+include the DNA of each top-performing Investor.
 
-Preserve Elite Option:The PreserveElite option ensures that a specified
+Preserve Elite Option: The Preserve Elite option ensures that a specified
 percentage of the highest-performing Investors from one generation are exactly
-replicated in the subsequent generation. Incorporating this method has
-empirically enhanced the overall performance of our Investor pool by
-approximately 1%, diverging from traditional genetic algorithm practices to
-foster incremental improvement.
+replicated in the subsequent generation. Though this feature diverges from
+traditional genetic algorithm practices, we have found it to enhance the overall
+performance of our Investor pool.
 
-Investor Bonus Plan: Mimicking real-world incentive structures, this feature
-boosts an Investor's genetic Fitness Score based on their performance.
-Investors surpassing certain profitability thresholds receive a Fitness Score
-multiplier, beginning at 2 and scaling with their ROI achievements. This
-elevation in Fitness Score directly influences their likelihood of contributing
-to the genetic makeup of future generations, prioritizing the propagation of
-successful investment strategies.
+Investor Bonus Plan: Mimicking real-world incentive structures when enabled,
+this feature boosts an Investor's genetic Fitness Score based on its
+performance.  Investors surpassing certain profitability thresholds receive a
+Fitness Score multiplier, beginning at 2X and scaling up with their ROI
+achievements. This elevation in Fitness Score directly influences their
+likelihood of contributing to the genetic makeup of future generations,
+prioritizing the propagation of successful investment strategies.
 
-Gen 0 Elite Injection: By introducing the DNA of exceptionally successful
-Investors into the initial generation, the Gen 0 Elite feature provides a
-strategic advantage right from the start. Without this, the first generation's
-population is entirely randomized. Incorporating proven genetic material early
-on effectively primes the simulation with a foundation of excellence, offering a
-significant "head start" in the evolutionary process.
+Gen 0 Elite Injection: When enabled, this optional feature introduces the DNA of
+exceptionally successful Investors into the initial generation. This provides a
+strategic advantage right from the start. When this feature is disabled, the
+first generation's population is entirely random. Incorporating proven genetic
+material early on effectively primes the simulation with a foundation of
+excellence, offering a significant "head start" in the evolutionary process.
 
-Appendix A: Assessing an Influencer's Accuracy
+Appendix A: Challenges in Assessing Influencer Accuracy
 
-Determining the predictive accuracy of each Influencer type presents a complex
-challenge. The intricacies stem from several factors that complicate a
-straightforward evaluation:
+It's difficult to measure how accurate each type of Influencer is at predicting
+future market movements. Here's why:
 
-Variable Research Periods: For any given prediction date, Influencers can
-analyze data from a variable timeframe preceding that date. The genetic
-algorithm may adjust this period extensively, affecting the basis on which
-predictions are made.
+Variable Lookback Periods:  Influencers consider different amounts of historical
+data (lookback periods) when making predictions. These lookback periods are set
+by the genetic algorithm and can change significantly.  This makes it hard to
+say something like "Influencer X is right 80% of the time." Instead, we could
+say "Influencer X, when looking back at 90 days (Delta1) and 19 days (Delta2) of
+data, predicted correctly 80% of the time between January 1st, 2022 and December
+31st, 2022." However, Delta1 can range from -145 to -60 days and Delta2 can
+range from -45 to -1 days. So, there are many possible combinations (3740 in
+this case) for these settings, and the accuracy could be different for each
+combination. Also, the accuracy for this Influencer with these settings would
+likely be different if we looked at data from a different time period (e.g.,
+2023).
 
-Indeterminate Sale Dates: The lack of a predetermined sale date following a
-'buy' prediction adds a layer of complexity to evaluating an Influencer's
-predictive accuracy. Consider this scenario for illustration: Influencer X
-advises buying currency C2 at time T1. This decision, influenced by the
-collective recommendations of the Investor's team of Influencers, leads to the
-purchase. However, Influencer X does not specify a sale date for C2. At a later
-time, T2, Influencer X may suggest selling C2, but if the majority of the team
-disagrees, the sale might be delayed until T3, potentially resulting in a loss.
-In such a situation, attributing the loss directly to Influencer X's initial buy
-recommendation becomes problematic. Conversely, if Influencer X recommends
-holding C2 at T2, but the team decides to sell, leading to a profit, should this
-outcome be considered a validation of Influencer X's judgment? These examples
-underscore the difficulty in directly linking an Influencer's predictions with
-the eventual financial outcomes of transactions, highlighting the nuanced
-challenges inherent in assessing prediction accuracy within the simulation.
+Uncertain Selling Dates:  Even if an Influencer predicts a correct "buy," it's
+hard to know how accurate it was because we don't know if that Influencer would
+recommend selling on the day it is decided to sell the C2 it recommended that
+the Investor should buy.  For example, let's say Influencer X suggests buying
+currency C2 at time T1.  If the Investor buys, but then later decides not to
+sell when Influencer X recommends it (T2), we can't say if Influencer X's buy
+recommendation was good or bad (we don’t track that info).  Similarly, if
+Influencer X recommends holding at T2 but the Investor sells and makes money,
+can we really say Influencer X was right?  These situations make it difficult to
+link Influencer predictions directly to how much money the Investor makes or
+loses.
 
-Complex Sale Attribution: Associating specific sales with their preceding buy
-predictions is fraught with difficulty. A single buy prediction might lead to
-purchases of varying amounts, with subsequent sales fragmented across multiple
-transactions.
+Complex Sales:  A single "buy" prediction might lead to multiple purchases of
+different amounts.  These purchases might then be sold in multiple transactions
+at different times.  This makes it hard to track a specific buy recommendation
+back to a specific sale and measure the accuracy of the prediction.
+
+These challenges highlight the complexity of evaluating Influencer accuracy
+within the Plato Project simulation.
 
 Appendix B: Managing External Resources
 
 In the development and operation of the Plato suite, accessing external
-resources frequently necessitates confidential credentials. These resources may
+resources frequently requires confidential credentials. These resources may
 include access keys for financial institutions, data vendors, or connections to
 critical services such as shared databases. To prevent both unintentional and
 deliberate exposure of these credentials, they are not stored within the source
 code repository.
 
 For secure management of these sensitive details, the Plato suite utilizes a
-specific configuration file, extres.json5. This file should be located either in
-the current directory from which a Plato tool is launched or in the directory
-housing the tool’s executable. Importantly, extres.json5 must not be checked
-into the version control system to avoid compromising its contents. It should be
-securely stored and only deployed in environments where it is explicitly
-required, underscoring that most Plato operations do not need access to
-extres.json5.
+specific configuration file, extres.json5 (note: JSON5 is a special version of
+JSON that allows for comments). This file should be located in the directory
+where the tool’s executable is kept. Importantly, extres.json5 must not be
+checked into the version control system to avoid compromising its contents. It
+should be securely stored and only deployed in environments where it is
+explicitly required, underscoring that most Plato operations do not need access
+to extres.json5.
 
 When a Plato tool initiates, it searches for extres.json5 to access the
 necessary credentials. In the absence of this file, the tool defaults to
@@ -237,3 +272,5 @@ the executing process owner's username (excluding a password) and settings for a
 default local MySQL database instance. This approach ensures the tool retains
 basic functionality while clearly indicating when specialized external resources
 are not available.
+
+

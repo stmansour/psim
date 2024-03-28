@@ -1,4 +1,4 @@
-TOP=../..
+OP=../..
 BINDIR=${TOP}/dist/platosim
 THISDIR="apps/simulator"
 TEST_FAILURE_FILE=fail
@@ -22,8 +22,8 @@ cleancsv:
 
 test: config db
 	@touch $(TEST_FAILURE_FILE)
-	./functest.sh
-	@go test -coverprofile=coverage.out -coverpkg=../../... && rm -f $(TEST_FAILURE_FILE)
+	@go test -coverprofile=coverage.out -coverpkg=../../...
+	./functest.sh && rm -f ${TEST_FAILURE_FILE}
 	@echo "*** ${THISDIR}: completed test ***"
 
 itest: config.json5 data/platodb.csv

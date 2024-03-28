@@ -3,6 +3,7 @@
 RUNSINGLETEST=0
 TESTNAME="TestSimulator"
 TESTCOUNT=0
+ERRORCOUNT=0
 ARCHIVE=arch
 
 usage() {
@@ -57,7 +58,7 @@ compareToGold() {
 
     # Normalize the report file
     sed -E \
-        -e 's/Version:[[:space:]]+[0-9]+\.[0-9]+-[0-9]{8}-[0-9]{6}/Version: VERSION_PLACEHOLDER/' \
+        -e 's/^Version:.*/Version: VERSION_PLACEHOLDER/' \
         -e 's/Random number seed:[[:space:]]+[0-9]+/Random number seed: SEED_PLACEHOLDER/' \
         -e 's/Archive directory:.*/Archive directory: PLACEHOLDER/' \
         "$reportFile" >"$normalizedFile"
@@ -77,6 +78,7 @@ compareToGold() {
         rm "${normalizedFile}"
     else
         echo "Differences detected."
+        ((ERRORCOUNT++))
         # Prompt the user for action
         if [[ "${ASKBEFOREEXIT}" == 1 ]]; then
             while true; do
@@ -184,4 +186,12 @@ if [[ "${SINGLETEST}${TFILES}" = "${TFILES}" || "${SINGLETEST}${TFILES}" = "${TF
     mv crep.csv c1.csv
     compareToGold c1.csv
     ((TESTCOUNT++))
+fi
+
+
+echo "Total tests: ${TESTCOUNT}"
+echo "Total errors: ${ERRORCOUNT}"
+exit "${ERRORCOUNT}"
+if [ "${ERRORCOUNT}" -gt 0 ]; then
+    exit 2
 fi

@@ -48,7 +48,7 @@ func (f *FinRep) GenerateFinRep(sim *Simulator, dirname string) error {
 // ----------------------------------------------------------
 func (f *FinRep) GenerateHeader() error {
 	fmt.Fprintf(f.file, "%q\n", "PLATO Simulator Financial Results")
-	f.Sim.ReportHeader(f.file, false)
+	f.Sim.ReportHeader(f.file, true)
 	return nil
 }
 
