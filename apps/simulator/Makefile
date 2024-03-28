@@ -1,4 +1,4 @@
-OP=../..
+TOP=../..
 BINDIR=${TOP}/dist/platosim
 THISDIR="apps/simulator"
 TEST_FAILURE_FILE=fail
