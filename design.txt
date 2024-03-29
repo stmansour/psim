@@ -239,10 +239,15 @@ can we really say Influencer X was right?  These situations make it difficult to
 link Influencer predictions directly to how much money the Investor makes or
 loses.
 
-Complex Sales:  A single "buy" prediction might lead to multiple purchases of
-different amounts.  These purchases might then be sold in multiple transactions
-at different times.  This makes it hard to track a specific buy recommendation
-back to a specific sale and measure the accuracy of the prediction.
+Complex Sales:  A single "buy" prediction that leads to a purchase of X amount
+of C2 might lead to multiple sells in which portions of X are sold at different
+times.  The multiple sell transactions make it hard to track a specific sell
+amount back to a specific buy recommendation from an Influencer to measure the
+accuracy of the prediction.  Again, Influencer A may have recommended the buy,
+but there’s no guarantee that every portion of X that is sold came from
+Influencer A recommending that sale. So, the attribution of success or failure
+back to Influencer A can become very messy.
+
 
 These challenges highlight the complexity of evaluating Influencer accuracy
 within the Plato Project simulation.
