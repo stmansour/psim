@@ -61,15 +61,15 @@
     "TopInvestors": [
       {
         "Name": "Bogel",
-        "DNA": "{Investor;Strategy=MajorityRules;InvW1=0.1764;InvW2=0.8236;Influencers=[{LSMInfluencer,Delta1=-98,Delta2=-39,Metric=MP}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RS}|{LSMInfluencer,Delta1=-171,Delta2=-52,Metric=UR}|{LSMInfluencer,Delta1=-138,Delta2=-30,Metric=HS}|{LSMInfluencer,Delta1=-114,Delta2=-39,Metric=M2}|{LSMInfluencer,Delta1=-88,Delta2=-6,Metric=LIMCount_ECON}|{LSMInfluencer,Delta1=-77,Delta2=-22,Metric=WDPCount}|{LSMInfluencer,Delta1=-119,Delta2=-58,Metric=CC}|{LSMInfluencer,Delta1=-65,Delta2=-15,Metric=WDECount}|{LSMInfluencer,Delta1=-62,Delta2=-10,Metric=LSNScore}]}"
+        "DNA": "{Investor;Strategy=MajorityRules;InvW1=0.1764;InvW2=0.8236;Influencers=[{LSMInfluencer,Delta1=-98,Delta2=-39,Metric=MP}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RS}|{LSMInfluencer,Delta1=-171,Delta2=-52,Metric=UR}|{LSMInfluencer,Delta1=-138,Delta2=-30,Metric=HS}|{LSMInfluencer,Delta1=-114,Delta2=-39,Metric=M2}|{LSMInfluencer,Delta1=-88,Delta2=-6,Metric=GCAM_C5_4_ECON}|{LSMInfluencer,Delta1=-77,Delta2=-22,Metric=GCAM_C16_121}|{LSMInfluencer,Delta1=-119,Delta2=-58,Metric=CC}|{LSMInfluencer,Delta1=-65,Delta2=-15,Metric=GCAM_C16_47}|{LSMInfluencer,Delta1=-62,Delta2=-10,Metric=GCAM_C3_1}]}"
       },
       {
         "Name": "Ichan",
-        "DNA": "{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-98,Delta2=-36,Metric=MP}|{LSMInfluencer,Delta1=-72,Delta2=-1,Metric=DR}|{LSMInfluencer,Delta1=-75,Delta2=-11,Metric=WHOScore_ECON}|{LSMInfluencer,Delta1=-111,Delta2=-42,Metric=M1}|{LSMInfluencer,Delta1=-98,Delta2=-30,Metric=HS}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BC}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RS}|{LSMInfluencer,Delta1=-69,Delta2=-20,Metric=LSPScore}|{LSMInfluencer,Delta1=-82,Delta2=-16,Metric=WDFCount}|{LSMInfluencer,Delta1=-154,Delta2=-34,Metric=IP}]}"
+        "DNA": "{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-98,Delta2=-36,Metric=MP}|{LSMInfluencer,Delta1=-72,Delta2=-1,Metric=DR}|{LSMInfluencer,Delta1=-75,Delta2=-11,Metric=GCAM_C15_147_ECON}|{LSMInfluencer,Delta1=-111,Delta2=-42,Metric=M1}|{LSMInfluencer,Delta1=-98,Delta2=-30,Metric=HS}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BC}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RS}|{LSMInfluencer,Delta1=-69,Delta2=-20,Metric=GCAM_C3_2}|{LSMInfluencer,Delta1=-82,Delta2=-16,Metric=GCAM_C16_60}|{LSMInfluencer,Delta1=-154,Delta2=-34,Metric=IP}]}"
       },
       {
         "Name": "Khosla",
-        "DNA": "{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-71,Delta2=-20,Metric=LSPScore}|{LSMInfluencer,Delta1=-690,Delta1=-457,Metric=GD}|{LSMInfluencer,Delta1=-200,Delta2=-17,Metric=WDECount_ECON}|{LSMInfluencer,Delta1=-95,Delta2=-40,Metric=MP}|{LSMInfluencer,Delta1=-153,Delta2=-34,Metric=IP}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RS}]}"
+        "DNA": "{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-71,Delta2=-20,Metric=GCAM_C3_2}|{LSMInfluencer,Delta1=-690,Delta1=-457,Metric=GD}|{LSMInfluencer,Delta1=-200,Delta2=-17,Metric=GCAM_C16_47_ECON}|{LSMInfluencer,Delta1=-95,Delta2=-40,Metric=MP}|{LSMInfluencer,Delta1=-153,Delta2=-34,Metric=IP}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RS}]}"
       },
     ],
 

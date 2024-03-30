@@ -26,6 +26,13 @@ var LocaleTypeMap = map[string]int{
 	"LocaleBloc": LocaleBloc,
 }
 
+// LocalStringList maps the LocaleTyp number to a string
+var LocalStringList = []string{
+	"LocaleNone",
+	"LocaleC1C2",
+	"LocaleBloc",
+}
+
 // Predictor type defines how the influencer will do predictions with the metric
 const (
 	SingleValGT   = iota // 0. use a single value at T1 and T2, predict "buy" for val@T1 > val@T2
@@ -42,6 +49,15 @@ var PredictorTypeMap = map[string]int{
 	"C1C2RatioGT":   C1C2RatioGT,
 	"C1C2RatioLT":   C1C2RatioLT,
 	"CustomPredict": CustomPredict,
+}
+
+// PredictoryStringList is used to map the Predictior's ID value to a string
+var PredictoryStringList = []string{
+	"SingleValGT",
+	"SingleValLT",
+	"C1C2RatioGT",
+	"C1C2RatioLT",
+	"CustomPredict",
 }
 
 // MInfluencerSubclass is the struct that defines a metric-based influencer
@@ -255,6 +271,8 @@ func (m *MetricInfluencerManager) loadMInfluencerSubclassesCSV() error {
 				inf.HoldWindowPos = m.parseAndCheckFloat64(record[index], filename, line)
 			case "HoldWindowNeg":
 				inf.HoldWindowNeg = m.parseAndCheckFloat64(record[index], filename, line)
+			case "MetricType":
+				inf.MetricType = m.parseAndCheckInt(record[index], filename, line)
 			}
 		}
 		m.MInfluencerSubclasses[inf.Metric] = inf

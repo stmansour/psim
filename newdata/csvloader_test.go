@@ -41,11 +41,11 @@ func TestCSVDataAccess(t *testing.T) {
 	}
 
 	dt := time.Date(2023, time.January, 15, 0, 0, 0, 0, time.UTC)
-	// ss := []string{"USDSP", "JPYDR", "LSNScore_ECON"}
+	// ss := []string{"USDSP", "JPYDR", "GCAM_C3_1_ECON"}
 	ss := []FieldSelector{
 		{Metric: "SP", Locale: "USD"},
 		{Metric: "DR", Locale: "JPY"},
-		{Metric: "LSNScore_ECON"},
+		{Metric: "GCAM_C3_1_ECON"},
 	}
 	p, err := d.Select(dt, ss)
 	if err != nil {

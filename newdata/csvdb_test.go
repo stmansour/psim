@@ -35,7 +35,7 @@ func TestOpenCSVDatabaseAndSelectRecord(t *testing.T) {
 	ss := []newdata.FieldSelector{
 		{Metric: "SP", Locale: "USD"},
 		{Metric: "DR", Locale: "JPY"},
-		{Metric: "LSNScore_ECON"},
+		{Metric: "GCAM_C3_1_ECON"},
 	}
 
 	rec, err := d.Select(dt, ss)

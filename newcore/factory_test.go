@@ -13,7 +13,7 @@ func TestMutateInfluencer(t *testing.T) {
 	cfg.MinInfluencers = 2
 
 	// now create an investor with 2 Influencers.
-	dna := "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Metric=LSNScore,Delta1=-65,Delta2=-5}|{LSMInfluencer,Metric=LSNScore,Delta1=-65,Delta2=-5}}]}"
+	dna := "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Metric=GCAM_C3_1,Delta1=-65,Delta2=-5}|{LSMInfluencer,Metric=GCAM_C3_1,Delta1=-65,Delta2=-5}}]}"
 	inv := f.NewInvestorFromDNA(dna)
 
 	// we should have 2 influencers now

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/stmansour/psim/newdata"
@@ -80,6 +81,8 @@ func main() {
 	dtStart := time.Date(2010, time.January, 1, 0, 0, 0, 0, time.UTC)
 	dtEnd := app.csvdb.CSVDB.DtStop.AddDate(0, 0, 1)
 	count := 0
+	unrecognized := map[string]bool{}
+
 	for dt := dtStart; dt.Before(dtEnd); dt = dt.AddDate(0, 0, 1) {
 		rec, err := app.csvdb.Select(dt, fields) // empty slice gets all fields
 		if err != nil {
@@ -102,6 +105,20 @@ func main() {
 			count++
 		}
 		for k, v := range rec.Fields {
+			// first, make sure we recognize this metric...
+			if !strings.Contains(k, "EXClose") {
+				f := newdata.FieldSelector{}
+				app.sqldb.SQLDB.FieldSelectorFromCSVColName(k, &f)
+				if _, ok := app.sqldb.Mim.MInfluencerSubclasses[f.Metric]; !ok {
+					// have we seen this metric before?
+					if _, ok = unrecognized[k]; !ok {
+						unrecognized[k] = true
+						fmt.Printf("Unrecognized metric: %s\n", k)
+					}
+					continue // no matter what, we don't have this metric, so just keep going
+				}
+			}
+
 			delta := rec1.Fields[k] - v
 			if delta < 0 {
 				delta = -delta

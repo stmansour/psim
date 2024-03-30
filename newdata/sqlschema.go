@@ -64,7 +64,7 @@ func (p *DatabaseSQL) CreateDatabaseTables() error {
 		);`,
 		`CREATE TABLE MISubclasses (
 			MID INT AUTO_INCREMENT PRIMARY KEY,
-			Name VARCHAR(80) NOT NULL,
+			Name VARCHAR(128) NOT NULL,
 			Metric VARCHAR(80) NOT NULL,
 			Subclass VARCHAR(80) NOT NULL,
 			LocaleType TINYINT NOT NULL,

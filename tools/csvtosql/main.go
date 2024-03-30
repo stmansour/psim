@@ -117,13 +117,25 @@ func main() {
 	}
 
 	//-------------------------------------------------------------------------------------
-	// The MISubclasses table has been loaded, we'll need to cache it for use in
-	// MigrateTimeSeriesData. So load it now
+	// This may have caused IDs to change. Let's reload them now so
+	// we can be assured that the ids are correct.  We do this by
+	// loading the SQL database cache into the CSV database.
+	//-------------------------------------------------------------------------------------
+	if err = app.csvdb.CSVDB.LoadMetricsSourceCache(); err != nil {
+		log.Fatalf("Error from LoadMetricsSourceCache: %s\n", err.Error())
+	}
+
+	//-------------------------------------------------------------------------------------
+	// now cache it for the SQL db...
 	//-------------------------------------------------------------------------------------
 	app.sqldb.Mim.ParentDB = app.sqldb
 	if err = app.sqldb.Mim.LoadMInfluencerSubclasses(); err != nil {
 		log.Fatalf("Error from LoadMInfluencerSubclasses: %s\n", err.Error())
 	}
+
+	//-------------------------------------------------------------------------------------
+	// and now we write the metrics...
+	//-------------------------------------------------------------------------------------
 	if err = app.sqldb.WriteMetricsSources(app.csvdb.CSVDB.MetricSrcCache); err != nil {
 		log.Fatalf("Error from WriteMetricsSources: %s\n", err.Error())
 	}

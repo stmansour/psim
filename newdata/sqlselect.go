@@ -37,6 +37,8 @@ func (p *DatabaseSQL) GetShardInfo(Date time.Time, f *FieldSelector) {
 	f.Table = fmt.Sprintf("Metrics_%d_%d", f.BucketNumber, decade)
 }
 
+var unrecognized = map[string]bool{}
+
 // Insert does a sql insert of all the metrics in the supplied record
 func (p *DatabaseSQL) Insert(rec *EconometricsRecord) error {
 	var err error
@@ -51,6 +53,13 @@ func (p *DatabaseSQL) Insert(rec *EconometricsRecord) error {
 			LID2:        f.LID2,
 			MSID:        1, // NOTE:  hardcode
 			MetricValue: v,
+		}
+		if f.MID == 0 {
+			if _, ok := unrecognized[f.Metric]; !ok {
+				fmt.Printf("Skipping all attempts to insert unrecognized metric %s\n", f.Metric)
+				unrecognized[f.Metric] = true
+			}
+			continue
 		}
 		if f.LID2 != 1 && f.MID == -1 {
 			query := `INSERT INTO ExchangeRate (Date,LID,LID2,MSID,EXClose) VALUES (?,?,?,?,?)`

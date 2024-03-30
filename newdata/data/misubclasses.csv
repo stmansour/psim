@@ -1,100 +1,100 @@
-Name,Metric,Subclass,LocaleType,Blocs,Predictor,MinDelta1,MaxDelta1,MinDelta2,MaxDelta2,FitnessW1,FitnessW2,HoldWindowPos,HoldWindowNeg,MetricType
-LJ,WDMCount,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-LI,WDPCount,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-LH,WDFCount,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-LG,WDECount,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-LF,WPAScore,LSMInfluencer,LocaleNone,,SingleValLT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-LE,WHLScore,LSMInfluencer,LocaleNone,,SingleValLT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-LD,WHOScore,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-LC,WHAScore,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-LB,LSPScore,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-LA,LSNScore,LSMInfluencer,LocaleNone,,SingleValLT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-L9,LIMCount_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-L8,WDPCount_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-L7,WDFCount_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-L6,WDECount_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-L5,WPAScore_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioLT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-L4,WHLScore_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioLT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-L3,WHOScore_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-L2,WHAScore_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-L1,LSNScore_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioLT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-L0,LSPScore_ECON,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-BC,BC,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,1
-CC,CC,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,1
-CU,CU,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,1
-DR,DR,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,1
-GD,GD,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-1095,-62,-61,-1,0.6,0.4,0.001,-0.001,1
-HS,HS,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,1
-IE,IE,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,1
-IP,IP,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,1
-IR,IR,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,1
-M1,M1,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,1
-M2,M2,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,1
-MP,MP,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,1
-RS,RS,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,1
-SP,SP,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-720,-62,-61,-1,0.6,0.4,0.001,-0.001,1
-UR,UR,LSMInfluencer,LocaleC1C2,,C1C2RatioGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,1
-WTOILClose,WTOILClose,LSMInfluencer,LocaleNone,,SingleValGT,-720,-62,-61,-1,0.6,0.4,0.001,-0.001,1
-GCAM_WC,GCAM_WC,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C3_3,GCAM_C3_3,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C3_4,GCAM_C3_4,LSMInfluencer,LocaleNone,,SingleValLT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C4_1,GCAM_C4_1,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C4_6,GCAM_C4_6,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C4_10,GCAM_C4_10,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C4_14,GCAM_C4_14,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C4_16,GCAM_C4_16,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C4_17,GCAM_C4_17,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C4_19,GCAM_C4_19,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C4_20,GCAM_C4_20,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C4_21,GCAM_C4_21,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C4_24,GCAM_C4_24,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C4_25,GCAM_C4_25,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C4_26,GCAM_C4_26,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C5_32,GCAM_C5_32,LSMInfluencer,LocaleNone,,SingleValLT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C5_33,GCAM_C5_33,LSMInfluencer,LocaleNone,,SingleValLT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C5_34,GCAM_C5_34,LSMInfluencer,LocaleNone,,SingleValLT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C5_35,GCAM_C5_35,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C7_1,GCAM_C7_1,LSMInfluencer,LocaleNone,,SingleValLT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C7_2,GCAM_C7_2,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_V10_1,GCAM_V10_1,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_V10_2,GCAM_V10_2,LSMInfluencer,LocaleNone,,SingleValLT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_V11_1,GCAM_V11_1,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C15_129,GCAM_C15_129,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C15_130,GCAM_C15_130,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C15_132,GCAM_C15_132,LSMInfluencer,LocaleNone,,SingleValLT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C15_133,GCAM_C15_133,LSMInfluencer,LocaleNone,,SingleValLT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C15_205,GCAM_C15_205,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C16_21,GCAM_C16_21,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C16_37,GCAM_C16_37,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C17_13,GCAM_C17_13,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C17_31,GCAM_C17_31,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C17_34,GCAM_C17_34,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C17_38,GCAM_C17_38,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_V19_1,GCAM_V19_1,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_V19_2,GCAM_V19_2,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_V19_3,GCAM_V19_3,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_V21_1,GCAM_V21_1,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C25_1,GCAM_C25_1,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C25_2,GCAM_C25_2,LSMInfluencer,LocaleNone,,SingleValLT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C25_3,GCAM_C25_3,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C25_4,GCAM_C25_4,LSMInfluencer,LocaleNone,,SingleValLT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C25_5,GCAM_C25_5,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C25_6,GCAM_C25_6,LSMInfluencer,LocaleNone,,SingleValLT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C25_7,GCAM_C25_7,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C25_8,GCAM_C25_8,LSMInfluencer,LocaleNone,,SingleValLT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C25_9,GCAM_C25_9,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C25_10,GCAM_C25_10,LSMInfluencer,LocaleNone,,SingleValLT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C25_11,GCAM_C25_11,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_V26_1,GCAM_V26_1,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C41_1,GCAM_C41_1,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_C42_1,GCAM_C42_1,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_V42_2,GCAM_V42_2,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_V42_3,GCAM_V42_3,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_V42_4,GCAM_V42_4,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_V42_5,GCAM_V42_5,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_V42_6,GCAM_V42_6,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_V42_7,GCAM_V42_7,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_V42_8,GCAM_V42_8,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_V42_9,GCAM_V42_9,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_V42_10,GCAM_V42_10,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
-GCAM_V42_11,GCAM_V42_11,LSMInfluencer,LocaleNone,,SingleValGT,-360,-62,-61,-1,0.6,0.4,0.001,-0.001,2
+MID,Name,Metric,BlocType,LocaleType,Predictor,Subclass,MinDelta1,MaxDelta1,MinDelta2,MaxDelta2,FitnessW1,FitnessW2,HoldWindowPos,HoldWindowNeg
+41,GDELT GCAM - Extended Moral Foundations Dictionary (eMFD):fairness_p - All news,GCAM_V42_3,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+46,GDELT GCAM - Affective Norms for English Words (ANEW) 2010:dominance (all) (scored value) - All news,GCAM_V19_3,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+48,GDELT GCAM - WordNet Affect 1.1:panic - Economic news,GCAM_C15_204_ECON,0,LocaleNone,SingleValLT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+94,SP,SP,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-720,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+95,GDELT GCAM - Lexicoder Topic Dictionaries:labour - All news,GCAM_C4_6,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+96,GDELT GCAM - WordNet Domains 3.2:banking - All news,GCAM_C16_21,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+3,GDELT GCAM - Lexicoder Topic Dictionaries:foreign_trade - All news,GCAM_C4_19,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+17,IP,IP,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+43,GDELT GCAM - Linguistic Inquiry and Word Count (LIWC):anxiety - All news,GCAM_C5_33,0,LocaleNone,SingleValLT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+47,GDELT GCAM - Extended Moral Foundations Dictionary (eMFD):care_sent - All news,GCAM_V42_7,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+75,GDELT GCAM - WordNet Affect 1.1:hopefulness - Economic news,GCAM_C15_147_ECON,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+84,GDELT GCAM - Lexicoder Topic Dictionaries:prov_local - All news,GCAM_C4_24,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+12,GDELT GCAM - WordNet Domains 3.2:politics - Economic news,GCAM_C16_121_ECON,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+37,GDELT GCAM - Lexicoder Topic Dictionaries:social_welfare - All news,GCAM_C4_14,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+23,GDELT GCAM - VADER Sentiment Lexicon (Bag of Words Mode):valence (scored value) - All news,GCAM_V26_1,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+25,GDELT GCAM - Extended Moral Foundations Dictionary (eMFD):sanctity_sent - All news,GCAM_V42_11,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+38,GDELT GCAM - Linguistic Inquiry and Word Count (LIWC):positiveemotion - All news,GCAM_C5_35,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+65,GDELT GCAM - Lexicoder Topic Dictionaries:macroeconomics - All news,GCAM_C4_1,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+85,GDELT GCAM - WordNet 3.1 Lexical Categories:verb/competition - All news,GCAM_C17_34,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+2,CU,CU,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+16,GDELT GCAM - Linguistic Inquiry and Word Count (LIWC):money - All news,GCAM_C5_4,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+28,GDELT GCAM - WordNet 3.1 Lexical Categories:verb/change - All news,GCAM_C17_31,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+50,GDELT GCAM - WordNet Affect 1.1:hopefulness - All news,GCAM_C15_147,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+52,GDELT GCAM - Lexicoder Topic Dictionaries:intergovernmental - All news,GCAM_C4_25,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+60,GDELT GCAM - Lexicoder Sentiment Dictionary:neg_positive - All news,GCAM_C3_4,0,LocaleNone,SingleValLT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+62,GDELT GCAM - WordNet 3.1 Lexical Categories:verb/emotion - All news,GCAM_C17_38,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+76,DR,DR,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+5,GDELT GCAM - WordNet Affect 1.1:happiness - All news,GCAM_C15_137,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+19,GDELT GCAM - Lexicoder Topic Dictionaries:government_ops - All news,GCAM_C4_21,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+32,GDELT GCAM - Extended Moral Foundations Dictionary (eMFD):moralwordcount - All news,GCAM_C42_1,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+36,GDELT GCAM - Linguistic Inquiry and Word Count (LIWC):money - Economic news,GCAM_C5_4_ECON,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+40,GDELT GCAM - Moral Foundations Dictionary:fairnessvice - All news,GCAM_C25_4,0,LocaleNone,SingleValLT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+98,GDELT GCAM - Extended Moral Foundations Dictionary (eMFD):fairness_sent - All news,GCAM_V42_8,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+14,RS,RS,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+27,GDELT GCAM - WordNet Affect 1.1:peace - All news,GCAM_C15_205,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+33,GDELT GCAM - WordNet Domains 3.2:finance - All news,GCAM_C16_60,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+78,GDELT GCAM - Lexicoder Topic Dictionaries:finance - All news,GCAM_C4_16,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+1,BC,BC,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+8,GDELT GCAM - Moral Foundations Dictionary:ingroupvirtue - All news,GCAM_C25_5,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+30,M2,M2,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+31,GDELT GCAM - Lexicoder Topic Dictionaries:energy - All news,GCAM_C4_10,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+53,GDELT GCAM - Opinion Observer:positive - All news,GCAM_C7_2,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+64,UR,UR,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+81,IE,IE,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+88,CC,CC,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+6,GDELT GCAM - Affective Norms for English Words (ANEW) 2010:valence (pleasure) (all) (scored value) - All news,GCAM_V19_1,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+22,GDELT GCAM - Moral Foundations Dictionary:harmvirtue - All news,GCAM_C25_1,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+61,GDELT GCAM - SentiWords:polarity (scored value) - All news,GCAM_V11_1,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+66,GDELT GCAM - Lexicoder Topic Dictionaries:constitutional_natl_unity - All news,GCAM_C4_26,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+80,GDELT GCAM - Lexicoder Sentiment Dictionary:positive - All news,GCAM_C3_2,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+86,GDELT GCAM - Affective Norms for English Words (ANEW) 2010:arousal (all) (scored value) - All news,GCAM_V19_2,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+92,GDELT GCAM - WordNet Domains 3.2:economy - Economic news,GCAM_C16_47_ECON,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+10,GDELT GCAM - WordNet Affect 1.1:panic - All news,GCAM_C15_204,0,LocaleNone,SingleValLT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+56,GDELT GCAM - WordNet Domains 3.2:politics - All news,GCAM_C16_121,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+67,GDELT GCAM - WordNet Affect 1.1:good-will - All news,GCAM_C15_129,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+89,GDELT GCAM - Extended Moral Foundations Dictionary (eMFD):care_p - All news,GCAM_V42_2,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+97,GDELT GCAM - Moral Foundations Dictionary:fairnessvirtue - All news,GCAM_C25_3,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+54,GDELT GCAM - WordNet Affect 1.1:grief - All news,GCAM_C15_133,0,LocaleNone,SingleValLT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+57,GDELT GCAM - Moral Foundations Dictionary:purityvice - All news,GCAM_C25_10,0,LocaleNone,SingleValLT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+34,GDELT GCAM - Lexicoder Topic Dictionaries:defence - All news,GCAM_C4_17,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+35,GDELT GCAM - Extended Moral Foundations Dictionary (eMFD):authority_p - All news,GCAM_V42_5,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+83,GDELT GCAM - Lexicoder Topic Dictionaries:intl_affairs - All news,GCAM_C4_20,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+93,GDELT GCAM - WordNet Affect 1.1:happiness - Economic news,GCAM_C15_137_ECON,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+26,GDELT GCAM - Word Count - All news,GCAM_WC,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+29,HS,HS,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+45,GDELT GCAM - SentiWordNet 3.0:positive (scored value) - All news,GCAM_V10_1,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+58,GDELT GCAM - Central Bank Financial Stability Report Sentiment:positive - All news,GCAM_C41_1,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+87,GDELT GCAM - Hedonometer (English):happiness (scored value) - All news,GCAM_V21_1,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+24,GDELT GCAM - Lexicoder Sentiment Dictionary:positive - Economic news,GCAM_C3_2_ECON,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+44,GDELT GCAM - Opinion Observer:negative - All news,GCAM_C7_1,0,LocaleNone,SingleValLT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+20,GDELT GCAM - WordNet Affect 1.1:gratefulness - All news,GCAM_C15_130,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+55,GDELT GCAM - Moral Foundations Dictionary:ingroupvice - All news,GCAM_C25_6,0,LocaleNone,SingleValLT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+69,GDELT GCAM - Extended Moral Foundations Dictionary (eMFD):loyalty_p - All news,GCAM_V42_4,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+71,GDELT GCAM - WordNet Affect 1.1:hopelessness - Economic news,GCAM_C15_148_ECON,0,LocaleC1C2,C1C2RatioLT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+99,GDELT GCAM - WordNet Domains 3.2:finance - Economic news,GCAM_C16_60_ECON,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+4,GDELT GCAM - Linguistic Inquiry and Word Count (LIWC):anger - All news,GCAM_C5_32,0,LocaleNone,SingleValLT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+9,GDELT GCAM - Linguistic Inquiry and Word Count (LIWC):negativeemotion - All news,GCAM_C5_34,0,LocaleNone,SingleValLT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+63,GDELT GCAM - Lexicoder Sentiment Dictionary:negative - Economic news,GCAM_C3_1_ECON,0,LocaleC1C2,C1C2RatioLT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+79,GDELT GCAM - SentiWordNet 3.0:negative (scored value) - All news,GCAM_V10_2,0,LocaleNone,SingleValLT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+7,GDELT GCAM - Moral Foundations Dictionary:harmvice - All news,GCAM_C25_2,0,LocaleNone,SingleValLT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+21,GDELT GCAM - WordNet Affect 1.1:gravity - All news,GCAM_C15_132,0,LocaleNone,SingleValLT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+49,GDELT GCAM - WordNet Domains 3.2:economy - All news,GCAM_C16_47,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+59,GDELT GCAM - Moral Foundations Dictionary:purityvirtue - All news,GCAM_C25_9,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+68,GDELT GCAM - WordNet Domains 3.2:commerce - All news,GCAM_C16_37,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+73,GDELT GCAM - Extended Moral Foundations Dictionary (eMFD):authority_sent - All news,GCAM_V42_10,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+82,GDELT GCAM - Lexicoder Sentiment Dictionary:neg_negative - All news,GCAM_C3_3,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+90,GDELT GCAM - Extended Moral Foundations Dictionary (eMFD):sanctity_p - All news,GCAM_V42_6,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+39,GDELT GCAM - WordNet 3.1 Lexical Categories:noun/feeling - All news,GCAM_C17_13,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+42,GDELT GCAM - WordNet Affect 1.1:hopelessness - All news,GCAM_C15_148,0,LocaleNone,SingleValLT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+51,MP,MP,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+74,M1,M1,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+91,GDELT GCAM - Moral Foundations Dictionary:moralitygeneral - All news,GCAM_C25_11,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+13,GD,GD,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-1095,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+18,IR,IR,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+70,GDELT GCAM - Extended Moral Foundations Dictionary (eMFD):loyalty_sent - All news,GCAM_V42_9,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+72,GDELT GCAM - Moral Foundations Dictionary:authorityvice - All news,GCAM_C25_8,0,LocaleNone,SingleValLT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+77,WTOILClose,WTOILClose,0,LocaleNone,SingleValGT,LSMInfluencer,-720,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+11,GDELT GCAM - Lexicoder Sentiment Dictionary:negative - All news,GCAM_C3_1,0,LocaleNone,SingleValLT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000
+15,GDELT GCAM - Moral Foundations Dictionary:authorityvirtue - All news,GCAM_C25_7,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.600000,0.400000,0.001000,-0.001000

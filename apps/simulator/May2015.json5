@@ -192,7 +192,7 @@
     "L9W2": 0.4,                // L9Influencer Fitness Score weighting for number of predictions made. Constraint: L9W1 + L9W2 = 1.0
 
     //-----------------------------------------------------------------
-    //  LA - LALLLSNScore
+    //  LA - LALLGCAM_C3_1
     //-----------------------------------------------------------------
     "LAMinDelta1": -90,         // greatest amount of time prior to T3 
     "LAMaxDelta1": -15,         // least amount of time prior to T3
