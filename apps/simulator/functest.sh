@@ -61,6 +61,7 @@ compareToGold() {
         -e 's/^Version:.*/Version: VERSION_PLACEHOLDER/' \
         -e 's/Random number seed:[[:space:]]+[0-9]+/Random number seed: SEED_PLACEHOLDER/' \
         -e 's/Archive directory:.*/Archive directory: PLACEHOLDER/' \
+        -e 's/Elapsed time:.*/Archive directory: PLACEHOLDER/' \
         "$reportFile" >"$normalizedFile"
 
     # Check if running on Windows

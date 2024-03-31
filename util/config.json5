@@ -61,7 +61,7 @@
     "TopInvestors": [
       {
         "Name": "Bogel",
-        "DNA": "{Investor;Strategy=MajorityRules;InvW1=0.1764;InvW2=0.8236;Influencers=[{LSMInfluencer,Delta1=-98,Delta2=-39,Metric=MP}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RS}|{LSMInfluencer,Delta1=-171,Delta2=-52,Metric=UR}|{LSMInfluencer,Delta1=-138,Delta2=-30,Metric=HS}|{LSMInfluencer,Delta1=-114,Delta2=-39,Metric=M2}|{LSMInfluencer,Delta1=-88,Delta2=-6,Metric=GCAM_C5_4_ECON}|{LSMInfluencer,Delta1=-77,Delta2=-22,Metric=GCAM_C16_121}|{LSMInfluencer,Delta1=-119,Delta2=-58,Metric=CC}|{LSMInfluencer,Delta1=-65,Delta2=-15,Metric=GCAM_C16_47}|{LSMInfluencer,Delta1=-62,Delta2=-10,Metric=GCAM_C3_1}]}"
+        "DNA": "{Investor;Strategy=MajorityRules;InvW1=0.1764;InvW2=0.8236;Influencers=[{LSMInfluencer,Delta1=-98,Delta2=-39,Metric=MP}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RS}|{LSMInfluencer,Delta1=-171,Delta2=-52,Metric=UR}|{LSMInfluencer,Delta1=-138,Delta2=-30,Metric=HS}|{LSMInfluencer,Delta1=-114,Delta2=-39,Metric=M1}|{LSMInfluencer,Delta1=-88,Delta2=-6,Metric=GCAM_C5_4_ECON}|{LSMInfluencer,Delta1=-77,Delta2=-22,Metric=GCAM_C16_121}|{LSMInfluencer,Delta1=-119,Delta2=-58,Metric=CC}|{LSMInfluencer,Delta1=-65,Delta2=-15,Metric=GCAM_C16_47}|{LSMInfluencer,Delta1=-62,Delta2=-10,Metric=GCAM_C3_1}]}"
       },
       {
         "Name": "Ichan",

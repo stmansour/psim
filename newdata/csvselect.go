@@ -1,8 +1,16 @@
 package newdata
 
 import (
+	"sync/atomic"
 	"time"
 )
+
+// IncrementNildata safely increments the nil data counter
+// in multithreaded environments
+// ----------------------------------------------------------------------------
+func (d *DatabaseCSV) IncrementNildata() {
+	atomic.AddInt64(&d.Nildata, 1)
+}
 
 // Select does the select function for CSV databases
 // this version took my test run case from 19 sec to 11 sec.
@@ -30,6 +38,19 @@ func (d *DatabaseCSV) Select(dt time.Time, fields []FieldSelector) (*Econometric
 			// if d.DBRecs[mid].Date.Year() == dt.Year() && d.DBRecs[mid].Date.Month() == dt.Month() && d.DBRecs[mid].Date.Day() == dt.Day()
 			if d.DBRecs[mid].Date.Year() == dty && d.DBRecs[mid].Date.Month() == dtm && d.DBRecs[mid].Date.Day() == dtd { // Further verify that the exact calendar date matches.
 				rec := d.mapSubset(&d.DBRecs[mid], fields)
+				if len(rec.Fields) == 0 {
+					d.IncrementNildata()
+					// newrec := d.DBRecs[mid]
+					// fmt.Printf("Your request was for  date: %s and the following fields\n", dt.Format("Jan 2, 2006"))
+					// for k, v := range fields {
+					// 	fmt.Printf("  %d. %s\n", k, v.FQMetric())
+					// }
+					// fmt.Printf("here are the fields found in the database record:\n")
+					// for k, v := range newrec.Fields {
+					// 	fmt.Printf("  %s = %f\n", k, v)
+					// }
+					// fmt.Printf("Check your datafield, validate that the data is present for %s. Make sure that misubclasses is defined correctly\n", dt.Format("Jan 2, 2006"))
+				}
 				return rec, nil
 			} else if d.DBRecs[mid].Date.Before(dt) {
 				left = mid + 1
@@ -74,31 +95,3 @@ func (d *DatabaseCSV) mapSubset(rec *EconometricsRecord, fs []FieldSelector) *Ec
 	}
 	return &nr
 }
-
-// func (d *DatabaseCSV) mapSubset(rec *EconometricsRecord, fs []FieldSelector) *EconometricsRecord {
-// 	var nr EconometricsRecord
-// 	nr.Date = rec.Date
-// 	ss := []string{}
-// 	for _, v := range fs {
-// 		ss = append(ss, v.FQMetric())
-// 	}
-
-// 	if len(ss) > 0 {
-// 		nr.Fields = make(map[string]float64, len(ss))
-// 		for _, key := range ss {
-// 			if value, exists := rec.Fields[key]; exists {
-// 				nr.Fields[key] = value
-// 			} else {
-// 				d.Nildata++
-// 			}
-// 			// Optionally, handle the "not exists" case here, if needed.
-// 		}
-// 	} else {
-// 		fields := map[string]float64{}
-// 		for k, v := range rec.Fields {
-// 			fields[k] = v
-// 		}
-// 		nr.Fields = fields
-// 	}
-// 	return &nr
-// }

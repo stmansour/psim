@@ -151,8 +151,8 @@ func (i *Investor) Init(cfg *util.AppConfig, f *Factory, db *newdata.Database) {
 	i.db = db
 
 	if !i.CreatedByDNA {
-		i.W1 = 1.0
-		i.W2 = 1.0
+		i.W1 = 1
+		i.W2 = 1
 	}
 
 	//--------------------------------------------------------------

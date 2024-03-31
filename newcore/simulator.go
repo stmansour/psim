@@ -111,7 +111,7 @@ func (s *Simulator) GetSimulationRunTime() (string, time.Duration) {
 	}
 	elapsed = s.SimStop.Sub(s.SimStart) // calculate elapsed time
 
-	return fmt.Sprintf("Simulation took %d hours, %d minutes and %d seconds", int(elapsed.Hours()), int(elapsed.Minutes())%60, int(elapsed.Seconds())%60), elapsed
+	return fmt.Sprintf("Simulation took %d hr, %d min, %d sec, and %d msec", int(elapsed.Hours()), int(elapsed.Minutes())%60, int(elapsed.Seconds())%60, int(elapsed.Milliseconds())%1000), elapsed
 }
 
 // Init initializes the simulation system, it also creates Investors and

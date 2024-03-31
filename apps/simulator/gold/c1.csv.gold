@@ -38,13 +38,13 @@
 "1/1/2021","12/31/2021",100000.00, 97023.06,-2.99%
 "1/1/2022","12/31/2022",100000.00, 89014.46,-11.02%
 
-"DNA Name: Bogel",,,,,"{Investor;Strategy=MajorityRules;InvW1=0.1764;InvW2=0.8236;Influencers=[{LSMInfluencer,Delta1=-98,Delta2=-39,Metric=MP}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RS}|{LSMInfluencer,Delta1=-171,Delta2=-52,Metric=UR}|{LSMInfluencer,Delta1=-138,Delta2=-30,Metric=HS}|{LSMInfluencer,Delta1=-114,Delta2=-39,Metric=M2}|{LSMInfluencer,Delta1=-88,Delta2=-6,Metric=GCAM_C5_4_ECON}|{LSMInfluencer,Delta1=-77,Delta2=-22,Metric=GCAM_C16_121}|{LSMInfluencer,Delta1=-119,Delta2=-58,Metric=CC}|{LSMInfluencer,Delta1=-65,Delta2=-15,Metric=GCAM_C16_47}|{LSMInfluencer,Delta1=-62,Delta2=-10,Metric=GCAM_C3_1}]}"
+"DNA Name: Bogel",,,,,"{Investor;Strategy=MajorityRules;InvW1=0.1764;InvW2=0.8236;Influencers=[{LSMInfluencer,Delta1=-98,Delta2=-39,Metric=MP}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RS}|{LSMInfluencer,Delta1=-171,Delta2=-52,Metric=UR}|{LSMInfluencer,Delta1=-138,Delta2=-30,Metric=HS}|{LSMInfluencer,Delta1=-114,Delta2=-39,Metric=M1}|{LSMInfluencer,Delta1=-88,Delta2=-6,Metric=GCAM_C5_4_ECON}|{LSMInfluencer,Delta1=-77,Delta2=-22,Metric=GCAM_C16_121}|{LSMInfluencer,Delta1=-119,Delta2=-58,Metric=CC}|{LSMInfluencer,Delta1=-65,Delta2=-15,Metric=GCAM_C16_47}|{LSMInfluencer,Delta1=-62,Delta2=-10,Metric=GCAM_C3_1}]}"
 "Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"
-"6/1/2015","9/30/2015",100000.00,100965.16, 2.94%
-"9/1/2015","12/31/2015",100000.00, 99172.90,-2.48%
-"4/1/2015","12/31/2015",100000.00, 97728.74,-3.02%
-"1/1/2021","12/31/2021",100000.00, 95735.10,-4.28%
-"1/1/2022","12/31/2022",100000.00, 85976.43,-14.07%
+"6/1/2015","9/30/2015",100000.00,101484.40, 4.55%
+"9/1/2015","12/31/2015",100000.00, 98745.64,-3.74%
+"4/1/2015","12/31/2015",100000.00, 98335.90,-2.21%
+"1/1/2021","12/31/2021",100000.00, 97315.92,-2.69%
+"1/1/2022","12/31/2022",100000.00, 87983.85,-12.05%
 
 "DNA Name: Ichan",,,,,"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-98,Delta2=-36,Metric=MP}|{LSMInfluencer,Delta1=-72,Delta2=-1,Metric=DR}|{LSMInfluencer,Delta1=-75,Delta2=-11,Metric=GCAM_C15_147_ECON}|{LSMInfluencer,Delta1=-111,Delta2=-42,Metric=M1}|{LSMInfluencer,Delta1=-98,Delta2=-30,Metric=HS}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BC}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RS}|{LSMInfluencer,Delta1=-69,Delta2=-20,Metric=GCAM_C3_2}|{LSMInfluencer,Delta1=-82,Delta2=-16,Metric=GCAM_C16_60}|{LSMInfluencer,Delta1=-154,Delta2=-34,Metric=IP}]}"
 "Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"
@@ -86,13 +86,13 @@
 "1/1/2021","12/31/2021",100000.00, 97132.71,-2.88%
 "1/1/2022","12/31/2022",100000.00, 89559.46,-10.47%
 
-"DNA Name: TopInvestor11",,,,,"{Investor;Strategy=MajorityRules;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-94,Delta2=-36,Metric=MP}|{LSMInfluencer,Delta1=-74,Delta2=-14,Metric=GCAM_C16_60_ECON}|{LSMInfluencer,Delta1=-134,Delta2=-6,Metric=GCAM_C5_4_ECON}|{LSMInfluencer,Delta1=-69,Delta2=-16,Metric=GCAM_C3_2}|{LSMInfluencer,Delta1=-143,Delta2=-20,Metric=GCAM_C5_4}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BC}|{LSMInfluencer,Delta1=-97,Delta2=-31,Metric=CC}|{LSMInfluencer,Delta1=-180,Delta2=-56,Metric=UR}|{LSMInfluencer,Delta1=-144,Delta2=-54,Metric=IR}|{LSMInfluencer,Delta1=-360,Delta2=-41,Metric=M2}]}"
+"DNA Name: TopInvestor11",,,,,"{Investor;Strategy=MajorityRules;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-94,Delta2=-36,Metric=MP}|{LSMInfluencer,Delta1=-74,Delta2=-14,Metric=GCAM_C16_60_ECON}|{LSMInfluencer,Delta1=-134,Delta2=-6,Metric=GCAM_C5_4_ECON}|{LSMInfluencer,Delta1=-69,Delta2=-16,Metric=GCAM_C3_2}|{LSMInfluencer,Delta1=-143,Delta2=-20,Metric=GCAM_C5_4}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BC}|{LSMInfluencer,Delta1=-97,Delta2=-31,Metric=CC}|{LSMInfluencer,Delta1=-180,Delta2=-56,Metric=UR}|{LSMInfluencer,Delta1=-144,Delta2=-54,Metric=IR}|{LSMInfluencer,Delta1=-360,Delta2=-41,Metric=M1}]}"
 "Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"
-"6/1/2015","9/30/2015",100000.00,101595.81, 4.90%
-"9/1/2015","12/31/2015",100000.00, 99897.51,-0.31%
-"4/1/2015","12/31/2015",100000.00, 97728.33,-3.02%
-"1/1/2021","12/31/2021",100000.00, 98634.35,-1.37%
-"1/1/2022","12/31/2022",100000.00, 86842.86,-13.20%
+"6/1/2015","9/30/2015",100000.00,100951.56, 2.90%
+"9/1/2015","12/31/2015",100000.00, 99903.54,-0.29%
+"4/1/2015","12/31/2015",100000.00, 97236.79,-3.67%
+"1/1/2021","12/31/2021",100000.00, 98333.03,-1.67%
+"1/1/2022","12/31/2022",100000.00, 86729.72,-13.31%
 
 "DNA Name: TopInvestor12",,,,,"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-154,Delta2=-34,Metric=IP}|{LSMInfluencer,Delta1=-82,Delta2=-3,Metric=GCAM_C16_60}|{LSMInfluencer,Delta1=-143,Delta2=-20,Metric=GCAM_C5_4}|{LSMInfluencer,Delta1=-360,Delta2=-31,Metric=RS}|{LSMInfluencer,Delta1=-66,Delta2=-11,Metric=SP}|{LSMInfluencer,Delta1=-97,Delta2=-59,Metric=CC}|{LSMInfluencer,Delta1=-149,Delta2=-14,Metric=GCAM_C15_204}|{LSMInfluencer,Delta1=-89,Delta2=-4,Metric=DR}]}"
 "Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"

@@ -69,6 +69,9 @@ stats:
 release:
 	cp -r dist/platosim /usr/local/plato/;cd /usr/local/plato;rm -rf bin;mv platosim bin;
 
+refmt:
+	fmt design.txt > design.txt1 ; mv design.txt1 design.txt
+
 install-tools:
 	go get -u github.com/go-sql-driver/mysql
 	go install golang.org/x/lint/golint@latest

@@ -514,7 +514,7 @@ func (f *Factory) NewInvestorFromDNA(DNA string) Investor {
 	if val, ok := m["InvW2"].(float64); ok {
 		inv.W2 = val
 	}
-	if inv.W1+inv.W2 > 1.0 {
+	if inv.W1+inv.W2 > 2.0 {
 		log.Panicf("Investor Weights > 0\n")
 	}
 	inv.cfg = f.cfg
@@ -538,7 +538,7 @@ func (f *Factory) NewInvestorFromDNA(DNA string) Investor {
 		inv.Influencers = append(inv.Influencers, inf)
 	}
 
-	if inv.W1+inv.W2 > 1.0 {
+	if inv.W1+inv.W2 > 2.0 {
 		log.Panicf("Investor Weights > 0\n")
 	}
 	inv.ID = f.GenerateInvestorID()
@@ -618,6 +618,7 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 	}
 	metric, ok := DNAmap["Metric"].(string)
 	if !ok {
+		fmt.Printf("Error parsing DNA: %s\n", DNA)
 		log.Panicf("Could not get a string value for Metric!\n")
 	}
 	if _, ok := f.db.Mim.MInfluencerSubclasses[metric]; !ok {
