@@ -2,7 +2,7 @@ package util
 
 var (
 	majorVersion = "3"           // PLATO major version here
-	minorVersion = "1"           // PLATO minor version here
+	minorVersion = "2"           // PLATO minor version here
 	buildID      = "development" // Default value for development builds - we use Go's loader flags to change at link time
 )
 
