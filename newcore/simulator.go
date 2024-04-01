@@ -3,6 +3,7 @@ package newcore
 import (
 	"fmt"
 	"log"
+	"runtime"
 	"time"
 
 	"github.com/stmansour/psim/newdata"
@@ -65,6 +66,8 @@ type Simulator struct {
 	ReportTimestamp              string                 // use this timestamp in the filenames we generate
 	GenInfluencerDistribution    bool                   // show Influencer distribution for each generation
 	FitnessScores                bool                   // save the fitness scores for each generation to dbgFitnessScores.csv
+	T3ForThreadPool              time.Time              // timestamp to be used by thread pool
+	WorkerThreads                int                    // number of worker threads in the thread pool
 }
 
 // ResetSimulator is primarily to support tests. It resets the simulator
@@ -233,6 +236,28 @@ func (s *Simulator) NewPopulation() error {
 	return nil
 }
 
+// workerPoolSize returns the number of CPU cores, which we will use for
+// parallel processing. Using all the cpu cores is a reasonable default.
+// This may change over time.
+// ----------------------------------------------------------------------------
+func (s *Simulator) workerPoolSize() int {
+	numCPU := runtime.NumCPU()
+	return numCPU
+}
+
+// worker is a goroutine that runs the dailyRun function for each Investor.
+// We allocate one worker process for each available CPU core. We broadcast
+// the index of each Investor to the workers over the tasks channel. One of
+// the workers will receive the index and the Investor. That worker grabs it,
+// runs the dailyRun function, and returns the result on the results channel.
+// ----------------------------------------------------------------------------
+func (s *Simulator) worker(tasks <-chan int, results chan<- error) {
+	for j := range tasks {
+		err := s.Investors[j].DailyRun(s.T3ForThreadPool, s.WindDownInProgress)
+		results <- err
+	}
+}
+
 // Run loops through the simulation day by day, first handling any conversions
 // from C2 to C1 on that day, and then having each Investor consult its
 // Influencers and deciding whether or not to convert C1 to C2. At the end
@@ -247,8 +272,7 @@ func (s *Simulator) Run() {
 	iteration := 0
 	s.SimStart = time.Now()
 	s.SetReportDirectory()
-
-	// var DateSettled time.Time
+	s.WorkerThreads = s.workerPoolSize() // for now, just use the number of CPU cores
 
 	for lc := 0; lc < s.cfg.LoopCount; lc++ {
 		for k, v := range s.Investors {
@@ -296,27 +320,51 @@ func (s *Simulator) Run() {
 				}
 
 				//*********************** BEGIN SIMULATOR DAILY LOOP ***********************
+				//-------------------------------------------------
+				// worker pools setup for each day of simulation
+				//-------------------------------------------------
+				if len(s.Investors) < s.WorkerThreads {
+					s.WorkerThreads = len(s.Investors) // but not more than number of investors
+				}
+				tasks := make(chan int, len(s.Investors))     // Send indices of s.Investors to workers
+				results := make(chan error, len(s.Investors)) // Collect errors or nil if successful
+
+				// fire them up!
+				for w := 0; w < s.WorkerThreads; w++ {
+					go s.worker(tasks, results)
+				}
+
+				//-----------------------------------------------
+				// Dispatch tasks to workers
+				//-----------------------------------------------
+				s.T3ForThreadPool = T3
+				for j := range s.Investors {
+					tasks <- j
+				}
+				close(tasks)
+
+				//-----------------------------------------------
+				// Wait for all tasks to complete
+				//-----------------------------------------------
+				for a := 0; a < len(s.Investors); a++ {
+					err := <-results
+					if err != nil {
+						fmt.Printf("Investors.DailyRun() returned: %s\n", err.Error())
+					}
+				}
 
 				SettleC2 := 0 // if past simulation end date, we'll count the Investors that still have C2
+
 				//-----------------------------------------------
 				// Ask each investor to do their daily run...
 				//-----------------------------------------------
-				for j := 0; j < len(s.Investors); j++ {
-					err := s.Investors[j].DailyRun(T3, s.WindDownInProgress)
-					if err != nil {
-						fmt.Printf("Investors[%d].DailyRun() returned: %s\n", j, err.Error())
-					}
-
-					//------------------------------------------------------------------------------
-					// If we're in MarkToEnd mode, check to see if all Investors have < 1.00 of C2
-					//------------------------------------------------------------------------------
-					if s.WindDownInProgress {
+				if s.WindDownInProgress {
+					for j := 0; j < len(s.Investors); j++ {
 						if s.Investors[j].BalanceC2 > 1.00 {
 							SettleC2++ // another investor needs to settle C2
 						}
 					}
 				}
-
 				//-------------------------------------------------------------------
 				// Terminate MarkToEnd if all Investors have settled their C2
 				//-------------------------------------------------------------------

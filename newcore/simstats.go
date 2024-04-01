@@ -3,6 +3,7 @@ package newcore
 import (
 	"fmt"
 	"os"
+	"runtime"
 	"sort"
 	"time"
 
@@ -322,9 +323,13 @@ func (s *Simulator) ReportHeader(file *os.File, bSim bool) {
 	c := b.AddDate(0, 0, 1)
 	fmt.Fprintf(file, "\"Program Version:  %s\"\n", util.Version())
 	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
+	fmt.Fprintf(file, "\"Available processor cores: %d\"\n", runtime.NumCPU())
+	fmt.Fprintf(file, "\"Worker Threads: %d\"\n", s.WorkerThreads)
+
 	fmt.Fprintf(file, "\"Configuration File:  %s\"\n", s.cfg.Filename)
 	if s.db.Datatype == "CSV" {
 		fmt.Fprintf(file, "\"Database: %s\"\n", s.db.CSVDB.DBFname)
+		fmt.Fprintf(file, "\"Nil data requests: %d\"\n", s.db.CSVDB.Nildata)
 	} else {
 		fmt.Fprintf(file, "\"Database: %s  (SQL)\"\n", s.db.SQLDB.Name)
 	}

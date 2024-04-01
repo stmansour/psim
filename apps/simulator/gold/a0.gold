@@ -1,10 +1,12 @@
 Random number seed: SEED_PLACEHOLDER
 **************  S I M U L A T I O N   D E T A I L S  **************
 Version: VERSION_PLACEHOLDER
+Available cores:     10
 Configuration File:  singleInvestor.json5
 Start:               May 1, 2015	valid: √
 Stop:                May 31, 2015	valid: √
 Loop count:          1
+Generations:         1
 C1:                  USD
 C2:                  JPY
 Duration:            0 years 1 month 0 days

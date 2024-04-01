@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"runtime"
 	"time"
 
 	"github.com/stmansour/psim/newdata"
@@ -15,6 +16,7 @@ func displaySimulationDetails(cfg *util.AppConfig) {
 	b := time.Time(cfg.DtStop)
 	c := b.AddDate(0, 0, 1)
 	fmt.Printf("Version:             %s\n", util.Version())
+	fmt.Printf("Available cores:     %d\n", runtime.NumCPU())
 	fmt.Printf("Configuration File:  %s\n", app.cfName)
 	fmt.Printf("Start:               %s\tvalid: %s\n", a.Format("Jan 2, 2006"), dateIsInDataRange(a))
 	fmt.Printf("Stop:                %s\tvalid: %s\n", b.Format("Jan 2, 2006"), dateIsInDataRange(b))
@@ -22,6 +24,7 @@ func displaySimulationDetails(cfg *util.AppConfig) {
 		fmt.Printf("Generation Lifetime: %s\n", util.FormatGenDur(cfg.GenDur))
 	}
 	fmt.Printf("Loop count:          %d\n", cfg.LoopCount)
+	fmt.Printf("Generations:         %d\n", cfg.Generations)
 
 	fmt.Printf("C1:                  %s\n", cfg.C1)
 	fmt.Printf("C2:                  %s\n", cfg.C2)

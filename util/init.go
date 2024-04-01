@@ -3,6 +3,7 @@ package util
 import (
 	"fmt"
 	"math/rand"
+	"sync"
 	"time"
 )
 
@@ -17,6 +18,7 @@ var Digits = "0123456789"
 // -----------------------------------------------------------------------------
 var UtilData struct {
 	Rand *rand.Rand
+	mu   sync.Mutex // Protects Rand
 }
 
 // Init is the util library's initialization functio for all the really
