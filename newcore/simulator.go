@@ -245,9 +245,8 @@ func (s *Simulator) workerPoolSize() int {
 	if s.cfg.WorkerPoolSize < 1 {
 		numCPU = runtime.NumCPU()
 		if numCPU == 120 {
-			numCPU = 30
-		}
-		if numCPU > 10 {
+			numCPU = 25
+		} else if numCPU > 10 {
 			numCPU /= 2
 		}
 	}
