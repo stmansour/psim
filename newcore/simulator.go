@@ -241,7 +241,16 @@ func (s *Simulator) NewPopulation() error {
 // This may change over time.
 // ----------------------------------------------------------------------------
 func (s *Simulator) workerPoolSize() int {
-	numCPU := runtime.NumCPU()
+	numCPU := s.cfg.WorkerPoolSize
+	if s.cfg.WorkerPoolSize < 1 {
+		numCPU = runtime.NumCPU()
+		if numCPU == 120 {
+			numCPU = 30
+		}
+		if numCPU > 10 {
+			numCPU /= 2
+		}
+	}
 	return numCPU
 }
 

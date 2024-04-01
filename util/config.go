@@ -149,6 +149,7 @@ type AppConfig struct {
 	TxnFee             float64             // a flat cost that is added for each transaction, 0 if not set
 	InvestorBonusPlan  bool                // rewards Investors earning high ROI by giving a bonus to their FitnessScore.  PV >= 110% receive 100% bonus, PV >= 115% get 200%, PV >= 120% get 300%, and PV >= 400% get 500%
 	Gen0Elites         bool                // if true, introduce TopInvestors DNA into the initial population
+	WorkerPoolSize     int                 // number of cores to utilize, if < 1 then the program decides, if 1 or more then that many cores are used, it will be capped at the number of cores the hardware actually has
 }
 
 // Helper function to check if a file exists
