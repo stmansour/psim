@@ -14,17 +14,18 @@ import (
 
 // DatabaseCSV is the database structure definition for csv databases
 type DatabaseCSV struct {
-	DBFname        string              // the csv file used as a database
-	DBPath         string              // path where DB files are kept
-	DBRecs         EconometricsRecords // all records... temporary, until we have database
-	DtStart        time.Time           // earliest date with data
-	DtStop         time.Time           // latest date with data
-	DTypes         []string            // the list of Influencers, each has their own data type
-	CSVMap         map[string]int      // which columns are where? Map the data type to a CSV column
-	MetricSrcCache []MetricsSource     // known data sources
-	ColIdx         []string            // the inverse of CSVMap: supply the index to get the column name
-	Nildata        int64               // data at the requested date/time did not exist
-	ParentDB       *Database           // the database that contains me
+	DBFname         string              // the csv file used as a database
+	DBPath          string              // path where DB files are kept
+	DBRecs          EconometricsRecords // all records... temporary, until we have database
+	DtStart         time.Time           // earliest date with data
+	DtStop          time.Time           // latest date with data
+	DTypes          []string            // the list of Influencers, each has their own data type
+	CSVMap          map[string]int      // which columns are where? Map the data type to a CSV column
+	MetricSrcCache  []MetricsSource     // known data sources
+	ColIdx          []string            // the inverse of CSVMap: supply the index to get the column name
+	Nildata         int64               // data at the requested date/time did not exist
+	ParentDB        *Database           // the database that contains me
+	NumMetricFields int                 // number of metric fields, used to allocate the metric map
 }
 
 // PLATODB is the csv data file that is used for Discount Rate information

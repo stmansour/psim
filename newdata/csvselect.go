@@ -13,8 +13,6 @@ func (d *DatabaseCSV) IncrementNildata() {
 }
 
 // Select does the select function for CSV databases
-// this version took my test run case from 19 sec to 11 sec.
-// so, going from 19sec run time to 11 sec   ===>  42.1% improvement!!
 // ----------------------------------------------------------------------------
 func (d *DatabaseCSV) Select(dt time.Time, fields []FieldSelector) (*EconometricsRecord, error) {
 	const dayInNanoseconds = 24 * 60 * 60 * 1000 * 1000 * 1000 // 24 hours in nanoseconds
@@ -34,8 +32,6 @@ func (d *DatabaseCSV) Select(dt time.Time, fields []FieldSelector) (*Econometric
 
 		// are we within a day?
 		if abs(dtUnixNano-recordUnixNano) < dayInNanoseconds {
-			// replacing this line brought test run time from 19 sec to 11 sec
-			// if d.DBRecs[mid].Date.Year() == dt.Year() && d.DBRecs[mid].Date.Month() == dt.Month() && d.DBRecs[mid].Date.Day() == dt.Day()
 			if d.DBRecs[mid].Date.Year() == dty && d.DBRecs[mid].Date.Month() == dtm && d.DBRecs[mid].Date.Day() == dtd { // Further verify that the exact calendar date matches.
 				rec := d.mapSubset(&d.DBRecs[mid], fields)
 				if len(rec.Fields) == 0 {
@@ -76,10 +72,14 @@ func abs(x int64) int64 {
 
 // mapSubset is a utility function to populate a map with only the fields
 // the caller requested.
+// When len(fs) == 0, the entire record is returned. The assumption here is
+// that the caller always uses this data in a read-only manner. So it is safe
+// to return the entire record.
 // ----------------------------------------------------------------------------
 func (d *DatabaseCSV) mapSubset(rec *EconometricsRecord, fs []FieldSelector) *EconometricsRecord {
-	var nr EconometricsRecord
-	nr.Date = rec.Date
+	nr := EconometricsRecord{
+		Date: rec.Date,
+	}
 	if len(fs) > 0 {
 		nr.Fields = make(map[string]float64, len(fs))
 		for _, selector := range fs {

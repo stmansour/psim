@@ -101,17 +101,19 @@ func (d *DatabaseCSV) LoadCsvDB() error {
 				d.CSVMap[s] = j
 				d.ColIdx = append(d.ColIdx, s)
 			}
+			d.NumMetricFields = len(d.ColIdx)
 			continue // remaining rows are data, code below handles data, continue to the next line now
 		}
 
 		rec := EconometricsRecord{
-			Fields: map[string]float64{},
+			Fields: make(map[string]float64, d.NumMetricFields),
 		}
+
 		rec.Date, err = util.StringToDate(line[0])
 		if err != nil {
 			fmt.Printf("*** ERROR *** on line %d, date = %q", i, line[0])
 			fmt.Println(err)
-			os.Exit(1)
+			return err
 		}
 		for j := 1; j < len(line); j++ {
 			if len(line[j]) == 0 {

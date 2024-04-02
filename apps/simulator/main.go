@@ -160,7 +160,8 @@ func main() {
 		os.Exit(0)
 	}
 
-	// CPU profiling
+	// CPU profiling.  Run it like this: ./simulator -cpuprofile cpu.prof
+	// Then profile it like this: go tool pprof ./simulator cpu.prof
 	if app.CPUProfile != "" {
 		f, err = os.Create(app.CPUProfile)
 		if err != nil {

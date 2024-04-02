@@ -363,8 +363,8 @@ level, the number of possible Investor configurations that exist.
 This will help us give us perspective on the results we achieve and
 help us prioritize the work we still need to do.
 
-A prototype program to test the genetics for its efficacy toward
-this problem was given a much simpler problem to solve
+An early prototype program to test the genetics for its efficacy
+toward this problem was given a much simpler problem to solve
 (https://stevemansour.com/code/p5/genetics1/index.html). For this
 problem, there happens to be a perfect solution. If a member of the
 generation achieved a Fitness Score of 1, it embodied the perfect
@@ -386,10 +386,10 @@ return on an Investor’s initial fund the better.  So, the more money
 an Investor has in its fund at the end of the simulation period,
 the higher its Fitness Score will be. On the downside, we don’t
 know exactly how many metrics could be highly relevant.  As of this
-writing, we have 161 metrics, each with its own Influencer. So, even now our
-problem is on the order of 161 factorial, that is  ~  7.59 * 10^286,
-possible Influencer teams. That number is incomprehensible. And
-remember, each member of the team has many thousands of variations
+writing, we have 161 metrics, each with its own Influencer. So,
+even now our problem is on the order of 161 factorial, that is  ~
+7.59 * 10^286, possible Influencer teams. That number is incomprehensible.
+And remember, each member of the team has many thousands of variations
 because its parameters can be tuned. But, more important, the number
 of metrics is growing rapidly and may grow to a thousand or more.
 This would bring the number of possible Investor teams to around
@@ -400,16 +400,16 @@ On a MacBook Pro with an M1 processor and 64GB RAM, here are some
 simulation times for a varying population of Investors who have
 been constrained to have Influencer team sizes between 1 and 36.
 
-  Population    Simulation Time per Generation 
-  ----------    ------------------------------
-	     100                 0 sec 557 msec
+  Population    Simulation Time per Generation ----------
+  ------------------------------
+	 100                 0 sec 557 msec
        1,000                 5 sec 375 msec
       10,000                54 sec 920 msec
      100,000          9 min 34 sec
    1,000,000    1 hr 32 min 51 sec
 
 There may exist Investors who could achieve 35%, 50%, or even higher
-returns. Even with the assistance of the genetic algorithm it is
+returns. Even with the assistance of the genetic algorithm, it is
 unclear how much time we would need to spend to find them.
 
 We must search for ways to speed up our simulations to find better
@@ -417,7 +417,89 @@ Investors in a shorter period of time. We must look for ways to
 parallelize simulations.
 
 
-Appendix C: Managing External Resources
+Appendix C:  Performance Considerations
+
+The amount of data needed by the simulator to hold multiple year’s
+worth of time-based metrics is relatively small. While the simulator
+can use either an SQL database or a CSV database for this information,
+the CSV data is loaded into memory in its entirety. Using the CSV
+database is essentially running the simulator with all its data
+cached. As a result, it runs several orders of magnitude faster
+than using the SQL database as a datasource.  While this approach
+helps, we would like to look at opportunities to parallelize the
+operation of the simulator.
+
+One approach would be to parallelize the processing of an Investor’s
+daily run. During the run each of the Investor’s Influencers are
+asked for their prediction. Thus, each of them will make several
+calls to the data layer to provide time-series data for the metric
+that they forecast with. This operation is currently serialized.
+The simulator manages a list of Investors. It calls each Investor
+serially to handle its daily affairs.  If this operation could be
+parallelized we may be able to speed things up.  It is unclear how
+the performance will go in that they all use the same datastore.
+
+Update: I’ve created a “thread pool” that can run a day’s simulation
+across multiple CPU cores. All the cores access the single in-memory
+cached CSV database for metrics. I've tried various simulations,
+all the cores are vying for access to the internal CSV data store.
+That limits the effectiveness of multiple cores. Our server has 120
+CPU cores.  Our peak performance on the plato server occurs when
+we use between 25 and 30 cores.
+
+
+
+Appendix D:  Influencer Prediction Logic
+
+Each Influencer is tasked with making predictions about whether to
+buy, hold, or sell currency C2.  This section of the document looks
+in detail at how this is done.  Each Influencer subtype looks at a
+specific metric. The methodology it uses to determine how to predict
+is the same, regardless of the metric. We begin by describing the
+relevant dates. Influencers are asked to make a buy-sell-hold
+prediction for time T3. Recall that two parameters of every Influencer
+are Delta1 and Delta2, both of which are negative numbers.  They
+are used to calculate T1 and T2.  T1 = T3 + Delta1.  T2 = T3 +
+Delta2. Their values are such that T1 < T2 < T3.  As a simple
+example, Delta1 could be -30 and Delta2 could be -7.  This means
+that T1 is about a month before T3, and T2 is a week prior to T3.
+The time period from T1 to T2 is where the Influencer examines its
+metric to make its prediction.  There are currently 4 predictive
+options for how this is handled in the Influencer:
+
+
+SingleValGT SingleValLT C1C2RatioGT C1C2RatioLT
+
+Each Influencer is configured in the MISubclasses SQL table, or in
+misubclasses.csv in the CSV database to use one of these predictive
+algorithms. By defining this (and some other) configuration in a
+database table, we can add new metrics and new Influencers without
+changing the source code. So, we do not need to re-release the
+software to add, remove, or change Influencers.
+
+We’ll start by explaining the simplest one called “Single Value
+Greater-Than” or “SingleValGT” for short. When the GetPrediction(t3)
+method for an Influencer is called, the Influencer first calculates
+T1 and T2 as described above. Next, it gets its metric for those
+dates, val1 and val2.  Next, it computes delta, the change in value:
+
+delta = val2 - val1
+
+Finally, it decides whether the delta value warrants an action.  A
+“hold window” is defined. The hold window defines a positive value
+Hpos and a negative value Hneg. We are still experimenting with how
+these numbers are defined, so I will not list a specific calculation
+at this time. But the motivation for it is easy to understand.  If
+delta is within the hold window, that is Hneg <= delta <= Hpos, the
+Influencer will recommend “hold”.  If the delta > Hpos then it will
+recommend “sell”.
+
+There is much more to do with the predictions, and I will update
+this section as we make progress.
+
+
+
+Appendix E: Managing External Resources
 
 In the development and operation of the Plato suite, accessing
 external resources frequently requires confidential credentials.
