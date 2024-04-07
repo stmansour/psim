@@ -35,5 +35,4 @@ coverage:
 
 package:
 	mkdir -p ${BINDIR}/data
-	cp data/misubclasses.csv ${BINDIR}/data/
 	@echo "*** ${THISDIR}: completed package ***"

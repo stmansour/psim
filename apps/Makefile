@@ -1,4 +1,4 @@
-DIRS=simulator
+DIRS=simulator simtalk
 THISDIR=apps
 
 apps:

@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
 	"os"
 	"runtime"
 	"runtime/pprof"
+	"sync"
 	"time"
 
 	"github.com/stmansour/psim/newcore"
@@ -22,7 +24,8 @@ type SimApp struct {
 	sim                          newcore.Simulator
 	randNano                     int64
 	InfPredDebug                 bool
-	trace                        bool
+	trace                        bool // traces voting activity of Influencers and Investors buy,hold,sell decisions
+	traceTiming                  bool // traces timing of simulation phase and next creating a new generation
 	version                      bool
 	cfName                       string // override default with this file
 	cfg                          *util.AppConfig
@@ -36,6 +39,10 @@ type SimApp struct {
 	dbfilename                   string // override database name with this name
 	CPUProfile                   string // where is time being spent?
 	MemProfile                   string // where is memory being consumed?
+	basePort                     int    // Starting port
+	maxPort                      int    // Upper limit for trying different ports
+	currentPort                  int    // current port being used
+	notalk                       bool   // if true, the simulator does not start up an HTTP listener
 }
 
 var app SimApp
@@ -62,21 +69,23 @@ func dateIsInDataRange(a time.Time) string {
 
 func readCommandLineArgs() {
 	flag.StringVar(&app.archiveBaseDir, "adir", "", "base archive directory, default is current directory")
-	flag.BoolVar(&app.GenInfluencerDistribution, "idist", false, "report Influencer Distribution each time a generation completes")
-	flag.BoolVar(&app.FitnessScores, "fit", false, "generate a Fitness Report that shows the fitness of all Investors for each generation")
 	flag.BoolVar(&app.archiveMode, "ar", false, "create archive directory for config file, finrep, simstats, and all other reports. Also see -adir.")
-	flag.BoolVar(&app.DayByDay, "d", false, "show day-by-day results")
-	flag.BoolVar(&app.InfPredDebug, "D", false, "show prediction debug info - dumps a lot of data, use on short simulations, with minimal Influencers")
-	flag.BoolVar(&app.ReportTopInvestorInvestments, "inv", false, "for each generation, write top investors Investment List to invrep.csv")
-	flag.BoolVar(&app.trace, "trace", false, "trace decision-making process every day, all investors")
-	flag.BoolVar(&app.version, "v", false, "print the program version string")
-	flag.BoolVar(&app.showAllInvestors, "i", false, "show all investors in the simulation results")
-	flag.Int64Var(&app.randNano, "r", -1, "random number seed. ex: ./simulator -r 1687802336231490000")
 	flag.StringVar(&app.cfName, "c", "", "configuration file to use (instead of config.json)")
-	flag.StringVar(&app.dbfilename, "db", "", "override CSV datatbase name")
 	flag.BoolVar(&app.CrucibleMode, "C", false, "Crucible mode.")
 	flag.StringVar(&app.CPUProfile, "cpuprofile", "", "write cpu profile to file")
+	flag.BoolVar(&app.InfPredDebug, "D", false, "show prediction debug info - dumps a lot of data, use on short simulations, with minimal Influencers")
+	flag.BoolVar(&app.DayByDay, "d", false, "show day-by-day results")
+	flag.StringVar(&app.dbfilename, "db", "", "override CSV datatbase name with this name. All CSV database files are assumed to be in the same directory.")
+	flag.BoolVar(&app.FitnessScores, "fit", false, "generate a Fitness Report that shows the fitness of all Investors for each generation")
+	flag.BoolVar(&app.showAllInvestors, "i", false, "show all investors in the simulation results")
+	flag.BoolVar(&app.GenInfluencerDistribution, "idist", false, "report Influencer Distribution each time a generation completes")
+	flag.BoolVar(&app.ReportTopInvestorInvestments, "inv", false, "for each generation, write top investors Investment List to invrep.csv")
 	flag.StringVar(&app.MemProfile, "memprofile", "", "write memory profile to this file")
+	flag.BoolVar(&app.notalk, "notalk", false, "if true, the simulator does not start up an HTTP listener")
+	flag.Int64Var(&app.randNano, "r", -1, "random number seed. ex: ./simulator -r 1687802336231490000")
+	flag.BoolVar(&app.trace, "trace", false, "trace decision-making process every day, all investors")
+	flag.BoolVar(&app.traceTiming, "tracetime", false, "shows timing of simulation phase and next creating a new generation")
+	flag.BoolVar(&app.version, "v", false, "print the program version string")
 	flag.Parse()
 }
 
@@ -136,16 +145,10 @@ func doSimulation() {
 	app.sim.Init(app.cfg, app.db, nil, app.DayByDay, app.ReportTopInvestorInvestments)
 	app.sim.GenInfluencerDistribution = app.GenInfluencerDistribution
 	app.sim.FitnessScores = app.FitnessScores
+	app.sim.TraceTiming = app.traceTiming
 	app.sim.Run()
 
 	displaySimulationResults(cfg, app.db)
-
-	// if app.ReportTopInvestorInvestments {
-	// 	err := app.sim.ShowTopInvestor()
-	// 	if err != nil {
-	// 		fmt.Printf("Error writing Top Investor profile: %s\n", err.Error())
-	// 	}
-	// }
 }
 
 func main() {
@@ -160,8 +163,27 @@ func main() {
 		os.Exit(0)
 	}
 
+	//----------------------------------------------------------------------------
+	// Start the HTTP server that can be used to communicate with the simulator
+	//----------------------------------------------------------------------------
+	ctx, cancel := context.WithCancel(context.Background()) // Create a context that can be canceled
+	defer cancel()
+
+	var wg sync.WaitGroup
+	if !app.notalk {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			if err := startHTTPServer(ctx); err != nil {
+				log.Printf("HTTP server stopped with error: %v", err)
+			}
+		}()
+	}
+
+	//-------------------------------------------------------------------------
 	// CPU profiling.  Run it like this: ./simulator -cpuprofile cpu.prof
 	// Then profile it like this: go tool pprof ./simulator cpu.prof
+	//-------------------------------------------------------------------------
 	if app.CPUProfile != "" {
 		f, err = os.Create(app.CPUProfile)
 		if err != nil {
@@ -176,7 +198,10 @@ func main() {
 	pprof.StopCPUProfile()
 	f.Close()
 
-	// Memory profiling
+	//-------------------------------------------------------------------------
+	// Memory profiling:  Run it like this: ./simulator -memprofile mem.prof
+	// Then profile it like this: go tool pprof ./simulator mem.prof
+	//-------------------------------------------------------------------------
 	if app.MemProfile != "" {
 		f, err := os.Create(app.MemProfile)
 		if err != nil {
@@ -188,4 +213,13 @@ func main() {
 		}
 		f.Close()
 	}
+
+	//-------------------------------------------------------------------------
+	// Once the simulation is done, cancel the context to stop the HTTP server
+	//-------------------------------------------------------------------------
+	if !app.notalk {
+		cancel()
+		wg.Wait() // Wait for the HTTP server goroutine to finish
+	}
+	fmt.Println("simulation completed.")
 }

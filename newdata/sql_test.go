@@ -81,12 +81,12 @@ func TestFieldSelectorBuilder(t *testing.T) {
 
 	defer app.sqldb.SQLDB.DB.Close()
 
-	fields := map[string]float64{
-		"USDJPYEXClose": 0.1,
-		"JPYSNSNScore":  0.1,
-		"USDBP":         0.1,
-		"SNSPScore":     0.1,
-		"CC":            0.1,
+	fields := map[string]MetricInfo{
+		"USDJPYEXClose": {Value: 0.1}, // Type MetricInfo is inferred
+		"JPYSNSNScore":  {Value: 0.1},
+		"USDBP":         {Value: 0.1},
+		"SNSPScore":     {Value: 0.1},
+		"CC":            {Value: 0.1},
 	}
 
 	rec := EconometricsRecord{

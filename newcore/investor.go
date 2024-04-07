@@ -280,36 +280,6 @@ func (i *Investor) DecideCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 	return coa, nil
 }
 
-// FormatPrediction prints a readable version of the Influencers predictions
-// ----------------------------------------------------------------------------
-func (i *Investor) FormatPrediction(p *Prediction, T3 time.Time) {
-	// name := i.db.Mim.MInfluencerSubclasses[p.IType].Name
-	fmt.Printf("\t%s:  %s   (T1 %s [%4.2f] -  T2 %s [%4.2f]   Ann. Change: %4.2f%%   HoldWin(%5.2f%% to %5.2f%%))\n",
-		p.IType,
-		p.Action,
-		T3.AddDate(0, 0, int(p.Delta1)).Format("Jan _2, 2006"),
-		p.Val1,
-		T3.AddDate(0, 0, int(p.Delta2)).Format("Jan _2, 2006"),
-		p.Val2,
-		p.DeltaPct*100,
-		i.db.Mim.MInfluencerSubclasses[p.IType].HoldWindowNeg*100,
-		i.db.Mim.MInfluencerSubclasses[p.IType].HoldWindowPos*100,
-	)
-}
-
-// FormatCOA prints a readable version of the Influencers predictions
-// ----------------------------------------------------------------------------
-func (i *Investor) FormatCOA(c *CourseOfAction) {
-	fmt.Printf("\tCOA:  Action: %s  %3.0f%%  (buy: %3.2f, hold: %3.2f, sell: %3.2f, abs: %3.2f)\n", c.Action, c.ActionPct*100, c.BuyVotes, c.HoldVotes, c.SellVotes, c.Abstains)
-}
-
-// PortfolioToString returns a string with the portfolio balance at time t
-// ----------------------------------------------------------------------------
-func (i *Investor) PortfolioToString(t time.Time) string {
-	pv := i.PortfolioValue(t)
-	return fmt.Sprintf("C1bal = %6.2f %s, C2bal = %6.2f %s, PV = %6.2f %s\n", i.BalanceC1, i.cfg.C1, i.BalanceC2, i.cfg.C2, pv, i.cfg.C1)
-}
-
 // setCourseOfAction sets the Action and ActionPct based on influencers input
 // ----------------------------------------------------------------------------
 func setCourseOfAction(coa *CourseOfAction, method string) error {
@@ -439,7 +409,7 @@ func (i *Investor) ExecuteBuy(T3 time.Time, pct float64) error {
 		return fmt.Errorf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found", inv.T3.Format("1/2/2006"))
 	}
 
-	inv.ERT3 = er3.Fields[s.FQMetric()]                      // exchange rate on T3
+	inv.ERT3 = er3.Fields[s.FQMetric()].Value                // exchange rate on T3
 	inv.T3C2Buy = inv.T3C1 * inv.ERT3                        // amount of C2 we purchased on T3
 	inv.Fee = (inv.T3C1 * i.cfg.TxnFeeFactor) + i.cfg.TxnFee // cost of the transaction: flat fee plus percentage is here because a buy is wholly done here, not in chunks as with sells
 	inv.T4C2Sold = 0                                         // just being explicit, haven't sold any of it yet
@@ -454,10 +424,6 @@ func (i *Investor) ExecuteBuy(T3 time.Time, pct float64) error {
 	}
 
 	return nil
-}
-
-func (i *Investor) showBuy(inv *Investment) {
-	fmt.Printf("        *** BUY ***   %8.2f %s (%8.2f %s, fee = %6.2f)\n", inv.T4C1, i.cfg.C1, inv.T3C2Buy, i.cfg.C2, inv.Fee)
 }
 
 // ExecuteSell does an exchange of C2 for C1 on T4. It will purchase pct*i.cfg.StdInvestment
@@ -496,7 +462,7 @@ func (i *Investor) PortfolioValue(t time.Time) float64 {
 	if err != nil {
 		log.Fatalf("Error getting exchange close rate")
 	}
-	C2 := i.BalanceC2 / er.Fields[s.FQMetric()] // amount of C1 we get for BalanceC2 at this exchange rate
+	C2 := i.BalanceC2 / er.Fields[s.FQMetric()].Value // amount of C1 we get for BalanceC2 at this exchange rate
 	pv := i.BalanceC1 + C2
 	return pv
 }
@@ -561,10 +527,10 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 	//-------------------------------------------------------------------
 	for j := 0; j < len(i.Investments); j++ {
 		if !i.Investments[j].Completed {
-			if er4.Fields[s.FQMetric()] < 0.0001 {
-				log.Panicf("Invalid exchange rate on %s: %12.6f\n", er4.Date.Format("1/2/2006"), er4.Fields[s.Metric])
+			if er4.Fields[s.FQMetric()].Value < 0.0001 {
+				log.Panicf("Invalid exchange rate on %s: %12.6f\n", er4.Date.Format("1/2/2006"), er4.Fields[s.Metric].Value)
 			}
-			i.Investments[j].ERT4 = er4.Fields[s.FQMetric()] // exchange rate on T4... just applies to this sale, we don't touch completed Investments
+			i.Investments[j].ERT4 = er4.Fields[s.FQMetric()].Value // exchange rate on T4... just applies to this sale, we don't touch completed Investments
 		}
 	}
 	i.sortInvestmentsDescending()
@@ -654,55 +620,12 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 	return sellAmount, nil
 }
 
-func (i *Investor) showSell(inv *Investment, tsc1, tsc2, fee float64) {
-	gains := 0
-	losses := 0
-	n := len(inv.Chunks)
-	for j := 0; j < n; j++ {
-		if inv.Chunks[j].Profitable {
-			gains++
-		} else {
-			losses++
-		}
-	}
-	fmt.Printf("        *** SELL ***  %8.2f %s (fee: %6.2f), [%8.2f %s], investments affected: %d -->  %d profited, %d lost\n", tsc1, i.cfg.C1, fee, tsc2, i.cfg.C2, n, gains, losses)
-}
-
 // sortInvestmentsDescending uses the E
 func (i *Investor) sortInvestmentsDescending() {
 	sort.Slice(i.Investments, func(j, k int) bool {
 		return i.Investments[j].ERT4 > i.Investments[k].ERT4
 	})
 }
-
-// InvestorProfile outputs information about this investor and its influencers
-// to a file named "investorProfile.txt"
-//
-// RETURNS
-//
-//	any error encountered or nil if no error
-//
-// ------------------------------------------------------------------------------------
-// func (i *Investor) InvestorProfile() error {
-// 	file, err := os.Create("investorProfile.txt")
-// 	if err != nil {
-// 		return err
-// 	}
-// 	defer file.Close()
-
-// 	fmt.Fprintf(file, "INVESTOR PROFILE\n")
-// 	fmt.Fprintf(file, "Initial cash: %14.2f %s\n", i.cfg.InitFunds, i.cfg.C1)
-// 	fmt.Fprintf(file, "              %14.2f %s\n", 0.0, i.cfg.C2)
-// 	fmt.Fprintf(file, "Ending cash:  %14.2f %s\n", i.BalanceC1, i.cfg.C1)
-// 	fmt.Fprintf(file, "              %14.2f %s\n", i.BalanceC2, i.cfg.C2)
-// 	// fmt.Fprintf(file, "\nInfluencers:\n")
-
-// 	// for j := 0; j < len(i.Influencers); j++ {
-// 	// 	fmt.Fprintf(file, "%d. %s\n", j+1, i.Influencers[j].DNA())
-// 	// }
-
-// 	return nil
-// }
 
 // CalculateFitnessScore calculates the fitness score for an Investor.
 //

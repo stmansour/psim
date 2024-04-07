@@ -50,15 +50,15 @@ func (ir *InvestorReport) dumpTopInvestorsDetail() error {
 		ir.dumpInvestmentReportHeader(file)
 		ir.ReportHeaderCompleted = true
 	}
-	lim := ir.s.cfg.TopInvestorCount
+	lim := ir.s.Cfg.TopInvestorCount
 	if lim > len(ir.s.Investors) {
 		lim = len(ir.s.Investors)
 	}
 	for i := 0; i < lim; i++ {
 		inv := ir.s.Investors[i]
 		name := inv.ID
-		if ir.CrucibleMode && len(ir.s.cfg.TopInvestors[ir.Cru.idx].Name) > 0 {
-			name = ir.s.cfg.TopInvestors[ir.Cru.idx].Name
+		if ir.CrucibleMode && len(ir.s.Cfg.TopInvestors[ir.Cru.idx].Name) > 0 {
+			name = ir.s.Cfg.TopInvestors[ir.Cru.idx].Name
 		}
 		fmt.Fprintf(file, "%d,%q,,,,,,,,,,,,,,,,%q\n", ir.s.GensCompleted, name, inv.DNA())
 		for i := 0; i < len(inv.Investments); i++ {
@@ -97,21 +97,21 @@ func (ir *InvestorReport) dumpTopInvestorsDetail() error {
 }
 
 func (ir *InvestorReport) dumpInvestmentReportHeader(file *os.File) {
-	a := time.Time(ir.s.cfg.DtStart)
-	b := time.Time(ir.s.cfg.DtStop)
+	a := time.Time(ir.s.Cfg.DtStart)
+	b := time.Time(ir.s.Cfg.DtStop)
 	c := b.AddDate(0, 0, 1)
 	//------------------------------------------------------------------------
 	// context information
 	//------------------------------------------------------------------------
 	fmt.Fprintf(file, "%q\n", "PLATO Simulator - Top Investor Investment Details")
-	fmt.Fprintf(file, "\"Configuration File:  %s\"\n", ir.s.cfg.Filename)
+	fmt.Fprintf(file, "\"Configuration File:  %s\"\n", ir.s.Cfg.Filename)
 	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Start Date: %s\"\n", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Stop Date: %s\"\n", c.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
-	// fmt.Fprintf(file, "\"Simulation Loop Count: %d\"\n", s.cfg.LoopCount)
-	fmt.Fprintf(file, "\"C1: %s\"\n", ir.s.cfg.C1)
-	fmt.Fprintf(file, "\"C2: %s\"\n", ir.s.cfg.C2)
-	fmt.Fprintf(file, "\"Initial Funds: %10.2f\"\n", ir.s.cfg.InitFunds)
+	// fmt.Fprintf(file, "\"Simulation Loop Count: %d\"\n", s.Cfg.LoopCount)
+	fmt.Fprintf(file, "\"C1: %s\"\n", ir.s.Cfg.C1)
+	fmt.Fprintf(file, "\"C2: %s\"\n", ir.s.Cfg.C2)
+	fmt.Fprintf(file, "\"Initial Funds: %10.2f\"\n", ir.s.Cfg.InitFunds)
 
 	// the header row
 	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q\n",

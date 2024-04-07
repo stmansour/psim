@@ -244,13 +244,13 @@ func (d *DatabaseCSV) CopySQLRecsToCSV(sqldb *Database) error {
 		if err != nil {
 			return err
 		}
-		fmt.Fprintf(file, "%q", rec.Date.Format("1/2/2006")) // special case 1: Date
-		fmt.Fprintf(file, ",%.6f", rec.Fields[f.FQMetric()]) // special case 2: EXClose
+		fmt.Fprintf(file, "%q", rec.Date.Format("1/2/2006"))       // special case 1: Date
+		fmt.Fprintf(file, ",%.6f", rec.Fields[f.FQMetric()].Value) // special case 2: EXClose
 
 		// Now the remaining metrics
 		for i := 0; i < len(s); i++ {
 			fld := s[i]
-			val := rec.Fields[fld]
+			val := rec.Fields[fld].Value
 			fmt.Fprintf(file, ",%.6f", val)
 		}
 		fmt.Fprintf(file, "\n")

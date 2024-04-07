@@ -198,40 +198,62 @@ func (p *LSMInfluencer) GetPrediction(t3 time.Time) (*Prediction, error) {
 	var delta float64
 	rec1 := pred.Recs[0]
 	rec2 := pred.Recs[1]
+	N := p.Delta2 - p.Delta1 // number of days between T1 and T2
 
 	switch p.Predictor {
 	case newdata.SingleValGT, newdata.SingleValLT:
 		if len(pred.Recs[0].Fields) != 1 {
 			return &pred, nil // need to abstain, the data was not available
 		}
-		pred.Val1 = rec1.Fields[pred.Fields[0].FQMetric()]
-		pred.Val2 = rec2.Fields[pred.Fields[0].FQMetric()]
+		pred.Val1 = rec1.Fields[pred.Fields[0].FQMetric()].Value // Value at T1
+		pred.Val2 = rec2.Fields[pred.Fields[0].FQMetric()].Value // Value at T2
+		stdDevSquared := rec2.Fields[pred.Fields[0].FQMetric()].StdDevSquared
+		pred.Probability = 1.0
+		pred.Weight = 1.0
+
+		//-----------------------------------------------------------------------------------------------------
+		// if (avg daily change from T1 to T2)^2    >    (avgp * (StdDeviation from Mean))^2   then we transact
+		//-----------------------------------------------------------------------------------------------------
+		delta = pred.Val2 - pred.Val1      // change between T1 and T2
+		da := delta / float64(N)           // Daily average change
+		pred.AvgDelta = da                 // used by trace
+		pred.StdDevSquared = stdDevSquared // used by trace
+		x := p.cfg.StdDevVariationFactor
+		res := da*da - x*x*stdDevSquared
+		if res > 0 { // we predict to buy or sell
+			if delta < 0 {
+				pred.Action = "buy"
+				if p.Predictor == newdata.SingleValLT {
+					pred.Action = "sell"
+				}
+			} else {
+				pred.Action = "sell"
+				if p.Predictor == newdata.SingleValLT {
+					pred.Action = "buy"
+				}
+			}
+		} else {
+			pred.Action = "hold"
+		}
+		return &pred, nil
+
 	case newdata.C1C2RatioGT, newdata.C1C2RatioLT:
 		if len(pred.Recs[0].Fields) != 2 || len(pred.Recs[1].Fields) != 2 {
 			return &pred, nil // need to abstain, the data was not available
 		}
-		pred.Val1 = rec1.Fields[pred.Fields[0].FQMetric()] / rec1.Fields[pred.Fields[1].FQMetric()]
-		pred.Val2 = rec2.Fields[pred.Fields[0].FQMetric()] / rec2.Fields[pred.Fields[1].FQMetric()]
+		pred.Val1 = rec1.Fields[pred.Fields[0].FQMetric()].Value / rec1.Fields[pred.Fields[1].FQMetric()].Value
+		pred.Val2 = rec2.Fields[pred.Fields[0].FQMetric()].Value / rec2.Fields[pred.Fields[1].FQMetric()].Value
 
 	default:
 		log.Fatalf("Need to handle this case\n")
 	}
 
 	sc := p.myInvestor.db.Mim.MInfluencerSubclasses[p.Metric]
-
 	delta = pred.Val2 - pred.Val1
 	percentChange := (delta / pred.Val1)                      // this is over the time period T1 to T2
 	numDays := p.Delta2 - p.Delta1                            // number of days between T1 and T2
 	percentChange = float64(numDays) * percentChange / 365.25 // scale to the annualized values we use for comparison below
-	pred.DeltaPct = percentChange
 
-	//--------------------------------------------------------------------------
-	// delta is the change in metric value between T1 and T2.
-	// percentChange is the percent of change in the metric between T1 and T2
-	// We predict "buy" if the percent change is greater than HoldWindowPos
-	// We predict "sell" if the percent change is less than HoldWindowNeg
-	// Otherwise, we "hold"
-	//--------------------------------------------------------------------------
 	if percentChange < sc.HoldWindowNeg {
 		pred.Action = "buy" // check buy condition
 	} else if percentChange > sc.HoldWindowPos {

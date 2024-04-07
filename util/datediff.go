@@ -75,3 +75,23 @@ func DateDiffString(a, b time.Time) string {
 	s += addDurStr(day, "day")
 	return s
 }
+
+// ElapsedTime returns the elapsed time as a string
+func ElapsedTime(dtStart, dtStop time.Time) string {
+	elapsed := dtStop.Sub(dtStart) // calculate elapsed time
+	s := ""
+	hrs := int(elapsed.Hours())
+	mins := int(elapsed.Minutes()) % 60
+	secs := int(elapsed.Seconds()) % 60
+	msec := int(elapsed.Milliseconds()) % 1000
+	if hrs > 0 {
+		s += fmt.Sprintf(" %d hr", hrs)
+	} else if mins > 0 {
+		s += fmt.Sprintf(" %d min", mins)
+	} else if secs > 0 {
+		s += fmt.Sprintf(" %d sec", secs)
+	} else if msec > 0 {
+		s += fmt.Sprintf(" %d msec", msec)
+	}
+	return s
+}

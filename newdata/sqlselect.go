@@ -14,7 +14,7 @@ type MetricRecord struct {
 	LID         int
 	LID2        int
 	MSID        int // metrics source
-	MetricValue float64
+	MetricValue MetricInfo
 }
 
 // ShardInfo defines the values necessary to read or write metrics to the correct metrics table
@@ -63,12 +63,12 @@ func (p *DatabaseSQL) Insert(rec *EconometricsRecord) error {
 		}
 		if f.LID2 != 1 && f.MID == -1 {
 			query := `INSERT INTO ExchangeRate (Date,LID,LID2,MSID,EXClose) VALUES (?,?,?,?,?)`
-			if _, err = p.DB.Exec(query, m.Date, m.LID, m.LID2, m.MSID, m.MetricValue); err != nil {
+			if _, err = p.DB.Exec(query, m.Date, m.LID, m.LID2, m.MSID, m.MetricValue.Value); err != nil {
 				return err
 			}
 		} else {
 			query := fmt.Sprintf(`INSERT INTO %s (Date,MID,LID,MetricValue) VALUES (?,?,?,?)`, f.Table)
-			if _, err = p.DB.Exec(query, m.Date, m.MID, m.LID, m.MetricValue); err != nil {
+			if _, err = p.DB.Exec(query, m.Date, m.MID, m.LID, m.MetricValue.Value); err != nil {
 				return err
 			}
 		}
@@ -84,7 +84,7 @@ func (p *DatabaseSQL) Select(dt time.Time, ss []FieldSelector) (*EconometricsRec
 	var err error
 	rec := EconometricsRecord{
 		Date:   dt,
-		Fields: map[string]float64{},
+		Fields: map[string]MetricInfo{},
 	}
 
 	for _, v := range ss {
@@ -97,7 +97,7 @@ func (p *DatabaseSQL) Select(dt time.Time, ss []FieldSelector) (*EconometricsRec
 
 		if v.Metric == "EXClose" {
 			query := `SELECT XID,Date,LID,LID2, EXClose FROM ExchangeRate WHERE Date=? AND LID=? AND LID2=? LIMIT 1`
-			err = p.DB.QueryRow(query, dateStr, v.LID, v.LID2).Scan(&m.MEID, &m.Date, &m.LID, &m.LID2, &m.MetricValue)
+			err = p.DB.QueryRow(query, dateStr, v.LID, v.LID2).Scan(&m.MEID, &m.Date, &m.LID, &m.LID2, &m.MetricValue.Value)
 			if err != nil {
 				if err == sql.ErrNoRows {
 					continue // nothing to store in Fields
@@ -109,7 +109,7 @@ func (p *DatabaseSQL) Select(dt time.Time, ss []FieldSelector) (*EconometricsRec
 			// Prepare the query
 			query := fmt.Sprintf(`SELECT MEID,Date,MID,LID,MSID, MetricValue FROM %s WHERE Date=? AND MID=? AND LID=? LIMIT 1`, v.Table)
 			var nullint sql.NullInt64
-			err = p.DB.QueryRow(query, dateStr, v.MID, v.LID).Scan(&m.MEID, &m.Date, &m.MID, &m.LID, &nullint, &m.MetricValue)
+			err = p.DB.QueryRow(query, dateStr, v.MID, v.LID).Scan(&m.MEID, &m.Date, &m.MID, &m.LID, &nullint, &m.MetricValue.Value)
 			if err != nil {
 				if err == sql.ErrNoRows {
 					continue // nothing to store in Fields

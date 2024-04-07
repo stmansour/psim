@@ -105,51 +105,53 @@ type CruciblePeriod struct {
 // to all areas of code in this project
 // ---------------------------------------------------------------------------
 type AppConfig struct {
-	Filename           string              // filename of the configuration file read
-	C1                 string              // Currency1 - the currency that we're trying to maximize
-	C2                 string              // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
-	DtStart            CustomDate          // simulation begins on this date
-	DtStop             CustomDate          // simulation ends on this date. Guaranteed that no "buys" happen after this date
-	EnforceStopDate    bool                // stops on DtStop even if there is a C2 Balance, if false and C2 Balance > 0 on StopDate, simulation will continue in sell-only mode until C2 < 1.00
-	COAStrategy        string              // course of action strategy used by Investors (choices are: DistributedDecision)
-	LoopCount          int                 // how many times to loop over DtStart to DtStop
-	TopInvestorCount   int                 // how many top investors to include in financial report
-	MinInfluencers     int                 // minimum number of influencers per Investor
-	MaxInfluencers     int                 // maximum number of influencers per Investor
-	GenDurSpec         string              // gen dur spec
-	GenDur             *GenerationDuration // parsed gen dur spec
-	DtSettle           time.Time           // later of DtStop or date on which the last sale was made
-	PopulationSize     int                 // how many investors are in this population
-	InitFunds          float64             // amount of funds each Investor is "staked" at the outset of the simulation
-	StdInvestment      float64             // standard investment amount
-	TradingDay         int                 // this needs to be completely re-thought -- it's like a recurrence rule
-	TradingTime        time.Time           // time of day when buy/sell is executed
-	Generations        int                 // current generation in the simulator
-	MutationRate       int                 // 1 - 100 indicating the % of mutation
-	DBSource           string              // {CSV | Database | OnlineService}
-	RandNano           int64               // random number seed used for this simulation
-	InfPredDebug       bool                // print debug info about every prediction
-	Trace              bool                // use this flag to cause full trace information to be printed regarding every Investor decision every day.
-	SingleInvestorMode bool                // default is false, when true it means we're running a single investor... more like the production code will run
-	SingleInvestorDNA  string              // DNA of the single investor
-	TopInvestors       []TopInvestor       // a list of top investors
-	CrucibleSpans      []CruciblePeriod    // list of times to run the simulation
-	CrucibleMode       bool                // if true then run all TopInvestor DNA through the CrucibleSpans
-	ReportDirectory    string              // final directory where all reports should be
-	ReportTimestamp    string              // timestamp to used for archived reports
-	ReportDirSet       bool                // when false the info needs to be set, when true it's already set
-	ArchiveBaseDir     string              // directory where archive will be created.  If no value is supplied, current directory will be used
-	ArchiveMode        bool                // archive reports to directory when true
-	PreserveElite      bool                // when true it replicates the top PreserverElitePct of DNA from gen x to gen x+1
-	PreserveElitePct   float64             // floating point value representing the amount of DNA to preserve. 0.0 to 100.0
-	EliteCount         int                 // calculated by the simulator
-	ExecutableFilePath string              // path to the executable
-	StopLoss           float64             // Expressed as a percentage of the Portfolio Value. That is, use 0.10 for 10%.  Sell all C2 immediately if the PV has lost this much of the initial funding.
-	TxnFeeFactor       float64             // cost per transaction that is multiplied by the amount. 0.0002 == 2 basis points, 0 if not set
-	TxnFee             float64             // a flat cost that is added for each transaction, 0 if not set
-	InvestorBonusPlan  bool                // rewards Investors earning high ROI by giving a bonus to their FitnessScore.  PV >= 110% receive 100% bonus, PV >= 115% get 200%, PV >= 120% get 300%, and PV >= 400% get 500%
-	Gen0Elites         bool                // if true, introduce TopInvestors DNA into the initial population
-	WorkerPoolSize     int                 // number of cores to utilize, if < 1 then the program decides, if 1 or more then that many cores are used, it will be capped at the number of cores the hardware actually has
+	Filename                string              // filename of the configuration file read
+	C1                      string              // Currency1 - the currency that we're trying to maximize
+	C2                      string              // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
+	DtStart                 CustomDate          // simulation begins on this date
+	DtStop                  CustomDate          // simulation ends on this date. Guaranteed that no "buys" happen after this date
+	EnforceStopDate         bool                // stops on DtStop even if there is a C2 Balance, if false and C2 Balance > 0 on StopDate, simulation will continue in sell-only mode until C2 < 1.00
+	COAStrategy             string              // course of action strategy used by Investors (choices are: DistributedDecision)
+	LoopCount               int                 // how many times to loop over DtStart to DtStop
+	TopInvestorCount        int                 // how many top investors to include in financial report
+	MinInfluencers          int                 // minimum number of influencers per Investor
+	MaxInfluencers          int                 // maximum number of influencers per Investor
+	GenDurSpec              string              // gen dur spec
+	GenDur                  *GenerationDuration // parsed gen dur spec
+	DtSettle                time.Time           // later of DtStop or date on which the last sale was made
+	PopulationSize          int                 // how many investors are in this population
+	InitFunds               float64             // amount of funds each Investor is "staked" at the outset of the simulation
+	StdInvestment           float64             // standard investment amount
+	TradingDay              int                 // this needs to be completely re-thought -- it's like a recurrence rule
+	TradingTime             time.Time           // time of day when buy/sell is executed
+	Generations             int                 // current generation in the simulator
+	MutationRate            int                 // 1 - 100 indicating the % of mutation
+	DBSource                string              // {CSV | Database | OnlineService}
+	RandNano                int64               // random number seed used for this simulation
+	InfPredDebug            bool                // print debug info about every prediction
+	Trace                   bool                // use this flag to cause full trace information to be printed regarding every Investor decision every day.
+	SingleInvestorMode      bool                // default is false, when true it means we're running a single investor... more like the production code will run
+	SingleInvestorDNA       string              // DNA of the single investor
+	TopInvestors            []TopInvestor       // a list of top investors
+	CrucibleSpans           []CruciblePeriod    // list of times to run the simulation
+	CrucibleMode            bool                // if true then run all TopInvestor DNA through the CrucibleSpans
+	ReportDirectory         string              // final directory where all reports should be
+	ReportTimestamp         string              // timestamp to used for archived reports
+	ReportDirSet            bool                // when false the info needs to be set, when true it's already set
+	ArchiveBaseDir          string              // directory where archive will be created.  If no value is supplied, current directory will be used
+	ArchiveMode             bool                // archive reports to directory when true
+	PreserveElite           bool                // when true it replicates the top PreserverElitePct of DNA from gen x to gen x+1
+	PreserveElitePct        float64             // floating point value representing the amount of DNA to preserve. 0.0 to 100.0
+	EliteCount              int                 // calculated by the simulator
+	ExecutableFilePath      string              // path to the executable
+	StopLoss                float64             // Expressed as a percentage of the Portfolio Value. That is, use 0.10 for 10%.  Sell all C2 immediately if the PV has lost this much of the initial funding.
+	TxnFeeFactor            float64             // cost per transaction that is multiplied by the amount. 0.0002 == 2 basis points, 0 if not set
+	TxnFee                  float64             // a flat cost that is added for each transaction, 0 if not set
+	InvestorBonusPlan       bool                // rewards Investors earning high ROI by giving a bonus to their FitnessScore.  PV >= 110% receive 100% bonus, PV >= 115% get 200%, PV >= 120% get 300%, and PV >= 400% get 500%
+	Gen0Elites              bool                // if true, introduce TopInvestors DNA into the initial population
+	WorkerPoolSize          int                 // number of cores to utilize, if < 1 then the program decides, if 1 or more then that many cores are used, it will be capped at the number of cores the hardware actually has
+	HoldWindowStatsLookBack int                 // how many days make up the rolling window of data used in HoldWindow stats calculations (mean and StdDev)
+	StdDevVariationFactor   float64             // how much variance from thethe standard deviation is needed for the hold window.
 }
 
 // Helper function to check if a file exists
@@ -250,6 +252,12 @@ func LoadConfig(cfname string) (*AppConfig, error) {
 	if cfg.TopInvestorCount < 1 {
 		cfg.TopInvestorCount = 10 // guarantee a reasonable number
 	}
+	if cfg.HoldWindowStatsLookBack < 1 {
+		cfg.HoldWindowStatsLookBack = 365 // guarantee a reasonable number
+	}
+	if cfg.StdDevVariationFactor == 0 {
+		cfg.StdDevVariationFactor = 0.1 // guarantee a reasonable number
+	}
 
 	//-------------------------------------------------------------------
 	// CRUCIBLE processing...
@@ -277,6 +285,7 @@ func LoadConfig(cfname string) (*AppConfig, error) {
 	// 	cfg.InvW1 = 0.5
 	// 	cfg.InvW2 = 0.5
 	// }
+
 	cfg.DtStart = fcfg.DtStart
 	cfg.DtStop = fcfg.DtStop
 	return &cfg, nil

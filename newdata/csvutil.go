@@ -11,7 +11,7 @@ import (
 func DRec2String(drec *EconometricsRecord) string {
 	s := fmt.Sprintf("    Date = %s\n", drec.Date.Format("Jan 2, 2006"))
 	for k, v := range drec.Fields {
-		s += fmt.Sprintf("    %s: %9.3f\n", k, v)
+		s += fmt.Sprintf("    %s: %9.3f\n", k, v.Value)
 	}
 	return s + "\n"
 }

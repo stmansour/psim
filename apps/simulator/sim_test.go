@@ -10,6 +10,7 @@ func TestGenDur(t *testing.T) {
 	app.randNano = -1
 	app.cfName = "gendur.json5"
 	setDBLocation()
+	app.notalk = true
 	s := &app.sim
 	s.ResetSimulator()
 
@@ -20,6 +21,7 @@ func TestCrucible(t *testing.T) {
 	app.randNano = -1
 	app.cfName = "confcru.json5"
 	setDBLocation()
+	app.notalk = true
 	s := &app.sim
 	s.ResetSimulator()
 
@@ -31,6 +33,7 @@ func TestInvestorDNA(t *testing.T) {
 	app.cfName = "configsmall.json5"
 	app.ReportTopInvestorInvestments = true
 	setDBLocation()
+	app.notalk = true
 	s := &app.sim
 	s.ResetSimulator()
 
@@ -41,6 +44,7 @@ func TestLinguisticDNA(t *testing.T) {
 	app.randNano = -1
 	app.cfName = "linguistics.json5"
 	setDBLocation()
+	app.notalk = true
 	s := &app.sim
 	app.trace = false
 	s.ResetSimulator()
@@ -50,6 +54,7 @@ func TestWTInfl(t *testing.T) {
 	app.randNano = -1
 	app.cfName = "wtconfig.json5"
 	setDBLocation()
+	app.notalk = true
 	s := &app.sim
 	app.trace = false
 	s.ResetSimulator()

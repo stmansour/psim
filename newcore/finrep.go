@@ -55,8 +55,8 @@ func (f *FinRep) GenerateHeader() error {
 // GenerateRows prints the header lines to the csv file
 // ----------------------------------------------------------
 func (f *FinRep) GenerateRows() error {
-	c1b := fmt.Sprintf("C1 Balance (%s)", f.Sim.cfg.C1)
-	c2b := fmt.Sprintf("C2 Balance (%s)", f.Sim.cfg.C2)
+	c1b := fmt.Sprintf("C1 Balance (%s)", f.Sim.Cfg.C1)
+	c2b := fmt.Sprintf("C2 Balance (%s)", f.Sim.Cfg.C2)
 	cols := []string{
 		"Rank",
 		"Date",
@@ -90,7 +90,7 @@ func (f *FinRep) GenerateRows() error {
 	// WRITE COLUMNS...
 	//------------------------------------------------------------------------
 	for i, t := range f.Sim.TopInvestors {
-		ar, err := util.AnnualizedReturn(f.Sim.cfg.InitFunds, t.PortfolioValue, time.Time(f.Sim.cfg.DtStart), time.Time(f.Sim.cfg.DtStop).AddDate(0, 0, 1))
+		ar, err := util.AnnualizedReturn(f.Sim.Cfg.InitFunds, t.PortfolioValue, time.Time(f.Sim.Cfg.DtStart), time.Time(f.Sim.Cfg.DtStop).AddDate(0, 0, 1))
 		if err != nil {
 			fmt.Printf("Error calculating annualized return: %s\n", err.Error())
 		}

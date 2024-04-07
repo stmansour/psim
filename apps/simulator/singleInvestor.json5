@@ -11,8 +11,8 @@
     //-----------------------------------------------------------------
     //  SIMULATOR
     //-----------------------------------------------------------------
-    "DtStart": "2015-05-01",    // simulation start date for each generation
-    "DtStop": "2015-05-31",     // simulation stop date for each generation
+    "DtStart": "2022-05-01",    // simulation start date for each generation
+    "DtStop": "2022-05-31",     // simulation stop date for each generation
     "EnforceStopDate": true,    // stops on DtStop even if there is a C2 Balance, if false and C2 Balance > 0 on StopDate, simulation will continue in sell-only mode until C2 < 1.00
     "LoopCount": 20,            // How many times to loop over DtStart to DtStop
     "Generations": 1,           // how many generations should the simulator run. NOTE: This value is only valid if GenDurSpec is commented out.
@@ -32,6 +32,11 @@
     "StopLoss": 0.10,           // Expressed as a percentage of the Portfolio Value. That is, 0.12 means 12%.  Sell all C2 immediately if the PV has lost this much of the initial funding.
 	"TxnFeeFactor": 0.0002,     // cost, in C1, per transaction that is multiplied by the amount. .0002 == 2 basis points, 0 if not set
 	"TxnFee": 0,                // a flat cost, in C1, that is added for each transaction, 0 if not set
+    "InvestorBonusPlan": true,      // rewards Investors earning high ROI by giving a bonus to their FitnessScore.  PV >= 110% receive 100% bonus, PV >= 115% get 200%, PV >= 120% get 300%, and PV >= 400% get 500%
+    "Gen0Elites": false,            // Insert TopInvestors DNA into Generation 0
+    "WorkerPoolSize": 0,            // When 0, the program decides the number of cores, when >= 1 the number of cores the simulator will use
+    "HoldWindowStatsLookBack": 365, // how many days make up the rolling window of data used in HoldWindow stats calculations (mean and StdDev)
+    "StdDevVariationFactor": 0.01,  // variable factor from Std Deviation
 
     //-----------------------------------------------------------------
     //  There may be times when we need to test or check the behavior
@@ -44,5 +49,5 @@
     //  version of this projects code will operate. 
     //-----------------------------------------------------------------
     "SingleInvestorMode": true,
-    "SingleInvestorDNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-67,Delta2=-5,Metric=SP}]}",
+    "SingleInvestorDNA": "{Investor;Strategy=MajorityRules;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-67,Delta2=-5,Metric=GCAM_C17_13}]}",
 }

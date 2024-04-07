@@ -3,8 +3,8 @@ Random number seed: SEED_PLACEHOLDER
 Version: VERSION_PLACEHOLDER
 Version: PLACEHOLDER
 Configuration File:  singleInvestor.json5
-Start:               May 1, 2015	valid: √
-Stop:                May 31, 2015	valid: √
+Start:               May 1, 2022	valid: √
+Stop:                May 31, 2022	valid: √
 Loop count:          1
 Generations:         1
 C1:                  USD
@@ -13,192 +13,194 @@ Duration:            0 years 1 month 0 days
 Population Size:     1
 *******************************************************************
 
-May  1, 2015 - Investor1
-	SP:  buy   (T1 Feb 23, 2015 [0.98] -  T2 Apr 26, 2015 [0.90]   Ann. Change: -1.35%   HoldWin(-0.10% to  0.10%))
+May  1, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Feb 23, 2022 [7.50] -  T2 Apr 26, 2022 [7.04]   Mean: -0.0075  StdDev: 0.3689,  Factor: 0.0100, Trigger: 0.0037)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1202100.00 JPY, fee =   2.00)
-	C1bal = 89998.00 USD, C2bal = 1202100.00 JPY, PV = 99998.00 USD
+        *** BUY ***       0.00 USD (1298400.00 JPY, fee =   2.00)
+	C1bal = 89998.00 USD, C2bal = 1298400.00 JPY, PV = 99998.00 USD
 
-May  2, 2015 - Investor1
-	SP:  buy   (T1 Feb 24, 2015 [0.98] -  T2 Apr 27, 2015 [0.90]   Ann. Change: -1.32%   HoldWin(-0.10% to  0.10%))
+May  2, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Feb 24, 2022 [7.68] -  T2 Apr 27, 2022 [7.13]   Mean: -0.0088  StdDev: 0.3683,  Factor: 0.0100, Trigger: 0.0037)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1202100.00 JPY, fee =   2.00)
-	C1bal = 79996.00 USD, C2bal = 2404200.00 JPY, PV = 99996.00 USD
+        *** BUY ***       0.00 USD (1301800.00 JPY, fee =   2.00)
+	C1bal = 79996.00 USD, C2bal = 2600200.00 JPY, PV = 99969.88 USD
 
-May  3, 2015 - Investor1
-	SP:  buy   (T1 Feb 25, 2015 [0.98] -  T2 Apr 28, 2015 [0.90]   Ann. Change: -1.35%   HoldWin(-0.10% to  0.10%))
+May  3, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Feb 25, 2022 [7.72] -  T2 Apr 28, 2022 [7.18]   Mean: -0.0087  StdDev: 0.3679,  Factor: 0.0100, Trigger: 0.0037)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1202100.00 JPY, fee =   2.00)
-	C1bal = 69994.00 USD, C2bal = 3606300.00 JPY, PV = 99994.00 USD
+        *** BUY ***       0.00 USD (1300900.00 JPY, fee =   2.00)
+	C1bal = 69994.00 USD, C2bal = 3901100.00 JPY, PV = 99981.70 USD
 
-May  4, 2015 - Investor1
-	SP:  buy   (T1 Feb 26, 2015 [0.97] -  T2 Apr 29, 2015 [0.90]   Ann. Change: -1.23%   HoldWin(-0.10% to  0.10%))
+May  4, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Feb 26, 2022 [7.96] -  T2 Apr 29, 2022 [7.39]   Mean: -0.0091  StdDev: 0.3674,  Factor: 0.0100, Trigger: 0.0037)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1202500.00 JPY, fee =   2.00)
-	C1bal = 59992.00 USD, C2bal = 4808800.00 JPY, PV = 99982.02 USD
+        *** BUY ***       0.00 USD (1299700.00 JPY, fee =   2.00)
+	C1bal = 59992.00 USD, C2bal = 5200800.00 JPY, PV = 100007.39 USD
 
-May  5, 2015 - Investor1
-	SP:  buy   (T1 Feb 27, 2015 [0.96] -  T2 Apr 30, 2015 [0.91]   Ann. Change: -0.89%   HoldWin(-0.10% to  0.10%))
+May  5, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Feb 27, 2022 [8.18] -  T2 Apr 30, 2022 [7.69]   Mean: -0.0080  StdDev: 0.3677,  Factor: 0.0100, Trigger: 0.0037)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1198700.00 JPY, fee =   2.00)
-	C1bal = 49990.00 USD, C2bal = 6007500.00 JPY, PV = 100106.79 USD
+        *** BUY ***       0.00 USD (1304100.00 JPY, fee =   2.00)
+	C1bal = 49990.00 USD, C2bal = 6504900.00 JPY, PV = 99870.38 USD
 
-May  6, 2015 - Investor1
-	SP:  sell   (T1 Feb 28, 2015 [0.96] -  T2 May  1, 2015 [1.04]   Ann. Change: 1.24%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
-        *** SELL ***  10066.15 USD (fee:   2.01), [1202100.00 JPY], investments affected: 1 -->  1 profited, 0 lost
-        *** SELL ***  10066.15 USD (fee:   2.01), [1202100.00 JPY], investments affected: 1 -->  1 profited, 0 lost
-        *** SELL ***  10066.15 USD (fee:   2.01), [1202100.00 JPY], investments affected: 1 -->  1 profited, 0 lost
-        *** SELL ***  10069.50 USD (fee:   2.01), [1202500.00 JPY], investments affected: 1 -->  1 profited, 0 lost
-        *** SELL ***  10037.68 USD (fee:   2.01), [1198700.00 JPY], investments affected: 1 -->  1 profited, 0 lost
-	C1bal = 100285.58 USD, C2bal =   0.00 JPY, PV = 100285.58 USD
-
-May  7, 2015 - Investor1
-	SP:  sell   (T1 Mar  1, 2015 [0.96] -  T2 May  2, 2015 [1.03]   Ann. Change: 1.14%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
-	C1bal = 100285.58 USD, C2bal =   0.00 JPY, PV = 100285.58 USD
-
-May  8, 2015 - Investor1
-	SP:  buy   (T1 Mar  2, 2015 [1.05] -  T2 May  3, 2015 [0.96]   Ann. Change: -1.51%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1197800.00 JPY, fee =   2.00)
-	C1bal = 90283.58 USD, C2bal = 1197800.00 JPY, PV = 100283.58 USD
-
-May  9, 2015 - Investor1
-	SP:  hold   (T1 Mar  3, 2015 [0.97] -  T2 May  4, 2015 [0.96]   Ann. Change: -0.07%   HoldWin(-0.10% to  0.10%))
+May  6, 2022 - Investor1
+	GCAM_C17_13:  hold   (T1 Feb 28, 2022 [7.73] -  T2 May  1, 2022 [7.88]   Mean: 0.0025  StdDev: 0.3681,  Factor: 0.0100, Trigger: 0.0037)
 	COA:  Action: hold  100%  (buy: 0.00, hold: 1.00, sell: 0.00, abs: 0.00)
-	C1bal = 90283.58 USD, C2bal = 1197800.00 JPY, PV = 100283.58 USD
+	C1bal = 49990.00 USD, C2bal = 6504900.00 JPY, PV = 99893.34 USD
 
-May 10, 2015 - Investor1
-	SP:  buy   (T1 Mar  4, 2015 [0.93] -  T2 May  5, 2015 [0.92]   Ann. Change: -0.24%   HoldWin(-0.10% to  0.10%))
+May  7, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Mar  1, 2022 [7.52] -  T2 May  2, 2022 [7.26]   Mean: -0.0043  StdDev: 0.3679,  Factor: 0.0100, Trigger: 0.0037)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1197800.00 JPY, fee =   2.00)
-	C1bal = 80281.58 USD, C2bal = 2395600.00 JPY, PV = 100281.58 USD
+        *** BUY ***       0.00 USD (1303500.00 JPY, fee =   2.00)
+	C1bal = 39988.00 USD, C2bal = 7808400.00 JPY, PV = 99891.34 USD
 
-May 11, 2015 - Investor1
-	SP:  buy   (T1 Mar  5, 2015 [0.93] -  T2 May  6, 2015 [0.87]   Ann. Change: -1.11%   HoldWin(-0.10% to  0.10%))
+May  8, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Mar  2, 2022 [7.59] -  T2 May  3, 2022 [6.95]   Mean: -0.0104  StdDev: 0.3679,  Factor: 0.0100, Trigger: 0.0037)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1200500.00 JPY, fee =   2.00)
-	C1bal = 70279.58 USD, C2bal = 3596100.00 JPY, PV = 100234.60 USD
+        *** BUY ***       0.00 USD (1303500.00 JPY, fee =   2.00)
+	C1bal = 29986.00 USD, C2bal = 9111900.00 JPY, PV = 99889.34 USD
 
-May 12, 2015 - Investor1
-	SP:  hold   (T1 Mar  6, 2015 [0.87] -  T2 May  7, 2015 [0.88]   Ann. Change: 0.07%   HoldWin(-0.10% to  0.10%))
+May  9, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Mar  3, 2022 [7.45] -  T2 May  4, 2022 [7.02]   Mean: -0.0069  StdDev: 0.3670,  Factor: 0.0100, Trigger: 0.0037)
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (1303700.00 JPY, fee =   2.00)
+	C1bal = 19984.00 USD, C2bal = 10415600.00 JPY, PV = 99876.61 USD
+
+May 10, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Mar  4, 2022 [7.71] -  T2 May  5, 2022 [7.26]   Mean: -0.0073  StdDev: 0.3659,  Factor: 0.0100, Trigger: 0.0037)
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (1302100.00 JPY, fee =   2.00)
+	C1bal = 9982.00 USD, C2bal = 11717700.00 JPY, PV = 99972.78 USD
+
+May 11, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Mar  5, 2022 [8.04] -  T2 May  6, 2022 [7.27]   Mean: -0.0124  StdDev: 0.3653,  Factor: 0.0100, Trigger: 0.0037)
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (1299656.40 JPY, fee =   2.00)
+	C1bal =  -2.00 USD, C2bal = 13017356.40 JPY, PV = 99977.70 USD
+
+May 12, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Mar  6, 2022 [8.36] -  T2 May  7, 2022 [7.78]   Mean: -0.0094  StdDev: 0.3657,  Factor: 0.0100, Trigger: 0.0037)
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+	C1bal =  -2.00 USD, C2bal = 13017356.40 JPY, PV = 101616.71 USD
+
+May 13, 2022 - Investor1
+	GCAM_C17_13:  hold   (T1 Mar  7, 2022 [7.86] -  T2 May  8, 2022 [8.05]   Mean: 0.0030  StdDev: 0.3673,  Factor: 0.0100, Trigger: 0.0037)
 	COA:  Action: hold  100%  (buy: 0.00, hold: 1.00, sell: 0.00, abs: 0.00)
-	C1bal = 70279.58 USD, C2bal = 3596100.00 JPY, PV = 100297.11 USD
+	C1bal =  -2.00 USD, C2bal = 13017356.40 JPY, PV = 100728.15 USD
 
-May 13, 2015 - Investor1
-	SP:  sell   (T1 Mar  7, 2015 [0.87] -  T2 May  8, 2015 [0.88]   Ann. Change: 0.26%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
-        *** SELL ***  10057.94 USD (fee:   2.01), [1197800.00 JPY], investments affected: 1 -->  1 profited, 0 lost
-        *** SELL ***  10057.94 USD (fee:   2.01), [1197800.00 JPY], investments affected: 1 -->  1 profited, 0 lost
-        *** SELL ***  10080.61 USD (fee:   2.02), [1200500.00 JPY], investments affected: 1 -->  1 profited, 0 lost
-	C1bal = 100470.03 USD, C2bal =   0.00 JPY, PV = 100470.03 USD
-
-May 14, 2015 - Investor1
-	SP:  sell   (T1 Mar  8, 2015 [0.87] -  T2 May  9, 2015 [0.88]   Ann. Change: 0.26%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
-	C1bal = 100470.03 USD, C2bal =   0.00 JPY, PV = 100470.03 USD
-
-May 15, 2015 - Investor1
-	SP:  sell   (T1 Mar  9, 2015 [0.99] -  T2 May 10, 2015 [1.01]   Ann. Change: 0.35%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
-	C1bal = 100470.03 USD, C2bal =   0.00 JPY, PV = 100470.03 USD
-
-May 16, 2015 - Investor1
-	SP:  buy   (T1 Mar 10, 2015 [0.97] -  T2 May 11, 2015 [0.95]   Ann. Change: -0.43%   HoldWin(-0.10% to  0.10%))
+May 14, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Mar  8, 2022 [7.56] -  T2 May  9, 2022 [7.30]   Mean: -0.0042  StdDev: 0.3668,  Factor: 0.0100, Trigger: 0.0037)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1193600.00 JPY, fee =   2.00)
-	C1bal = 90468.03 USD, C2bal = 1193600.00 JPY, PV = 100468.03 USD
+	C1bal =  -2.00 USD, C2bal = 13017356.40 JPY, PV = 100728.15 USD
 
-May 17, 2015 - Investor1
-	SP:  buy   (T1 Mar 11, 2015 [0.97] -  T2 May 12, 2015 [0.95]   Ann. Change: -0.43%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1193600.00 JPY, fee =   2.00)
-	C1bal = 80466.03 USD, C2bal = 2387200.00 JPY, PV = 100466.03 USD
-
-May 18, 2015 - Investor1
-	SP:  sell   (T1 Mar 12, 2015 [0.90] -  T2 May 13, 2015 [0.91]   Ann. Change: 0.31%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
-        *** SELL ***   9961.61 USD (fee:   1.99), [1193600.00 JPY], investments affected: 1 -->  0 profited, 1 lost
-        *** SELL ***   9961.61 USD (fee:   1.99), [1193600.00 JPY], investments affected: 1 -->  0 profited, 1 lost
-	C1bal = 100385.27 USD, C2bal =   0.00 JPY, PV = 100385.27 USD
-
-May 19, 2015 - Investor1
-	SP:  sell   (T1 Mar 13, 2015 [0.92] -  T2 May 14, 2015 [0.93]   Ann. Change: 0.20%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
-	C1bal = 100385.27 USD, C2bal =   0.00 JPY, PV = 100385.27 USD
-
-May 20, 2015 - Investor1
-	SP:  hold   (T1 Mar 14, 2015 [0.92] -  T2 May 15, 2015 [0.93]   Ann. Change: 0.08%   HoldWin(-0.10% to  0.10%))
+May 15, 2022 - Investor1
+	GCAM_C17_13:  hold   (T1 Mar  9, 2022 [7.38] -  T2 May 10, 2022 [7.17]   Mean: -0.0034  StdDev: 0.3669,  Factor: 0.0100, Trigger: 0.0037)
 	COA:  Action: hold  100%  (buy: 0.00, hold: 1.00, sell: 0.00, abs: 0.00)
-	C1bal = 100385.27 USD, C2bal =   0.00 JPY, PV = 100385.27 USD
+	C1bal =  -2.00 USD, C2bal = 13017356.40 JPY, PV = 100728.15 USD
 
-May 21, 2015 - Investor1
-	SP:  hold   (T1 Mar 15, 2015 [0.92] -  T2 May 16, 2015 [0.93]   Ann. Change: 0.08%   HoldWin(-0.10% to  0.10%))
+May 16, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Mar 10, 2022 [7.43] -  T2 May 11, 2022 [7.08]   Mean: -0.0056  StdDev: 0.3666,  Factor: 0.0100, Trigger: 0.0037)
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+	C1bal =  -2.00 USD, C2bal = 13017356.40 JPY, PV = 100790.54 USD
+
+May 17, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Mar 11, 2022 [7.55] -  T2 May 12, 2022 [7.10]   Mean: -0.0073  StdDev: 0.3666,  Factor: 0.0100, Trigger: 0.0037)
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+	C1bal =  -2.00 USD, C2bal = 13017356.40 JPY, PV = 100665.83 USD
+
+May 18, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Mar 12, 2022 [7.88] -  T2 May 13, 2022 [7.31]   Mean: -0.0091  StdDev: 0.3664,  Factor: 0.0100, Trigger: 0.0037)
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+	C1bal =  -2.00 USD, C2bal = 13017356.40 JPY, PV = 101521.61 USD
+
+May 19, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Mar 13, 2022 [8.16] -  T2 May 14, 2022 [7.50]   Mean: -0.0106  StdDev: 0.3663,  Factor: 0.0100, Trigger: 0.0037)
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+	C1bal =  -2.00 USD, C2bal = 13017356.40 JPY, PV = 101998.92 USD
+
+May 20, 2022 - Investor1
+	GCAM_C17_13:  sell   (T1 Mar 14, 2022 [7.66] -  T2 May 15, 2022 [7.97]   Mean: 0.0049  StdDev: 0.3676,  Factor: 0.0100, Trigger: 0.0037)
+	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
+        *** SELL ***  10154.86 USD (fee:   2.03), [1298400.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***  10181.45 USD (fee:   2.04), [1301800.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***  10174.41 USD (fee:   2.03), [1300900.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***  10165.02 USD (fee:   2.03), [1299700.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***  10199.44 USD (fee:   2.04), [1304100.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***  10194.74 USD (fee:   2.04), [1303500.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***  10194.74 USD (fee:   2.04), [1303500.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***  10196.31 USD (fee:   2.04), [1303700.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***  10183.79 USD (fee:   2.04), [1302100.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***  10164.68 USD (fee:   2.03), [1299656.40 JPY], investments affected: 1 -->  1 profited, 0 lost
+	C1bal = 101787.09 USD, C2bal =   0.00 JPY, PV = 101787.09 USD
+
+May 21, 2022 - Investor1
+	GCAM_C17_13:  hold   (T1 Mar 15, 2022 [7.39] -  T2 May 16, 2022 [7.41]   Mean: 0.0004  StdDev: 0.3667,  Factor: 0.0100, Trigger: 0.0037)
 	COA:  Action: hold  100%  (buy: 0.00, hold: 1.00, sell: 0.00, abs: 0.00)
-	C1bal = 100385.27 USD, C2bal =   0.00 JPY, PV = 100385.27 USD
+	C1bal = 101787.09 USD, C2bal =   0.00 JPY, PV = 101787.09 USD
 
-May 22, 2015 - Investor1
-	SP:  buy   (T1 Mar 16, 2015 [0.93] -  T2 May 17, 2015 [0.93]   Ann. Change: -0.15%   HoldWin(-0.10% to  0.10%))
+May 22, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Mar 16, 2022 [7.41] -  T2 May 17, 2022 [7.12]   Mean: -0.0046  StdDev: 0.3669,  Factor: 0.0100, Trigger: 0.0037)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1214500.00 JPY, fee =   2.00)
-	C1bal = 90383.27 USD, C2bal = 1214500.00 JPY, PV = 100383.27 USD
+        *** BUY ***       0.00 USD (1278600.00 JPY, fee =   2.00)
+	C1bal = 91785.09 USD, C2bal = 1278600.00 JPY, PV = 101785.09 USD
 
-May 23, 2015 - Investor1
-	SP:  hold   (T1 Mar 17, 2015 [0.92] -  T2 May 18, 2015 [0.92]   Ann. Change: 0.03%   HoldWin(-0.10% to  0.10%))
+May 23, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Mar 17, 2022 [7.37] -  T2 May 18, 2022 [7.12]   Mean: -0.0041  StdDev: 0.3666,  Factor: 0.0100, Trigger: 0.0037)
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (1277800.00 JPY, fee =   2.00)
+	C1bal = 81783.09 USD, C2bal = 2556400.00 JPY, PV = 101789.35 USD
+
+May 24, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Mar 18, 2022 [7.53] -  T2 May 19, 2022 [7.14]   Mean: -0.0063  StdDev: 0.3663,  Factor: 0.0100, Trigger: 0.0037)
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (1265600.00 JPY, fee =   2.00)
+	C1bal = 71781.09 USD, C2bal = 3822000.00 JPY, PV = 101980.21 USD
+
+May 25, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Mar 19, 2022 [7.97] -  T2 May 20, 2022 [7.25]   Mean: -0.0117  StdDev: 0.3660,  Factor: 0.0100, Trigger: 0.0037)
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (1273100.00 JPY, fee =   2.00)
+	C1bal = 61779.09 USD, C2bal = 5095100.00 JPY, PV = 101800.30 USD
+
+May 26, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Mar 20, 2022 [8.13] -  T2 May 21, 2022 [7.47]   Mean: -0.0106  StdDev: 0.3660,  Factor: 0.0100, Trigger: 0.0037)
+	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
+        *** BUY ***       0.00 USD (1272300.00 JPY, fee =   2.00)
+	C1bal = 51777.09 USD, C2bal = 6367400.00 JPY, PV = 101823.47 USD
+
+May 27, 2022 - Investor1
+	GCAM_C17_13:  sell   (T1 Mar 21, 2022 [7.50] -  T2 May 22, 2022 [7.75]   Mean: 0.0040  StdDev: 0.3665,  Factor: 0.0100, Trigger: 0.0037)
+	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
+        *** SELL ***  10056.63 USD (fee:   2.01), [1278600.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***  10050.34 USD (fee:   2.01), [1277800.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***   9954.38 USD (fee:   1.99), [1265600.00 JPY], investments affected: 1 -->  0 profited, 1 lost
+        *** SELL ***  10013.37 USD (fee:   2.00), [1273100.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+        *** SELL ***  10007.08 USD (fee:   2.00), [1272300.00 JPY], investments affected: 1 -->  1 profited, 0 lost
+	C1bal = 101848.88 USD, C2bal =   0.00 JPY, PV = 101848.88 USD
+
+May 28, 2022 - Investor1
+	GCAM_C17_13:  hold   (T1 Mar 22, 2022 [7.26] -  T2 May 23, 2022 [7.23]   Mean: -0.0006  StdDev: 0.3665,  Factor: 0.0100, Trigger: 0.0037)
 	COA:  Action: hold  100%  (buy: 0.00, hold: 1.00, sell: 0.00, abs: 0.00)
-	C1bal = 90383.27 USD, C2bal = 1214500.00 JPY, PV = 100383.27 USD
+	C1bal = 101848.88 USD, C2bal =   0.00 JPY, PV = 101848.88 USD
 
-May 24, 2015 - Investor1
-	SP:  buy   (T1 Mar 18, 2015 [0.92] -  T2 May 19, 2015 [0.91]   Ann. Change: -0.19%   HoldWin(-0.10% to  0.10%))
+May 29, 2022 - Investor1
+	GCAM_C17_13:  hold   (T1 Mar 23, 2022 [7.23] -  T2 May 24, 2022 [7.04]   Mean: -0.0031  StdDev: 0.3667,  Factor: 0.0100, Trigger: 0.0037)
+	COA:  Action: hold  100%  (buy: 0.00, hold: 1.00, sell: 0.00, abs: 0.00)
+	C1bal = 101848.88 USD, C2bal =   0.00 JPY, PV = 101848.88 USD
+
+May 30, 2022 - Investor1
+	GCAM_C17_13:  hold   (T1 Mar 24, 2022 [7.44] -  T2 May 25, 2022 [7.28]   Mean: -0.0026  StdDev: 0.3660,  Factor: 0.0100, Trigger: 0.0037)
+	COA:  Action: hold  100%  (buy: 0.00, hold: 1.00, sell: 0.00, abs: 0.00)
+	C1bal = 101848.88 USD, C2bal =   0.00 JPY, PV = 101848.88 USD
+
+May 31, 2022 - Investor1
+	GCAM_C17_13:  buy   (T1 Mar 25, 2022 [7.54] -  T2 May 26, 2022 [7.31]   Mean: -0.0037  StdDev: 0.3653,  Factor: 0.0100, Trigger: 0.0037)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1214500.00 JPY, fee =   2.00)
-	C1bal = 80381.27 USD, C2bal = 2429000.00 JPY, PV = 100381.27 USD
+        *** BUY ***       0.00 USD (1285300.00 JPY, fee =   2.00)
+	C1bal = 91846.88 USD, C2bal = 1285300.00 JPY, PV = 101846.88 USD
 
-May 25, 2015 - Investor1
-	SP:  buy   (T1 Mar 19, 2015 [0.92] -  T2 May 20, 2015 [0.91]   Ann. Change: -0.31%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1214500.00 JPY, fee =   2.00)
-	C1bal = 70379.27 USD, C2bal = 3643500.00 JPY, PV = 100379.27 USD
-
-May 26, 2015 - Investor1
-	SP:  buy   (T1 Mar 20, 2015 [0.93] -  T2 May 21, 2015 [0.91]   Ann. Change: -0.40%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1230800.00 JPY, fee =   2.00)
-	C1bal = 60377.27 USD, C2bal = 4874300.00 JPY, PV = 99979.96 USD
-
-May 27, 2015 - Investor1
-	SP:  buy   (T1 Mar 21, 2015 [0.93] -  T2 May 22, 2015 [0.90]   Ann. Change: -0.50%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1237600.00 JPY, fee =   2.00)
-	C1bal = 50375.27 USD, C2bal = 6111900.00 JPY, PV = 99760.37 USD
-
-May 28, 2015 - Investor1
-	SP:  buy   (T1 Mar 22, 2015 [0.93] -  T2 May 23, 2015 [0.90]   Ann. Change: -0.50%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1241800.00 JPY, fee =   2.00)
-	C1bal = 40373.27 USD, C2bal = 7353700.00 JPY, PV = 99591.34 USD
-
-May 29, 2015 - Investor1
-	SP:  buy   (T1 Mar 23, 2015 [0.92] -  T2 May 24, 2015 [0.90]   Ann. Change: -0.32%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1239800.00 JPY, fee =   2.00)
-	C1bal = 30371.27 USD, C2bal = 8593500.00 JPY, PV = 99684.87 USD
-
-May 30, 2015 - Investor1
-	SP:  buy   (T1 Mar 24, 2015 [0.91] -  T2 May 25, 2015 [0.89]   Ann. Change: -0.38%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1239800.00 JPY, fee =   2.00)
-	C1bal = 20369.27 USD, C2bal = 9833300.00 JPY, PV = 99682.87 USD
-
-May 31, 2015 - Investor1
-	SP:  buy   (T1 Mar 25, 2015 [0.90] -  T2 May 26, 2015 [0.88]   Ann. Change: -0.28%   HoldWin(-0.10% to  0.10%))
-	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1239800.00 JPY, fee =   2.00)
-	C1bal = 10367.27 USD, C2bal = 11073100.00 JPY, PV = 99680.87 USD
-
-Completed generation 1, May  1, 2015 - May 31, 2015,  unsettled =  11073100.00 JPY
-loop 0 completed.  May  1, 2015 - May 31, 2015
+Completed generation 1, May  1, 2022 - May 31, 2022,  unsettled =   1285300.00 JPY
+loop 0 completed.  May  1, 2022 - May 31, 2022
 
 **************  S I M U L A T I O N   R E S U L T S  **************
 Number of generations: 1
@@ -206,3 +208,4 @@ Observed Mutation Rate:  0.000%
 nil data requests: 0
 Archive directory: PLACEHOLDER
 Archive directory: PLACEHOLDER
+simulation completed.

@@ -33,7 +33,7 @@ func (c *Crucible) Init(cfg *util.AppConfig, db *newdata.Database, sim *Simulato
 	c.cfg = cfg
 	c.db = db
 	c.sim = sim
-	c.sim.cfg = cfg // required for generateFName
+	c.sim.Cfg = cfg // required for generateFName
 	c.sim.SetReportDirectory()
 	c.sim.db = db
 	c.fname = c.sim.generateFName("crep")

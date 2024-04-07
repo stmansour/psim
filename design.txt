@@ -445,7 +445,10 @@ cached CSV database for metrics. I've tried various simulations,
 all the cores are vying for access to the internal CSV data store.
 That limits the effectiveness of multiple cores. Our server has 120
 CPU cores.  Our peak performance on the plato server occurs when
-we use between 25 and 30 cores.
+we use between 25 and 30 cores. Overall, the thread pool has
+significantly improved performance.  I’ve also done profiling on the
+code and removed several issues that caused the memory allocation
+code to overwork. This also improved performance slightly.
 
 
 
@@ -492,7 +495,7 @@ these numbers are defined, so I will not list a specific calculation
 at this time. But the motivation for it is easy to understand.  If
 delta is within the hold window, that is Hneg <= delta <= Hpos, the
 Influencer will recommend “hold”.  If the delta > Hpos then it will
-recommend “sell”.
+recommend “sell”.  And if delta < Hneg it will recommend “buy”.
 
 There is much more to do with the predictions, and I will update
 this section as we make progress.

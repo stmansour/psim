@@ -13,7 +13,7 @@ import (
 // UpdateTopInvestors saves the best investors in s.TopInvestors
 // -----------------------------------------------------------------------------
 func (s *Simulator) UpdateTopInvestors() {
-	n := s.cfg.TopInvestorCount
+	n := s.Cfg.TopInvestorCount
 
 	//----------------------------------------------------------------
 	// First, sort Investors by PortfolioValueC1 in descending order
@@ -84,9 +84,9 @@ func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time, eodr bool) {
 	totalC2 := float64(0)
 
 	for i := 0; i < len(s.Investors); i++ {
-		if s.Investors[i].PortfolioValueC1 > s.cfg.InitFunds {
+		if s.Investors[i].PortfolioValueC1 > s.Cfg.InitFunds {
 			prof++
-			profit := s.Investors[i].PortfolioValueC1 - s.cfg.InitFunds
+			profit := s.Investors[i].PortfolioValueC1 - s.Cfg.InitFunds
 			avgProfit += profit
 			if profit > maxProfit {
 				maxProfit = profit
@@ -159,12 +159,12 @@ func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time, eodr bool) {
 
 func (s *Simulator) generateFName(basename string) string {
 	fname := ""
-	if len(s.cfg.ReportDirectory) > 0 {
-		fname = s.cfg.ReportDirectory + "/"
+	if len(s.Cfg.ReportDirectory) > 0 {
+		fname = s.Cfg.ReportDirectory + "/"
 	}
 	fname += basename
-	if s.cfg.ArchiveMode {
-		fname += s.cfg.ReportTimestamp
+	if s.Cfg.ArchiveMode {
+		fname += s.Cfg.ReportTimestamp
 	}
 	fname += ".csv"
 	return fname
@@ -290,7 +290,7 @@ func (s *Simulator) SimStats(d string) error {
 			s.GenStats[i].DtGenStart.Format("1/2/2006"),                                    // 1
 			s.GenStats[i].DtGenStop.Format("1/2/2006"),                                     // 2
 			s.GenStats[i].ProfitableInvestors,                                              // 3
-			100.0*float64(s.GenStats[i].ProfitableInvestors)/float64(s.cfg.PopulationSize), // 4
+			100.0*float64(s.GenStats[i].ProfitableInvestors)/float64(s.Cfg.PopulationSize), // 4
 			s.GenStats[i].AvgProfit,                                                        // 5
 			s.GenStats[i].MaxProfit,                                                        // 6
 			s.GenStats[i].TotalBuys,                                                        // 7
@@ -317,16 +317,16 @@ func (s *Simulator) SimStats(d string) error {
 //
 // -------------------------------------------------------------------------------
 func (s *Simulator) ReportHeader(file *os.File, bSim bool) {
-	et, _ := s.GetSimulationRunTime()
-	a := time.Time(s.cfg.DtStart)
-	b := time.Time(s.cfg.DtStop)
+	et := s.GetSimulationRunTime()
+	a := time.Time(s.Cfg.DtStart)
+	b := time.Time(s.Cfg.DtStop)
 	c := b.AddDate(0, 0, 1)
 	fmt.Fprintf(file, "\"Program Version:  %s\"\n", util.Version())
 	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Available processor cores: %d\"\n", runtime.NumCPU())
 	fmt.Fprintf(file, "\"Worker Threads: %d\"\n", s.WorkerThreads)
 
-	fmt.Fprintf(file, "\"Configuration File:  %s\"\n", s.cfg.Filename)
+	fmt.Fprintf(file, "\"Configuration File:  %s\"\n", s.Cfg.Filename)
 	if s.db.Datatype == "CSV" {
 		fmt.Fprintf(file, "\"Database: %s\"\n", s.db.CSVDB.DBFname)
 		fmt.Fprintf(file, "\"Nil data requests: %d\"\n", s.db.CSVDB.Nildata)
@@ -336,37 +336,37 @@ func (s *Simulator) ReportHeader(file *os.File, bSim bool) {
 	fmt.Fprintf(file, "\"Simulation Start Date: %s\"\n", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Stop Date: %s\"\n", b.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	if bSim {
-		if s.cfg.SingleInvestorMode {
+		if s.Cfg.SingleInvestorMode {
 			fmt.Fprintf(file, "\"Single Investor Mode\"\n")
-			fmt.Fprintf(file, "\"DNA: %s\"\n", s.cfg.SingleInvestorDNA)
+			fmt.Fprintf(file, "\"DNA: %s\"\n", s.Cfg.SingleInvestorDNA)
 		} else {
 			fmt.Fprintf(file, "\"Generations: %d\"\n", s.GensCompleted)
-			if len(s.cfg.GenDurSpec) > 0 {
-				fmt.Fprintf(file, "\"Generation Lifetime: %s\"\n", util.FormatGenDur(s.cfg.GenDur))
+			if len(s.Cfg.GenDurSpec) > 0 {
+				fmt.Fprintf(file, "\"Generation Lifetime: %s\"\n", util.FormatGenDur(s.Cfg.GenDur))
 			}
-			fmt.Fprintf(file, "\"Simulation Loop Count: %d\"\n", s.cfg.LoopCount)
+			fmt.Fprintf(file, "\"Simulation Loop Count: %d\"\n", s.Cfg.LoopCount)
 			fmt.Fprintf(file, "\"Simulation Time Duration: %s\"\n", util.DateDiffString(a, c))
 		}
 	}
-	fmt.Fprintf(file, "\"C1: %s\"\n", s.cfg.C1)
-	fmt.Fprintf(file, "\"C2: %s\"\n", s.cfg.C2)
+	fmt.Fprintf(file, "\"C1: %s\"\n", s.Cfg.C1)
+	fmt.Fprintf(file, "\"C2: %s\"\n", s.Cfg.C2)
 
-	fmt.Fprintf(file, "\"Population: %d\"\n", s.cfg.PopulationSize)
-	fmt.Fprintf(file, "\"Influencers: min %d,  max %d\"\n", s.cfg.MinInfluencers, s.cfg.MaxInfluencers)
-	fmt.Fprintf(file, "\"Initial Funds: %.2f %s\"\n", s.cfg.InitFunds, s.cfg.C1)
-	fmt.Fprintf(file, "\"Standard Investment: %.2f %s\"\n", s.cfg.StdInvestment, s.cfg.C1)
-	fmt.Fprintf(file, "\"Stop Loss: %.2f%%\"\n", s.cfg.StopLoss*100)
-	fmt.Fprintf(file, "\"Preserve Elite: %v  (%5.2f%%)\"\n", s.cfg.PreserveElite, s.cfg.PreserveElitePct)
-	fmt.Fprintf(file, "\"Transaction Fee: %.2f (flat rate)  %5.1f bps\"\n", s.cfg.TxnFee, s.cfg.TxnFeeFactor*10000)
-	fmt.Fprintf(file, "\"Investor Bonus Plan: %v\"\n", s.cfg.InvestorBonusPlan)
-	fmt.Fprintf(file, "\"Gen 0 Elites: %v\"\n", s.cfg.Gen0Elites)
+	fmt.Fprintf(file, "\"Population: %d\"\n", s.Cfg.PopulationSize)
+	fmt.Fprintf(file, "\"Influencers: min %d,  max %d\"\n", s.Cfg.MinInfluencers, s.Cfg.MaxInfluencers)
+	fmt.Fprintf(file, "\"Initial Funds: %.2f %s\"\n", s.Cfg.InitFunds, s.Cfg.C1)
+	fmt.Fprintf(file, "\"Standard Investment: %.2f %s\"\n", s.Cfg.StdInvestment, s.Cfg.C1)
+	fmt.Fprintf(file, "\"Stop Loss: %.2f%%\"\n", s.Cfg.StopLoss*100)
+	fmt.Fprintf(file, "\"Preserve Elite: %v  (%5.2f%%)\"\n", s.Cfg.PreserveElite, s.Cfg.PreserveElitePct)
+	fmt.Fprintf(file, "\"Transaction Fee: %.2f (flat rate)  %5.1f bps\"\n", s.Cfg.TxnFee, s.Cfg.TxnFeeFactor*10000)
+	fmt.Fprintf(file, "\"Investor Bonus Plan: %v\"\n", s.Cfg.InvestorBonusPlan)
+	fmt.Fprintf(file, "\"Gen 0 Elites: %v\"\n", s.Cfg.Gen0Elites)
 
 	omr := float64(0)
 	if s.factory.MutateCalls > 0 {
 		omr = 100.0 * float64(s.factory.Mutations) / float64(s.factory.MutateCalls)
 	}
 	fmt.Fprintf(file, "\"Observed Mutation Rate: %6.3f%%\"\n", omr)
-	if !s.cfg.CrucibleMode {
+	if !s.Cfg.CrucibleMode {
 		fmt.Fprintf(file, "\"Elapsed Run Time: %s\"\n", et)
 	}
 	fmt.Fprintf(file, "\"\"\n")

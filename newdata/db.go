@@ -13,6 +13,14 @@ import (
 // EconometricsRecords is a type for an array of DR records
 type EconometricsRecords []EconometricsRecord
 
+// MetricInfo is the metric itself and a few statistics about it
+type MetricInfo struct {
+	Value         float64 // actual value of the metric
+	Mean          float64 // the Mean value for the last cfg.HoldWindowStatsLookBack records. Only valid when StatsValid is true
+	StdDevSquared float64 // the stdDeviationSquared value for the last cfg.HoldWindowStatsLookBack records. Only valid when StatsValid is true
+	StatsValid    bool    // set to true when Mean and StdDevSquared have been calculated. Note, the first RollingStats.WindowSize records will not have valid stats.
+}
+
 // Database is the abstraction for the data source
 type Database struct {
 	cfg      *util.AppConfig          // application configuration info
@@ -26,7 +34,7 @@ type Database struct {
 // EconometricsRecord is the basic structure of discount rate data
 type EconometricsRecord struct {
 	Date   time.Time
-	Fields map[string]float64
+	Fields map[string]MetricInfo
 }
 
 // GlobalSQLSettings is a struct used to control how the SQL subsystem

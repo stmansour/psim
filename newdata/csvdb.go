@@ -39,6 +39,9 @@ import (
 // LoadCsvDB - Read in the data from the CSV file
 // -----------------------------------------------------------------------------
 func (d *DatabaseCSV) LoadCsvDB() error {
+	//---------------------------------------------------------------------------
+	// #################### BEGIN DATABASE FILE HANDLING #######################
+	//---------------------------------------------------------------------------
 	fname := "" // this is the default: data/platodb.csv
 	if len(d.DBFname) > 0 {
 		fname = d.DBFname
@@ -75,6 +78,12 @@ func (d *DatabaseCSV) LoadCsvDB() error {
 		fmt.Printf("Error reading %s: %s\n", fname, err)
 		os.Exit(1)
 	}
+	//-------------------------------------------------------------------------
+	// #################### END DATABASE FILE HANDLING #######################
+	//-------------------------------------------------------------------------
+
+	rollingStatsMap := make(map[string]*RollingStats) // this is where we keep the rolling window of values used to calculate stats
+
 	//----------------------------------------------------------------------
 	// Keep track of the column with the data needed for each ratio.  This
 	// is based on the two currencies in the simulation.
@@ -106,7 +115,7 @@ func (d *DatabaseCSV) LoadCsvDB() error {
 		}
 
 		rec := EconometricsRecord{
-			Fields: make(map[string]float64, d.NumMetricFields),
+			Fields: make(map[string]MetricInfo, d.NumMetricFields),
 		}
 
 		rec.Date, err = util.StringToDate(line[0])
@@ -115,15 +124,31 @@ func (d *DatabaseCSV) LoadCsvDB() error {
 			fmt.Println(err)
 			return err
 		}
+
 		for j := 1; j < len(line); j++ {
 			if len(line[j]) == 0 {
 				continue
 			}
+			metricName := d.ColIdx[j]
 			x, err := strconv.ParseFloat(util.Stripchars(line[j], ","), 64)
 			if err != nil {
 				log.Panicf("invalid float value: %q, err = %s\n", line[j], err)
 			}
-			rec.Fields[d.ColIdx[j]] = x
+
+			//----------------------------------------------------------------------------
+			// Initialize RollingStats for this metric if it doesn't already exist
+			//----------------------------------------------------------------------------
+			if _, exists := rollingStatsMap[metricName]; !exists {
+				rollingStatsMap[metricName] = NewRollingStats(d.ParentDB.cfg.HoldWindowStatsLookBack)
+			}
+			mean, stdDevSquared, statsValid := rollingStatsMap[metricName].AddValue(x)
+			mi := MetricInfo{
+				Value:         x,
+				Mean:          mean,
+				StdDevSquared: stdDevSquared,
+				StatsValid:    statsValid,
+			}
+			rec.Fields[metricName] = mi
 		}
 		records = append(records, rec)
 	}

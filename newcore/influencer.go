@@ -13,21 +13,22 @@ import (
 // its own performance.
 // -----------------------------------------------------------------------------
 type Prediction struct {
-	Action      string                        // buy or hold
-	Probability float64                       // probability that the action is correct
-	Weight      float64                       // how heavily should this prediction weigh in the overall decision
-	Delta1      int                           // research start offset
-	Delta2      int                           // research stop offset
-	T3          time.Time                     // date of buy
-	Recs        []*newdata.EconometricsRecord // one, two, or more records of data, depending on the LocaleType
-	Fields      []newdata.FieldSelector       // names of database fields
-	Val1        float64                       // value or ratio at time T1
-	Val2        float64                       // value ratio at time T2
-	DeltaPct    float64                       // percent change from T1 to T2
-	IType       string                        // specific influencer type
-	ID          string                        // id of this influencer
-	Correct     bool                          // was this profitable (correct)?
-	Completed   bool                          // has this Prediction been Finalized
+	Action        string                        // buy or hold
+	Probability   float64                       // probability that the action is correct
+	Weight        float64                       // how heavily should this prediction weigh in the overall decision
+	Delta1        int                           // research start offset
+	Delta2        int                           // research stop offset
+	T3            time.Time                     // date of buy
+	Recs          []*newdata.EconometricsRecord // one, two, or more records of data, depending on the LocaleType
+	Fields        []newdata.FieldSelector       // names of database fields
+	Val1          float64                       // value or ratio at time T1
+	Val2          float64                       // value ratio at time T2
+	IType         string                        // specific influencer type
+	ID            string                        // id of this influencer
+	Correct       bool                          // was this profitable (correct)?
+	Completed     bool                          // has this Prediction been Finalized
+	AvgDelta      float64                       // average delta between T1 and T2
+	StdDevSquared float64                       // standard deviation squared of delta over cfg.HoldWindowStatsLookBack period (365 days by default)
 }
 
 // Influencer is a base class / struct definition for the types of objects that will

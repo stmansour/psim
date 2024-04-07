@@ -44,7 +44,7 @@ type TopInvestor struct {
 
 // Simulator is a simulator object
 type Simulator struct {
-	cfg                          *util.AppConfig        // system-wide configuration info
+	Cfg                          *util.AppConfig        // system-wide configuration info
 	factory                      Factory                // used to create Influencers
 	db                           *newdata.Database      // database to use in this simulation
 	crucible                     *Crucible              // must not be nil when cfg.CrucibleMode is true, pointer to crucible object
@@ -56,6 +56,7 @@ type Simulator struct {
 	maxPredictions               map[string]int         // max predictions indexed by subclass
 	maxProfitInvestor            int                    // the investor that had the max profit for this generation
 	GensCompleted                int                    // the current count of the number of generations completed in the simulation
+	LoopsCompleted               int                    // the current loop being executed in the simulation
 	GenStats                     []SimulationStatistics // keep track of what happened
 	SimStart                     time.Time              // timestamp for simulation start
 	SimStop                      time.Time              // timestamp for simulation stop
@@ -68,6 +69,8 @@ type Simulator struct {
 	FitnessScores                bool                   // save the fitness scores for each generation to dbgFitnessScores.csv
 	T3ForThreadPool              time.Time              // timestamp to be used by thread pool
 	WorkerThreads                int                    // number of worker threads in the thread pool
+	TraceTiming                  bool                   // show the timing of the various parts of the simulation
+	GenerationSimTime            string                 // how long did the last generation take?
 }
 
 // ResetSimulator is primarily to support tests. It resets the simulator
@@ -76,7 +79,7 @@ type Simulator struct {
 // -----------------------------------------------------------------------------
 func (s *Simulator) ResetSimulator() {
 	var f Factory
-	s.cfg = nil
+	s.Cfg = nil
 	s.db = nil
 	s.factory = f
 	s.Investors = nil
@@ -95,7 +98,7 @@ func (s *Simulator) ResetSimulator() {
 // SetAppConfig simply sets the simulators pointer to the AppConfig struct
 // -----------------------------------------------------------------------------
 func (s *Simulator) SetAppConfig(cfg *util.AppConfig) {
-	s.cfg = cfg
+	s.Cfg = cfg
 }
 
 // GetFactory simply returns the simulator's factory
@@ -107,21 +110,21 @@ func (s *Simulator) GetFactory() *Factory {
 // GetSimulationRunTime returns a printable string and a duration with the run
 // time for this simulation
 // ----------------------------------------------------------------------------
-func (s *Simulator) GetSimulationRunTime() (string, time.Duration) {
-	var elapsed time.Duration
+func (s *Simulator) GetSimulationRunTime() string {
 	if !s.StopTimeSet {
-		return "Simulation has not completed", elapsed
+		return "Simulation has not completed"
 	}
-	elapsed = s.SimStop.Sub(s.SimStart) // calculate elapsed time
+	return util.ElapsedTime(s.SimStart, s.SimStop)
+	// elapsed = s.SimStop.Sub(s.SimStart) // calculate elapsed time
 
-	return fmt.Sprintf("Simulation took %d hr, %d min, %d sec, and %d msec", int(elapsed.Hours()), int(elapsed.Minutes())%60, int(elapsed.Seconds())%60, int(elapsed.Milliseconds())%1000), elapsed
+	// return fmt.Sprintf("Simulation took %d hr, %d min, %d sec, and %d msec", int(elapsed.Hours()), int(elapsed.Minutes())%60, int(elapsed.Seconds())%60, int(elapsed.Milliseconds())%1000), elapsed
 }
 
 // Init initializes the simulation system, it also creates Investors and
 // calls their init functions.
 // ----------------------------------------------------------------------------
 func (s *Simulator) Init(cfg *util.AppConfig, db *newdata.Database, crucible *Crucible, DayByDay, ReportTopInvestorInvestments bool) error {
-	s.cfg = cfg
+	s.Cfg = cfg
 	s.db = db
 	s.crucible = crucible
 	s.DayByDay = DayByDay
@@ -131,11 +134,11 @@ func (s *Simulator) Init(cfg *util.AppConfig, db *newdata.Database, crucible *Cr
 		s.crucible.ReportTopInvestorInvestments = ReportTopInvestorInvestments
 	}
 	s.ir = NewInvestorReport(s)
-	s.factory.Init(s.cfg, db)
+	s.factory.Init(s.Cfg, db)
 	s.FinRpt = &FinRep{}
 
-	if s.cfg.PreserveElite {
-		s.cfg.EliteCount = int(s.cfg.PreserveElitePct*float64(s.cfg.PopulationSize)/100 + 0.5)
+	if s.Cfg.PreserveElite {
+		s.Cfg.EliteCount = int(s.Cfg.PreserveElitePct*float64(s.Cfg.PopulationSize)/100 + 0.5)
 	}
 
 	//------------------------------------------------------------------------
@@ -165,20 +168,20 @@ func (s *Simulator) NewPopulation() error {
 		// introduce Gen0Elites if requested...
 		//------------------------------------------
 		gen0elites := 0
-		if s.cfg.Gen0Elites {
-			gen0elites = len(s.cfg.TopInvestors)
+		if s.Cfg.Gen0Elites {
+			gen0elites = len(s.Cfg.TopInvestors)
 			for i := 0; i < gen0elites; i++ {
-				v := s.factory.NewInvestorFromDNA(s.cfg.TopInvestors[i].DNA)
+				v := s.factory.NewInvestorFromDNA(s.Cfg.TopInvestors[i].DNA)
 				s.Investors = append(s.Investors, v)
 			}
 		}
-		for i := 0; i < s.cfg.PopulationSize-gen0elites; i++ {
+		for i := 0; i < s.Cfg.PopulationSize-gen0elites; i++ {
 			var v Investor
-			if s.cfg.SingleInvestorMode {
-				v = s.factory.NewInvestorFromDNA(s.cfg.SingleInvestorDNA)
+			if s.Cfg.SingleInvestorMode {
+				v = s.factory.NewInvestorFromDNA(s.Cfg.SingleInvestorDNA)
 			} else {
 				v.ID = s.factory.GenerateInvestorID()
-				v.Init(s.cfg, &s.factory, s.db)
+				v.Init(s.Cfg, &s.factory, s.db)
 			}
 			s.Investors = append(s.Investors, v)
 		}
@@ -191,8 +194,8 @@ func (s *Simulator) NewPopulation() error {
 	// top investors start at Investors[0]
 	//-----------------------------------------------------------------------
 	elite := []Investor{}
-	if s.cfg.PreserveElite {
-		elite = s.Investors[0:s.cfg.EliteCount]
+	if s.Cfg.PreserveElite {
+		elite = s.Investors[0:s.Cfg.EliteCount]
 	}
 
 	//-----------------------------------------------------------------------
@@ -212,19 +215,19 @@ func (s *Simulator) NewPopulation() error {
 	if s.FitnessScores {
 		s.dumpFitnessScores()
 	}
-	if s.cfg.PreserveElite {
+	if s.Cfg.PreserveElite {
 		//---------------------------------------------------------------------
 		// They may be elite, but they cannot carry their balance forward :-)
 		//---------------------------------------------------------------------
 		for k := 0; k < len(elite); k++ {
-			elite[k].BalanceC1 = s.cfg.InitFunds
+			elite[k].BalanceC1 = s.Cfg.InitFunds
 			elite[k].BalanceC2 = 0
 			elite[k].PortfolioValueC1 = 0
 		}
 		//--------------------------------------
 		// add the elites to the new population
 		//--------------------------------------
-		popCount := s.cfg.PopulationSize - s.cfg.EliteCount
+		popCount := s.Cfg.PopulationSize - s.Cfg.EliteCount
 		newPop = newPop[0:popCount]
 		newPop = append(newPop, elite...)
 	}
@@ -241,8 +244,8 @@ func (s *Simulator) NewPopulation() error {
 // This may change over time.
 // ----------------------------------------------------------------------------
 func (s *Simulator) workerPoolSize() int {
-	numCPU := s.cfg.WorkerPoolSize
-	if s.cfg.WorkerPoolSize < 1 {
+	numCPU := s.Cfg.WorkerPoolSize
+	if s.Cfg.WorkerPoolSize < 1 {
 		numCPU = runtime.NumCPU()
 		if numCPU == 120 {
 			numCPU = 25
@@ -282,24 +285,24 @@ func (s *Simulator) Run() {
 	s.SetReportDirectory()
 	s.WorkerThreads = s.workerPoolSize() // for now, just use the number of CPU cores
 
-	for lc := 0; lc < s.cfg.LoopCount; lc++ {
+	for lc := 0; lc < s.Cfg.LoopCount; lc++ {
 		for k, v := range s.Investors {
-			if v.BalanceC1 > s.cfg.InitFunds || v.BalanceC2 != 0 {
+			if v.BalanceC1 > s.Cfg.InitFunds || v.BalanceC2 != 0 {
 				fmt.Printf("Investor %d has C1 = %8.2f and C2 = %8.2f\n", k, v.BalanceC1, v.BalanceC2)
 			}
 		}
 
-		dtStop := time.Time(s.cfg.DtStop)
+		dtStop := time.Time(s.Cfg.DtStop)
 		// DateSettled = dtStop
-		isGenDur := len(s.cfg.GenDurSpec) > 0
-		genStart := time.Time(s.cfg.DtStart)
+		isGenDur := len(s.Cfg.GenDurSpec) > 0
+		genStart := time.Time(s.Cfg.DtStart)
 
 		if isGenDur {
-			genDays := s.getGenerationDays(s.cfg.GenDur)   // number of days in one generation
+			genDays := s.getGenerationDays(s.Cfg.GenDur)   // number of days in one generation
 			totalDays := dtStop.Sub(genStart).Hours() / 24 // number of generations, rounding up
-			s.cfg.Generations = int(float64(totalDays) / float64(genDays))
-			if float64(totalDays)/float64(genDays) > float64(s.cfg.Generations) {
-				s.cfg.Generations++
+			s.Cfg.Generations = int(float64(totalDays) / float64(genDays))
+			if float64(totalDays)/float64(genDays) > float64(s.Cfg.Generations) {
+				s.Cfg.Generations++
 			}
 		}
 
@@ -308,10 +311,11 @@ func (s *Simulator) Run() {
 		//-------------------------------------------------------------------------
 		var d time.Time
 		var dtGenEnd time.Time
-		for g := 0; g < s.cfg.Generations; g++ {
+		for g := 0; g < s.Cfg.Generations; g++ {
+			dtGenSt := time.Now()
 			T3 := genStart
 			if isGenDur {
-				dtGenEnd = T3.AddDate(s.cfg.GenDur.Years, s.cfg.GenDur.Months, s.cfg.GenDur.Weeks*7+s.cfg.GenDur.Days) // end of this generation
+				dtGenEnd = T3.AddDate(s.Cfg.GenDur.Years, s.Cfg.GenDur.Months, s.Cfg.GenDur.Weeks*7+s.Cfg.GenDur.Days) // end of this generation
 			} else {
 				dtGenEnd = dtStop
 			}
@@ -320,11 +324,13 @@ func (s *Simulator) Run() {
 			}
 			EndOfDataReached = false
 
+			dtGenerationTimerStart := time.Now()
+
 			for T3.Before(dtGenEnd) || T3.Equal(dtGenEnd) || s.WindDownInProgress {
 				iteration++
 
-				if len(s.Investors) > s.cfg.PopulationSize {
-					log.Panicf("Population size should be %d, len(Investors) = %d", s.cfg.PopulationSize, len(s.Investors))
+				if len(s.Investors) > s.Cfg.PopulationSize {
+					log.Panicf("Population size should be %d, len(Investors) = %d", s.Cfg.PopulationSize, len(s.Investors))
 				}
 
 				//*********************** BEGIN SIMULATOR DAILY LOOP ***********************
@@ -395,7 +401,7 @@ func (s *Simulator) Run() {
 				d = T3
 				T3 = T3.AddDate(0, 0, 1)
 
-				if !s.WindDownInProgress && !T3.Before(dtGenEnd) && !s.cfg.EnforceStopDate {
+				if !s.WindDownInProgress && !T3.Before(dtGenEnd) && !s.Cfg.EnforceStopDate {
 					//----------------------------------------------------------------------
 					// if we get to this point, it means that we're about to drop out of
 					// the daily loop. See if any investor is holding C2. If so, we will
@@ -414,9 +420,15 @@ func (s *Simulator) Run() {
 					EndOfDataReached = true
 				}
 			}
+
+			dtGenerationStop := time.Now()
+			if s.TraceTiming {
+				fmt.Printf("<<<TRACE TIMING>>> generation simulation time: %s\n", util.ElapsedTime(dtGenerationTimerStart, dtGenerationStop))
+			}
+
 			T3 = T3.AddDate(0, 0, -1)
 			s.GensCompleted++ // we have just concluded another generation
-			if g+1 == s.cfg.Generations || !isGenDur {
+			if g+1 == s.Cfg.Generations || !isGenDur {
 				d = T3
 			}
 			thisGenDtStart = genStart
@@ -425,8 +437,8 @@ func (s *Simulator) Run() {
 			for j := 0; j < len(s.Investors); j++ {
 				unsettled += s.Investors[j].BalanceC2
 			}
-			if !s.cfg.CrucibleMode {
-				fmt.Printf("Completed generation %d, %s - %s,  unsettled = %12.2f %s\n", s.GensCompleted, thisGenDtStart.Format("Jan _2, 2006"), d.Format("Jan _2, 2006"), unsettled, s.cfg.C2)
+			if !s.Cfg.CrucibleMode {
+				fmt.Printf("Completed generation %d, %s - %s,  unsettled = %12.2f %s\n", s.GensCompleted, thisGenDtStart.Format("Jan _2, 2006"), d.Format("Jan _2, 2006"), unsettled, s.Cfg.C2)
 			}
 			if isGenDur {
 				genStart = dtGenEnd // Start next generation from the end of the last
@@ -443,7 +455,7 @@ func (s *Simulator) Run() {
 			//---------------------------------------
 			// End of generation reports...
 			//---------------------------------------
-			if s.cfg.CrucibleMode {
+			if s.Cfg.CrucibleMode {
 				s.crucible.DumpResults()
 			}
 			if s.ReportTopInvestorInvestments {
@@ -455,17 +467,24 @@ func (s *Simulator) Run() {
 			//----------------------------------------------------------------------------------------------
 			// Now replace current generation with next generation unless this is the last generation...
 			//----------------------------------------------------------------------------------------------
-			if s.GensCompleted < s.cfg.Generations || lc+1 < s.cfg.LoopCount {
+			if s.GensCompleted < s.Cfg.Generations || lc+1 < s.Cfg.LoopCount {
 				if err := s.NewPopulation(); err != nil {
 					log.Panicf("*** PANIC ERROR *** NewPopulation returned error: %s\n", err)
 				}
 				s.maxPredictions = make(map[string]int, 0)
+				dtNextGenCompleted := time.Now()
+				if s.TraceTiming {
+					fmt.Printf("<<<TRACE TIMING>>> next generation create time: %s\n", util.ElapsedTime(dtGenerationStop, dtNextGenCompleted))
+				}
 			}
 			s.WindDownInProgress = false
+			dtGenStp := time.Now()
+			s.GenerationSimTime = util.ElapsedTime(dtGenSt, dtGenStp)
 		}
-		if !s.cfg.CrucibleMode {
+		if !s.Cfg.CrucibleMode {
 			fmt.Printf("loop %d completed.  %s - %s\n", lc, thisGenDtStart.Format("Jan _2, 2006"), thisGenDtEnd.Format("Jan _2, 2006"))
 		}
+		s.LoopsCompleted++
 	}
 
 	s.SimStop = time.Now()
@@ -473,25 +492,25 @@ func (s *Simulator) Run() {
 }
 
 // SetReportDirectory ensures that all the directory and file information for reports is
-// set in s.cfg.
+// set in s.Cfg.
 // ----------------------------------------------------------------------------------------
 func (s *Simulator) SetReportDirectory() {
-	if !s.cfg.ReportDirSet {
+	if !s.Cfg.ReportDirSet {
 		if s.SimStart.Year() < 1900 {
 			s.SimStart = time.Now()
 		}
-		s.cfg.ReportTimestamp = s.SimStart.Format("2006-01-02T15-04-05.05.000000000")
-		s.cfg.ReportDirectory = s.cfg.ArchiveBaseDir
-		if s.cfg.ArchiveMode {
-			s.cfg.ReportDirectory += "/" + s.cfg.ReportTimestamp
+		s.Cfg.ReportTimestamp = s.SimStart.Format("2006-01-02T15-04-05.05.000000000")
+		s.Cfg.ReportDirectory = s.Cfg.ArchiveBaseDir
+		if s.Cfg.ArchiveMode {
+			s.Cfg.ReportDirectory += "/" + s.Cfg.ReportTimestamp
 		}
-		if len(s.cfg.ReportDirectory) > 0 {
-			_, err := util.VerifyOrCreateDirectory(s.cfg.ReportDirectory)
+		if len(s.Cfg.ReportDirectory) > 0 {
+			_, err := util.VerifyOrCreateDirectory(s.Cfg.ReportDirectory)
 			if err != nil {
-				log.Fatalf("Could not create directory %s, err = %s\n", s.cfg.ReportDirectory, err.Error())
+				log.Fatalf("Could not create directory %s, err = %s\n", s.Cfg.ReportDirectory, err.Error())
 			}
 		}
-		s.cfg.ReportDirSet = true
+		s.Cfg.ReportDirSet = true
 	}
 }
 
@@ -522,7 +541,7 @@ func (s *Simulator) CreateArchiveDirectory(baseDir string) (string, error) {
 
 // ArchiveResults creates an archive directory if needed and copies the config file there
 func (s *Simulator) ArchiveResults(configFilePath string) (string, error) {
-	newDir, err := s.CreateArchiveDirectory(s.cfg.ReportDirectory)
+	newDir, err := s.CreateArchiveDirectory(s.Cfg.ReportDirectory)
 	if err != nil {
 		return newDir, err
 	}
@@ -581,7 +600,7 @@ func (s *Simulator) CalculateMaxVals(t3 time.Time) {
 	//----------------------------------------------------
 	maxInvestorProfit := float64(-100000000) // a large negative amount
 	for i := 0; i < len(s.Investors); i++ {
-		profit := s.Investors[i].BalanceC1 - s.cfg.InitFunds
+		profit := s.Investors[i].BalanceC1 - s.Cfg.InitFunds
 		if profit > maxInvestorProfit {
 			maxInvestorProfit = profit
 		}
@@ -609,10 +628,10 @@ func (s *Simulator) SetAllPortfolioValues(t time.Time) error {
 	// First, get today's closing price
 	field := newdata.FieldSelector{
 		Metric:  "EXClose",
-		Locale:  s.cfg.C1,
-		Locale2: s.cfg.C2,
+		Locale:  s.Cfg.C1,
+		Locale2: s.Cfg.C2,
 	}
-	// field := fmt.Sprintf("%s%sEXClose", s.cfg.C1, s.cfg.C2)
+	// field := fmt.Sprintf("%s%sEXClose", s.Cfg.C1, s.Cfg.C2)
 	// ss := []string{field}
 	ss := []newdata.FieldSelector{}
 	ss = append(ss, field)
@@ -620,7 +639,7 @@ func (s *Simulator) SetAllPortfolioValues(t time.Time) error {
 	if err != nil {
 		log.Fatalf("Error getting exchange close rate")
 	}
-	exch := er.Fields[field.FQMetric()] // exchange rate at time t
+	exch := er.Fields[field.FQMetric()].Value // exchange rate at time t
 	if exch < 0.0001 {
 		log.Panicf("exch = %12.6f\n", exch)
 	}

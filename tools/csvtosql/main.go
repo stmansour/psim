@@ -144,23 +144,24 @@ func main() {
 	}
 
 	end := time.Now()
-	FormatDuration(start, end)
+	fmt.Printf("Elapsed time: %s\n", util.ElapsedTime(start, end))
+	// FormatDuration(start, end)
 }
 
 // FormatDuration prints the duration between two times
-func FormatDuration(start, end time.Time) {
-	duration := end.Sub(start)
+// func FormatDuration(start, end time.Time) {
+// 	duration := end.Sub(start)
 
-	// Print the duration in a human-readable format
-	fmt.Println("Duration:", duration)
+// 	// Print the duration in a human-readable format
+// 	fmt.Println("Duration:", duration)
 
-	// For more control over the format, you can use the individual components of the duration:
-	hours := duration / time.Hour
-	duration -= hours * time.Hour
-	minutes := duration / time.Minute
-	duration -= minutes * time.Minute
-	seconds := duration / time.Second
-	duration -= seconds * time.Second
-	milliseconds := duration / time.Millisecond
-	fmt.Printf("Elapsed: %02d hr %02d min %02d sec %03d msec\n", hours, minutes, seconds, milliseconds)
-}
+// 	// For more control over the format, you can use the individual components of the duration:
+// 	hours := duration / time.Hour
+// 	duration -= hours * time.Hour
+// 	minutes := duration / time.Minute
+// 	duration -= minutes * time.Minute
+// 	seconds := duration / time.Second
+// 	duration -= seconds * time.Second
+// 	milliseconds := duration / time.Millisecond
+// 	fmt.Printf("Elapsed: %02d hr %02d min %02d sec %03d msec\n", hours, minutes, seconds, milliseconds)
+// }

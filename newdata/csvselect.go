@@ -81,7 +81,7 @@ func (d *DatabaseCSV) mapSubset(rec *EconometricsRecord, fs []FieldSelector) *Ec
 		Date: rec.Date,
 	}
 	if len(fs) > 0 {
-		nr.Fields = make(map[string]float64, len(fs))
+		nr.Fields = make(map[string]MetricInfo, len(fs))
 		for _, selector := range fs {
 			key := selector.FQMetric()
 			if value, exists := rec.Fields[key]; exists {

@@ -119,12 +119,12 @@ func main() {
 				}
 			}
 
-			delta := rec1.Fields[k] - v
+			delta := rec1.Fields[k].Value - v.Value
 			if delta < 0 {
 				delta = -delta
 			}
 			if delta > .0001 {
-				fmt.Printf("Miscompare - %s: Metric = %s, csv: %12.6f, sql: %12.6f, delta: %12.6f\n", dt.Format("Jan 2, 2006"), k, v, rec1.Fields[k], delta)
+				fmt.Printf("Miscompare - %s: Metric = %s, csv: %12.6f, sql: %12.6f, delta: %12.6f\n", dt.Format("Jan 2, 2006"), k, v.Value, rec1.Fields[k].Value, delta)
 				count++
 			}
 		}

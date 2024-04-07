@@ -1,7 +1,6 @@
 #!/bin/bash
 
 RUNSINGLETEST=0
-TESTNAME="TestSimulator"
 TESTCOUNT=0
 ERRORCOUNT=0
 ARCHIVE=arch
@@ -29,16 +28,6 @@ OPTIONS
 	    an individual test by name, you can use ${RUNSINGLETEST} to check and
 	    see if the user has requested a specific test.
 EOF
-}
-
-passmsg() {
-    t="${TESTNAME}"
-    printf "PASSED  %-20.20s  %-40.40s \n" "${TESTDIR}" "${t}" ${TESTCOUNT}
-}
-
-failmsg() {
-    t="${TESTNAME}"
-    printf "FAILED  %-20.20s  %-40.40s \n" "${TESTDIR}" "${t}" ${TESTCOUNT}
 }
 
 #------------------------------------------------------------------------------
@@ -79,7 +68,7 @@ compareToGold() {
         echo "PASSED"
         rm "${normalizedFile}"
     else
-        echo "Differences detected."
+        echo "Differences detected.  meld ${normalizedFile} ${goldFile}"
         ((ERRORCOUNT++))
         # Prompt the user for action
         if [[ "${ASKBEFOREEXIT}" == 1 ]]; then
@@ -153,7 +142,7 @@ if [[ "${SINGLETEST}${TFILES}" = "${TFILES}" || "${SINGLETEST}${TFILES}" = "${TF
     echo -n "Test ${TFILES} - "
     echo -n "Single Investor test... "
     RESFILE="${TFILES}${STEP}"
-    ./simulator -ar -adir "${ARCHIVE}" -trace -c singleInvestor.json5 >"${RESFILE}"
+    ./simulator -ar -adir "${ARCHIVE}" -notalk -trace -c singleInvestor.json5 >"${RESFILE}"
     compareToGold ${RESFILE}
     ((TESTCOUNT++))
 fi
@@ -168,7 +157,7 @@ if [[ "${SINGLETEST}${TFILES}" = "${TFILES}" || "${SINGLETEST}${TFILES}" = "${TF
     echo -n "Test ${TFILES} - "
     echo -n "Linguistic Influencers test... "
     RESFILE="${TFILES}${STEP}"
-    ./simulator -ar -adir "${ARCHIVE}" -trace -c linguistics.json5 >"${RESFILE}"
+    ./simulator -ar -adir "${ARCHIVE}" -notalk -trace -c linguistics.json5 >"${RESFILE}"
     compareToGold ${RESFILE}
     ((TESTCOUNT++))
 fi
@@ -183,7 +172,7 @@ if [[ "${SINGLETEST}${TFILES}" = "${TFILES}" || "${SINGLETEST}${TFILES}" = "${TF
     echo -n "Test ${TFILES} - "
     echo -n "Crucible test..."
     RESFILE="${TFILES}${STEP}"
-    ./simulator -C -c confcru.json5 >"${RESFILE}"
+    ./simulator -C -c confcru.json5 -notalk >"${RESFILE}"
     compareToGold ${RESFILE}
     mv crep.csv c1.csv
     compareToGold c1.csv
@@ -193,7 +182,6 @@ fi
 
 echo "Total tests: ${TESTCOUNT}"
 echo "Total errors: ${ERRORCOUNT}"
-exit "${ERRORCOUNT}"
 if [ "${ERRORCOUNT}" -gt 0 ]; then
     exit 2
 fi

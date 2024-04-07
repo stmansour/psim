@@ -55,7 +55,7 @@ func displaySimulationResults(cfg *util.AppConfig, db *newdata.Database) {
 	default:
 	}
 
-	s, _ := app.sim.GetSimulationRunTime()
+	s := app.sim.GetSimulationRunTime()
 	fmt.Printf("Elapsed time: %s\n", s)
 
 	var arch string
