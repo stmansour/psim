@@ -20,6 +20,9 @@ clean:
 coverage:
 	go tool cover -html=coverage.out 
 
+test:
+	@echo "*** ${THISDIR}: completed package ***"
+
 package:
 	mkdir -p ${BINDIR}/
 	cp simtalk ${BINDIR}/
