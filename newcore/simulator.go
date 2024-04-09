@@ -71,6 +71,7 @@ type Simulator struct {
 	WorkerThreads                int                    // number of worker threads in the thread pool
 	TraceTiming                  bool                   // show the timing of the various parts of the simulation
 	GenerationSimTime            string                 // how long did the last generation take?
+	Simtalkport                  int                    // the port on which the simulator is listening for external commands
 }
 
 // ResetSimulator is primarily to support tests. It resets the simulator

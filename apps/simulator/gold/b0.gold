@@ -24,19 +24,19 @@ May  1, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Feb 25, 2015 [1.91] -  T2 Apr 26, 2015 [2.08]   Mean: 0.0029  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Feb 25, 2015 [1.69] -  T2 Apr 26, 2015 [1.80]   Mean: 0.0018  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Feb 25, 2015 [1.42] -  T2 Apr 26, 2015 [1.59]   Mean: 0.0029  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  buy   (T1 Feb 25, 2015 [1.00] -  T2 Apr 26, 2015 [0.90]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  buy   (T1 Feb 25, 2015 [1.15] -  T2 Apr 26, 2015 [1.01]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  buy   (T1 Feb 25, 2015 [1.15] -  T2 Apr 26, 2015 [1.00]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  buy   (T1 Feb 25, 2015 [1.07] -  T2 Apr 26, 2015 [0.99]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  buy   (T1 Feb 25, 2015 [1.08] -  T2 Apr 26, 2015 [0.93]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  buy   (T1 Feb 25, 2015 [1.20] -  T2 Apr 26, 2015 [1.06]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  sell   (T1 Feb 25, 2015 [1.02] -  T2 Apr 26, 2015 [1.32]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  buy   (T1 Feb 25, 2015 [1.23] -  T2 Apr 26, 2015 [1.11]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  buy   (T1 Feb 25, 2015 [1.20] -  T2 Apr 26, 2015 [0.97]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Feb 25, 2015 [1.00] -  T2 Apr 26, 2015 [0.90]   Mean: -0.0905  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  sell   (T1 Feb 25, 2015 [1.15] -  T2 Apr 26, 2015 [1.01]   Mean: 0.2230  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  buy   (T1 Feb 25, 2015 [1.15] -  T2 Apr 26, 2015 [1.00]   Mean: 0.2462  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  buy   (T1 Feb 25, 2015 [1.07] -  T2 Apr 26, 2015 [0.99]   Mean: 0.2417  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  buy   (T1 Feb 25, 2015 [1.08] -  T2 Apr 26, 2015 [0.93]   Mean: 0.0109  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  buy   (T1 Feb 25, 2015 [1.20] -  T2 Apr 26, 2015 [1.06]   Mean: 0.3035  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  sell   (T1 Feb 25, 2015 [1.02] -  T2 Apr 26, 2015 [1.32]   Mean: 0.0036  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  sell   (T1 Feb 25, 2015 [1.23] -  T2 Apr 26, 2015 [1.11]   Mean: 0.0084  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  buy   (T1 Feb 25, 2015 [1.20] -  T2 Apr 26, 2015 [0.97]   Mean: 0.0073  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Feb 25, 2015 [1.42] -  T2 Apr 26, 2015 [1.59]   Mean: 0.0029  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: buy   70%  (buy: 14.00, hold: 0.00, sell: 6.00, abs: 0.00)
-        *** BUY ***       0.00 USD (841470.00 JPY, fee =   0.00)
-	C1bal = 93000.00 USD, C2bal = 841470.00 JPY, PV = 100000.00 USD
+	COA:  Action: buy   60%  (buy: 12.00, hold: 0.00, sell: 8.00, abs: 0.00)
+        *** BUY ***       0.00 USD (721260.00 JPY, fee =   0.00)
+	C1bal = 94000.00 USD, C2bal = 721260.00 JPY, PV = 100000.00 USD
 
 May  2, 2015 - Investor1
 	GCAM_C3_1:  buy   (T1 Feb 26, 2015 [19.03] -  T2 Apr 27, 2015 [20.38]   Mean: 0.0225  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -49,19 +49,19 @@ May  2, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Feb 26, 2015 [1.93] -  T2 Apr 27, 2015 [2.09]   Mean: 0.0026  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Feb 26, 2015 [1.68] -  T2 Apr 27, 2015 [1.71]   Mean: 0.0005  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Feb 26, 2015 [1.49] -  T2 Apr 27, 2015 [1.48]   Mean: -0.0003  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  sell   (T1 Feb 26, 2015 [0.87] -  T2 Apr 27, 2015 [0.92]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  sell   (T1 Feb 26, 2015 [1.06] -  T2 Apr 27, 2015 [1.10]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  sell   (T1 Feb 26, 2015 [1.07] -  T2 Apr 27, 2015 [1.13]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  sell   (T1 Feb 26, 2015 [0.98] -  T2 Apr 27, 2015 [1.03]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  sell   (T1 Feb 26, 2015 [0.99] -  T2 Apr 27, 2015 [1.03]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  sell   (T1 Feb 26, 2015 [1.11] -  T2 Apr 27, 2015 [1.12]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  sell   (T1 Feb 26, 2015 [0.99] -  T2 Apr 27, 2015 [1.12]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  buy   (T1 Feb 26, 2015 [1.19] -  T2 Apr 27, 2015 [0.85]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  buy   (T1 Feb 26, 2015 [1.13] -  T2 Apr 27, 2015 [1.06]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  sell   (T1 Feb 26, 2015 [0.87] -  T2 Apr 27, 2015 [0.92]   Mean: -0.1158  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  buy   (T1 Feb 26, 2015 [1.06] -  T2 Apr 27, 2015 [1.10]   Mean: 0.0365  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  sell   (T1 Feb 26, 2015 [1.07] -  T2 Apr 27, 2015 [1.13]   Mean: -0.0028  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  sell   (T1 Feb 26, 2015 [0.98] -  T2 Apr 27, 2015 [1.03]   Mean: -0.1581  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  sell   (T1 Feb 26, 2015 [0.99] -  T2 Apr 27, 2015 [1.03]   Mean: -0.0356  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  sell   (T1 Feb 26, 2015 [1.11] -  T2 Apr 27, 2015 [1.12]   Mean: 0.0154  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  sell   (T1 Feb 26, 2015 [0.99] -  T2 Apr 27, 2015 [1.12]   Mean: 0.0030  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  sell   (T1 Feb 26, 2015 [1.19] -  T2 Apr 27, 2015 [0.85]   Mean: 0.0176  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  buy   (T1 Feb 26, 2015 [1.13] -  T2 Apr 27, 2015 [1.06]   Mean: -0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Feb 26, 2015 [1.49] -  T2 Apr 27, 2015 [1.48]   Mean: -0.0003  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: sell   70%  (buy: 6.00, hold: 0.00, sell: 14.00, abs: 0.00)
-        *** SELL ***   4900.00 USD (fee:   0.00), [589029.00 JPY], investments affected: 1 -->  0 profited, 1 lost
-	C1bal = 97900.00 USD, C2bal = 252441.00 JPY, PV = 100000.00 USD
+        *** SELL ***   4200.00 USD (fee:   0.00), [504882.00 JPY], investments affected: 1 -->  0 profited, 1 lost
+	C1bal = 98200.00 USD, C2bal = 216378.00 JPY, PV = 100000.00 USD
 
 May  3, 2015 - Investor1
 	GCAM_C3_1:  buy   (T1 Feb 27, 2015 [19.30] -  T2 Apr 28, 2015 [20.24]   Mean: 0.0157  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -74,19 +74,19 @@ May  3, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Feb 27, 2015 [1.94] -  T2 Apr 28, 2015 [2.10]   Mean: 0.0027  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Feb 27, 2015 [1.70] -  T2 Apr 28, 2015 [1.69]   Mean: -0.0002  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Feb 27, 2015 [1.43] -  T2 Apr 28, 2015 [1.41]   Mean: -0.0002  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  sell   (T1 Feb 27, 2015 [0.92] -  T2 Apr 28, 2015 [1.00]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  buy   (T1 Feb 27, 2015 [1.16] -  T2 Apr 28, 2015 [1.09]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  buy   (T1 Feb 27, 2015 [1.18] -  T2 Apr 28, 2015 [1.14]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  hold   (T1 Feb 27, 2015 [1.06] -  T2 Apr 28, 2015 [1.07]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  buy   (T1 Feb 27, 2015 [1.09] -  T2 Apr 28, 2015 [1.06]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  buy   (T1 Feb 27, 2015 [1.22] -  T2 Apr 28, 2015 [1.14]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  sell   (T1 Feb 27, 2015 [1.00] -  T2 Apr 28, 2015 [1.23]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  buy   (T1 Feb 27, 2015 [1.07] -  T2 Apr 28, 2015 [0.87]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  sell   (T1 Feb 27, 2015 [1.08] -  T2 Apr 28, 2015 [1.09]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  sell   (T1 Feb 27, 2015 [0.92] -  T2 Apr 28, 2015 [1.00]   Mean: -0.1243  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  sell   (T1 Feb 27, 2015 [1.16] -  T2 Apr 28, 2015 [1.09]   Mean: 0.0366  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  buy   (T1 Feb 27, 2015 [1.18] -  T2 Apr 28, 2015 [1.14]   Mean: 0.0352  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  sell   (T1 Feb 27, 2015 [1.06] -  T2 Apr 28, 2015 [1.07]   Mean: -0.1804  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  buy   (T1 Feb 27, 2015 [1.09] -  T2 Apr 28, 2015 [1.06]   Mean: -0.0191  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  buy   (T1 Feb 27, 2015 [1.22] -  T2 Apr 28, 2015 [1.14]   Mean: 0.0427  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  sell   (T1 Feb 27, 2015 [1.00] -  T2 Apr 28, 2015 [1.23]   Mean: -0.0077  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  sell   (T1 Feb 27, 2015 [1.07] -  T2 Apr 28, 2015 [0.87]   Mean: 0.0124  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  sell   (T1 Feb 27, 2015 [1.08] -  T2 Apr 28, 2015 [1.09]   Mean: -0.0017  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Feb 27, 2015 [1.43] -  T2 Apr 28, 2015 [1.41]   Mean: -0.0002  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: buy   50%  (buy: 10.00, hold: 1.00, sell: 9.00, abs: 0.00)
-        *** BUY ***       0.00 USD (601050.00 JPY, fee =   0.00)
-	C1bal = 92900.00 USD, C2bal = 853491.00 JPY, PV = 100000.00 USD
+	COA:  Action: sell   60%  (buy: 8.00, hold: 0.00, sell: 12.00, abs: 0.00)
+        *** SELL ***   1080.00 USD (fee:   0.00), [129826.80 JPY], investments affected: 2 -->  0 profited, 2 lost
+	C1bal = 99280.00 USD, C2bal = 86551.20 JPY, PV = 100000.00 USD
 
 May  4, 2015 - Investor1
 	GCAM_C3_1:  sell   (T1 Feb 28, 2015 [21.29] -  T2 Apr 29, 2015 [19.90]   Mean: -0.0231  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -99,20 +99,19 @@ May  4, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Feb 28, 2015 [1.97] -  T2 Apr 29, 2015 [2.10]   Mean: 0.0021  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Feb 28, 2015 [1.76] -  T2 Apr 29, 2015 [1.73]   Mean: -0.0006  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Feb 28, 2015 [1.44] -  T2 Apr 29, 2015 [1.43]   Mean: -0.0001  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  sell   (T1 Feb 28, 2015 [0.71] -  T2 Apr 29, 2015 [0.94]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  buy   (T1 Feb 28, 2015 [1.05] -  T2 Apr 29, 2015 [1.01]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  sell   (T1 Feb 28, 2015 [0.93] -  T2 Apr 29, 2015 [1.10]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  sell   (T1 Feb 28, 2015 [0.90] -  T2 Apr 29, 2015 [1.03]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  sell   (T1 Feb 28, 2015 [0.80] -  T2 Apr 29, 2015 [0.99]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  sell   (T1 Feb 28, 2015 [1.00] -  T2 Apr 29, 2015 [1.06]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  sell   (T1 Feb 28, 2015 [0.86] -  T2 Apr 29, 2015 [1.11]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  sell   (T1 Feb 28, 2015 [0.89] -  T2 Apr 29, 2015 [1.01]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  sell   (T1 Feb 28, 2015 [1.01] -  T2 Apr 29, 2015 [1.16]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  sell   (T1 Feb 28, 2015 [0.71] -  T2 Apr 29, 2015 [0.94]   Mean: -0.1233  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  sell   (T1 Feb 28, 2015 [1.05] -  T2 Apr 29, 2015 [1.01]   Mean: -0.1632  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  sell   (T1 Feb 28, 2015 [0.93] -  T2 Apr 29, 2015 [1.10]   Mean: -0.2307  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  sell   (T1 Feb 28, 2015 [0.90] -  T2 Apr 29, 2015 [1.03]   Mean: -0.5187  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  sell   (T1 Feb 28, 2015 [0.80] -  T2 Apr 29, 2015 [0.99]   Mean: -0.0925  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  sell   (T1 Feb 28, 2015 [1.00] -  T2 Apr 29, 2015 [1.06]   Mean: -0.3060  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  sell   (T1 Feb 28, 2015 [0.86] -  T2 Apr 29, 2015 [1.11]   Mean: -0.0063  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  buy   (T1 Feb 28, 2015 [0.89] -  T2 Apr 29, 2015 [1.01]   Mean: -0.0047  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  sell   (T1 Feb 28, 2015 [1.01] -  T2 Apr 29, 2015 [1.16]   Mean: -0.0020  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Feb 28, 2015 [1.44] -  T2 Apr 29, 2015 [1.43]   Mean: -0.0001  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: sell   75%  (buy: 5.00, hold: 0.00, sell: 15.00, abs: 0.00)
-        *** SELL ***   2099.30 USD (fee:   0.00), [252441.00 JPY], investments affected: 2 -->  0 profited, 2 lost
-        *** SELL ***   3223.93 USD (fee:   0.00), [387677.25 JPY], investments affected: 1 -->  0 profited, 1 lost
-	C1bal = 98223.23 USD, C2bal = 213372.75 JPY, PV = 99997.64 USD
+        *** SELL ***    539.82 USD (fee:   0.00), [64913.40 JPY], investments affected: 3 -->  0 profited, 3 lost
+	C1bal = 99819.82 USD, C2bal = 21637.80 JPY, PV = 99999.76 USD
 
 May  5, 2015 - Investor1
 	GCAM_C3_1:  sell   (T1 Mar  1, 2015 [20.58] -  T2 Apr 30, 2015 [19.73]   Mean: -0.0141  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -125,19 +124,19 @@ May  5, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Mar  1, 2015 [2.02] -  T2 Apr 30, 2015 [2.08]   Mean: 0.0010  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar  1, 2015 [1.76] -  T2 Apr 30, 2015 [1.70]   Mean: -0.0010  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar  1, 2015 [1.52] -  T2 Apr 30, 2015 [1.46]   Mean: -0.0010  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  sell   (T1 Mar  1, 2015 [0.82] -  T2 Apr 30, 2015 [0.91]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  sell   (T1 Mar  1, 2015 [1.00] -  T2 Apr 30, 2015 [1.01]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  sell   (T1 Mar  1, 2015 [0.92] -  T2 Apr 30, 2015 [1.08]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  sell   (T1 Mar  1, 2015 [0.93] -  T2 Apr 30, 2015 [1.00]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  sell   (T1 Mar  1, 2015 [0.85] -  T2 Apr 30, 2015 [1.04]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  sell   (T1 Mar  1, 2015 [1.02] -  T2 Apr 30, 2015 [1.08]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  sell   (T1 Mar  1, 2015 [0.83] -  T2 Apr 30, 2015 [0.95]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  sell   (T1 Mar  1, 2015 [0.97] -  T2 Apr 30, 2015 [1.05]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  buy   (T1 Mar  1, 2015 [1.12] -  T2 Apr 30, 2015 [0.96]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  sell   (T1 Mar  1, 2015 [0.82] -  T2 Apr 30, 2015 [0.91]   Mean: -0.0388  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  buy   (T1 Mar  1, 2015 [1.00] -  T2 Apr 30, 2015 [1.01]   Mean: -0.1676  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  sell   (T1 Mar  1, 2015 [0.92] -  T2 Apr 30, 2015 [1.08]   Mean: -0.2429  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  sell   (T1 Mar  1, 2015 [0.93] -  T2 Apr 30, 2015 [1.00]   Mean: -0.4131  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  sell   (T1 Mar  1, 2015 [0.85] -  T2 Apr 30, 2015 [1.04]   Mean: -0.0819  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  sell   (T1 Mar  1, 2015 [1.02] -  T2 Apr 30, 2015 [1.08]   Mean: -0.3370  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  sell   (T1 Mar  1, 2015 [0.83] -  T2 Apr 30, 2015 [0.95]   Mean: -0.0087  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  buy   (T1 Mar  1, 2015 [0.97] -  T2 Apr 30, 2015 [1.05]   Mean: -0.0012  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  buy   (T1 Mar  1, 2015 [1.12] -  T2 Apr 30, 2015 [0.96]   Mean: 0.0024  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar  1, 2015 [1.52] -  T2 Apr 30, 2015 [1.46]   Mean: -0.0010  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: sell   80%  (buy: 4.00, hold: 0.00, sell: 16.00, abs: 0.00)
-        *** SELL ***   1424.03 USD (fee:   0.00), [170698.20 JPY], investments affected: 2 -->  1 profited, 1 lost
-	C1bal = 99647.26 USD, C2bal = 42674.55 JPY, PV = 100003.26 USD
+	COA:  Action: sell   70%  (buy: 6.00, hold: 0.00, sell: 14.00, abs: 0.00)
+        *** SELL ***    126.36 USD (fee:   0.00), [15146.46 JPY], investments affected: 4 -->  1 profited, 3 lost
+	C1bal = 99946.18 USD, C2bal = 6491.34 JPY, PV = 100000.33 USD
 
 May  6, 2015 - Investor1
 	GCAM_C3_1:  buy   (T1 Mar  2, 2015 [19.18] -  T2 May  1, 2015 [20.95]   Mean: 0.0295  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -150,19 +149,19 @@ May  6, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Mar  2, 2015 [1.93] -  T2 May  1, 2015 [2.16]   Mean: 0.0038  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar  2, 2015 [1.70] -  T2 May  1, 2015 [1.77]   Mean: 0.0011  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar  2, 2015 [1.46] -  T2 May  1, 2015 [1.40]   Mean: -0.0011  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  buy   (T1 Mar  2, 2015 [0.87] -  T2 May  1, 2015 [0.81]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  buy   (T1 Mar  2, 2015 [1.13] -  T2 May  1, 2015 [1.10]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  buy   (T1 Mar  2, 2015 [1.13] -  T2 May  1, 2015 [1.10]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  buy   (T1 Mar  2, 2015 [1.02] -  T2 May  1, 2015 [0.98]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  hold   (T1 Mar  2, 2015 [1.00] -  T2 May  1, 2015 [0.99]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  hold   (T1 Mar  2, 2015 [1.12] -  T2 May  1, 2015 [1.12]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  buy   (T1 Mar  2, 2015 [1.10] -  T2 May  1, 2015 [0.88]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  sell   (T1 Mar  2, 2015 [1.02] -  T2 May  1, 2015 [1.19]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  buy   (T1 Mar  2, 2015 [1.15] -  T2 May  1, 2015 [0.98]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Mar  2, 2015 [0.87] -  T2 May  1, 2015 [0.81]   Mean: -0.0405  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  sell   (T1 Mar  2, 2015 [1.13] -  T2 May  1, 2015 [1.10]   Mean: 0.0299  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  buy   (T1 Mar  2, 2015 [1.13] -  T2 May  1, 2015 [1.10]   Mean: -0.0139  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  buy   (T1 Mar  2, 2015 [1.02] -  T2 May  1, 2015 [0.98]   Mean: -0.0638  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  buy   (T1 Mar  2, 2015 [1.00] -  T2 May  1, 2015 [0.99]   Mean: -0.0396  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  buy   (T1 Mar  2, 2015 [1.12] -  T2 May  1, 2015 [1.12]   Mean: -0.0561  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  buy   (T1 Mar  2, 2015 [1.10] -  T2 May  1, 2015 [0.88]   Mean: 0.0074  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  buy   (T1 Mar  2, 2015 [1.02] -  T2 May  1, 2015 [1.19]   Mean: 0.0041  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  buy   (T1 Mar  2, 2015 [1.15] -  T2 May  1, 2015 [0.98]   Mean: 0.0036  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar  2, 2015 [1.46] -  T2 May  1, 2015 [1.40]   Mean: -0.0011  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: buy   55%  (buy: 11.00, hold: 2.00, sell: 7.00, abs: 0.00)
-        *** BUY ***       0.00 USD (656810.00 JPY, fee =   0.00)
-	C1bal = 94147.26 USD, C2bal = 699484.55 JPY, PV = 100004.60 USD
+	COA:  Action: buy   65%  (buy: 13.00, hold: 0.00, sell: 7.00, abs: 0.00)
+        *** BUY ***       0.00 USD (776230.00 JPY, fee =   0.00)
+	C1bal = 93446.18 USD, C2bal = 782721.34 JPY, PV = 100000.53 USD
 
 May  7, 2015 - Investor1
 	GCAM_C3_1:  buy   (T1 Mar  3, 2015 [18.99] -  T2 May  2, 2015 [21.92]   Mean: 0.0489  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -175,19 +174,19 @@ May  7, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Mar  3, 2015 [1.90] -  T2 May  2, 2015 [2.20]   Mean: 0.0052  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar  3, 2015 [1.69] -  T2 May  2, 2015 [1.85]   Mean: 0.0028  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar  3, 2015 [1.40] -  T2 May  2, 2015 [1.44]   Mean: 0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  buy   (T1 Mar  3, 2015 [0.83] -  T2 May  2, 2015 [0.75]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  buy   (T1 Mar  3, 2015 [1.13] -  T2 May  2, 2015 [0.88]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  buy   (T1 Mar  3, 2015 [1.18] -  T2 May  2, 2015 [0.90]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  buy   (T1 Mar  3, 2015 [1.04] -  T2 May  2, 2015 [0.85]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  buy   (T1 Mar  3, 2015 [1.03] -  T2 May  2, 2015 [0.76]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  buy   (T1 Mar  3, 2015 [1.20] -  T2 May  2, 2015 [0.86]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  sell   (T1 Mar  3, 2015 [0.98] -  T2 May  2, 2015 [1.03]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  buy   (T1 Mar  3, 2015 [1.13] -  T2 May  2, 2015 [0.94]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  buy   (T1 Mar  3, 2015 [0.97] -  T2 May  2, 2015 [0.94]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Mar  3, 2015 [0.83] -  T2 May  2, 2015 [0.75]   Mean: -0.0511  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  sell   (T1 Mar  3, 2015 [1.13] -  T2 May  2, 2015 [0.88]   Mean: 0.2240  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  buy   (T1 Mar  3, 2015 [1.18] -  T2 May  2, 2015 [0.90]   Mean: 0.2821  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  buy   (T1 Mar  3, 2015 [1.04] -  T2 May  2, 2015 [0.85]   Mean: 0.4402  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  buy   (T1 Mar  3, 2015 [1.03] -  T2 May  2, 2015 [0.76]   Mean: 0.0477  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  buy   (T1 Mar  3, 2015 [1.20] -  T2 May  2, 2015 [0.86]   Mean: 0.4228  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  sell   (T1 Mar  3, 2015 [0.98] -  T2 May  2, 2015 [1.03]   Mean: 0.0022  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  sell   (T1 Mar  3, 2015 [1.13] -  T2 May  2, 2015 [0.94]   Mean: 0.0113  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  buy   (T1 Mar  3, 2015 [0.97] -  T2 May  2, 2015 [0.94]   Mean: 0.0043  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar  3, 2015 [1.40] -  T2 May  2, 2015 [1.44]   Mean: 0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: buy   75%  (buy: 15.00, hold: 0.00, sell: 5.00, abs: 0.00)
-        *** BUY ***       0.00 USD (898050.00 JPY, fee =   0.00)
-	C1bal = 86647.26 USD, C2bal = 1597534.55 JPY, PV = 99988.95 USD
+	COA:  Action: buy   65%  (buy: 13.00, hold: 0.00, sell: 7.00, abs: 0.00)
+        *** BUY ***       0.00 USD (778310.00 JPY, fee =   0.00)
+	C1bal = 86946.18 USD, C2bal = 1561031.34 JPY, PV = 99983.02 USD
 
 May  8, 2015 - Investor1
 	GCAM_C3_1:  buy   (T1 Mar  4, 2015 [19.31] -  T2 May  3, 2015 [22.26]   Mean: 0.0491  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -200,19 +199,19 @@ May  8, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Mar  4, 2015 [1.92] -  T2 May  3, 2015 [2.13]   Mean: 0.0036  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar  4, 2015 [1.69] -  T2 May  3, 2015 [1.77]   Mean: 0.0014  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar  4, 2015 [1.38] -  T2 May  3, 2015 [1.43]   Mean: 0.0008  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  sell   (T1 Mar  4, 2015 [0.83] -  T2 May  3, 2015 [0.93]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  buy   (T1 Mar  4, 2015 [1.13] -  T2 May  3, 2015 [1.04]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  buy   (T1 Mar  4, 2015 [1.17] -  T2 May  3, 2015 [1.01]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  buy   (T1 Mar  4, 2015 [1.00] -  T2 May  3, 2015 [0.98]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  buy   (T1 Mar  4, 2015 [1.00] -  T2 May  3, 2015 [0.92]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  buy   (T1 Mar  4, 2015 [1.18] -  T2 May  3, 2015 [0.95]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  buy   (T1 Mar  4, 2015 [1.28] -  T2 May  3, 2015 [0.93]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  sell   (T1 Mar  4, 2015 [0.98] -  T2 May  3, 2015 [1.21]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  buy   (T1 Mar  4, 2015 [1.10] -  T2 May  3, 2015 [0.90]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  sell   (T1 Mar  4, 2015 [0.83] -  T2 May  3, 2015 [0.93]   Mean: -0.1100  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  sell   (T1 Mar  4, 2015 [1.13] -  T2 May  3, 2015 [1.04]   Mean: 0.1877  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  buy   (T1 Mar  4, 2015 [1.17] -  T2 May  3, 2015 [1.01]   Mean: 0.2505  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  buy   (T1 Mar  4, 2015 [1.00] -  T2 May  3, 2015 [0.98]   Mean: 0.2868  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  buy   (T1 Mar  4, 2015 [1.00] -  T2 May  3, 2015 [0.92]   Mean: 0.0158  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  buy   (T1 Mar  4, 2015 [1.18] -  T2 May  3, 2015 [0.95]   Mean: 0.3777  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  buy   (T1 Mar  4, 2015 [1.28] -  T2 May  3, 2015 [0.93]   Mean: 0.0092  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  buy   (T1 Mar  4, 2015 [0.98] -  T2 May  3, 2015 [1.21]   Mean: 0.0022  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  buy   (T1 Mar  4, 2015 [1.10] -  T2 May  3, 2015 [0.90]   Mean: 0.0075  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar  4, 2015 [1.38] -  T2 May  3, 2015 [1.43]   Mean: 0.0008  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: buy   70%  (buy: 14.00, hold: 0.00, sell: 6.00, abs: 0.00)
         *** BUY ***       0.00 USD (838460.00 JPY, fee =   0.00)
-	C1bal = 79647.26 USD, C2bal = 2435994.55 JPY, PV = 99984.50 USD
+	C1bal = 79946.18 USD, C2bal = 2399491.34 JPY, PV = 99978.67 USD
 
 May  9, 2015 - Investor1
 	GCAM_C3_1:  buy   (T1 Mar  5, 2015 [19.17] -  T2 May  4, 2015 [19.96]   Mean: 0.0132  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -225,19 +224,19 @@ May  9, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Mar  5, 2015 [1.92] -  T2 May  4, 2015 [1.97]   Mean: 0.0009  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar  5, 2015 [1.68] -  T2 May  4, 2015 [1.72]   Mean: 0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar  5, 2015 [1.39] -  T2 May  4, 2015 [1.40]   Mean: 0.0001  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  buy   (T1 Mar  5, 2015 [1.02] -  T2 May  4, 2015 [0.84]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  buy   (T1 Mar  5, 2015 [0.98] -  T2 May  4, 2015 [0.94]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  buy   (T1 Mar  5, 2015 [1.15] -  T2 May  4, 2015 [0.92]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  buy   (T1 Mar  5, 2015 [1.07] -  T2 May  4, 2015 [0.90]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  buy   (T1 Mar  5, 2015 [1.10] -  T2 May  4, 2015 [0.87]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  buy   (T1 Mar  5, 2015 [1.10] -  T2 May  4, 2015 [0.93]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  buy   (T1 Mar  5, 2015 [1.00] -  T2 May  4, 2015 [0.85]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  buy   (T1 Mar  5, 2015 [1.15] -  T2 May  4, 2015 [0.91]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  buy   (T1 Mar  5, 2015 [1.14] -  T2 May  4, 2015 [0.88]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Mar  5, 2015 [1.02] -  T2 May  4, 2015 [0.84]   Mean: 0.0052  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  sell   (T1 Mar  5, 2015 [0.98] -  T2 May  4, 2015 [0.94]   Mean: 0.0106  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  buy   (T1 Mar  5, 2015 [1.15] -  T2 May  4, 2015 [0.92]   Mean: 0.1792  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  buy   (T1 Mar  5, 2015 [1.07] -  T2 May  4, 2015 [0.90]   Mean: 0.2966  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  buy   (T1 Mar  5, 2015 [1.10] -  T2 May  4, 2015 [0.87]   Mean: 0.0358  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  buy   (T1 Mar  5, 2015 [1.10] -  T2 May  4, 2015 [0.93]   Mean: 0.1722  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  buy   (T1 Mar  5, 2015 [1.00] -  T2 May  4, 2015 [0.85]   Mean: 0.0024  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  sell   (T1 Mar  5, 2015 [1.15] -  T2 May  4, 2015 [0.91]   Mean: 0.0123  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  buy   (T1 Mar  5, 2015 [1.14] -  T2 May  4, 2015 [0.88]   Mean: 0.0120  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar  5, 2015 [1.39] -  T2 May  4, 2015 [1.40]   Mean: 0.0001  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: buy   85%  (buy: 17.00, hold: 0.00, sell: 3.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1018130.00 JPY, fee =   0.00)
-	C1bal = 71147.26 USD, C2bal = 3454124.55 JPY, PV = 99984.50 USD
+	COA:  Action: buy   75%  (buy: 15.00, hold: 0.00, sell: 5.00, abs: 0.00)
+        *** BUY ***       0.00 USD (898350.00 JPY, fee =   0.00)
+	C1bal = 72446.18 USD, C2bal = 3297841.34 JPY, PV = 99978.67 USD
 
 May 10, 2015 - Investor1
 	GCAM_C3_1:  buy   (T1 Mar  6, 2015 [19.14] -  T2 May  5, 2015 [19.21]   Mean: 0.0012  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -250,19 +249,19 @@ May 10, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Mar  6, 2015 [1.91] -  T2 May  5, 2015 [1.95]   Mean: 0.0006  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar  6, 2015 [1.72] -  T2 May  5, 2015 [1.69]   Mean: -0.0005  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar  6, 2015 [1.41] -  T2 May  5, 2015 [1.40]   Mean: -0.0002  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  buy   (T1 Mar  6, 2015 [0.94] -  T2 May  5, 2015 [0.84]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  buy   (T1 Mar  6, 2015 [1.07] -  T2 May  5, 2015 [0.96]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  buy   (T1 Mar  6, 2015 [1.14] -  T2 May  5, 2015 [1.01]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  buy   (T1 Mar  6, 2015 [1.01] -  T2 May  5, 2015 [0.95]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  buy   (T1 Mar  6, 2015 [1.08] -  T2 May  5, 2015 [0.91]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  buy   (T1 Mar  6, 2015 [1.09] -  T2 May  5, 2015 [1.06]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  buy   (T1 Mar  6, 2015 [1.05] -  T2 May  5, 2015 [0.88]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  sell   (T1 Mar  6, 2015 [1.04] -  T2 May  5, 2015 [1.22]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  buy   (T1 Mar  6, 2015 [1.25] -  T2 May  5, 2015 [0.96]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Mar  6, 2015 [0.94] -  T2 May  5, 2015 [0.84]   Mean: 0.0060  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  sell   (T1 Mar  6, 2015 [1.07] -  T2 May  5, 2015 [0.96]   Mean: 0.0335  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  buy   (T1 Mar  6, 2015 [1.14] -  T2 May  5, 2015 [1.01]   Mean: 0.1025  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  buy   (T1 Mar  6, 2015 [1.01] -  T2 May  5, 2015 [0.95]   Mean: 0.0578  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  buy   (T1 Mar  6, 2015 [1.08] -  T2 May  5, 2015 [0.91]   Mean: 0.0212  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  buy   (T1 Mar  6, 2015 [1.09] -  T2 May  5, 2015 [1.06]   Mean: 0.0208  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  buy   (T1 Mar  6, 2015 [1.05] -  T2 May  5, 2015 [0.88]   Mean: 0.0021  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  buy   (T1 Mar  6, 2015 [1.04] -  T2 May  5, 2015 [1.22]   Mean: 0.0001  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  buy   (T1 Mar  6, 2015 [1.25] -  T2 May  5, 2015 [0.96]   Mean: 0.0092  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar  6, 2015 [1.41] -  T2 May  5, 2015 [1.40]   Mean: -0.0002  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: buy   65%  (buy: 13.00, hold: 0.00, sell: 7.00, abs: 0.00)
         *** BUY ***       0.00 USD (778570.00 JPY, fee =   0.00)
-	C1bal = 64647.26 USD, C2bal = 4232694.55 JPY, PV = 99984.50 USD
+	C1bal = 65946.18 USD, C2bal = 4076411.34 JPY, PV = 99978.67 USD
 
 May 11, 2015 - Investor1
 	GCAM_C3_1:  sell   (T1 Mar  7, 2015 [20.16] -  T2 May  6, 2015 [19.36]   Mean: -0.0133  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -275,23 +274,23 @@ May 11, 2015 - Investor1
 	GCAM_C15_148:  sell   (T1 Mar  7, 2015 [2.03] -  T2 May  6, 2015 [1.91]   Mean: -0.0019  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar  7, 2015 [1.77] -  T2 May  6, 2015 [1.72]   Mean: -0.0008  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar  7, 2015 [1.45] -  T2 May  6, 2015 [1.40]   Mean: -0.0009  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  buy   (T1 Mar  7, 2015 [0.84] -  T2 May  6, 2015 [0.83]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  sell   (T1 Mar  7, 2015 [0.95] -  T2 May  6, 2015 [1.01]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  sell   (T1 Mar  7, 2015 [0.86] -  T2 May  6, 2015 [1.02]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  sell   (T1 Mar  7, 2015 [0.87] -  T2 May  6, 2015 [0.94]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  sell   (T1 Mar  7, 2015 [0.85] -  T2 May  6, 2015 [0.92]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  sell   (T1 Mar  7, 2015 [0.90] -  T2 May  6, 2015 [1.00]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  sell   (T1 Mar  7, 2015 [0.68] -  T2 May  6, 2015 [0.93]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  sell   (T1 Mar  7, 2015 [0.97] -  T2 May  6, 2015 [1.04]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  sell   (T1 Mar  7, 2015 [0.93] -  T2 May  6, 2015 [0.99]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Mar  7, 2015 [0.84] -  T2 May  6, 2015 [0.83]   Mean: -0.0031  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  buy   (T1 Mar  7, 2015 [0.95] -  T2 May  6, 2015 [1.01]   Mean: -0.2068  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  sell   (T1 Mar  7, 2015 [0.86] -  T2 May  6, 2015 [1.02]   Mean: -0.2876  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  sell   (T1 Mar  7, 2015 [0.87] -  T2 May  6, 2015 [0.94]   Mean: -0.4390  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  sell   (T1 Mar  7, 2015 [0.85] -  T2 May  6, 2015 [0.92]   Mean: -0.0505  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  sell   (T1 Mar  7, 2015 [0.90] -  T2 May  6, 2015 [1.00]   Mean: -0.4212  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  sell   (T1 Mar  7, 2015 [0.68] -  T2 May  6, 2015 [0.93]   Mean: -0.0222  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  buy   (T1 Mar  7, 2015 [0.97] -  T2 May  6, 2015 [1.04]   Mean: -0.0124  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  sell   (T1 Mar  7, 2015 [0.93] -  T2 May  6, 2015 [0.99]   Mean: -0.0041  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar  7, 2015 [1.45] -  T2 May  6, 2015 [1.40]   Mean: -0.0009  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: sell   80%  (buy: 4.00, hold: 0.00, sell: 16.00, abs: 0.00)
-        *** SELL ***    355.47 USD (fee:   0.00), [42674.55 JPY], investments affected: 3 -->  2 profited, 1 lost
-        *** SELL ***   5471.14 USD (fee:   0.00), [656810.00 JPY], investments affected: 1 -->  0 profited, 1 lost
-        *** SELL ***   7480.63 USD (fee:   0.00), [898050.00 JPY], investments affected: 1 -->  0 profited, 1 lost
+	COA:  Action: sell   70%  (buy: 6.00, hold: 0.00, sell: 14.00, abs: 0.00)
+        *** SELL ***     54.07 USD (fee:   0.00), [ 6491.34 JPY], investments affected: 5 -->  2 profited, 3 lost
+        *** SELL ***   6465.89 USD (fee:   0.00), [776230.00 JPY], investments affected: 1 -->  0 profited, 1 lost
+        *** SELL ***   6483.22 USD (fee:   0.00), [778310.00 JPY], investments affected: 1 -->  0 profited, 1 lost
         *** SELL ***   6984.26 USD (fee:   0.00), [838460.00 JPY], investments affected: 1 -->  0 profited, 1 lost
-        *** SELL ***   7914.71 USD (fee:   0.00), [950161.09 JPY], investments affected: 1 -->  0 profited, 1 lost
-	C1bal = 92853.47 USD, C2bal = 846538.91 JPY, PV = 99905.02 USD
+        *** SELL ***   3781.73 USD (fee:   0.00), [453996.60 JPY], investments affected: 1 -->  0 profited, 1 lost
+	C1bal = 89715.34 USD, C2bal = 1222923.40 JPY, PV = 99902.12 USD
 
 May 12, 2015 - Investor1
 	GCAM_C3_1:  sell   (T1 Mar  8, 2015 [21.01] -  T2 May  7, 2015 [19.23]   Mean: -0.0295  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -304,20 +303,20 @@ May 12, 2015 - Investor1
 	GCAM_C15_148:  sell   (T1 Mar  8, 2015 [2.10] -  T2 May  7, 2015 [1.91]   Mean: -0.0032  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar  8, 2015 [1.81] -  T2 May  7, 2015 [1.67]   Mean: -0.0025  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar  8, 2015 [1.44] -  T2 May  7, 2015 [1.37]   Mean: -0.0011  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  sell   (T1 Mar  8, 2015 [0.83] -  T2 May  7, 2015 [0.95]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  hold   (T1 Mar  8, 2015 [1.07] -  T2 May  7, 2015 [1.07]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  sell   (T1 Mar  8, 2015 [0.99] -  T2 May  7, 2015 [1.13]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  sell   (T1 Mar  8, 2015 [0.94] -  T2 May  7, 2015 [1.06]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  sell   (T1 Mar  8, 2015 [0.87] -  T2 May  7, 2015 [1.03]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  sell   (T1 Mar  8, 2015 [1.02] -  T2 May  7, 2015 [1.13]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  sell   (T1 Mar  8, 2015 [0.88] -  T2 May  7, 2015 [0.90]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  sell   (T1 Mar  8, 2015 [1.00] -  T2 May  7, 2015 [1.06]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  hold   (T1 Mar  8, 2015 [0.98] -  T2 May  7, 2015 [0.98]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  sell   (T1 Mar  8, 2015 [0.83] -  T2 May  7, 2015 [0.95]   Mean: -0.0125  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  buy   (T1 Mar  8, 2015 [1.07] -  T2 May  7, 2015 [1.07]   Mean: -0.1857  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  sell   (T1 Mar  8, 2015 [0.99] -  T2 May  7, 2015 [1.13]   Mean: -0.2574  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  sell   (T1 Mar  8, 2015 [0.94] -  T2 May  7, 2015 [1.06]   Mean: -0.5212  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  sell   (T1 Mar  8, 2015 [0.87] -  T2 May  7, 2015 [1.03]   Mean: -0.0683  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  sell   (T1 Mar  8, 2015 [1.02] -  T2 May  7, 2015 [1.13]   Mean: -0.3885  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  sell   (T1 Mar  8, 2015 [0.88] -  T2 May  7, 2015 [0.90]   Mean: -0.0078  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  buy   (T1 Mar  8, 2015 [1.00] -  T2 May  7, 2015 [1.06]   Mean: -0.0095  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  sell   (T1 Mar  8, 2015 [0.98] -  T2 May  7, 2015 [0.98]   Mean: -0.0064  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar  8, 2015 [1.44] -  T2 May  7, 2015 [1.37]   Mean: -0.0011  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: sell   65%  (buy: 5.00, hold: 2.00, sell: 13.00, abs: 0.00)
-        *** SELL ***    567.35 USD (fee:   0.00), [67968.91 JPY], investments affected: 2 -->  0 profited, 2 lost
-        *** SELL ***   4025.72 USD (fee:   0.00), [482281.38 JPY], investments affected: 1 -->  0 profited, 1 lost
-	C1bal = 97446.54 USD, C2bal = 296288.62 JPY, PV = 99919.74 USD
+	COA:  Action: sell   65%  (buy: 7.00, hold: 0.00, sell: 13.00, abs: 0.00)
+        *** SELL ***   3709.13 USD (fee:   0.00), [444353.40 JPY], investments affected: 2 -->  0 profited, 2 lost
+        *** SELL ***   2926.10 USD (fee:   0.00), [350546.81 JPY], investments affected: 1 -->  0 profited, 1 lost
+	C1bal = 96350.57 USD, C2bal = 428023.19 JPY, PV = 99923.38 USD
 
 May 13, 2015 - Investor1
 	GCAM_C3_1:  buy   (T1 Mar  9, 2015 [19.43] -  T2 May  8, 2015 [19.62]   Mean: 0.0033  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -330,19 +329,19 @@ May 13, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Mar  9, 2015 [1.97] -  T2 May  8, 2015 [2.12]   Mean: 0.0025  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar  9, 2015 [1.69] -  T2 May  8, 2015 [1.75]   Mean: 0.0010  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar  9, 2015 [1.43] -  T2 May  8, 2015 [1.41]   Mean: -0.0002  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  sell   (T1 Mar  9, 2015 [0.82] -  T2 May  8, 2015 [0.87]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  sell   (T1 Mar  9, 2015 [1.04] -  T2 May  8, 2015 [1.07]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  buy   (T1 Mar  9, 2015 [1.14] -  T2 May  8, 2015 [1.08]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  buy   (T1 Mar  9, 2015 [1.02] -  T2 May  8, 2015 [1.00]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  hold   (T1 Mar  9, 2015 [0.95] -  T2 May  8, 2015 [0.96]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  buy   (T1 Mar  9, 2015 [1.12] -  T2 May  8, 2015 [1.08]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  sell   (T1 Mar  9, 2015 [0.91] -  T2 May  8, 2015 [0.97]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  sell   (T1 Mar  9, 2015 [1.06] -  T2 May  8, 2015 [1.23]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  buy   (T1 Mar  9, 2015 [1.07] -  T2 May  8, 2015 [0.95]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  sell   (T1 Mar  9, 2015 [0.82] -  T2 May  8, 2015 [0.87]   Mean: -0.0032  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  buy   (T1 Mar  9, 2015 [1.04] -  T2 May  8, 2015 [1.07]   Mean: 0.0081  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  buy   (T1 Mar  9, 2015 [1.14] -  T2 May  8, 2015 [1.08]   Mean: 0.0914  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  buy   (T1 Mar  9, 2015 [1.02] -  T2 May  8, 2015 [1.00]   Mean: 0.1682  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  sell   (T1 Mar  9, 2015 [0.95] -  T2 May  8, 2015 [0.96]   Mean: 0.0073  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  buy   (T1 Mar  9, 2015 [1.12] -  T2 May  8, 2015 [1.08]   Mean: 0.0927  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  sell   (T1 Mar  9, 2015 [0.91] -  T2 May  8, 2015 [0.97]   Mean: 0.0024  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  buy   (T1 Mar  9, 2015 [1.06] -  T2 May  8, 2015 [1.23]   Mean: 0.0034  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  buy   (T1 Mar  9, 2015 [1.07] -  T2 May  8, 2015 [0.95]   Mean: 0.0076  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar  9, 2015 [1.43] -  T2 May  8, 2015 [1.41]   Mean: -0.0002  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: sell   60%  (buy: 7.00, hold: 1.00, sell: 12.00, abs: 0.00)
-        *** SELL ***   1492.76 USD (fee:   0.00), [177773.17 JPY], investments affected: 2 -->  1 profited, 1 lost
-	C1bal = 98939.30 USD, C2bal = 118515.45 JPY, PV = 99934.48 USD
+	COA:  Action: sell   55%  (buy: 9.00, hold: 0.00, sell: 11.00, abs: 0.00)
+        *** SELL ***   1976.76 USD (fee:   0.00), [235412.75 JPY], investments affected: 2 -->  1 profited, 1 lost
+	C1bal = 98327.33 USD, C2bal = 192610.44 JPY, PV = 99944.68 USD
 
 May 14, 2015 - Investor1
 	GCAM_C3_1:  buy   (T1 Mar 10, 2015 [18.99] -  T2 May  9, 2015 [20.88]   Mean: 0.0314  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -355,19 +354,19 @@ May 14, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Mar 10, 2015 [1.92] -  T2 May  9, 2015 [2.01]   Mean: 0.0015  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 10, 2015 [1.68] -  T2 May  9, 2015 [1.78]   Mean: 0.0016  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar 10, 2015 [1.43] -  T2 May  9, 2015 [1.47]   Mean: 0.0005  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  buy   (T1 Mar 10, 2015 [0.90] -  T2 May  9, 2015 [0.78]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  buy   (T1 Mar 10, 2015 [1.06] -  T2 May  9, 2015 [0.94]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  buy   (T1 Mar 10, 2015 [1.19] -  T2 May  9, 2015 [0.87]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  buy   (T1 Mar 10, 2015 [1.10] -  T2 May  9, 2015 [0.86]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  buy   (T1 Mar 10, 2015 [1.11] -  T2 May  9, 2015 [0.86]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  buy   (T1 Mar 10, 2015 [1.27] -  T2 May  9, 2015 [0.90]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  sell   (T1 Mar 10, 2015 [0.88] -  T2 May  9, 2015 [0.91]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  sell   (T1 Mar 10, 2015 [0.96] -  T2 May  9, 2015 [1.16]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  sell   (T1 Mar 10, 2015 [1.01] -  T2 May  9, 2015 [1.05]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Mar 10, 2015 [0.90] -  T2 May  9, 2015 [0.78]   Mean: -0.0542  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  sell   (T1 Mar 10, 2015 [1.06] -  T2 May  9, 2015 [0.94]   Mean: 0.1643  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  buy   (T1 Mar 10, 2015 [1.19] -  T2 May  9, 2015 [0.87]   Mean: 0.3310  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  buy   (T1 Mar 10, 2015 [1.10] -  T2 May  9, 2015 [0.86]   Mean: 0.4836  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  buy   (T1 Mar 10, 2015 [1.11] -  T2 May  9, 2015 [0.86]   Mean: 0.0274  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  buy   (T1 Mar 10, 2015 [1.27] -  T2 May  9, 2015 [0.90]   Mean: 0.4560  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  sell   (T1 Mar 10, 2015 [0.88] -  T2 May  9, 2015 [0.91]   Mean: 0.0070  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  buy   (T1 Mar 10, 2015 [0.96] -  T2 May  9, 2015 [1.16]   Mean: 0.0038  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  sell   (T1 Mar 10, 2015 [1.01] -  T2 May  9, 2015 [1.05]   Mean: 0.0003  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar 10, 2015 [1.43] -  T2 May  9, 2015 [1.47]   Mean: 0.0005  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: buy   70%  (buy: 14.00, hold: 0.00, sell: 6.00, abs: 0.00)
         *** BUY ***       0.00 USD (834400.00 JPY, fee =   0.00)
-	C1bal = 91939.30 USD, C2bal = 952915.45 JPY, PV = 99933.56 USD
+	C1bal = 91327.33 USD, C2bal = 1027010.44 JPY, PV = 99943.19 USD
 
 May 15, 2015 - Investor1
 	GCAM_C3_1:  buy   (T1 Mar 11, 2015 [18.98] -  T2 May 10, 2015 [21.13]   Mean: 0.0358  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -380,19 +379,19 @@ May 15, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Mar 11, 2015 [1.89] -  T2 May 10, 2015 [2.01]   Mean: 0.0019  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 11, 2015 [1.67] -  T2 May 10, 2015 [1.86]   Mean: 0.0032  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar 11, 2015 [1.41] -  T2 May 10, 2015 [1.41]   Mean: 0.0001  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  buy   (T1 Mar 11, 2015 [0.85] -  T2 May 10, 2015 [0.78]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  buy   (T1 Mar 11, 2015 [0.94] -  T2 May 10, 2015 [0.91]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  buy   (T1 Mar 11, 2015 [1.08] -  T2 May 10, 2015 [0.87]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  buy   (T1 Mar 11, 2015 [0.99] -  T2 May 10, 2015 [0.88]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  buy   (T1 Mar 11, 2015 [1.02] -  T2 May 10, 2015 [0.85]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  buy   (T1 Mar 11, 2015 [1.06] -  T2 May 10, 2015 [0.92]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  buy   (T1 Mar 11, 2015 [0.84] -  T2 May 10, 2015 [0.79]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  buy   (T1 Mar 11, 2015 [1.00] -  T2 May 10, 2015 [0.86]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  hold   (T1 Mar 11, 2015 [1.01] -  T2 May 10, 2015 [1.01]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Mar 11, 2015 [0.85] -  T2 May 10, 2015 [0.78]   Mean: -0.0665  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  sell   (T1 Mar 11, 2015 [0.94] -  T2 May 10, 2015 [0.91]   Mean: 0.1382  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  buy   (T1 Mar 11, 2015 [1.08] -  T2 May 10, 2015 [0.87]   Mean: 0.3089  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  buy   (T1 Mar 11, 2015 [0.99] -  T2 May 10, 2015 [0.88]   Mean: 0.3688  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  buy   (T1 Mar 11, 2015 [1.02] -  T2 May 10, 2015 [0.85]   Mean: 0.0416  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  buy   (T1 Mar 11, 2015 [1.06] -  T2 May 10, 2015 [0.92]   Mean: 0.3145  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  buy   (T1 Mar 11, 2015 [0.84] -  T2 May 10, 2015 [0.79]   Mean: 0.0139  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  sell   (T1 Mar 11, 2015 [1.00] -  T2 May 10, 2015 [0.86]   Mean: 0.0154  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  buy   (T1 Mar 11, 2015 [1.01] -  T2 May 10, 2015 [1.01]   Mean: 0.0041  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar 11, 2015 [1.41] -  T2 May 10, 2015 [1.41]   Mean: 0.0001  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: buy   75%  (buy: 15.00, hold: 1.00, sell: 4.00, abs: 0.00)
-        *** BUY ***       0.00 USD (895200.00 JPY, fee =   0.00)
-	C1bal = 84439.30 USD, C2bal = 1848115.45 JPY, PV = 99922.85 USD
+	COA:  Action: buy   70%  (buy: 14.00, hold: 0.00, sell: 6.00, abs: 0.00)
+        *** BUY ***       0.00 USD (835520.00 JPY, fee =   0.00)
+	C1bal = 84327.33 USD, C2bal = 1862530.44 JPY, PV = 99931.64 USD
 
 May 16, 2015 - Investor1
 	GCAM_C3_1:  buy   (T1 Mar 12, 2015 [19.14] -  T2 May 11, 2015 [19.66]   Mean: 0.0087  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -405,20 +404,18 @@ May 16, 2015 - Investor1
 	GCAM_C15_148:  sell   (T1 Mar 12, 2015 [1.98] -  T2 May 11, 2015 [1.92]   Mean: -0.0011  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 12, 2015 [1.67] -  T2 May 11, 2015 [1.70]   Mean: 0.0005  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar 12, 2015 [1.37] -  T2 May 11, 2015 [1.38]   Mean: 0.0001  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  buy   (T1 Mar 12, 2015 [0.87] -  T2 May 11, 2015 [0.85]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  sell   (T1 Mar 12, 2015 [1.05] -  T2 May 11, 2015 [1.09]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  hold   (T1 Mar 12, 2015 [1.11] -  T2 May 11, 2015 [1.10]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  buy   (T1 Mar 12, 2015 [1.01] -  T2 May 11, 2015 [1.00]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  buy   (T1 Mar 12, 2015 [1.01] -  T2 May 11, 2015 [0.94]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  buy   (T1 Mar 12, 2015 [1.11] -  T2 May 11, 2015 [1.08]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  sell   (T1 Mar 12, 2015 [0.87] -  T2 May 11, 2015 [0.93]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  buy   (T1 Mar 12, 2015 [1.16] -  T2 May 11, 2015 [1.04]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  sell   (T1 Mar 12, 2015 [1.09] -  T2 May 11, 2015 [1.21]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Mar 12, 2015 [0.87] -  T2 May 11, 2015 [0.85]   Mean: -0.0395  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  buy   (T1 Mar 12, 2015 [1.05] -  T2 May 11, 2015 [1.09]   Mean: 0.0186  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  buy   (T1 Mar 12, 2015 [1.11] -  T2 May 11, 2015 [1.10]   Mean: 0.0536  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  buy   (T1 Mar 12, 2015 [1.01] -  T2 May 11, 2015 [1.00]   Mean: 0.1100  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  buy   (T1 Mar 12, 2015 [1.01] -  T2 May 11, 2015 [0.94]   Mean: 0.0247  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  buy   (T1 Mar 12, 2015 [1.11] -  T2 May 11, 2015 [1.08]   Mean: 0.0685  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  sell   (T1 Mar 12, 2015 [0.87] -  T2 May 11, 2015 [0.93]   Mean: 0.0020  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  sell   (T1 Mar 12, 2015 [1.16] -  T2 May 11, 2015 [1.04]   Mean: 0.0028  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  sell   (T1 Mar 12, 2015 [1.09] -  T2 May 11, 2015 [1.21]   Mean: -0.0014  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar 12, 2015 [1.37] -  T2 May 11, 2015 [1.38]   Mean: 0.0001  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: sell   50%  (buy: 9.00, hold: 1.00, sell: 10.00, abs: 0.00)
-        *** SELL ***    992.92 USD (fee:   0.00), [118515.45 JPY], investments affected: 3 -->  2 profited, 1 lost
-        *** SELL ***   6748.85 USD (fee:   0.00), [805542.28 JPY], investments affected: 1 -->  0 profited, 1 lost
-	C1bal = 92181.08 USD, C2bal = 924057.72 JPY, PV = 99922.85 USD
+	COA:  Action: hold    0%  (buy: 10.00, hold: 0.00, sell: 10.00, abs: 0.00)
+	C1bal = 84327.33 USD, C2bal = 1862530.44 JPY, PV = 99931.64 USD
 
 May 17, 2015 - Investor1
 	GCAM_C3_1:  sell   (T1 Mar 13, 2015 [19.42] -  T2 May 12, 2015 [19.09]   Mean: -0.0055  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -431,19 +428,19 @@ May 17, 2015 - Investor1
 	GCAM_C15_148:  sell   (T1 Mar 13, 2015 [1.94] -  T2 May 12, 2015 [1.86]   Mean: -0.0014  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar 13, 2015 [1.69] -  T2 May 12, 2015 [1.67]   Mean: -0.0003  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar 13, 2015 [1.41] -  T2 May 12, 2015 [1.48]   Mean: 0.0011  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  buy   (T1 Mar 13, 2015 [0.87] -  T2 May 12, 2015 [0.82]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  buy   (T1 Mar 13, 2015 [1.12] -  T2 May 12, 2015 [0.97]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  buy   (T1 Mar 13, 2015 [1.08] -  T2 May 12, 2015 [0.98]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  buy   (T1 Mar 13, 2015 [1.03] -  T2 May 12, 2015 [0.92]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  buy   (T1 Mar 13, 2015 [0.93] -  T2 May 12, 2015 [0.88]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  buy   (T1 Mar 13, 2015 [1.13] -  T2 May 12, 2015 [0.97]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  sell   (T1 Mar 13, 2015 [1.02] -  T2 May 12, 2015 [1.03]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  buy   (T1 Mar 13, 2015 [1.10] -  T2 May 12, 2015 [1.01]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  buy   (T1 Mar 13, 2015 [1.21] -  T2 May 12, 2015 [0.96]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Mar 13, 2015 [0.87] -  T2 May 12, 2015 [0.82]   Mean: -0.0638  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  sell   (T1 Mar 13, 2015 [1.12] -  T2 May 12, 2015 [0.97]   Mean: 0.0328  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  buy   (T1 Mar 13, 2015 [1.08] -  T2 May 12, 2015 [0.98]   Mean: 0.0349  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  buy   (T1 Mar 13, 2015 [1.03] -  T2 May 12, 2015 [0.92]   Mean: 0.0963  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  buy   (T1 Mar 13, 2015 [0.93] -  T2 May 12, 2015 [0.88]   Mean: -0.0264  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  buy   (T1 Mar 13, 2015 [1.13] -  T2 May 12, 2015 [0.97]   Mean: 0.0685  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  sell   (T1 Mar 13, 2015 [1.02] -  T2 May 12, 2015 [1.03]   Mean: -0.0010  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  sell   (T1 Mar 13, 2015 [1.10] -  T2 May 12, 2015 [1.01]   Mean: 0.0024  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  buy   (T1 Mar 13, 2015 [1.21] -  T2 May 12, 2015 [0.96]   Mean: 0.0063  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar 13, 2015 [1.41] -  T2 May 12, 2015 [1.48]   Mean: 0.0011  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: buy   70%  (buy: 14.00, hold: 0.00, sell: 6.00, abs: 0.00)
-        *** BUY ***       0.00 USD (835520.00 JPY, fee =   0.00)
-	C1bal = 85181.08 USD, C2bal = 1759577.72 JPY, PV = 99922.85 USD
+	COA:  Action: buy   60%  (buy: 12.00, hold: 0.00, sell: 8.00, abs: 0.00)
+        *** BUY ***       0.00 USD (716160.00 JPY, fee =   0.00)
+	C1bal = 78327.33 USD, C2bal = 2578690.44 JPY, PV = 99931.64 USD
 
 May 18, 2015 - Investor1
 	GCAM_C3_1:  sell   (T1 Mar 14, 2015 [20.28] -  T2 May 13, 2015 [19.39]   Mean: -0.0149  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -456,19 +453,19 @@ May 18, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Mar 14, 2015 [1.98] -  T2 May 13, 2015 [1.98]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar 14, 2015 [1.75] -  T2 May 13, 2015 [1.70]   Mean: -0.0009  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar 14, 2015 [1.46] -  T2 May 13, 2015 [1.43]   Mean: -0.0006  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  buy   (T1 Mar 14, 2015 [1.12] -  T2 May 13, 2015 [0.87]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  sell   (T1 Mar 14, 2015 [0.88] -  T2 May 13, 2015 [1.05]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  buy   (T1 Mar 14, 2015 [1.07] -  T2 May 13, 2015 [1.03]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  buy   (T1 Mar 14, 2015 [1.03] -  T2 May 13, 2015 [0.97]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  buy   (T1 Mar 14, 2015 [1.04] -  T2 May 13, 2015 [0.92]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  buy   (T1 Mar 14, 2015 [1.07] -  T2 May 13, 2015 [1.05]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  buy   (T1 Mar 14, 2015 [1.12] -  T2 May 13, 2015 [0.88]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  sell   (T1 Mar 14, 2015 [0.87] -  T2 May 13, 2015 [1.11]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  buy   (T1 Mar 14, 2015 [1.30] -  T2 May 13, 2015 [1.02]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Mar 14, 2015 [1.12] -  T2 May 13, 2015 [0.87]   Mean: 0.0927  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  buy   (T1 Mar 14, 2015 [0.88] -  T2 May 13, 2015 [1.05]   Mean: -0.1677  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  buy   (T1 Mar 14, 2015 [1.07] -  T2 May 13, 2015 [1.03]   Mean: -0.0274  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  buy   (T1 Mar 14, 2015 [1.03] -  T2 May 13, 2015 [0.97]   Mean: 0.0864  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  buy   (T1 Mar 14, 2015 [1.04] -  T2 May 13, 2015 [0.92]   Mean: 0.0160  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  buy   (T1 Mar 14, 2015 [1.07] -  T2 May 13, 2015 [1.05]   Mean: -0.0950  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  buy   (T1 Mar 14, 2015 [1.12] -  T2 May 13, 2015 [0.88]   Mean: 0.0068  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  buy   (T1 Mar 14, 2015 [0.87] -  T2 May 13, 2015 [1.11]   Mean: -0.0086  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  buy   (T1 Mar 14, 2015 [1.30] -  T2 May 13, 2015 [1.02]   Mean: 0.0057  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar 14, 2015 [1.46] -  T2 May 13, 2015 [1.43]   Mean: -0.0006  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: buy   55%  (buy: 11.00, hold: 0.00, sell: 9.00, abs: 0.00)
-        *** BUY ***       0.00 USD (659010.00 JPY, fee =   0.00)
-	C1bal = 79681.08 USD, C2bal = 2418587.72 JPY, PV = 99866.25 USD
+	COA:  Action: buy   65%  (buy: 13.00, hold: 0.00, sell: 7.00, abs: 0.00)
+        *** BUY ***       0.00 USD (778830.00 JPY, fee =   0.00)
+	C1bal = 71827.33 USD, C2bal = 3357520.44 JPY, PV = 99848.70 USD
 
 May 19, 2015 - Investor1
 	GCAM_C3_1:  sell   (T1 Mar 15, 2015 [21.05] -  T2 May 14, 2015 [19.31]   Mean: -0.0290  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -481,21 +478,21 @@ May 19, 2015 - Investor1
 	GCAM_C15_148:  sell   (T1 Mar 15, 2015 [2.00] -  T2 May 14, 2015 [1.94]   Mean: -0.0009  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar 15, 2015 [1.79] -  T2 May 14, 2015 [1.69]   Mean: -0.0017  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar 15, 2015 [1.47] -  T2 May 14, 2015 [1.46]   Mean: -0.0002  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  buy   (T1 Mar 15, 2015 [1.00] -  T2 May 14, 2015 [0.94]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  sell   (T1 Mar 15, 2015 [0.82] -  T2 May 14, 2015 [1.10]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  sell   (T1 Mar 15, 2015 [0.97] -  T2 May 14, 2015 [1.08]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  sell   (T1 Mar 15, 2015 [0.91] -  T2 May 14, 2015 [1.04]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  sell   (T1 Mar 15, 2015 [0.97] -  T2 May 14, 2015 [1.05]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  sell   (T1 Mar 15, 2015 [0.96] -  T2 May 14, 2015 [1.11]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  buy   (T1 Mar 15, 2015 [1.14] -  T2 May 14, 2015 [0.89]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  sell   (T1 Mar 15, 2015 [0.92] -  T2 May 14, 2015 [1.05]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  buy   (T1 Mar 15, 2015 [1.16] -  T2 May 14, 2015 [1.00]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Mar 15, 2015 [1.00] -  T2 May 14, 2015 [0.94]   Mean: 0.0504  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  buy   (T1 Mar 15, 2015 [0.82] -  T2 May 14, 2015 [1.10]   Mean: -0.3071  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  sell   (T1 Mar 15, 2015 [0.97] -  T2 May 14, 2015 [1.08]   Mean: -0.1686  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  sell   (T1 Mar 15, 2015 [0.91] -  T2 May 14, 2015 [1.04]   Mean: -0.3443  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  sell   (T1 Mar 15, 2015 [0.97] -  T2 May 14, 2015 [1.05]   Mean: -0.0281  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  sell   (T1 Mar 15, 2015 [0.96] -  T2 May 14, 2015 [1.11]   Mean: -0.3202  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  buy   (T1 Mar 15, 2015 [1.14] -  T2 May 14, 2015 [0.89]   Mean: 0.0053  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  buy   (T1 Mar 15, 2015 [0.92] -  T2 May 14, 2015 [1.05]   Mean: -0.0088  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  buy   (T1 Mar 15, 2015 [1.16] -  T2 May 14, 2015 [1.00]   Mean: -0.0020  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar 15, 2015 [1.47] -  T2 May 14, 2015 [1.46]   Mean: -0.0002  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: sell   65%  (buy: 7.00, hold: 0.00, sell: 13.00, abs: 0.00)
-        *** SELL ***    239.32 USD (fee:   0.00), [28857.72 JPY], investments affected: 2 -->  0 profited, 2 lost
-        *** SELL ***   7424.12 USD (fee:   0.00), [895200.00 JPY], investments affected: 1 -->  0 profited, 1 lost
-        *** SELL ***   5374.23 USD (fee:   0.00), [648024.30 JPY], investments affected: 1 -->  0 profited, 1 lost
-	C1bal = 92718.74 USD, C2bal = 846505.70 JPY, PV = 99739.03 USD
+	COA:  Action: sell   55%  (buy: 9.00, hold: 0.00, sell: 11.00, abs: 0.00)
+        *** SELL ***   1597.37 USD (fee:   0.00), [192610.44 JPY], investments affected: 3 -->  1 profited, 2 lost
+        *** SELL ***   6919.89 USD (fee:   0.00), [834400.00 JPY], investments affected: 1 -->  0 profited, 1 lost
+        *** SELL ***   6797.36 USD (fee:   0.00), [819625.80 JPY], investments affected: 1 -->  0 profited, 1 lost
+	C1bal = 87141.95 USD, C2bal = 1510884.20 JPY, PV = 99672.08 USD
 
 May 20, 2015 - Investor1
 	GCAM_C3_1:  sell   (T1 Mar 16, 2015 [19.55] -  T2 May 15, 2015 [19.51]   Mean: -0.0006  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -508,20 +505,18 @@ May 20, 2015 - Investor1
 	GCAM_C15_148:  sell   (T1 Mar 16, 2015 [1.99] -  T2 May 15, 2015 [1.95]   Mean: -0.0006  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 16, 2015 [1.70] -  T2 May 15, 2015 [1.74]   Mean: 0.0006  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar 16, 2015 [1.42] -  T2 May 15, 2015 [1.45]   Mean: 0.0005  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  buy   (T1 Mar 16, 2015 [0.92] -  T2 May 15, 2015 [0.89]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  sell   (T1 Mar 16, 2015 [0.94] -  T2 May 15, 2015 [1.22]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  sell   (T1 Mar 16, 2015 [1.15] -  T2 May 15, 2015 [1.22]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  sell   (T1 Mar 16, 2015 [0.98] -  T2 May 15, 2015 [1.08]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  hold   (T1 Mar 16, 2015 [1.01] -  T2 May 15, 2015 [1.01]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  sell   (T1 Mar 16, 2015 [1.05] -  T2 May 15, 2015 [1.23]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  hold   (T1 Mar 16, 2015 [0.97] -  T2 May 15, 2015 [0.97]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  sell   (T1 Mar 16, 2015 [0.93] -  T2 May 15, 2015 [1.08]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  sell   (T1 Mar 16, 2015 [0.99] -  T2 May 15, 2015 [1.05]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Mar 16, 2015 [0.92] -  T2 May 15, 2015 [0.89]   Mean: -0.0361  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  buy   (T1 Mar 16, 2015 [0.94] -  T2 May 15, 2015 [1.22]   Mean: -0.1664  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  sell   (T1 Mar 16, 2015 [1.15] -  T2 May 15, 2015 [1.22]   Mean: -0.0688  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  sell   (T1 Mar 16, 2015 [0.98] -  T2 May 15, 2015 [1.08]   Mean: -0.2857  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  sell   (T1 Mar 16, 2015 [1.01] -  T2 May 15, 2015 [1.01]   Mean: -0.0202  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  sell   (T1 Mar 16, 2015 [1.05] -  T2 May 15, 2015 [1.23]   Mean: -0.1641  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  sell   (T1 Mar 16, 2015 [0.97] -  T2 May 15, 2015 [0.97]   Mean: -0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  buy   (T1 Mar 16, 2015 [0.93] -  T2 May 15, 2015 [1.08]   Mean: -0.0133  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  sell   (T1 Mar 16, 2015 [0.99] -  T2 May 15, 2015 [1.05]   Mean: -0.0029  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar 16, 2015 [1.42] -  T2 May 15, 2015 [1.45]   Mean: 0.0005  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: sell   50%  (buy: 8.00, hold: 2.00, sell: 10.00, abs: 0.00)
-        *** SELL ***   1545.97 USD (fee:   0.00), [187495.70 JPY], investments affected: 2 -->  0 profited, 2 lost
-        *** SELL ***   1943.91 USD (fee:   0.00), [235757.15 JPY], investments affected: 1 -->  0 profited, 1 lost
-	C1bal = 96208.63 USD, C2bal = 423252.85 JPY, PV = 99698.51 USD
+	COA:  Action: hold    0%  (buy: 10.00, hold: 0.00, sell: 10.00, abs: 0.00)
+	C1bal = 87141.95 USD, C2bal = 1510884.20 JPY, PV = 99599.76 USD
 
 May 21, 2015 - Investor1
 	GCAM_C3_1:  buy   (T1 Mar 17, 2015 [18.90] -  T2 May 16, 2015 [20.57]   Mean: 0.0278  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -534,19 +529,19 @@ May 21, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Mar 17, 2015 [1.91] -  T2 May 16, 2015 [2.00]   Mean: 0.0016  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 17, 2015 [1.68] -  T2 May 16, 2015 [1.77]   Mean: 0.0016  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar 17, 2015 [1.40] -  T2 May 16, 2015 [1.44]   Mean: 0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  sell   (T1 Mar 17, 2015 [0.87] -  T2 May 16, 2015 [0.92]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  sell   (T1 Mar 17, 2015 [1.09] -  T2 May 16, 2015 [1.15]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  buy   (T1 Mar 17, 2015 [1.12] -  T2 May 16, 2015 [0.99]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  buy   (T1 Mar 17, 2015 [1.00] -  T2 May 16, 2015 [0.98]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  buy   (T1 Mar 17, 2015 [0.98] -  T2 May 16, 2015 [0.95]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  buy   (T1 Mar 17, 2015 [1.18] -  T2 May 16, 2015 [1.05]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  buy   (T1 Mar 17, 2015 [1.05] -  T2 May 16, 2015 [0.84]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  sell   (T1 Mar 17, 2015 [1.00] -  T2 May 16, 2015 [1.04]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  buy   (T1 Mar 17, 2015 [1.14] -  T2 May 16, 2015 [0.89]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  sell   (T1 Mar 17, 2015 [0.87] -  T2 May 16, 2015 [0.92]   Mean: -0.0854  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  buy   (T1 Mar 17, 2015 [1.09] -  T2 May 16, 2015 [1.15]   Mean: 0.1071  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  buy   (T1 Mar 17, 2015 [1.12] -  T2 May 16, 2015 [0.99]   Mean: 0.2059  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  buy   (T1 Mar 17, 2015 [1.00] -  T2 May 16, 2015 [0.98]   Mean: 0.2108  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  buy   (T1 Mar 17, 2015 [0.98] -  T2 May 16, 2015 [0.95]   Mean: -0.0097  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  buy   (T1 Mar 17, 2015 [1.18] -  T2 May 16, 2015 [1.05]   Mean: 0.2628  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  buy   (T1 Mar 17, 2015 [1.05] -  T2 May 16, 2015 [0.84]   Mean: 0.0082  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  buy   (T1 Mar 17, 2015 [1.00] -  T2 May 16, 2015 [1.04]   Mean: 0.0013  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  buy   (T1 Mar 17, 2015 [1.14] -  T2 May 16, 2015 [0.89]   Mean: 0.0117  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar 17, 2015 [1.40] -  T2 May 16, 2015 [1.44]   Mean: 0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: buy   70%  (buy: 14.00, hold: 0.00, sell: 6.00, abs: 0.00)
-        *** BUY ***       0.00 USD (847420.00 JPY, fee =   0.00)
-	C1bal = 89208.63 USD, C2bal = 1270672.85 JPY, PV = 99704.85 USD
+	COA:  Action: buy   80%  (buy: 16.00, hold: 0.00, sell: 4.00, abs: 0.00)
+        *** BUY ***       0.00 USD (968480.00 JPY, fee =   0.00)
+	C1bal = 79141.95 USD, C2bal = 2479364.20 JPY, PV = 99622.40 USD
 
 May 22, 2015 - Investor1
 	GCAM_C3_1:  buy   (T1 Mar 18, 2015 [19.01] -  T2 May 17, 2015 [20.86]   Mean: 0.0307  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -559,20 +554,19 @@ May 22, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Mar 18, 2015 [1.89] -  T2 May 17, 2015 [1.96]   Mean: 0.0011  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 18, 2015 [1.69] -  T2 May 17, 2015 [1.79]   Mean: 0.0016  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar 18, 2015 [1.43] -  T2 May 17, 2015 [1.43]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  sell   (T1 Mar 18, 2015 [0.82] -  T2 May 17, 2015 [0.88]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  sell   (T1 Mar 18, 2015 [1.07] -  T2 May 17, 2015 [1.20]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  sell   (T1 Mar 18, 2015 [1.08] -  T2 May 17, 2015 [1.09]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  sell   (T1 Mar 18, 2015 [0.99] -  T2 May 17, 2015 [1.01]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  sell   (T1 Mar 18, 2015 [0.94] -  T2 May 17, 2015 [1.01]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  buy   (T1 Mar 18, 2015 [1.17] -  T2 May 17, 2015 [1.13]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  buy   (T1 Mar 18, 2015 [1.30] -  T2 May 17, 2015 [1.13]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  sell   (T1 Mar 18, 2015 [1.03] -  T2 May 17, 2015 [1.25]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  sell   (T1 Mar 18, 2015 [1.01] -  T2 May 17, 2015 [1.07]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  sell   (T1 Mar 18, 2015 [0.82] -  T2 May 17, 2015 [0.88]   Mean: -0.0670  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  buy   (T1 Mar 18, 2015 [1.07] -  T2 May 17, 2015 [1.20]   Mean: 0.0707  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  sell   (T1 Mar 18, 2015 [1.08] -  T2 May 17, 2015 [1.09]   Mean: 0.1162  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  sell   (T1 Mar 18, 2015 [0.99] -  T2 May 17, 2015 [1.01]   Mean: 0.1842  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  sell   (T1 Mar 18, 2015 [0.94] -  T2 May 17, 2015 [1.01]   Mean: -0.0064  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  buy   (T1 Mar 18, 2015 [1.17] -  T2 May 17, 2015 [1.13]   Mean: 0.1734  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  buy   (T1 Mar 18, 2015 [1.30] -  T2 May 17, 2015 [1.13]   Mean: 0.0040  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  buy   (T1 Mar 18, 2015 [1.03] -  T2 May 17, 2015 [1.25]   Mean: -0.0016  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  sell   (T1 Mar 18, 2015 [1.01] -  T2 May 17, 2015 [1.07]   Mean: 0.0010  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar 18, 2015 [1.43] -  T2 May 17, 2015 [1.43]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: sell   55%  (buy: 9.00, hold: 0.00, sell: 11.00, abs: 0.00)
-        *** SELL ***   3485.00 USD (fee:   0.00), [423252.85 JPY], investments affected: 2 -->  0 profited, 2 lost
-        *** SELL ***   2269.39 USD (fee:   0.00), [275617.22 JPY], investments affected: 1 -->  0 profited, 1 lost
-	C1bal = 94963.01 USD, C2bal = 571802.78 JPY, PV = 99671.14 USD
+	COA:  Action: buy   55%  (buy: 11.00, hold: 0.00, sell: 9.00, abs: 0.00)
+        *** BUY ***       0.00 USD (667975.00 JPY, fee =   0.00)
+	C1bal = 73641.95 USD, C2bal = 3147339.20 JPY, PV = 99556.64 USD
 
 May 23, 2015 - Investor1
 	GCAM_C3_1:  buy   (T1 Mar 19, 2015 [19.16] -  T2 May 18, 2015 [19.91]   Mean: 0.0124  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -585,19 +579,22 @@ May 23, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Mar 19, 2015 [1.89] -  T2 May 18, 2015 [1.98]   Mean: 0.0015  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 19, 2015 [1.69] -  T2 May 18, 2015 [1.73]   Mean: 0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar 19, 2015 [1.44] -  T2 May 18, 2015 [1.40]   Mean: -0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  hold   (T1 Mar 19, 2015 [0.87] -  T2 May 18, 2015 [0.87]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  sell   (T1 Mar 19, 2015 [0.98] -  T2 May 18, 2015 [1.12]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  sell   (T1 Mar 19, 2015 [1.04] -  T2 May 18, 2015 [1.07]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  sell   (T1 Mar 19, 2015 [0.97] -  T2 May 18, 2015 [0.99]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  sell   (T1 Mar 19, 2015 [0.94] -  T2 May 18, 2015 [1.03]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  sell   (T1 Mar 19, 2015 [1.04] -  T2 May 18, 2015 [1.13]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  buy   (T1 Mar 19, 2015 [1.08] -  T2 May 18, 2015 [0.92]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  buy   (T1 Mar 19, 2015 [1.00] -  T2 May 18, 2015 [0.97]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  sell   (T1 Mar 19, 2015 [0.99] -  T2 May 18, 2015 [1.03]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  sell   (T1 Mar 19, 2015 [0.87] -  T2 May 18, 2015 [0.87]   Mean: -0.0289  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  buy   (T1 Mar 19, 2015 [0.98] -  T2 May 18, 2015 [1.12]   Mean: 0.0031  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  sell   (T1 Mar 19, 2015 [1.04] -  T2 May 18, 2015 [1.07]   Mean: 0.0267  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  sell   (T1 Mar 19, 2015 [0.97] -  T2 May 18, 2015 [0.99]   Mean: -0.0008  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  sell   (T1 Mar 19, 2015 [0.94] -  T2 May 18, 2015 [1.03]   Mean: -0.0345  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  sell   (T1 Mar 19, 2015 [1.04] -  T2 May 18, 2015 [1.13]   Mean: -0.0426  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  buy   (T1 Mar 19, 2015 [1.08] -  T2 May 18, 2015 [0.92]   Mean: 0.0056  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  sell   (T1 Mar 19, 2015 [1.00] -  T2 May 18, 2015 [0.97]   Mean: 0.0067  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  sell   (T1 Mar 19, 2015 [0.99] -  T2 May 18, 2015 [1.03]   Mean: 0.0002  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar 19, 2015 [1.44] -  T2 May 18, 2015 [1.40]   Mean: -0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: sell   60%  (buy: 7.00, hold: 1.00, sell: 12.00, abs: 0.00)
-        *** SELL ***   2824.88 USD (fee:   0.00), [343081.67 JPY], investments affected: 2 -->  0 profited, 2 lost
-	C1bal = 97787.89 USD, C2bal = 228721.11 JPY, PV = 99671.14 USD
+	COA:  Action: sell   65%  (buy: 7.00, hold: 0.00, sell: 13.00, abs: 0.00)
+        *** SELL ***    130.87 USD (fee:   0.00), [15894.20 JPY], investments affected: 2 -->  0 profited, 2 lost
+        *** SELL ***   5896.75 USD (fee:   0.00), [716160.00 JPY], investments affected: 1 -->  0 profited, 1 lost
+        *** SELL ***   6412.76 USD (fee:   0.00), [778830.00 JPY], investments affected: 1 -->  0 profited, 1 lost
+        *** SELL ***   4404.17 USD (fee:   0.00), [534886.28 JPY], investments affected: 1 -->  0 profited, 1 lost
+	C1bal = 90486.49 USD, C2bal = 1101568.72 JPY, PV = 99556.64 USD
 
 May 24, 2015 - Investor1
 	GCAM_C3_1:  sell   (T1 Mar 20, 2015 [19.65] -  T2 May 19, 2015 [19.06]   Mean: -0.0098  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -610,19 +607,20 @@ May 24, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Mar 20, 2015 [1.93] -  T2 May 19, 2015 [1.93]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar 20, 2015 [1.75] -  T2 May 19, 2015 [1.67]   Mean: -0.0013  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar 20, 2015 [1.47] -  T2 May 19, 2015 [1.42]   Mean: -0.0009  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  hold   (T1 Mar 20, 2015 [0.91] -  T2 May 19, 2015 [0.91]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  sell   (T1 Mar 20, 2015 [1.01] -  T2 May 19, 2015 [1.08]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  sell   (T1 Mar 20, 2015 [1.04] -  T2 May 19, 2015 [1.05]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  hold   (T1 Mar 20, 2015 [0.98] -  T2 May 19, 2015 [0.98]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  sell   (T1 Mar 20, 2015 [0.95] -  T2 May 19, 2015 [0.98]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  sell   (T1 Mar 20, 2015 [1.04] -  T2 May 19, 2015 [1.08]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  sell   (T1 Mar 20, 2015 [0.94] -  T2 May 19, 2015 [0.94]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  buy   (T1 Mar 20, 2015 [1.09] -  T2 May 19, 2015 [1.05]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  sell   (T1 Mar 20, 2015 [0.97] -  T2 May 19, 2015 [0.99]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Mar 20, 2015 [0.91] -  T2 May 19, 2015 [0.91]   Mean: -0.0175  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  buy   (T1 Mar 20, 2015 [1.01] -  T2 May 19, 2015 [1.08]   Mean: -0.0449  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  sell   (T1 Mar 20, 2015 [1.04] -  T2 May 19, 2015 [1.05]   Mean: -0.0363  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  buy   (T1 Mar 20, 2015 [0.98] -  T2 May 19, 2015 [0.98]   Mean: -0.0959  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  sell   (T1 Mar 20, 2015 [0.95] -  T2 May 19, 2015 [0.98]   Mean: -0.0276  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  sell   (T1 Mar 20, 2015 [1.04] -  T2 May 19, 2015 [1.08]   Mean: -0.0819  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  sell   (T1 Mar 20, 2015 [0.94] -  T2 May 19, 2015 [0.94]   Mean: -0.0013  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  sell   (T1 Mar 20, 2015 [1.09] -  T2 May 19, 2015 [1.05]   Mean: 0.0013  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  sell   (T1 Mar 20, 2015 [0.97] -  T2 May 19, 2015 [0.99]   Mean: -0.0054  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar 20, 2015 [1.47] -  T2 May 19, 2015 [1.42]   Mean: -0.0009  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: sell   60%  (buy: 6.00, hold: 2.00, sell: 12.00, abs: 0.00)
-        *** SELL ***   1129.95 USD (fee:   0.00), [137232.67 JPY], investments affected: 3 -->  0 profited, 3 lost
-	C1bal = 98917.84 USD, C2bal = 91488.45 JPY, PV = 99671.14 USD
+	COA:  Action: sell   60%  (buy: 8.00, hold: 0.00, sell: 12.00, abs: 0.00)
+        *** SELL ***   3570.14 USD (fee:   0.00), [433593.72 JPY], investments affected: 2 -->  0 profited, 2 lost
+        *** SELL ***   1871.94 USD (fee:   0.00), [227347.51 JPY], investments affected: 1 -->  0 profited, 1 lost
+	C1bal = 95928.58 USD, C2bal = 440627.49 JPY, PV = 99556.64 USD
 
 May 25, 2015 - Investor1
 	GCAM_C3_1:  sell   (T1 Mar 21, 2015 [20.26] -  T2 May 20, 2015 [18.89]   Mean: -0.0228  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -635,19 +633,19 @@ May 25, 2015 - Investor1
 	GCAM_C15_148:  sell   (T1 Mar 21, 2015 [1.93] -  T2 May 20, 2015 [1.92]   Mean: -0.0001  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar 21, 2015 [1.75] -  T2 May 20, 2015 [1.68]   Mean: -0.0011  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar 21, 2015 [1.47] -  T2 May 20, 2015 [1.43]   Mean: -0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  buy   (T1 Mar 21, 2015 [0.99] -  T2 May 20, 2015 [0.88]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  sell   (T1 Mar 21, 2015 [0.95] -  T2 May 20, 2015 [1.11]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  sell   (T1 Mar 21, 2015 [0.95] -  T2 May 20, 2015 [1.11]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  sell   (T1 Mar 21, 2015 [0.94] -  T2 May 20, 2015 [0.97]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  hold   (T1 Mar 21, 2015 [0.96] -  T2 May 20, 2015 [0.97]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  sell   (T1 Mar 21, 2015 [0.95] -  T2 May 20, 2015 [1.08]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  buy   (T1 Mar 21, 2015 [0.91] -  T2 May 20, 2015 [0.87]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  sell   (T1 Mar 21, 2015 [0.99] -  T2 May 20, 2015 [1.09]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  buy   (T1 Mar 21, 2015 [1.09] -  T2 May 20, 2015 [0.95]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Mar 21, 2015 [0.99] -  T2 May 20, 2015 [0.88]   Mean: 0.0504  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  buy   (T1 Mar 21, 2015 [0.95] -  T2 May 20, 2015 [1.11]   Mean: -0.1894  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  sell   (T1 Mar 21, 2015 [0.95] -  T2 May 20, 2015 [1.11]   Mean: -0.2401  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  sell   (T1 Mar 21, 2015 [0.94] -  T2 May 20, 2015 [0.97]   Mean: -0.2741  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  sell   (T1 Mar 21, 2015 [0.96] -  T2 May 20, 2015 [0.97]   Mean: -0.0278  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  sell   (T1 Mar 21, 2015 [0.95] -  T2 May 20, 2015 [1.08]   Mean: -0.3212  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  buy   (T1 Mar 21, 2015 [0.91] -  T2 May 20, 2015 [0.87]   Mean: 0.0004  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  buy   (T1 Mar 21, 2015 [0.99] -  T2 May 20, 2015 [1.09]   Mean: -0.0119  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  buy   (T1 Mar 21, 2015 [1.09] -  T2 May 20, 2015 [0.95]   Mean: -0.0021  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar 21, 2015 [1.47] -  T2 May 20, 2015 [1.43]   Mean: -0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: sell   65%  (buy: 6.00, hold: 1.00, sell: 13.00, abs: 0.00)
-        *** SELL ***    489.65 USD (fee:   0.00), [59467.49 JPY], investments affected: 4 -->  0 profited, 4 lost
-	C1bal = 99407.49 USD, C2bal = 32020.96 JPY, PV = 99671.14 USD
+	COA:  Action: sell   60%  (buy: 8.00, hold: 0.00, sell: 12.00, abs: 0.00)
+        *** SELL ***   2176.83 USD (fee:   0.00), [264376.49 JPY], investments affected: 2 -->  0 profited, 2 lost
+	C1bal = 98105.41 USD, C2bal = 176250.99 JPY, PV = 99556.64 USD
 
 May 26, 2015 - Investor1
 	GCAM_C3_1:  sell   (T1 Mar 22, 2015 [20.70] -  T2 May 21, 2015 [19.05]   Mean: -0.0275  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -660,19 +658,19 @@ May 26, 2015 - Investor1
 	GCAM_C15_148:  sell   (T1 Mar 22, 2015 [1.97] -  T2 May 21, 2015 [1.93]   Mean: -0.0006  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar 22, 2015 [1.74] -  T2 May 21, 2015 [1.72]   Mean: -0.0004  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar 22, 2015 [1.46] -  T2 May 21, 2015 [1.44]   Mean: -0.0003  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  buy   (T1 Mar 22, 2015 [0.97] -  T2 May 21, 2015 [0.84]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  sell   (T1 Mar 22, 2015 [1.02] -  T2 May 21, 2015 [1.19]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  sell   (T1 Mar 22, 2015 [0.99] -  T2 May 21, 2015 [1.11]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  sell   (T1 Mar 22, 2015 [0.98] -  T2 May 21, 2015 [1.04]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  sell   (T1 Mar 22, 2015 [0.89] -  T2 May 21, 2015 [0.94]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  sell   (T1 Mar 22, 2015 [1.00] -  T2 May 21, 2015 [1.14]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  buy   (T1 Mar 22, 2015 [1.01] -  T2 May 21, 2015 [0.89]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  sell   (T1 Mar 22, 2015 [0.84] -  T2 May 21, 2015 [1.18]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  sell   (T1 Mar 22, 2015 [1.09] -  T2 May 21, 2015 [1.18]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Mar 22, 2015 [0.97] -  T2 May 21, 2015 [0.84]   Mean: -0.0197  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  buy   (T1 Mar 22, 2015 [1.02] -  T2 May 21, 2015 [1.19]   Mean: -0.2520  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  sell   (T1 Mar 22, 2015 [0.99] -  T2 May 21, 2015 [1.11]   Mean: -0.2628  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  sell   (T1 Mar 22, 2015 [0.98] -  T2 May 21, 2015 [1.04]   Mean: -0.4873  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  sell   (T1 Mar 22, 2015 [0.89] -  T2 May 21, 2015 [0.94]   Mean: -0.0595  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  sell   (T1 Mar 22, 2015 [1.00] -  T2 May 21, 2015 [1.14]   Mean: -0.4351  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  buy   (T1 Mar 22, 2015 [1.01] -  T2 May 21, 2015 [0.89]   Mean: -0.0006  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  buy   (T1 Mar 22, 2015 [0.84] -  T2 May 21, 2015 [1.18]   Mean: -0.0206  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  sell   (T1 Mar 22, 2015 [1.09] -  T2 May 21, 2015 [1.18]   Mean: -0.0023  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar 22, 2015 [1.46] -  T2 May 21, 2015 [1.44]   Mean: -0.0003  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: sell   65%  (buy: 7.00, hold: 0.00, sell: 13.00, abs: 0.00)
-        *** SELL ***    169.11 USD (fee:   0.00), [20813.62 JPY], investments affected: 5 -->  0 profited, 5 lost
-	C1bal = 99576.59 USD, C2bal = 11207.33 JPY, PV = 99667.65 USD
+	COA:  Action: sell   55%  (buy: 9.00, hold: 0.00, sell: 11.00, abs: 0.00)
+        *** SELL ***    787.60 USD (fee:   0.00), [96938.05 JPY], investments affected: 3 -->  0 profited, 3 lost
+	C1bal = 98893.02 USD, C2bal = 79312.95 JPY, PV = 99537.42 USD
 
 May 27, 2015 - Investor1
 	GCAM_C3_1:  sell   (T1 Mar 23, 2015 [19.46] -  T2 May 22, 2015 [19.31]   Mean: -0.0024  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -685,19 +683,19 @@ May 27, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Mar 23, 2015 [1.92] -  T2 May 22, 2015 [1.95]   Mean: 0.0005  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 23, 2015 [1.70] -  T2 May 22, 2015 [1.71]   Mean: 0.0002  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar 23, 2015 [1.43] -  T2 May 22, 2015 [1.39]   Mean: -0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  buy   (T1 Mar 23, 2015 [0.88] -  T2 May 22, 2015 [0.79]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  sell   (T1 Mar 23, 2015 [0.99] -  T2 May 22, 2015 [1.29]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  sell   (T1 Mar 23, 2015 [1.02] -  T2 May 22, 2015 [1.14]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  sell   (T1 Mar 23, 2015 [0.97] -  T2 May 22, 2015 [1.07]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  sell   (T1 Mar 23, 2015 [0.90] -  T2 May 22, 2015 [0.90]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  sell   (T1 Mar 23, 2015 [1.02] -  T2 May 22, 2015 [1.22]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  sell   (T1 Mar 23, 2015 [0.87] -  T2 May 22, 2015 [0.96]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  sell   (T1 Mar 23, 2015 [0.94] -  T2 May 22, 2015 [1.15]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  sell   (T1 Mar 23, 2015 [1.00] -  T2 May 22, 2015 [1.10]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Mar 23, 2015 [0.88] -  T2 May 22, 2015 [0.79]   Mean: -0.0022  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  buy   (T1 Mar 23, 2015 [0.99] -  T2 May 22, 2015 [1.29]   Mean: -0.1354  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  sell   (T1 Mar 23, 2015 [1.02] -  T2 May 22, 2015 [1.14]   Mean: -0.1073  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  sell   (T1 Mar 23, 2015 [0.97] -  T2 May 22, 2015 [1.07]   Mean: -0.2279  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  sell   (T1 Mar 23, 2015 [0.90] -  T2 May 22, 2015 [0.90]   Mean: -0.0263  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  sell   (T1 Mar 23, 2015 [1.02] -  T2 May 22, 2015 [1.22]   Mean: -0.2261  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  sell   (T1 Mar 23, 2015 [0.87] -  T2 May 22, 2015 [0.96]   Mean: 0.0017  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  buy   (T1 Mar 23, 2015 [0.94] -  T2 May 22, 2015 [1.15]   Mean: -0.0082  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  sell   (T1 Mar 23, 2015 [1.00] -  T2 May 22, 2015 [1.10]   Mean: -0.0030  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar 23, 2015 [1.43] -  T2 May 22, 2015 [1.39]   Mean: -0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: sell   70%  (buy: 6.00, hold: 0.00, sell: 14.00, abs: 0.00)
-        *** SELL ***     63.39 USD (fee:   0.00), [ 7845.13 JPY], investments affected: 6 -->  0 profited, 6 lost
-	C1bal = 99639.98 USD, C2bal = 3362.20 JPY, PV = 99667.15 USD
+	COA:  Action: sell   60%  (buy: 8.00, hold: 0.00, sell: 12.00, abs: 0.00)
+        *** SELL ***    384.52 USD (fee:   0.00), [47587.77 JPY], investments affected: 4 -->  0 profited, 4 lost
+	C1bal = 99277.53 USD, C2bal = 31725.18 JPY, PV = 99533.88 USD
 
 May 28, 2015 - Investor1
 	GCAM_C3_1:  buy   (T1 Mar 24, 2015 [19.09] -  T2 May 23, 2015 [20.39]   Mean: 0.0217  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -710,19 +708,19 @@ May 28, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Mar 24, 2015 [1.93] -  T2 May 23, 2015 [1.99]   Mean: 0.0011  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 24, 2015 [1.68] -  T2 May 23, 2015 [1.73]   Mean: 0.0009  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar 24, 2015 [1.39] -  T2 May 23, 2015 [1.41]   Mean: 0.0003  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  hold   (T1 Mar 24, 2015 [0.82] -  T2 May 23, 2015 [0.82]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  buy   (T1 Mar 24, 2015 [1.16] -  T2 May 23, 2015 [0.91]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  buy   (T1 Mar 24, 2015 [1.16] -  T2 May 23, 2015 [0.82]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  buy   (T1 Mar 24, 2015 [1.02] -  T2 May 23, 2015 [0.84]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  buy   (T1 Mar 24, 2015 [0.96] -  T2 May 23, 2015 [0.76]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  buy   (T1 Mar 24, 2015 [1.15] -  T2 May 23, 2015 [0.82]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  buy   (T1 Mar 24, 2015 [0.90] -  T2 May 23, 2015 [0.81]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  buy   (T1 Mar 24, 2015 [0.96] -  T2 May 23, 2015 [0.82]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  sell   (T1 Mar 24, 2015 [0.87] -  T2 May 23, 2015 [0.93]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Mar 24, 2015 [0.82] -  T2 May 23, 2015 [0.82]   Mean: -0.0707  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  sell   (T1 Mar 24, 2015 [1.16] -  T2 May 23, 2015 [0.91]   Mean: 0.2322  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  buy   (T1 Mar 24, 2015 [1.16] -  T2 May 23, 2015 [0.82]   Mean: 0.3199  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  buy   (T1 Mar 24, 2015 [1.02] -  T2 May 23, 2015 [0.84]   Mean: 0.3945  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  buy   (T1 Mar 24, 2015 [0.96] -  T2 May 23, 2015 [0.76]   Mean: 0.0376  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  buy   (T1 Mar 24, 2015 [1.15] -  T2 May 23, 2015 [0.82]   Mean: 0.4246  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  buy   (T1 Mar 24, 2015 [0.90] -  T2 May 23, 2015 [0.81]   Mean: 0.0137  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  sell   (T1 Mar 24, 2015 [0.96] -  T2 May 23, 2015 [0.82]   Mean: 0.0118  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  sell   (T1 Mar 24, 2015 [0.87] -  T2 May 23, 2015 [0.93]   Mean: -0.0005  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar 24, 2015 [1.39] -  T2 May 23, 2015 [1.41]   Mean: 0.0003  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: buy   75%  (buy: 15.00, hold: 1.00, sell: 4.00, abs: 0.00)
-        *** BUY ***       0.00 USD (931350.00 JPY, fee =   0.00)
-	C1bal = 92139.98 USD, C2bal = 934712.20 JPY, PV = 99667.06 USD
+	COA:  Action: buy   70%  (buy: 14.00, hold: 0.00, sell: 6.00, abs: 0.00)
+        *** BUY ***       0.00 USD (869260.00 JPY, fee =   0.00)
+	C1bal = 92277.53 USD, C2bal = 900985.18 JPY, PV = 99533.01 USD
 
 May 29, 2015 - Investor1
 	GCAM_C3_1:  buy   (T1 Mar 25, 2015 [19.39] -  T2 May 24, 2015 [21.47]   Mean: 0.0347  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -735,19 +733,19 @@ May 29, 2015 - Investor1
 	GCAM_C15_148:  sell   (T1 Mar 25, 2015 [2.11] -  T2 May 24, 2015 [2.07]   Mean: -0.0008  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 25, 2015 [1.69] -  T2 May 24, 2015 [1.78]   Mean: 0.0014  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar 25, 2015 [1.41] -  T2 May 24, 2015 [1.39]   Mean: -0.0003  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  buy   (T1 Mar 25, 2015 [0.91] -  T2 May 24, 2015 [0.86]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  buy   (T1 Mar 25, 2015 [1.28] -  T2 May 24, 2015 [0.98]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  buy   (T1 Mar 25, 2015 [1.18] -  T2 May 24, 2015 [0.96]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  buy   (T1 Mar 25, 2015 [1.10] -  T2 May 24, 2015 [0.93]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  buy   (T1 Mar 25, 2015 [0.96] -  T2 May 24, 2015 [0.88]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  buy   (T1 Mar 25, 2015 [1.20] -  T2 May 24, 2015 [0.97]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  buy   (T1 Mar 25, 2015 [1.08] -  T2 May 24, 2015 [0.83]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  buy   (T1 Mar 25, 2015 [1.20] -  T2 May 24, 2015 [1.05]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  buy   (T1 Mar 25, 2015 [1.14] -  T2 May 24, 2015 [1.04]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Mar 25, 2015 [0.91] -  T2 May 24, 2015 [0.86]   Mean: -0.0393  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  sell   (T1 Mar 25, 2015 [1.28] -  T2 May 24, 2015 [0.98]   Mean: 0.2536  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  buy   (T1 Mar 25, 2015 [1.18] -  T2 May 24, 2015 [0.96]   Mean: 0.2774  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  buy   (T1 Mar 25, 2015 [1.10] -  T2 May 24, 2015 [0.93]   Mean: 0.4312  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  buy   (T1 Mar 25, 2015 [0.96] -  T2 May 24, 2015 [0.88]   Mean: 0.0084  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  buy   (T1 Mar 25, 2015 [1.20] -  T2 May 24, 2015 [0.97]   Mean: 0.3446  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  buy   (T1 Mar 25, 2015 [1.08] -  T2 May 24, 2015 [0.83]   Mean: 0.0112  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  sell   (T1 Mar 25, 2015 [1.20] -  T2 May 24, 2015 [1.05]   Mean: 0.0046  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  buy   (T1 Mar 25, 2015 [1.14] -  T2 May 24, 2015 [1.04]   Mean: 0.0047  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar 25, 2015 [1.41] -  T2 May 24, 2015 [1.39]   Mean: -0.0003  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: buy   65%  (buy: 13.00, hold: 0.00, sell: 7.00, abs: 0.00)
-        *** BUY ***       0.00 USD (805870.00 JPY, fee =   0.00)
-	C1bal = 85639.98 USD, C2bal = 1740582.20 JPY, PV = 99679.20 USD
+	COA:  Action: buy   55%  (buy: 11.00, hold: 0.00, sell: 9.00, abs: 0.00)
+        *** BUY ***       0.00 USD (681890.00 JPY, fee =   0.00)
+	C1bal = 86777.53 USD, C2bal = 1582875.18 JPY, PV = 99544.71 USD
 
 May 30, 2015 - Investor1
 	GCAM_C3_1:  buy   (T1 Mar 26, 2015 [19.39] -  T2 May 25, 2015 [20.24]   Mean: 0.0141  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -760,19 +758,19 @@ May 30, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Mar 26, 2015 [1.95] -  T2 May 25, 2015 [1.98]   Mean: 0.0006  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 26, 2015 [1.67] -  T2 May 25, 2015 [1.72]   Mean: 0.0009  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar 26, 2015 [1.41] -  T2 May 25, 2015 [1.44]   Mean: 0.0005  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  buy   (T1 Mar 26, 2015 [0.88] -  T2 May 25, 2015 [0.87]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  sell   (T1 Mar 26, 2015 [1.04] -  T2 May 25, 2015 [1.09]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  buy   (T1 Mar 26, 2015 [1.09] -  T2 May 25, 2015 [1.06]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  buy   (T1 Mar 26, 2015 [1.00] -  T2 May 25, 2015 [0.99]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  hold   (T1 Mar 26, 2015 [0.95] -  T2 May 25, 2015 [0.94]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  buy   (T1 Mar 26, 2015 [1.12] -  T2 May 25, 2015 [1.08]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  buy   (T1 Mar 26, 2015 [0.87] -  T2 May 25, 2015 [0.83]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  sell   (T1 Mar 26, 2015 [0.98] -  T2 May 25, 2015 [1.10]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  sell   (T1 Mar 26, 2015 [1.02] -  T2 May 25, 2015 [1.03]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Mar 26, 2015 [0.88] -  T2 May 25, 2015 [0.87]   Mean: -0.0616  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  buy   (T1 Mar 26, 2015 [1.04] -  T2 May 25, 2015 [1.09]   Mean: -0.0076  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  buy   (T1 Mar 26, 2015 [1.09] -  T2 May 25, 2015 [1.06]   Mean: 0.0316  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  buy   (T1 Mar 26, 2015 [1.00] -  T2 May 25, 2015 [0.99]   Mean: -0.0761  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  buy   (T1 Mar 26, 2015 [0.95] -  T2 May 25, 2015 [0.94]   Mean: -0.0278  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  buy   (T1 Mar 26, 2015 [1.12] -  T2 May 25, 2015 [1.08]   Mean: 0.0160  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  buy   (T1 Mar 26, 2015 [0.87] -  T2 May 25, 2015 [0.83]   Mean: 0.0026  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  buy   (T1 Mar 26, 2015 [0.98] -  T2 May 25, 2015 [1.10]   Mean: -0.0014  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  sell   (T1 Mar 26, 2015 [1.02] -  T2 May 25, 2015 [1.03]   Mean: 0.0018  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  buy   (T1 Mar 26, 2015 [1.41] -  T2 May 25, 2015 [1.44]   Mean: 0.0005  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: buy   65%  (buy: 13.00, hold: 1.00, sell: 6.00, abs: 0.00)
-        *** BUY ***       0.00 USD (805870.00 JPY, fee =   0.00)
-	C1bal = 79139.98 USD, C2bal = 2546452.20 JPY, PV = 99679.20 USD
+	COA:  Action: buy   80%  (buy: 16.00, hold: 0.00, sell: 4.00, abs: 0.00)
+        *** BUY ***       0.00 USD (991840.00 JPY, fee =   0.00)
+	C1bal = 78777.53 USD, C2bal = 2574715.18 JPY, PV = 99544.71 USD
 
 May 31, 2015 - Investor1
 	GCAM_C3_1:  sell   (T1 Mar 27, 2015 [19.51] -  T2 May 26, 2015 [19.28]   Mean: -0.0039  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -785,21 +783,21 @@ May 31, 2015 - Investor1
 	GCAM_C15_148:  buy   (T1 Mar 27, 2015 [1.92] -  T2 May 26, 2015 [1.92]   Mean: 0.0001  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar 27, 2015 [1.69] -  T2 May 26, 2015 [1.69]   Mean: -0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar 27, 2015 [1.43] -  T2 May 26, 2015 [1.38]   Mean: -0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C5_4_ECON:  hold   (T1 Mar 27, 2015 [0.82] -  T2 May 26, 2015 [0.82]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_1_ECON:  buy   (T1 Mar 27, 2015 [1.16] -  T2 May 26, 2015 [0.99]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C3_2_ECON:  buy   (T1 Mar 27, 2015 [1.19] -  T2 May 26, 2015 [1.01]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_47_ECON:  buy   (T1 Mar 27, 2015 [1.05] -  T2 May 26, 2015 [0.94]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_60_ECON:  buy   (T1 Mar 27, 2015 [1.01] -  T2 May 26, 2015 [0.88]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C16_121_ECON:  buy   (T1 Mar 27, 2015 [1.21] -  T2 May 26, 2015 [1.02]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_137_ECON:  buy   (T1 Mar 27, 2015 [0.91] -  T2 May 26, 2015 [0.90]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_148_ECON:  buy   (T1 Mar 27, 2015 [1.10] -  T2 May 26, 2015 [1.04]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	GCAM_C15_147_ECON:  sell   (T1 Mar 27, 2015 [1.04] -  T2 May 26, 2015 [1.06]   Mean: 0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C5_4_ECON:  buy   (T1 Mar 27, 2015 [0.82] -  T2 May 26, 2015 [0.82]   Mean: -0.0633  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_1_ECON:  sell   (T1 Mar 27, 2015 [1.16] -  T2 May 26, 2015 [0.99]   Mean: 0.0250  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C3_2_ECON:  buy   (T1 Mar 27, 2015 [1.19] -  T2 May 26, 2015 [1.01]   Mean: 0.0831  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_47_ECON:  buy   (T1 Mar 27, 2015 [1.05] -  T2 May 26, 2015 [0.94]   Mean: 0.0261  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_60_ECON:  buy   (T1 Mar 27, 2015 [1.01] -  T2 May 26, 2015 [0.88]   Mean: 0.0005  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C16_121_ECON:  buy   (T1 Mar 27, 2015 [1.21] -  T2 May 26, 2015 [1.02]   Mean: 0.0640  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_137_ECON:  buy   (T1 Mar 27, 2015 [0.91] -  T2 May 26, 2015 [0.90]   Mean: 0.0009  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_148_ECON:  sell   (T1 Mar 27, 2015 [1.10] -  T2 May 26, 2015 [1.04]   Mean: 0.0008  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
+	GCAM_C15_147_ECON:  sell   (T1 Mar 27, 2015 [1.04] -  T2 May 26, 2015 [1.06]   Mean: -0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_204:  sell   (T1 Mar 27, 2015 [1.43] -  T2 May 26, 2015 [1.38]   Mean: -0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
-	COA:  Action: buy   70%  (buy: 14.00, hold: 1.00, sell: 5.00, abs: 0.00)
-        *** BUY ***       0.00 USD (867860.00 JPY, fee =   0.00)
-	C1bal = 72139.98 USD, C2bal = 3414312.20 JPY, PV = 99679.20 USD
+	COA:  Action: buy   65%  (buy: 13.00, hold: 0.00, sell: 7.00, abs: 0.00)
+        *** BUY ***       0.00 USD (805870.00 JPY, fee =   0.00)
+	C1bal = 72277.53 USD, C2bal = 3380585.18 JPY, PV = 99544.71 USD
 
-Completed generation 1, May  1, 2015 - May 31, 2015,  unsettled =   3414312.20 JPY
+Completed generation 1, May  1, 2015 - May 31, 2015,  unsettled =   3380585.18 JPY
 loop 0 completed.  May  1, 2015 - May 31, 2015
 
 **************  S I M U L A T I O N   R E S U L T S  **************

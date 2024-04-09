@@ -41,7 +41,7 @@ type SimApp struct {
 	MemProfile                   string // where is memory being consumed?
 	basePort                     int    // Starting port
 	maxPort                      int    // Upper limit for trying different ports
-	currentPort                  int    // current port being used
+	Simtalkport                  int    // current port being used
 	notalk                       bool   // if true, the simulator does not start up an HTTP listener
 }
 
@@ -146,6 +146,7 @@ func doSimulation() {
 	app.sim.GenInfluencerDistribution = app.GenInfluencerDistribution
 	app.sim.FitnessScores = app.FitnessScores
 	app.sim.TraceTiming = app.traceTiming
+	app.sim.Simtalkport = app.Simtalkport
 	app.sim.Run()
 
 	displaySimulationResults(cfg, app.db)

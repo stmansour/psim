@@ -31,7 +31,7 @@ func startHTTPServer(ctx context.Context) error {
 		}
 	}()
 
-	log.Printf("Listening for commands on http://localhost:%d\n", app.currentPort)
+	log.Printf("Listening for commands on http://localhost:%d\n", app.Simtalkport)
 
 	// Wait for the context to be canceled (simulation done), then shut down the server
 	<-ctx.Done()
@@ -45,7 +45,7 @@ func findAvailablePort(ctx context.Context) (net.Listener, error) {
 		addr := fmt.Sprintf(":%d", port)
 		listener, err := net.Listen("tcp", addr)
 		if err == nil {
-			app.currentPort = port
+			app.Simtalkport = port
 			return listener, nil
 		}
 		if ctx.Err() != nil {

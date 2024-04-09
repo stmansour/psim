@@ -174,6 +174,44 @@ func (p *LSMInfluencer) DNA() string {
 	return fmt.Sprintf("{%s,Delta1=%d,Delta2=%d,Metric=%s}", p.Subclass(), p.Delta1, p.Delta2, p.Metric)
 }
 
+// calculateAndSetValues calculates and sets values based on the specified metric name (field name).
+// The field name is a string that uniquely identifies the metric in a record.
+// ----------------------------------------------------------------------------------------------------
+func (p *LSMInfluencer) calculateAndSetValues(pred *Prediction, fieldName string) (float64, float64, float64, bool) {
+	val1, ok1 := pred.Recs[0].Fields[fieldName]
+	val2, ok2 := pred.Recs[1].Fields[fieldName]
+	if !ok1 || !ok2 {
+		return 0, 0, 0, false
+	}
+
+	stdDevSquared := val2.StdDevSquared // used by trace
+	pred.StdDevSquared = stdDevSquared
+	delta := val2.Value - val1.Value         // change over T1 to T2
+	da := delta / float64(p.Delta2-p.Delta1) // mean change between T1 and T2
+	pred.AvgDelta = da                       // used for trace
+	x := p.cfg.StdDevVariationFactor         // notational simplification
+	res := da*da - x*x*stdDevSquared         // deltaAvg^2 - (x*stdDev)^2   if the result is positive, then we transact
+	pred.Val1 = val1.Value                   // used in trace
+	pred.Val2 = val2.Value                   // used in trace
+
+	return val1.Value, val2.Value, res, true
+}
+
+// determineAction determines the action based on delta and the predictor type.
+// ----------------------------------------------------------------------------------------------------
+func (p *LSMInfluencer) determineAction(delta float64, predictor int) string {
+	if delta < 0 {
+		if predictor == newdata.SingleValLT || predictor == newdata.C1C2RatioLT {
+			return "sell"
+		}
+		return "buy"
+	}
+	if predictor == newdata.SingleValLT || predictor == newdata.C1C2RatioLT {
+		return "buy"
+	}
+	return "sell"
+}
+
 // GetPrediction - using the supplied date, it researches data and makes
 // a prediction on whther to "buy" or "hold"
 //
@@ -186,7 +224,7 @@ func (p *LSMInfluencer) DNA() string {
 // ---------------------------------------------------------------------------
 func (p *LSMInfluencer) GetPrediction(t3 time.Time) (*Prediction, error) {
 	var pred Prediction
-	pred.Action = "abstain" // assume no data
+	pred.Action = "abstain" // Default action
 	pred.T3 = t3
 	pred.Delta1 = p.Delta1
 	pred.Delta2 = p.Delta2
@@ -195,76 +233,85 @@ func (p *LSMInfluencer) GetPrediction(t3 time.Time) (*Prediction, error) {
 		return &pred, err
 	}
 
-	var delta float64
-	rec1 := pred.Recs[0]
-	rec2 := pred.Recs[1]
-	N := p.Delta2 - p.Delta1 // number of days between T1 and T2
-
+	// Setting default probabilities and weights for simplicity.
+	pred.Probability = 1.0
+	pred.Weight = 1.0
 	switch p.Predictor {
 	case newdata.SingleValGT, newdata.SingleValLT:
-		if len(pred.Recs[0].Fields) != 1 {
-			return &pred, nil // need to abstain, the data was not available
+		val1, val2, res, ok := p.calculateAndSetValues(&pred, p.Metric)
+		if !ok {
+			// Data for the given fieldName is not available.
+			return &pred, nil // Return immediately with pred.Action as "abstain".
 		}
-		pred.Val1 = rec1.Fields[pred.Fields[0].FQMetric()].Value // Value at T1
-		pred.Val2 = rec2.Fields[pred.Fields[0].FQMetric()].Value // Value at T2
-		stdDevSquared := rec2.Fields[pred.Fields[0].FQMetric()].StdDevSquared
-		pred.Probability = 1.0
-		pred.Weight = 1.0
-
-		//-----------------------------------------------------------------------------------------------------
-		// if (avg daily change from T1 to T2)^2    >    (avgp * (StdDeviation from Mean))^2   then we transact
-		//-----------------------------------------------------------------------------------------------------
-		delta = pred.Val2 - pred.Val1      // change between T1 and T2
-		da := delta / float64(N)           // Daily average change
-		pred.AvgDelta = da                 // used by trace
-		pred.StdDevSquared = stdDevSquared // used by trace
-		x := p.cfg.StdDevVariationFactor
-		res := da*da - x*x*stdDevSquared
-		if res > 0 { // we predict to buy or sell
-			if delta < 0 {
-				pred.Action = "buy"
-				if p.Predictor == newdata.SingleValLT {
-					pred.Action = "sell"
-				}
-			} else {
-				pred.Action = "sell"
-				if p.Predictor == newdata.SingleValLT {
-					pred.Action = "buy"
-				}
-			}
+		if res > 0 {
+			pred.Action = p.determineAction(val2-val1, p.Predictor)
 		} else {
 			pred.Action = "hold"
 		}
 		return &pred, nil
 
 	case newdata.C1C2RatioGT, newdata.C1C2RatioLT:
+		pred.Probability = 1.0
+		pred.Weight = 1.0
 		if len(pred.Recs[0].Fields) != 2 || len(pred.Recs[1].Fields) != 2 {
 			return &pred, nil // need to abstain, the data was not available
 		}
-		pred.Val1 = rec1.Fields[pred.Fields[0].FQMetric()].Value / rec1.Fields[pred.Fields[1].FQMetric()].Value
-		pred.Val2 = rec2.Fields[pred.Fields[0].FQMetric()].Value / rec2.Fields[pred.Fields[1].FQMetric()].Value
+
+		// // There are two keys in pred.Recs[0].Fields. One is p.cfg.C1 + metric, the other is p.cfg.C2 + metric
+		// // With Go maps, the order of the keys is not guaranteed. So we'll grab both and swap if we need to.
+		// c := []string{}
+		// for k := range pred.Recs {
+
+		// 	if strings.HasPrefix(k, p.cfg.C1) {
+		// 		c = append(c, k)
+		// 	}
+		// }
+		// if c[0][:3] != p.cfg.C1 {
+		// 	c[0], c[1] = c[1], c[0]
+		// }
+
+		// // Now the metric for C1 is in c[0] and the metric for C2 is in c[1]
+
+		// vala -- is Fields[0] withing the std dev?
+		valaT1, valaT2, res0, ok := p.calculateAndSetValues(&pred, p.cfg.C1+p.Metric)
+		if !ok {
+			// Data for the given fieldName is not available.
+			return &pred, nil // Return immediately with pred.Action as "abstain".
+		}
+		// valb -- is Fields[1] withing the std dev?
+		valbT1, valbT2, res1, ok := p.calculateAndSetValues(&pred, p.cfg.C2+p.Metric)
+		if !ok {
+			// Data for the given fieldName is not available.
+			return &pred, nil // Return immediately with pred.Action as "abstain".
+		}
+		// pred.Val1 = rec1.Fields[pred.Fields[0].FQMetric()].Value / rec1.Fields[pred.Fields[1].FQMetric()].Value
+		// pred.Val2 = rec2.Fields[pred.Fields[1].FQMetric()].Value / rec2.Fields[pred.Fields[1].FQMetric()].Value
+		pred.Val1 = valaT1 / valbT1
+		pred.Val2 = valaT2 / valbT2
+		delta := pred.Val2 - pred.Val1
+
+		if res0 > 0 && res1 > 0 { // both results need to be positive if we transact
+			if delta < 0 {
+				pred.Action = "buy"
+				if p.Predictor == newdata.C1C2RatioLT {
+					pred.Action = "sell"
+				}
+			} else {
+				pred.Action = "sell"
+				if p.Predictor == newdata.C1C2RatioLT {
+					pred.Action = "buy"
+				}
+			}
+		} else {
+			pred.Action = "hold"
+		}
+
+		return &pred, nil
 
 	default:
 		log.Fatalf("Need to handle this case\n")
 	}
 
-	sc := p.myInvestor.db.Mim.MInfluencerSubclasses[p.Metric]
-	delta = pred.Val2 - pred.Val1
-	percentChange := (delta / pred.Val1)                      // this is over the time period T1 to T2
-	numDays := p.Delta2 - p.Delta1                            // number of days between T1 and T2
-	percentChange = float64(numDays) * percentChange / 365.25 // scale to the annualized values we use for comparison below
-
-	if percentChange < sc.HoldWindowNeg {
-		pred.Action = "buy" // check buy condition
-	} else if percentChange > sc.HoldWindowPos {
-		pred.Action = "sell" // check sell condition
-	} else {
-		pred.Action = "hold" // we have the data and made the calculation.  Assume "hold"
-	}
-
-	// todo - return proper probability and weight
-	pred.Probability = 1.0
-	pred.Weight = 1.0
 	return &pred, nil
 }
 
