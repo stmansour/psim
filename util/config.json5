@@ -57,8 +57,13 @@
     //-----------------------------------------------------------------
     "CrucibleMode": false,
     "CruciblePeriods": [
+      {"Duration": "3m", "Ending": "yesterday"},
+      {"Duration": "6m", "Ending": "today"},
+      {"Duration": "1y", "Ending": "lastMonthEnd"},
+      {"Duration": "1y", "Ending": "2023-12-31"},
       { "DtStart": "2015-06-01", "DtStop": "2015-09-30", },
       { "DtStart": "2015-09-01", "DtStop": "2015-12-31", },
+
     ],
 
     "TopInvestors": [

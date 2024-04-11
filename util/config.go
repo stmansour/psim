@@ -5,6 +5,8 @@ import (
 	"io"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 	"time"
 
 	json5 "github.com/yosuke-furukawa/json5/encoding/json5"
@@ -90,8 +92,10 @@ type TopInvestor struct {
 // The CustomDate type is used to force our custome string to date function when it is read in through
 // the csv file
 type CustomCruciblePeriod struct {
-	DtStart CustomDate // simulation begins on this date
-	DtStop  CustomDate // simulation ends on this date
+	DtStart  CustomDate // simulation begins on this date
+	DtStop   CustomDate // simulation ends on this date
+	Duration string     // how long the simulation is
+	Ending   string     // typically a keyword: "today", "yesterday", "lastmonthend", or possibly a CustomDate
 }
 
 // CruciblePeriod defines the start and end time for a simulation of top investors
@@ -262,33 +266,128 @@ func LoadConfig(cfname string) (*AppConfig, error) {
 	//-------------------------------------------------------------------
 	// CRUCIBLE processing...
 	//-------------------------------------------------------------------
+	if err = ProcessCrucibleSettings(&cfg, &fcfg); err != nil {
+		return &cfg, err
+	}
+
+	cfg.DtStart = fcfg.DtStart
+	cfg.DtStop = fcfg.DtStop
+	return &cfg, nil
+}
+
+// ProcessCrucibleSettings handles the date ranges for the Crucible mode
+// ----------------------------------------------------------------------------
+func ProcessCrucibleSettings(cfg *AppConfig, fcfg *FileConfig) error {
+	if len(fcfg.CruciblePeriods) == 0 {
+		return nil
+	}
+
+	//------------------------------------------------
+	// First, make sure all Investors have a name...
+	//------------------------------------------------
 	for i := 0; i < len(cfg.TopInvestors); i++ {
 		if len(cfg.TopInvestors[i].Name) == 0 {
 			cfg.TopInvestors[i].Name = fmt.Sprintf("TopInvestor%d", i)
 		}
 	}
+
 	//-------------------------------------------------------------------
-	// Convert the dates now, it's much easier to deal with time.Time
-	// values after they've be read in.
+	// Convert the dates now, or relative periods into date ranges.
 	//-------------------------------------------------------------------
 	for i := 0; i < len(fcfg.CruciblePeriods); i++ {
-		var cp CruciblePeriod
-		cp.DtStart = time.Time(fcfg.CruciblePeriods[i].DtStart)
-		cp.DtStop = time.Time(fcfg.CruciblePeriods[i].DtStop)
-		cfg.CrucibleSpans = append(cfg.CrucibleSpans, cp)
+		if len(fcfg.CruciblePeriods[i].Duration) > 0 {
+			cp, err := parseCustomCruciblePeriod(&fcfg.CruciblePeriods[i])
+			if err != nil {
+				return err
+			}
+			cfg.CrucibleSpans = append(cfg.CrucibleSpans, cp)
+		} else {
+			var cp CruciblePeriod
+			cp.DtStart = time.Time(fcfg.CruciblePeriods[i].DtStart)
+			cp.DtStop = time.Time(fcfg.CruciblePeriods[i].DtStop)
+			cfg.CrucibleSpans = append(cfg.CrucibleSpans, cp)
+		}
 	}
-	// //-------------------------------------------------------------------
-	// // If the weights were not specified, or they do not add up to 1
-	// // then set default values here...
-	// //-------------------------------------------------------------------
-	// if cfg.InvW1+cfg.InvW2 != 1.0 {
-	// 	cfg.InvW1 = 0.5
-	// 	cfg.InvW2 = 0.5
-	// }
+	return nil
+}
 
-	cfg.DtStart = fcfg.DtStart
-	cfg.DtStop = fcfg.DtStop
-	return &cfg, nil
+// parseCustomCruciblePeriod takes a CustomCruciblePeriod and calculates the start and stop times.
+func parseCustomCruciblePeriod(ccp *CustomCruciblePeriod) (CruciblePeriod, error) {
+	var cp CruciblePeriod
+	var endDate time.Time
+	var err error
+
+	// Handling the Ending field
+	switch strings.ToLower(ccp.Ending) {
+	case "yesterday", "today", "lastmonthend":
+		endDate = calculateEndDate(ccp.Ending)
+	default:
+		endDate, err = StringToDate(ccp.Ending)
+		if err != nil {
+			return cp, fmt.Errorf("invalid ending date: %v", err)
+		}
+	}
+
+	// Calculate start date based on duration if available
+	if ccp.Duration != "" {
+		startDate := calculateStartDate(ccp.Duration, endDate)
+		cp.DtStart = startDate
+	} else {
+		cp.DtStart = time.Time(ccp.DtStart)
+	}
+
+	cp.DtStop = endDate
+
+	return cp, nil
+}
+
+func calculateEndDate(ending string) time.Time {
+	ending = strings.ToLower(ending)
+	currentDate := time.Now()
+	switch ending {
+	case "yesterday":
+		return currentDate.AddDate(0, 0, -1)
+	case "today":
+		return currentDate
+	case "lastmonthend":
+		firstOfCurrentMonth := time.Date(currentDate.Year(), currentDate.Month(), 1, 0, 0, 0, 0, currentDate.Location())
+		return firstOfCurrentMonth.AddDate(0, 0, -1)
+	}
+	return time.Time{} // This should not be reached
+}
+
+// calculateStartDate calculates the start date by subtracting the specified 'duration' from 'endDate'.
+func calculateStartDate(duration string, endDate time.Time) time.Time {
+	duration = strings.ToLower(duration)
+
+	if len(duration) < 2 {
+		fmt.Println("Invalid duration format")
+		return time.Time{} // Return zero time in case of format error
+	}
+
+	// Extract the duration amount and unit
+	amountStr := duration[:len(duration)-1]
+	unit := duration[len(duration)-1]
+
+	// Convert amount string to integer
+	amount, err := strconv.Atoi(amountStr)
+	if err != nil {
+		fmt.Println("Error converting duration amount to integer:", err)
+		return time.Time{} // Return zero time in case of conversion error
+	}
+
+	// Subtract duration from endDate based on unit
+	switch unit {
+	case 'y': // Year
+		return endDate.AddDate(-amount, 0, 0).AddDate(0, 0, 1)
+	case 'm': // Month
+		return endDate.AddDate(0, -amount, 0).AddDate(0, 0, 1)
+	case 'd': // Day
+		return endDate.AddDate(0, 0, -amount)
+	default:
+		fmt.Println("Unknown duration unit:", string(unit))
+		return time.Time{} // Return zero time in case of unknown unit
+	}
 }
 
 // CreateTestingCFG is a function that creates a test cfg file with no secrets

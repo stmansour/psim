@@ -6,6 +6,24 @@ import (
 	"time"
 )
 
+func TestLoadConfig(t *testing.T) {
+	Init(-1)
+	cfg, err := LoadConfig("")
+	if err != nil {
+		t.Errorf("LoadConfig failed: %s", err)
+		return
+	}
+
+	if err := ValidateConfig(cfg); err != nil {
+		t.Errorf("ValidateConfig failed: %s", err)
+	}
+
+	// Print out the crucible date list...
+	//--------------------------------------
+	for i := 0; i < len(cfg.CrucibleSpans); i++ {
+		fmt.Printf("%d: %s - %s\n", i, cfg.CrucibleSpans[i].DtStart.Format("2006-01-02"), cfg.CrucibleSpans[i].DtStop.Format("2006-01-02"))
+	}
+}
 func TestSingleInvestorMode(t *testing.T) {
 	Init(-1)
 	cfg, err := LoadConfig("singleInvestor.json5")
@@ -27,22 +45,6 @@ func TestSingleInvestorMode(t *testing.T) {
 func TestConfig(t *testing.T) {
 	Init(-1)
 	cfg := CreateTestingCFG()
-
-	// for k, v := range cfg.SCInfo {
-	// 	fmt.Printf("Key: %s, Value: %#v\n", k, v)
-	// }
-	if err := ValidateConfig(cfg); err != nil {
-		t.Errorf("ValidateConfig failed: %s", err)
-	}
-}
-
-func TestLoadConfig(t *testing.T) {
-	Init(-1)
-	cfg, err := LoadConfig("")
-	if err != nil {
-		t.Errorf("LoadConfig failed: %s", err)
-		return
-	}
 
 	if err := ValidateConfig(cfg); err != nil {
 		t.Errorf("ValidateConfig failed: %s", err)
