@@ -149,6 +149,9 @@ func (d *DatabaseCSV) LoadCsvDB() error {
 				StatsValid:    statsValid,
 			}
 			rec.Fields[metricName] = mi
+			// if math.IsNaN(mean) {
+			// 	fmt.Printf("ERROR: Mean is NaN for %s, value = %f\n", metricName, mean)
+			// }
 		}
 		records = append(records, rec)
 	}

@@ -446,8 +446,8 @@ all the cores are vying for access to the internal CSV data store.
 That limits the effectiveness of multiple cores. Our server has 120
 CPU cores.  Our peak performance on the plato server occurs when
 we use between 25 and 30 cores. Overall, the thread pool has
-significantly improved performance.  I’ve also done profiling on the
-code and removed several issues that caused the memory allocation
+significantly improved performance.  I’ve also done profiling on
+the code and removed several issues that caused the memory allocation
 code to overwork. This also improved performance slightly.
 
 
