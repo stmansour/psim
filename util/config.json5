@@ -36,7 +36,7 @@
     "Gen0Elites": false,            // Insert TopInvestors DNA into Generation 0
     "WorkerPoolSize": 0,            // When 0, the program decides the number of cores, when >= 1 the number of cores the simulator will use
     "HoldWindowStatsLookBack": 365, // how many days make up the rolling window of data used in HoldWindow stats calculations (mean and StdDev)
-    "StdDevVariationFactor": 0.10,  // variable factor from Std Deviation
+    "StdDevVariationFactor": 0.01,  // variable factor from Std Deviation
 
     //-----------------------------------------------------------------
     //  There may be times when we need to test or check the performance
