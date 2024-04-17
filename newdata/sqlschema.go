@@ -81,13 +81,13 @@ func (p *DatabaseSQL) CreateDatabaseTables() error {
 		);`,
 		`CREATE TABLE IF NOT EXISTS MetricsSources (
 			MSID INT AUTO_INCREMENT PRIMARY KEY,
-			LastUpdate DATETIME(6) NOT NULL,
+			LastUpdate DATETIME NOT NULL,
 			URL VARCHAR(255) NOT NULL,
 			Name VARCHAR(80) NOT NULL
 		);`,
 		`CREATE TABLE IF NOT EXISTS ExchangeRate (
 			XID INT AUTO_INCREMENT PRIMARY KEY,
-			Date DATETIME(6) NOT NULL,
+			Date DATETIME NOT NULL,
 			LID INT NOT NULL,
 			LID2 INT NOT NULL,
 			MSID INT NOT NULL,
@@ -97,6 +97,22 @@ func (p *DatabaseSQL) CreateDatabaseTables() error {
 			CONSTRAINT fk_ExchangeRate_Locales2 FOREIGN KEY (LID2) REFERENCES Locales(LID),
 			CONSTRAINT fk_ExchangeRate_MetricsSources FOREIGN KEY (MSID) REFERENCES MetricsSources(MSID)
 		);`,
+		// `CREATE TABLE IF NOT EXISTS DNABank (
+		// 	DNAID INT AUTO_INCREMENT PRIMARY KEY,
+		// 	DNA VARCHAR(2048) NOT NULL,
+		// 	C1 VARCHAR(10) NOT NULL,
+		// 	C2 VARCHAR(10) NOT NULL,
+		// 	TxnFeeFactor DOUBLE NOT NULL,
+		// 	TxnFee DOUBLE NOT NULL,
+		// 	StopLoss DOUBLE NOT NULL,
+		// 	HoldWindowStatsLookBack  INT NOT NULL,
+		// 	StdDevFactor DOUBLE NOT NULL,
+		// 	AnnualizedReturnAchieved DOUBLE NOT NULL,
+		// 	DtStart VARCHAR(30) NOT NULL,
+		// 	DtStop VARCHAR(30) NOT NULL,
+		// 	Created DATETIME NOT NULL,
+		// 	LastUpdate DATETIME NOT NULL
+		// );`,
 	}
 
 	// Execute the SQL statement to create the table

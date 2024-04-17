@@ -53,6 +53,12 @@ algorithm does the heavy lifting to fine-tune Delta1 and Delta2 to
 optimal values. We are confident that there are many opportunities
 to improve an Influencer’s analysis of data.
 
+The way that an Influencer makes its prediction is one of the areas
+of the Plato system that needs further analysis. We believe there
+is a great opportunity to improve the predictive accuracy of the
+Influencers if we apply better statistical analysis on its data.
+This is discussed further in Appendix E.
+
 The second cornerstone class is the 'Investor', tasked with managing
 its own private team of Influencers, and an investment fund. Its
 investment fund is initialized at the start of each new generation
@@ -186,14 +192,29 @@ There is a special mode of operation in the simulator called "the
 crucible".  By feeding the simulator a curated list of DNA strings
 along with specified time periods, the crucible reconstitutes each
 of the Investors and subjects them to a series of investment
-simulations across the designated time periods. This process tests
-the adaptability and robustness of each Investor's strategy across
-varying market conditions. This targeted approach allows us to
-isolate and analyze the effectiveness of top-performing Investors,
-ensuring that only the most resilient and profitable Investors are
-used in actual investing. The crucible, therefore, stands as a
-critical component of the system, bridging the gap between theoretical
-optimization and practical, real-world application.
+simulations across the designated time periods. This process Makes
+it easy to test the adaptability and robustness of each Investor's
+strategy across varying market conditions. This targeted approach
+allows us to isolate and analyze the effectiveness of top-performing
+Investors, ensuring that only the most resilient and profitable
+Investors are used in actual investing. When we configure the time
+periods for crucible testing we can embed the notion of a moveable
+window in time relative to the current system date. This makes it
+much easier to test the DNA over time because we don’t need to
+change the date ranges.  That is, in a config file, we can specify
+date ranges for the crucible as shown below:
+
+    "CruciblePeriods": [
+      {"Duration": "3m", "Ending": "yesterday"}, {"Duration": "6m",
+      "Ending": "today"}, {"Duration": "1y", "Ending": "lastMonthEnd"},
+      {"Duration": "1y", "Ending": "2023-12-31"}, { "DtStart":
+      "2015-06-01", "DtStop": "2015-09-30", }, { "DtStart":
+      "2015-09-01", "DtStop": "2015-12-31", },
+    ],
+
+The crucible, therefore, stands as a critical component of the
+system, bridging the gap between theoretical optimization and
+practical, real-world application.
 
 "Single Investor Mode" is another special operational mode within
 the simulator.  In this mode, the simulation focuses exclusively
@@ -446,8 +467,8 @@ all the cores are vying for access to the internal CSV data store.
 That limits the effectiveness of multiple cores. Our server has 120
 CPU cores.  Our peak performance on the plato server occurs when
 we use between 25 and 30 cores. Overall, the thread pool has
-significantly improved performance.  I’ve also done profiling on
-the code and removed several issues that caused the memory allocation
+significantly improved performance. I’ve also done profiling on the
+code and removed several issues that caused the memory allocation
 code to overwork. This also improved performance slightly.
 
 
@@ -495,14 +516,82 @@ these numbers are defined, so I will not list a specific calculation
 at this time. But the motivation for it is easy to understand.  If
 delta is within the hold window, that is Hneg <= delta <= Hpos, the
 Influencer will recommend “hold”.  If the delta > Hpos then it will
-recommend “sell”.  And if delta < Hneg it will recommend “buy”.
+recommend “sell”. And if delta < Hneg it will recommend “buy”.
+
+We have recently created a new way of calculating Hpos and Hneg.
+We calculate the Standard Deviation of the metric over the N days
+ending on T2 (N = 365 currently, but it is settable), and we define
+a damping factor X (X = 0.1 currently, but it is settable). We look
+for changes greater in magnitude than the damping factor times the
+Standard Deviation. Specifically we set Hneg = -(X * Stardard
+Deviation) and Hpos = X * Standard Deviation, so it is centered
+around 0.
 
 There is much more to do with the predictions, and I will update
 this section as we make progress.
 
+Appendix E: Improving Influencer Predictions on Ratio Metrics
 
+Influencers have been implemented with a very simplistic prediction
+capability to allow us to progress quickly through the development
+of the entire system. The intent is to circle back and refine the
+prediction logic with a tried-and-true statistical analysis of the
+metric. In Appendix D we discussed the general approach to how
+Influencers predict. However, it was focused on metrics where the
+value of the metric is assumed to have some amount of influence on
+an Exchange Rate between two currencies.  There is another type of
+comparison that we do which is also likely to impact the Exchange
+Rates. This involves looking at the ratios of a metric associated
+with an exchange rate’s locale. As an example, suppose we have C1
+= US Dollar and C2 = Japanese Yen. Let’s suppose that the metric
+we look at is the Housing Starts metric associated with each local.
+So, HS = Housing Starts metric, USDHS = Housing Starts metric for
+the USA, and JPYHS = Housing Starts for Japan.  We still have Delta1
+and Delta2 and they have the same meaning as described in Appendix
+D to define T1 and T2.  But now, the metric that we look at is
+USDHS/JPYHS at T1 and T2.
 
-Appendix E: Managing External Resources
+The question now is do we calculate the Standard Deviation of this
+ratio over the last N days? Are there other things we should be
+considering, such as the slope of the metric curve at T1 and T2?
+These questions still need to be answered and coded.
+
+Appendix F: Implementation Details
+
+The Plato simulator has been implemented in Golang.  The build
+system utilizes ‘make’ as the main orchestrator of the build.
+Several syntax, code-checkers and linters are in place and the build
+will fail if there are any issues in the source code.  Both unit
+tests and functional tests also run during the build process. Tests
+are written using Go’s testing infrastructure and there are also
+shell scripts that perform many functional tests. The simulator
+also has command-line options to turn on performance profiling and
+memory profiling which can be scrutinized in Go’s profiler tool
+
+Source code coverage is also checked in multiple places. While it
+has not been a focus, the current suite of tests achieves about 70%
+coverage of all the source code. The tests have been focused on
+testing function and almost no work has been dedicated to improving
+source code coverage numbers.
+
+The simulator is implemented with a worker pool to distribute work
+over multiple CPUs. Parallel processing is achieved with Go routines.
+The worker pool utilizes a single, in-memory database in a read-only
+fashion obviating the need for mutexes and locks.
+
+With populations of 1,000,000 or greater and the number of generations
+exceeding 100, even with all the parallel processing, some of the
+simulations can run for days.  So, the simulator also has an HTTP
+listener allowing a user to contact it while it is running, determine
+its status, and even give it a command that instructs the simulator
+to terminate after it completes the generation currently in progress.
+In this way, even though we may need to restart the simulations
+with a newer version of the code, we do not lose any of the information
+the simulations produced after however many generations were run.
+In the future, we may extend this capability to change parameters
+in the middle of the run.
+
+Appendix G: Managing External Resources
 
 In the development and operation of the Plato suite, accessing
 external resources frequently requires confidential credentials.

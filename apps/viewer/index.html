@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Time Series Plot</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="app.js"></script>
+
+    <style>
+        #control-panel {
+            width: 300px;
+            float: left;
+            height: 100vh;
+            overflow: auto;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        #plot {
+            margin-left: 320px;
+        }
+    </style>
+</head>
+<body>
+    <div id="control-panel">
+        <h3>Select Metrics and Date</h3>
+        Metric 1: <select id="metric1-select"></select><br><br>
+        Metric 2: <select id="metric2-select"></select><br><br>
+        Start Date: <input type="date" id="start-date"><br><br>
+        End Date: <input type="date" id="end-date"><br><br>
+        <button onclick="plotData()">Plot</button>
+    </div>
+    <div id="plot"></div>
+
+</body>
+</html>
+

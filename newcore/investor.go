@@ -163,6 +163,11 @@ func (i *Investor) Init(cfg *util.AppConfig, f *Factory, db *newdata.Database) {
 	}
 
 	//------------------------------------------------------------------
+	// Pick a strategy for this influencer to use
+	//------------------------------------------------------------------
+	i.Strategy = util.RandomInRange(0, len(InvestmentStrategies)-1) // 0 = Distributed Decsion, 1 = majority wins
+
+	//------------------------------------------------------------------
 	// Create a team of influencers.
 	//------------------------------------------------------------------
 	min := i.cfg.MinInfluencers
