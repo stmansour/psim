@@ -6,6 +6,183 @@ import (
 	"time"
 )
 
+func TestCalculateEndDate(t *testing.T) {
+	tests := []struct {
+		ending     string
+		systemTime time.Time // Allow specifying the fixed time for each test
+		expected   time.Time
+	}{
+		{
+			ending:     "2023-5-31",
+			systemTime: time.Date(2024, 4, 17, 0, 0, 0, 0, time.UTC),
+			expected:   time.Date(2023, 5, 31, 0, 0, 0, 0, time.UTC),
+		},
+		{
+			ending:     "2023-5-31 - 1m",
+			systemTime: time.Date(2024, 4, 17, 0, 0, 0, 0, time.UTC),
+			expected:   time.Date(2023, 4, 30, 0, 0, 0, 0, time.UTC),
+		},
+		{
+			ending:     "2023-5-31 - 2m",
+			systemTime: time.Date(2024, 4, 17, 0, 0, 0, 0, time.UTC),
+			expected:   time.Date(2023, 3, 31, 0, 0, 0, 0, time.UTC),
+		},
+		{
+			ending:     "2023-5-31 - 3m",
+			systemTime: time.Date(2024, 4, 17, 0, 0, 0, 0, time.UTC),
+			expected:   time.Date(2023, 2, 28, 0, 0, 0, 0, time.UTC),
+		},
+		{
+			ending:     "2023-5-31 - 4m",
+			systemTime: time.Date(2024, 4, 17, 0, 0, 0, 0, time.UTC),
+			expected:   time.Date(2023, 1, 31, 0, 0, 0, 0, time.UTC),
+		},
+		{
+			ending:     "2023-5-31 - 5m",
+			systemTime: time.Date(2024, 4, 17, 0, 0, 0, 0, time.UTC),
+			expected:   time.Date(2022, 12, 31, 0, 0, 0, 0, time.UTC),
+		},
+		{
+			ending:     "2023-5-31 - 6m",
+			systemTime: time.Date(2024, 4, 17, 0, 0, 0, 0, time.UTC),
+			expected:   time.Date(2022, 11, 30, 0, 0, 0, 0, time.UTC),
+		},
+		{
+			ending:     "2023-5-31 - 7m",
+			systemTime: time.Date(2024, 4, 17, 0, 0, 0, 0, time.UTC),
+			expected:   time.Date(2022, 10, 31, 0, 0, 0, 0, time.UTC),
+		},
+		{
+			ending:     "2023-5-31 - 8m",
+			systemTime: time.Date(2024, 4, 17, 0, 0, 0, 0, time.UTC),
+			expected:   time.Date(2022, 9, 30, 0, 0, 0, 0, time.UTC),
+		},
+		{
+			ending:     "2023-5-31 - 9m",
+			systemTime: time.Date(2024, 4, 17, 0, 0, 0, 0, time.UTC),
+			expected:   time.Date(2022, 8, 31, 0, 0, 0, 0, time.UTC),
+		},
+		{
+			ending:     "2023-5-31 - 10m",
+			systemTime: time.Date(2024, 4, 17, 0, 0, 0, 0, time.UTC),
+			expected:   time.Date(2022, 7, 31, 0, 0, 0, 0, time.UTC),
+		},
+		{
+			ending:     "2023-5-31 - 11m",
+			systemTime: time.Date(2024, 4, 17, 0, 0, 0, 0, time.UTC),
+			expected:   time.Date(2022, 6, 30, 0, 0, 0, 0, time.UTC),
+		},
+		{
+			ending:     "2023-5-31 - 12m",
+			systemTime: time.Date(2024, 4, 17, 0, 0, 0, 0, time.UTC),
+			expected:   time.Date(2022, 5, 31, 0, 0, 0, 0, time.UTC),
+		},
+		{
+			ending:     "2024-2-29 - 1y",
+			systemTime: time.Date(2024, 2, 29, 0, 0, 0, 0, time.UTC),
+			expected:   time.Date(2023, 2, 28, 0, 0, 0, 0, time.UTC),
+		},
+		{
+			ending:     "2023-12-31 - 1y",
+			systemTime: time.Date(2023, 12, 31, 0, 0, 0, 0, time.UTC),
+			expected:   time.Date(2022, 12, 31, 0, 0, 0, 0, time.UTC),
+		},
+		{
+			ending:     "today - 4d",
+			systemTime: time.Date(2023, 12, 15, 0, 0, 0, 0, time.UTC), // Dec 15, 2023 as the fixed time
+			expected:   time.Date(2023, 12, 11, 0, 0, 0, 0, time.UTC), // Dec 11, 2023
+		},
+		{
+			ending:     "today - 2w",
+			systemTime: time.Date(2023, 12, 15, 0, 0, 0, 0, time.UTC), // Dec 15, 2023 as the fixed time
+			expected:   time.Date(2023, 12, 1, 0, 0, 0, 0, time.UTC),  // Dec 1, 2023
+		},
+		{
+			ending:     "yesterday - 6m",
+			systemTime: time.Date(2023, 12, 31, 0, 0, 0, 0, time.UTC), // Dec 31, 2023 as the fixed time
+			expected:   time.Date(2023, 6, 30, 0, 0, 0, 0, time.UTC),  // June 30, 2023
+		},
+		{
+			ending:     "today - 6m",
+			systemTime: time.Date(2023, 12, 15, 0, 0, 0, 0, time.UTC), // Dec 15, 2023 as the fixed time
+			expected:   time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC),  // June 15, 2023
+		},
+		{
+			ending:     "yesterday - 1m",
+			systemTime: time.Date(2024, 4, 1, 0, 0, 0, 0, time.UTC),  // April 1, 2024, as the fixed time
+			expected:   time.Date(2024, 2, 29, 0, 0, 0, 0, time.UTC), // Leap year correction
+		},
+		{
+			ending:     "yesterday - 30d",
+			systemTime: time.Date(2024, 4, 1, 0, 0, 0, 0, time.UTC), // April 1, 2024, as the fixed time
+			expected:   time.Date(2024, 3, 1, 0, 0, 0, 0, time.UTC),
+		},
+		{
+			ending:     "yesterday - 2w",
+			systemTime: time.Date(2024, 4, 1, 0, 0, 0, 0, time.UTC), // April 1, 2024, as the fixed time
+			expected:   time.Date(2024, 3, 17, 0, 0, 0, 0, time.UTC),
+		},
+		{
+			ending:     "today - 1m",
+			systemTime: time.Date(2024, 4, 1, 0, 0, 0, 0, time.UTC), // April 1, 2024, as the fixed time
+			expected:   time.Date(2024, 3, 1, 0, 0, 0, 0, time.UTC),
+		},
+		{
+			ending:     "yesterday - 3m",
+			systemTime: time.Date(2024, 3, 1, 0, 0, 0, 0, time.UTC), // April 1, 2024, as the fixed time
+			expected:   time.Date(2023, 11, 30, 0, 0, 0, 0, time.UTC),
+		},
+	}
+
+	for _, tc := range tests {
+		name := fmt.Sprintf("%s on %s", tc.ending, tc.systemTime.Format("2006-01-02"))
+		t.Run(name, func(t *testing.T) {
+			result := calculateEndDate(tc.ending, tc.systemTime)
+			if !result.Equal(tc.expected) {
+				t.Errorf("Test %v failed. Expected %v, got %v", name, tc.expected, result)
+			}
+		})
+	}
+}
+
+func TestCalculateStartDate(t *testing.T) {
+	tests := []struct {
+		duration string
+		endDate  string // Use string and compute endDate in test
+		expected time.Time
+	}{
+		// Subtract months from May 31, 2023
+		{"1m", "2023-5-31", time.Date(2023, 5, 1, 0, 0, 0, 0, time.UTC)},
+		{"1m", "2023-5-31 - 1m", time.Date(2023, 4, 1, 0, 0, 0, 0, time.UTC)},
+		{"1m", "2023-5-31 - 2m", time.Date(2023, 3, 1, 0, 0, 0, 0, time.UTC)},
+		{"1m", "2023-5-31 - 3m", time.Date(2023, 2, 1, 0, 0, 0, 0, time.UTC)},
+		{"1m", "2023-5-31 - 4m", time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC)},
+		{"1m", "2023-5-31 - 5m", time.Date(2022, 12, 1, 0, 0, 0, 0, time.UTC)},
+		{"1m", "2023-5-31 - 6m", time.Date(2022, 11, 1, 0, 0, 0, 0, time.UTC)},
+		{"1m", "2023-5-31 - 7m", time.Date(2022, 10, 1, 0, 0, 0, 0, time.UTC)},
+		{"1m", "2023-5-31 - 8m", time.Date(2022, 9, 1, 0, 0, 0, 0, time.UTC)},
+		{"1m", "2023-5-31 - 9m", time.Date(2022, 8, 1, 0, 0, 0, 0, time.UTC)},
+		{"1m", "2023-5-31 - 10m", time.Date(2022, 7, 1, 0, 0, 0, 0, time.UTC)},
+		{"1m", "2023-5-31 - 11m", time.Date(2022, 6, 1, 0, 0, 0, 0, time.UTC)},
+
+		// Additional cases for subtracting years, weeks and days
+		{"3w", "2023-5-31", time.Date(2023, 5, 10, 0, 0, 0, 0, time.UTC)},
+		{"10d", "2023-5-31", time.Date(2023, 5, 21, 0, 0, 0, 0, time.UTC)},
+		{"1y", "2024-2-29", time.Date(2023, 3, 1, 0, 0, 0, 0, time.UTC)},
+	}
+
+	for _, tc := range tests {
+		endDate := calculateEndDate(tc.endDate, time.Now()) // Calculate end date first using calculateEndDate
+		name := fmt.Sprintf("Start date for %s ending %s", tc.duration, endDate.Format("2006-01-02"))
+		t.Run(name, func(t *testing.T) {
+			result := calculateStartDate(tc.duration, endDate)
+			if !result.Equal(tc.expected) {
+				t.Errorf("%s: calculated start date %v, expected %v", name, result, tc.expected)
+			}
+		})
+	}
+}
+
 func TestLoadConfig(t *testing.T) {
 	Init(-1)
 	cfg, err := LoadConfig("")

@@ -56,6 +56,8 @@
     // Saved DNA of the Top Investors
     //-----------------------------------------------------------------
     "CrucibleMode": false,
+    "CrucibleName": "Default QA Testing Crucible", 
+    "CrucibleARThreshold": 0.15, // only count the run if the annualized return is this amount or greater
     "CruciblePeriods": [
       {"Duration": "3m", "Ending": "yesterday"},
       {"Duration": "6m", "Ending": "today"},

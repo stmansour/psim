@@ -20,6 +20,7 @@ type Crucible struct {
 	fname                        string // name of the crucible report file
 	ReportTopInvestorInvestments bool
 	DayByDay                     bool
+	AnnualizedReturnList         []float64 // as we list its returns, keep track of each one for computation of success coefficient
 }
 
 // NewCrucible returns a pointer to a new crucible object
@@ -68,12 +69,19 @@ func (c *Crucible) Run() {
 			c.sim.ir = ir // we need to override the simulators new creation of this with our ongoing report
 			c.sim.Run()
 		}
+		c.DumpSuccessCoefficient()
+
 	}
 	fmt.Printf("Crucible run completed\n")
 	fmt.Printf("Output file is: %s\n", c.fname)
 }
 
-// SubHeader is used to identify a new DNA for the crucible
+// SubHeader is used to identify a new DNA for the crucible.
+//
+//	This is called at the start of each DNA so we'll empty the list of
+//	ROI and start over
+//
+// --------------------------------------------------------------------------
 func (c *Crucible) SubHeader() {
 	file, err := os.OpenFile(c.fname, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
@@ -83,9 +91,13 @@ func (c *Crucible) SubHeader() {
 	defer file.Close()
 	fmt.Fprintf(file, "\n\"DNA Name: %s\",,,,,%q\n", c.cfg.TopInvestors[c.idx].Name, c.cfg.TopInvestors[c.idx].DNA)
 	fmt.Fprintf(file, "%q,%q,%q,%q,%q\n", "Start", "End", "Opening Portfolio Value", "Ending Portfolio Value", "Annualized Return")
+
+	c.AnnualizedReturnList = make([]float64, 0) // reset the list
 }
 
-// DumpResults sends the crucible report to a csv file
+// DumpResults sends the crucible report to a csv file.
+//
+//	This is called upon the completion of a generation.  So we'll save the annualized return
 func (c *Crucible) DumpResults() {
 	file, err := os.OpenFile(c.fname, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
@@ -101,4 +113,27 @@ func (c *Crucible) DumpResults() {
 		os.Exit(1)
 	}
 	fmt.Fprintf(file, "%q,%q,%9.2f,%9.2f,%5.2f%%\n", dtStart.Format("1/2/2006"), dtStop.Format("1/2/2006"), c.cfg.InitFunds, c.sim.Investors[0].PortfolioValueC1, roi*100)
+	c.AnnualizedReturnList = append(c.AnnualizedReturnList, roi)
+}
+
+// DumpSuccessCoefficient calculates the success coefficient and adds it to the report
+// -------------------------------------------------------------------------------------
+func (c *Crucible) DumpSuccessCoefficient() {
+	file, err := os.OpenFile(c.fname, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Printf("error opening %s: %s\n", c.fname, err.Error())
+		os.Exit(1)
+	}
+	defer file.Close()
+
+	consistency := 0
+	for i := 0; i < len(c.AnnualizedReturnList); i++ {
+		if c.AnnualizedReturnList[i] >= c.cfg.CrucibleARThreshold {
+			consistency++
+		}
+	}
+	consist := float64(consistency) / float64(len(c.AnnualizedReturnList)) // consistency factor
+	sc := float64(len(c.cfg.CrucibleSpans)) * consist
+	fmt.Fprintf(file, "%s  Success Coefficient:  %.3f   simulations: %d consistency = %d/%d = %.3f \n", c.cfg.CrucibleName, sc, len(c.cfg.CrucibleSpans), consistency, len(c.AnnualizedReturnList), consist)
+
 }

@@ -488,6 +488,9 @@ func (s *Simulator) Run() {
 		s.LoopsCompleted++
 	}
 
+	// Finalize any reports that need bottom results
+	//-------------------------------------------------
+
 	s.SimStop = time.Now()
 	s.StopTimeSet = true
 }

@@ -139,6 +139,8 @@ type AppConfig struct {
 	TopInvestors            []TopInvestor       // a list of top investors
 	CrucibleSpans           []CruciblePeriod    // list of times to run the simulation
 	CrucibleMode            bool                // if true then run all TopInvestor DNA through the CrucibleSpans
+	CrucibleName            string              // name of the crucible
+	CrucibleARThreshold     float64             // AR threshold... it only counts if if the annualized return is above this amount.  Use 0.15 for 15%
 	ReportDirectory         string              // final directory where all reports should be
 	ReportTimestamp         string              // timestamp to used for archived reports
 	ReportDirSet            bool                // when false the info needs to be set, when true it's already set
@@ -156,6 +158,35 @@ type AppConfig struct {
 	WorkerPoolSize          int                 // number of cores to utilize, if < 1 then the program decides, if 1 or more then that many cores are used, it will be capped at the number of cores the hardware actually has
 	HoldWindowStatsLookBack int                 // how many days make up the rolling window of data used in HoldWindow stats calculations (mean and StdDev)
 	StdDevVariationFactor   float64             // how much variance from thethe standard deviation is needed for the hold window.
+}
+
+// CreateTestingCFG is a function that creates a test cfg file with no secrets
+// for use in testing
+// -----------------------------------------------------------------------------
+func CreateTestingCFG() *AppConfig {
+	dt1 := time.Date(2022, time.January, 1, 0, 0, 0, 0, time.UTC)
+	dt2 := time.Date(2022, time.December, 31, 0, 0, 0, 0, time.UTC)
+
+	cfg := AppConfig{
+		Generations:    1,       // how many generations should the simulator run
+		PopulationSize: 10,      // Total number Investors in the population
+		LoopCount:      10,      // How many times to loop over DtStart to DtSTop
+		C1:             "USD",   // main currency  (ISO 4217 code)
+		C2:             "JPY",   // currency that we will invest in (ISO 4217 code)
+		InitFunds:      1000.00, // how much each Investor is funded at the start of a simulation cycle
+		StdInvestment:  100.00,  // the "standard" investment amount if a decision is made to invest in C2
+		MinInfluencers: 1,       // at least this many per Investor
+		MaxInfluencers: 10,      // no more than this many
+		MutationRate:   1,       // percentage number, from 1 - 100, what percent of the time does mutation occur
+		DBSource:       "CSV",   // {CSV | Database | OnlineService}
+	}
+
+	cfg.DtStart = CustomDate(dt1)
+	cfg.DtStop = CustomDate(dt2)
+
+	cfg.DtSettle = time.Time(cfg.DtStop)
+
+	return &cfg
 }
 
 // Helper function to check if a file exists
@@ -275,146 +306,164 @@ func LoadConfig(cfname string) (*AppConfig, error) {
 	return &cfg, nil
 }
 
+// parseCustomCruciblePeriod takes a CustomCruciblePeriod and calculates the start and stop times.
+func parseCustomCruciblePeriod(ccp *CustomCruciblePeriod) (CruciblePeriod, error) {
+	var cp CruciblePeriod
+	now := time.Now()
+
+	// Handling the Ending field
+	if ccp.Ending != "" {
+		cp.DtStop = time.Time(calculateEndDate(ccp.Ending, now))
+	} else {
+		cp.DtStop = time.Time(ccp.DtStop)
+	}
+
+	// Calculate start date based on duration if available
+	if ccp.Duration != "" {
+		cp.DtStart = time.Time(calculateStartDate(ccp.Duration, cp.DtStop))
+	} else {
+		cp.DtStart = time.Time(ccp.DtStart)
+	}
+
+	return cp, nil
+}
+
 // ProcessCrucibleSettings handles the date ranges for the Crucible mode
-// ----------------------------------------------------------------------------
 func ProcessCrucibleSettings(cfg *AppConfig, fcfg *FileConfig) error {
 	if len(fcfg.CruciblePeriods) == 0 {
 		return nil
 	}
 
-	//------------------------------------------------
-	// First, make sure all Investors have a name...
-	//------------------------------------------------
 	for i := 0; i < len(cfg.TopInvestors); i++ {
 		if len(cfg.TopInvestors[i].Name) == 0 {
 			cfg.TopInvestors[i].Name = fmt.Sprintf("TopInvestor%d", i)
 		}
 	}
 
-	//-------------------------------------------------------------------
-	// Convert the dates now, or relative periods into date ranges.
-	//-------------------------------------------------------------------
 	for i := 0; i < len(fcfg.CruciblePeriods); i++ {
-		if len(fcfg.CruciblePeriods[i].Duration) > 0 {
-			cp, err := parseCustomCruciblePeriod(&fcfg.CruciblePeriods[i])
-			if err != nil {
-				return err
-			}
-			cfg.CrucibleSpans = append(cfg.CrucibleSpans, cp)
-		} else {
-			var cp CruciblePeriod
-			cp.DtStart = time.Time(fcfg.CruciblePeriods[i].DtStart)
-			cp.DtStop = time.Time(fcfg.CruciblePeriods[i].DtStop)
-			cfg.CrucibleSpans = append(cfg.CrucibleSpans, cp)
+		cp, err := parseCustomCruciblePeriod(&fcfg.CruciblePeriods[i])
+		if err != nil {
+			return err
 		}
+		cfg.CrucibleSpans = append(cfg.CrucibleSpans, cp)
 	}
 	return nil
 }
 
-// parseCustomCruciblePeriod takes a CustomCruciblePeriod and calculates the start and stop times.
-func parseCustomCruciblePeriod(ccp *CustomCruciblePeriod) (CruciblePeriod, error) {
-	var cp CruciblePeriod
-	var endDate time.Time
-	var err error
-
-	// Handling the Ending field
-	switch strings.ToLower(ccp.Ending) {
-	case "yesterday", "today", "lastmonthend":
-		endDate = calculateEndDate(ccp.Ending)
-	default:
-		endDate, err = StringToDate(ccp.Ending)
-		if err != nil {
-			return cp, fmt.Errorf("invalid ending date: %v", err)
-		}
-	}
-
-	// Calculate start date based on duration if available
-	if ccp.Duration != "" {
-		startDate := calculateStartDate(ccp.Duration, endDate)
-		cp.DtStart = startDate
-	} else {
-		cp.DtStart = time.Time(ccp.DtStart)
-	}
-
-	cp.DtStop = endDate
-
-	return cp, nil
-}
-
-func calculateEndDate(ending string) time.Time {
-	ending = strings.ToLower(ending)
-	currentDate := time.Now()
-	switch ending {
-	case "yesterday":
-		return currentDate.AddDate(0, 0, -1)
-	case "today":
-		return currentDate
-	case "lastmonthend":
-		firstOfCurrentMonth := time.Date(currentDate.Year(), currentDate.Month(), 1, 0, 0, 0, 0, currentDate.Location())
-		return firstOfCurrentMonth.AddDate(0, 0, -1)
-	}
-	return time.Time{} // This should not be reached
-}
-
 // calculateStartDate calculates the start date by subtracting the specified 'duration' from 'endDate'.
 func calculateStartDate(duration string, endDate time.Time) time.Time {
-	duration = strings.ToLower(duration)
-
-	if len(duration) < 2 {
-		fmt.Println("Invalid duration format")
-		return time.Time{} // Return zero time in case of format error
+	parts := strings.Fields(duration)
+	if len(parts) == 0 {
+		return endDate
 	}
 
-	// Extract the duration amount and unit
-	amountStr := duration[:len(duration)-1]
-	unit := duration[len(duration)-1]
-
-	// Convert amount string to integer
+	// Parse duration and unit
+	unit := parts[0][len(parts[0])-1] // 'm', 'y', 'd', 'w'
+	amountStr := parts[0][:len(parts[0])-1]
 	amount, err := strconv.Atoi(amountStr)
 	if err != nil {
 		fmt.Println("Error converting duration amount to integer:", err)
-		return time.Time{} // Return zero time in case of conversion error
+		return time.Time{}
 	}
 
-	// Subtract duration from endDate based on unit
 	switch unit {
-	case 'y': // Year
-		return endDate.AddDate(-amount, 0, 0).AddDate(0, 0, 1)
-	case 'm': // Month
-		return endDate.AddDate(0, -amount, 0).AddDate(0, 0, 1)
-	case 'd': // Day
+	case 'm', 'y':
+		if endDate.Day() >= 28 { // Handle end-of-month scenario
+			if unit == 'y' {
+				amount = amount * 12
+			}
+			newMonth := int(endDate.Month()) - amount
+			newYear := endDate.Year()
+			if newMonth <= 0 {
+				newYear -= (-newMonth / 12) + 1
+				newMonth = 12 + (newMonth % 12)
+			}
+			startDate := time.Date(newYear, time.Month(newMonth), endDate.Day(), 0, 0, 0, 0, time.UTC)
+			lastDayOfMonth := time.Date(newYear, time.Month(newMonth+1), 0, 0, 0, 0, 0, time.UTC)
+			if !startDate.Equal(lastDayOfMonth) {
+				return lastDayOfMonth.AddDate(0, 0, 1)
+			}
+			return startDate.AddDate(0, 0, 1)
+		}
+		return endDate.AddDate(0, -amount, 0)
+	case 'w':
+		return endDate.AddDate(0, 0, -7*amount)
+	case 'd':
 		return endDate.AddDate(0, 0, -amount)
 	default:
 		fmt.Println("Unknown duration unit:", string(unit))
-		return time.Time{} // Return zero time in case of unknown unit
+		return time.Time{}
 	}
 }
 
-// CreateTestingCFG is a function that creates a test cfg file with no secrets
-// for use in testing
-// -----------------------------------------------------------------------------
-func CreateTestingCFG() *AppConfig {
-	dt1 := time.Date(2022, time.January, 1, 0, 0, 0, 0, time.UTC)
-	dt2 := time.Date(2022, time.December, 31, 0, 0, 0, 0, time.UTC)
+// calculateEndDate calculates based on the user's specification
+func calculateEndDate(ending string, currentDate time.Time) time.Time {
+	parts := strings.Fields(ending)
+	baseDate := time.Time{}
 
-	cfg := AppConfig{
-		Generations:    1,       // how many generations should the simulator run
-		PopulationSize: 10,      // Total number Investors in the population
-		LoopCount:      10,      // How many times to loop over DtStart to DtSTop
-		C1:             "USD",   // main currency  (ISO 4217 code)
-		C2:             "JPY",   // currency that we will invest in (ISO 4217 code)
-		InitFunds:      1000.00, // how much each Investor is funded at the start of a simulation cycle
-		StdInvestment:  100.00,  // the "standard" investment amount if a decision is made to invest in C2
-		MinInfluencers: 1,       // at least this many per Investor
-		MaxInfluencers: 10,      // no more than this many
-		MutationRate:   1,       // percentage number, from 1 - 100, what percent of the time does mutation occur
-		DBSource:       "CSV",   // {CSV | Database | OnlineService}
+	// Determine the initial date
+	switch parts[0] {
+	case "yesterday":
+		baseDate = currentDate.AddDate(0, 0, -1)
+	case "today":
+		baseDate = currentDate
+	default:
+		var err error
+		baseDate, err = StringToDate(parts[0])
+		if err != nil {
+			fmt.Println("Error parsing base date:", err)
+			return time.Time{}
+		}
 	}
 
-	cfg.DtStart = CustomDate(dt1)
-	cfg.DtStop = CustomDate(dt2)
+	if len(parts) > 1 {
+		offsetUnit := parts[2][len(parts[2])-1]
+		offsetAmountStr := parts[2][:len(parts[2])-1]
+		offsetAmount, err := strconv.Atoi(offsetAmountStr)
+		if err != nil {
+			fmt.Println("Error converting offset amount to integer:", err)
+			return time.Time{}
+		}
 
-	cfg.DtSettle = time.Time(cfg.DtStop)
+		if parts[1] == "-" {
+			offsetAmount = -offsetAmount
+		}
 
-	return &cfg
+		// Adjust month and find the last day of the adjusted month if the day of the baseDate is 28 or higher
+		switch offsetUnit {
+		case 'm', 'y':
+			if offsetUnit == 'y' {
+				offsetAmount = offsetAmount * 12
+			}
+			if baseDate.Day() >= 28 {
+				// Calculate new month and year considering the offset
+				newMonth := int(baseDate.Month()) + offsetAmount
+				newYear := baseDate.Year()
+
+				if newMonth <= 0 {
+					newYear -= 1 + (-newMonth / 12)
+					newMonth = 12 + (newMonth % 12)
+				} else if newMonth > 12 {
+					newYear += (newMonth - 1) / 12
+					newMonth = ((newMonth - 1) % 12) + 1
+				}
+
+				// Find the last day of the new month
+				firstOfNextMonth := time.Date(newYear, time.Month(newMonth+1), 1, 0, 0, 0, 0, baseDate.Location())
+				lastDayOfNewMonth := firstOfNextMonth.AddDate(0, 0, -1)
+				return lastDayOfNewMonth
+			}
+			endDate := baseDate.AddDate(0, offsetAmount, 0)
+			return endDate
+		case 'w':
+			return baseDate.AddDate(0, 0, offsetAmount*7)
+		case 'd':
+			return baseDate.AddDate(0, 0, offsetAmount)
+		default:
+			fmt.Println("Unknown offset unit:", string(offsetUnit))
+			return time.Time{}
+		}
+	}
+
+	return baseDate
 }
