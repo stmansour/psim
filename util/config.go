@@ -402,11 +402,14 @@ func calculateEndDate(ending string, currentDate time.Time) time.Time {
 	baseDate := time.Time{}
 
 	// Determine the initial date
-	switch parts[0] {
+	switch strings.ToLower(parts[0]) {
 	case "yesterday":
 		baseDate = currentDate.AddDate(0, 0, -1)
 	case "today":
 		baseDate = currentDate
+	case "lastmonthend":
+		firstOfCurrentMonth := time.Date(currentDate.Year(), currentDate.Month(), 1, 0, 0, 0, 0, currentDate.Location())
+		baseDate = firstOfCurrentMonth.AddDate(0, 0, -1)
 	default:
 		var err error
 		baseDate, err = StringToDate(parts[0])
