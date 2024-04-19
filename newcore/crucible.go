@@ -7,6 +7,7 @@ import (
 
 	"github.com/stmansour/psim/newdata"
 	"github.com/stmansour/psim/util"
+	"gonum.org/v1/gonum/stat"
 )
 
 // Crucible is the class that implements and reports on a crucible... a
@@ -126,14 +127,14 @@ func (c *Crucible) DumpSuccessCoefficient() {
 	}
 	defer file.Close()
 
-	consistency := 0
-	for i := 0; i < len(c.AnnualizedReturnList); i++ {
-		if c.AnnualizedReturnList[i] >= c.cfg.CrucibleARThreshold {
-			consistency++
-		}
-	}
-	consist := float64(consistency) / float64(len(c.AnnualizedReturnList)) // consistency factor
-	sc := float64(len(c.cfg.CrucibleSpans)) * consist
-	fmt.Fprintf(file, "%s  Success Coefficient:  %.3f   simulations: %d consistency = %d/%d = %.3f \n", c.cfg.CrucibleName, sc, len(c.cfg.CrucibleSpans), consistency, len(c.AnnualizedReturnList), consist)
+	// Consistency coefficient = 1 - stddev(of all annualized returns)
+	// mean = SUM(annualized returns) / COUNT(annualized returns)
+	// SUCCESS coefficient = (mean)* consistency
+
+	mean, stddev := stat.MeanStdDev(c.AnnualizedReturnList, nil)
+	consistency := 1 - stddev
+	sc := mean * consistency
+	fmt.Fprintf(file, "%s  |||  mean: %.4f  stddev: %.4f   consistency: %.4f   success coefficient: %.4f\n", c.cfg.CrucibleName,
+		mean, stddev, consistency*100, sc*100)
 
 }

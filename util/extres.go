@@ -11,13 +11,14 @@ import (
 // ExternalResources is used to store sensitive or secret config values
 // for gaining access to external resources.
 type ExternalResources struct {
-	Env    int    `json:"Env"` // 0 = dev, 1 = qa, 2 = production
-	DbUser string `json:"Dbuser"`
-	DbName string `json:"Dbname"`
-	DbPass string `json:"Dbpass"`
-	DbHost string `json:"Dbhost"`
-	DbPort int    `json:"Dbport"`
-	DbType string `json:"Dbtype"`
+	Env                    int    `json:"Env"` // 0 = dev, 1 = qa, 2 = production
+	DbUser                 string `json:"Dbuser"`
+	DbName                 string `json:"Dbname"`
+	DbPass                 string `json:"Dbpass"`
+	DbHost                 string `json:"Dbhost"`
+	DbPort                 int    `json:"Dbport"`
+	DbType                 string `json:"Dbtype"`
+	TradingeconomicsAPIKey string `json:"TradingeconomicsAPIKey"`
 }
 
 // Define constant variables for DEV, QA, and PROD as per corrected mapping

@@ -643,6 +643,9 @@ func (s *Simulator) SetAllPortfolioValues(t time.Time) error {
 	if err != nil {
 		log.Fatalf("Error getting exchange close rate")
 	}
+	if er == nil {
+		log.Fatalf("ExchangeRate record == nil for t = %s and ss.Field[0] = %s\n", t.Format("2006-01-02"), ss[0].FQMetric())
+	}
 	exch := er.Fields[field.FQMetric()].Value // exchange rate at time t
 	if exch < 0.0001 {
 		log.Panicf("exch = %12.6f\n", exch)
