@@ -1,3 +1,5 @@
+OS := $(shell uname)
+
 TOP=../..
 BINDIR=${TOP}/dist/platosim
 THISDIR="apps/iewer"
@@ -19,7 +21,16 @@ package:
 	cp app.js ${BINDIR}/
 	@echo "*** ${THISDIR}: completed package ***"
 
-release:
+release: db
+ifeq ($(OS),Linux)
+	@echo "Running Linux-specific commands"
+	cp index.html /var/www/html/viewer/
+	cp app.js /var/www/html/viewer/
+	cp -r data /var/www/html/viewer/
+
+else ifeq ($(OS),Darwin)
+	@echo "Running MacOS-specific commands"
 	cp index.html /Library/Webserver/Documents/viewer/
 	cp app.js /Library/Webserver/Documents/viewer/
 	cp -r data /Library/Webserver/Documents/viewer/
+endif
