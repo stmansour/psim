@@ -1,29 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Time Series Plot</title>
+    <title>PLATO Metrics Viewer</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://unpkg.com/simple-statistics@7.8.3/dist/simple-statistics.min.js"></script>
     <script src="app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: #77FF77;
+            /* Fluorescent green */
+            background-color: #333333;
+            /* Dark charcoal gray for main background */
+        }
+
         #control-panel {
             width: 300px;
             float: left;
             height: 100vh;
             overflow: auto;
-            background-color: #f4f4f4;
+            background-color: #121212;
+            /* Almost black */
             padding: 20px;
+            box-shadow: 2px 0 5px 0 rgba(0, 0, 0, 0.5);
         }
+
         #plot {
             margin-left: 320px;
+            background-color: #fff;
+            /* Keep plot background white */
+            padding: 20px;
+        }
+
+        h1,
+        h3 {
+            color: #77FF77;
+            /* Fluorescent green */
+        }
+
+        select,
+        input,
+        button {
+            background-color: #262626;
+            color: #77FF77;
+            border: 1px solid #333;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        button:hover {
+            background-color: #333333;
+        }
+
+        input[type="date"] {
+            color: white;
+            /* This can sometimes affect the icon color */
+            background-color: #121212;
+            border: 1px solid #333;
+            padding: 5px 10px;
+            border-radius: 5px;
+            /* Use a custom SVG or PNG for the calendar icon */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%2377FF77" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V9h14v10zM5 7V5h14v2H5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 5px center;
+            appearance: none;
+            /* This can remove default system styling */
+        }
+
+        /* Adjustments for focus and hover states */
+        input[type="date"]:hover,
+        input[type="date"]:focus {
+            border-color: #39FF14;
+            /* Adjust hover border color */
+            outline: none;
         }
     </style>
 </head>
+
 <body>
     <div id="control-panel">
+        <h2>PLATO Metrics Viewer</h2>
         <h3>Select Metrics and Date</h3>
         Metric 1: <select id="metric1-select"></select><br><br>
         Metric 2: <select id="metric2-select"></select><br><br>
@@ -33,6 +96,31 @@
     </div>
     <div id="plot"></div>
 
-</body>
-</html>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Load CSV from the specified directory
+            Papa.parse('data/platodb.csv', {
+                download: true,
+                header: true,
+                dynamicTyping: true,
+                skipEmptyLines: true,
+                complete: function (results) {
+                    datasetTimeSeries = results.data;  // Ensure data is assigned to datasetTimeSeries
+                    if (datasetTimeSeries.length > 0) {
+                        initializeControls();
+                        setDefaultControls(); // Initialize controls with default values
+                    }
+                }
+            });
 
+            function setDefaultControls() {
+                document.getElementById('metric2-select').value = 'GCAM_C4_20'; // Set the second dropdown default
+                document.getElementById('start-date').value = '2022-01-01';    // Set the start date
+                document.getElementById('end-date').value = '2022-12-31';      // Set the end date
+            }
+        });
+    </script>
+
+</body>
+
+</html>

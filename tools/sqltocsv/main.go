@@ -65,9 +65,6 @@ func main() {
 		log.Fatalf("db.Init returned error: %s\n", err.Error())
 	}
 	defer app.sqldb.SQLDB.DB.Close()
-	if err = app.sqldb.Init(); err != nil {
-		log.Fatalf("db.Init returned error: %s\n", err.Error())
-	}
 
 	//---------------------------------------------------------------------
 	// If the only thing requested was shard info for a metric

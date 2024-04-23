@@ -9,6 +9,7 @@ type Locale struct {
 	LID         int64
 	Name        string
 	Currency    string
+	Country     string
 	Description string
 }
 
@@ -27,13 +28,13 @@ func (p *Database) InsertLocale(m *Locale) (int64, error) {
 
 // InsertLocale inserts a new Locale into the Locales table.
 func (p *DatabaseSQL) InsertLocale(loc *Locale) (int64, error) {
-	stmt, err := p.DB.Prepare("INSERT INTO Locales(Name, Currency, Description) VALUES(?, ?, ?)")
+	stmt, err := p.DB.Prepare("INSERT INTO Locales(Name, Currency, Country, Description) VALUES(?, ?, ?, ?)")
 	if err != nil {
 		return 0, err
 	}
 	defer stmt.Close()
 
-	res, err := stmt.Exec(loc.Name, loc.Currency, loc.Description)
+	res, err := stmt.Exec(loc.Name, loc.Currency, loc.Country, loc.Description)
 	if err != nil {
 		return 0, err
 	}
@@ -52,14 +53,14 @@ func (p *DatabaseSQL) LoadLocaleCache() error {
 	var loc Locale
 
 	localesMap := make(map[string]Locale)
-	rows, err := p.DB.Query("SELECT LID, Name, Currency, Description FROM Locales")
+	rows, err := p.DB.Query("SELECT LID, Name, Currency, Country,Description FROM Locales")
 	if err != nil {
 		return err
 	}
 	defer rows.Close()
 
 	for rows.Next() {
-		if err := rows.Scan(&loc.LID, &loc.Name, &loc.Currency, &loc.Description); err != nil {
+		if err := rows.Scan(&loc.LID, &loc.Name, &loc.Currency, &loc.Country, &loc.Description); err != nil {
 			return err
 		}
 		localesMap[loc.Currency] = loc

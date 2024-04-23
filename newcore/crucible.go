@@ -128,12 +128,12 @@ func (c *Crucible) DumpSuccessCoefficient() {
 	defer file.Close()
 
 	// Consistency coefficient = 1 - stddev(of all annualized returns)
-	// mean = SUM(annualized returns) / COUNT(annualized returns)
-	// SUCCESS coefficient = (mean)* consistency
-
+	// mean annualized return = SUM(annualized returns) / COUNT(annualized returns)
+	// SUCCESS coefficient = (mean annualized return)* consistency
 	mean, stddev := stat.MeanStdDev(c.AnnualizedReturnList, nil)
 	consistency := 1 - stddev
 	sc := mean * consistency
+
 	fmt.Fprintf(file, "%s  |||  mean: %.4f  stddev: %.4f   consistency: %.4f   success coefficient: %.4f\n", c.cfg.CrucibleName,
 		mean, stddev, consistency*100, sc*100)
 

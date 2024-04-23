@@ -3,20 +3,6 @@
 let datasetTimeSeries = [];  // Make sure this is declared at the top of your file
 let dateColumn = "Date";  // Adjust this if your date column has a different header
 
-// Load CSV from the specified directory
-Papa.parse('data/platodb.csv', {
-    download: true,
-    header: true,
-    dynamicTyping: true,
-    skipEmptyLines: true,
-    complete: function(results) {
-        datasetTimeSeries = results.data;  // Ensure data is assigned to datasetTimeSeries
-        if (datasetTimeSeries.length > 0) {
-            initializeControls();
-        }
-    }
-});
-
 function initializeControls() {
     // Ensure we have data to work with
     if (datasetTimeSeries.length === 0) {
@@ -47,6 +33,15 @@ function initializeControls() {
     document.getElementById('end-date').valueAsDate = new Date(Math.max(...dateArray));
 }
 
+// Normalize data function
+function normalizeData(values) {
+    let mean = ss.mean(values);
+    let standardDeviation = ss.standardDeviation(values);
+    return values.map(value => (value - mean) / standardDeviation);
+}
+
+
+
 function plotData() {
     let metric1 = document.getElementById('metric1-select').value;
     let metric2 = document.getElementById('metric2-select').value;
@@ -58,26 +53,59 @@ function plotData() {
         return (dataDate >= startDate && dataDate <= endDate);
     });
 
+    let xValues = filteredData.map(data => data[dateColumn]);
+    let yValues1 = filteredData.map(data => data[metric1]);
+    let yValues2 = filteredData.map(data => data[metric2]);
+
+    let windowSize = 30; // Moving window size of 30 days
+    let correlationValues = []; // Array to hold correlation values
+
+    // Calculate moving window correlation
+    for (let i = windowSize; i < xValues.length; i++) {
+        let windowYValues1 = yValues1.slice(i - windowSize, i);
+        let windowYValues2 = yValues2.slice(i - windowSize, i);
+
+        // Ensure the window has enough data points
+        if (windowYValues1.length >= windowSize && windowYValues2.length >= windowSize) {
+            let correlation = ss.sampleCorrelation(windowYValues1, windowYValues2);
+            correlationValues.push(correlation);
+        } else {
+            correlationValues.push(null); // Or handle insufficient data points
+        }
+    }
+
     let trace1 = {
-        x: filteredData.map(data => data[dateColumn]),
-        y: filteredData.map(data => data[metric1]),
+        x: xValues,
+        y: yValues1,
         mode: 'lines',
         name: metric1,
-        yaxis: 'y1',  // Assign to the first y-axis
-        line: { color: '#17BECF' }  // Defaulting to a specific color
+        yaxis: 'y1',
+        line: { color: '#17BECF' }
     };
 
     let trace2 = {
-        x: filteredData.map(data => data[dateColumn]),
-        y: filteredData.map(data => data[metric2]),
+        x: xValues,
+        y: yValues2,
         mode: 'lines',
         name: metric2,
-        yaxis: 'y2',  // Assign to the second y-axis
-        line: { color: '#B22222' }  // Defaulting to a specific color
+        yaxis: 'y2',
+        line: { color: '#B22222' }
+    };
+
+    // Adjust xValues for correlation trace to match the windowed calculation
+    let correlationXValues = xValues.slice(windowSize);
+
+    let trace3 = {
+        x: correlationXValues,
+        y: correlationValues,
+        mode: 'lines',
+        name: 'Correlation',
+        yaxis: 'y3',
+        line: { color: '#DAA520' }
     };
 
     let layout = {
-        title: 'Time Series Data',
+        title: 'Time Series Data with Correlation',
         xaxis: { title: 'Date' },
         yaxis: {
             title: metric1,
@@ -91,8 +119,16 @@ function plotData() {
             tickfont: { color: trace2.line.color },
             overlaying: 'y',
             side: 'right'
+        },
+        yaxis3: {
+            title: 'Correlation',
+            titlefont: { color: trace3.line.color },
+            tickfont: { color: trace3.line.color },
+            overlaying: 'y',
+            side: 'right',
+            position: 0.95
         }
     };
 
-    Plotly.newPlot('plot', [trace1, trace2], layout);
+    Plotly.newPlot('plot', [trace1, trace2, trace3], layout);
 }

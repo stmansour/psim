@@ -59,6 +59,7 @@ func (p *DatabaseSQL) CreateDatabaseTables() error {
 		`CREATE TABLE Locales (
 			LID INT AUTO_INCREMENT PRIMARY KEY,
 			Name VARCHAR(80) NOT NULL,
+			Country VARCHAR(80) NOT NULL,
 			Currency VARCHAR(80) NOT NULL,
 			Description TEXT
 		);`,
@@ -206,7 +207,13 @@ func (p *DatabaseSQL) FieldSelectorsFromRecord(rec *EconometricsRecord) []FieldS
 }
 
 // FieldSelectorFromCSVColName updates f with the fields derived from k,
-// a fully qualified metric name as seen in the column header of a CSV file
+// a fully qualified metric name as seen in the column header of a CSV file.
+//
+//	It parses out the prefix(es) of k.  Examples:
+//	     USDHS -> FieldSelector{Locale: USD, Metric: HS}
+//	     JPYIR -> FieldSelector{Locale: JPY, Metric: IR}
+//	     USDJPYEXClose -> FieldSelector{Locale: USD, Locale2: JPY, Metric: EXClose}
+//
 // --------------------------------------------------------------------------------
 func (p *DatabaseSQL) FieldSelectorFromCSVColName(k string, f *FieldSelector) {
 	// Attempt to extract up to two locales from the prefix of the key

@@ -115,7 +115,7 @@ func (p *Database) Select(dt time.Time, fields []FieldSelector) (*EconometricsRe
 	case "SQL":
 		return p.SQLDB.Select(dt, fields)
 	default:
-		err = fmt.Errorf("unrecognized data source: %s", p.cfg.DBSource)
+		err = fmt.Errorf("unrecognized data source: %s", p.Datatype)
 		return nil, err
 	}
 }

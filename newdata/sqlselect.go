@@ -42,6 +42,7 @@ var unrecognized = map[string]bool{}
 // Insert does a sql insert of all the metrics in the supplied record
 func (p *DatabaseSQL) Insert(rec *EconometricsRecord) error {
 	var err error
+	noLocale := int(p.LocaleCache["NON"].LID)
 	for k, v := range rec.Fields {
 		var f FieldSelector
 		p.FieldSelectorFromCSVColName(k, &f)
@@ -61,7 +62,7 @@ func (p *DatabaseSQL) Insert(rec *EconometricsRecord) error {
 			}
 			continue
 		}
-		if f.LID2 != 1 && f.MID == -1 {
+		if f.LID2 != noLocale && f.MID == -1 {
 			query := `INSERT INTO ExchangeRate (Date,LID,LID2,MSID,EXClose) VALUES (?,?,?,?,?)`
 			if _, err = p.DB.Exec(query, m.Date, m.LID, m.LID2, m.MSID, m.MetricValue.Value); err != nil {
 				return err
