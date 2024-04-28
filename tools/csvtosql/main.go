@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/stmansour/psim/newdata"
@@ -18,6 +19,8 @@ type Application struct {
 	BucketCount int
 	DtStart     time.Time
 	DtStop      time.Time
+	metricsSrc  string
+	MSID        int
 }
 
 var app Application
@@ -57,6 +60,24 @@ func main() {
 	}
 	if err := app.csvdb.Init(); err != nil {
 		log.Panicf("*** PANIC ERROR ***  db.Init returned error: %s\n", err)
+	}
+
+	//-----------------------------------------------------------------
+	// This is our source data, a CSV file.
+	// We need to set the data source info in the app struct...
+	//-----------------------------------------------------------------
+	mn := "csvfile"
+	app.MSID = -1
+	for _, ms := range app.csvdb.CSVDB.MetricSrcCache {
+		m := util.Stripchars(strings.ToLower(ms.Name), " ")
+		if strings.Contains(m, mn) {
+			app.MSID = ms.MSID
+			app.metricsSrc = ms.Name
+			break
+		}
+	}
+	if app.MSID == -1 {
+		log.Fatalf("Could not find metric source: %s\n", mn)
 	}
 
 	//---------------------------------------------------------------------

@@ -25,6 +25,13 @@ func MigrateTimeSeriesData() error {
 		if len(rec.Fields) == 0 {
 			continue
 		}
+		//-------------------------------------------------------------------------
+		// We're writing to the SQL database, so we need to set the metrics source.
+		// In this case, we're sourcing from a CSV file.
+		//-------------------------------------------------------------------------
+		for _, v := range rec.Fields {
+			v.MSID = app.MSID
+		}
 
 		// Write it to the database...
 		if err = app.sqldb.Insert(rec); err != nil {

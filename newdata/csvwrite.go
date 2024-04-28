@@ -181,7 +181,8 @@ func (d *DatabaseCSV) CopySQLRecsToCSV(sqldb *Database) error {
 	// Prepare field selectors...
 	//------------------------------------------------
 	startDate := time.Date(2015, time.January, 1, 0, 0, 0, 0, time.UTC) // GDELT data starts at 2015
-	endDate := time.Date(2023, time.December, 31, 0, 0, 0, 0, time.UTC) // time.Date(2023, time.December, 31, 0, 0, 0, 0, time.UTC)
+	// startDate := time.Date(2023, 8, 17, 0, 0, 0, 0, time.UTC) // DEBUG ONLY
+	endDate := time.Now().AddDate(0, 0, -1)
 	loc1 := d.ParentDB.cfg.C1
 	loc2 := d.ParentDB.cfg.C2
 
@@ -239,19 +240,41 @@ func (d *DatabaseCSV) CopySQLRecsToCSV(sqldb *Database) error {
 	//----------------------------
 	year := 0
 	month := 0
+	var ok bool
+	val := float64(0)
 	for dt := startDate; dt.Before(endDate) || dt.Equal(endDate); dt = dt.AddDate(0, 0, 1) {
 		rec, err := sqldb.Select(dt, fields)
 		if err != nil {
 			return err
 		}
-		fmt.Fprintf(file, "%q", rec.Date.Format("1/2/2006"))       // special case 1: Date
-		fmt.Fprintf(file, ",%.6f", rec.Fields[f.FQMetric()].Value) // special case 2: EXClose
 
-		// Now the remaining metrics
+		//-----------------------
+		// special case 1: Date
+		//-----------------------
+		fmt.Fprintf(file, "%q", rec.Date.Format("1/2/2006"))
+
+		//------------------------------------
+		// Special case 2: EXClose
+		//------------------------------------
+		_, ok = rec.Fields[f.FQMetric()]
+		if ok {
+			fmt.Fprintf(file, ",%.6f", rec.Fields[f.FQMetric()].Value) // special case 2: EXClose
+		} else {
+			fmt.Fprintf(file, ",")
+		}
+
+		//------------------------------------
+		// Now all the remaining metrics
+		//------------------------------------
 		for i := 0; i < len(s); i++ {
 			fld := s[i]
-			val := rec.Fields[fld].Value
-			fmt.Fprintf(file, ",%.6f", val)
+			_, ok = rec.Fields[fld]
+			if ok {
+				fmt.Fprintf(file, ",%.6f", val)
+				val = rec.Fields[fld].Value
+			} else {
+				fmt.Fprintf(file, ",")
+			}
 		}
 		fmt.Fprintf(file, "\n")
 		if dt.Year() != year || dt.Month() != time.Month(month) {

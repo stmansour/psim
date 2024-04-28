@@ -19,6 +19,7 @@ type MetricInfo struct {
 	Mean          float64 // the Mean value for the last cfg.HoldWindowStatsLookBack records. Only valid when StatsValid is true
 	StdDevSquared float64 // the stdDeviationSquared value for the last cfg.HoldWindowStatsLookBack records. Only valid when StatsValid is true
 	StatsValid    bool    // set to true when Mean and StdDevSquared have been calculated. Note, the first RollingStats.WindowSize records will not have valid stats.
+	MSID          int     // metrics source
 }
 
 // Database is the abstraction for the data source

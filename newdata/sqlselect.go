@@ -52,7 +52,7 @@ func (p *DatabaseSQL) Insert(rec *EconometricsRecord) error {
 			MID:         f.MID,
 			LID:         f.LID,
 			LID2:        f.LID2,
-			MSID:        1, // NOTE:  hardcode
+			MSID:        3, // NOTE:  hardcode - csvfile
 			MetricValue: v,
 		}
 		if f.MID == 0 {
@@ -62,14 +62,20 @@ func (p *DatabaseSQL) Insert(rec *EconometricsRecord) error {
 			}
 			continue
 		}
+		//--------------------------------------------------------------------
+		// for every metric we write, if we have source info then we write it
+		//--------------------------------------------------------------------
+		if v.MSID > 0 {
+			m.MSID = v.MSID
+		}
 		if f.LID2 != noLocale && f.MID == -1 {
 			query := `INSERT INTO ExchangeRate (Date,LID,LID2,MSID,EXClose) VALUES (?,?,?,?,?)`
 			if _, err = p.DB.Exec(query, m.Date, m.LID, m.LID2, m.MSID, m.MetricValue.Value); err != nil {
 				return err
 			}
 		} else {
-			query := fmt.Sprintf(`INSERT INTO %s (Date,MID,LID,MetricValue) VALUES (?,?,?,?)`, f.Table)
-			if _, err = p.DB.Exec(query, m.Date, m.MID, m.LID, m.MetricValue.Value); err != nil {
+			query := fmt.Sprintf(`INSERT INTO %s (Date,MID,LID,MSID,MetricValue) VALUES (?,?,?,?,?)`, f.Table)
+			if _, err = p.DB.Exec(query, m.Date, m.MID, m.LID, m.MSID, m.MetricValue.Value); err != nil {
 				return err
 			}
 		}
@@ -89,6 +95,7 @@ func (p *DatabaseSQL) Select(dt time.Time, ss []FieldSelector) (*EconometricsRec
 	}
 
 	for _, v := range ss {
+		p.FieldSelectorFromCSVColName(v.Metric, &v)
 		p.GetShardInfo(dt, &v)
 		var m MetricRecord
 
@@ -119,6 +126,7 @@ func (p *DatabaseSQL) Select(dt time.Time, ss []FieldSelector) (*EconometricsRec
 			}
 			if nullint.Valid {
 				v.MSID = int(nullint.Int64)
+				m.MetricValue.MSID = int(nullint.Int64)
 			}
 			rec.Fields[v.FQMetric()] = m.MetricValue
 		}
