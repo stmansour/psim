@@ -102,13 +102,13 @@ Default QA Testing Crucible  |||  mean: -0.0004  stddev: 0.0010   consistency: 9
 "2/1/2023","2/28/2023",100000.00,100000.00, 0.00%
 "1/1/2023","1/31/2023",100000.00,100000.00, 0.00%
 "12/1/2022","12/31/2022",100000.00,100000.00, 0.00%
-"11/1/2022","11/30/2022",100000.00,100079.59, 1.01%
+"11/1/2022","11/30/2022",100000.00,100070.75, 0.89%
 "10/1/2022","10/31/2022",100000.00,100000.00, 0.00%
-"9/1/2022","9/30/2022",100000.00, 99980.39,-0.25%
+"9/1/2022","9/30/2022",100000.00, 99982.57,-0.22%
 "8/1/2022","8/31/2022",100000.00,100000.00, 0.00%
 "7/1/2022","7/31/2022",100000.00,100000.00, 0.00%
 "6/1/2022","6/30/2022",100000.00,100000.00, 0.00%
-Default QA Testing Crucible  |||  mean: 0.0006  stddev: 0.0031   consistency: 99.6945   success coefficient: 0.0632
+Default QA Testing Crucible  |||  mean: 0.0006  stddev: 0.0027   consistency: 99.7285   success coefficient: 0.0561
 
 "DNA Name: Graham",,,,,"{Investor;Strategy=MajorityRules;InvW1=0.6763;InvW2=0.3237;Influencers=[{LSMInfluencer,Delta1=-119,Delta2=-31,Metric=ConsumerConfidence}|{LSMInfluencer,Delta1=-66,Delta2=-5,Metric=GCAM_C15_148_ECON}|{LSMInfluencer,Delta1=-145,Delta2=-39,Metric=ManufacturingProduction}|{LSMInfluencer,Delta1=-154,Delta2=-34,Metric=IndustrialProduction}|{LSMInfluencer,Delta1=-167,Delta2=-53,Metric=InflationExpectations}|{LSMInfluencer,Delta1=-110,Delta2=-31,Metric=RetailSalesMoM}|{LSMInfluencer,Delta1=-77,Delta2=-22,Metric=GCAM_C16_121}|{LSMInfluencer,Delta1=-62,Delta2=-9,Metric=GCAM_C15_147}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BusinessConfidence}|{LSMInfluencer,Delta1=-69,Delta2=-26,Metric=GCAM_C15_204}]}"
 "Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"
