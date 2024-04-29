@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	"github.com/stmansour/psim/util"
 )
@@ -224,6 +225,7 @@ func (m *MetricInfluencerManager) loadMInfluencerSubclassesCSV() error {
 	// Identify column indices
 	colIndices := make(map[string]int)
 	for i, col := range header {
+		col = strings.ReplaceAll(col, " ", "")
 		colIndices[col] = i
 	}
 
