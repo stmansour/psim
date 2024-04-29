@@ -73,11 +73,11 @@ func TestInfluencerPredictions(t *testing.T) {
 // TestNewInfestorFromDNA - create Investors from DNA
 func TestNewInvestorFromDNA(t *testing.T) {
 	dnas := []string{
-		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-77,Delta2=-14,Metric=WTOILClose}|{LSMInfluencer,Delta1=-83,Delta2=-13,Metric=GCAM_C5_4}|{LSMInfluencer,Delta1=-63,Delta2=-21,Metric=GCAM_C15_148_ECON}|{LSMInfluencer,Delta1=-77,Delta2=-10,Metric=GCAM_C15_147}|{LSMInfluencer,Delta1=-95,Delta2=-30,Metric=IR}|{LSMInfluencer,Delta1=-149,Delta2=-26,Metric=GCAM_C16_60}|{LSMInfluencer,Delta1=-132,Delta2=-9,Metric=GCAM_C3_2_ECON}|{LSMInfluencer,Delta1=-163,Delta2=-35,Metric=M1}|{LSMInfluencer,Delta1=-249,Delta2=-3,Metric=GCAM_C16_121}|{LSMInfluencer,Delta1=-104,Delta2=-42,Metric=BC}]}",
+		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-77,Delta2=-14,Metric=WTOILClose}|{LSMInfluencer,Delta1=-83,Delta2=-13,Metric=GCAM_C5_4}|{LSMInfluencer,Delta1=-63,Delta2=-21,Metric=GCAM_C15_148_ECON}|{LSMInfluencer,Delta1=-77,Delta2=-10,Metric=GCAM_C15_147}|{LSMInfluencer,Delta1=-95,Delta2=-30,Metric=InflationRate}|{LSMInfluencer,Delta1=-149,Delta2=-26,Metric=GCAM_C16_60}|{LSMInfluencer,Delta1=-132,Delta2=-9,Metric=GCAM_C3_2_ECON}|{LSMInfluencer,Delta1=-163,Delta2=-35,Metric=MoneySupplyM1}|{LSMInfluencer,Delta1=-249,Delta2=-3,Metric=GCAM_C16_121}|{LSMInfluencer,Delta1=-104,Delta2=-42,Metric=BusinessConfidence}]}",
 		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-63,Delta2=-23,Metric=GCAM_C16_47_ECON}]}",
 		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-80,Delta2=-24,Metric=GCAM_C16_60_ECON}|{LSMInfluencer,Delta1=-242,Delta2=-5,Metric=GCAM_C16_121_ECON}]}",
-		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-138,Delta2=-15,Metric=GCAM_C16_121}|{LSMInfluencer,Delta1=-71,Delta2=-5,Metric=GCAM_C15_147}|{LSMInfluencer,Delta1=-166,Delta2=-44,Metric=BC}]}",
-		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-132,Delta2=-27,Metric=GCAM_C3_1}|{LSMInfluencer,Delta1=-144,Delta2=-14,Metric=GCAM_C15_148}|{LSMInfluencer,Delta1=-137,Delta2=-16,Metric=GCAM_C16_60}|{LSMInfluencer,Delta1=-147,Delta2=-6,Metric=GCAM_C15_137}|{LSMInfluencer,Delta1=-159,Delta2=-16,Metric=GCAM_C3_1}|{LSMInfluencer,Delta1=-84,Delta2=-16,Metric=GCAM_C15_204}|{LSMInfluencer,Delta1=-167,Delta2=-43,Metric=M1}|{LSMInfluencer,Delta1=-97,Delta2=-34,Metric=CC}]}",
+		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-138,Delta2=-15,Metric=GCAM_C16_121}|{LSMInfluencer,Delta1=-71,Delta2=-5,Metric=GCAM_C15_147}|{LSMInfluencer,Delta1=-166,Delta2=-44,Metric=BusinessConfidence}]}",
+		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-132,Delta2=-27,Metric=GCAM_C3_1}|{LSMInfluencer,Delta1=-144,Delta2=-14,Metric=GCAM_C15_148}|{LSMInfluencer,Delta1=-137,Delta2=-16,Metric=GCAM_C16_60}|{LSMInfluencer,Delta1=-147,Delta2=-6,Metric=GCAM_C15_137}|{LSMInfluencer,Delta1=-159,Delta2=-16,Metric=GCAM_C3_1}|{LSMInfluencer,Delta1=-84,Delta2=-16,Metric=GCAM_C15_204}|{LSMInfluencer,Delta1=-167,Delta2=-43,Metric=MoneySupplyM1}|{LSMInfluencer,Delta1=-97,Delta2=-34,Metric=ConsumerConfidence}]}",
 	}
 	f, db, cfg := createConfigAndFactory()
 	for i := 0; i < len(dnas); i++ {
@@ -119,7 +119,7 @@ func TestInvestorFromParents(t *testing.T) {
 
 	parent1 := Investor{Strategy: 1, W1: 0.5, W2: 0.5}
 	dr := LSMInfluencer{Metric: "WTOILClose", Delta1: -145, Delta2: -2}
-	ir := LSMInfluencer{Metric: "SP", Delta1: -89, Delta2: -5}
+	ir := LSMInfluencer{Metric: "StockMarket", Delta1: -89, Delta2: -5}
 	dr.Init(&parent1, cfg)
 	dr.SetID()
 	ir.Init(&parent1, cfg)
@@ -127,8 +127,8 @@ func TestInvestorFromParents(t *testing.T) {
 	parent1.Influencers = append(parent1.Influencers, &dr, &ir)
 
 	parent2 := Investor{Strategy: 0, W1: 0.5, W2: 0.5}
-	dr2 := LSMInfluencer{Metric: "CC", Delta1: -95, Delta2: -30}
-	ur2 := LSMInfluencer{Metric: "DR", Delta1: -89, Delta2: -1}
+	dr2 := LSMInfluencer{Metric: "ConsumerConfidence", Delta1: -95, Delta2: -30}
+	ur2 := LSMInfluencer{Metric: "InterestRate", Delta1: -89, Delta2: -1}
 	dr2.Init(&parent2, cfg)
 	dr2.SetID()
 	ur2.Init(&parent2, cfg)

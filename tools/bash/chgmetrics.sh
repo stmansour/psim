@@ -5,16 +5,15 @@ replace_metrics() {
     local file="$1"
     echo "Modifying: $file"
 
-    # Detect operating system and set sed in-place option accordingly
-    SED_OPT=""
+    # Detect operating system and set the appropriate sed command
     if [[ "$(uname)" == "Darwin" ]]; then
-        SED_OPT="-i ''" # macOS requires an empty string as an argument to -i
+        SED_CMD="gsed" # Use GNU sed on macOS, if you don't have it, use 'brew install gnu-sed'
     else
-        SED_OPT="-i" # Linux and other Unix-like systems do not
+        SED_CMD="sed" # Use default sed on Linux
     fi
 
-    # Apply sed command with the appropriate option
-    sed $SED_OPT \
+    # Apply sed command with the in-place edit without creating a backup
+    $SED_CMD -i \
         -e 's/Metric=BC/Metric=BusinessConfidence/g' \
         -e 's/Metric=BP/Metric=BuildingPermits/g' \
         -e 's/Metric=CC/Metric=ConsumerConfidence/g' \
@@ -38,7 +37,7 @@ replace_metrics() {
 export -f replace_metrics
 
 # Find all .json5, .csv, and .go files starting from the current directory, and apply the replacement
-find . \( -name "*.json5" -o -name "*.go" \) -exec bash -c 'replace_metrics "$0"' {} \;
+# find . \( -name "*.json5" -o -name "*.go" \) -exec bash -c 'replace_metrics "$0"' {} \;
+find . \( -name "*.gold" \) -exec bash -c 'replace_metrics "$0"' {} \;
 
 echo "Metric names have been updated."
-

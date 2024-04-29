@@ -82,11 +82,11 @@ func TestFieldSelectorBuilder(t *testing.T) {
 	defer app.sqldb.SQLDB.DB.Close()
 
 	fields := map[string]MetricInfo{
-		"USDJPYEXClose": {Value: 0.1}, // Type MetricInfo is inferred
-		"JPYSNSNScore":  {Value: 0.1},
-		"USDBP":         {Value: 0.1},
-		"SNSPScore":     {Value: 0.1},
-		"CC":            {Value: 0.1},
+		"USDJPYEXClose":      {Value: 0.1}, // Type MetricInfo is inferred
+		"JPYSNSNScore":       {Value: 0.1},
+		"USDBuildingPermits": {Value: 0.1},
+		"SNSPScore":          {Value: 0.1},
+		"ConsumerConfidence": {Value: 0.1},
 	}
 
 	rec := EconometricsRecord{
@@ -98,9 +98,9 @@ func TestFieldSelectorBuilder(t *testing.T) {
 	res := []FieldSelector{
 		{Metric: "EXClose", Locale: "USD", Locale2: "JPY"},
 		{Metric: "SNSNScore", Locale: "JPY", Locale2: ""},
-		{Metric: "BP", Locale: "USD", Locale2: ""},
+		{Metric: "BuildingPermits", Locale: "USD", Locale2: ""},
 		{Metric: "SNSPScore", Locale: "", Locale2: ""},
-		{Metric: "CC", Locale: "", Locale2: ""},
+		{Metric: "ConsumerConfidence", Locale: "", Locale2: ""},
 	}
 
 	f := app.sqldb.SQLDB.FieldSelectorsFromRecord(&rec)

@@ -43,5 +43,5 @@
     //  version of this projects code will operate. 
     //-----------------------------------------------------------------
     "SingleInvestorMode": false,
-    "SingleInvestorDNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Metric=SP,Delta1=-27,Delta2=-5}]}",
+    "SingleInvestorDNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Metric=StockMarket,Delta1=-27,Delta2=-5}]}",
 }
