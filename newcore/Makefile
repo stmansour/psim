@@ -29,6 +29,7 @@ db:
 	mkdir -p data;cp ${TOP}/newdata/data/platodb.csv data/
 	cp ${TOP}/newdata/data/misubclasses.csv data/
 	cp ${TOP}/newdata/data/metricssources.csv data/
+	cp ${TOP}/newdata/data/msm.csv data/
 
 coverage:
 	go tool cover -html=coverage.out

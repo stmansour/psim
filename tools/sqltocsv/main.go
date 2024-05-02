@@ -101,21 +101,28 @@ func main() {
 	//   2. Locales
 	//----------------------------------------------------------------------
 	if err = app.csvdb.CSVDB.WriteLocalesToCSV(app.sqldb.SQLDB.LocaleCache); err != nil {
-		log.Fatalf("*** FATAL ERROR ***  WriteMetricsSourcesToSQL returned error: %s\n", err)
+		log.Fatalf("*** FATAL ERROR ***  WriteMetricsSourcesToCSV returned error: %s\n", err)
 	}
 
 	//----------------------------------------------------------------------
 	//   3. MISubclasses
 	//----------------------------------------------------------------------
 	if err = app.csvdb.CSVDB.WriteMISubclassesToCSV(app.sqldb.Mim.MInfluencerSubclasses); err != nil {
-		log.Fatalf("*** FATAL ERROR ***  WriteMetricsSourcesToSQL returned error: %s\n", err)
+		log.Fatalf("*** FATAL ERROR ***  WriteMetricsSourcesToCSV returned error: %s\n", err)
 	}
 
 	//----------------------------------------------------------------------
-	//   4. Sharded Metrics  (includes EXClose which is not sharded)
+	//   4. MetricSourcesMapping
+	//----------------------------------------------------------------------
+	if err = app.csvdb.CSVDB.WriteMetricSourcesMappingToCSV(app.sqldb); err != nil {
+		log.Fatalf("*** FATAL ERROR ***  WriteMetricsSourcesToCSV returned error: %s\n", err)
+	}
+
+	//----------------------------------------------------------------------
+	//   5. Sharded Metrics  (includes EXClose which is not sharded)
 	//----------------------------------------------------------------------
 	if err = app.csvdb.CSVDB.CopySQLRecsToCSV(app.sqldb); err != nil {
-		log.Fatalf("*** FATAL ERROR ***  WriteMetricsSourcesToSQL returned error: %s\n", err)
+		log.Fatalf("*** FATAL ERROR ***  WriteMetricsSourcesToCSV returned error: %s\n", err)
 	}
 
 	//----------------------------------------------------------------------

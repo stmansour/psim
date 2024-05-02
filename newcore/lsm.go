@@ -189,7 +189,7 @@ func (p *LSMInfluencer) calculateAndSetValues(pred *Prediction, fieldName string
 	delta := val2.Value - val1.Value         // change over T1 to T2
 	da := delta / float64(p.Delta2-p.Delta1) // mean change between T1 and T2
 	pred.AvgDelta = da                       // used for trace
-	x := p.cfg.StdDevVariationFactor         // notational simplification
+	x := p.cfg.StdDevVariationFactor         // notational simplification, use the factor from the config file
 	res := da*da - x*x*stdDevSquared         // deltaAvg^2 - (x*stdDev)^2   if the result is positive, then we transact
 	pred.Val1 = val1.Value                   // used in trace
 	pred.Val2 = val2.Value                   // used in trace

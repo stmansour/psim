@@ -40,6 +40,7 @@ db:
 	cp ${TOP}/newdata/data/platodb.csv data/
 	cp ${TOP}/newdata/data/misubclasses.csv data/
 	cp ${TOP}/newdata/data/metricssources.csv data/
+	cp ${TOP}/newdata/data/msm.csv data/
 
 package:
 	mkdir -p ${BINDIR}/

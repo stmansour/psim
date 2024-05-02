@@ -22,6 +22,9 @@ func (p *DatabaseSQL) SQLInit() error {
 	if err = p.LoadMetricsSourceCache(); err != nil {
 		return err
 	}
+	if err = p.LoadMetricSourceMapFromSQL(); err != nil {
+		return err
+	}
 	return nil
 }
 

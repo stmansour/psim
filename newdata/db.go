@@ -22,14 +22,21 @@ type MetricInfo struct {
 	MSID          int     // metrics source
 }
 
+// MetricSourceMap is a map from the internal metric name to a metrics supplier api
+// name or symbol for the metric.  For example, for Trading Economics, "gold" maps
+// to "XAUUSD:CUR".
+// -----------------------------------------------------------------------------------
+type MetricSourceMap map[string]string
+
 // Database is the abstraction for the data source
 type Database struct {
-	cfg      *util.AppConfig          // application configuration info
-	extres   *util.ExternalResources  // the db may require secrets
-	Datatype string                   // "CSV", "MYSQL"
-	CSVDB    *DatabaseCSV             // valid when Datatype is "CSV"
-	SQLDB    *DatabaseSQL             // valid when Datatype is "SQL"
-	Mim      *MetricInfluencerManager // metrics manager
+	cfg      *util.AppConfig            // application configuration info
+	extres   *util.ExternalResources    // the db may require secrets
+	Datatype string                     // "CSV", "MYSQL"
+	CSVDB    *DatabaseCSV               // valid when Datatype is "CSV"
+	SQLDB    *DatabaseSQL               // valid when Datatype is "SQL"
+	Mim      *MetricInfluencerManager   // metrics manager
+	MSMap    map[string]MetricSourceMap // metric name to metric source api name: example MSMap["TradingEconomics"]["gold"] = "XAUUSD:CUR"
 }
 
 // EconometricsRecord is the basic structure of discount rate data
@@ -233,8 +240,10 @@ func (p *Database) CreateDatabaseTables() error {
 func (p *Database) Init() error {
 	switch p.Datatype {
 	case "CSV":
+		p.MSMap = make(map[string]MetricSourceMap, 3)
 		return p.CSVDB.CSVInit()
 	case "SQL":
+		p.MSMap = make(map[string]MetricSourceMap, 3)
 		p.SQLDB.ParentDB = p
 		return p.SQLDB.SQLInit()
 	default:
@@ -265,6 +274,20 @@ func (p *Database) WriteMetricsSources(locations []MetricsSource) error {
 		return p.CSVDB.WriteMetricsSourcesToCSV(locations)
 	case "SQL":
 		return p.SQLDB.WriteMetricsSourcesToSQL(locations)
+	default:
+		return fmt.Errorf("unknown database type: %s", p.Datatype)
+	}
+}
+
+// LoadMetricSourcesMap writes the supplied slice of MetricsSource structs to the database.
+// after CreateDatabaseTables or MigrateCSVtoSQL so that caches are loaded with the copied data.
+// -------------------------------------------------------------------------------------------
+func (p *Database) LoadMetricSourcesMap() error {
+	switch p.Datatype {
+	case "CSV":
+		return p.CSVDB.LoadMetricSourceMapFromCSV()
+	case "SQL":
+		return p.SQLDB.LoadMetricSourceMapFromSQL()
 	default:
 		return fmt.Errorf("unknown database type: %s", p.Datatype)
 	}

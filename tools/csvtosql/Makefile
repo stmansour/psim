@@ -38,6 +38,7 @@ csvdb:
 	$(DO_CMD)cp ${TOP}/newdata/data/platodb.csv data/
 	$(DO_CMD)cp ${TOP}/newdata/data/misubclasses.csv data/
 	$(DO_CMD)cp ${TOP}/newdata/data/metricssources.csv data/
+	$(DO_CMD)cp ${TOP}/newdata/data/msm.csv data/
 
 package:
 	$(DO_CMD)@echo "*** PACKAGE completed in ${THISDIR} ***"

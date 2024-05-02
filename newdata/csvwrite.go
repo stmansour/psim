@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strconv"
 	"time"
 )
@@ -56,6 +57,63 @@ func (d *DatabaseCSV) WriteMetricsSourcesToCSV(locations []MetricsSource) error 
 		if err := writer.Write(row); err != nil {
 			return err
 		}
+	}
+
+	return nil
+}
+
+// WriteMetricSourcesMappingToCSV is Function to write metric source maps for
+// each metric source (provider) to the CSV database
+// ---------------------------------------------------------------------------------
+func (d *DatabaseCSV) WriteMetricSourcesMappingToCSV(psqldb *Database) error {
+	msmsm := psqldb.MSMap // notational convenience
+	mim := psqldb.Mim     // notational convenience
+	FullyQualifiedFileName := filepath.Join(d.DBPath, "msm.csv")
+	file, err := os.Create(FullyQualifiedFileName)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	//-------------------------------------------------------------------------------
+	// Write CSV header.  The left column is "Metric".  The remaining columns are
+	// the other MetricSources
+	//-------------------------------------------------------------------------------
+	header := []string{"Metric"}
+	for k := range msmsm {
+		header = append(header, k)
+	}
+	if err := writer.Write(header); err != nil {
+		return err
+	}
+
+	//-------------------------------------------------------------------------------
+	// Now we loop through every metric and then write the metric and corresponding
+	// mapping for each MetricSource
+	//-------------------------------------------------------------------------------
+	for k := range mim.MInfluencerSubclasses {
+		row := []string{k}
+		for i := 1; i < len(header); i++ {
+			val := ""
+			m := msmsm[header[i]] // notational convenience
+			if len(m[k]) > 0 {
+				val = m[k]
+			}
+			row = append(row, val)
+		}
+		if err := writer.Write(row); err != nil {
+			return err
+		}
+	}
+
+	// Flush ensures all buffered data is written to the underlying file
+	writer.Flush()
+
+	if err := writer.Error(); err != nil {
+		return fmt.Errorf("error flushing data to CSV file: %v", err)
 	}
 
 	return nil
@@ -200,7 +258,27 @@ func (d *DatabaseCSV) CopySQLRecsToCSV(sqldb *Database) error {
 	//----------------------------
 	fmt.Fprintf(file, "%q", "Date")        // special case 1:  date
 	fmt.Fprintf(file, ",%q", f.FQMetric()) // special case 2: EXClose
-	for _, v := range sqldb.Mim.MInfluencerSubclasses {
+
+	//---------------------------------------------------------------
+	// I want the rest of the fields printed in alphabetical order.
+	// We do this in steps.  First get Metrics into an array...
+	//---------------------------------------------------------------
+	var influencerList []MInfluencerSubclass
+	for _, inf := range sqldb.Mim.MInfluencerSubclasses {
+		influencerList = append(influencerList, inf)
+	}
+
+	//---------------------------------------------
+	// Now sort them based on the Metric field...
+	//---------------------------------------------
+	sort.Slice(influencerList, func(i, j int) bool {
+		return influencerList[i].Metric < influencerList[j].Metric
+	})
+
+	//---------------------------------
+	// Now write them out...
+	//---------------------------------
+	for _, v := range influencerList {
 		switch v.LocaleType {
 		case LocaleNone:
 			field := FieldSelector{

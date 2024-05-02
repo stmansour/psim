@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/stmansour/psim/util"
@@ -100,6 +101,9 @@ func (d *DatabaseCSV) CSVInit() error {
 	if err := d.LoadMetricsSourceCache(); err != nil {
 		return err
 	}
+	if err := d.LoadMetricSourceMapFromCSV(); err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -164,6 +168,88 @@ func (d *DatabaseCSV) LoadMetricsSourceCache() error {
 		metrics = append(metrics, m)
 	}
 	d.MetricSrcCache = metrics
+
+	return nil
+}
+
+// LoadMetricSourceMapFromCSV reads a CSV file and maps internal metric names to their corresponding names or symbols
+// in various metric supplier systems. For example, internally we refer to the gold commodity as "Gold", but to
+// fetch the gold price from the TradingEconomics API, we need to request "XAUUSD:CUR". This file provides the
+// necessary mappings to retrieve data from different metric suppliers.
+//
+// The CSV file should have the following structure:
+//   - The first column contains the internal metric names.
+//   - The remaining column headers represent different metric sources (e.g., TradingEconomics, GDELT).
+//   - Each subsequent row maps an internal metric name (first column) to its corresponding name in the API
+//     for each metric source.
+//   - If a cell is empty, it means that the metric source API does not have that particular metric.
+//
+// Returns any error encountered, or nil on success.
+// --------------------------------------------------------------------------------------------------------------------------
+func (d *DatabaseCSV) LoadMetricSourceMapFromCSV() error {
+	// Extract the directory from the original file path
+	dir := filepath.Dir(d.DBFname)
+	filename := "msm.csv"
+	newFilePath := filepath.Join(dir, filename)
+	file, err := os.Open(newFilePath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	reader := csv.NewReader(file)
+
+	// Read the header row
+	header, err := reader.Read()
+	if err != nil {
+		return err
+	}
+
+	//-------------------------------------------------------------------------------------------------------------
+	// Deal with the Byte Order Mark issue.  This is where a program like Excel creates a CSV file with a BOM
+	// character at the beginning of the file. \ufeff is the BOM character. We just want to ignore the BOM
+	//character if it is present. We do this using the strings.TrimPrefix() function.
+	//-------------------------------------------------------------------------------------------------------------
+	header[0] = strings.TrimPrefix(header[0], "\ufeff")
+
+	//---------------------------------------------------------------------------------------------
+	// Next, verify that the first column is "Metric" and that the remaining columns
+	// are Metrics Sources. We must be able to match all the metric sources. If not,
+	// return an error...
+	//---------------------------------------------------------------------------------------------
+	if header[0] != "Metric" {
+		return fmt.Errorf("first column must be 'Metric'")
+	}
+	for i := 1; i < len(header); i++ {
+		found := false
+		for j := 0; j < len(d.MetricSrcCache); j++ {
+			if strings.Contains(d.MetricSrcCache[j].Name, header[i]) {
+				found = true
+				d.ParentDB.MSMap[header[j]] = make(MetricSourceMap, 20)
+				break
+			}
+		}
+		if !found {
+			return fmt.Errorf("could not find metric source: %s", header[i])
+		}
+	}
+
+	//---------------------------------------------------------------------------------------------
+	// Finally, we can read the data rows and map each metric name to its corresponding
+	//---------------------------------------------------------------------------------------------
+	for {
+		row, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		for i := 1; i < len(header); i++ {
+			if len(row[i]) == 0 {
+				continue
+			}
+			//               met src    metric    metric src name
+			d.ParentDB.MSMap[header[i]][row[0]] = row[i]
+		}
+	}
 
 	return nil
 }

@@ -37,12 +37,11 @@ var app = struct {
 	cfName       string
 	extres       *util.ExternalResources
 	countries    []string // the countries we'll pull data for
-	currencies   []string // the forex currencies we'll pull data for
-	indicators   []string // the forex currencies we'll pull data for
 	metricsSrc   string   // Trading Economics API
 	MSID         int      // metrics source unique id
 	HTTPGetCalls int      // how many times we've called http.Get
 	HTTPGetErrs  int      // how many times we've gotten errors
+	Verified     int      // how many metrics were verified
 }{
 	APIKey: "",
 }
@@ -87,26 +86,7 @@ func main() {
 			log.Fatal(err)
 		}
 	}
-
-	app.currencies = []string{"AUDUSD", "EURUSD", "USDJPY"}
 	app.countries = []string{"Australia", "Japan", "United States"}
-	app.indicators = []string{
-		"Building Permits",
-		"Business Confidence",
-		"Capacity Utilization",
-		"Consumer Confidence",
-		"Government Debt to GDP",
-		"Housing Starts",
-		"Inflation Expectations",
-		"Inflation Rate",
-		"Interest Rate",
-		"Manufacturing Production",
-		"Money Supply M1",
-		"Money Supply M2",
-		"Retail Sales MoM",
-		"Stock Market",
-		"Unemployment Rate",
-	}
 
 	//---------------------------------------------------------------------
 	// open the SQL database
@@ -121,6 +101,15 @@ func main() {
 		log.Fatalf("db.Init returned error: %s\n", err.Error())
 	}
 	defer app.SQLDB.SQLDB.DB.Close()
+
+	//---------------------------------------------------------------------
+	// Build the lists of metrics:  indicators, forex, commodities
+	//---------------------------------------------------------------------
+	mtcs, fxrs, err := BuildMetricLists(app.StartDate, app.StopDate)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Found %d forex, %d indicators\n", len(fxrs), len(mtcs))
 
 	//-----------------------------------------------------------------
 	// This is (at least for now) the Trading Economics update. So
@@ -145,19 +134,20 @@ func main() {
 	//----------------------------------
 	fmt.Printf("Updating Indicators...\n")
 	for i := 0; i < len(app.countries); i++ {
-		time.Sleep(time.Second)
-		ind, err := FetchIndicators(app.StartDate, app.StopDate)
+		ind, err := FetchIndicators(app.StartDate, app.StopDate, mtcs)
 		if err != nil {
 			fmt.Println("Error fetching indicators:", err)
 			return
 		}
-
 		//----------------------------------
 		// Store / update the indicators
 		//----------------------------------
 		if err = UpdateIndicators(ind); err != nil {
 			fmt.Println("Error updating indicators:", err)
 			return
+		}
+		if i+1 < len(app.countries) {
+			time.Sleep(time.Second)
 		}
 	}
 
@@ -171,12 +161,12 @@ func main() {
 	//----------------------------------
 	// Fetch forex rates.
 	//----------------------------------
-	rates, err := FetchForexRates(app.StartDate, app.StopDate)
+	rates, err := FetchForexRates(app.StartDate, app.StopDate, fxrs)
 	if err != nil {
 		fmt.Println("Error fetching forex rates:", err)
 		return
 	}
-	if err = UpdateForex(rates); err != nil {
+	if err = UpdateForex(rates, fxrs); err != nil {
 		fmt.Println("Error updating forex rates:", err)
 		return
 	}
@@ -191,8 +181,10 @@ func main() {
 	fmt.Printf("Total HTTP calls.....: %d\n", app.HTTPGetCalls)
 	fmt.Printf("Total HTTP errors....: %d\n", app.HTTPGetErrs)
 	fmt.Printf("Total countries......: %d\n", len(app.countries))
-	fmt.Printf("Total indicators.....: %d\n", len(app.indicators)*len(app.countries))
-	fmt.Printf("Total currencies.....: %d\n", len(app.currencies))
+	fmt.Printf("Total indicators.....: %d\n", len(mtcs))
+	fmt.Printf("Total currencies.....: %d\n", len(fxrs))
+	fmt.Printf("Total SQL inserts....: %d\n", app.SQLDB.SQLDB.InsertCount)
+	fmt.Printf("Verified Correct.....: %d\n", app.Verified)
 	fmt.Printf("Program Finished.....: %s\n", time1.Format("2006-01-02 15:04:05 MST"))
 	fmt.Printf("Elapsed time.........: %s\n", util.ElapsedTime(time0, time1))
 }

@@ -72,21 +72,25 @@ func (i *Indicator) UnmarshalJSON(data []byte) error {
 //              https://api.tradingeconomics.com/historical/country/United%20States,Japan/indicator/Housing%20Starts%20MoM,Stock%20Market,Unemployment%20Rate/2024-01-01/2024-04-16&f=json
 
 // FetchIndicators fetches economic indicators from Trading Economics.
-func FetchIndicators(startDate, endDate time.Time) ([]Indicator, error) {
+func FetchIndicators(startDate, endDate time.Time, ind []PML) ([]Indicator, error) {
 	const maxIndicators = 13
 	allcountries := strings.Join(app.countries, ",")
 	allind := []Indicator{}
 
-	for i := 0; i < len(app.indicators); i += maxIndicators {
+	for i := 0; i < len(ind); i += maxIndicators {
 		n := maxIndicators
-		if len(app.indicators)-i < maxIndicators {
-			n = len(app.indicators) - i
+		if len(ind)-i < maxIndicators {
+			n = len(ind) - i
 		}
-		ind, err := doFetch(allcountries, strings.Join(app.indicators[i:i+n], ","), startDate, endDate)
+		si := []string{}
+		for j := i; j < i+n; j++ {
+			si = append(si, ind[j].Handle)
+		}
+		nd, err := doFetch(allcountries, strings.Join(si, ","), startDate, endDate)
 		if err != nil {
 			return nil, err
 		}
-		allind = append(allind, ind...)
+		allind = append(allind, nd...)
 		time.Sleep(1 * time.Second)
 	}
 	return allind, nil

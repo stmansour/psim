@@ -38,6 +38,9 @@ test: config sql
 sql:
 	${DO_CMD}cd data; gunzip platodb.sql.gz; mysql plato <platodb.sql ; gzip platodb.sql
 
+sqlbkup:
+	${DO_CMD}cd data;mysqldump plato >platodb.sql;rm -f platodb.sql.gz;gzip platodb.sql
+
 config:
 	@cp ${TOP}/util/config.json5 .
 

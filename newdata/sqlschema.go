@@ -22,7 +22,7 @@ type DatabaseSQL struct {
 	ParentDB       *Database         // the database that contains me
 	DtStart        time.Time         // earliest date with data
 	DtStop         time.Time         // latest date with data
-
+	InsertCount    int64             // number of records inserted
 }
 
 // GetBucketForString returns the modulo number for the supplied
@@ -97,6 +97,13 @@ func (p *DatabaseSQL) CreateDatabaseTables() error {
 			CONSTRAINT fk_ExchangeRate_Locales1 FOREIGN KEY (LID) REFERENCES Locales(LID),
 			CONSTRAINT fk_ExchangeRate_Locales2 FOREIGN KEY (LID2) REFERENCES Locales(LID),
 			CONSTRAINT fk_ExchangeRate_MetricsSources FOREIGN KEY (MSID) REFERENCES MetricsSources(MSID)
+		);`,
+		`CREATE TABLE IF NOT EXISTS MetricSourcesMapping (
+			MSID INT NOT NULL,                 -- this metricsSource...
+			MID INT NOT NULL,                  -- ...maps to this metric...
+			MetricName VARCHAR(80) NOT NULL,   -- ...with this name
+			CONSTRAINT fk_MetricSourcesMapping_MetricsSources FOREIGN KEY (MSID) REFERENCES MetricsSources(MSID),
+			CONSTRAINT fk_MetricSourcesMapping_Metrics FOREIGN KEY (MID) REFERENCES MISubclasses(MID)
 		);`,
 		// `CREATE TABLE IF NOT EXISTS DNABank (
 		// 	DNAID INT AUTO_INCREMENT PRIMARY KEY,

@@ -79,6 +79,7 @@ func (p *DatabaseSQL) Insert(rec *EconometricsRecord) error {
 				return err
 			}
 		}
+		p.InsertCount++
 
 	}
 	return nil

@@ -155,11 +155,23 @@ func main() {
 	}
 
 	//-------------------------------------------------------------------------------------
-	// and now we write the metrics...
+	// Write the known metrics sources to SQL
 	//-------------------------------------------------------------------------------------
 	if err = app.sqldb.WriteMetricsSources(app.csvdb.CSVDB.MetricSrcCache); err != nil {
 		log.Fatalf("Error from WriteMetricsSources: %s\n", err.Error())
 	}
+
+	//-------------------------------------------------------------------------------------
+	// now write the MetricsSources mapping to SQL so we know how to update metrics
+	// using this source...
+	//-------------------------------------------------------------------------------------
+	if err = CopyMetricsSourceMapToSQL(); err != nil {
+		log.Fatalf("Error from CopyMetricsSourceMapToSQL: %s\n", err.Error())
+	}
+
+	//-------------------------------------------------------------------------------------
+	// and now we write the metrics...
+	//-------------------------------------------------------------------------------------
 	if err = MigrateTimeSeriesData(); err != nil {
 		log.Fatalf("Error from MigrateTimeSeriesData: %s\n", err.Error())
 	}

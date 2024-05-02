@@ -88,6 +88,9 @@ func main() {
 		if err != nil {
 			log.Fatalf("csvdb.Select returned error: %s\n", err.Error())
 		}
+		if rec == nil {
+			continue
+		}
 		//---------------------------------------------------------------------
 		// For the SQL db we must supply the fields.  We can build the fields
 		// from the return value of the CSV select...

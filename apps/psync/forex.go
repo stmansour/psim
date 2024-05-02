@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/stmansour/psim/newdata"
-	"github.com/stmansour/psim/util"
 )
 
 // ForexRate struct that captures the data supplied by the Trading Economics API.
@@ -40,20 +39,44 @@ func (fr *ForexRate) UnmarshalJSON(data []byte) error {
 	if err != nil {
 		return err
 	}
-	// Set the time part to 00:00:00 and use UTC timezone
 	fr.Date = time.Date(parsedDate.Year(), parsedDate.Month(), parsedDate.Day(), 0, 0, 0, 0, time.UTC)
 	return nil
 }
 
-// FetchForexRates fetches forex rates from Trading Economics.
+// FetchForexRates fetches forex rates from Trading Economics. The calls
+// are broken up into 13 currencies/commodities at a time.
 // -----------------------------------------------------------------------------
-func FetchForexRates(startDate, endDate time.Time) ([]ForexRate, error) {
-	var currencies []string
-	for _, currency := range app.currencies {
-		currencies = append(currencies, currency+":CUR")
-	}
-	currencyPairs := strings.Join(currencies, ",")
+func FetchForexRates(startDate, endDate time.Time, forex []PML) ([]ForexRate, error) {
+	const maxcurrencies = 13
+	allforex := []ForexRate{}
 
+	for i := 0; i < len(forex); i += maxcurrencies {
+		n := maxcurrencies
+		if len(forex)-i < maxcurrencies {
+			n = len(forex) - i
+		}
+		//---------------------------------------------------------------
+		// pull out the Handles we'll be using for this call...
+		//---------------------------------------------------------------
+		fx := []string{}
+		for j := i; j < i+n; j++ {
+			fx = append(fx, forex[j].Handle)
+		}
+		//--------------------------------
+		// fetch the values in fx
+		//--------------------------------
+		ind, err := doFetchForexRates(strings.Join(fx, ","), startDate, endDate)
+		if err != nil {
+			return nil, err
+		}
+		allforex = append(allforex, ind...)
+		time.Sleep(1 * time.Second)
+	}
+	return allforex, nil
+}
+
+// doFetchForexRates does the API work of fetching the data
+func doFetchForexRates(currencyPairs string, startDate, endDate time.Time) ([]ForexRate, error) {
 	url := fmt.Sprintf("https://api.tradingeconomics.com/markets/historical/%s?c=%s&d1=%s&d2=%s&f=json",
 		currencyPairs, app.APIKey, startDate.Format("2006-01-02"), endDate.Format("2006-01-02"))
 
@@ -79,41 +102,103 @@ func FetchForexRates(startDate, endDate time.Time) ([]ForexRate, error) {
 }
 
 // UpdateForex updates the foreign exchange rates in the SQL database
-func UpdateForex(fxrs []ForexRate) error {
-	for i := 0; i < len(fxrs); i++ {
+func UpdateForex(forex []ForexRate, fxrs []PML) error {
+	for i := 0; i < len(forex); i++ {
 		fields := []newdata.FieldSelector{}
 		var f newdata.FieldSelector
-		f.Metric = fxrs[i].Symbol[0:6] + "EXClose"
+
+		//---------------------------------------------------------
+		// Exchange rates are handled a little differently from
+		// the commodities. If it is an exchange rate, the first
+		// 6 characters will the the 3-letter currency codes of
+		// the two countries involved.
+		//---------------------------------------------------------
+		isExchRate := false
+		if len(forex[i].Symbol) > 6 && forex[i].Symbol[6] == ':' {
+			if isCurrency(forex[i].Symbol[0:2]) && isCurrency(forex[i].Symbol[3:5]) {
+				isExchRate = true
+			}
+		}
+
+		//-----------------------------------------------------------------------------
+		// Set the metric name to all characters up to the first colon ":" if it is
+		// an exchange rate.
+		//-----------------------------------------------------------------------------
+		if isExchRate {
+			colonIndex := strings.Index(forex[i].Symbol, ":")
+			if colonIndex == -1 {
+				fmt.Printf("No colon in symbol: %s\n", forex[i].Symbol)
+				return fmt.Errorf("no colon in symbol: %s", forex[i].Symbol)
+			}
+			f.Metric = forex[i].Symbol[0:colonIndex]
+			f.Metric += "EXClose"
+		} else {
+			f.Metric = ""
+			for j := 0; j < len(fxrs); j++ {
+				if fxrs[j].Handle == forex[i].Symbol {
+					f.Metric = fxrs[j].Metric
+					break
+				}
+			}
+			if len(f.Metric) == 0 {
+				return fmt.Errorf("could not find metric for %s", forex[i].Symbol)
+			}
+		}
 		fields = append(fields, f)
 
 		//---------------------------------------------------------
 		// Try to read this value and let's see what we may already
 		// have for it
 		//---------------------------------------------------------
-		rec, err := app.SQLDB.Select(fxrs[i].Date, fields)
+		rec, err := app.SQLDB.Select(forex[i].Date, fields)
 		if err != nil {
 			return err
 		}
-		metric := util.Stripchars(f.Metric, " ")
+
+		//------------------------------------------------------------------------------
+		// one of 3 things happens now:
+		//    1. if this data was not found in the database, we insert it
+		//    2. if the value in the database is different, we report the difference
+		//    3. if it matches, we mark a successful validation of the value
+		//------------------------------------------------------------------------------
 		if len(rec.Fields) == 0 {
-			// currently we do not have data for this exchange rate.  Add it...
+			//------------------------------------------------------
+			// This is case 1. We do not have this data. Add it...
+			//------------------------------------------------------
 			fld := newdata.MetricInfo{
-				Value: fxrs[i].Close,
+				Value: forex[i].Close,
 				MSID:  app.MSID,
 			}
 			flds := make(map[string]newdata.MetricInfo, 1)
-			flds[metric] = fld
+			flds[f.Metric] = fld
 			rec.Fields = flds
-			rec.Date = fxrs[i].Date
+			rec.Date = forex[i].Date
 			if err = app.SQLDB.Insert(rec); err != nil {
 				return err
 			}
-		} else if rec.Fields[metric].Value != fxrs[i].Close {
-			fmt.Printf("*** MISCOMPARE ***\n")
-			fmt.Printf("    Rec:  Date = %s, metric = %s, rec.Fields[metric] = %v\n", rec.Date.Format("2006-01-02"), metric, rec.Fields[metric].Value)
-			fmt.Printf("    API:  Date = %s, i = %d, fxrs[i].Close = %.6f\n", fxrs[i].Date.Format("2006-01-02"), i, fxrs[i].Close)
+		} else if rec.Fields[f.Metric].Value != forex[i].Close {
+			//------------------------------------------------------------
+			// This is case 2. We have it, but it miscompares.  Flag it!
+			//------------------------------------------------------------
+			fmt.Printf("*** MISCOMPARE - FOREX VALUE ***\n")
+			fmt.Printf("    Rec:  Date = %s, f.Metric = %s, rec.Fields[f.Metric] = %v\n", rec.Date.Format("2006-01-02"), f.Metric, rec.Fields[f.Metric].Value)
+			fmt.Printf("    API:  Date = %s, i = %d, forex[i].Close = %.2f\n", forex[i].Date.Format("2006-01-02"), i, forex[i].Close)
+		} else {
+			//-----------------------------------------------------------------------
+			// This is case 3. We have it, and it compares. Update verified count...
+			//-----------------------------------------------------------------------
+			app.Verified++
 		}
 	}
 
 	return nil
+}
+
+func isCurrency(s string) bool {
+	for _, v := range app.SQLDB.SQLDB.LocaleCache {
+		if v.Currency == s {
+			return true
+		}
+	}
+	return false
 }

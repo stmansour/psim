@@ -99,4 +99,16 @@ MID,Name,Metric,BlocType,LocaleType,Predictor,Subclass,MinDelta1,MaxDelta1,MinDe
 98,RS - Retail Sales MoM,RetailSalesMoM,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.6,0.4,0.001,-0.001
 99,SP - Stock Market,StockMarket,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-720,-62,-61,-1,0.6,0.4,0.001,-0.001
 100,UR - Unemployment Rate,UnemploymentRate,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.6,0.4,0.001,-0.001
-101,WTOILClose,WTOILClose,0,LocaleNone,SingleValGT,LSMInfluencer,-720,-62,-61,-1,0.6,0.4,0.001,-0.001
+102,USD Crude Oil,CrudeOil,0,LocaleNone,SingleValGT,LSMInfluencer,-720,-62,-61,-1,0.6,0.4,0.001,-0.001
+103,USD Brent Oil,BrentOil,0,LocaleNone,SingleValGT,LSMInfluencer,-720,-62,-61,-1,0.6,0.4,0.001,-0.001
+104,USD Copper,Copper,0,LocaleNone,SingleValGT,LSMInfluencer,-720,-62,-61,-1,0.6,0.4,0.001,-0.001
+105,USD Heating Oil,HeatingOil,0,LocaleNone,SingleValGT,LSMInfluencer,-720,-62,-61,-1,0.6,0.4,0.001,-0.001
+106,USD Steel,Steel,0,LocaleNone,SingleValGT,LSMInfluencer,-720,-62,-61,-1,0.6,0.4,0.001,-0.001
+107,USD Natural Gas,NaturalGas,0,LocaleNone,SingleValGT,LSMInfluencer,-720,-62,-61,-1,0.6,0.4,0.001,-0.001
+108,USD Soybeans,Soybeans,0,LocaleNone,SingleValGT,LSMInfluencer,-720,-62,-61,-1,0.6,0.4,0.001,-0.001
+109,USD Iron Ore,IronOre,0,LocaleNone,SingleValGT,LSMInfluencer,-720,-62,-61,-1,0.6,0.4,0.001,-0.001
+110,USD Wheat,Wheat,0,LocaleNone,SingleValGT,LSMInfluencer,-720,-62,-61,-1,0.6,0.4,0.001,-0.001
+111,USD Silver,Silver,0,LocaleNone,SingleValGT,LSMInfluencer,-720,-62,-61,-1,0.6,0.4,0.001,-0.001
+112,USD Coal,Coal,0,LocaleNone,SingleValGT,LSMInfluencer,-720,-62,-61,-1,0.6,0.4,0.001,-0.001
+113,USD Gold,Gold,0,LocaleNone,SingleValGT,LSMInfluencer,-720,-62,-61,-1,0.6,0.4,0.001,-0.001
+114,USD Gasoline,Gasoline,0,LocaleNone,SingleValGT,LSMInfluencer,-720,-62,-61,-1,0.6,0.4,0.001,-0.001
