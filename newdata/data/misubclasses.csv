@@ -5,7 +5,7 @@ MID,Name,Metric,BlocType,LocaleType,Predictor,Subclass,MinDelta1,MaxDelta1,MinDe
 4,CP - Corporate Profits,CorporateProfits,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.6,0.4,0.001,-0.001
 5,CU - Capacity Utilization,CapacityUtilization,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.6,0.4,0.001,-0.001
 6,DR - Interest Rate,InterestRate,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-360,-62,-61,-1,0.6,0.4,0.001,-0.001
-7,GD - Government Debt to GDP,GovernmentDebttoGDP,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-1095,-62,-61,-1,0.6,0.4,0.001,-0.001
+7,GD - Government Debt to GDP,GDtoGDP,0,LocaleC1C2,C1C2RatioGT,LSMInfluencer,-1095,-62,-61,-1,0.6,0.4,0.001,-0.001
 8,GDELT GCAM - Affective Norms for English Words (ANEW) 2010:arousal (all) (scored value) - All news,GCAM_V19_2,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.6,0.4,0.001,-0.001
 9,GDELT GCAM - Affective Norms for English Words (ANEW) 2010:dominance (all) (scored value) - All news,GCAM_V19_3,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.6,0.4,0.001,-0.001
 10,GDELT GCAM - Affective Norms for English Words (ANEW) 2010:valence (pleasure) (all) (scored value) - All news,GCAM_V19_1,0,LocaleNone,SingleValGT,LSMInfluencer,-360,-62,-61,-1,0.6,0.4,0.001,-0.001

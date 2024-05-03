@@ -239,7 +239,6 @@ func (d *DatabaseCSV) CopySQLRecsToCSV(sqldb *Database) error {
 	// Prepare field selectors...
 	//------------------------------------------------
 	startDate := time.Date(2015, time.January, 1, 0, 0, 0, 0, time.UTC) // GDELT data starts at 2015
-	// startDate := time.Date(2023, 8, 17, 0, 0, 0, 0, time.UTC) // DEBUG ONLY
 	endDate := time.Now().AddDate(0, 0, -1)
 	loc1 := d.ParentDB.cfg.C1
 	loc2 := d.ParentDB.cfg.C2
@@ -348,8 +347,8 @@ func (d *DatabaseCSV) CopySQLRecsToCSV(sqldb *Database) error {
 			fld := s[i]
 			_, ok = rec.Fields[fld]
 			if ok {
-				fmt.Fprintf(file, ",%.6f", val)
 				val = rec.Fields[fld].Value
+				fmt.Fprintf(file, ",%.6f", val)
 			} else {
 				fmt.Fprintf(file, ",")
 			}
