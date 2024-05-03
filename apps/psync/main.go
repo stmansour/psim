@@ -42,6 +42,7 @@ var app = struct {
 	HTTPGetCalls int      // how many times we've called http.Get
 	HTTPGetErrs  int      // how many times we've gotten errors
 	Verified     int      // how many metrics were verified
+	Miscompared  int      // how many metrics were miscompared
 }{
 	APIKey: "",
 }
@@ -185,6 +186,7 @@ func main() {
 	fmt.Printf("Total currencies.....: %d\n", len(fxrs))
 	fmt.Printf("Total SQL inserts....: %d\n", app.SQLDB.SQLDB.InsertCount)
 	fmt.Printf("Verified Correct.....: %d\n", app.Verified)
+	fmt.Printf("Miscompared..........: %d\n", app.Miscompared)
 	fmt.Printf("Program Finished.....: %s\n", time1.Format("2006-01-02 15:04:05 MST"))
 	fmt.Printf("Elapsed time.........: %s\n", util.ElapsedTime(time0, time1))
 }

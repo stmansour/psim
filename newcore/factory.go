@@ -508,6 +508,11 @@ func (f *Factory) NewInvestorFromDNA(DNA string) Investor {
 	}
 
 	inv := Investor{}
+
+	if val, ok := m["Strategy"].(string); ok {
+		inv.Strategy = InvestmentStrategyMap[val]
+	}
+
 	if val, ok := m["InvW1"].(float64); ok {
 		inv.W1 = val
 	}
@@ -517,6 +522,7 @@ func (f *Factory) NewInvestorFromDNA(DNA string) Investor {
 	if inv.W1+inv.W2 > 2.0 {
 		log.Panicf("Investor Weights > 0\n")
 	}
+
 	inv.cfg = f.cfg
 	inv.factory = f
 	inv.db = f.db

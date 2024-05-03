@@ -183,6 +183,7 @@ func UpdateForex(forex []ForexRate, fxrs []PML) error {
 			fmt.Printf("*** MISCOMPARE - FOREX VALUE ***\n")
 			fmt.Printf("    Rec:  Date = %s, f.Metric = %s, rec.Fields[f.Metric] = %v\n", rec.Date.Format("2006-01-02"), f.Metric, rec.Fields[f.Metric].Value)
 			fmt.Printf("    API:  Date = %s, i = %d, forex[i].Close = %.2f\n", forex[i].Date.Format("2006-01-02"), i, forex[i].Close)
+			app.Miscompared++
 		} else {
 			//-----------------------------------------------------------------------
 			// This is case 3. We have it, and it compares. Update verified count...

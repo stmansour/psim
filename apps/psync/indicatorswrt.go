@@ -82,15 +82,13 @@ func UpdateIndicators(indicators []Indicator) error {
 			fmt.Printf("*** MISCOMPARE - INDICATOR VALUE ***\n")
 			fmt.Printf("    Rec:  Date = %s, metric = %s, rec.Fields[metric] = %v\n", rec.Date.Format("2006-01-02"), fqmetric, rec.Fields[fqmetric].Value)
 			fmt.Printf("    API:  Date = %s, i = %d, fxrs[i].Close = %.2f\n", indicators[i].DateTime.Format("2006-01-02"), i, indicators[i].Value)
+			app.Miscompared++
 		} else {
 			//-----------------------------------------------------------------------
 			// This is case 3. We have it, and it compares. Update verified count...
 			//-----------------------------------------------------------------------
 			app.Verified++
-
 		}
-
 	}
-
 	return nil
 }
