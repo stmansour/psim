@@ -27,30 +27,42 @@ import (
 //
 // ------------------------------------------------------------------------------------------------
 var app = struct {
-	APIKey       string
-	Dt1          string
-	Dt2          string
-	StartDate    time.Time
-	StopDate     time.Time
-	SQLDB        *newdata.Database
-	cfg          *util.AppConfig
-	cfName       string
-	extres       *util.ExternalResources
-	countries    []string // the countries we'll pull data for
-	metricsSrc   string   // Trading Economics API
-	MSID         int      // metrics source unique id
-	HTTPGetCalls int      // how many times we've called http.Get
-	HTTPGetErrs  int      // how many times we've gotten errors
-	Verified     int      // how many metrics were verified
-	Miscompared  int      // how many metrics were miscompared
+	APIKey            string
+	Dt1               string
+	Dt2               string
+	StartDate         time.Time
+	StopDate          time.Time
+	SQLDB             *newdata.Database
+	cfg               *util.AppConfig
+	cfName            string
+	extres            *util.ExternalResources
+	countries         []string // the countries we'll pull data for
+	metricsSrc        string   // Trading Economics API
+	MSID              int      // metrics source unique id
+	HTTPGetCalls      int      // how many times we've called http.Get
+	HTTPGetErrs       int      // how many times we've gotten errors
+	Verified          int      // how many metrics were verified
+	Miscompared       int      // how many metrics were miscompared
+	Tolerance         float64  // tolerance for miscomparison
+	Verbose           bool     // show all data found and the actions taken
+	APIFixMiscompares bool     // fix miscompares by using the API values
+	Corrected         int      // how many metrics were corrected
+	SkipIndicators    bool     // if true, skip the indicators
+	SkipForex         bool     // if true, skip the forex
+	SingleMetric      string   // if specified, only update this metric
 }{
 	APIKey: "",
 }
 
 func readCommandLineArgs() {
+	flag.StringVar(&app.cfName, "c", "", "configuration file to use (instead of config.json)")
 	flag.StringVar(&app.Dt1, "d1", "", "Start Date for data, YYYY-mm-dd, default is 7 days ago. Both d1 and d2 are required if either are specified.")
 	flag.StringVar(&app.Dt2, "d2", "", "Stop Date for data, YYYY-mm-dd, default is 1 day ago. Both d1 and d2 are required if either are specified.")
-	flag.StringVar(&app.cfName, "c", "", "configuration file to use (instead of config.json)")
+	flag.BoolVar(&app.APIFixMiscompares, "F", false, "Fix miscompares by overwriting miscompared values with the API values")
+	flag.StringVar(&app.SingleMetric, "metric", "", "Update data only for the supplied metric")
+	flag.BoolVar(&app.SkipIndicators, "SI", false, "Skip updates and verification of indicators")
+	flag.BoolVar(&app.SkipForex, "SF", false, "Skip updates and verification of forex data")
+	flag.BoolVar(&app.Verbose, "verbose", false, "Verbose mode, show all data found and the actions taken")
 	flag.Parse()
 }
 
@@ -70,6 +82,8 @@ func main() {
 
 	app.APIKey = app.extres.TradingeconomicsAPIKey
 	readCommandLineArgs()
+
+	app.Tolerance = 0.0051 // = $0.0051, just a little over 1/2 cents
 
 	//---------------------------------------
 	// Default date range... last 7 days
@@ -110,6 +124,16 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	if app.Verbose {
+		fmt.Printf("Indicators:\n")
+		for i := 0; i < len(mtcs); i++ {
+			fmt.Printf("%3d. %s\n", i, mtcs[i].Handle)
+		}
+		fmt.Printf("Forex:\n")
+		for i := 0; i < len(fxrs); i++ {
+			fmt.Printf("%3d. %s\n", i, fxrs[i].Handle)
+		}
+	}
 	fmt.Printf("Found %d forex, %d indicators\n", len(fxrs), len(mtcs))
 
 	//-----------------------------------------------------------------
@@ -130,11 +154,11 @@ func main() {
 		log.Fatalf("Could not find metric source: %s\n", mn)
 	}
 
-	//----------------------------------
-	// Fetch indicators.
-	//----------------------------------
-	fmt.Printf("Updating Indicators...\n")
-	for i := 0; i < len(app.countries); i++ {
+	if !app.SkipIndicators && len(mtcs) > 0 {
+		//----------------------------------
+		// Fetch indicators.
+		//----------------------------------
+		fmt.Printf("Updating Indicators...\n")
 		ind, err := FetchIndicators(app.StartDate, app.StopDate, mtcs)
 		if err != nil {
 			fmt.Println("Error fetching indicators:", err)
@@ -147,29 +171,28 @@ func main() {
 			fmt.Println("Error updating indicators:", err)
 			return
 		}
-		if i+1 < len(app.countries) {
-			time.Sleep(time.Second)
-		}
+		//----------------------------------
+		// Calls are rate-limited.
+		// Wait for 1 second
+		//----------------------------------
+		time.Sleep(time.Second)
 	}
 
-	//----------------------------------
-	// Calls are rate-limited.
-	// Wait for 1 second
-	//----------------------------------
-	time.Sleep(time.Second)
 	fmt.Printf("Updating Foreign Exchange Rates...\n")
 
 	//----------------------------------
 	// Fetch forex rates.
 	//----------------------------------
-	rates, err := FetchForexRates(app.StartDate, app.StopDate, fxrs)
-	if err != nil {
-		fmt.Println("Error fetching forex rates:", err)
-		return
-	}
-	if err = UpdateForex(rates, fxrs); err != nil {
-		fmt.Println("Error updating forex rates:", err)
-		return
+	if !app.SkipForex && len(fxrs) > 0 {
+		rates, err := FetchForexRates(app.StartDate, app.StopDate, fxrs)
+		if err != nil {
+			fmt.Println("Error fetching forex rates:", err)
+			return
+		}
+		if err = UpdateForex(rates, fxrs); err != nil {
+			fmt.Println("Error updating forex rates:", err)
+			return
+		}
 	}
 
 	time1 := time.Now()
@@ -183,10 +206,12 @@ func main() {
 	fmt.Printf("Total HTTP errors....: %d\n", app.HTTPGetErrs)
 	fmt.Printf("Total countries......: %d\n", len(app.countries))
 	fmt.Printf("Total indicators.....: %d\n", len(mtcs))
-	fmt.Printf("Total currencies.....: %d\n", len(fxrs))
+	fmt.Printf("Total forex..........: %d\n", len(fxrs))
 	fmt.Printf("Total SQL inserts....: %d\n", app.SQLDB.SQLDB.InsertCount)
+	fmt.Printf("Total SQL updates....: %d\n", app.SQLDB.SQLDB.UpdateCount)
 	fmt.Printf("Verified Correct.....: %d\n", app.Verified)
 	fmt.Printf("Miscompared..........: %d\n", app.Miscompared)
+	fmt.Printf("Corrected............: %d\n", app.Corrected)
 	fmt.Printf("Program Finished.....: %s\n", time1.Format("2006-01-02 15:04:05 MST"))
 	fmt.Printf("Elapsed time.........: %s\n", util.ElapsedTime(time0, time1))
 }

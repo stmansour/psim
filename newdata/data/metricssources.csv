@@ -1,4 +1,4 @@
-MSID,Name,URL,LastUpdate
-1,GDELT,https://www.gdeltproject.org/,3/18/24
-2,Trading Economics,https://api.tradingeconomics.com/,2/15/24
-3,CSV File,anyfile.csv,4/27/24
+MSID,LastUpdate,URL,Name
+1,05/03/2024,https://www.gdeltproject.org/,GDELT
+2,05/03/2024,https://api.tradingeconomics.com/,Trading Economics
+3,05/03/2024,anyfile.csv,CSV File

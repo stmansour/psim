@@ -6,6 +6,23 @@ import (
 	"time"
 )
 
+// RoundTo rounds a number to a specified number of decimal places.
+// This would be used to compare two numbers where the number of decimals
+// is not exactly the same. If we're comparing the numbers we don't want
+// minor rounding errors to affect the result.
+//
+// INPUTS:
+// num = the number to round
+// decimals = the number of decimal places to round to
+//
+// RETURN
+// the rounded number
+// -----------------------------------------------------------------------------
+func RoundTo(num float64, decimals int) float64 {
+	shift := math.Pow(10, float64(decimals))
+	return math.Round(num*shift) / shift
+}
+
 // AnnualizedReturn computes the annualized return on an investment.
 // INPUTS:
 //

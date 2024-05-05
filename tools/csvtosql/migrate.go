@@ -21,6 +21,10 @@ func CopyCsvMISubclassesToSQL() error {
 // ------------------------------------------------------------------------------
 func CopyMetricsSourceMapToSQL() error {
 	for k, ms := range app.csvdb.MSMap {
+		if k == "Metric" {
+			continue //
+		}
+
 		//-----------------------------------------------------------------
 		// First thing to do is look up the MSID. This can be found
 		// by matching the supplier name, k, with a name in the csvdb

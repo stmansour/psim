@@ -115,7 +115,7 @@ func UpdateForex(forex []ForexRate, fxrs []PML) error {
 		//---------------------------------------------------------
 		isExchRate := false
 		if len(forex[i].Symbol) > 6 && forex[i].Symbol[6] == ':' {
-			if isCurrency(forex[i].Symbol[0:2]) && isCurrency(forex[i].Symbol[3:5]) {
+			if isCurrency(forex[i].Symbol[0:3]) && isCurrency(forex[i].Symbol[3:6]) {
 				isExchRate = true
 			}
 		}
@@ -161,10 +161,16 @@ func UpdateForex(forex []ForexRate, fxrs []PML) error {
 		//    2. if the value in the database is different, we report the difference
 		//    3. if it matches, we mark a successful validation of the value
 		//------------------------------------------------------------------------------
+		if app.Verbose {
+			fmt.Printf("%s - %s: %.4f", forex[i].Date.Format("2006-01-02"), forex[i].Symbol, forex[i].Close)
+		}
 		if len(rec.Fields) == 0 {
 			//------------------------------------------------------
 			// This is case 1. We do not have this data. Add it...
 			//------------------------------------------------------
+			if app.Verbose {
+				fmt.Printf(" || SQL Record not found, adding\n")
+			}
 			fld := newdata.MetricInfo{
 				Value: forex[i].Close,
 				MSID:  app.MSID,
@@ -176,18 +182,40 @@ func UpdateForex(forex []ForexRate, fxrs []PML) error {
 			if err = app.SQLDB.Insert(rec); err != nil {
 				return err
 			}
-		} else if rec.Fields[f.Metric].Value != forex[i].Close {
+		} else if toleranceMiscompare(rec.Fields[f.Metric].Value, forex[i].Close) {
 			//------------------------------------------------------------
 			// This is case 2. We have it, but it miscompares.  Flag it!
 			//------------------------------------------------------------
+			if app.Verbose {
+				fmt.Printf(" || SQL Record miscompare\n")
+			}
 			fmt.Printf("*** MISCOMPARE - FOREX VALUE ***\n")
 			fmt.Printf("    Rec:  Date = %s, f.Metric = %s, rec.Fields[f.Metric] = %v\n", rec.Date.Format("2006-01-02"), f.Metric, rec.Fields[f.Metric].Value)
 			fmt.Printf("    API:  Date = %s, i = %d, forex[i].Close = %.2f\n", forex[i].Date.Format("2006-01-02"), i, forex[i].Close)
+			//------------------------------------------------------------------
+			// If the flag is set, we can fix miscompares by using the API data
+			//------------------------------------------------------------------
+			if app.APIFixMiscompares {
+				var newrec newdata.EconometricsRecord
+				newrec.Date = rec.Date
+				newfld := rec.Fields[f.Metric] // start with the original information
+				newfld.Value = forex[i].Close  // here's the new value
+				newfld.MSID = app.MSID         // we're now updating the value from the Metric Source
+				newrec.Fields = make(map[string]newdata.MetricInfo, 1)
+				newrec.Fields[f.Metric] = newfld
+				if err = app.SQLDB.Update(&newrec); err != nil {
+					return err
+				}
+				app.Corrected++
+			}
 			app.Miscompared++
 		} else {
 			//-----------------------------------------------------------------------
 			// This is case 3. We have it, and it compares. Update verified count...
 			//-----------------------------------------------------------------------
+			if app.Verbose {
+				fmt.Printf(" || SQL Record values matched, verified\n")
+			}
 			app.Verified++
 		}
 	}

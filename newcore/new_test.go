@@ -73,7 +73,7 @@ func TestInfluencerPredictions(t *testing.T) {
 // TestNewInfestorFromDNA - create Investors from DNA
 func TestNewInvestorFromDNA(t *testing.T) {
 	dnas := []string{
-		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-77,Delta2=-14,Metric=WTOILClose}|{LSMInfluencer,Delta1=-83,Delta2=-13,Metric=GCAM_C5_4}|{LSMInfluencer,Delta1=-63,Delta2=-21,Metric=GCAM_C15_148_ECON}|{LSMInfluencer,Delta1=-77,Delta2=-10,Metric=GCAM_C15_147}|{LSMInfluencer,Delta1=-95,Delta2=-30,Metric=InflationRate}|{LSMInfluencer,Delta1=-149,Delta2=-26,Metric=GCAM_C16_60}|{LSMInfluencer,Delta1=-132,Delta2=-9,Metric=GCAM_C3_2_ECON}|{LSMInfluencer,Delta1=-163,Delta2=-35,Metric=MoneySupplyM1}|{LSMInfluencer,Delta1=-249,Delta2=-3,Metric=GCAM_C16_121}|{LSMInfluencer,Delta1=-104,Delta2=-42,Metric=BusinessConfidence}]}",
+		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-77,Delta2=-14,Metric=BrentOil}|{LSMInfluencer,Delta1=-83,Delta2=-13,Metric=GCAM_C5_4}|{LSMInfluencer,Delta1=-63,Delta2=-21,Metric=GCAM_C15_148_ECON}|{LSMInfluencer,Delta1=-77,Delta2=-10,Metric=GCAM_C15_147}|{LSMInfluencer,Delta1=-95,Delta2=-30,Metric=InflationRate}|{LSMInfluencer,Delta1=-149,Delta2=-26,Metric=GCAM_C16_60}|{LSMInfluencer,Delta1=-132,Delta2=-9,Metric=GCAM_C3_2_ECON}|{LSMInfluencer,Delta1=-163,Delta2=-35,Metric=MoneySupplyM1}|{LSMInfluencer,Delta1=-249,Delta2=-3,Metric=GCAM_C16_121}|{LSMInfluencer,Delta1=-104,Delta2=-42,Metric=BusinessConfidence}]}",
 		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-63,Delta2=-23,Metric=GCAM_C16_47_ECON}]}",
 		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-80,Delta2=-24,Metric=GCAM_C16_60_ECON}|{LSMInfluencer,Delta1=-242,Delta2=-5,Metric=GCAM_C16_121_ECON}]}",
 		"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-138,Delta2=-15,Metric=GCAM_C16_121}|{LSMInfluencer,Delta1=-71,Delta2=-5,Metric=GCAM_C15_147}|{LSMInfluencer,Delta1=-166,Delta2=-44,Metric=BusinessConfidence}]}",
@@ -118,7 +118,7 @@ func TestInvestorFromParents(t *testing.T) {
 	// t.Fail()
 
 	parent1 := Investor{Strategy: 1, W1: 0.5, W2: 0.5}
-	dr := LSMInfluencer{Metric: "WTOILClose", Delta1: -145, Delta2: -2}
+	dr := LSMInfluencer{Metric: "BrentOil", Delta1: -145, Delta2: -2}
 	ir := LSMInfluencer{Metric: "StockMarket", Delta1: -89, Delta2: -5}
 	dr.Init(&parent1, cfg)
 	dr.SetID()
@@ -152,11 +152,11 @@ func TestParseInvestorDNA(t *testing.T) {
 		wantMap map[string]interface{}
 	}{
 		{
-			"{Investor;invVar1=YesIDo;invVar2=34;Influencers=[{subclass1,metric=\"WTOILClose\",var1=NotAtAll,var2=1.0}|{subclass2,var1=2,var2=2.0}];invVar3=3.1416}",
+			"{Investor;invVar1=YesIDo;invVar2=34;Influencers=[{subclass1,metric=\"BrentOil\",var1=NotAtAll,var2=1.0}|{subclass2,var1=2,var2=2.0}];invVar3=3.1416}",
 			map[string]interface{}{
 				"invVar1":     "YesIDo",
 				"invVar2":     34,
-				"Influencers": "[{subclass1,metric=\"WTOILClose\",var1=NotAtAll,var2=1.0}|{subclass2,var1=2,var2=2.0}]",
+				"Influencers": "[{subclass1,metric=\"BrentOil\",var1=NotAtAll,var2=1.0}|{subclass2,var1=2,var2=2.0}]",
 				"invVar3":     float64(3.1416),
 			},
 		},

@@ -20,6 +20,7 @@ type MetricInfo struct {
 	StdDevSquared float64 // the stdDeviationSquared value for the last cfg.HoldWindowStatsLookBack records. Only valid when StatsValid is true
 	StatsValid    bool    // set to true when Mean and StdDevSquared have been calculated. Note, the first RollingStats.WindowSize records will not have valid stats.
 	MSID          int     // metrics source
+	ID            int     // XID if this is an ExchangeRate, MEID if this is a metric
 }
 
 // MetricSourceMap is a map from the internal metric name to a metrics supplier api
@@ -260,6 +261,19 @@ func (p *Database) Insert(rec *EconometricsRecord) error {
 		return fmt.Errorf("this function is not valid for database type: %s", p.Datatype)
 	case "SQL":
 		return p.SQLDB.Insert(rec)
+	default:
+		return fmt.Errorf("unknown database type: %s", p.Datatype)
+	}
+}
+
+// Update updates the supplied the Econometrics record in the database
+// -------------------------------------------------------------------------------------------
+func (p *Database) Update(rec *EconometricsRecord) error {
+	switch p.Datatype {
+	case "CSV":
+		return fmt.Errorf("this function is not valid for database type: %s", p.Datatype)
+	case "SQL":
+		return p.SQLDB.Update(rec)
 	default:
 		return fmt.Errorf("unknown database type: %s", p.Datatype)
 	}

@@ -85,6 +85,52 @@ func (p *DatabaseSQL) Insert(rec *EconometricsRecord) error {
 	return nil
 }
 
+// Update does a sql update of all the metrics in the supplied record
+func (p *DatabaseSQL) Update(rec *EconometricsRecord) error {
+	var err error
+	noLocale := int(p.LocaleCache["NON"].LID)
+	for k, v := range rec.Fields {
+		var f FieldSelector
+		p.FieldSelectorFromCSVColName(k, &f)
+		p.GetShardInfo(rec.Date, &f)
+		m := MetricRecord{
+			Date:        rec.Date,
+			MID:         f.MID,
+			LID:         f.LID,
+			LID2:        f.LID2,
+			MSID:        3, // NOTE:  hardcode - csvfile
+			MetricValue: v,
+		}
+		if f.MID == 0 {
+			if _, ok := unrecognized[f.Metric]; !ok {
+				fmt.Printf("Skipping all attempts to insert unrecognized metric %s\n", f.Metric)
+				unrecognized[f.Metric] = true
+			}
+			continue
+		}
+		//--------------------------------------------------------------------
+		// for every metric we write, if we have source info then we write it
+		//--------------------------------------------------------------------
+		if v.MSID > 0 {
+			m.MSID = v.MSID
+		}
+		if f.LID2 != noLocale && f.MID == -1 {
+			query := `UPDATE ExchangeRate SET Date=?, LID=?, LID2=?, MSID=?, EXClose=? WHERE XID=?`
+			if _, err = p.DB.Exec(query, m.Date, m.LID, m.LID2, m.MSID, m.MetricValue.Value, m.MetricValue.ID); err != nil {
+				return err
+			}
+		} else {
+			query := fmt.Sprintf(`UPDATE %s SET Date=?, MID=?, LID=?, MSID=?, MetricValue=? WHERE MEID=?`, f.Table)
+			if _, err = p.DB.Exec(query, m.Date, m.MID, m.LID, m.MSID, m.MetricValue.Value, m.MetricValue.ID); err != nil {
+				return err
+			}
+		}
+		p.UpdateCount++
+
+	}
+	return nil
+}
+
 // Select reads the requested fields from the sql database.
 // If ss is nil or zero length then it uses all known metrics
 // --------------------------------------------------------------------
@@ -106,7 +152,7 @@ func (p *DatabaseSQL) Select(dt time.Time, ss []FieldSelector) (*EconometricsRec
 
 		if v.Metric == "EXClose" {
 			query := `SELECT XID,Date,LID,LID2, EXClose FROM ExchangeRate WHERE Date=? AND LID=? AND LID2=? LIMIT 1`
-			err = p.DB.QueryRow(query, dateStr, v.LID, v.LID2).Scan(&m.MEID, &m.Date, &m.LID, &m.LID2, &m.MetricValue.Value)
+			err = p.DB.QueryRow(query, dateStr, v.LID, v.LID2).Scan(&m.MetricValue.ID, &m.Date, &m.LID, &m.LID2, &m.MetricValue.Value)
 			if err != nil {
 				if err == sql.ErrNoRows {
 					continue // nothing to store in Fields
@@ -118,7 +164,7 @@ func (p *DatabaseSQL) Select(dt time.Time, ss []FieldSelector) (*EconometricsRec
 			// Prepare the query
 			query := fmt.Sprintf(`SELECT MEID,Date,MID,LID,MSID, MetricValue FROM %s WHERE Date=? AND MID=? AND LID=? LIMIT 1`, v.Table)
 			var nullint sql.NullInt64
-			err = p.DB.QueryRow(query, dateStr, v.MID, v.LID).Scan(&m.MEID, &m.Date, &m.MID, &m.LID, &nullint, &m.MetricValue.Value)
+			err = p.DB.QueryRow(query, dateStr, v.MID, v.LID).Scan(&m.MetricValue.ID, &m.Date, &m.MID, &m.LID, &nullint, &m.MetricValue.Value)
 			if err != nil {
 				if err == sql.ErrNoRows {
 					continue // nothing to store in Fields

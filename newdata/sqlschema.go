@@ -23,6 +23,7 @@ type DatabaseSQL struct {
 	DtStart        time.Time         // earliest date with data
 	DtStop         time.Time         // latest date with data
 	InsertCount    int64             // number of records inserted
+	UpdateCount    int64             // number of records updated
 }
 
 // GetBucketForString returns the modulo number for the supplied

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"strings"
@@ -12,18 +13,24 @@ import (
 
 // Application is a struct that holds key application resources
 type Application struct {
-	sqldb       *newdata.Database
-	csvdb       *newdata.Database
-	cfg         *util.AppConfig
-	extres      *util.ExternalResources
-	BucketCount int
-	DtStart     time.Time
-	DtStop      time.Time
-	metricsSrc  string
-	MSID        int
+	sqldb               *newdata.Database
+	csvdb               *newdata.Database
+	cfg                 *util.AppConfig
+	extres              *util.ExternalResources
+	BucketCount         int
+	DtStart             time.Time
+	DtStop              time.Time
+	metricsSrc          string
+	MSID                int
+	SkipMetricMigration bool // if true, skip the metric migration step
 }
 
 var app Application
+
+func readCommandLineArgs() {
+	flag.BoolVar(&app.SkipMetricMigration, "S", false, "skip the metric migration step, just create the metrics tables")
+	flag.Parse()
+}
 
 //	main - this function creates a new db from scratch. It uses the
 //	data from platodb.csv
@@ -33,6 +40,7 @@ func main() {
 	var err error
 	start := time.Now()
 
+	readCommandLineArgs()
 	//----------------------------------------------------------------------
 	// Now get any other info we need for the databases
 	//----------------------------------------------------------------------
@@ -172,8 +180,10 @@ func main() {
 	//-------------------------------------------------------------------------------------
 	// and now we write the metrics...
 	//-------------------------------------------------------------------------------------
-	if err = MigrateTimeSeriesData(); err != nil {
-		log.Fatalf("Error from MigrateTimeSeriesData: %s\n", err.Error())
+	if !app.SkipMetricMigration {
+		if err = MigrateTimeSeriesData(); err != nil {
+			log.Fatalf("Error from MigrateTimeSeriesData: %s\n", err.Error())
+		}
 	}
 
 	end := time.Now()

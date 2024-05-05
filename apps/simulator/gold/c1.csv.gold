@@ -1,34 +1,34 @@
 "DNA Name: Khosla",,,,,"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-71,Delta2=-20,Metric=GCAM_C3_2}|{LSMInfluencer,Delta1=-200,Delta2=-17,Metric=GCAM_C16_47_ECON}|{LSMInfluencer,Delta1=-95,Delta2=-40,Metric=ManufacturingProduction}|{LSMInfluencer,Delta1=-153,Delta2=-34,Metric=IndustrialProduction}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RetailSalesMoM}]}"
 "Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"
-"5/1/2023","5/31/2023",100000.00,100000.00, 0.00%
-"4/1/2023","4/30/2023",100000.00,100000.00, 0.00%
-"3/1/2023","3/31/2023",100000.00,100000.00, 0.00%
+"5/1/2023","5/31/2023",100000.00, 99132.34,-10.07%
+"4/1/2023","4/30/2023",100000.00, 99302.91,-8.43%
+"3/1/2023","3/31/2023",100000.00,100042.25, 0.52%
 "2/1/2023","2/28/2023",100000.00,100000.00, 0.00%
-"1/1/2023","1/31/2023",100000.00,100000.00, 0.00%
-"12/1/2022","12/31/2022",100000.00,100000.00, 0.00%
+"1/1/2023","1/31/2023",100000.00, 99948.92,-0.62%
+"12/1/2022","12/31/2022",100000.00,100023.07, 0.28%
 "11/1/2022","11/30/2022",100000.00,100000.00, 0.00%
-"10/1/2022","10/31/2022",100000.00,100000.00, 0.00%
-"9/1/2022","9/30/2022",100000.00, 99935.32,-0.81%
-"8/1/2022","8/31/2022",100000.00,100000.00, 0.00%
-"7/1/2022","7/31/2022",100000.00,100000.00, 0.00%
-"6/1/2022","6/30/2022",100000.00,100000.00, 0.00%
-Default QA Testing Crucible  |||  mean: -0.0007  stddev: 0.0023   consistency: 99.7657   success coefficient: -0.0675
+"10/1/2022","10/31/2022",100000.00, 99994.30,-0.07%
+"9/1/2022","9/30/2022",100000.00, 99741.02,-3.21%
+"8/1/2022","8/31/2022",100000.00, 99748.94,-3.01%
+"7/1/2022","7/31/2022",100000.00, 99952.51,-0.58%
+"6/1/2022","6/30/2022",100000.00, 99818.93,-2.26%
+Default QA Testing Crucible  |||  mean: -0.0229  stddev: 0.0351   consistency: 96.4939   success coefficient: -2.2076
 
 "DNA Name: TopInvestor1",,,,,"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-360,Delta2=-34,Metric=RetailSalesMoM}|{LSMInfluencer,Delta1=-96,Delta2=-43,Metric=ManufacturingProduction}|{LSMInfluencer,Delta1=-67,Delta2=-11,Metric=GCAM_C16_121_ECON}|{LSMInfluencer,Delta1=-300,Delta2=-10,Metric=GCAM_C16_47}|{LSMInfluencer,Delta1=-73,Delta2=-30,Metric=GCAM_C15_204}]}"
 "Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"
 "5/1/2023","5/31/2023",100000.00,100000.00, 0.00%
 "4/1/2023","4/30/2023",100000.00,100000.00, 0.00%
-"3/1/2023","3/31/2023",100000.00,100209.42, 2.58%
-"2/1/2023","2/28/2023",100000.00, 99617.17,-5.06%
-"1/1/2023","1/31/2023",100000.00,100000.00, 0.00%
-"12/1/2022","12/31/2022",100000.00,100000.00, 0.00%
-"11/1/2022","11/30/2022",100000.00, 99990.81,-0.12%
-"10/1/2022","10/31/2022",100000.00,100000.00, 0.00%
-"9/1/2022","9/30/2022",100000.00,100000.00, 0.00%
-"8/1/2022","8/31/2022",100000.00,100000.00, 0.00%
-"7/1/2022","7/31/2022",100000.00,100000.00, 0.00%
-"6/1/2022","6/30/2022",100000.00,100000.00, 0.00%
-Default QA Testing Crucible  |||  mean: -0.0022  stddev: 0.0170   consistency: 98.3030   success coefficient: -0.2124
+"3/1/2023","3/31/2023",100000.00,100034.00, 0.41%
+"2/1/2023","2/28/2023",100000.00, 99889.57,-1.48%
+"1/1/2023","1/31/2023",100000.00, 99961.76,-0.46%
+"12/1/2022","12/31/2022",100000.00,100158.02, 1.94%
+"11/1/2022","11/30/2022",100000.00,100000.00, 0.00%
+"10/1/2022","10/31/2022",100000.00, 99834.19,-2.00%
+"9/1/2022","9/30/2022",100000.00, 99976.07,-0.30%
+"8/1/2022","8/31/2022",100000.00, 99983.28,-0.20%
+"7/1/2022","7/31/2022",100000.00,100099.65, 1.22%
+"6/1/2022","6/30/2022",100000.00, 99982.56,-0.22%
+Default QA Testing Crucible  |||  mean: -0.0009  stddev: 0.0104   consistency: 98.9588   success coefficient: -0.0904
 
 "DNA Name: Sequoia",,,,,"{Investor;Strategy=MajorityRules;InvW1=0.0911;InvW2=0.9089;Influencers=[{LSMInfluencer,Delta1=-360,Delta2=-34,Metric=RetailSalesMoM}|{LSMInfluencer,Delta1=-112,Delta2=-31,Metric=InflationRate}|{LSMInfluencer,Delta1=-68,Delta2=-9,Metric=GCAM_C5_4_ECON}|{LSMInfluencer,Delta1=-102,Delta2=-53,Metric=ConsumerConfidence}|{LSMInfluencer,Delta1=-100,Delta2=-48,Metric=ManufacturingProduction}]}"
 "Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"
@@ -48,89 +48,41 @@ Default QA Testing Crucible  |||  mean: 0.0000  stddev: 0.0000   consistency: 10
 
 "DNA Name: Lynch",,,,,"{Investor;Strategy=DistributedDecision;InvW1=0.4031;InvW2=0.5969;Influencers=[{LSMInfluencer,Delta1=-67,Delta2=-6,Metric=GCAM_C5_4_ECON}|{LSMInfluencer,Delta1=-180,Delta2=-52,Metric=UnemploymentRate}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BusinessConfidence}|{LSMInfluencer,Delta1=-119,Delta2=-59,Metric=ConsumerConfidence}|{LSMInfluencer,Delta1=-89,Delta2=-1,Metric=InterestRate}|{LSMInfluencer,Delta1=-94,Delta2=-36,Metric=ManufacturingProduction}|{LSMInfluencer,Delta1=-96,Delta2=-42,Metric=MoneySupplyM1}|{LSMInfluencer,Delta1=-76,Delta2=-3,Metric=GCAM_C16_60}|{LSMInfluencer,Delta1=-77,Delta2=-20,Metric=GCAM_C3_2}]}"
 "Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"
-"5/1/2023","5/31/2023",100000.00,100000.00, 0.00%
-"4/1/2023","4/30/2023",100000.00,100000.00, 0.00%
-"3/1/2023","3/31/2023",100000.00,100000.00, 0.00%
+"5/1/2023","5/31/2023",100000.00, 98954.68,-12.01%
+"4/1/2023","4/30/2023",100000.00, 99969.48,-0.38%
+"3/1/2023","3/31/2023",100000.00, 99909.72,-1.09%
 "2/1/2023","2/28/2023",100000.00,100000.00, 0.00%
-"1/1/2023","1/31/2023",100000.00,100000.00, 0.00%
-"12/1/2022","12/31/2022",100000.00,100000.00, 0.00%
+"1/1/2023","1/31/2023",100000.00,100150.90, 1.85%
+"12/1/2022","12/31/2022",100000.00,100004.23, 0.05%
 "11/1/2022","11/30/2022",100000.00,100000.00, 0.00%
-"10/1/2022","10/31/2022",100000.00,100000.00, 0.00%
-"9/1/2022","9/30/2022",100000.00, 99982.57,-0.22%
-"8/1/2022","8/31/2022",100000.00,100000.00, 0.00%
-"7/1/2022","7/31/2022",100000.00,100000.00, 0.00%
-"6/1/2022","6/30/2022",100000.00,100000.00, 0.00%
-Default QA Testing Crucible  |||  mean: -0.0002  stddev: 0.0006   consistency: 99.9367   success coefficient: -0.0183
+"10/1/2022","10/31/2022",100000.00, 99920.60,-0.96%
+"9/1/2022","9/30/2022",100000.00, 99968.59,-0.39%
+"8/1/2022","8/31/2022",100000.00, 99920.83,-0.96%
+"7/1/2022","7/31/2022",100000.00,100011.03, 0.13%
+"6/1/2022","6/30/2022",100000.00, 99493.60,-6.19%
+Default QA Testing Crucible  |||  mean: -0.0166  stddev: 0.0377   consistency: 96.2318   success coefficient: -1.6006
 
 "DNA Name: Ichan",,,,,"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-98,Delta2=-36,Metric=ManufacturingProduction}|{LSMInfluencer,Delta1=-72,Delta2=-1,Metric=InterestRate}|{LSMInfluencer,Delta1=-75,Delta2=-11,Metric=GCAM_C15_147_ECON}|{LSMInfluencer,Delta1=-111,Delta2=-42,Metric=MoneySupplyM1}|{LSMInfluencer,Delta1=-98,Delta2=-30,Metric=HousingStarts}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BusinessConfidence}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RetailSalesMoM}|{LSMInfluencer,Delta1=-69,Delta2=-20,Metric=GCAM_C3_2}|{LSMInfluencer,Delta1=-82,Delta2=-16,Metric=GCAM_C16_60}|{LSMInfluencer,Delta1=-154,Delta2=-34,Metric=IndustrialProduction}]}"
 "Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"
-"5/1/2023","5/31/2023",100000.00,100000.00, 0.00%
-"4/1/2023","4/30/2023",100000.00,100000.00, 0.00%
-"3/1/2023","3/31/2023",100000.00,100000.00, 0.00%
+"5/1/2023","5/31/2023",100000.00, 98948.83,-12.07%
+"4/1/2023","4/30/2023",100000.00, 99472.44,-6.45%
+"3/1/2023","3/31/2023",100000.00,100413.56, 5.15%
 "2/1/2023","2/28/2023",100000.00,100000.00, 0.00%
-"1/1/2023","1/31/2023",100000.00,100000.00, 0.00%
-"12/1/2022","12/31/2022",100000.00,100000.00, 0.00%
+"1/1/2023","1/31/2023",100000.00, 99939.52,-0.73%
+"12/1/2022","12/31/2022",100000.00, 99995.99,-0.05%
 "11/1/2022","11/30/2022",100000.00,100000.00, 0.00%
 "10/1/2022","10/31/2022",100000.00,100000.00, 0.00%
-"9/1/2022","9/30/2022",100000.00,100000.00, 0.00%
-"8/1/2022","8/31/2022",100000.00,100000.00, 0.00%
-"7/1/2022","7/31/2022",100000.00,100000.00, 0.00%
-"6/1/2022","6/30/2022",100000.00,100000.00, 0.00%
-Default QA Testing Crucible  |||  mean: 0.0000  stddev: 0.0000   consistency: 100.0000   success coefficient: 0.0000
+"9/1/2022","9/30/2022",100000.00, 99904.36,-1.20%
+"8/1/2022","8/31/2022",100000.00,100013.74, 0.17%
+"7/1/2022","7/31/2022",100000.00,100008.24, 0.10%
+"6/1/2022","6/30/2022",100000.00, 99635.56,-4.49%
+Default QA Testing Crucible  |||  mean: -0.0163  stddev: 0.0431   consistency: 95.6922   success coefficient: -1.5607
 
 "DNA Name: Bogel",,,,,"{Investor;Strategy=MajorityRules;InvW1=0.1764;InvW2=0.8236;Influencers=[{LSMInfluencer,Delta1=-98,Delta2=-39,Metric=ManufacturingProduction}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RetailSalesMoM}|{LSMInfluencer,Delta1=-171,Delta2=-52,Metric=UnemploymentRate}|{LSMInfluencer,Delta1=-138,Delta2=-30,Metric=HousingStarts}|{LSMInfluencer,Delta1=-114,Delta2=-39,Metric=MoneySupplyM1}|{LSMInfluencer,Delta1=-88,Delta2=-6,Metric=GCAM_C5_4_ECON}|{LSMInfluencer,Delta1=-77,Delta2=-22,Metric=GCAM_C16_121}|{LSMInfluencer,Delta1=-119,Delta2=-58,Metric=ConsumerConfidence}|{LSMInfluencer,Delta1=-65,Delta2=-15,Metric=GCAM_C16_47}|{LSMInfluencer,Delta1=-62,Delta2=-10,Metric=GCAM_C3_1}]}"
 "Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"
 "5/1/2023","5/31/2023",100000.00,100000.00, 0.00%
 "4/1/2023","4/30/2023",100000.00,100000.00, 0.00%
 "3/1/2023","3/31/2023",100000.00,100000.00, 0.00%
-"2/1/2023","2/28/2023",100000.00, 99986.26,-0.19%
-"1/1/2023","1/31/2023",100000.00, 99973.56,-0.32%
-"12/1/2022","12/31/2022",100000.00,100000.00, 0.00%
-"11/1/2022","11/30/2022",100000.00,100000.00, 0.00%
-"10/1/2022","10/31/2022",100000.00,100000.00, 0.00%
-"9/1/2022","9/30/2022",100000.00,100000.00, 0.00%
-"8/1/2022","8/31/2022",100000.00,100000.00, 0.00%
-"7/1/2022","7/31/2022",100000.00,100000.00, 0.00%
-"6/1/2022","6/30/2022",100000.00,100000.00, 0.00%
-Default QA Testing Crucible  |||  mean: -0.0004  stddev: 0.0010   consistency: 99.8971   success coefficient: -0.0422
-
-"DNA Name: Buffet",,,,,"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-65,Delta2=-24,Metric=GCAM_C16_47}|{LSMInfluencer,Delta1=-88,Delta2=-6,Metric=GCAM_C15_204}|{LSMInfluencer,Delta1=-88,Delta2=-13,Metric=GCAM_C3_2}|{LSMInfluencer,Delta1=-75,Delta2=-19,Metric=GCAM_C5_4}|{LSMInfluencer,Delta1=-102,Delta2=-38,Metric=ManufacturingProduction}|{LSMInfluencer,Delta1=-143,Delta2=-33,Metric=RetailSalesMoM}|{LSMInfluencer,Delta1=-157,Delta2=-59,Metric=IndustrialProduction}|{LSMInfluencer,Delta1=-100,Delta2=-1,Metric=StockMarket}|{LSMInfluencer,Delta1=-160,Delta2=-60,Metric=ConsumerConfidence}]}"
-"Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"
-"5/1/2023","5/31/2023",100000.00,100000.00, 0.00%
-"4/1/2023","4/30/2023",100000.00,100000.00, 0.00%
-"3/1/2023","3/31/2023",100000.00,100000.00, 0.00%
-"2/1/2023","2/28/2023",100000.00,100000.00, 0.00%
-"1/1/2023","1/31/2023",100000.00,100000.00, 0.00%
-"12/1/2022","12/31/2022",100000.00,100000.00, 0.00%
-"11/1/2022","11/30/2022",100000.00,100070.75, 0.89%
-"10/1/2022","10/31/2022",100000.00,100000.00, 0.00%
-"9/1/2022","9/30/2022",100000.00, 99982.57,-0.22%
-"8/1/2022","8/31/2022",100000.00,100000.00, 0.00%
-"7/1/2022","7/31/2022",100000.00,100000.00, 0.00%
-"6/1/2022","6/30/2022",100000.00,100000.00, 0.00%
-Default QA Testing Crucible  |||  mean: 0.0006  stddev: 0.0027   consistency: 99.7285   success coefficient: 0.0561
-
-"DNA Name: Graham",,,,,"{Investor;Strategy=MajorityRules;InvW1=0.6763;InvW2=0.3237;Influencers=[{LSMInfluencer,Delta1=-119,Delta2=-31,Metric=ConsumerConfidence}|{LSMInfluencer,Delta1=-66,Delta2=-5,Metric=GCAM_C15_148_ECON}|{LSMInfluencer,Delta1=-145,Delta2=-39,Metric=ManufacturingProduction}|{LSMInfluencer,Delta1=-154,Delta2=-34,Metric=IndustrialProduction}|{LSMInfluencer,Delta1=-167,Delta2=-53,Metric=InflationExpectations}|{LSMInfluencer,Delta1=-110,Delta2=-31,Metric=RetailSalesMoM}|{LSMInfluencer,Delta1=-77,Delta2=-22,Metric=GCAM_C16_121}|{LSMInfluencer,Delta1=-62,Delta2=-9,Metric=GCAM_C15_147}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BusinessConfidence}|{LSMInfluencer,Delta1=-69,Delta2=-26,Metric=GCAM_C15_204}]}"
-"Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"
-"5/1/2023","5/31/2023",100000.00,100000.00, 0.00%
-"4/1/2023","4/30/2023",100000.00,100000.00, 0.00%
-"3/1/2023","3/31/2023",100000.00,100048.29, 0.59%
-"2/1/2023","2/28/2023",100000.00, 99894.04,-1.42%
-"1/1/2023","1/31/2023",100000.00, 99951.42,-0.59%
-"12/1/2022","12/31/2022",100000.00,100000.00, 0.00%
-"11/1/2022","11/30/2022",100000.00,100002.51, 0.03%
-"10/1/2022","10/31/2022",100000.00,100000.00, 0.00%
-"9/1/2022","9/30/2022",100000.00, 99984.31,-0.20%
-"8/1/2022","8/31/2022",100000.00,100000.00, 0.00%
-"7/1/2022","7/31/2022",100000.00,100030.32, 0.37%
-"6/1/2022","6/30/2022",100000.00,100000.00, 0.00%
-Default QA Testing Crucible  |||  mean: -0.0010  stddev: 0.0050   consistency: 99.4977   success coefficient: -0.1012
-
-"DNA Name: TopInvestor8",,,,,"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-69,Delta2=-20,Metric=GCAM_C3_2}|{LSMInfluencer,Delta1=-72,Delta2=-1,Metric=InterestRate}|{LSMInfluencer,Delta1=-97,Delta2=-59,Metric=ConsumerConfidence}|{LSMInfluencer,Delta1=-251,Delta2=-7,Metric=GCAM_C3_1_ECON}|{LSMInfluencer,Delta1=-111,Delta2=-42,Metric=MoneySupplyM1}|{LSMInfluencer,Delta1=-94,Delta2=-36,Metric=ManufacturingProduction}|{LSMInfluencer,Delta1=-75,Delta2=-11,Metric=GCAM_C15_147_ECON}]}"
-"Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"
-"5/1/2023","5/31/2023",100000.00,100000.00, 0.00%
-"4/1/2023","4/30/2023",100000.00,100000.00, 0.00%
-"3/1/2023","3/31/2023",100000.00,100000.00, 0.00%
 "2/1/2023","2/28/2023",100000.00,100000.00, 0.00%
 "1/1/2023","1/31/2023",100000.00,100000.00, 0.00%
 "12/1/2022","12/31/2022",100000.00,100000.00, 0.00%
@@ -142,37 +94,85 @@ Default QA Testing Crucible  |||  mean: -0.0010  stddev: 0.0050   consistency: 9
 "6/1/2022","6/30/2022",100000.00,100000.00, 0.00%
 Default QA Testing Crucible  |||  mean: 0.0000  stddev: 0.0000   consistency: 100.0000   success coefficient: 0.0000
 
-"DNA Name: TopInvestor9",,,,,"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-66,Delta2=-5,Metric=GCAM_C15_148_ECON}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BusinessConfidence}|{LSMInfluencer,Delta1=-154,Delta2=-34,Metric=IndustrialProduction}|{LSMInfluencer,Delta1=-77,Delta2=-22,Metric=GCAM_C16_121}|{LSMInfluencer,Delta1=-110,Delta2=-33,Metric=RetailSalesMoM}|{LSMInfluencer,Delta1=-167,Delta2=-53,Metric=InflationExpectations}|{LSMInfluencer,Delta1=-65,Delta2=-15,Metric=GCAM_C16_47}|{LSMInfluencer,Delta1=-69,Delta2=-20,Metric=GCAM_C3_2}]}"
+"DNA Name: Buffet",,,,,"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-65,Delta2=-24,Metric=GCAM_C16_47}|{LSMInfluencer,Delta1=-88,Delta2=-6,Metric=GCAM_C15_204}|{LSMInfluencer,Delta1=-88,Delta2=-13,Metric=GCAM_C3_2}|{LSMInfluencer,Delta1=-75,Delta2=-19,Metric=GCAM_C5_4}|{LSMInfluencer,Delta1=-102,Delta2=-38,Metric=ManufacturingProduction}|{LSMInfluencer,Delta1=-143,Delta2=-33,Metric=RetailSalesMoM}|{LSMInfluencer,Delta1=-157,Delta2=-59,Metric=IndustrialProduction}|{LSMInfluencer,Delta1=-100,Delta2=-1,Metric=StockMarket}|{LSMInfluencer,Delta1=-160,Delta2=-60,Metric=ConsumerConfidence}]}"
+"Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"
+"5/1/2023","5/31/2023",100000.00, 98687.78,-14.86%
+"4/1/2023","4/30/2023",100000.00, 98353.06,-18.87%
+"3/1/2023","3/31/2023",100000.00, 99625.81,-4.46%
+"2/1/2023","2/28/2023",100000.00,100000.00, 0.00%
+"1/1/2023","1/31/2023",100000.00, 99790.31,-2.52%
+"12/1/2022","12/31/2022",100000.00,100000.00, 0.00%
+"11/1/2022","11/30/2022",100000.00,100287.14, 3.68%
+"10/1/2022","10/31/2022",100000.00, 99256.68,-8.68%
+"9/1/2022","9/30/2022",100000.00, 99659.82,-4.20%
+"8/1/2022","8/31/2022",100000.00, 99519.48,-5.70%
+"7/1/2022","7/31/2022",100000.00,100242.73, 3.00%
+"6/1/2022","6/30/2022",100000.00, 99342.41,-7.97%
+Default QA Testing Crucible  |||  mean: -0.0505  stddev: 0.0680   consistency: 93.1993   success coefficient: -4.7061
+
+"DNA Name: Graham",,,,,"{Investor;Strategy=MajorityRules;InvW1=0.6763;InvW2=0.3237;Influencers=[{LSMInfluencer,Delta1=-119,Delta2=-31,Metric=ConsumerConfidence}|{LSMInfluencer,Delta1=-66,Delta2=-5,Metric=GCAM_C15_148_ECON}|{LSMInfluencer,Delta1=-145,Delta2=-39,Metric=ManufacturingProduction}|{LSMInfluencer,Delta1=-154,Delta2=-34,Metric=IndustrialProduction}|{LSMInfluencer,Delta1=-167,Delta2=-53,Metric=InflationExpectations}|{LSMInfluencer,Delta1=-110,Delta2=-31,Metric=RetailSalesMoM}|{LSMInfluencer,Delta1=-77,Delta2=-22,Metric=GCAM_C16_121}|{LSMInfluencer,Delta1=-62,Delta2=-9,Metric=GCAM_C15_147}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BusinessConfidence}|{LSMInfluencer,Delta1=-69,Delta2=-26,Metric=GCAM_C15_204}]}"
 "Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"
 "5/1/2023","5/31/2023",100000.00,100000.00, 0.00%
 "4/1/2023","4/30/2023",100000.00,100000.00, 0.00%
-"3/1/2023","3/31/2023",100000.00,100000.00, 0.00%
+"3/1/2023","3/31/2023",100000.00,100164.92, 2.03%
 "2/1/2023","2/28/2023",100000.00,100000.00, 0.00%
-"1/1/2023","1/31/2023",100000.00, 99901.43,-1.19%
+"1/1/2023","1/31/2023",100000.00,100000.00, 0.00%
 "12/1/2022","12/31/2022",100000.00,100000.00, 0.00%
 "11/1/2022","11/30/2022",100000.00,100000.00, 0.00%
 "10/1/2022","10/31/2022",100000.00,100000.00, 0.00%
-"9/1/2022","9/30/2022",100000.00, 99980.39,-0.25%
+"9/1/2022","9/30/2022",100000.00,100000.00, 0.00%
 "8/1/2022","8/31/2022",100000.00,100000.00, 0.00%
-"7/1/2022","7/31/2022",100000.00,100037.90, 0.46%
+"7/1/2022","7/31/2022",100000.00,100000.00, 0.00%
 "6/1/2022","6/30/2022",100000.00,100000.00, 0.00%
-Default QA Testing Crucible  |||  mean: -0.0008  stddev: 0.0038   consistency: 99.6163   success coefficient: -0.0812
+Default QA Testing Crucible  |||  mean: 0.0017  stddev: 0.0059   consistency: 99.4150   success coefficient: 0.1679
+
+"DNA Name: TopInvestor8",,,,,"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-69,Delta2=-20,Metric=GCAM_C3_2}|{LSMInfluencer,Delta1=-72,Delta2=-1,Metric=InterestRate}|{LSMInfluencer,Delta1=-97,Delta2=-59,Metric=ConsumerConfidence}|{LSMInfluencer,Delta1=-251,Delta2=-7,Metric=GCAM_C3_1_ECON}|{LSMInfluencer,Delta1=-111,Delta2=-42,Metric=MoneySupplyM1}|{LSMInfluencer,Delta1=-94,Delta2=-36,Metric=ManufacturingProduction}|{LSMInfluencer,Delta1=-75,Delta2=-11,Metric=GCAM_C15_147_ECON}]}"
+"Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"
+"5/1/2023","5/31/2023",100000.00, 99548.69,-5.36%
+"4/1/2023","4/30/2023",100000.00, 99930.50,-0.87%
+"3/1/2023","3/31/2023",100000.00,100160.52, 1.97%
+"2/1/2023","2/28/2023",100000.00, 97734.74,-26.65%
+"1/1/2023","1/31/2023",100000.00, 99850.32,-1.81%
+"12/1/2022","12/31/2022",100000.00,100008.66, 0.11%
+"11/1/2022","11/30/2022",100000.00,100000.00, 0.00%
+"10/1/2022","10/31/2022",100000.00, 99737.38,-3.15%
+"9/1/2022","9/30/2022",100000.00, 99334.25,-8.07%
+"8/1/2022","8/31/2022",100000.00, 99715.44,-3.41%
+"7/1/2022","7/31/2022",100000.00,100051.44, 0.63%
+"6/1/2022","6/30/2022",100000.00, 99741.37,-3.21%
+Default QA Testing Crucible  |||  mean: -0.0415  stddev: 0.0761   consistency: 92.3873   success coefficient: -3.8359
+
+"DNA Name: TopInvestor9",,,,,"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-66,Delta2=-5,Metric=GCAM_C15_148_ECON}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BusinessConfidence}|{LSMInfluencer,Delta1=-154,Delta2=-34,Metric=IndustrialProduction}|{LSMInfluencer,Delta1=-77,Delta2=-22,Metric=GCAM_C16_121}|{LSMInfluencer,Delta1=-110,Delta2=-33,Metric=RetailSalesMoM}|{LSMInfluencer,Delta1=-167,Delta2=-53,Metric=InflationExpectations}|{LSMInfluencer,Delta1=-65,Delta2=-15,Metric=GCAM_C16_47}|{LSMInfluencer,Delta1=-69,Delta2=-20,Metric=GCAM_C3_2}]}"
+"Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"
+"5/1/2023","5/31/2023",100000.00, 97628.37,-25.34%
+"4/1/2023","4/30/2023",100000.00, 98272.31,-19.71%
+"3/1/2023","3/31/2023",100000.00, 99683.59,-3.78%
+"2/1/2023","2/28/2023",100000.00,100000.00, 0.00%
+"1/1/2023","1/31/2023",100000.00,100048.06, 0.59%
+"12/1/2022","12/31/2022",100000.00,100114.84, 1.41%
+"11/1/2022","11/30/2022",100000.00,100013.37, 0.17%
+"10/1/2022","10/31/2022",100000.00, 99872.75,-1.54%
+"9/1/2022","9/30/2022",100000.00, 99252.78,-9.01%
+"8/1/2022","8/31/2022",100000.00, 99456.61,-6.42%
+"7/1/2022","7/31/2022",100000.00,100255.90, 3.16%
+"6/1/2022","6/30/2022",100000.00, 98771.85,-14.41%
+Default QA Testing Crucible  |||  mean: -0.0624  stddev: 0.0916   consistency: 90.8432   success coefficient: -5.6697
 
 "DNA Name: TopInvestor10",,,,,"{Investor;Strategy=MajorityRules;InvW1=0.8959;InvW2=0.1041;Influencers=[{LSMInfluencer,Delta1=-153,Delta2=-34,Metric=IndustrialProduction}|{LSMInfluencer,Delta1=-66,Delta2=-5,Metric=GCAM_C15_148_ECON}|{LSMInfluencer,Delta1=-110,Delta2=-31,Metric=RetailSalesMoM}|{LSMInfluencer,Delta1=-62,Delta2=-9,Metric=GCAM_C15_147}|{LSMInfluencer,Delta1=-200,Delta2=-14,Metric=GCAM_C15_204}|{LSMInfluencer,Delta1=-69,Delta2=-26,Metric=GCAM_C15_204}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BusinessConfidence}|{LSMInfluencer,Delta1=-75,Delta2=-11,Metric=GCAM_C15_147_ECON}|{LSMInfluencer,Delta1=-65,Delta2=-15,Metric=GCAM_C16_47}|{LSMInfluencer,Delta1=-77,Delta2=-22,Metric=GCAM_C16_121}]}"
 "Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"
 "5/1/2023","5/31/2023",100000.00,100000.00, 0.00%
-"4/1/2023","4/30/2023",100000.00,100000.00, 0.00%
-"3/1/2023","3/31/2023",100000.00,100048.29, 0.59%
-"2/1/2023","2/28/2023",100000.00, 99896.05,-1.40%
-"1/1/2023","1/31/2023",100000.00, 99959.25,-0.50%
+"4/1/2023","4/30/2023",100000.00, 99743.91,-3.18%
+"3/1/2023","3/31/2023",100000.00,100272.61, 3.37%
+"2/1/2023","2/28/2023",100000.00,100000.00, 0.00%
+"1/1/2023","1/31/2023",100000.00,100000.00, 0.00%
 "12/1/2022","12/31/2022",100000.00,100000.00, 0.00%
-"11/1/2022","11/30/2022",100000.00,100002.51, 0.03%
+"11/1/2022","11/30/2022",100000.00,100000.00, 0.00%
 "10/1/2022","10/31/2022",100000.00,100000.00, 0.00%
-"9/1/2022","9/30/2022",100000.00, 99984.31,-0.20%
+"9/1/2022","9/30/2022",100000.00,100000.00, 0.00%
 "8/1/2022","8/31/2022",100000.00,100000.00, 0.00%
-"7/1/2022","7/31/2022",100000.00,100030.32, 0.37%
+"7/1/2022","7/31/2022",100000.00,100000.00, 0.00%
 "6/1/2022","6/30/2022",100000.00,100000.00, 0.00%
-Default QA Testing Crucible  |||  mean: -0.0009  stddev: 0.0049   consistency: 99.5119   success coefficient: -0.0911
+Default QA Testing Crucible  |||  mean: 0.0002  stddev: 0.0140   consistency: 98.6035   success coefficient: 0.0158
 
 "DNA Name: TopInvestor11",,,,,"{Investor;Strategy=MajorityRules;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-94,Delta2=-36,Metric=ManufacturingProduction}|{LSMInfluencer,Delta1=-74,Delta2=-14,Metric=GCAM_C16_60_ECON}|{LSMInfluencer,Delta1=-134,Delta2=-6,Metric=GCAM_C5_4_ECON}|{LSMInfluencer,Delta1=-69,Delta2=-16,Metric=GCAM_C3_2}|{LSMInfluencer,Delta1=-143,Delta2=-20,Metric=GCAM_C5_4}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BusinessConfidence}|{LSMInfluencer,Delta1=-97,Delta2=-31,Metric=ConsumerConfidence}|{LSMInfluencer,Delta1=-180,Delta2=-56,Metric=UnemploymentRate}|{LSMInfluencer,Delta1=-144,Delta2=-54,Metric=InflationRate}|{LSMInfluencer,Delta1=-360,Delta2=-41,Metric=MoneySupplyM1}]}"
 "Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"
@@ -192,16 +192,16 @@ Default QA Testing Crucible  |||  mean: 0.0000  stddev: 0.0000   consistency: 10
 
 "DNA Name: TopInvestor12",,,,,"{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-154,Delta2=-34,Metric=IndustrialProduction}|{LSMInfluencer,Delta1=-82,Delta2=-3,Metric=GCAM_C16_60}|{LSMInfluencer,Delta1=-143,Delta2=-20,Metric=GCAM_C5_4}|{LSMInfluencer,Delta1=-360,Delta2=-31,Metric=RetailSalesMoM}|{LSMInfluencer,Delta1=-66,Delta2=-11,Metric=StockMarket}|{LSMInfluencer,Delta1=-97,Delta2=-59,Metric=ConsumerConfidence}|{LSMInfluencer,Delta1=-149,Delta2=-14,Metric=GCAM_C15_204}|{LSMInfluencer,Delta1=-89,Delta2=-4,Metric=InterestRate}]}"
 "Start","End","Opening Portfolio Value","Ending Portfolio Value","Annualized Return"
-"5/1/2023","5/31/2023",100000.00,100000.00, 0.00%
-"4/1/2023","4/30/2023",100000.00,100000.00, 0.00%
-"3/1/2023","3/31/2023",100000.00,100000.00, 0.00%
-"2/1/2023","2/28/2023",100000.00,100000.00, 0.00%
-"1/1/2023","1/31/2023",100000.00,100000.00, 0.00%
-"12/1/2022","12/31/2022",100000.00,100000.00, 0.00%
-"11/1/2022","11/30/2022",100000.00,100000.00, 0.00%
-"10/1/2022","10/31/2022",100000.00,100000.00, 0.00%
-"9/1/2022","9/30/2022",100000.00,100000.00, 0.00%
-"8/1/2022","8/31/2022",100000.00,100000.00, 0.00%
-"7/1/2022","7/31/2022",100000.00,100000.00, 0.00%
-"6/1/2022","6/30/2022",100000.00,100000.00, 0.00%
-Default QA Testing Crucible  |||  mean: 0.0000  stddev: 0.0000   consistency: 100.0000   success coefficient: 0.0000
+"5/1/2023","5/31/2023",100000.00, 99764.10,-2.83%
+"4/1/2023","4/30/2023",100000.00, 99243.70,-9.12%
+"3/1/2023","3/31/2023",100000.00,100255.39, 3.15%
+"2/1/2023","2/28/2023",100000.00, 98390.88,-19.70%
+"1/1/2023","1/31/2023",100000.00,100104.01, 1.27%
+"12/1/2022","12/31/2022",100000.00,100059.71, 0.73%
+"11/1/2022","11/30/2022",100000.00,100122.30, 1.55%
+"10/1/2022","10/31/2022",100000.00, 99445.84,-6.54%
+"9/1/2022","9/30/2022",100000.00, 99444.81,-6.77%
+"8/1/2022","8/31/2022",100000.00, 99574.03,-5.06%
+"7/1/2022","7/31/2022",100000.00,100216.12, 2.66%
+"6/1/2022","6/30/2022",100000.00, 99639.99,-4.44%
+Default QA Testing Crucible  |||  mean: -0.0376  stddev: 0.0651   consistency: 93.4946   success coefficient: -3.5142

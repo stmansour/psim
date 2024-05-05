@@ -68,7 +68,7 @@ func (i *Indicator) UnmarshalJSON(data []byte) error {
 
 // Construct the URL.
 //              https://api.tradingeconomics.com/historical/country/mexico/indicator/gold%20reserves/2019-01-01/2019-12-31?f=json;c=guest:guest
-//              https://api.tradingeconomics.com/historical/country/United%20States/indicator/Housing Starts MoM/2024-04-01/2024-04-16?f=json&c=8dba8cc926874fd:7fgqrflgveh7wfi
+//              https://api.tradingeconomics.com/historical/country/United%20States/indicator/Unemployment%20Rate/2024-04-01/2024-04-16?f=json
 //              https://api.tradingeconomics.com/historical/country/United%20States,Japan/indicator/Housing%20Starts%20MoM,Stock%20Market,Unemployment%20Rate/2024-01-01/2024-04-16&f=json
 
 // FetchIndicators fetches economic indicators from Trading Economics.
@@ -95,6 +95,12 @@ func FetchIndicators(startDate, endDate time.Time, ind []PML) ([]Indicator, erro
 	}
 	return allind, nil
 }
+
+// doFetch does the API work of fetching the data
+// "https://api.tradingeconomics.com/historical/country/Australia,Japan,United%20States/indicator/Government%20Debt%20to%20GDP/2024-04-26/2024-05-03?f=json&c=8dba8cc926874fd:7fgqrflgveh7wfi"
+//
+//		https://api.tradingeconomics.com/historical/country/Australia,Japan,United%20States/indicator/Government%20Debt%20to%20GDP/2015-03-01/2024-05-03?f=json&c=8dba8cc926874fd:7fgqrflgveh7wfi
+//	    https://api.tradingeconomics.com/historical/country/Australia,Japan,United%20States/indicator/Government%20Debt%20to%20GDP/2015-01-01/2024-05-03?f=json&c=8dba8cc926874fd:7fgqrflgveh7wfi
 func doFetch(allcountries, allindicators string, startDate, endDate time.Time) ([]Indicator, error) {
 	prefix := "https://api.tradingeconomics.com/historical/country/"
 	teurl := fmt.Sprintf("%s/indicator/%s/%s/%s?f=json&c=%s", allcountries, allindicators, startDate.Format("2006-01-02"), endDate.Format("2006-01-02"), app.APIKey)
