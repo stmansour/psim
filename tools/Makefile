@@ -1,4 +1,4 @@
-DIRS=csvtosql validator sqltocsv
+DIRS=csvtosql validator sqltocsv tsf
 THISDIR=tools
 
 # Conditional variable to prepend to commands

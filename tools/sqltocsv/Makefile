@@ -33,6 +33,7 @@ test: config
 	$(DO_CMD)@echo "*** TEST completed in ${THISDIR} ***"
 
 package:
+	cp sqltocsv ${DIST}/
 	$(DO_CMD)@echo "*** PACKAGE completed in ${THISDIR} ***"
 
 secure:

@@ -68,6 +68,11 @@ stats:
 
 release:
 	cp -r dist/platosim /usr/local/plato/;cd /usr/local/plato;rm -rf bin;mv platosim bin;
+	if [ -f ~/.vault/extres.json5 ]; then \
+	    cp ~/.vault/extres.json5 /usr/local/plato/bin/ ; \
+	else \
+	    echo "extres.json5 was not found, some apps will not run with out it." ; \
+	fi
 
 refmt:
 	fmt design.txt > design.txt1 ; mv design.txt1 design.txt
