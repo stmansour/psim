@@ -315,8 +315,8 @@ func (d *DatabaseCSV) CopySQLRecsToCSV(sqldb *Database) error {
 	//----------------------------
 	// Write the data rows
 	//----------------------------
-	year := 0
-	month := 0
+	// year := 0
+	// month := 0
 	var ok bool
 	val := float64(0)
 	for dt := startDate; dt.Before(endDate) || dt.Equal(endDate); dt = dt.AddDate(0, 0, 1) {
@@ -354,11 +354,11 @@ func (d *DatabaseCSV) CopySQLRecsToCSV(sqldb *Database) error {
 			}
 		}
 		fmt.Fprintf(file, "\n")
-		if dt.Year() != year || dt.Month() != time.Month(month) {
-			year = dt.Year()
-			month = int(dt.Month())
-			fmt.Printf("%4d-%02d\r", year, month)
-		}
+		// if dt.Year() != year || dt.Month() != time.Month(month) {
+		// 	year = dt.Year()
+		// 	month = int(dt.Month())
+		// 	fmt.Printf("%4d-%02d\r", year, month)
+		// }
 	}
 	return nil
 }
