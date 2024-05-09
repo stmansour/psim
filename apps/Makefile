@@ -1,4 +1,4 @@
-DIRS=simulator simtalk viewer psync
+DIRS=simulator simtalk viewer psync gsync
 THISDIR=apps
 
 apps:

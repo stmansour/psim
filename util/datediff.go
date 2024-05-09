@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -93,5 +94,5 @@ func ElapsedTime(dtStart, dtStop time.Time) string {
 	} else if msec > 0 {
 		s += fmt.Sprintf(" %d msec", msec)
 	}
-	return s
+	return strings.TrimLeft(s, " ") // remove leading spaces
 }

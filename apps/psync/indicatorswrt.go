@@ -46,17 +46,15 @@ func UpdateIndicators(indicators []Indicator) error {
 		// Set the field selector with the internal metric name
 		//-------------------------------------------------------
 		var f = newdata.FieldSelector{
-			Metric: mtc, // not sure if this is a good mapping. It will work for now.
+			Metric: mtc,
 		}
 		//----------------------------------------------------
 		// find the locale for this indicator... Look for the
 		// country name in our locale cache
 		//----------------------------------------------------
 		country := strings.ToLower(indicators[i].Country)
-		// loc := newdata.Locale{}
 		for k, v := range app.SQLDB.SQLDB.LocaleCache {
 			if strings.ToLower(v.Country) == country {
-				// loc = v
 				f.Locale = k
 				break
 			}

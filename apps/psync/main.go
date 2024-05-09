@@ -58,10 +58,10 @@ func readCommandLineArgs() {
 	flag.StringVar(&app.cfName, "c", "", "configuration file to use (instead of config.json)")
 	flag.StringVar(&app.Dt1, "d1", "", "Start Date for data, YYYY-mm-dd, default is 7 days ago. Both d1 and d2 are required if either are specified.")
 	flag.StringVar(&app.Dt2, "d2", "", "Stop Date for data, YYYY-mm-dd, default is 1 day ago. Both d1 and d2 are required if either are specified.")
-	flag.BoolVar(&app.APIFixMiscompares, "F", false, "Fix miscompares by overwriting miscompared values with the API values")
 	flag.StringVar(&app.SingleMetric, "metric", "", "Update data only for the supplied metric")
 	flag.BoolVar(&app.SkipIndicators, "SI", false, "Skip updates and verification of indicators")
 	flag.BoolVar(&app.SkipForex, "SF", false, "Skip updates and verification of forex data")
+	flag.BoolVar(&app.APIFixMiscompares, "F", false, "Fix miscompares by overwriting miscompared values with the API values")
 	flag.BoolVar(&app.Verbose, "verbose", false, "Verbose mode, show all data found and the actions taken")
 	flag.Parse()
 }

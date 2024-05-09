@@ -1,0 +1,108 @@
+How To Use gsync and gfetch.sh
+
+First decide whether you are looking to update a time period or getting
+the 15 min update. 
+
+For 15 min update:
+
+    ./gfetch.sh [-d base_dir]
+
+You can supply a base directory if you want. If you don't supply one
+the program will create ./gdelt in the current directory.
+For a date range, use gsync -d1 YYYY-MM-DD -d2 YYYY-MM-DD to generate a
+file list. Then run gfetch.sh with the -f option and the file list. Make
+sure that "masterlist.csv" is in the current directory. For example:
+
+    gsync -d1 2024-04-01 -d2 2024-04-07 > flist.txt
+    ./gfetch.sh -f flist.txt
+
+This will process the files a day at a time, as described below.
+
+
+
+Handling The 15 Minute Updates
+
+For the cron operation, we'll be downloading the GDELT updates as they
+are created every 15 mins. Once the zip files for a particular date have
+been downloaded, they can be processed.  Assuming we have been
+downloading the 15 minute updates for a day and all the files for
+April 1, 2024 have been downloaded, we can process that directory as
+follows:
+
+    ./gfetch.sh -C 20240401
+
+This last operation will utilize a lot of disk space. There are 96 zip
+files for a day, they each need to be unzipped, then concatenated into 
+a single csv file for processing. In this case, the zip file would be
+20240401.csv. Then we can run gsync on this directory to update the 
+database with the metrics found for that day (April 1, 2024).  You would
+run the same command as we describe below for updating a date range.
+
+Handling A Multi-Day Update
+
+The code is best utilized when processing information to update the
+database 1 day at a time, cleaning up after each day is processed. Here
+is the high level flow for a multi-day update, from date1 to date2:
+
+    * make a url list for all the GDELT files that cover date1 to date2
+    * for each day in the update time period
+        * pull down all the *.gkg.csv.zip files for that day
+        * unzip them and concatenate into a single csv file
+        * delete all the unzipped files for the day, keep the zip files.
+        * call gsync to process the single csv file and update the SQL db
+          with the new metrics
+        * if gsync runs without errors, delete all the .zip files for
+          that day. Leave the .csv file and the log file in the direcory
+          for that day.
+    * repeat for the remaining days
+
+So, as an example usage, suppose we want to update or verify the SQL
+database for all the GCAM data between April 15, 2024 and April 22, 2024.
+Let's say that you have a directory, ./gdelt, and this is where you will
+always run the sync process (highly recommended to do it this way). Here's
+the command we would run:
+
+    gfetch.sh -d1 2024-04-15 -d2 2024-04-22
+
+Internally, this is what gfetch.sh will do. First, it make sure that 
+masterlist.txt is in the current directory. If it's not there, it will
+be downloaded.  (You can do this download by running gfetch.sh -m).
+
+Next, it will create a file containing the list of URLs to download based on
+the daterange to download. For this example it will run:
+
+    gsync -d1 2024-04-15 -d2 2024-04-22 >urls.txt
+
+These URLs will be extracted from masterlist.txt. So, if masterlist.csv
+is older than April 22, 2024 it will need to be updated, so gfetch may
+need to download masterlist.txt even if you already have a copy.
+gfetch will use 'tail -1 masterlist.txt' to determine the date of the
+latest URL. If the latest URL is prior to the -d2 date, then it will
+download masterlist.txt
+
+Next, we run gfetch will begin to process the URLs in urls.txt. It will
+create a directory in ./gdelt named YYYYMMDD for the year, month, and
+day it will be processing. So, for example, the first URL it reads from
+the list will be something like this:
+
+    http://data.gdeltproject.org/gdeltv2/20240415000000.gkg.csv.zip
+
+So, it will look at the first 8 characters of the file name "20240415".
+It will then create ./gdelt/20240415 if it does not already exist, then
+it will download all the files containing "20240415" into that directory.
+Once it sees a url where the first 8 characters of the filename are
+different, for example "20240416", it will pause the downloading and process
+./gdelt/20240415 .  It will unzip all the zipped files, then concatenate
+them together to produce 20240415.csv.   This is exactly what happens
+if you run gfetch.sh -C 20240415 (internally, gfetch calls the same
+function).  Once this completes it calls gsync to process this directory
+
+    gsync -gf 20240415 > gsync-20240415.log
+
+When this completes it would continue by processing the URLs for
+April 16, 2024, that is, those URLs with the first 8 characters of their
+filename being "20240416". And this process would continue until all the
+urls in urls.txt have been processed.
+
+
+

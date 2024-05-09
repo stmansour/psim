@@ -1,0 +1,276 @@
+GSYNC Design
+GDELT Data Synchronization for Plato
+
+Overview
+--------
+The GDELT Project produces information that we need to convert into
+time-series data so that it can be utilized by Influencers in the 
+Plato System.  This document describes how the data is collected,
+parsed, and ultimately loaded into the Plato SQL database. We
+use GDELT 2.0.  They release updates every 15 minutes. We process
+those updates into daily values that can be utilized as any other
+metric in the Plato system.
+
+The main download site is here:
+https://blog.gdeltproject.org/gdelt-2-0-our-global-world-in-realtime/
+
+While they publish a Master CSV Data File Set every 15 minutes, it is quite
+large, 102MB as of this writing. Its only contents are http links to other
+data files. GDELT also publishes a smaller directory every 15 mins and it
+contains only the files that were generated in the last 15 mins.  This
+"Last 15 Minutes CSV Data File List" is available here:
+
+http://data.gdeltproject.org/gdeltv2/lastupdate.txt
+
+For ease of handling, we will process this file every 15 minutes using a cron
+job.  It lists a link to 3 different CSV files. The ones we are interested
+in are of the form:
+
+http://data.gdeltproject.org/gdeltv2/20150218231500.gkg.csv.zip
+
+The gkg.csv file is what we are interested in. It contains the raw
+information for the metrics we want. In the example URL above, the prefix to the
+file name 20150218231500.gkg.csv.zip can be decoded as follows:
+
+    2015 = year              \
+    02   = month, February    >  YYYYMMDD
+    18   = day               /
+    23   = hour (11 pm)      \
+    15   = mins               >  hhmmss
+    00   = seconds           /
+
+So, this URL represents the updates for Feb 18, 2015, that occurred in the
+15-minute time period ending at 23:15:00 or 11:15 pm.  
+
+The individual files for each hhmmss will be stored in a directory named for
+the YYYYMMDD it represents.  Thus, for May 6, 2024, the directory will be
+named 202405006.  It will contain 96 CSV files that were pulled from the
+GDELT2 . 
+
+Since the current Plato system works on Daily values, we will process these
+96 files for the day. There should be a new spreadsheet published every 15
+mins from 000000 to 234500, or 96 files per day. We need all the files for
+the day before we can produce the numbers we will send to the Plato SQL
+database.
+
+We will create a cron job that checks for new data files every 15 minutes. It
+downloads the files.  At 1 am each day, we will process the files for the
+previous 24-hour period and publish the information to the Plato SQL
+database.
+
+How The Metrics Are Calculated
+------------------------------
+We begin this discussion by making the assumption that 96 files are 
+retrieved for a particular 24-hour period. If we find less than
+96 files in the directory, we can attempt to find the missing file(s) using
+the Master CSV Data File List (that’s a topic for later).  If we don't find
+what we need we will publish an error. 
+
+Assuming all 96 data files are there, they are processed as follows.
+
+1. Concatenate them all, along with a special column headers file, into a single
+   CSV file. The relevant columns for our processing are defined in
+   GDELT2ColHdrs.csv
+2. Ingest the CSV file into a new program, gsync
+3. Process column R, the GCAM column, for its values. Further below we is
+    a description of how to parse these values.
+4. Reprocess column R to compute a new value related to Economics in the
+   United States. This is done by filtering as follows: for rows where
+   column H, Themes, contains the string "ECON_" and column J, Locations,
+   contains the string "1#United States"
+5. Reprocess column R to compute a new value related to Economics in Japan.
+   This is done by filtering as follows: for rows where
+   column H, Themes, contains the string "ECON_" and column J, Locations,
+   contains the string "1#Japan"
+
+   
+Parsing GCAM Column Values
+--------------------------
+Each cell in column R is associated with a date (column B, Date) and is of
+the form:  
+    m1:val1,m2:val2,m3:val3,...
+where
+    m1, m2, m3, ... are metric names
+    val1, val2, val3, ... are the values for those metrics
+   
+Each cell value is parsed by determining all the values between
+commas (,). This results in a tuple, a metric name, and a value, separated
+by a colon (:).  The metric names are best explained by example. Here are
+two example metric/value pairs that are found in the cell value for 
+column R:
+
+    wc:219,c12.1:38,...
+
+When we parse the values between commas the first two pairs are:
+
+    wc:219
+    c12.1:38
+
+The metric name is formed by starting with "GCAM_" and then adding the string
+to the left of the colon, changing dots (.) to underscores (_), then
+mapping the entire string to upper case. So,
+for "wc:219" we get toUpper("GCAM_" + "wc") or GCAM_WC and a value of 219.
+For "c12.1:38" we get toUpper("GCAM_" + "c12_1") or GCAM_C12_1 and a value
+of 38.
+
+Column B provides the date for each metric/value pair we process.  We then
+total all the values for a given date and determine their arithmetic mean.
+We store the mean value in a new spreadsheet where each row is a day and 
+each column is a different GCAM_ variable.
+
+The "ECON" values which are associated with a specific locale are filtered
+as described above, and the metric name is derived in the same as above with
+2 additional steps.  First, the currency of the locale is used as a prefix.
+Second, "_ECON" is used as a suffix.  So, in the example above, if the row
+also contained "1#United States" in column J, the metric names would become
+
+    "USD" + "GCAM_WC" + "_ECON" or "USDGCAM_WC_ECON", and 
+    "USD" + "GCAM_C12_1" + "_ECON" or "USDGCAM_C12_1_ECON"
+
+Similarly for Japan, we look to see if column J contains "1#Japan" and if
+so we similarly create ECON variables such as "JPYGCAM_WC_ECON", etc.
+
+Writing Metrics To The Plato SQL Database
+-----------------------------------------
+When we write data to the database based on information we sourced from
+GDELT, we will mark the database Metrics Source field to show that it
+came from GDELT.
+
+Also note that these updates must be idempotent. So, if we process the same
+csv files from GDELT multiple times when the program goes to write the data
+if it finds that the data already exists, it will, by default verify that
+the number it was going to write matches the number already in the database.
+If the numbers do not match, it will flag the miscompare in the output
+signalling the team to look into the miscompare to find out what happened.
+The program should have an option to update the values that miscompare if we
+find that the newer values are correct.
+
+Downloading GCAM Information For Arbitrary Date Ranges
+------------------------------------------------------
+While a cron job that executes every 15 minutes can keep the Plato database
+up-to-date with emerging information, there will be times when we require
+going back in time to get historical data.  This can be achieved by
+processing the Master CSV Data File Set. It is a space-delimited file that
+contains a concatenation of all the 15-minute updates that have been
+published since GDELT2 began in 2015. This file has the following format:
+
+150383 297a16b493de7cf6ca809a7cc31d0b93 http://data.gdeltproject.org/gdeltv2/20150218230000.export.CSV.zip
+318084 bb27f78ba45f69a17ea6ed7755e9f8ff http://data.gdeltproject.org/gdeltv2/20150218230000.mentions.CSV.zip
+10768507 ea8dde0beb0ba98810a92db068c0ce99 http://data.gdeltproject.org/gdeltv2/20150218230000.gkg.csv.zip
+149211 2a91041d7e72b0fc6a629e2ff867b240 http://data.gdeltproject.org/gdeltv2/20150218231500.export.CSV.zip
+339037 dec3f427076b716a8112b9086c342523 http://data.gdeltproject.org/gdeltv2/20150218231500.mentions.CSV.zip
+10269336 2f1a504a3c4558694ade0442e9a5ae6f http://data.gdeltproject.org/gdeltv2/20150218231500.gkg.csv.zip
+...
+
+We simply scan this file for all lines containing ".gkg.csv.zip", and
+compare the date in the URL path name to the date range we are looking.
+We just need to process all files on a particular date as described above.
+
+Error handling
+--------------
+What happens if we don't get 96 files for the day?  It's not clear
+what the exact solution to this should be. GDELT is a free service 
+available to everyone in the world. But I didn't see any support contact
+information on their website. It may be that they cover more than 15
+minutes in one of the other files. Or, for whatever reason, there may
+just be periods of time that don't have any information. 
+
+For the time being, I think the thing to do is to keep track of days
+that don't have 96 files for the day. We can analyze them individually
+to see if there is a hole in coverage or if one or more files contain
+more then 15 mins worth of information. In any case, all we're doing
+is averaging the metrics that we find over the course of the day. So,
+in the worst case, we're computing an average that may be missing a
+a few entries... and I don't think this will severely impact our work.
+If we do find that there are holes in the time periods being covered
+then we can check back periodically with an updated master list file
+to see if any new csv files were published, and if so we can get them
+and reprocess the day's metrics.
+
+Security
+--------
+If someone spoofs the GDELT site, we are vulnerable. We will move
+forward anyway. It is not clear how we can protect ourselves from a
+man-in-the-middle attack.  I will update this section if we can
+work something out.
+
+APPENDIX A. Design Concerns and Responses
+-----------------------------------------
+1. Detailing GDELT CSV File Complexity
+
+Concern: The GDELT CSV file's complexity and format could be more
+detailed to aid in designing the parser and subsequent data handling
+mechanisms.
+
+Response: The GDELT CSV file is highly detailed and complicated,
+making a full description disproportionately large compared to the
+scope of this document. We focus only on specific columns relevant
+to our metrics processing to maintain clarity and manageability.
+
+2. Error Handling and Missing Files
+
+Concern: Error handling for situations where less than the expected
+96 files are available was initially not defined.
+
+Response: The document now includes a strategy for monitoring and
+analyzing days with fewer than 96 files. We will track such instances
+and investigate whether they represent a hole in data coverage or if
+certain files contain more than 15 minutes worth of data.
+
+3. Data Integrity and Verification
+
+Concern: There was no mention of mechanisms to verify the integrity
+and completeness of the data before processing.
+
+Response: We will consider implementing checksum validation for file
+integrity where possible and monitor the system's handling of data
+completeness.
+
+4. Efficiency and Performance Optimization
+
+Concern: The potential resource-intensive nature of processing large
+amounts of data was noted.
+
+Response: Given the current system design and database sharding, we
+have addressed scalability effectively. The database serves as an
+internal cache, significantly enhancing the performance of our
+simulations.
+
+5. Scalability and Maintenance
+
+Concern: Scalability and maintenance could become an issue as data
+grows and the system evolves.
+
+Response: Scalability has been thoroughly planned with database
+sharding. The system's design also allows for maintaining performance
+criticality, which is crucial for the Plato process.
+
+6. Performance of GCAM Column Parsing
+
+Concern: The performance impact of parsing GCAM column values was
+questioned.
+
+Response: The parsing and processing of GCAM column values are done
+once per batch of files. Given this batch processing nature, performance
+concerns are minimal. The system effectively caches processed data,
+which facilitates quick data retrieval and use in simulations.
+
+7. Security and Data Spoofing
+
+Concern: The potential for data spoofing and security vulnerabilities
+was raised.
+
+Response: Recognizing the risk of spoofing, we note the importance of
+exploring protective measures against such threats. The possibility of
+implementing checksums for data verification is under consideration, and
+we are exploring more secure methods to ensure data authenticity.
+
+8. Historical Data Retrieval
+
+Concern: Retrieving historical data efficiently and securely could be
+challenging.
+
+Response: We utilize the Master CSV Data File Set for historical data
+retrieval. This process is carefully designed to only access relevant
+files based on date ranges, ensuring efficient handling of historical
+data.

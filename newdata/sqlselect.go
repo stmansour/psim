@@ -47,12 +47,16 @@ func (p *DatabaseSQL) Insert(rec *EconometricsRecord) error {
 		var f FieldSelector
 		p.FieldSelectorFromCSVColName(k, &f)
 		p.GetShardInfo(rec.Date, &f)
+		msid := 3 // assume CSV, worst case
+		if v.MSID > 0 {
+			msid = v.MSID
+		}
 		m := MetricRecord{
 			Date:        rec.Date,
 			MID:         f.MID,
 			LID:         f.LID,
 			LID2:        f.LID2,
-			MSID:        3, // NOTE:  hardcode - csvfile
+			MSID:        msid,
 			MetricValue: v,
 		}
 		if f.MID == 0 {
@@ -65,9 +69,6 @@ func (p *DatabaseSQL) Insert(rec *EconometricsRecord) error {
 		//--------------------------------------------------------------------
 		// for every metric we write, if we have source info then we write it
 		//--------------------------------------------------------------------
-		if v.MSID > 0 {
-			m.MSID = v.MSID
-		}
 		if f.LID2 != noLocale && f.MID == -1 {
 			query := `INSERT INTO ExchangeRate (Date,LID,LID2,MSID,EXClose) VALUES (?,?,?,?,?)`
 			if _, err = p.DB.Exec(query, m.Date, m.LID, m.LID2, m.MSID, m.MetricValue.Value); err != nil {

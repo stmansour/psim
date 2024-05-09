@@ -184,6 +184,7 @@ func (p *LSMInfluencer) calculateAndSetValues(pred *Prediction, fieldName string
 		return 0, 0, 0, false
 	}
 
+	// TODO: explain this thoroughly
 	stdDevSquared := val2.StdDevSquared // used by trace
 	pred.StdDevSquared = stdDevSquared
 	delta := val2.Value - val1.Value         // change over T1 to T2
