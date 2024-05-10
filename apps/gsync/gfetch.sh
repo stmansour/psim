@@ -130,13 +130,14 @@ ProcessRange() {
     log "Processing range from $start_date to $end_date"
     while [[ ! "$current_date" > "$end_date" ]]; do
         # Process URLs for the current day
+        log "Processing URLs for $current_date"
         local day_urls
         day_urls=$(awk -v date="$current_date" '$0 ~ date {print $0}' "$URL_LIST")
         for url in $day_urls; do
             log "Downloading $url..."
             DownloadFile "$url"
         done
-        kig "ConcatFiles $current_date..."
+        log "ConcatFiles $current_date..."
         ConcatFiles "$current_date"
         # Increment date
         if [ "$OS" == "Darwin" ]; then
@@ -151,6 +152,9 @@ ProcessRange() {
 }
 
 ShowDuration() {
+    END_TIME=$(date +%s)
+    log "End time: ${END_TIME}"
+    ELAPSED_TIME=$((END_TIME - START_TIME))
     HOURS=$((ELAPSED_TIME / 3600))
     MINUTES=$(((ELAPSED_TIME % 3600) / 60))
     SECONDS=$((ELAPSED_TIME % 60))
@@ -187,8 +191,7 @@ elif [[ -n "$start_date" && -n "$end_date" ]]; then
     log "Start time: ${START_TIME}"
     GenerateURLList "$start_date" "$end_date"
     ProcessRange "$start_date" "$end_date"
-    END_TIME=$(date +%s)
-    log "End time: ${END_TIME}"
     ShowDuration
+else
     usage
 fi
