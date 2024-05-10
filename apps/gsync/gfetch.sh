@@ -38,13 +38,34 @@ usage() {
 }
 
 #--------------------------------------------------------------------------
-# Download the master file list
+# Download the master file list if needed
 #--------------------------------------------------------------------------
 GetMasterlist() {
-    url="http://data.gdeltproject.org/gdeltv2/masterfilelist.txt"
-    if ! curl -L "${url}" -o masterlist.txt; then
-        echo "Failed to download $url"
-        exit 1
+    local latest_url_date
+    local masterlist_file="masterlist.txt"
+    local url="http://data.gdeltproject.org/gdeltv2/masterfilelist.txt"
+
+    # Check if the masterlist file exists and read the last URL date
+    if [ -f "$masterlist_file" ]; then
+        # Extract the date directly from the last URL in the file
+        latest_url_date=$(tail -1 "$masterlist_file" | awk '{print $3}' | grep -oE '\d{8}')
+
+        # Compare latest URL date with the end_date directly
+        if [[ "$latest_url_date" < "$end_date" ]]; then
+            log "Existing masterlist.txt is outdated. Downloading the latest version..."
+            if ! curl -L "${url}" -o "$masterlist_file"; then
+                log "Failed to download $url"
+                exit 1
+            fi
+        else
+            log "Existing masterlist.txt is up-to-date."
+        fi
+    else
+        log "masterlist.txt does not exist. Downloading now..."
+        if ! curl -L "${url}" -o "$masterlist_file"; then
+            log "Failed to download $url"
+            exit 1
+        fi
     fi
 }
 
@@ -52,11 +73,12 @@ GetMasterlist() {
 # GenerateURLList
 #--------------------------------------------------------------------------
 GenerateURLList() {
+    GetMasterlist  # only downloads masterlist.txt if needed
     local start_date=$1
     local end_date=$2
     log "Generating URL list from $start_date to $end_date"
     echo "Generating URL list from $start_date to $end_date"
-    "${GSYNC}" -d1 2024-04-15 -d2 2024-04-22 >"${URL_LIST}"
+    "${GSYNC}" -d1 "${start_date}" -d2 "${end_date}" >"${URL_LIST}"
 }
 
 #--------------------------------------------------------------------------
@@ -164,6 +186,7 @@ ShowDuration() {
 #--------------------------------------------------------------------------
 # Main execution starts here
 #--------------------------------------------------------------------------
+echo "gfetch.sh - GDELT Data Synchronization for Plato" >$LOGFILE
 log "Starting gfetch process..."
 rm -f "${FAILED_DOWNLOADS}" # Remove any previous failed downloads log
 
@@ -189,6 +212,7 @@ if [[ -n "$CONCAT_DATE" ]]; then
 elif [[ -n "$start_date" && -n "$end_date" ]]; then
     START_TIME=$(date +%s)
     log "Start time: ${START_TIME}"
+    mkdir -p "$BASE_DIR"
     GenerateURLList "$start_date" "$end_date"
     ProcessRange "$start_date" "$end_date"
     ShowDuration

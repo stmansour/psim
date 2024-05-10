@@ -104,14 +104,15 @@ func main() {
 	// Parse the start and end dates
 	//---------------------------------
 	if len(*StartDate) > 0 {
-		app.StartDate, err = time.Parse("2006-01-02", *StartDate)
+
+		app.StartDate, err = time.Parse("20060102", util.Stripchars(*StartDate, "-"))
 		if err != nil {
 			fmt.Printf("Error parsing start date: %v\n", err)
 			return
 		}
 	}
 	if len(*StopDate) > 0 {
-		app.StopDate, err = time.Parse("2006-01-02", *StopDate)
+		app.StopDate, err = time.Parse("20060102", util.Stripchars(*StopDate, "-"))
 		if err != nil {
 			fmt.Printf("Error parsing end date: %v\n", err)
 			return
@@ -209,6 +210,8 @@ func extractURLs() error {
 	}
 	defer file.Close()
 
+	dt := app.StopDate.AddDate(0, 0, 1)
+
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -232,8 +235,7 @@ func extractURLs() error {
 				continue
 			}
 
-			if (fileDate.Equal(app.StartDate) || fileDate.After(app.StartDate)) &&
-				(fileDate.Equal(app.StopDate) || fileDate.Before(app.StopDate)) {
+			if (fileDate.Equal(app.StartDate) || fileDate.After(app.StartDate)) && fileDate.Before(dt) {
 				fmt.Println(u)
 			}
 		}
