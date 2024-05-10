@@ -48,7 +48,7 @@ GetMasterlist() {
     # Check if the masterlist file exists and read the last URL date
     if [ -f "$masterlist_file" ]; then
         # Extract the date directly from the last URL in the file
-        latest_url_date=$(tail -1 "$masterlist_file" | awk '{print $3}' | grep -oE '\d{8}')
+        latest_url_date=$(tail -1 "$masterlist_file" | awk '{print $3}' | grep -oE '[0-9]{8}')
 
         # Compare latest URL date with the end_date directly
         if [[ "$latest_url_date" < "$end_date" ]]; then
@@ -95,7 +95,7 @@ log() {
 DownloadFile() {
     local url=$1
     local date_part
-    date_part=$(echo "${url}" | grep -E -o '\d{8}')
+    date_part=$(echo "${url}" | grep -E -o '[0-9]{8}')
     local filename
     filename=$(basename "${url}")
     local dir="$BASE_DIR/$date_part"

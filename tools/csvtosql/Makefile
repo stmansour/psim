@@ -3,14 +3,14 @@ DIST=${TOP}/dist/platosim
 THISDIR=csvtosql
 TEST_FAILURE_FILE=fail
 
-# Check for mysql and set a variable
-MYSQL_FOUND := $(shell command -v mysql 2> /dev/null)
+# Use environment variable to control execution
+MYSQL_AVAILABLE ?= 0
 
 # Conditional variable to prepend to commands
-ifdef MYSQL_FOUND
+ifeq ($(MYSQL_AVAILABLE),1)
 DO_CMD=
 else
-DO_CMD=@echo "SQL not found, skipping target"; exit 0;
+DO_CMD=@echo "MySQL not available, skipping target"; exit 0;
 endif
 
 schema: *.go

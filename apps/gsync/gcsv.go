@@ -73,7 +73,11 @@ func ProcessGDELTCSV(filename string) error {
 			continue
 		}
 
-		fields := strings.Split(line, "\t")    // Split the line by tab delimiter
+		fields := strings.Split(line, "\t") // Split the line by tab delimiter
+		if len(fields) < 18 {
+			fmt.Printf("*** WARNING *** skipping row %d: invalid number of fields: %d\n", row, len(fields))
+			continue
+		}
 		gcam := strings.Split(fields[17], ",") // this is the GCAM column
 
 		//-------------------------------------------------------------------

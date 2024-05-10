@@ -13,7 +13,7 @@ For a date range, use gsync -d1 YYYY-MM-DD -d2 YYYY-MM-DD to generate a
 file list. Then run gfetch.sh with the -f option and the file list. Make
 sure that "masterlist.csv" is in the current directory. For example:
 
-    gsync -d1 2024-04-01 -d2 2024-04-07 > flist.txt
+    gsync -d1 20240401 -d2 20240407 > flist.txt
     ./gfetch.sh -f flist.txt
 
 This will process the files a day at a time, as described below.
@@ -62,7 +62,7 @@ Let's say that you have a directory, ./gdelt, and this is where you will
 always run the sync process (highly recommended to do it this way). Here's
 the command we would run:
 
-    gfetch.sh -d1 2024-04-15 -d2 2024-04-22
+    gfetch.sh -d1 20240415 -d2 20240422
 
 Internally, this is what gfetch.sh will do. First, it make sure that 
 masterlist.txt is in the current directory. If it's not there, it will
@@ -71,7 +71,7 @@ be downloaded.  (You can do this download by running gfetch.sh -m).
 Next, it will create a file containing the list of URLs to download based on
 the daterange to download. For this example it will run:
 
-    gsync -d1 2024-04-15 -d2 2024-04-22 >urls.txt
+    gsync -d1 20240415 -d2 20240422 >urls.txt
 
 These URLs will be extracted from masterlist.txt. So, if masterlist.csv
 is older than April 22, 2024 it will need to be updated, so gfetch may
