@@ -113,7 +113,7 @@ func ProcessGDELTCSV(filename string) error {
 			if _, ok := gvals[metric]; !ok {
 				gvals[metric] = make([]float64, 0)
 				if app.Verbose {
-					fmt.Printf("Adding new metric: %s\n", metric)
+					fmt.Printf("Found metric: %s\n", metric)
 				}
 			}
 			gvals[metric] = append(gvals[metric], val)
@@ -204,14 +204,18 @@ func ProcessGDELTCSV(filename string) error {
 						fmt.Printf(" || SQL Record miscompare\n")
 					}
 					fmt.Printf("*** MISCOMPARE - GCAM VALUE ***\n")
-					fmt.Printf("    Rec:  Date = %s, metric = %s, rec.Fields[metric] = %v\n", rec.Date.Format("2006-01-02"), k, existingRec.Fields[k].Value)
-					fmt.Printf("    API:  Date = %s, mean(gvals[%q]) = %.2f\n", app.dt.Format("2006-01-02"), k, mean)
+					fmt.Printf("      Rec:  Date = %s, metric = %s, rec.Fields[metric] = %v\n", rec.Date.Format("2006-01-02"), k, existingRec.Fields[k].Value)
+					fmt.Printf("    GDELT:  Date = %s, mean(gvals[%q]) = %.2f\n", app.dt.Format("2006-01-02"), k, mean)
 					app.Miscompared++
 
 					//----------------------------------------------------------------------------
 					// If we're fixing miscompares, we need to update the value in the database
 					//----------------------------------------------------------------------------
 					if app.FixMiscompares {
+						mi.ID = existingRec.Fields[k].ID
+						rec.Fields = make(map[string]newdata.MetricInfo, 1)
+						rec.Fields[k] = mi
+
 						if err := app.SQLDB.Update(&rec); err != nil {
 							return err
 						}
