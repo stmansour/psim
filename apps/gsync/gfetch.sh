@@ -11,18 +11,7 @@ URL_LIST="$BASE_DIR/urls.txt"
 OS="$(uname -s)"
 KEEP_ZIPS=0
 GSYNCOPTS=""
-
-GSYNC=$(which gsync)
-echo "gsync: ${GSYNC}"
-if [ "${GSYNC}" = "" ]; then
-    GSYNC="./gsync"
-fi
-
-echo "gsync: ${GSYNC}"
-if [ ! -f "${GSYNC}" ]; then
-    echo "gsync not found"
-    exit 1
-fi
+GSYNC=/usr/local/plato/bin/gsync
 
 #--------------------------------------------------------------------------
 # Log function for standardized logging
