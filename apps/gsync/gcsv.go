@@ -57,8 +57,8 @@ func ProcessGDELTCSV(filename string) error {
 	// Create a Scanner to read the file line by line
 	//-------------------------------------------------
 	scanner := bufio.NewScanner(file)
-	buf := make([]byte, 0, 1024*1024)              // Start with a 1 MB buffer
-	scanner.Buffer(buf, bufio.MaxScanTokenSize*16) // Allow the buffer to grow up to 16 times the default size 1024*1024/65536
+	buf := make([]byte, 0, 64*1024)   // Start with a 1 MB buffer
+	scanner.Buffer(buf, 10*1024*1024) // Allow the buffer to grow up to 16 times the default size 1024*1024/65536
 
 	if app.Verbose {
 		fmt.Printf("Beginning processing of: %s\n", filename)

@@ -1,42 +1,24 @@
-How To Use gsync and gfetch.sh
+GDELT Data Synchronization
 
-First decide whether you are looking to update a time period or getting
-the 15 min update. 
+Two programs handle GDELT data synchronization for Plato. They are
+gfetch.sh and gsync.  gfetch.sh is a bash script. It downloads GDELT
+2.0 downloads, concatenates them into a daily csv file, and generally
+manages the files.  The downloads are done a day at a time. All the
+downloads are rooted in a specific directory. For the plato server
+I'm setting it up with that directory to be ~steve/gsync/gdelt. Within
+this directory, there is a directory per day of the form YYYYMMDD,
+a "day directory".
 
-For 15 min update:
+Within these day directories all the GDELT files for a particular day
+are loaded and kept in the "zipped" state.  When all the files for
+a particular day have been downloaded, they are unzipped, then
+concatenated into a single CSV file. Then the gsync program is called
+to process the CSV file and store the metrics into the SQL database.
 
-    ./gfetch.sh [-d base_dir]
-
-You can supply a base directory if you want. If you don't supply one
-the program will create ./gdelt in the current directory.
-For a date range, use gsync -d1 YYYY-MM-DD -d2 YYYY-MM-DD to generate a
-file list. Then run gfetch.sh with the -f option and the file list. Make
-sure that "masterlist.csv" is in the current directory. For example:
-
-    gsync -d1 20240401 -d2 20240407 > flist.txt
-    ./gfetch.sh -f flist.txt
-
-This will process the files a day at a time, as described below.
-
-
-
-Handling The 15 Minute Updates
-
-For the cron operation, we'll be downloading the GDELT updates as they
-are created every 15 mins. Once the zip files for a particular date have
-been downloaded, they can be processed.  Assuming we have been
-downloading the 15 minute updates for a day and all the files for
-April 1, 2024 have been downloaded, we can process that directory as
-follows:
-
-    ./gfetch.sh -C 20240401
-
-This last operation will utilize a lot of disk space. There are 96 zip
-files for a day, they each need to be unzipped, then concatenated into 
-a single csv file for processing. In this case, the zip file would be
-20240401.csv. Then we can run gsync on this directory to update the 
-database with the metrics found for that day (April 1, 2024).  You would
-run the same command as we describe below for updating a date range.
+The GDELT files are large, so they are not kept by default. Once gsync
+has completed, everything all of the unzipped files, the zipped files,
+and the concatenated CSV file are deleted. The only thing that , a
+ 
 
 Handling A Multi-Day Update
 
