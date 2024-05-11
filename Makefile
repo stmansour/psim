@@ -55,7 +55,7 @@ check_tests:
 
 package:
 	for dir in $(DIRS); do make -C $$dir package;done
-	cd dist ; rm -f platosim.tar* ; tar cvf platosim.tar platosim ; gzip platosim.tar
+	cd dist ; rm -f plato.tar* ; tar cvf plato.tar plato ; gzip plato.tar
 
 all: starttimer clean psim package test stoptimer
 	@echo "Completed"
@@ -67,7 +67,7 @@ stats:
 	@find . -name "*.go" | srcstats
 
 release:
-	cp -r dist/platosim /usr/local/plato/;cd /usr/local/plato;rm -rf bin;mv platosim bin;
+	cp -r dist/plato /usr/local/plato/;cd /usr/local/plato;rm -rf bin;mv plato bin;
 	if [ -f ~/.vault/extres.json5 ]; then \
 	    cp ~/.vault/extres.json5 /usr/local/plato/bin/ ; \
 	else \

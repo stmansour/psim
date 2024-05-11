@@ -1,5 +1,5 @@
 TOP="../.."
-DIST=${TOP}/dist/platosim
+DIST=${TOP}/dist/plato
 THISDIR=gsync
 TEST_FAILURE_FILE=fail
 

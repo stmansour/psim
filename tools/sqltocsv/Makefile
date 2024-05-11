@@ -1,5 +1,5 @@
 TOP="../.."
-DIST=${TOP}/dist/platosim
+DIST=${TOP}/dist/plato
 THISDIR=sqltocsv
 TEST_FAILURE_FILE=fail
 
@@ -14,11 +14,11 @@ DO_CMD=@echo "SQL not found, skipping target"; exit 0;
 endif
 
 schema: *.go
-	$(DO_CMD)go vet
-	$(DO_CMD)@golint ./... | grep -v "use underscores in Go names;" | ( ! grep . )
-	$(DO_CMD)staticcheck
-	$(DO_CMD)go build
-	$(DO_CMD)@echo "*** completed in ${THISDIR} ***"
+	go vet
+	@golint ./... | grep -v "use underscores in Go names;" | ( ! grep . )
+	staticcheck
+	go build
+	@echo "*** completed in ${THISDIR} ***"
 
 clean:
 	rm -rf data fail config.json5 "${THISDIR}"
@@ -27,10 +27,13 @@ clean:
 config:
 	$(DO_CMD)cp ${TOP}/util/config.json5 .
 
-test: config
+test:
+	$(DO_CMD)@echo "*** TEST completed in ${THISDIR} ***"
+
+createcsv: config
 	rm -rf data
 	$(DO_CMD)./sqltocsv
-	$(DO_CMD)@echo "*** TEST completed in ${THISDIR} ***"
+	$(DO_CMD)@echo "*** CREATECSV completed in ${THISDIR} ***"
 
 package:
 	cp sqltocsv ${DIST}/

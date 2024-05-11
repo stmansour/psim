@@ -1,6 +1,6 @@
 TOP=..
 THISDIR="util"
-BINDIR=${TOP}/dist/platosim
+BINDIR=${TOP}/dist/plato
 
 util: *.go
 	@touch fail

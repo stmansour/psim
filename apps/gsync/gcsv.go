@@ -86,8 +86,8 @@ func ProcessGDELTCSV(filename string) error {
 		//-------------------------------------------------------------------
 		for j := 0; j < len(app.locs); j++ {
 			target := "1#" + app.locs[j].Country
-			app.locs[j].Mentioned = false // assume it's not mentioned
-			if strings.Contains(fields[10], target) {
+			app.locs[j].Mentioned = false                                                     // assume it's not mentioned
+			if strings.Contains(fields[10], target) && strings.Contains(fields[8], "ECON_") { // TODO - check this line
 				app.locs[j].Mentioned = true // it's mentioned
 			}
 		}
@@ -212,7 +212,7 @@ func ProcessGDELTCSV(filename string) error {
 					// If we're fixing miscompares, we need to update the value in the database
 					//----------------------------------------------------------------------------
 					if app.FixMiscompares {
-						mi.ID = existingRec.Fields[k].ID
+						mi.ID = existingRec.Fields[k].ID // this is the MEID of the value we're replacing
 						rec.Fields = make(map[string]newdata.MetricInfo, 1)
 						rec.Fields[k] = mi
 

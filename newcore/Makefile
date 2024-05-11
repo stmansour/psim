@@ -1,5 +1,5 @@
 TOP=..
-BINDIR=${TOP}/dist/platosim
+BINDIR=${TOP}/dist/plato
 THISDIR="newcore"
 TEST_FAILURE_FILE=fail
 

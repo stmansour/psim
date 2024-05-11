@@ -178,18 +178,18 @@ func (p *LSMInfluencer) DNA() string {
 // The field name is a string that uniquely identifies the metric in a record.
 // ----------------------------------------------------------------------------------------------------
 func (p *LSMInfluencer) calculateAndSetValues(pred *Prediction, fieldName string) (float64, float64, float64, bool) {
-	val1, ok1 := pred.Recs[0].Fields[fieldName]
-	val2, ok2 := pred.Recs[1].Fields[fieldName]
+	val1, ok1 := pred.Recs[0].Fields[fieldName] // value at T1
+	val2, ok2 := pred.Recs[1].Fields[fieldName] // value at T2
 	if !ok1 || !ok2 {
 		return 0, 0, 0, false
 	}
 
 	// TODO: explain this thoroughly
-	stdDevSquared := val2.StdDevSquared // used by trace
-	pred.StdDevSquared = stdDevSquared
+	stdDevSquared := val2.StdDevSquared      // used by trace
+	pred.StdDevSquared = stdDevSquared       // pass it back in the prediction for trace
 	delta := val2.Value - val1.Value         // change over T1 to T2
 	da := delta / float64(p.Delta2-p.Delta1) // mean change between T1 and T2
-	pred.AvgDelta = da                       // used for trace
+	pred.AvgDelta = da                       // Average change between T2 and T1, used for trace
 	x := p.cfg.StdDevVariationFactor         // notational simplification, use the factor from the config file
 	res := da*da - x*x*stdDevSquared         // deltaAvg^2 - (x*stdDev)^2   if the result is positive, then we transact
 	pred.Val1 = val1.Value                   // used in trace

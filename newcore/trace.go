@@ -15,7 +15,7 @@ import (
 func (i *Investor) FormatPrediction(p *Prediction, T3 time.Time) {
 	stdDev := math.Sqrt(p.StdDevSquared)
 	// name := i.db.Mim.MInfluencerSubclasses[p.IType].Name
-	fmt.Printf("\t%s:  %s   (T1 %s [%4.2f] -  T2 %s [%4.2f]   Mean: %.4f  StdDev: %.4f,  Factor: %.4f, Trigger: %.4f)\n",
+	fmt.Printf("\t%s:  %s   (T1 %s [%4.2f] -  T2 %s [%4.2f]   AvgDelta: %.4f  StdDev: %.4f,  Factor: %.4f, Trigger: %.4f)\n",
 		p.IType,
 		p.Action,
 		T3.AddDate(0, 0, int(p.Delta1)).Format("Jan _2, 2006"),

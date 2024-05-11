@@ -1,5 +1,5 @@
 TOP="../.."
-DIST=${TOP}/dist/platosim
+DIST=${TOP}/dist/plato
 THISDIR=tsf
 TEST_FAILURE_FILE=fail
 
@@ -17,7 +17,7 @@ clean:
 config:
 	cp ${TOP}/util/config.json5 .
 
-test: config csvdb
+test: config
 	@echo "*** TEST completed in ${THISDIR} ***"
 
 package:

@@ -1,5 +1,5 @@
 TOP=../..
-BINDIR=${TOP}/dist/platosim
+BINDIR=${TOP}/dist/plato
 THISDIR="apps/simtalk"
 TEST_FAILURE_FILE=fail
 THISDIR := $(notdir $(PWD))

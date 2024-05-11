@@ -1,5 +1,5 @@
 TOP="../.."
-DIST=${TOP}/dist/platosim
+DIST=${TOP}/dist/plato
 THISDIR=fxcorrscan
 TEST_FAILURE_FILE=fail
 

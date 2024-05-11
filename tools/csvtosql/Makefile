@@ -1,5 +1,5 @@
 TOP="../.."
-DIST=${TOP}/dist/platosim
+DIST=${TOP}/dist/plato
 THISDIR=csvtosql
 TEST_FAILURE_FILE=fail
 
@@ -27,9 +27,12 @@ clean:
 config:
 	$(DO_CMD)cp ${TOP}/util/config.json5 .
 
-test: config csvdb
-	$(DO_CMD)./csvtosql
+test:	config
 	$(DO_CMD)@echo "*** TEST completed in ${THISDIR} ***"
+
+makenewdb: config csvdb
+	$(DO_CMD)./csvtosql
+	$(DO_CMD)@echo "*** MAKENEWDB completed in ${THISDIR} ***"
 
 db: csvdb
 

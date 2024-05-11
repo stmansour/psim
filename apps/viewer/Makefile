@@ -1,7 +1,7 @@
 OS := $(shell uname)
 
 TOP=../..
-BINDIR=${TOP}/dist/platosim
+BINDIR=${TOP}/dist/plato
 THISDIR="apps/iewer"
 TEST_FAILURE_FILE=fail
 

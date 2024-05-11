@@ -10,6 +10,7 @@ HEADER=$'DATE\tSourceCollectionIdentifier\tSourceCommonName\tDocumentIdentifier\
 URL_LIST="$BASE_DIR/urls.txt"
 OS="$(uname -s)"
 KEEP_ZIPS=0
+GSYNCOPTS=""
 
 GSYNC=$(which gsync)
 echo "gsync: ${GSYNC}"
@@ -29,7 +30,6 @@ fi
 usage() {
     echo "Usage: $0 [-d directory] [-f URLList] [-C YYYYMMDD] [-b begin_date -e end_date]"
     echo "  -d directory   Specify the base directory for downloads."
-    echo "  -f URLList     Specify a file containing URLs to download."
     echo "  -C YYYYMMDD    Concatenate and process files for specified date."
     echo "  -b begin_date  Specify start date for processing."
     echo "  -e end_date    Specify end date for processing."
@@ -77,7 +77,6 @@ GenerateURLList() {
     local start_date=$1
     local end_date=$2
     log "Generating URL list from $start_date to $end_date"
-    echo "Generating URL list from $start_date to $end_date"
     "${GSYNC}" -d1 "${start_date}" -d2 "${end_date}" >"${URL_LIST}"
 }
 
@@ -130,7 +129,7 @@ ConcatFiles() {
     rm "$dir"/*.gkg.csv
 
     log "Processing with ${GSYNC} -gf $date_part -verbose"
-    if "${GSYNC}" -gf "$date_part" -verbose >"$dir/gsync-$date_part.log"; then
+    if "${GSYNC}" -gf "$date_part" -verbose "${GSYNCOPTS}" >"$dir/gsync-$date_part.log"; then
         if [ "$KEEP_ZIPS" -eq 0 ]; then
             rm "$dir"/*.zip
         fi
@@ -190,12 +189,13 @@ echo "gfetch.sh - GDELT Data Synchronization for Plato" >$LOGFILE
 log "Starting gfetch process..."
 rm -f "${FAILED_DOWNLOADS}" # Remove any previous failed downloads log
 
-while getopts "d:f:C:b:e:hkm" opt; do
+while getopts "d:f:C:b:e:Fhkm" opt; do
     case "${opt}" in
     b) start_date=${OPTARG} ;;
     C) CONCAT_DATE=${OPTARG} ;;
     d) BASE_DIR=${OPTARG} ;;
     e) end_date=${OPTARG} ;;
+    F) GSYNCOPTS="-F"; echo "gsync: -F option to overwrite miscompares" ;;
     h) usage ;;
     k) KEEP_ZIPS=1
         log "Will keep zip files"

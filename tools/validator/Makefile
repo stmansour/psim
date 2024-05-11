@@ -1,5 +1,5 @@
 TOP="../.."
-DIST=${TOP}/dist/platosim
+DIST=${TOP}/dist/plato
 THISDIR=validator
 TEST_FAILURE_FILE=fail
 
@@ -14,33 +14,37 @@ DO_CMD=@echo "SQL not found, skipping target"; exit 0;
 endif
 
 schema: *.go
-	$(DO_CMD)go vet
-	$(DO_CMD)@golint ./... | grep -v "use underscores in Go names;" | ( ! grep . )
-	$(DO_CMD)staticcheck
-	$(DO_CMD)go build
-	$(DO_CMD)@echo "*** completed in ${THISDIR} ***"
+	go vet
+	@golint ./... | grep -v "use underscores in Go names;" | ( ! grep . )
+	staticcheck
+	go build
+	@echo "*** completed in ${THISDIR} ***"
 
 clean:
 	rm -rf data fail config.json5 "${THISDIR}"
 	@echo "*** CLEAN completed in ${THISDIR} ***"
 
 config:
-	$(DO_CMD)cp ${TOP}/util/config.json5 .
+	cp ${TOP}/util/config.json5 .
 
-test: config csvdb
-	$(DO_CMD)./validator
-	$(DO_CMD)@echo "*** TEST completed in ${THISDIR} ***"
+test:
+	@echo "*** TEST completed in ${THISDIR} ***"
+
+
+dovalidation: config csvdb
+	./validator
+	@echo "*** TEST completed in ${THISDIR} ***"
 
 csvdb:
-	$(DO_CMD)mkdir -p data
-	$(DO_CMD)cp ${TOP}/newdata/data/platodb.csv data/
-	$(DO_CMD)cp ${TOP}/newdata/data/misubclasses.csv data/
-	$(DO_CMD)cp ${TOP}/newdata/data/metricssources.csv data/
-	$(DO_CMD)cp ${TOP}/newdata/data/msm.csv data/
+	mkdir -p data
+	cp ${TOP}/newdata/data/platodb.csv data/
+	cp ${TOP}/newdata/data/misubclasses.csv data/
+	cp ${TOP}/newdata/data/metricssources.csv data/
+	cp ${TOP}/newdata/data/msm.csv data/
 
 package:
-	$(DO_CMD)@echo "*** PACKAGE completed in ${THISDIR} ***"
+	@echo "*** PACKAGE completed in ${THISDIR} ***"
 
 secure:
-	$(DO_CMD)@echo "*** SECURE completed in ${THISDIR} ***"
+	@echo "*** SECURE completed in ${THISDIR} ***"
 

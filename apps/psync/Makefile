@@ -1,5 +1,5 @@
 TOP=../..
-BINDIR=${TOP}/dist/platosim
+BINDIR=${TOP}/dist/plato
 THISDIR="apps/psync"
 TEST_FAILURE_FILE=fail
 THISDIR := $(notdir $(PWD))

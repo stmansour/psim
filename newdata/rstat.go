@@ -43,7 +43,7 @@ func (rs *RollingStats) AddValue(value float64) (mean, stdDevSquared float64, st
 		for _, v := range rs.Window {
 			varianceSum += (v - mean) * (v - mean)
 		}
-		stdDevSquared = varianceSum / float64(len(rs.Window)-1) // Use N-1 for sample standard deviation if it's a sample
+		stdDevSquared = varianceSum / float64(len(rs.Window)) // Use N for sample standard deviation if it's a sample
 		statsValid = true
 		// if math.IsNaN(mean) || math.IsNaN(stdDevSquared) {
 		// 	fmt.Printf("ERROR: Mean or StdDevSquared is NaN, mean = %f, stdDevSquared = %f\n", mean, stdDevSquared)
