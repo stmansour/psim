@@ -28,13 +28,21 @@ fi
 # Function to show usage
 #--------------------------------------------------------------------------
 usage() {
-    echo "Usage: $0 [-d directory] [-f URLList] [-C YYYYMMDD] [-b begin_date -e end_date]"
-    echo "  -d directory   Specify the base directory for downloads."
-    echo "  -C YYYYMMDD    Concatenate and process files for specified date."
-    echo "  -b begin_date  Specify start date for processing."
-    echo "  -e end_date    Specify end date for processing."
-    echo "  If no URL file is specified, fetches the latest 15-minute list."
-    exit 1
+    cat << ZZEOF
+Usage: $0 [-d directory] [-f URLList] [-CYYYYMMDD] [-b begin_date -e end_date]
+    -b begin_date  Specify start date for processing.
+    -d directory   Specify the base directory for downloads. The default is ./gdelt
+    -b begin_date  Specify start date for processing.
+    -e end_date    Specify end date for processing.
+    -F             Overwrite miscompares with values computed from processing GDELT files.
+    -k             Keep zip files
+    -m             Download masterlist.txt.  The default is to download only when needed.
+
+Examples:
+    $0 -b 20190701 -e 20190702
+    $0 -b 20190701 -e 20190702 -F
+
+ZZEOF
 }
 
 #--------------------------------------------------------------------------
