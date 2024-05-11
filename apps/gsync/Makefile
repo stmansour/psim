@@ -28,3 +28,5 @@ package:
 secure:
 	@echo "*** SECURE completed in ${THISDIR} ***"
 
+refmt:
+	fmt howto.txt > howto.txt1 ; mv howto.txt1 howto.txt

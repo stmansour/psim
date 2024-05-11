@@ -1,90 +1,84 @@
-GDELT Data Synchronization
+GDELT Data Synchronization Overview
 
-Two programs handle GDELT data synchronization for Plato. They are
-gfetch.sh and gsync.  gfetch.sh is a bash script. It downloads GDELT
-2.0 downloads, concatenates them into a daily csv file, and generally
-manages the files.  The downloads are done a day at a time. All the
-downloads are rooted in a specific directory. For the plato server
-I'm setting it up with that directory to be ~steve/gsync/gdelt. Within
-this directory, there is a directory per day of the form YYYYMMDD,
-a "day directory".
+Components
 
-Within these day directories all the GDELT files for a particular day
-are loaded and kept in the "zipped" state.  When all the files for
-a particular day have been downloaded, they are unzipped, then
-concatenated into a single CSV file. Then the gsync program is called
-to process the CSV file and store the metrics into the SQL database.
+The GDELT data synchronization for the Plato project is managed by
+two primary programs: gfetch.sh and gsync.  gfetch.sh: This Bash
+script orchestrates the entire data synchronization process. It is
+responsible for downloading GDELT 2.0 data files, organizing these
+files into daily CSV formats, and managing the directories and files
+used by gsync to extract and process the data. It logs everything
+it does and saves the log files.  gsync: Implemented in Go, this
+program processes the daily CSV files created by gfetch.sh and
+updates Plato's SQL database with new metrics. A log for each gsync
+run is saved, and gsync is run with the -verbose option to ensure
+detailed logging.  Workflow
 
-The GDELT files are large, so they are not kept by default. Once gsync
-has completed, everything all of the unzipped files, the zipped files,
-and the concatenated CSV file are deleted. The only thing that , a
- 
+gfetch.sh operates within a specified base directory. If no directory
+is provided, it defaults to creating and using a gdelt directory
+in the current working directory. The script is capable of handling
+multiple days' data; however, it processes downloads one day at a
+time to manage system resources effectively.  Each day's data is
+stored in a dedicated "day directory" named in the YYYYMMDD format
+within the base directory. These directories contain all the GDELT
+files for the respective day in their zipped form. Once all files
+for a day are downloaded, gfetch.sh unzips them, concatenates them
+into a single CSV file, and invokes gsync to process this file and
+upload the metrics to Plato's SQL database.  By default, once gsync
+has processed the data, gfetch.sh cleans up by deleting all the
+original zipped and unzipped files, as well as the concatenated
+CSV, leaving only the gsync log file in the day directory. For
+initial operations on the Plato server, the -k option is used to
+retain the zipped files and the CSV for debugging purposes. With
+the -k option turned on, the day directories typically consume 2-3
+GB.
 
-Handling A Multi-Day Update
+Automation
 
-The code is best utilized when processing information to update the
-database 1 day at a time, cleaning up after each day is processed. Here
-is the high level flow for a multi-day update, from date1 to date2:
+A cron job is set up to run gfetch.sh daily at 2:10 AM in
+/home/steve/gsync. This job synchronizes the previous day's data
+and checks the data for the past six days to ensure accuracy and
+consistency. When the cron job completes, it also creates a CSV
+database file set and publishes these files on Plato's website,
+making it easy to get your own local copy of the most up-to-date
+data.
 
-    * make a url list for all the GDELT files that cover date1 to date2
-    * for each day in the update time period
-        * pull down all the *.gkg.csv.zip files for that day
-        * unzip them and concatenate into a single csv file
-        * delete all the unzipped files for the day, keep the zip files.
-        * call gsync to process the single csv file and update the SQL db
-          with the new metrics
-        * if gsync runs without errors, delete all the .zip files for
-          that day. Leave the .csv file and the log file in the direcory
-          for that day.
-    * repeat for the remaining days
+Syncing Multiple Days
 
-So, as an example usage, suppose we want to update or verify the SQL
-database for all the GCAM data between April 15, 2024 and April 22, 2024.
-Let's say that you have a directory, ./gdelt, and this is where you will
-always run the sync process (highly recommended to do it this way). Here's
-the command we would run:
+gfetch.sh is optimized for sequentially processing multiple days
+of data, ensuring that the SQL database is updated one day at a
+time and then cleaned up. This methodical approach is detailed in
+the steps below:
 
-    gfetch.sh -d1 20240415 -d2 20240422
+URL List Creation
 
-Internally, this is what gfetch.sh will do. First, it make sure that 
-masterlist.txt is in the current directory. If it's not there, it will
-be downloaded.  (You can do this download by running gfetch.sh -m).
+Generate a list of URLs for the GDELT files spanning from the start
+date (-b) to the end date (-e).
 
-Next, it will create a file containing the list of URLs to download based on
-the daterange to download. For this example it will run:
+Daily Processing
 
-    gsync -d1 20240415 -d2 20240422 >urls.txt
+* Download all .gkg.csv.zip files for the day.
 
-These URLs will be extracted from masterlist.txt. So, if masterlist.csv
-is older than April 22, 2024 it will need to be updated, so gfetch may
-need to download masterlist.txt even if you already have a copy.
-gfetch will use 'tail -1 masterlist.txt' to determine the date of the
-latest URL. If the latest URL is prior to the -d2 date, then it will
-download masterlist.txt
+* Unzip and concatenate them into a single CSV file.
 
-Next, we run gfetch will begin to process the URLs in urls.txt. It will
-create a directory in ./gdelt named YYYYMMDD for the year, month, and
-day it will be processing. So, for example, the first URL it reads from
-the list will be something like this:
+* Delete all unzipped files, retaining the zipped files if specified.
 
-    http://data.gdeltproject.org/gdeltv2/20240415000000.gkg.csv.zip
+* Use gsync to update the SQL database with the new metrics from the
+CSV.
 
-So, it will look at the first 8 characters of the file name "20240415".
-It will then create ./gdelt/20240415 if it does not already exist, then
-it will download all the files containing "20240415" into that directory.
-Once it sees a url where the first 8 characters of the filename are
-different, for example "20240416", it will pause the downloading and process
-./gdelt/20240415 .  It will unzip all the zipped files, then concatenate
-them together to produce 20240415.csv.   This is exactly what happens
-if you run gfetch.sh -C 20240415 (internally, gfetch calls the same
-function).  Once this completes it calls gsync to process this directory
+* Upon successful update, delete the zipped files, leaving the CSV
+and log files.
 
-    gsync -gf 20240415 > gsync-20240415.log
+* Repeat for each day in the specified range.
 
-When this completes it would continue by processing the URLs for
-April 16, 2024, that is, those URLs with the first 8 characters of their
-filename being "20240416". And this process would continue until all the
-urls in urls.txt have been processed.
+Example Usage
 
+To update the SQL database with GCAM data from April 15, 2024, to
+April 22, 2024, within the ./gdelt directory, use the following
+command: gfetch.sh -b 20240415 -e 20240422
 
-
+This command tells gfetch.sh to manage data synchronization by
+ensuring all necessary data from the GDELT project is accurately
+downloaded, processed, published to Plato's SQL database, and
+verified, maintaining an organized structure in the specified
+directory.
