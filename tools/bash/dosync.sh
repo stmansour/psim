@@ -1,0 +1,58 @@
+#!/bin/bash
+
+#------------------------------
+# Configuration
+#------------------------------
+SYNC=/usr/local/plato/bin/psync
+LOG_DIR=./logs
+MAX_LOGS=30
+SQLTOCSV=/usr/local/plato/bin/sqltocsv
+HTTPDOCPATH=/var/www/html
+
+#------------------------------
+# Ensure log directory exists
+#------------------------------
+mkdir -p "${LOG_DIR}"
+
+#------------------------------------
+# Check if the log directory is empty
+#------------------------------------
+if [ -z "$(ls -A "${LOG_DIR}")" ]; then
+    num_logs=0
+else
+    #-----------------------------------------
+    # Get the number of existing log files
+    #-----------------------------------------
+    num_logs=$(ls -1q "${LOG_DIR}"/*.log | wc -l)
+
+    #-----------------------------------------------------------------
+    # Check if maximum logs reached and delete the oldest if necessary
+    #-----------------------------------------------------------------
+    if [ "${num_logs}" -ge "${MAX_LOGS}" ]; then
+        oldest_log=$(ls -1t "${LOG_DIR}"/*.log | tail -1)
+        rm -f "${oldest_log}"
+    fi
+fi
+
+#--------------------------------------
+# Generate timestamped log file name
+#--------------------------------------
+LOG="${LOG_DIR}/psync_$(date +'%Y%m%d_%H%M%S').log"
+
+#------------------------
+# Now do the sync...
+#------------------------
+"${SYNC}" -F -verbose > "${LOG}"
+if [ $? -eq 0 ]; then
+    echo "Success - $(date)" > ${HTTPDOCPATH}/sync/status.txt
+else
+    echo "Failure - $(date)" > ${HTTPDOCPATH}/sync/status.txt
+    exit 1
+fi
+
+#------------------------------------------------------------------------------
+# Create new database csv files that include the updates to the sql database...
+#------------------------------------------------------------------------------
+rm -rf data
+"${SQLTOCSV}" >> "${LOG}" ; pushd data ; tsf platodb.csv ; mv platodb-filled.csv platodb.csv ; popd
+tar cvf USDJPYdata.tar data ; gzip -f USDJPYdata.tar ; cp USDJPYdata.tar.gz ${HTTPDOCPATH}/csv/
