@@ -42,6 +42,7 @@ Examples:
     $0 -b 20190701 -e 20190702
     $0 -b 20190701 -e 20190702 -F
 
+
 ZZEOF
 }
 
@@ -204,12 +205,14 @@ while getopts "d:f:C:b:e:Fhkm" opt; do
     d) BASE_DIR=${OPTARG} ;;
     e) end_date=${OPTARG} ;;
     F) GSYNCOPTS="-F"; echo "gsync: -F option to overwrite miscompares" ;;
-    h) usage ;;
+    h) usage 
+        exit ;;
     k) KEEP_ZIPS=1
         log "Will keep zip files"
         ;;
     m) GetMasterlist ;;
-    *) usage ;;
+    *) usage 
+        exit ;;
     esac
 done
 
