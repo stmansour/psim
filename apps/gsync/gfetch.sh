@@ -25,10 +25,18 @@ if [ ! -f "${GSYNC}" ]; then
 fi
 
 #--------------------------------------------------------------------------
+# Log function for standardized logging
+#--------------------------------------------------------------------------
+log() {
+    echo "$1"
+    echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1" >>$LOGFILE
+}
+
+#--------------------------------------------------------------------------
 # Function to show usage
 #--------------------------------------------------------------------------
 usage() {
-    cat << ZZEOF
+    cat <<ZZEOF
 Usage: $0 [-d directory] [-f URLList] [-CYYYYMMDD] [-b begin_date -e end_date]
     -b begin_date  Specify start date for processing.
     -d directory   Specify the base directory for downloads. The default is ./gdelt
@@ -82,19 +90,11 @@ GetMasterlist() {
 # GenerateURLList
 #--------------------------------------------------------------------------
 GenerateURLList() {
-    GetMasterlist  # only downloads masterlist.txt if needed
+    GetMasterlist # only downloads masterlist.txt if needed
     local start_date=$1
     local end_date=$2
     log "Generating URL list from $start_date to $end_date"
     "${GSYNC}" -d1 "${start_date}" -d2 "${end_date}" >"${URL_LIST}"
-}
-
-#--------------------------------------------------------------------------
-# Log function for standardized logging
-#--------------------------------------------------------------------------
-log() {
-    echo "$1"
-    echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1" >>$LOGFILE
 }
 
 #--------------------------------------------------------------------------
@@ -137,12 +137,16 @@ ConcatFiles() {
     cat "$dir"/*.gkg.csv >>"$output_file"
     rm "$dir"/*.gkg.csv
 
-    log "Processing with ${GSYNC} -gf $date_part -verbose"
+    log "Processing with ${GSYNC} -gf $date_part -verbose ${GSYNCOPTS}"
     if "${GSYNC}" -gf "$date_part" -verbose "${GSYNCOPTS}" >"$dir/gsync-$date_part.log"; then
+        log "${GSYNC} completed successfully for $date_part."
         if [ "$KEEP_ZIPS" -eq 0 ]; then
             rm "$dir"/*.zip
+            rm "${output_file}"
+            log "Removed all zip files and generated CSV file for $date_part."
+        else
+            log "Retained all zip files for $date_part."
         fi
-        log "${GSYNC} completed successfully for $date_part. Zip files deleted."
     else
         log "Error during ${GSYNC} for $date_part. Check gsync-$date_part.log for details."
     fi
@@ -204,15 +208,23 @@ while getopts "d:f:C:b:e:Fhkm" opt; do
     C) CONCAT_DATE=${OPTARG} ;;
     d) BASE_DIR=${OPTARG} ;;
     e) end_date=${OPTARG} ;;
-    F) GSYNCOPTS="-F"; echo "gsync: -F option to overwrite miscompares" ;;
-    h) usage 
-        exit ;;
-    k) KEEP_ZIPS=1
+    F)
+        GSYNCOPTS="-F"
+        echo "gsync: -F option to overwrite miscompares"
+        ;;
+    h)
+        usage
+        exit
+        ;;
+    k)
+        KEEP_ZIPS=1
         log "Will keep zip files"
         ;;
     m) GetMasterlist ;;
-    *) usage 
-        exit ;;
+    *)
+        usage
+        exit
+        ;;
     esac
 done
 
