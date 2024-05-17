@@ -4,9 +4,10 @@
 # Run this command from the directory containing gdelt
 #---------------------------------------------------------
 GSYNC=/usr/local/plato/bin/gfetch.sh
+TSF=/usr/local/plato/bin/tsf
 SQLTOCSV=/usr/local/plato/bin/sqltocsv
 HTTPDOCPATH=/var/www/html
-BASE_DIR="./gsync/gdelt"
+BASE_DIR="./gdelt"
 LOG=/home/steve/gsync/dogsync.log
 
 #--------------------------------------------------------------------------
@@ -44,9 +45,11 @@ oldest_dir=$(calculate_date 8)
 # Remove the oldest directory to maintain only 7 days of data
 #----------------------------------------------------------------
 log "Removing $BASE_DIR/$oldest_dir"
-rm -rf "$BASE_DIR/$oldest_dir"
+rm -r "$BASE_DIR/$oldest_dir"
 
+#------------------------------------------
 # Run gfetch.sh with the calculated dates
+#------------------------------------------
 log "Initiating ${GSYNC} -b ${seven_days_ago} -e ${yesterday} -k -F"
 "${GSYNC}" -b "${seven_days_ago}" -e "${yesterday}" -k -F
 
@@ -55,9 +58,19 @@ log "Initiating ${GSYNC} -b ${seven_days_ago} -e ${yesterday} -k -F"
 #------------------------------------------------------------------------------
 log "Generating new CSV database fileset"
 rm -rf data
-"${SQLTOCSV}" ; pushd data ; tsf platodb.csv ; mv platodb-filled.csv platodb.csv ; popd
+"${SQLTOCSV}" ; pushd data ; "${TSF}" platodb.csv ; mv platodb-filled.csv platodb.csv ; popd
 log "Posting new CSV fileset to ${HTTPDOCPATH}/csv/"
 tar cvf USDJPYdata.tar data ; gzip -f USDJPYdata.tar ; cp USDJPYdata.tar.gz ${HTTPDOCPATH}/csv/
+cp data/platodb.csv /usr/local/plato/bin/data/
+
+#------------------------------------------------------------------------------
+# Now create the status from the results of yesterday's gdelt update...
+#------------------------------------------------------------------------------
+filename="./gdelt/${yesterday}/gsync-${yesterday}.log"
+target="gdeltStatus.txt"
+tail -n 11 "${filename}" > "${target}"
+cp "${target}" /var/www/html/sync/
 
 log "Done"
 date >> "${LOG}"
+

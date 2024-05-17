@@ -197,16 +197,13 @@ while getopts "d:f:C:b:e:Fhkm" opt; do
     C) CONCAT_DATE=${OPTARG} ;;
     d) BASE_DIR=${OPTARG} ;;
     e) end_date=${OPTARG} ;;
-    F)
-        GSYNCOPTS="-F"
+    F) GSYNCOPTS="-F"
         echo "gsync: -F option to overwrite miscompares"
         ;;
-    h)
-        usage
+    h) usage
         exit
         ;;
-    k)
-        KEEP_ZIPS=1
+    k) KEEP_ZIPS=1
         log "Will keep zip files"
         ;;
     m) GetMasterlist ;;

@@ -4,6 +4,7 @@
 # Configuration
 #------------------------------
 SYNC=/usr/local/plato/bin/psync
+TSF=/usr/local/plato/bin/tsf
 LOG_DIR=./logs
 MAX_LOGS=30
 SQLTOCSV=/usr/local/plato/bin/sqltocsv
@@ -54,5 +55,6 @@ fi
 # Create new database csv files that include the updates to the sql database...
 #------------------------------------------------------------------------------
 rm -rf data
-"${SQLTOCSV}" >> "${LOG}" ; pushd data ; tsf platodb.csv ; mv platodb-filled.csv platodb.csv ; popd
+"${SQLTOCSV}" >> "${LOG}" ; pushd data ; "${TSF}" platodb.csv ; mv platodb-filled.csv platodb.csv ; popd
 tar cvf USDJPYdata.tar data ; gzip -f USDJPYdata.tar ; cp USDJPYdata.tar.gz ${HTTPDOCPATH}/csv/
+cp data/platodb.csv /usr/local/plato/bin/data/
