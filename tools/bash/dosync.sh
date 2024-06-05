@@ -55,11 +55,6 @@ fi
 # Create new database csv files that include the updates to the sql database...
 #------------------------------------------------------------------------------
 rm -rf data
-<<<<<<< HEAD
 "${SQLTOCSV}" >> "${LOG}" ; pushd data ; "${TSF}" platodb.csv ; mv platodb-filled.csv platodb.csv ; popd
 tar cvf USDJPYdata.tar data ; gzip -f USDJPYdata.tar ; cp USDJPYdata.tar.gz ${HTTPDOCPATH}/csv/
 cp data/platodb.csv /usr/local/plato/bin/data/
-=======
-"${SQLTOCSV}" >> "${LOG}" ; pushd data ; tsf platodb.csv ; mv platodb-filled.csv platodb.csv ; popd
-tar cvf USDJPYdata.tar data ; gzip -f USDJPYdata.tar ; cp USDJPYdata.tar.gz ${HTTPDOCPATH}/csv/
->>>>>>> a9df3dee8028a213108e7d9b01c60536d4d186d8
