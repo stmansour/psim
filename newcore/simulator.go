@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"runtime"
+	"strings"
 	"time"
 
 	"github.com/stmansour/psim/newdata"
@@ -181,7 +182,9 @@ func (s *Simulator) NewPopulation() error {
 			if s.Cfg.SingleInvestorMode {
 				v = s.factory.NewInvestorFromDNA(s.Cfg.SingleInvestorDNA)
 			} else {
-				v.ID = s.factory.GenerateInvestorID()
+				if len(v.ID) == 0 {
+					v.ID = s.factory.GenerateInvestorID()
+				}
 				v.Init(s.Cfg, &s.factory, s.db)
 			}
 			s.Investors = append(s.Investors, v)
@@ -597,6 +600,9 @@ func (s *Simulator) CalculateMaxVals(t3 time.Time) {
 	// set the portfolio values for all investors
 	//----------------------------------------------------
 	if err := s.SetAllPortfolioValues(t3); err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			return
+		}
 		log.Panicf("Error from SetAllPortfolioValues: %s\n", err.Error())
 	}
 	//----------------------------------------------------
@@ -644,7 +650,7 @@ func (s *Simulator) SetAllPortfolioValues(t time.Time) error {
 		log.Fatalf("Error getting exchange close rate")
 	}
 	if er == nil {
-		log.Fatalf("ExchangeRate record == nil for t = %s and ss.Field[0] = %s\n", t.Format("2006-01-02"), ss[0].FQMetric())
+		return fmt.Errorf("th ExchangeRate record not found for t = %s and ss.Field[0] = %s", t.Format("2006-01-02"), ss[0].FQMetric())
 	}
 	exch := er.Fields[field.FQMetric()].Value // exchange rate at time t
 	if exch < 0.0001 {

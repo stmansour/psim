@@ -139,6 +139,7 @@ type AppConfig struct {
 	TopInvestors            []TopInvestor       // a list of top investors
 	CrucibleSpans           []CruciblePeriod    // list of times to run the simulation
 	CrucibleMode            bool                // if true then run all TopInvestor DNA through the CrucibleSpans
+	Recommendation          bool                // if true then show buy/sell/hold recommendation for DtStart
 	CrucibleName            string              // name of the crucible
 	CrucibleARThreshold     float64             // AR threshold... it only counts if if the annualized return is above this amount.  Use 0.15 for 15%
 	ReportDirectory         string              // final directory where all reports should be

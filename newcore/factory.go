@@ -136,7 +136,9 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	newInvestor.FitnessCalculated = false
 	newInvestor.Fitness = 0.0
 	newInvestor.BalanceC1 = f.cfg.InitFunds
-	newInvestor.ID = f.GenerateInvestorID()
+	if len(newInvestor.ID) == 0 {
+		newInvestor.ID = f.GenerateInvestorID()
+	}
 
 	parent1 := (*population)[idxParent1]
 	parent2 := (*population)[idxParent2]
@@ -513,6 +515,10 @@ func (f *Factory) NewInvestorFromDNA(DNA string) Investor {
 		inv.Strategy = InvestmentStrategyMap[val]
 	}
 
+	if val, ok := m["ID"].(string); ok {
+		inv.ID = val
+	}
+
 	if val, ok := m["InvW1"].(float64); ok {
 		inv.W1 = val
 	}
@@ -547,7 +553,9 @@ func (f *Factory) NewInvestorFromDNA(DNA string) Investor {
 	if inv.W1+inv.W2 > 2.0 {
 		log.Panicf("Investor Weights > 0\n")
 	}
-	inv.ID = f.GenerateInvestorID()
+	if len(inv.ID) == 0 {
+		inv.ID = f.GenerateInvestorID()
+	}
 	return inv
 }
 

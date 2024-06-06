@@ -1,22 +1,9 @@
-//  PLATO SIMULATOR CONFIGURATION FILE
-//  JSON5 is being used primarily so that we can add comments to this file.
-//
-//  Notes:
-//    floating point numbers cannot begin with ".".  
-//    That is:  
-//       0.1 is valid
-//        .1 is not valid
-//----------------------------------------------------------------------------------
 {
-    //-----------------------------------------------------------------
-    //  SIMULATOR
-    //-----------------------------------------------------------------
     "DtStart": "2015-06-01",    // simulation start date for each generation
     "DtStop": "2015-12-31",     // simulation stop date for each generation
     "EnforceStopDate": true,    // stops on DtStop even if there is a C2 Balance, if false and C2 Balance > 0 on StopDate, simulation will continue in sell-only mode until C2 < 1.00
     "LoopCount": 1,             // How many times to loop over DtStart to DtStop
     "Generations": 20,          // how many generations should the simulator run. NOTE: This value is only valid if GenDurSpec is commented out.
-    // "GenDurSpec": "1 Y",     // How long is a generation.  EX:  "1 Y",  "6 M",  "8 W", "1 Y 6 M", "90 D"
     "PopulationSize": 200,      // Total number Investors in the population
     "C1": "USD",                // main currency  (ISO 4217 code)
     "C2": "JPY",                // currency that we will invest in (ISO 4217 code)
@@ -30,18 +17,7 @@
     "TopInvestorCount": 20,     // Save this number of top Investors from across all generations - used in Financial Report - finrep.csv
     "MinInfluencers": 2,        // An investor cannot have fewer than this many influencers
     "MaxInfluencers": 4,        // An investor can have no more than this many Influencers
-
-    //-----------------------------------------------------------------
-    //  There may be times when we need to test or check the behavior
-    //  of a specific Investor, based on its DNA. In this case, looping
-    //  and generations are not relevant. Instead, we need the behavior
-    //  to be completely repeatable and predictable.
-    //  When "SingleInvestorMode" is true
-    //       LoopCount will be forced to 1
-    //       Generations will be forced  to 1
-    //  This would simulate things more like the production
-    //  version of this projects code will operate. 
-    //-----------------------------------------------------------------
+    "Recommendation": false,    // if true, provide today's recommendation from all TopInvestors
     "SingleInvestorMode": false,
     "SingleInvestorDNA": "{Investor;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Metric=StockMarket,Delta1=-27,Delta2=-5}]}",
 }

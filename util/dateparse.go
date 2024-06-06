@@ -22,11 +22,14 @@ var AcceptedDateFmts = []string{
 // for further experimentation, try: https://play.golang.org/p/JNUnA5zbMoz
 // ----------------------------------------------------------------------------------
 func StringToDate(s string) (time.Time, error) {
-	// try the ansi std date format first
-	var Dt time.Time
-	var err error
 	s = Stripchars(s, "\"")
 	s = strings.TrimSpace(s)
+	// try the ansi std date format first
+	match, Dt := easyDates(s)
+	if match {
+		return Dt, nil
+	}
+	var err error
 	for i := 0; i < len(AcceptedDateFmts); i++ {
 		Dt, err = time.Parse(AcceptedDateFmts[i], s)
 		if nil == err {
@@ -34,4 +37,26 @@ func StringToDate(s string) (time.Time, error) {
 		}
 	}
 	return Dt, fmt.Errorf("date could not be decoded")
+}
+
+func easyDates(s string) (bool, time.Time) {
+	match := true
+	now := time.Now()
+	dt := UTCDate(now)
+	switch s {
+	case "today":
+		return match, dt
+	case "yesterday":
+		return match, dt.AddDate(0, 0, -1)
+	case "tomorrow":
+		return match, dt.AddDate(0, 0, 1)
+	default:
+		match = false
+	}
+	return match, dt
+}
+
+func UTCDate(now time.Time) time.Time {
+	dt := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.UTC)
+	return dt
 }

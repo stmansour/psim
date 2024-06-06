@@ -71,7 +71,27 @@ func (c *Crucible) Run() {
 			c.sim.Run()
 		}
 		c.DumpSuccessCoefficient()
-
+	}
+	//--------------------------------------------
+	// Now do todays recommendation if requested...
+	//--------------------------------------------
+	if c.cfg.Recommendation {
+		fmt.Printf("Today's recommendation\n")
+		for i := 0; i < len(c.cfg.TopInvestors); i++ {
+			c.cfg.DtStart = util.CustomDate(util.UTCDate(time.Now()))
+			c.cfg.DtStop = c.cfg.DtStart
+			c.idx = i // mark the investor we're testing
+			c.sim.ResetSimulator()
+			c.cfg.SingleInvestorDNA = c.cfg.TopInvestors[i].DNA
+			c.cfg.SingleInvestorMode = true
+			c.cfg.Trace = true
+			c.cfg.PopulationSize = 1
+			c.cfg.LoopCount = 1
+			c.cfg.Generations = 1
+			c.sim.Init(c.cfg, c.db, c, c.DayByDay, c.ReportTopInvestorInvestments)
+			c.sim.ir = nil
+			c.sim.Run()
+		}
 	}
 	fmt.Printf("Crucible run completed\n")
 	fmt.Printf("Output file is: %s\n", c.fname)

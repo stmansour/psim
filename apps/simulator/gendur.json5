@@ -49,6 +49,8 @@
     //-----------------------------------------------------------------
     // Saved DNA of the Top Investors
     //-----------------------------------------------------------------
+    "Recommendation": false,    // if true, provide today's recommendation from all TopInvestors
+
     "TopInvestors": [
       {
         "DNA": "{Investor;InvW1=0.0362;InvW2=0.9638;Influencers=[{LEInfluencer,Delta1=-55,Delta2=-1}|{LAInfluencer,Delta1=-27,Delta2=-2}|{LFInfluencer,Delta1=-36,Delta2=-10}]}"

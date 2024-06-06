@@ -41,7 +41,7 @@ func AnnualizedReturn(startingValue, endingValue float64, dtStart, dtEnd time.Ti
 	years := duration / 365.25                  // Convert duration from days to years
 
 	if years <= 0 {
-		return 0, fmt.Errorf("investment period must be greater than 0")
+		return 0, nil
 	}
 	annualizedReturn := math.Pow(endingValue/startingValue, 1/years) - 1
 
