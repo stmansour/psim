@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/google/uuid"
 	"github.com/stmansour/psim/newdata"
 	"github.com/stmansour/psim/util"
 )
@@ -108,7 +109,7 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 // GenerateInvestorID generates a unique investor id string
 func (f *Factory) GenerateInvestorID() string {
 	f.InvCounter++
-	return fmt.Sprintf("Investor%d", f.InvCounter)
+	return fmt.Sprintf("Investor-%s", uuid.New().String())
 }
 
 // BreedNewInvestor creates a new Investor by going through the genetic
@@ -348,7 +349,11 @@ func (f *Factory) Mutate(inv *Investor) {
 	for k := range m {
 		keys = append(keys, k)
 	}
-	randomKey := keys[util.UtilData.Rand.Intn(len(keys))]
+
+	randomKey := "ID"
+	for randomKey == "ID" {
+		randomKey = keys[util.UtilData.Rand.Intn(len(keys))]
+	}
 	// fmt.Printf("Random key: %s, value: %v\n", randomKey, m[randomKey])
 
 	switch randomKey {

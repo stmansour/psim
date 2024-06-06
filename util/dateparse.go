@@ -56,6 +56,10 @@ func easyDates(s string) (bool, time.Time) {
 	return match, dt
 }
 
+// UTCDate returns the current date based on the time.Time
+// value supplied.  It generates a new date using only the
+// year, month and day in UTC
+// ----------------------------------------------------------------
 func UTCDate(now time.Time) time.Time {
 	dt := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.UTC)
 	return dt

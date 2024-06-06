@@ -197,7 +197,7 @@ func (i *Investor) Init(cfg *util.AppConfig, f *Factory, db *newdata.Database) {
 //
 // ----------------------------------------------------------------------------
 func (i *Investor) DNA() string {
-	s := fmt.Sprintf("{Investor;Strategy=%s;InvW1=%6.4f;InvW2=%6.4f;Influencers=[", InvestmentStrategies[i.Strategy], i.W1, i.W2)
+	s := fmt.Sprintf("{Investor;ID=%s;Strategy=%s;InvW1=%6.4f;InvW2=%6.4f;Influencers=[", i.ID, InvestmentStrategies[i.Strategy], i.W1, i.W2)
 	for j := 0; j < len(i.Influencers); j++ {
 		s += i.Influencers[j].DNA()
 		if j+1 < len(i.Influencers) {

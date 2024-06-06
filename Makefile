@@ -55,7 +55,7 @@ check_tests:
 
 package:
 	for dir in $(DIRS); do make -C $$dir package;done
-	cd dist/plato ; rm -rf data ; cp -r /usr/local/plato/bin/data .
+	if [ -d /usr/local/plato/bin/data ]; then cd dist/plato ; rm -rf data ; cp -r /usr/local/plato/bin/data . ; fi
 	cd dist ; rm -f plato.tar* ; tar cvf plato.tar plato ; gzip plato.tar
 
 all: starttimer clean psim package test stoptimer
@@ -80,6 +80,7 @@ refmt:
 
 install-tools:
 	go get -u github.com/go-sql-driver/mysql
+	go get github.com/google/uuid
 	go install golang.org/x/lint/golint@latest
 	go install honnef.co/go/tools/cmd/staticcheck@latest
 

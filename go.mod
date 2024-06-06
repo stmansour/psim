@@ -8,6 +8,7 @@ require github.com/yosuke-furukawa/json5 v0.1.1
 
 require (
 	github.com/go-sql-driver/mysql v1.8.0
+	github.com/google/uuid v1.6.0
 	gonum.org/v1/gonum v0.15.0
 )
 
