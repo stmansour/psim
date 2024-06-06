@@ -115,6 +115,14 @@ func (i *Investor) GetDB() *newdata.Database {
 	return i.db
 }
 
+// EnsureID adds an ID if it doesn't already exist
+// --------------------------------------------------------------------------------
+func (i *Investor) EnsureID() {
+	if len(i.ID) == 0 {
+		i.ID = i.factory.GenerateInvestorID()
+	}
+}
+
 // SelectNUniqueSubclasses shuffles the indexes to the map of MInfluencerSubclasses
 // then selects the first n, and returns the list
 // ----------------------------------------------------------------------------------
