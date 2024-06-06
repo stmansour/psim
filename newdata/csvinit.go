@@ -225,7 +225,7 @@ func (d *DatabaseCSV) LoadMetricSourceMapFromCSV() error {
 		for j := 0; j < len(d.MetricSrcCache); j++ {
 			if strings.Contains(d.MetricSrcCache[j].Name, header[i]) {
 				found = true
-				d.ParentDB.MSMap[header[j]] = make(MetricSourceMap, 20)
+				d.ParentDB.MSMap[header[i]] = make(MetricSourceMap, 20)
 				break
 			}
 		}
