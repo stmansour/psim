@@ -32,7 +32,7 @@
     "StopLoss": 0.10,           // Expressed as a percentage of the Portfolio Value. That is, 0.12 means 12%.  Sell all C2 immediately if the PV has lost this much of the initial funding.
     "TxnFeeFactor": 0.0002,     // cost, in C1, per transaction that is multiplied by the amount. .0002 == 2 basis points, 0 if not set
     "TxnFee": 0,                // a flat cost, in C1, that is added for each transaction, 0 if not set
-    "StdDevVariationFactor": 0.02, // testing this value
+    "StdDevVariationFactor": 0.0001, // testing this value
 
     //-----------------------------------------------------------------
     //  There may be times when we need to test or check the performance
