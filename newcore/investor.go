@@ -240,6 +240,7 @@ func (i *Investor) DecideCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 	//---------------------------------------------------------------------
 	for j := 0; j < len(i.Influencers); j++ {
 		pred, err := i.Influencers[j].GetPrediction(T3)
+
 		if err != nil {
 			// if the error is anything except nildata, then return now
 			if !strings.Contains(err.Error(), "nildata") {

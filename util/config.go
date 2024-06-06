@@ -367,11 +367,10 @@ func calculateStartDate(duration string, endDate time.Time) time.Time {
 	}
 
 	switch unit {
-	case 'm', 'y':
+	case 'y':
+		return endDate.AddDate(-amount, 0, 0)
+	case 'm':
 		if endDate.Day() >= 28 { // Handle end-of-month scenario
-			if unit == 'y' {
-				amount = amount * 12
-			}
 			newMonth := int(endDate.Month()) - amount
 			newYear := endDate.Year()
 			if newMonth <= 0 {
@@ -387,7 +386,7 @@ func calculateStartDate(duration string, endDate time.Time) time.Time {
 		}
 		return endDate.AddDate(0, -amount, 0)
 	case 'w':
-		return endDate.AddDate(0, 0, -7*amount)
+		return endDate.AddDate(0, 0, 1-(7*amount))
 	case 'd':
 		return endDate.AddDate(0, 0, -amount)
 	default:

@@ -421,9 +421,9 @@ On a MacBook Pro with an M1 processor and 64GB RAM, here are some
 simulation times for a varying population of Investors who have
 been constrained to have Influencer team sizes between 1 and 36.
 
-  Population    Simulation Time per Generation ----------
-  ------------------------------
-	 100                 0 sec 557 msec
+  Population    Simulation Time per Generation
+  ----------    ------------------------------
+	       100                 0 sec 557 msec
        1,000                 5 sec 375 msec
       10,000                54 sec 920 msec
      100,000          9 min 34 sec
@@ -620,7 +620,25 @@ database instance. This approach ensures the tool retains basic
 functionality while clearly indicating when specialized external
 resources are not available.
 
+Appendix H: Database Management
 
+The database is updated nightly automatically, every day.
 
+The data for the econometrics and for the published articles
+that we get from GDELT changes constantly. Our database is updated
+every night by two cron jobs that run at 2am. The first one collects
+all the GDELT updates for yesterday and writes the updated information
+to our SQL database.  The second one collects all the econometric
+data updates from yesterday and writes the updated information to
+the SQL database. 
 
+Next, a new CSV database fileset is generated from the information
+in the SQL database.  The new database fileset is released to the
+plato installation on the server.  Furthermore, the fileset is
+made available on the plato website for download.
 
+As explained earlier, we use the CSV fileset for simulations as it
+is loaded into memory and essentially acts as a cached version of
+the database. This allows simulations to run two orders of magnitude
+faster compared with an implementation that used the SQL database
+directly.

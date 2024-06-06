@@ -321,7 +321,7 @@ func (p *LSMInfluencer) SetDataFields(pred *Prediction) error {
 	db := p.myInvestor.db
 	sc := p.myInvestor.db.Mim.MInfluencerSubclasses[p.Metric]
 
-	// the dates for the
+	// the dates for data selection
 	t1 := pred.T3.AddDate(0, 0, pred.Delta1)
 	t2 := pred.T3.AddDate(0, 0, pred.Delta2)
 

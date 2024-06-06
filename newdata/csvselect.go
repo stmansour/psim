@@ -15,15 +15,18 @@ func (d *DatabaseCSV) IncrementNildata() {
 // Select does the select function for CSV databases
 // ----------------------------------------------------------------------------
 func (d *DatabaseCSV) Select(dt time.Time, fields []FieldSelector) (*EconometricsRecord, error) {
-	const dayInNanoseconds = 24 * 60 * 60 * 1000 * 1000 * 1000 // 24 hours in nanoseconds
+	dayInNanoseconds := int64(24 * 60 * 60 * 1000 * 1000 * 1000) // 36 hours in nanoseconds
 	left := 0
 	right := len(d.DBRecs) - 1
 
-	// Pre-calculate the UnixNano representation of dt for comparison.
-	dtUnixNano := dt.UnixNano()
+	// get the date with no tz offset...
 	dty := dt.Year()
 	dtm := dt.Month()
 	dtd := dt.Day()
+	dtt := time.Date(dty, dtm, dtd, 0, 0, 0, 0, time.UTC)
+
+	// Pre-calculate the UnixNano representation of dt for comparison.
+	dtUnixNano := dtt.UnixNano()
 
 	// Binary search the record index
 	for left <= right {
@@ -36,16 +39,6 @@ func (d *DatabaseCSV) Select(dt time.Time, fields []FieldSelector) (*Econometric
 				rec := d.mapSubset(&d.DBRecs[mid], fields)
 				if len(rec.Fields) == 0 {
 					d.IncrementNildata()
-					// newrec := d.DBRecs[mid]
-					// fmt.Printf("Your request was for  date: %s and the following fields\n", dt.Format("Jan 2, 2006"))
-					// for k, v := range fields {
-					// 	fmt.Printf("  %d. %s\n", k, v.FQMetric())
-					// }
-					// fmt.Printf("here are the fields found in the database record:\n")
-					// for k, v := range newrec.Fields {
-					// 	fmt.Printf("  %s = %f\n", k, v)
-					// }
-					// fmt.Printf("Check your datafield, validate that the data is present for %s. Make sure that misubclasses is defined correctly\n", dt.Format("Jan 2, 2006"))
 				}
 				return rec, nil
 			} else if d.DBRecs[mid].Date.Before(dt) {

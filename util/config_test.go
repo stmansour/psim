@@ -151,6 +151,10 @@ func TestCalculateStartDate(t *testing.T) {
 		endDate  string // Use string and compute endDate in test
 		expected time.Time
 	}{
+		// Additional cases for subtracting years, weeks and days
+		{"3w", "2023-5-31", time.Date(2023, 5, 11, 0, 0, 0, 0, time.UTC)},
+		{"10d", "2023-5-31", time.Date(2023, 5, 21, 0, 0, 0, 0, time.UTC)},
+		{"1y", "2024-2-29", time.Date(2023, 3, 1, 0, 0, 0, 0, time.UTC)},
 		// Subtract months from May 31, 2023
 		{"1m", "2023-5-31", time.Date(2023, 5, 1, 0, 0, 0, 0, time.UTC)},
 		{"1m", "2023-5-31 - 1m", time.Date(2023, 4, 1, 0, 0, 0, 0, time.UTC)},
@@ -164,11 +168,6 @@ func TestCalculateStartDate(t *testing.T) {
 		{"1m", "2023-5-31 - 9m", time.Date(2022, 8, 1, 0, 0, 0, 0, time.UTC)},
 		{"1m", "2023-5-31 - 10m", time.Date(2022, 7, 1, 0, 0, 0, 0, time.UTC)},
 		{"1m", "2023-5-31 - 11m", time.Date(2022, 6, 1, 0, 0, 0, 0, time.UTC)},
-
-		// Additional cases for subtracting years, weeks and days
-		{"3w", "2023-5-31", time.Date(2023, 5, 10, 0, 0, 0, 0, time.UTC)},
-		{"10d", "2023-5-31", time.Date(2023, 5, 21, 0, 0, 0, 0, time.UTC)},
-		{"1y", "2024-2-29", time.Date(2023, 3, 1, 0, 0, 0, 0, time.UTC)},
 	}
 
 	for _, tc := range tests {
