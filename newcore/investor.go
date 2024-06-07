@@ -198,6 +198,13 @@ func (i *Investor) Init(cfg *util.AppConfig, f *Factory, db *newdata.Database) {
 	}
 }
 
+// SortInfluencers sorts the Influencers of an Investor in a consistent order.
+func (i *Investor) SortInfluencers() {
+	sort.Slice(i.Influencers, func(k, j int) bool {
+		return i.Influencers[k].GetMetric() < i.Influencers[j].GetMetric()
+	})
+}
+
 // DNA returns a string containing descriptions all its influencers.
 // Here is the format of a DNA string for an Investor:
 //

@@ -243,6 +243,15 @@ func (s *Simulator) NewPopulation() error {
 	return nil
 }
 
+// SortInvestors calls on each investor to sort itself and its influencers
+// in a consistent order.
+// ----------------------------------------------------------------------------
+func (s *Simulator) SortInvestors() {
+	for _, v := range s.Investors {
+		v.SortInfluencers()
+	}
+}
+
 // workerPoolSize returns the number of CPU cores, which we will use for
 // parallel processing. Using all the cpu cores is a reasonable default.
 // This may change over time.
