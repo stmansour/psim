@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/google/uuid"
 	"github.com/stmansour/psim/newdata"
 	"github.com/stmansour/psim/util"
 )
@@ -106,12 +105,6 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 	return newPopulation, nil
 }
 
-// GenerateInvestorID generates a unique investor id string
-func (f *Factory) GenerateInvestorID() string {
-	// f.InvCounter++
-	return fmt.Sprintf("Investor-%s", uuid.New().String())
-}
-
 // BreedNewInvestor creates a new Investor by going through the genetic
 // algorithm. It also creates the Investor's Influencers.  Here's how
 // we choose the next generation Influencers for the new Investor.
@@ -137,9 +130,9 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	newInvestor.FitnessCalculated = false
 	newInvestor.Fitness = 0.0
 	newInvestor.BalanceC1 = f.cfg.InitFunds
-	if len(newInvestor.ID) == 0 {
-		newInvestor.ID = f.GenerateInvestorID()
-	}
+	// if len(newInvestor.ID) == 0 {
+	// 	newInvestor.ID = newInvestor.GenerateInvestorID()
+	// }
 	parent1 := (*population)[idxParent1]
 	parent2 := (*population)[idxParent2]
 	parent1.EnsureID()
@@ -263,6 +256,8 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	for i := 0; i < len(newInvestor.Influencers); i++ {
 		newInvestor.Influencers[i].Init(&newInvestor, f.cfg)
 	}
+
+	newInvestor.DNA() // force ID to be generated
 
 	return newInvestor
 }
@@ -559,9 +554,10 @@ func (f *Factory) NewInvestorFromDNA(DNA string) Investor {
 	if inv.W1+inv.W2 > 2.0 {
 		log.Panicf("Investor Weights > 0\n")
 	}
-	if len(inv.ID) == 0 {
-		inv.ID = f.GenerateInvestorID()
-	}
+	// if len(inv.ID) == 0 {
+	// 	inv.ID = inv.GenerateInvestorID()
+	// }
+	inv.DNA() // force ID to be generated
 	return inv
 }
 

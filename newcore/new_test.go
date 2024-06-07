@@ -102,7 +102,7 @@ func TestNewPopulation(t *testing.T) {
 	Investors := make([]Investor, 0)
 	for i := 0; i < 50; i++ {
 		var v Investor
-		v.ID = f.GenerateInvestorID()
+		// v.ID = v.GenerateInvestorID()
 		Investors = append(Investors, v)
 	}
 	// Now initialize them all

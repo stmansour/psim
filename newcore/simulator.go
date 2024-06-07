@@ -182,9 +182,9 @@ func (s *Simulator) NewPopulation() error {
 			if s.Cfg.SingleInvestorMode {
 				v = s.factory.NewInvestorFromDNA(s.Cfg.SingleInvestorDNA)
 			} else {
-				if len(v.ID) == 0 {
-					v.ID = s.factory.GenerateInvestorID()
-				}
+				// if len(v.ID) == 0 {
+				// 	v.ID =v.GenerateInvestorID()
+				// }
 				v.Init(s.Cfg, &s.factory, s.db)
 			}
 			s.Investors = append(s.Investors, v)

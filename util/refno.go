@@ -1,5 +1,10 @@
 package util
 
+import (
+	"crypto/sha256"
+	"encoding/hex"
+)
+
 // GenerateRefNo generate a unique identifier for a transaction. This is
 // a really simple implementation. Should be rewritten if we intend to use
 // it commercially.
@@ -30,4 +35,11 @@ func GenerateRefNo() string {
 		l[k], l[j] = l[j], l[k]
 	}
 	return string(l)
+}
+
+// HashDNA generates and returns a hash for a DNA string
+// -----------------------------------------------------------
+func HashDNA(dna string) string {
+	hash := sha256.Sum256([]byte(dna))
+	return hex.EncodeToString(hash[:])
 }

@@ -62,6 +62,7 @@ type Investor struct {
 	Strategy          int               // which strategy to use for predictions
 	ID                string            // unique id for this investor
 	Parented          int64             // how many times was this Investor a parent for the next gen?
+	IDGenerated       bool              // true if ID was generated
 	// maxPredictions    map[string]int           // max predictions indexed by Influencer subclass, set by simulator at the end of each simulation cycle
 	// maxPredictions    map[string]int    // max predictions indexed by Influencer subclass, set by simulator at the end of each simulation cycle, used when calculating fitness
 }
@@ -119,7 +120,7 @@ func (i *Investor) GetDB() *newdata.Database {
 // --------------------------------------------------------------------------------
 func (i *Investor) EnsureID() {
 	if len(i.ID) == 0 {
-		i.ID = i.factory.GenerateInvestorID()
+		i.DNA() // force id to be generated
 	}
 }
 
@@ -198,13 +199,6 @@ func (i *Investor) Init(cfg *util.AppConfig, f *Factory, db *newdata.Database) {
 	}
 }
 
-// SortInfluencers sorts the Influencers of an Investor in a consistent order.
-func (i *Investor) SortInfluencers() {
-	sort.Slice(i.Influencers, func(k, j int) bool {
-		return i.Influencers[k].GetMetric() < i.Influencers[j].GetMetric()
-	})
-}
-
 // DNA returns a string containing descriptions all its influencers.
 // Here is the format of a DNA string for an Investor:
 //
@@ -212,7 +206,14 @@ func (i *Investor) SortInfluencers() {
 //
 // ----------------------------------------------------------------------------
 func (i *Investor) DNA() string {
-	s := fmt.Sprintf("{Investor;ID=%s;Strategy=%s;InvW1=%6.4f;InvW2=%6.4f;Influencers=[", i.ID, InvestmentStrategies[i.Strategy], i.W1, i.W2)
+	s := fmt.Sprintf("Strategy=%s;InvW1=%6.4f;InvW2=%6.4f;Influencers=[", InvestmentStrategies[i.Strategy], i.W1, i.W2)
+	//----------------------------------------------------------------------------
+	// only sort them if this is the first time DNA has been asked for...
+	//----------------------------------------------------------------------------
+	if !i.IDGenerated {
+		i.SortInfluencers()
+		i.IDGenerated = true
+	}
 	for j := 0; j < len(i.Influencers); j++ {
 		s += i.Influencers[j].DNA()
 		if j+1 < len(i.Influencers) {
@@ -220,7 +221,26 @@ func (i *Investor) DNA() string {
 		}
 	}
 	s += "]}"
+	//--------------------------------------------------------------------------------------------
+	// s is now the string that we want to generate a hash from. It contains all the critical
+	// information that makes it unique.
+	//--------------------------------------------------------------------------------------------
+	i.ID = "Investor-" + util.HashDNA(s)
+	s = fmt.Sprintf("{Investor;ID=%s;", i.ID) + s
 	return s
+}
+
+// GenerateInvestorID generates a unique investor id string
+func (i *Investor) GenerateInvestorID() string {
+	i.DNA() // call this so that the ID is generated
+	return i.ID
+}
+
+// SortInfluencers sorts the Influencers of an Investor in a consistent order.
+func (i *Investor) SortInfluencers() {
+	sort.Slice(i.Influencers, func(k, j int) bool {
+		return i.Influencers[k].GetMetric() < i.Influencers[j].GetMetric()
+	})
 }
 
 // DecideCourseOfAction returns the Investor's "buy", "sell", "hold", or "abstain"
