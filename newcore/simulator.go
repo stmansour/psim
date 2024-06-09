@@ -1,6 +1,7 @@
 package newcore
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"runtime"
@@ -8,6 +9,7 @@ import (
 	"time"
 
 	"github.com/stmansour/psim/newdata"
+	"github.com/stmansour/psim/sqlt"
 	"github.com/stmansour/psim/util"
 )
 
@@ -49,6 +51,7 @@ type Simulator struct {
 	factory                      Factory                // used to create Influencers
 	db                           *newdata.Database      // database to use in this simulation
 	crucible                     *Crucible              // must not be nil when cfg.CrucibleMode is true, pointer to crucible object
+	SqltDB                       *sql.DB                // the sqlite3 database used for Investor ids
 	ir                           *InvestorReport        // investment table of investors
 	Investors                    []Investor             // the population of the current generation
 	DayByDay                     bool                   // show day by day results, debug feature
@@ -73,6 +76,7 @@ type Simulator struct {
 	TraceTiming                  bool                   // show the timing of the various parts of the simulation
 	GenerationSimTime            string                 // how long did the last generation take?
 	Simtalkport                  int                    // the port on which the simulator is listening for external commands
+	HashDuplicates               int64                  // the count of duplicate Investors encountered
 }
 
 // ResetSimulator is primarily to support tests. It resets the simulator
@@ -136,7 +140,7 @@ func (s *Simulator) Init(cfg *util.AppConfig, db *newdata.Database, crucible *Cr
 		s.crucible.ReportTopInvestorInvestments = ReportTopInvestorInvestments
 	}
 	s.ir = NewInvestorReport(s)
-	s.factory.Init(s.Cfg, db)
+	s.factory.Init(s.Cfg, db, s.SqltDB)
 	s.FinRpt = &FinRep{}
 
 	if s.Cfg.PreserveElite {
@@ -148,9 +152,30 @@ func (s *Simulator) Init(cfg *util.AppConfig, db *newdata.Database, crucible *Cr
 	//------------------------------------------------------------------------
 	var err error
 	if err = s.NewPopulation(); err != nil {
-		log.Panicf("*** ERROR ***  NewPopulation returned error: %s\n", err.Error())
+		if err.Error() != "hash exists" {
+			log.Panicf("*** ERROR ***  NewPopulation returned error: %s\n", err.Error())
+		}
 	}
 
+	return nil
+}
+
+// CheckAndAddNewInvestor checks if the hash of the investor already exists
+// in the database. If it does not exist, it will be inserted into Simulator's list
+// of investors
+// ------------------------------------------------------------------------------
+func (s *Simulator) CheckAndAddNewInvestor(v *Investor) error {
+	if !s.Cfg.AllowDuplicateInvestors {
+		found, err := sqlt.CheckAndInsertHash(s.SqltDB, v.ID)
+		if err != nil {
+			return fmt.Errorf("error checking/inserting hash: %s", err)
+		}
+		if found {
+			s.HashDuplicates++
+			return fmt.Errorf("hash exists")
+		}
+	}
+	s.Investors = append(s.Investors, *v)
 	return nil
 }
 
@@ -174,7 +199,12 @@ func (s *Simulator) NewPopulation() error {
 			gen0elites = len(s.Cfg.TopInvestors)
 			for i := 0; i < gen0elites; i++ {
 				v := s.factory.NewInvestorFromDNA(s.Cfg.TopInvestors[i].DNA)
-				s.Investors = append(s.Investors, v)
+				if err := s.CheckAndAddNewInvestor(&v); err != nil {
+					if err.Error() == "hash exists" {
+						log.Printf("duplicate hash: %s\n", v.ID)
+					}
+					return err
+				}
 			}
 		}
 		for i := 0; i < s.Cfg.PopulationSize-gen0elites; i++ {
@@ -182,12 +212,15 @@ func (s *Simulator) NewPopulation() error {
 			if s.Cfg.SingleInvestorMode {
 				v = s.factory.NewInvestorFromDNA(s.Cfg.SingleInvestorDNA)
 			} else {
-				// if len(v.ID) == 0 {
-				// 	v.ID =v.GenerateInvestorID()
-				// }
 				v.Init(s.Cfg, &s.factory, s.db)
+				v.EnsureID()
 			}
-			s.Investors = append(s.Investors, v)
+			if err := s.CheckAndAddNewInvestor(&v); err != nil {
+				if err.Error() == "hash exists" {
+					log.Printf("duplicate hash: %s\n", v.ID)
+				}
+				return err
+			}
 		}
 		return nil
 	}

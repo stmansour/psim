@@ -17,6 +17,8 @@ func createConfigAndFactory() (*Factory, *newdata.Database, *util.AppConfig) {
 	var f Factory
 	util.Init(-1)
 	cfg := util.CreateTestingCFG()
+	cfg.AllowDuplicateInvestors = true
+
 	if err := util.ValidateConfig(cfg); err != nil {
 		log.Panicf("*** PANIC ERROR ***  ValidateConfig returned error: %s\n", err)
 	}
@@ -35,7 +37,8 @@ func createConfigAndFactory() (*Factory, *newdata.Database, *util.AppConfig) {
 	if err := db.Init(); err != nil {
 		log.Panicf("*** PANIC ERROR ***  db.Init returned error: %s\n", err)
 	}
-	f.Init(cfg, db)
+
+	f.Init(cfg, db, nil)
 	return &f, db, cfg
 }
 
@@ -102,7 +105,6 @@ func TestNewPopulation(t *testing.T) {
 	Investors := make([]Investor, 0)
 	for i := 0; i < 50; i++ {
 		var v Investor
-		// v.ID = v.GenerateInvestorID()
 		Investors = append(Investors, v)
 	}
 	// Now initialize them all

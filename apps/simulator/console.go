@@ -48,6 +48,11 @@ func displaySimulationResults(cfg *util.AppConfig, db *newdata.Database) {
 	fmt.Printf("\n**************  S I M U L A T I O N   R E S U L T S  **************\n")
 	fmt.Printf("Number of generations: %d\n", app.sim.GensCompleted)
 	fmt.Printf("Observed Mutation Rate: %6.3f%%\n", omr)
+	if app.AllowDuplicateInvestors {
+		fmt.Printf("Duplicate Investors: allowed\n")
+	} else {
+		fmt.Printf("Duplicated Investors: %d\n", app.sim.HashDuplicates+app.sim.GetFactory().HashDuplicates)
+	}
 	switch db.Datatype {
 	case "CSV":
 		fmt.Printf("nil data requests: %d\n", db.CSVDB.Nildata)

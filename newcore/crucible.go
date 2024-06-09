@@ -128,12 +128,17 @@ func (c *Crucible) DumpResults() {
 	defer file.Close()
 	dtStart := time.Time(c.cfg.DtStart)
 	dtStop := time.Time(c.cfg.DtStop)
-	roi, err := util.AnnualizedReturn(c.cfg.InitFunds, c.sim.Investors[0].PortfolioValueC1, dtStart, dtStop)
-	if err != nil {
-		fmt.Printf("error computing AnnualizedReturn: %s\n", err.Error())
-		os.Exit(1)
+	pv := float64(0)
+	roi := float64(0)
+	if len(c.sim.Investors) > 0 {
+		pv = c.sim.Investors[0].PortfolioValueC1
+		roi, err = util.AnnualizedReturn(c.cfg.InitFunds, pv, dtStart, dtStop)
+		if err != nil {
+			fmt.Printf("error computing AnnualizedReturn: %s\n", err.Error())
+			os.Exit(1)
+		}
 	}
-	fmt.Fprintf(file, "%q,%q,%9.2f,%9.2f,%5.2f%%\n", dtStart.Format("1/2/2006"), dtStop.Format("1/2/2006"), c.cfg.InitFunds, c.sim.Investors[0].PortfolioValueC1, roi*100)
+	fmt.Fprintf(file, "%q,%q,%9.2f,%9.2f,%5.2f%%\n", dtStart.Format("1/2/2006"), dtStop.Format("1/2/2006"), c.cfg.InitFunds, pv, roi*100)
 	c.AnnualizedReturnList = append(c.AnnualizedReturnList, roi)
 }
 

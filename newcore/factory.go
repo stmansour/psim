@@ -1,6 +1,7 @@
 package newcore
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 	"log"
@@ -8,15 +9,18 @@ import (
 	"strings"
 
 	"github.com/stmansour/psim/newdata"
+	"github.com/stmansour/psim/sqlt"
 	"github.com/stmansour/psim/util"
 )
 
 // Factory contains methods to create objects based on a DNA string
 type Factory struct {
-	cfg         *util.AppConfig   // system-wide configuration info
-	db          *newdata.Database // db to provide to investors
-	MutateCalls int64             // how many calls were made to Mutate()
-	Mutations   int64             // how many times did mutation happen
+	cfg            *util.AppConfig   // system-wide configuration info
+	db             *newdata.Database // db to provide to investors
+	sqltdb         *sql.DB           // the sqlite3 database used for Investor ids
+	HashDuplicates int64             // number of times an Investor was duplicated
+	MutateCalls    int64             // how many calls were made to Mutate()
+	Mutations      int64             // how many times did mutation happen
 	// InvCounter  int64             // used in ID generation
 }
 
@@ -33,7 +37,8 @@ type InfluencerDNA struct {
 // Init - initializes the factory
 //
 // --------------------------------------------------------------------------------
-func (f *Factory) Init(cfg *util.AppConfig, db *newdata.Database) {
+func (f *Factory) Init(cfg *util.AppConfig, db *newdata.Database, sqltdb *sql.DB) {
+	f.sqltdb = sqltdb
 	f.cfg = cfg
 	f.db = db
 }
@@ -94,9 +99,33 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 				log.Panicf("Unable to select a different parent\n")
 			}
 		}
+
 		population[idxParent1].Parented++
 		population[idxParent2].Parented++
-		newPopulation[i] = f.BreedNewInvestor(&population, idxParent1, idxParent2)
+
+		//----------------------------------------------------------------------------
+		// Create the new investor and ensure that it is unique, that is, that its
+		// core functionality has not been seen before.
+		//----------------------------------------------------------------------------
+		found := true
+		var err error
+		var v Investor
+		for found {
+			v = f.BreedNewInvestor(&population, idxParent1, idxParent2)
+			if !f.cfg.AllowDuplicateInvestors {
+				found, err = sqlt.CheckAndInsertHash(f.sqltdb, v.ID)
+				if err != nil {
+					return newPopulation, fmt.Errorf("error checking/inserting hash: %s", err)
+				}
+				if found {
+					f.HashDuplicates++
+				}
+			} else {
+				found = false
+			}
+		}
+		newPopulation[i] = v
+
 		if newPopulation[i].factory == nil {
 			log.Panicf("BreedNewInvestor returned a new Investor with a nil factory\n")
 		}
@@ -130,9 +159,6 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	newInvestor.FitnessCalculated = false
 	newInvestor.Fitness = 0.0
 	newInvestor.BalanceC1 = f.cfg.InitFunds
-	// if len(newInvestor.ID) == 0 {
-	// 	newInvestor.ID = newInvestor.GenerateInvestorID()
-	// }
 	parent1 := (*population)[idxParent1]
 	parent2 := (*population)[idxParent2]
 	parent1.EnsureID()
@@ -554,9 +580,6 @@ func (f *Factory) NewInvestorFromDNA(DNA string) Investor {
 	if inv.W1+inv.W2 > 2.0 {
 		log.Panicf("Investor Weights > 0\n")
 	}
-	// if len(inv.ID) == 0 {
-	// 	inv.ID = inv.GenerateInvestorID()
-	// }
 	inv.DNA() // force ID to be generated
 	return inv
 }

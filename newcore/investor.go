@@ -225,7 +225,7 @@ func (i *Investor) DNA() string {
 	// s is now the string that we want to generate a hash from. It contains all the critical
 	// information that makes it unique.
 	//--------------------------------------------------------------------------------------------
-	i.ID = "Investor-" + util.HashDNA(s)
+	i.ID = util.HashDNA(s)
 	s = fmt.Sprintf("{Investor;ID=%s;", i.ID) + s
 	return s
 }

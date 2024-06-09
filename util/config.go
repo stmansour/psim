@@ -159,6 +159,7 @@ type AppConfig struct {
 	WorkerPoolSize          int                 // number of cores to utilize, if < 1 then the program decides, if 1 or more then that many cores are used, it will be capped at the number of cores the hardware actually has
 	HoldWindowStatsLookBack int                 // how many days make up the rolling window of data used in HoldWindow stats calculations (mean and StdDev)
 	StdDevVariationFactor   float64             // how much variance from thethe standard deviation is needed for the hold window.
+	AllowDuplicateInvestors bool                // if false then check for duplicate investors
 }
 
 // CreateTestingCFG is a function that creates a test cfg file with no secrets

@@ -52,7 +52,7 @@ compareToGold() {
         -e 's/Random number seed:[[:space:]]+[0-9]+/Random number seed: SEED_PLACEHOLDER/' \
         -e 's/Archive directory:.*/Archive directory: PLACEHOLDER/' \
         -e 's/Elapsed time:.*/Archive directory: PLACEHOLDER/' \
-        -e 's/Investor-[0-9a-zA-Z-]+/Investor-GUID/' \
+        -e 's/ - [0-9a-zA-Z-]{64}/ - GUID/' \
         "$reportFile" >"$normalizedFile"
 
     # Check if running on Windows
@@ -143,7 +143,7 @@ if [[ "${SINGLETEST}${TFILES}" = "${TFILES}" || "${SINGLETEST}${TFILES}" = "${TF
     echo -n "Test ${TFILES} - "
     echo -n "Single Investor test... "
     RESFILE="${TFILES}${STEP}"
-    ./simulator -ar -adir "${ARCHIVE}" -notalk -trace -c singleInvestor.json5 >"${RESFILE}"
+    ./simulator -ar -adir "${ARCHIVE}" -dup -notalk -trace -c singleInvestor.json5 >"${RESFILE}"
     compareToGold ${RESFILE}
     ((TESTCOUNT++))
 fi
@@ -158,7 +158,7 @@ if [[ "${SINGLETEST}${TFILES}" = "${TFILES}" || "${SINGLETEST}${TFILES}" = "${TF
     echo -n "Test ${TFILES} - "
     echo -n "Linguistic Influencers test... "
     RESFILE="${TFILES}${STEP}"
-    ./simulator -ar -adir "${ARCHIVE}" -notalk -trace -c linguistics.json5 >"${RESFILE}"
+    ./simulator -ar -adir "${ARCHIVE}" -dup -notalk -trace -c linguistics.json5 >"${RESFILE}"
     compareToGold ${RESFILE}
     ((TESTCOUNT++))
 fi
@@ -173,7 +173,7 @@ if [[ "${SINGLETEST}${TFILES}" = "${TFILES}" || "${SINGLETEST}${TFILES}" = "${TF
     echo -n "Test ${TFILES} - "
     echo -n "Crucible test..."
     RESFILE="${TFILES}${STEP}"
-    ./simulator -C -c confcru.json5 -notalk >"${RESFILE}"
+    ./simulator -C -c confcru.json5 -notalk -dup >"${RESFILE}"
     compareToGold ${RESFILE}
     mv crep.csv c1.csv
     compareToGold c1.csv

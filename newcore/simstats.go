@@ -122,19 +122,21 @@ func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time, eodr bool) {
 	//----------------------------------------------------
 	idx := s.maxProfitInvestor
 	pro := 0
-	for _, investment := range s.Investors[idx].Investments {
-		//----------------------------------------------------------------
-		// Note that when we sell, we try to sell at a loss first. So
-		// this might not be a good way to determine profitable buys
-		//----------------------------------------------------------------
-		chunkProfit := float64(0)
-		for j := 0; j < len(investment.Chunks); j++ {
-			if investment.Chunks[j].Profitable {
-				chunkProfit += investment.Chunks[j].ChunkProfit
+	if len(s.Investors) > 0 {
+		for _, investment := range s.Investors[idx].Investments {
+			//----------------------------------------------------------------
+			// Note that when we sell, we try to sell at a loss first. So
+			// this might not be a good way to determine profitable buys
+			//----------------------------------------------------------------
+			chunkProfit := float64(0)
+			for j := 0; j < len(investment.Chunks); j++ {
+				if investment.Chunks[j].Profitable {
+					chunkProfit += investment.Chunks[j].ChunkProfit
+				}
 			}
-		}
-		if chunkProfit > 0 {
-			pro++
+			if chunkProfit > 0 {
+				pro++
+			}
 		}
 	}
 
@@ -143,7 +145,6 @@ func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time, eodr bool) {
 		AvgProfit:            avgProfit,
 		MaxProfit:            maxProfit,
 		MaxProfitDNA:         maxProfitDNA,
-		TotalBuys:            len(s.Investors[idx].Investments),
 		ProfitableBuys:       pro,
 		TotalNilDataRequests: totNil,
 		DtGenStart:           dtStart,
@@ -154,6 +155,10 @@ func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time, eodr bool) {
 		EndOfDataReached:     eodr,
 		StopLossCount:        stoploss,
 	}
+	if len(s.Investors) > 0 {
+		ss.TotalBuys = len(s.Investors[idx].Investments)
+	}
+
 	s.GenStats = append(s.GenStats, ss)
 }
 

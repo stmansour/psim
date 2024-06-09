@@ -1,5 +1,5 @@
 # test comment
-DIRS=util newdata newcore tools apps
+DIRS=util sqlt newdata newcore tools apps
 DIST=dist 
 TEST_FAILURE_FILE=fail
 # Temporary file for storing start time

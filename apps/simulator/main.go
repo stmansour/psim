@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"flag"
 	"fmt"
 	"log"
@@ -13,7 +14,10 @@ import (
 
 	"github.com/stmansour/psim/newcore"
 	"github.com/stmansour/psim/newdata"
+	"github.com/stmansour/psim/sqlt"
 	"github.com/stmansour/psim/util"
+
+	_ "github.com/mattn/go-sqlite3" // Import the SQLite driver
 )
 
 // SimApp is the main application
@@ -31,18 +35,21 @@ type SimApp struct {
 	cfg                          *util.AppConfig
 	extres                       *util.ExternalResources
 	db                           *newdata.Database
-	archiveBaseDir               string // where archives go
-	archiveMode                  bool   // if true it copies the config file to an archive directory, places simstats and finrep there as well
-	CrucibleMode                 bool   // normal or crucible
-	GenInfluencerDistribution    bool   // show Influencer distribution for each generation
-	FitnessScores                bool   // save the fitness scores for each generation to dbgFitnessScores.csv
-	dbfilename                   string // override database name with this name
-	CPUProfile                   string // where is time being spent?
-	MemProfile                   string // where is memory being consumed?
-	basePort                     int    // Starting port
-	maxPort                      int    // Upper limit for trying different ports
-	Simtalkport                  int    // current port being used
-	notalk                       bool   // if true, the simulator does not start up an HTTP listener
+	archiveBaseDir               string  // where archives go
+	archiveMode                  bool    // if true it copies the config file to an archive directory, places simstats and finrep there as well
+	CrucibleMode                 bool    // normal or crucible
+	GenInfluencerDistribution    bool    // show Influencer distribution for each generation
+	FitnessScores                bool    // save the fitness scores for each generation to dbgFitnessScores.csv
+	dbfilename                   string  // override database name with this name
+	CPUProfile                   string  // where is time being spent?
+	MemProfile                   string  // where is memory being consumed?
+	basePort                     int     // Starting port
+	maxPort                      int     // Upper limit for trying different ports
+	Simtalkport                  int     // current port being used
+	notalk                       bool    // if true, the simulator does not start up an HTTP listener
+	SQLiteFileName               string  // where we keep the Investor cache
+	SQLiteDB                     *sql.DB // the sqlite3 database used for Investor ids
+	AllowDuplicateInvestors      bool    // whether to check for duplicate investors or not
 }
 
 var app SimApp
@@ -76,6 +83,7 @@ func readCommandLineArgs() {
 	flag.BoolVar(&app.InfPredDebug, "D", false, "show prediction debug info - dumps a lot of data, use on short simulations, with minimal Influencers")
 	flag.BoolVar(&app.DayByDay, "d", false, "show day-by-day results")
 	flag.StringVar(&app.dbfilename, "db", "", "override CSV datatbase name with this name. All CSV database files are assumed to be in the same directory.")
+	flag.BoolVar(&app.AllowDuplicateInvestors, "dup", false, "Allow duplicate investors within a population.")
 	flag.BoolVar(&app.FitnessScores, "fit", false, "generate a Fitness Report that shows the fitness of all Investors for each generation")
 	flag.BoolVar(&app.showAllInvestors, "i", false, "show all investors in the simulation results")
 	flag.BoolVar(&app.GenInfluencerDistribution, "idist", false, "report Influencer Distribution each time a generation completes")
@@ -110,8 +118,7 @@ func doSimulation() {
 	cfg.Trace = app.trace
 	cfg.ArchiveBaseDir = app.archiveBaseDir
 	cfg.ArchiveMode = app.archiveMode
-
-	// need this if statement to support unit testing
+	cfg.AllowDuplicateInvestors = app.AllowDuplicateInvestors //whether to check for need this if swhether to check for support unit testing or not
 	if !cfg.CrucibleMode {
 		cfg.CrucibleMode = app.CrucibleMode
 	}
@@ -131,6 +138,32 @@ func doSimulation() {
 	if err := app.db.Init(); err != nil {
 		log.Panicf("*** PANIC ERROR ***  db.Init returned error: %s\n", err)
 	}
+
+	//---------------------------------------------------------------------------------
+	// OPEN SQLITE Cache DB
+	// This is used to store the hashes of all the Investors we create so that
+	// we don't have duplicates in our simulations. The exception is for PreserveElite
+	//---------------------------------------------------------------------------------
+	if app.SQLiteFileName, err = sqlt.GenerateDBFileName(); err != nil {
+		log.Panicf("*** PANIC ERROR ***  GenerateDBFileName returned error: %s\n", err)
+	}
+	if app.SQLiteDB, err = sql.Open("sqlite3", app.SQLiteFileName); err != nil {
+		log.Fatal(err)
+	}
+	defer func() {
+		if err := app.SQLiteDB.Close(); err != nil {
+			log.Printf("Error closing database: %s\n", err)
+		}
+		if err := os.Remove(app.SQLiteFileName); err != nil {
+			log.Printf("Error deleting database file: %s\n", err)
+		}
+	}()
+	app.sim.SqltDB = app.SQLiteDB
+	sqlt.CreateSchema(app.SQLiteDB)
+
+	//##########################################################################################
+	//  ON WITH THE SIMULATION...
+	//##########################################################################################
 
 	if cfg.CrucibleMode {
 		c := newcore.NewCrucible()
@@ -158,6 +191,7 @@ func main() {
 
 	app.randNano = -1
 	app.cfName = "config.json5"
+
 	readCommandLineArgs()
 	if app.version {
 		fmt.Printf("PLATO Simulator version %s\n", util.Version())
