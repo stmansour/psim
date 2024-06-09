@@ -166,7 +166,7 @@ func (s *Simulator) Init(cfg *util.AppConfig, db *newdata.Database, crucible *Cr
 // ------------------------------------------------------------------------------
 func (s *Simulator) CheckAndAddNewInvestor(v *Investor) error {
 	if !s.Cfg.AllowDuplicateInvestors {
-		found, err := sqlt.CheckAndInsertHash(s.SqltDB, v.ID)
+		found, err := sqlt.CheckAndInsertHash(s.SqltDB, v.ID, v.Elite)
 		if err != nil {
 			return fmt.Errorf("error checking/inserting hash: %s", err)
 		}
@@ -233,6 +233,9 @@ func (s *Simulator) NewPopulation() error {
 	elite := []Investor{}
 	if s.Cfg.PreserveElite {
 		elite = s.Investors[0:s.Cfg.EliteCount]
+		for i := 0; i < len(elite); i++ {
+			elite[i].Elite = true
+		}
 	}
 
 	//-----------------------------------------------------------------------
@@ -267,6 +270,14 @@ func (s *Simulator) NewPopulation() error {
 		popCount := s.Cfg.PopulationSize - s.Cfg.EliteCount
 		newPop = newPop[0:popCount]
 		newPop = append(newPop, elite...)
+
+		//----------------------------------------------------------------------
+		// Now that the new population is set, we can remove the Elite flag.
+		// The elites need to earn their spot each generation.
+		//----------------------------------------------------------------------
+		for k := 0; k < len(newPop); k++ {
+			newPop[k].Elite = false
+		}
 	}
 	if s.GenInfluencerDistribution {
 		s.printNewPopStats(newPop)

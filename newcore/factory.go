@@ -113,7 +113,7 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 		for found {
 			v = f.BreedNewInvestor(&population, idxParent1, idxParent2)
 			if !f.cfg.AllowDuplicateInvestors {
-				found, err = sqlt.CheckAndInsertHash(f.sqltdb, v.ID)
+				found, err = sqlt.CheckAndInsertHash(f.sqltdb, v.ID, v.Elite)
 				if err != nil {
 					return newPopulation, fmt.Errorf("error checking/inserting hash: %s", err)
 				}

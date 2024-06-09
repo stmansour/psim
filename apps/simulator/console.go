@@ -51,7 +51,7 @@ func displaySimulationResults(cfg *util.AppConfig, db *newdata.Database) {
 	if app.AllowDuplicateInvestors {
 		fmt.Printf("Duplicate Investors: allowed\n")
 	} else {
-		fmt.Printf("Duplicated Investors: %d\n", app.sim.HashDuplicates+app.sim.GetFactory().HashDuplicates)
+		fmt.Printf("Duplicated Investors: %d (prevented)\n", app.sim.HashDuplicates+app.sim.GetFactory().HashDuplicates)
 	}
 	switch db.Datatype {
 	case "CSV":

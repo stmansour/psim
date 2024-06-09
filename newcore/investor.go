@@ -63,6 +63,7 @@ type Investor struct {
 	ID                string            // unique id for this investor
 	Parented          int64             // how many times was this Investor a parent for the next gen?
 	IDGenerated       bool              // true if ID was generated
+	Elite             bool              // an ephemeral flag, if true it means that it may propagate the next generation if we're preserving the elites
 	// maxPredictions    map[string]int           // max predictions indexed by Influencer subclass, set by simulator at the end of each simulation cycle
 	// maxPredictions    map[string]int    // max predictions indexed by Influencer subclass, set by simulator at the end of each simulation cycle, used when calculating fitness
 }
@@ -503,8 +504,16 @@ func (i *Investor) PortfolioValue(t time.Time) float64 {
 	if err != nil {
 		log.Fatalf("Error getting exchange close rate")
 	}
-	C2 := i.BalanceC2 / er.Fields[s.FQMetric()].Value // amount of C1 we get for BalanceC2 at this exchange rate
-	pv := i.BalanceC1 + C2
+	a := s.FQMetric()
+	pv := float64(0.0)
+	if len(a) > 0 {
+		if v, ok := er.Fields[a]; ok {
+			C2 := i.BalanceC2 / v.Value // amount of C1 we get for BalanceC2 at this exchange rate
+			pv = i.BalanceC1 + C2
+		}
+	} else {
+		fmt.Printf("*** WARNING **** PortfolioValue: ExchangeRate Record for %s not found\n", t.Format("1/2/2006"))
+	}
 	return pv
 }
 
