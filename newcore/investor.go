@@ -397,6 +397,9 @@ func (i *Investor) DailyRun(T3 time.Time, winddown bool) error {
 	if err != nil {
 		return err
 	}
+	if i.cfg.PredictionMode {
+		return nil
+	}
 	switch coa.Action {
 	case "buy":
 		if winddown {

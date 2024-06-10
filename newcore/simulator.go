@@ -512,7 +512,7 @@ func (s *Simulator) Run() {
 			//---------------------------------------
 			// End of generation reports...
 			//---------------------------------------
-			if s.Cfg.CrucibleMode {
+			if s.Cfg.CrucibleMode && !s.Cfg.PredictionMode {
 				s.crucible.DumpResults()
 			}
 			if s.ReportTopInvestorInvestments {

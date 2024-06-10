@@ -160,6 +160,7 @@ type AppConfig struct {
 	HoldWindowStatsLookBack int                 // how many days make up the rolling window of data used in HoldWindow stats calculations (mean and StdDev)
 	StdDevVariationFactor   float64             // how much variance from thethe standard deviation is needed for the hold window.
 	AllowDuplicateInvestors bool                // if false then check for duplicate investors
+	PredictionMode          bool                // true if the code is making a prediction about the next day
 }
 
 // CreateTestingCFG is a function that creates a test cfg file with no secrets

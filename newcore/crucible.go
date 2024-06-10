@@ -32,6 +32,7 @@ func NewCrucible() *Crucible {
 
 // Init initializes the crucible object
 func (c *Crucible) Init(cfg *util.AppConfig, db *newdata.Database, sim *Simulator) {
+	cfg.AllowDuplicateInvestors = true
 	c.cfg = cfg
 	c.db = db
 	c.sim = sim
@@ -76,6 +77,7 @@ func (c *Crucible) Run() {
 	// Now do todays recommendation if requested...
 	//--------------------------------------------
 	if c.cfg.Recommendation {
+		c.cfg.PredictionMode = true
 		fmt.Printf("Today's recommendation\n")
 		for i := 0; i < len(c.cfg.TopInvestors); i++ {
 			c.cfg.DtStart = util.CustomDate(util.UTCDate(time.Now()))
