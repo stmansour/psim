@@ -58,3 +58,4 @@ rm -rf data
 "${SQLTOCSV}" >> "${LOG}" ; pushd data ; "${TSF}" platodb.csv ; mv platodb-filled.csv platodb.csv ; popd
 tar cvf USDJPYdata.tar data ; gzip -f USDJPYdata.tar ; cp USDJPYdata.tar.gz ${HTTPDOCPATH}/csv/
 cp data/platodb.csv /usr/local/plato/bin/data/
+cp data/platodb.csv /var/www/html/viewer/data/

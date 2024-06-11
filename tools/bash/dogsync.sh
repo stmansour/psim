@@ -4,16 +4,10 @@
 # Run this command from the directory containing gdelt
 #---------------------------------------------------------
 GSYNC=/usr/local/plato/bin/gfetch.sh
-<<<<<<< HEAD
 TSF=/usr/local/plato/bin/tsf
 SQLTOCSV=/usr/local/plato/bin/sqltocsv
 HTTPDOCPATH=/var/www/html
 BASE_DIR="./gdelt"
-=======
-SQLTOCSV=/usr/local/plato/bin/sqltocsv
-HTTPDOCPATH=/var/www/html
-BASE_DIR="./gsync/gdelt"
->>>>>>> a9df3dee8028a213108e7d9b01c60536d4d186d8
 LOG=/home/steve/gsync/dogsync.log
 
 #--------------------------------------------------------------------------
@@ -51,17 +45,11 @@ oldest_dir=$(calculate_date 8)
 # Remove the oldest directory to maintain only 7 days of data
 #----------------------------------------------------------------
 log "Removing $BASE_DIR/$oldest_dir"
-<<<<<<< HEAD
 rm -r "$BASE_DIR/$oldest_dir"
 
 #------------------------------------------
 # Run gfetch.sh with the calculated dates
 #------------------------------------------
-=======
-rm -rf "$BASE_DIR/$oldest_dir"
-
-# Run gfetch.sh with the calculated dates
->>>>>>> a9df3dee8028a213108e7d9b01c60536d4d186d8
 log "Initiating ${GSYNC} -b ${seven_days_ago} -e ${yesterday} -k -F"
 "${GSYNC}" -b "${seven_days_ago}" -e "${yesterday}" -k -F
 
@@ -70,11 +58,11 @@ log "Initiating ${GSYNC} -b ${seven_days_ago} -e ${yesterday} -k -F"
 #------------------------------------------------------------------------------
 log "Generating new CSV database fileset"
 rm -rf data
-<<<<<<< HEAD
 "${SQLTOCSV}" ; pushd data ; "${TSF}" platodb.csv ; mv platodb-filled.csv platodb.csv ; popd
 log "Posting new CSV fileset to ${HTTPDOCPATH}/csv/"
 tar cvf USDJPYdata.tar data ; gzip -f USDJPYdata.tar ; cp USDJPYdata.tar.gz ${HTTPDOCPATH}/csv/
 cp data/platodb.csv /usr/local/plato/bin/data/
+cp data/platodb.csv /var/www/html/viewer/data/
 
 #------------------------------------------------------------------------------
 # Now create the status from the results of yesterday's gdelt update...
@@ -87,11 +75,3 @@ cp "${target}" /var/www/html/sync/
 log "Done"
 date >> "${LOG}"
 
-=======
-"${SQLTOCSV}" ; pushd data ; tsf platodb.csv ; mv platodb-filled.csv platodb.csv ; popd
-log "Posting new CSV fileset to ${HTTPDOCPATH}/csv/"
-tar cvf USDJPYdata.tar data ; gzip -f USDJPYdata.tar ; cp USDJPYdata.tar.gz ${HTTPDOCPATH}/csv/
-
-log "Done"
-date >> "${LOG}"
->>>>>>> a9df3dee8028a213108e7d9b01c60536d4d186d8
