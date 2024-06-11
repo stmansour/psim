@@ -1,28 +1,53 @@
-The PLATO System Design Revised: March 29, 2024
+The PLATO System Design
 
-The Plato Project utilizes genetic algorithms for predicting
-investment strategies in foreign currency markets. It may apply to
-other financial markets as well, but we are not focusing on those
-at this time. The objective is to develop a prediction engine for
-currency investment that analyzes historical data (traditional
-econometrics) and current events (via linguistic metrics) to forecast
-changes in currency values. The genetics algorithm was chosen as
-the solution we want to use involves a nearly inconceivable number
-of configuration options and the genetic algorithm seemed like a
-good way to find the best configuration solutions in a (relatively)
-short period of time. The method involves creating simulated Investors
-with initial capital and allowing them to invest in foreign currencies.
-These Investors go through simulated periods of investment, after
-which a new generation is created using principles of genetic
-algorithms. This process selectively breeds Investors for a new
-generation based on the financial performance of Investors from the
-prior generation, with more successful ones having a higher chance
-of influencing the next generation. Each Investor in the new
-generation starts with initial capital and invests over a simulation
-period. The goal is to use the genetics algorithm to breed the most
-financially successful investors over successive generations.  The
-predictive engine is based on two major object types: an Investor
-and an Influencer.
+Revised: March 29, 2024
+
+Imagine an investment engine that leverages both financial data and
+real-world events to predict currency movements. That's the core
+idea behind the PLATO Project. While the underlying approach using
+genetic algorithms has the potential to be applied to other financial
+markets as well, PLATO is currently focused on predicting investment
+strategies in foreign currency markets.
+
+The primary goal is to develop a prediction engine that analyzes
+historical data (traditional econometrics) and incorporates current
+events (via linguistic metrics) to forecast currency value changes.
+The PLATO system centers around two main types of simulated entities:
+Investors and Influencers. Genetic algorithms are then used to
+identify optimal configurations for these entities within a reasonable
+timeframe.
+
+PLATO takes an innovative approach to discover successful investment
+strategies. We create simulated investors, each with a starting pot
+of capital. These investors are aided by simulated influencers who
+provide insights to guide their investment decisions.
+
+The core of PLATO is a program that acts as a simulated market.
+This program, called the simulator, runs over a specified period
+of historical data. Each investor is given a virtual fund in one
+currency and the ability to buy and sell another currency.  Investors
+make decisions daily, based on historical information available up
+to that point in the simulation, mimicking real-world trading
+limitations.
+
+At the end of the simulation period, the program calculates the
+annualized return for each investor.  PLATO then uses a genetic
+algorithm, inspired by natural selection, to create new generations
+of investors. Investors with stronger performance have a higher
+chance of influencing the next generation.  This iterative process
+continues for a set number of generations, with the goal of evolving
+a population of investors with increasingly successful strategies.
+
+The simulator offers extensive settings and controls, all configured
+through a JSON5 file. Currently, there is no graphical user interface
+for the Plato system; it is managed via text editors and scripts.
+The entire system was designed to be highly scriptable in terms of
+configuration, usage, and output. The configuration file allows for
+detailed customization of simulations, Investors, and Influencers,
+ensuring that almost every conceivable variable can be tailored to
+specific needs.
+
+The Core Classes: Influencers and Investors
 
 The 'Influencer' class is one cornerstone of the architecture,
 acting as a base for a variety of derived classes. Each subclass
