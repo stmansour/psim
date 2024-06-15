@@ -70,9 +70,9 @@ stats:
 release:
 	cp -r dist/plato /usr/local/plato/;cd /usr/local/plato;rm -rf bin;mv plato bin;
 	@if [ -f ~/.vault/extres.json5 ]; then \
-	    cp ~/.vault/extres.json5 /usr/local/plato/bin/ ; \
+	    cp ~/.vault/extres.json5 /usr/local/plato/bin/ ; chmod 755 /usr/local/plato/bin/extres.json5 ;\
 	else \
-	    echo "extres.json5 was not found, some apps will not run with out it." ; \
+	    echo "extres.json5 was not found, some apps will not function without it." ; \
 	fi
 
 refmt:

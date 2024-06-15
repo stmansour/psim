@@ -46,3 +46,7 @@ package:
 	mkdir -p ${BINDIR}/
 	cp simulator ${BINDIR}/
 	@echo "*** ${THISDIR}: completed package ***"
+
+releaseman:
+	if [ -d /usr/local/share/man/man1 ] && [ -w /usr/local/share/man/man1 ]; then cp simulator.1 /usr/local/share/man/man1/ ; fi
+	@echo "*** ${THISDIR}: completed releaseman ***"

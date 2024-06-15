@@ -31,7 +31,7 @@ type SimApp struct {
 	trace                        bool // traces voting activity of Influencers and Investors buy,hold,sell decisions
 	traceTiming                  bool // traces timing of simulation phase and next creating a new generation
 	version                      bool
-	cfName                       string // override default with this file
+	cfName                       string // override default config filename with this
 	cfg                          *util.AppConfig
 	extres                       *util.ExternalResources
 	db                           *newdata.Database
