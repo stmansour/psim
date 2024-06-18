@@ -472,3 +472,19 @@ func calculateEndDate(ending string, currentDate time.Time) time.Time {
 
 	return baseDate
 }
+
+// GenerateFName returns the filename for the specified basename
+// in the appropriate directory.
+// --------------------------------------------------------------------------
+func (cfg *AppConfig) GenerateFName(basename string) string {
+	fname := ""
+	if len(cfg.ReportDirectory) > 0 {
+		fname = cfg.ReportDirectory + "/"
+	}
+	fname += basename
+	if cfg.ArchiveMode {
+		fname += cfg.ReportTimestamp
+	}
+	fname += ".csv"
+	return fname
+}

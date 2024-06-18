@@ -35,7 +35,7 @@ func NewInvestorReport(sim *Simulator) *InvestorReport {
 func (ir *InvestorReport) dumpTopInvestorsDetail() error {
 	var file *os.File
 	var err error
-	fname := ir.s.generateFName("invrep")
+	fname := ir.s.Cfg.GenerateFName("invrep")
 	if !ir.ReportHeaderCompleted {
 		file, err = os.Create(fname)
 	} else {

@@ -31,7 +31,7 @@ type FinRep struct {
 func (f *FinRep) GenerateFinRep(sim *Simulator, dirname string) error {
 	var err error
 	f.Sim = sim
-	fname := f.Sim.generateFName("finrep")
+	fname := f.Sim.Cfg.GenerateFName("finrep")
 
 	f.file, err = os.Create(fname)
 	if err != nil {

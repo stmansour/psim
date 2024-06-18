@@ -78,7 +78,8 @@ func (i *Investor) SaveTrace() {
 func (i *Investor) TraceWriteFile() error {
 	var f *os.File
 	var err error
-	filename := fmt.Sprintf("trace-%s.csv", i.ID)
+	filename := fmt.Sprintf("trace-%s", i.ID)
+	filename = i.cfg.GenerateFName(filename)
 	f, err = os.Create(filename)
 	if err != nil {
 		log.Panicf("Error creating %s: %s\n", filename, err.Error())

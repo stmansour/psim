@@ -39,7 +39,7 @@ func (c *Crucible) Init(cfg *util.AppConfig, db *newdata.Database, sim *Simulato
 	c.sim.Cfg = cfg // required for generateFName
 	c.sim.SetReportDirectory()
 	c.sim.db = db
-	c.fname = c.sim.generateFName("crep")
+	c.fname = c.cfg.GenerateFName("crep")
 	file, err := os.Create(c.fname)
 	if err != nil {
 		fmt.Printf("error creating %s: %s\n", c.fname, err.Error())

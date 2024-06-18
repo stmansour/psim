@@ -162,18 +162,18 @@ func (s *Simulator) SaveStats(dtStart, dtStop, dtSettled time.Time, eodr bool) {
 	s.GenStats = append(s.GenStats, ss)
 }
 
-func (s *Simulator) generateFName(basename string) string {
-	fname := ""
-	if len(s.Cfg.ReportDirectory) > 0 {
-		fname = s.Cfg.ReportDirectory + "/"
-	}
-	fname += basename
-	if s.Cfg.ArchiveMode {
-		fname += s.Cfg.ReportTimestamp
-	}
-	fname += ".csv"
-	return fname
-}
+// func (s *Simulator) generateFName(basename string) string {
+// 	fname := ""
+// 	if len(s.Cfg.ReportDirectory) > 0 {
+// 		fname = s.Cfg.ReportDirectory + "/"
+// 	}
+// 	fname += basename
+// 	if s.Cfg.ArchiveMode {
+// 		fname += s.Cfg.ReportTimestamp
+// 	}
+// 	fname += ".csv"
+// 	return fname
+// }
 
 // dumpFitnessScores - dumps Investor fitness Scores for each generation
 // to a file
@@ -186,7 +186,7 @@ func (s *Simulator) generateFName(basename string) string {
 func (s *Simulator) dumpFitnessScores() error {
 	var file *os.File
 	var err error
-	fname := s.generateFName("fitnessScores")
+	fname := s.Cfg.GenerateFName("fitnessScores")
 	if s.GensCompleted == 1 {
 		file, err = os.Create(fname)
 	} else {
@@ -248,7 +248,7 @@ func (s *Simulator) printNewPopStats(newpop []Investor) {
 //
 // ----------------------------------------------------------------------------
 func (s *Simulator) SimStats(d string) error {
-	fname := s.generateFName("simstats")
+	fname := s.Cfg.GenerateFName("simstats")
 	file, err := os.Create(fname)
 	if err != nil {
 		return err
