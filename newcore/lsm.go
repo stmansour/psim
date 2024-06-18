@@ -258,28 +258,13 @@ func (p *LSMInfluencer) GetPrediction(t3 time.Time) (*Prediction, error) {
 			return &pred, nil // need to abstain, the data was not available
 		}
 
-		// // There are two keys in pred.Recs[0].Fields. One is p.cfg.C1 + metric, the other is p.cfg.C2 + metric
-		// // With Go maps, the order of the keys is not guaranteed. So we'll grab both and swap if we need to.
-		// c := []string{}
-		// for k := range pred.Recs {
-
-		// 	if strings.HasPrefix(k, p.cfg.C1) {
-		// 		c = append(c, k)
-		// 	}
-		// }
-		// if c[0][:3] != p.cfg.C1 {
-		// 	c[0], c[1] = c[1], c[0]
-		// }
-
-		// // Now the metric for C1 is in c[0] and the metric for C2 is in c[1]
-
-		// vala -- is Fields[0] withing the std dev?
+		// val a -- is Fields[0] within the std dev?
 		valaT1, valaT2, res0, ok := p.calculateAndSetValues(&pred, p.cfg.C1+p.Metric)
 		if !ok {
 			// Data for the given fieldName is not available.
 			return &pred, nil // Return immediately with pred.Action as "abstain".
 		}
-		// valb -- is Fields[1] withing the std dev?
+		// val b -- is Fields[1] within the std dev?
 		valbT1, valbT2, res1, ok := p.calculateAndSetValues(&pred, p.cfg.C2+p.Metric)
 		if !ok {
 			// Data for the given fieldName is not available.

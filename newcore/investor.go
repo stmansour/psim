@@ -266,7 +266,7 @@ func (i *Investor) DecideCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 			return coa, err
 		}
 		i.StopLossThreshold = (1 - i.cfg.StopLoss) * i.BalanceC1
-		if i.cfg.Trace {
+		if (i.cfg.Trace && !i.cfg.CrucibleMode) || i.cfg.PredictionMode {
 			fmt.Printf("        <<<STOP LOSS>>>  %s StopLoss, PV = %8.2f, new StopLoss amount: %8.2f\n", i.ID, pv, i.StopLossThreshold)
 		}
 		i.StopLossCount++
@@ -313,7 +313,7 @@ func (i *Investor) DecideCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 	}
 
 	setCourseOfAction(&coa, InvestmentStrategies[i.Strategy]) // use course of action strategy called out in the config file
-	if i.cfg.Trace {
+	if (i.cfg.Trace && !i.cfg.CrucibleMode) || i.cfg.PredictionMode {
 		for j := 0; j < len(recs); j++ {
 			i.FormatPrediction(&recs[j], T3)
 		}
@@ -391,7 +391,7 @@ func majorityRulesCOA(coa *CourseOfAction) error {
 // err - any error encountered
 // ------------------------------------------------------------------------------
 func (i *Investor) DailyRun(T3 time.Time, winddown bool) error {
-	if i.cfg.Trace {
+	if (i.cfg.Trace && !i.cfg.CrucibleMode) || i.cfg.PredictionMode {
 		fmt.Printf("%s - Investor: %s\n", T3.Format("Jan _2, 2006"), i.ID)
 	}
 	coa, err := i.DecideCourseOfAction(T3)
@@ -415,7 +415,7 @@ func (i *Investor) DailyRun(T3 time.Time, winddown bool) error {
 			return err
 		}
 	}
-	if i.cfg.Trace {
+	if (i.cfg.Trace && !i.cfg.CrucibleMode) || i.cfg.PredictionMode {
 		fmt.Printf("\t%s\n", i.PortfolioToString(T3))
 		i.SaveTrace()
 	}
@@ -466,7 +466,7 @@ func (i *Investor) ExecuteBuy(T3 time.Time, pct float64) error {
 	inv.T3BalanceC2 = i.BalanceC2                            // C2 balance after exchange
 	i.Investments = append(i.Investments, inv)               // add it to the list of investments
 
-	if i.cfg.Trace {
+	if (i.cfg.Trace && !i.cfg.CrucibleMode) || i.cfg.PredictionMode {
 		i.showBuy(&inv)
 	}
 
@@ -650,7 +650,7 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 		for k := 0; k < len(i.Influencers); k++ {
 			i.Influencers[k].FinalizePrediction(i.Investments[j].T3, t4, p)
 		}
-		if i.cfg.Trace {
+		if (i.cfg.Trace && !i.cfg.CrucibleMode) || i.cfg.PredictionMode {
 			i.showSell(&i.Investments[j], thisSaleC1, thisSaleC2, fee)
 		}
 	}
