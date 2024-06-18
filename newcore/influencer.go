@@ -23,7 +23,7 @@ type Prediction struct {
 	Fields        []newdata.FieldSelector       // names of database fields
 	Val1          float64                       // value or ratio at time T1
 	Val2          float64                       // value ratio at time T2
-	IType         string                        // specific influencer type
+	Metric        string                        // specific influencer type
 	ID            string                        // id of this influencer
 	Correct       bool                          // was this profitable (correct)?
 	Completed     bool                          // has this Prediction been Finalized

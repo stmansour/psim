@@ -342,7 +342,14 @@ func (s *Simulator) Run() {
 	s.SetReportDirectory()
 	s.WorkerThreads = s.workerPoolSize() // for now, just use the number of CPU cores
 
+	//-------------------------------------
+	// ITERATE THROUGH THE LOOP COUNT...
+	//-------------------------------------
 	for lc := 0; lc < s.Cfg.LoopCount; lc++ {
+
+		//---------------------------------
+		// DO WE STILL NEED THIS?
+		//---------------------------------
 		for k, v := range s.Investors {
 			if v.BalanceC1 > s.Cfg.InitFunds || v.BalanceC2 != 0 {
 				fmt.Printf("Investor %d has C1 = %8.2f and C2 = %8.2f\n", k, v.BalanceC1, v.BalanceC2)
@@ -364,12 +371,12 @@ func (s *Simulator) Run() {
 		}
 
 		//-------------------------------------------------------------------------
-		// Iterate day-by-day through the simulation.
+		// Iterate through the GENERATIONS
 		//-------------------------------------------------------------------------
 		var d time.Time
 		var dtGenEnd time.Time
 		for g := 0; g < s.Cfg.Generations; g++ {
-			dtGenSt := time.Now()
+			dtGenStartTrace := time.Now()
 			T3 := genStart
 			if isGenDur {
 				dtGenEnd = T3.AddDate(s.Cfg.GenDur.Years, s.Cfg.GenDur.Months, s.Cfg.GenDur.Weeks*7+s.Cfg.GenDur.Days) // end of this generation
@@ -381,8 +388,15 @@ func (s *Simulator) Run() {
 			}
 			EndOfDataReached = false
 
-			dtGenerationTimerStart := time.Now()
+			// Let Investors now a new generation is starting...
+			//-----------------------------------------------
+			for _, v := range s.Investors {
+				v.TraceInit()
+			}
 
+			//-------------------------------------------------------------------------
+			// Iterate day-by-day through this generation's start to end dates...
+			//-------------------------------------------------------------------------
 			for T3.Before(dtGenEnd) || T3.Equal(dtGenEnd) || s.WindDownInProgress {
 				iteration++
 
@@ -480,7 +494,7 @@ func (s *Simulator) Run() {
 
 			dtGenerationStop := time.Now()
 			if s.TraceTiming {
-				fmt.Printf("<<<TRACE TIMING>>> generation simulation time: %s\n", util.ElapsedTime(dtGenerationTimerStart, dtGenerationStop))
+				fmt.Printf("<<<TRACE TIMING>>> generation simulation time: %s\n", util.ElapsedTime(dtGenStartTrace, dtGenerationStop))
 			}
 
 			T3 = T3.AddDate(0, 0, -1)
@@ -520,6 +534,11 @@ func (s *Simulator) Run() {
 					log.Printf("ERROR: dumpTopInvestorsDetail returned: %s\n", err)
 				}
 			}
+			if s.Cfg.Trace {
+				for j := 0; j < len(s.Investors); j++ {
+					s.Investors[j].TraceWriteFile()
+				}
+			}
 
 			//----------------------------------------------------------------------------------------------
 			// Now replace current generation with next generation unless this is the last generation...
@@ -535,8 +554,8 @@ func (s *Simulator) Run() {
 				}
 			}
 			s.WindDownInProgress = false
-			dtGenStp := time.Now()
-			s.GenerationSimTime = util.ElapsedTime(dtGenSt, dtGenStp)
+			dtGenStopTrace := time.Now()
+			s.GenerationSimTime = util.ElapsedTime(dtGenStartTrace, dtGenStopTrace)
 		}
 		if !s.Cfg.CrucibleMode {
 			fmt.Printf("loop %d completed.  %s - %s\n", lc, thisGenDtStart.Format("Jan _2, 2006"), thisGenDtEnd.Format("Jan _2, 2006"))

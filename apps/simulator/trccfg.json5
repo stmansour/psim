@@ -1,0 +1,53 @@
+//  PLATO SIMULATOR CONFIGURATION FILE
+//  JSON5 is being used primarily so that we can add comments to this file.
+//
+//  Notes:
+//    floating point numbers cannot begin with ".".  
+//    That is:  
+//       0.1 is valid
+//        .1 is not valid
+//----------------------------------------------------------------------------------
+{
+    //-----------------------------------------------------------------
+    //  SIMULATOR
+    //-----------------------------------------------------------------
+    "DtStart": "2022-05-01",    // simulation start date for each generation
+    "DtStop": "2022-05-31",     // simulation stop date for each generation
+    "EnforceStopDate": true,    // stops on DtStop even if there is a C2 Balance, if false and C2 Balance > 0 on StopDate, simulation will continue in sell-only mode until C2 < 1.00
+    "LoopCount": 20,            // How many times to loop over DtStart to DtStop
+    "Generations": 1,           // how many generations should the simulator run. NOTE: This value is only valid if GenDurSpec is commented out.
+    // "GenDurSpec": "1 Y",        // How long is a generation.  EX:  "1 Y",  "6 M",  "8 W", "1 Y 6 M", "90 D"
+    "PopulationSize": 200,      // Total number Investors in the population
+    "C1": "USD",                // main currency  (ISO 4217 code)
+    "C2": "JPY",                // currency that we will invest in (ISO 4217 code)
+    "InitFunds": 100000.00,     // how much each Investor is funded at the start of a simulation cycle
+    "StdInvestment": 10000.00,  // the "standard" investment amount if a decision is made to invest in C2
+    "MutationRate": 1,          // number between 1 and 100, indicating the percentage of mutation
+    "DBSource": "CSV",          // { CSV | Database }
+    "TopInvestorCount": 10,     // Save this number of top Investors from across all generations - used in Financial Report - finrep.csv
+    "MinInfluencers": 2,        // Minimum # of Influencers per Investor
+    "MaxInfluencers": 10,       // Maximum # of Influencers per Investor
+    "PreserveElite": false,     // when true it replicates the top PreserverElitePct of DNA from gen x to gen x+1
+    "PreserveElitePct": 5.0,    // floating point value representing the amount of DNA to preserve. 0.0 to 100.0
+    "StopLoss": 0.10,           // Expressed as a percentage of the Portfolio Value. That is, 0.12 means 12%.  Sell all C2 immediately if the PV has lost this much of the initial funding.
+	"TxnFeeFactor": 0.0001,     // cost, in C1, per transaction that is multiplied by the amount. .0002 == 2 basis points, 0 if not set
+	"TxnFee": 0,                // a flat cost, in C1, that is added for each transaction, 0 if not set
+    "InvestorBonusPlan": true,      // rewards Investors earning high ROI by giving a bonus to their FitnessScore.  PV >= 110% receive 100% bonus, PV >= 115% get 200%, PV >= 120% get 300%, and PV >= 400% get 500%
+    "Gen0Elites": false,            // Insert TopInvestors DNA into Generation 0
+    "WorkerPoolSize": 0,            // When 0, the program decides the number of cores, when >= 1 the number of cores the simulator will use
+    "HoldWindowStatsLookBack": 365, // how many days make up the rolling window of data used in HoldWindow stats calculations (mean and StdDev)
+    "StdDevVariationFactor": 0.0001,  // variable factor from Std Deviation
+
+    //-----------------------------------------------------------------
+    //  There may be times when we need to test or check the behavior
+    //  of a specific Investor, based on its DNA. In this case, looping
+    //  and generations are not relevant. Instead, we need the behavior
+    //  to be completely repeatable and predictable.
+    //  When "SingleInvestorMode" is
+    //  true, LoopCount will be forced to 1, Generations will be forced
+    //  to 1.  This would simulate things more like the production
+    //  version of this projects code will operate. 
+    //-----------------------------------------------------------------
+    "SingleInvestorMode": true,
+    "SingleInvestorDNA": "{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-71,Delta2=-20,Metric=GCAM_C3_2}|{LSMInfluencer,Delta1=-200,Delta2=-17,Metric=GCAM_C16_47_ECON}|{LSMInfluencer,Delta1=-95,Delta2=-40,Metric=ManufacturingProduction}|{LSMInfluencer,Delta1=-153,Delta2=-34,Metric=IndustrialProduction}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RetailSalesMoM}]}",
+}

@@ -64,6 +64,7 @@ type Investor struct {
 	Parented          int64             // how many times was this Investor a parent for the next gen?
 	IDGenerated       bool              // true if ID was generated
 	Elite             bool              // an ephemeral flag, if true it means that it may propagate the next generation if we're preserving the elites
+	COATrace          Trace             // a struct to keep track of trace information
 	// maxPredictions    map[string]int           // max predictions indexed by Influencer subclass, set by simulator at the end of each simulation cycle
 	// maxPredictions    map[string]int    // max predictions indexed by Influencer subclass, set by simulator at the end of each simulation cycle, used when calculating fitness
 }
@@ -284,7 +285,7 @@ func (i *Investor) DecideCourseOfAction(T3 time.Time) (CourseOfAction, error) {
 				return coa, err
 			}
 		}
-		pred.IType = i.Influencers[j].GetMetric()
+		pred.Metric = i.Influencers[j].GetMetric()
 		pred.ID = i.Influencers[j].GetID()
 		pred.Correct = false // don't know yet
 		recs = append(recs, *pred)
@@ -391,7 +392,7 @@ func majorityRulesCOA(coa *CourseOfAction) error {
 // ------------------------------------------------------------------------------
 func (i *Investor) DailyRun(T3 time.Time, winddown bool) error {
 	if i.cfg.Trace {
-		fmt.Printf("%s - %s\n", T3.Format("Jan _2, 2006"), i.ID)
+		fmt.Printf("%s - Investor: %s\n", T3.Format("Jan _2, 2006"), i.ID)
 	}
 	coa, err := i.DecideCourseOfAction(T3)
 	if err != nil {
@@ -416,6 +417,7 @@ func (i *Investor) DailyRun(T3 time.Time, winddown bool) error {
 	}
 	if i.cfg.Trace {
 		fmt.Printf("\t%s\n", i.PortfolioToString(T3))
+		i.SaveTrace()
 	}
 
 	return nil

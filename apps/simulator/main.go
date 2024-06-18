@@ -24,32 +24,32 @@ import (
 type SimApp struct {
 	ReportTopInvestorInvestments bool
 	DayByDay                     bool
-	showAllInvestors             bool // adds all investors to the output in the simulation results
-	sim                          newcore.Simulator
-	randNano                     int64
-	InfPredDebug                 bool
-	trace                        bool // traces voting activity of Influencers and Investors buy,hold,sell decisions
-	traceTiming                  bool // traces timing of simulation phase and next creating a new generation
-	version                      bool
-	cfName                       string // override default config filename with this
-	cfg                          *util.AppConfig
-	extres                       *util.ExternalResources
-	db                           *newdata.Database
-	archiveBaseDir               string  // where archives go
-	archiveMode                  bool    // if true it copies the config file to an archive directory, places simstats and finrep there as well
-	CrucibleMode                 bool    // normal or crucible
-	GenInfluencerDistribution    bool    // show Influencer distribution for each generation
-	FitnessScores                bool    // save the fitness scores for each generation to dbgFitnessScores.csv
-	dbfilename                   string  // override database name with this name
-	CPUProfile                   string  // where is time being spent?
-	MemProfile                   string  // where is memory being consumed?
-	basePort                     int     // Starting port
-	maxPort                      int     // Upper limit for trying different ports
-	Simtalkport                  int     // current port being used
-	notalk                       bool    // if true, the simulator does not start up an HTTP listener
-	SQLiteFileName               string  // where we keep the Investor cache
-	SQLiteDB                     *sql.DB // the sqlite3 database used for Investor ids
-	AllowDuplicateInvestors      bool    // whether to check for duplicate investors or not
+	// showAllInvestors             bool // adds all investors to the output in the simulation results
+	sim                       newcore.Simulator
+	randNano                  int64
+	InfPredDebug              bool
+	trace                     bool // traces voting activity of Influencers and Investors buy,hold,sell decisions
+	traceTiming               bool // traces timing of simulation phase and next creating a new generation
+	version                   bool
+	cfName                    string // override default config filename (config.json5) with this
+	cfg                       *util.AppConfig
+	extres                    *util.ExternalResources
+	db                        *newdata.Database
+	archiveBaseDir            string  // where archives go
+	archiveMode               bool    // if true it copies the config file to an archive directory, places simstats and finrep there as well
+	CrucibleMode              bool    // normal or crucible
+	GenInfluencerDistribution bool    // show Influencer distribution for each generation
+	FitnessScores             bool    // save the fitness scores for each generation to dbgFitnessScores.csv
+	dbfilename                string  // override database name with this name
+	CPUProfile                string  // where is time being spent?
+	MemProfile                string  // where is memory being consumed?
+	basePort                  int     // Starting port
+	maxPort                   int     // Upper limit for trying different ports
+	Simtalkport               int     // current port being used
+	notalk                    bool    // if true, the simulator does not start up an HTTP listener
+	SQLiteFileName            string  // where we keep the Investor cache
+	SQLiteDB                  *sql.DB // the sqlite3 database used for Investor ids
+	AllowDuplicateInvestors   bool    // whether to check for duplicate investors or not
 }
 
 var app SimApp
@@ -77,7 +77,7 @@ func dateIsInDataRange(a time.Time) string {
 func readCommandLineArgs() {
 	flag.StringVar(&app.archiveBaseDir, "adir", "", "base archive directory, default is current directory")
 	flag.BoolVar(&app.archiveMode, "ar", false, "create archive directory for config file, finrep, simstats, and all other reports. Also see -adir.")
-	flag.StringVar(&app.cfName, "c", "", "configuration file to use (instead of config.json)")
+	flag.StringVar(&app.cfName, "c", "config.json5", "configuration file to use (instead of config.json5)")
 	flag.BoolVar(&app.CrucibleMode, "C", false, "Crucible mode.")
 	flag.StringVar(&app.CPUProfile, "cpuprofile", "", "write cpu profile to file")
 	flag.BoolVar(&app.InfPredDebug, "D", false, "show prediction debug info - dumps a lot of data, use on short simulations, with minimal Influencers")
@@ -85,7 +85,7 @@ func readCommandLineArgs() {
 	flag.StringVar(&app.dbfilename, "db", "", "override CSV datatbase name with this name. All CSV database files are assumed to be in the same directory.")
 	flag.BoolVar(&app.AllowDuplicateInvestors, "dup", false, "Allow duplicate investors within a population.")
 	flag.BoolVar(&app.FitnessScores, "fit", false, "generate a Fitness Report that shows the fitness of all Investors for each generation")
-	flag.BoolVar(&app.showAllInvestors, "i", false, "show all investors in the simulation results")
+	//  flag.BoolVar(&app.showAllInvestors, "i", false, "show all investors in the simulation results")
 	flag.BoolVar(&app.GenInfluencerDistribution, "idist", false, "report Influencer Distribution each time a generation completes")
 	flag.BoolVar(&app.ReportTopInvestorInvestments, "inv", false, "for each generation, write top investors Investment List to invrep.csv")
 	flag.StringVar(&app.MemProfile, "memprofile", "", "write memory profile to this file")

@@ -13,37 +13,37 @@ Duration:            0 years 1 month 0 days
 Population Size:     1
 *******************************************************************
 
-May  1, 2022 - GUID
+May  1, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Feb 23, 2022 [7.50] -  T2 Apr 26, 2022 [7.04]   AvgDelta: -0.0075  StdDev: 0.3684,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1298300.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1298300.00 JPY, fee =   2.00)
 	C1bal = 89998.00 USD, C2bal = 1298300.00 JPY, PV = 99998.00 USD
 
-May  2, 2022 - GUID
+May  2, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Feb 24, 2022 [7.68] -  T2 Apr 27, 2022 [7.13]   AvgDelta: -0.0088  StdDev: 0.3677,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1301400.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1301400.00 JPY, fee =   2.00)
 	C1bal = 79996.00 USD, C2bal = 2599700.00 JPY, PV = 99972.18 USD
 
-May  3, 2022 - GUID
+May  3, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Feb 25, 2022 [7.72] -  T2 Apr 28, 2022 [7.18]   AvgDelta: -0.0087  StdDev: 0.3674,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1301000.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1301000.00 JPY, fee =   2.00)
 	C1bal = 69994.00 USD, C2bal = 3900700.00 JPY, PV = 99976.32 USD
 
-May  4, 2022 - GUID
+May  4, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Feb 26, 2022 [7.96] -  T2 Apr 29, 2022 [7.39]   AvgDelta: -0.0091  StdDev: 0.3669,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1290700.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1290700.00 JPY, fee =   2.00)
 	C1bal = 59992.00 USD, C2bal = 5191400.00 JPY, PV = 100213.59 USD
 
-May  5, 2022 - GUID
+May  5, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Feb 27, 2022 [8.18] -  T2 Apr 30, 2022 [7.69]   AvgDelta: -0.0080  StdDev: 0.3672,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1301300.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1301300.00 JPY, fee =   2.00)
 	C1bal = 49990.00 USD, C2bal = 6492700.00 JPY, PV = 99883.95 USD
 
-May  6, 2022 - GUID
+May  6, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  sell   (T1 Feb 28, 2022 [7.73] -  T2 May  1, 2022 [7.88]   AvgDelta: 0.0025  StdDev: 0.3676,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
         *** SELL ***   9944.09 USD (fee:   1.99), [1298300.00 JPY], investments affected: 1 -->  0 profited, 1 lost
@@ -53,43 +53,43 @@ May  6, 2022 - GUID
         *** SELL ***   9967.06 USD (fee:   1.99), [1301300.00 JPY], investments affected: 1 -->  0 profited, 1 lost
 	C1bal = 99709.68 USD, C2bal =   0.00 JPY, PV = 99709.68 USD
 
-May  7, 2022 - GUID
+May  7, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar  1, 2022 [7.52] -  T2 May  2, 2022 [7.26]   AvgDelta: -0.0043  StdDev: 0.3674,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1305600.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1305600.00 JPY, fee =   2.00)
 	C1bal = 89707.68 USD, C2bal = 1305600.00 JPY, PV = 99707.68 USD
 
-May  8, 2022 - GUID
+May  8, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar  2, 2022 [7.59] -  T2 May  3, 2022 [6.95]   AvgDelta: -0.0104  StdDev: 0.3674,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1305600.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1305600.00 JPY, fee =   2.00)
 	C1bal = 79705.68 USD, C2bal = 2611200.00 JPY, PV = 99705.68 USD
 
-May  9, 2022 - GUID
+May  9, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar  3, 2022 [7.45] -  T2 May  4, 2022 [7.02]   AvgDelta: -0.0069  StdDev: 0.3665,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1302500.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1302500.00 JPY, fee =   2.00)
 	C1bal = 69703.68 USD, C2bal = 3913700.00 JPY, PV = 99751.28 USD
 
-May 10, 2022 - GUID
+May 10, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar  4, 2022 [7.71] -  T2 May  5, 2022 [7.26]   AvgDelta: -0.0073  StdDev: 0.3654,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1304300.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1304300.00 JPY, fee =   2.00)
 	C1bal = 59701.68 USD, C2bal = 5218000.00 JPY, PV = 99707.81 USD
 
-May 11, 2022 - GUID
+May 11, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar  5, 2022 [8.04] -  T2 May  6, 2022 [7.27]   AvgDelta: -0.0124  StdDev: 0.3648,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1299600.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1299600.00 JPY, fee =   2.00)
 	C1bal = 49699.68 USD, C2bal = 6517600.00 JPY, PV = 99850.50 USD
 
-May 12, 2022 - GUID
+May 12, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar  6, 2022 [8.36] -  T2 May  7, 2022 [7.78]   AvgDelta: -0.0094  StdDev: 0.3652,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1283200.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1283200.00 JPY, fee =   2.00)
 	C1bal = 39697.68 USD, C2bal = 7800800.00 JPY, PV = 100489.45 USD
 
-May 13, 2022 - GUID
+May 13, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  sell   (T1 Mar  7, 2022 [7.86] -  T2 May  8, 2022 [8.05]   AvgDelta: 0.0030  StdDev: 0.3668,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
         *** SELL ***  10106.05 USD (fee:   2.02), [1305600.00 JPY], investments affected: 1 -->  1 profited, 0 lost
@@ -100,43 +100,43 @@ May 13, 2022 - GUID
         *** SELL ***   9932.66 USD (fee:   1.99), [1283200.00 JPY], investments affected: 1 -->  0 profited, 1 lost
 	C1bal = 100067.99 USD, C2bal =   0.00 JPY, PV = 100067.99 USD
 
-May 14, 2022 - GUID
+May 14, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar  8, 2022 [7.56] -  T2 May  9, 2022 [7.30]   AvgDelta: -0.0042  StdDev: 0.3663,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1291900.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1291900.00 JPY, fee =   2.00)
 	C1bal = 90065.99 USD, C2bal = 1291900.00 JPY, PV = 100065.99 USD
 
-May 15, 2022 - GUID
+May 15, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar  9, 2022 [7.38] -  T2 May 10, 2022 [7.17]   AvgDelta: -0.0034  StdDev: 0.3664,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1291900.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1291900.00 JPY, fee =   2.00)
 	C1bal = 80063.99 USD, C2bal = 2583800.00 JPY, PV = 100063.99 USD
 
-May 16, 2022 - GUID
+May 16, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar 10, 2022 [7.43] -  T2 May 11, 2022 [7.08]   AvgDelta: -0.0056  StdDev: 0.3660,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1291600.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1291600.00 JPY, fee =   2.00)
 	C1bal = 70061.99 USD, C2bal = 3875400.00 JPY, PV = 100066.63 USD
 
-May 17, 2022 - GUID
+May 17, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar 11, 2022 [7.55] -  T2 May 12, 2022 [7.10]   AvgDelta: -0.0073  StdDev: 0.3661,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1293900.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1293900.00 JPY, fee =   2.00)
 	C1bal = 60059.99 USD, C2bal = 5169300.00 JPY, PV = 100011.30 USD
 
-May 18, 2022 - GUID
+May 18, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar 12, 2022 [7.88] -  T2 May 13, 2022 [7.31]   AvgDelta: -0.0091  StdDev: 0.3659,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1282200.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1282200.00 JPY, fee =   2.00)
 	C1bal = 50057.99 USD, C2bal = 6451500.00 JPY, PV = 100373.85 USD
 
-May 19, 2022 - GUID
+May 19, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar 13, 2022 [8.16] -  T2 May 14, 2022 [7.50]   AvgDelta: -0.0106  StdDev: 0.3658,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1278000.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1278000.00 JPY, fee =   2.00)
 	C1bal = 40055.99 USD, C2bal = 7729500.00 JPY, PV = 100537.21 USD
 
-May 20, 2022 - GUID
+May 20, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  sell   (T1 Mar 14, 2022 [7.66] -  T2 May 15, 2022 [7.97]   AvgDelta: 0.0049  StdDev: 0.3671,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
         *** SELL ***  10104.81 USD (fee:   2.02), [1291900.00 JPY], investments affected: 1 -->  1 profited, 0 lost
@@ -147,42 +147,42 @@ May 20, 2022 - GUID
         *** SELL ***   9996.09 USD (fee:   2.00), [1278000.00 JPY], investments affected: 1 -->  0 profited, 1 lost
 	C1bal = 100501.46 USD, C2bal =   0.00 JPY, PV = 100501.46 USD
 
-May 21, 2022 - GUID
+May 21, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  sell   (T1 Mar 15, 2022 [7.39] -  T2 May 16, 2022 [7.41]   AvgDelta: 0.0004  StdDev: 0.3662,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
 	C1bal = 100501.46 USD, C2bal =   0.00 JPY, PV = 100501.46 USD
 
-May 22, 2022 - GUID
+May 22, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar 16, 2022 [7.41] -  T2 May 17, 2022 [7.12]   AvgDelta: -0.0046  StdDev: 0.3664,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1278500.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1278500.00 JPY, fee =   2.00)
 	C1bal = 90499.46 USD, C2bal = 1278500.00 JPY, PV = 100499.46 USD
 
-May 23, 2022 - GUID
+May 23, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar 17, 2022 [7.37] -  T2 May 18, 2022 [7.12]   AvgDelta: -0.0041  StdDev: 0.3661,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1278700.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1278700.00 JPY, fee =   2.00)
 	C1bal = 80497.46 USD, C2bal = 2557200.00 JPY, PV = 100495.90 USD
 
-May 24, 2022 - GUID
+May 24, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar 18, 2022 [7.53] -  T2 May 19, 2022 [7.14]   AvgDelta: -0.0063  StdDev: 0.3658,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1268000.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1268000.00 JPY, fee =   2.00)
 	C1bal = 70495.46 USD, C2bal = 3825200.00 JPY, PV = 100662.65 USD
 
-May 25, 2022 - GUID
+May 25, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar 19, 2022 [7.97] -  T2 May 20, 2022 [7.25]   AvgDelta: -0.0117  StdDev: 0.3655,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1273100.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1273100.00 JPY, fee =   2.00)
 	C1bal = 60493.46 USD, C2bal = 5098300.00 JPY, PV = 100539.81 USD
 
-May 26, 2022 - GUID
+May 26, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar 20, 2022 [8.13] -  T2 May 21, 2022 [7.47]   AvgDelta: -0.0106  StdDev: 0.3655,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1271400.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1271400.00 JPY, fee =   2.00)
 	C1bal = 50491.46 USD, C2bal = 6369700.00 JPY, PV = 100591.35 USD
 
-May 27, 2022 - GUID
+May 27, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  sell   (T1 Mar 21, 2022 [7.50] -  T2 May 22, 2022 [7.75]   AvgDelta: 0.0040  StdDev: 0.3660,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: sell  100%  (buy: 0.00, hold: 0.00, sell: 1.00, abs: 0.00)
         *** SELL ***  10058.22 USD (fee:   2.01), [1278500.00 JPY], investments affected: 1 -->  1 profited, 0 lost
@@ -192,28 +192,28 @@ May 27, 2022 - GUID
         *** SELL ***  10002.36 USD (fee:   2.00), [1271400.00 JPY], investments affected: 1 -->  1 profited, 0 lost
 	C1bal = 100593.15 USD, C2bal =   0.00 JPY, PV = 100593.15 USD
 
-May 28, 2022 - GUID
+May 28, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar 22, 2022 [7.26] -  T2 May 23, 2022 [7.23]   AvgDelta: -0.0006  StdDev: 0.3660,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1271100.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1271100.00 JPY, fee =   2.00)
 	C1bal = 90591.15 USD, C2bal = 1271100.00 JPY, PV = 100591.15 USD
 
-May 29, 2022 - GUID
+May 29, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar 23, 2022 [7.23] -  T2 May 24, 2022 [7.04]   AvgDelta: -0.0031  StdDev: 0.3662,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1271100.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1271100.00 JPY, fee =   2.00)
 	C1bal = 80589.15 USD, C2bal = 2542200.00 JPY, PV = 100589.15 USD
 
-May 30, 2022 - GUID
+May 30, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar 24, 2022 [7.44] -  T2 May 25, 2022 [7.28]   AvgDelta: -0.0026  StdDev: 0.3655,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1275500.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1275500.00 JPY, fee =   2.00)
 	C1bal = 70587.15 USD, C2bal = 3817700.00 JPY, PV = 100518.16 USD
 
-May 31, 2022 - GUID
+May 31, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d153d3f3d07
 	GCAM_C17_13:  buy   (T1 Mar 25, 2022 [7.54] -  T2 May 26, 2022 [7.31]   AvgDelta: -0.0037  StdDev: 0.3648,  Factor: 0.0001, Trigger: 0.0000)
 	COA:  Action: buy  100%  (buy: 1.00, hold: 0.00, sell: 0.00, abs: 0.00)
-        *** BUY ***       0.00 USD (1286800.00 JPY, fee =   2.00)
+        *** BUY ***   10000.00 USD (1286800.00 JPY, fee =   2.00)
 	C1bal = 60585.15 USD, C2bal = 5104500.00 JPY, PV = 100253.32 USD
 
 Completed generation 1, May  1, 2022 - May 31, 2022,  unsettled =   5104500.00 JPY

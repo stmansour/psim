@@ -13,7 +13,7 @@ Duration:            0 years 1 month 0 days
 Population Size:     1
 *******************************************************************
 
-May  1, 2015 - GUID
+May  1, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  sell   (T1 Feb 25, 2015 [1.87] -  T2 Apr 26, 2015 [2.07]   AvgDelta: 0.0033  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  sell   (T1 Feb 25, 2015 [1.02] -  T2 Apr 26, 2015 [1.32]   AvgDelta: 0.0036  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Feb 25, 2015 [1.69] -  T2 Apr 26, 2015 [1.80]   AvgDelta: 0.0018  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -35,10 +35,10 @@ May  1, 2015 - GUID
 	GCAM_C5_4:  buy   (T1 Feb 25, 2015 [8.21] -  T2 Apr 26, 2015 [7.33]   AvgDelta: -0.0148  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C5_4_ECON:  buy   (T1 Feb 25, 2015 [1.00] -  T2 Apr 26, 2015 [0.90]   AvgDelta: -0.0905  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: buy   60%  (buy: 12.00, hold: 0.00, sell: 8.00, abs: 0.00)
-        *** BUY ***       0.00 USD (720960.00 JPY, fee =   0.00)
+        *** BUY ***    6000.00 USD (720960.00 JPY, fee =   0.00)
 	C1bal = 94000.00 USD, C2bal = 720960.00 JPY, PV = 100000.00 USD
 
-May  2, 2015 - GUID
+May  2, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  sell   (T1 Feb 26, 2015 [1.89] -  T2 Apr 27, 2015 [1.99]   AvgDelta: 0.0018  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  sell   (T1 Feb 26, 2015 [0.99] -  T2 Apr 27, 2015 [1.12]   AvgDelta: 0.0030  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Feb 26, 2015 [1.68] -  T2 Apr 27, 2015 [1.71]   AvgDelta: 0.0005  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -63,7 +63,7 @@ May  2, 2015 - GUID
         *** SELL ***   4200.00 USD (fee:   0.00), [504672.00 JPY], investments affected: 1 -->  0 profited, 1 lost
 	C1bal = 98200.00 USD, C2bal = 216288.00 JPY, PV = 100000.00 USD
 
-May  3, 2015 - GUID
+May  3, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  sell   (T1 Feb 27, 2015 [1.92] -  T2 Apr 28, 2015 [2.00]   AvgDelta: 0.0012  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  sell   (T1 Feb 27, 2015 [1.00] -  T2 Apr 28, 2015 [1.23]   AvgDelta: -0.0077  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Feb 27, 2015 [1.70] -  T2 Apr 28, 2015 [1.69]   AvgDelta: -0.0002  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -88,7 +88,7 @@ May  3, 2015 - GUID
         *** SELL ***   1080.00 USD (fee:   0.00), [129772.80 JPY], investments affected: 2 -->  0 profited, 2 lost
 	C1bal = 99280.00 USD, C2bal = 86515.20 JPY, PV = 100000.00 USD
 
-May  4, 2015 - GUID
+May  4, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  buy   (T1 Feb 28, 2015 [1.97] -  T2 Apr 29, 2015 [1.94]   AvgDelta: -0.0006  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  sell   (T1 Feb 28, 2015 [0.86] -  T2 Apr 29, 2015 [1.11]   AvgDelta: -0.0063  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Feb 28, 2015 [1.76] -  T2 Apr 29, 2015 [1.73]   AvgDelta: -0.0006  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -113,7 +113,7 @@ May  4, 2015 - GUID
         *** SELL ***    540.27 USD (fee:   0.00), [64886.40 JPY], investments affected: 3 -->  1 profited, 2 lost
 	C1bal = 99820.27 USD, C2bal = 21628.80 JPY, PV = 100000.36 USD
 
-May  5, 2015 - GUID
+May  5, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  sell   (T1 Mar  1, 2015 [1.96] -  T2 Apr 30, 2015 [1.97]   AvgDelta: 0.0003  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  sell   (T1 Mar  1, 2015 [0.83] -  T2 Apr 30, 2015 [0.95]   AvgDelta: -0.0087  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar  1, 2015 [1.76] -  T2 Apr 30, 2015 [1.70]   AvgDelta: -0.0010  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -138,7 +138,7 @@ May  5, 2015 - GUID
         *** SELL ***    126.36 USD (fee:   0.00), [15140.16 JPY], investments affected: 4 -->  2 profited, 2 lost
 	C1bal = 99946.63 USD, C2bal = 6488.64 JPY, PV = 100000.78 USD
 
-May  6, 2015 - GUID
+May  6, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  sell   (T1 Mar  2, 2015 [1.91] -  T2 May  1, 2015 [1.96]   AvgDelta: 0.0008  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  buy   (T1 Mar  2, 2015 [1.10] -  T2 May  1, 2015 [0.88]   AvgDelta: 0.0074  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar  2, 2015 [1.70] -  T2 May  1, 2015 [1.77]   AvgDelta: 0.0011  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -160,10 +160,10 @@ May  6, 2015 - GUID
 	GCAM_C5_4:  buy   (T1 Mar  2, 2015 [8.20] -  T2 May  1, 2015 [7.96]   AvgDelta: -0.0041  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C5_4_ECON:  buy   (T1 Mar  2, 2015 [0.87] -  T2 May  1, 2015 [0.81]   AvgDelta: -0.0405  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: buy   65%  (buy: 13.00, hold: 0.00, sell: 7.00, abs: 0.00)
-        *** BUY ***       0.00 USD (776295.00 JPY, fee =   0.00)
+        *** BUY ***    6500.00 USD (776295.00 JPY, fee =   0.00)
 	C1bal = 93446.63 USD, C2bal = 782783.64 JPY, PV = 100000.96 USD
 
-May  7, 2015 - GUID
+May  7, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  sell   (T1 Mar  3, 2015 [1.89] -  T2 May  2, 2015 [2.01]   AvgDelta: 0.0020  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  sell   (T1 Mar  3, 2015 [0.98] -  T2 May  2, 2015 [1.03]   AvgDelta: 0.0022  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar  3, 2015 [1.69] -  T2 May  2, 2015 [1.85]   AvgDelta: 0.0028  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -185,10 +185,10 @@ May  7, 2015 - GUID
 	GCAM_C5_4:  buy   (T1 Mar  3, 2015 [8.23] -  T2 May  2, 2015 [6.83]   AvgDelta: -0.0235  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C5_4_ECON:  buy   (T1 Mar  3, 2015 [0.83] -  T2 May  2, 2015 [0.75]   AvgDelta: -0.0511  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: buy   65%  (buy: 13.00, hold: 0.00, sell: 7.00, abs: 0.00)
-        *** BUY ***       0.00 USD (778245.00 JPY, fee =   0.00)
+        *** BUY ***    6500.00 USD (778245.00 JPY, fee =   0.00)
 	C1bal = 86946.63 USD, C2bal = 1561028.64 JPY, PV = 99984.53 USD
 
-May  8, 2015 - GUID
+May  8, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  sell   (T1 Mar  4, 2015 [1.92] -  T2 May  3, 2015 [2.00]   AvgDelta: 0.0013  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  buy   (T1 Mar  4, 2015 [1.28] -  T2 May  3, 2015 [0.93]   AvgDelta: 0.0092  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar  4, 2015 [1.69] -  T2 May  3, 2015 [1.77]   AvgDelta: 0.0014  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -210,10 +210,10 @@ May  8, 2015 - GUID
 	GCAM_C5_4:  buy   (T1 Mar  4, 2015 [8.24] -  T2 May  3, 2015 [7.28]   AvgDelta: -0.0161  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C5_4_ECON:  sell   (T1 Mar  4, 2015 [0.83] -  T2 May  3, 2015 [0.93]   AvgDelta: -0.1100  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: buy   70%  (buy: 14.00, hold: 0.00, sell: 6.00, abs: 0.00)
-        *** BUY ***       0.00 USD (838530.00 JPY, fee =   0.00)
+        *** BUY ***    7000.00 USD (838530.00 JPY, fee =   0.00)
 	C1bal = 79946.63 USD, C2bal = 2399558.64 JPY, PV = 99978.00 USD
 
-May  9, 2015 - GUID
+May  9, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  buy   (T1 Mar  5, 2015 [1.93] -  T2 May  4, 2015 [1.92]   AvgDelta: -0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  buy   (T1 Mar  5, 2015 [1.00] -  T2 May  4, 2015 [0.85]   AvgDelta: 0.0024  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar  5, 2015 [1.68] -  T2 May  4, 2015 [1.72]   AvgDelta: 0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -235,10 +235,10 @@ May  9, 2015 - GUID
 	GCAM_C5_4:  buy   (T1 Mar  5, 2015 [8.26] -  T2 May  4, 2015 [8.18]   AvgDelta: -0.0013  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C5_4_ECON:  buy   (T1 Mar  5, 2015 [1.02] -  T2 May  4, 2015 [0.84]   AvgDelta: 0.0052  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: buy   75%  (buy: 15.00, hold: 0.00, sell: 5.00, abs: 0.00)
-        *** BUY ***       0.00 USD (898425.00 JPY, fee =   0.00)
+        *** BUY ***    7500.00 USD (898425.00 JPY, fee =   0.00)
 	C1bal = 72446.63 USD, C2bal = 3297983.64 JPY, PV = 99978.00 USD
 
-May 10, 2015 - GUID
+May 10, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  buy   (T1 Mar  6, 2015 [1.94] -  T2 May  5, 2015 [1.91]   AvgDelta: -0.0005  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  buy   (T1 Mar  6, 2015 [1.05] -  T2 May  5, 2015 [0.88]   AvgDelta: 0.0021  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar  6, 2015 [1.72] -  T2 May  5, 2015 [1.69]   AvgDelta: -0.0005  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -260,10 +260,10 @@ May 10, 2015 - GUID
 	GCAM_C5_4:  sell   (T1 Mar  6, 2015 [7.96] -  T2 May  5, 2015 [8.44]   AvgDelta: 0.0080  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C5_4_ECON:  buy   (T1 Mar  6, 2015 [0.94] -  T2 May  5, 2015 [0.84]   AvgDelta: 0.0060  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: buy   65%  (buy: 13.00, hold: 0.00, sell: 7.00, abs: 0.00)
-        *** BUY ***       0.00 USD (778635.00 JPY, fee =   0.00)
+        *** BUY ***    6500.00 USD (778635.00 JPY, fee =   0.00)
 	C1bal = 65946.63 USD, C2bal = 4076618.64 JPY, PV = 99978.00 USD
 
-May 11, 2015 - GUID
+May 11, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  buy   (T1 Mar  7, 2015 [1.97] -  T2 May  6, 2015 [1.91]   AvgDelta: -0.0010  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  sell   (T1 Mar  7, 2015 [0.68] -  T2 May  6, 2015 [0.93]   AvgDelta: -0.0222  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar  7, 2015 [1.77] -  T2 May  6, 2015 [1.72]   AvgDelta: -0.0008  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -292,7 +292,7 @@ May 11, 2015 - GUID
         *** SELL ***   3781.75 USD (fee:   0.00), [454074.41 JPY], investments affected: 1 -->  0 profited, 1 lost
 	C1bal = 89713.04 USD, C2bal = 1222985.59 JPY, PV = 99898.64 USD
 
-May 12, 2015 - GUID
+May 12, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  buy   (T1 Mar  8, 2015 [2.01] -  T2 May  7, 2015 [1.91]   AvgDelta: -0.0018  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  sell   (T1 Mar  8, 2015 [0.88] -  T2 May  7, 2015 [0.90]   AvgDelta: -0.0078  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar  8, 2015 [1.81] -  T2 May  7, 2015 [1.67]   AvgDelta: -0.0025  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -318,7 +318,7 @@ May 12, 2015 - GUID
         *** SELL ***   2925.24 USD (fee:   0.00), [350590.04 JPY], investments affected: 1 -->  0 profited, 1 lost
 	C1bal = 96345.84 USD, C2bal = 428044.96 JPY, PV = 99917.34 USD
 
-May 13, 2015 - GUID
+May 13, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  sell   (T1 Mar  9, 2015 [1.92] -  T2 May  8, 2015 [1.97]   AvgDelta: 0.0008  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  sell   (T1 Mar  9, 2015 [0.91] -  T2 May  8, 2015 [0.97]   AvgDelta: 0.0024  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar  9, 2015 [1.69] -  T2 May  8, 2015 [1.75]   AvgDelta: 0.0010  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -343,7 +343,7 @@ May 13, 2015 - GUID
         *** SELL ***   1976.03 USD (fee:   0.00), [235424.73 JPY], investments affected: 2 -->  1 profited, 1 lost
 	C1bal = 98321.87 USD, C2bal = 192620.23 JPY, PV = 99938.62 USD
 
-May 14, 2015 - GUID
+May 14, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  sell   (T1 Mar 10, 2015 [1.92] -  T2 May  9, 2015 [2.03]   AvgDelta: 0.0018  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  sell   (T1 Mar 10, 2015 [0.88] -  T2 May  9, 2015 [0.91]   AvgDelta: 0.0070  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 10, 2015 [1.68] -  T2 May  9, 2015 [1.78]   AvgDelta: 0.0016  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -365,10 +365,10 @@ May 14, 2015 - GUID
 	GCAM_C5_4:  buy   (T1 Mar 10, 2015 [8.11] -  T2 May  9, 2015 [6.96]   AvgDelta: -0.0192  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C5_4_ECON:  buy   (T1 Mar 10, 2015 [0.90] -  T2 May  9, 2015 [0.78]   AvgDelta: -0.0542  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: buy   70%  (buy: 14.00, hold: 0.00, sell: 6.00, abs: 0.00)
-        *** BUY ***       0.00 USD (833910.00 JPY, fee =   0.00)
+        *** BUY ***    7000.00 USD (833910.00 JPY, fee =   0.00)
 	C1bal = 91321.87 USD, C2bal = 1026530.23 JPY, PV = 99938.76 USD
 
-May 15, 2015 - GUID
+May 15, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  sell   (T1 Mar 11, 2015 [1.89] -  T2 May 10, 2015 [2.08]   AvgDelta: 0.0032  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  buy   (T1 Mar 11, 2015 [0.84] -  T2 May 10, 2015 [0.79]   AvgDelta: 0.0139  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 11, 2015 [1.67] -  T2 May 10, 2015 [1.86]   AvgDelta: 0.0032  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -390,10 +390,10 @@ May 15, 2015 - GUID
 	GCAM_C5_4:  buy   (T1 Mar 11, 2015 [8.11] -  T2 May 10, 2015 [7.10]   AvgDelta: -0.0170  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C5_4_ECON:  buy   (T1 Mar 11, 2015 [0.85] -  T2 May 10, 2015 [0.78]   AvgDelta: -0.0665  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: buy   70%  (buy: 14.00, hold: 0.00, sell: 6.00, abs: 0.00)
-        *** BUY ***       0.00 USD (834890.00 JPY, fee =   0.00)
+        *** BUY ***    7000.00 USD (834890.00 JPY, fee =   0.00)
 	C1bal = 84321.87 USD, C2bal = 1861420.23 JPY, PV = 99928.65 USD
 
-May 16, 2015 - GUID
+May 16, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  sell   (T1 Mar 12, 2015 [1.88] -  T2 May 11, 2015 [1.98]   AvgDelta: 0.0017  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  sell   (T1 Mar 12, 2015 [0.87] -  T2 May 11, 2015 [0.93]   AvgDelta: 0.0020  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 12, 2015 [1.67] -  T2 May 11, 2015 [1.70]   AvgDelta: 0.0005  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -417,7 +417,7 @@ May 16, 2015 - GUID
 	COA:  Action: hold    0%  (buy: 10.00, hold: 0.00, sell: 10.00, abs: 0.00)
 	C1bal = 84321.87 USD, C2bal = 1861420.23 JPY, PV = 99928.65 USD
 
-May 17, 2015 - GUID
+May 17, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  sell   (T1 Mar 13, 2015 [1.91] -  T2 May 12, 2015 [1.99]   AvgDelta: 0.0012  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  sell   (T1 Mar 13, 2015 [1.02] -  T2 May 12, 2015 [1.03]   AvgDelta: -0.0010  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar 13, 2015 [1.69] -  T2 May 12, 2015 [1.67]   AvgDelta: -0.0003  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -439,10 +439,10 @@ May 17, 2015 - GUID
 	GCAM_C5_4:  sell   (T1 Mar 13, 2015 [8.22] -  T2 May 12, 2015 [8.28]   AvgDelta: 0.0009  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C5_4_ECON:  buy   (T1 Mar 13, 2015 [0.87] -  T2 May 12, 2015 [0.82]   AvgDelta: -0.0638  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: buy   60%  (buy: 12.00, hold: 0.00, sell: 8.00, abs: 0.00)
-        *** BUY ***       0.00 USD (715620.00 JPY, fee =   0.00)
+        *** BUY ***    6000.00 USD (715620.00 JPY, fee =   0.00)
 	C1bal = 78321.87 USD, C2bal = 2577040.23 JPY, PV = 99928.65 USD
 
-May 18, 2015 - GUID
+May 18, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  buy   (T1 Mar 14, 2015 [1.93] -  T2 May 13, 2015 [1.93]   AvgDelta: -0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  buy   (T1 Mar 14, 2015 [1.12] -  T2 May 13, 2015 [0.88]   AvgDelta: 0.0068  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar 14, 2015 [1.75] -  T2 May 13, 2015 [1.70]   AvgDelta: -0.0009  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -464,10 +464,10 @@ May 18, 2015 - GUID
 	GCAM_C5_4:  sell   (T1 Mar 14, 2015 [6.95] -  T2 May 13, 2015 [8.25]   AvgDelta: 0.0216  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C5_4_ECON:  buy   (T1 Mar 14, 2015 [1.12] -  T2 May 13, 2015 [0.87]   AvgDelta: 0.0927  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: buy   65%  (buy: 13.00, hold: 0.00, sell: 7.00, abs: 0.00)
-        *** BUY ***       0.00 USD (779870.00 JPY, fee =   0.00)
+        *** BUY ***    6500.00 USD (779870.00 JPY, fee =   0.00)
 	C1bal = 71821.87 USD, C2bal = 3356910.23 JPY, PV = 99800.78 USD
 
-May 19, 2015 - GUID
+May 19, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  buy   (T1 Mar 15, 2015 [1.96] -  T2 May 14, 2015 [1.94]   AvgDelta: -0.0003  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  buy   (T1 Mar 15, 2015 [1.14] -  T2 May 14, 2015 [0.89]   AvgDelta: 0.0053  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar 15, 2015 [1.79] -  T2 May 14, 2015 [1.69]   AvgDelta: -0.0017  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -494,7 +494,7 @@ May 19, 2015 - GUID
         *** SELL ***   6792.36 USD (fee:   0.00), [819770.40 JPY], investments affected: 1 -->  0 profited, 1 lost
 	C1bal = 87119.75 USD, C2bal = 1510609.60 JPY, PV = 99636.19 USD
 
-May 20, 2015 - GUID
+May 20, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  buy   (T1 Mar 16, 2015 [1.99] -  T2 May 15, 2015 [1.96]   AvgDelta: -0.0005  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  sell   (T1 Mar 16, 2015 [0.97] -  T2 May 15, 2015 [0.97]   AvgDelta: -0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 16, 2015 [1.70] -  T2 May 15, 2015 [1.74]   AvgDelta: 0.0006  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -518,7 +518,7 @@ May 20, 2015 - GUID
 	COA:  Action: hold    0%  (buy: 10.00, hold: 0.00, sell: 10.00, abs: 0.00)
 	C1bal = 87119.75 USD, C2bal = 1510609.60 JPY, PV = 99569.14 USD
 
-May 21, 2015 - GUID
+May 21, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  sell   (T1 Mar 17, 2015 [1.92] -  T2 May 16, 2015 [1.96]   AvgDelta: 0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  buy   (T1 Mar 17, 2015 [1.05] -  T2 May 16, 2015 [0.84]   AvgDelta: 0.0082  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 17, 2015 [1.68] -  T2 May 16, 2015 [1.77]   AvgDelta: 0.0016  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -540,10 +540,10 @@ May 21, 2015 - GUID
 	GCAM_C5_4:  buy   (T1 Mar 17, 2015 [8.07] -  T2 May 16, 2015 [6.89]   AvgDelta: -0.0198  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C5_4_ECON:  sell   (T1 Mar 17, 2015 [0.87] -  T2 May 16, 2015 [0.92]   AvgDelta: -0.0854  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: buy   80%  (buy: 16.00, hold: 0.00, sell: 4.00, abs: 0.00)
-        *** BUY ***       0.00 USD (968160.00 JPY, fee =   0.00)
+        *** BUY ***    8000.00 USD (968160.00 JPY, fee =   0.00)
 	C1bal = 79119.75 USD, C2bal = 2478769.60 JPY, PV = 99602.06 USD
 
-May 22, 2015 - GUID
+May 22, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  sell   (T1 Mar 18, 2015 [1.92] -  T2 May 17, 2015 [2.01]   AvgDelta: 0.0014  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  buy   (T1 Mar 18, 2015 [1.30] -  T2 May 17, 2015 [1.13]   AvgDelta: 0.0040  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 18, 2015 [1.69] -  T2 May 17, 2015 [1.79]   AvgDelta: 0.0016  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -565,10 +565,10 @@ May 22, 2015 - GUID
 	GCAM_C5_4:  buy   (T1 Mar 18, 2015 [8.15] -  T2 May 17, 2015 [7.12]   AvgDelta: -0.0171  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C5_4_ECON:  sell   (T1 Mar 18, 2015 [0.82] -  T2 May 17, 2015 [0.88]   AvgDelta: -0.0670  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: buy   55%  (buy: 11.00, hold: 0.00, sell: 9.00, abs: 0.00)
-        *** BUY ***       0.00 USD (668415.00 JPY, fee =   0.00)
+        *** BUY ***    5500.00 USD (668415.00 JPY, fee =   0.00)
 	C1bal = 73619.75 USD, C2bal = 3147184.60 JPY, PV = 99516.11 USD
 
-May 23, 2015 - GUID
+May 23, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  sell   (T1 Mar 19, 2015 [1.87] -  T2 May 18, 2015 [1.95]   AvgDelta: 0.0012  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  buy   (T1 Mar 19, 2015 [1.08] -  T2 May 18, 2015 [0.92]   AvgDelta: 0.0056  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 19, 2015 [1.69] -  T2 May 18, 2015 [1.73]   AvgDelta: 0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -596,7 +596,7 @@ May 23, 2015 - GUID
         *** SELL ***   4402.70 USD (fee:   0.00), [535060.39 JPY], investments affected: 1 -->  0 profited, 1 lost
 	C1bal = 90452.38 USD, C2bal = 1101514.61 JPY, PV = 99516.11 USD
 
-May 24, 2015 - GUID
+May 24, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  buy   (T1 Mar 20, 2015 [2.02] -  T2 May 19, 2015 [1.94]   AvgDelta: -0.0014  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  sell   (T1 Mar 20, 2015 [0.94] -  T2 May 19, 2015 [0.94]   AvgDelta: -0.0013  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar 20, 2015 [1.75] -  T2 May 19, 2015 [1.67]   AvgDelta: -0.0013  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -622,7 +622,7 @@ May 24, 2015 - GUID
         *** SELL ***   1874.51 USD (fee:   0.00), [227809.16 JPY], investments affected: 1 -->  0 profited, 1 lost
 	C1bal = 95890.61 USD, C2bal = 440605.84 JPY, PV = 99516.11 USD
 
-May 25, 2015 - GUID
+May 25, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  buy   (T1 Mar 21, 2015 [1.97] -  T2 May 20, 2015 [1.95]   AvgDelta: -0.0003  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  buy   (T1 Mar 21, 2015 [0.91] -  T2 May 20, 2015 [0.87]   AvgDelta: 0.0004  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar 21, 2015 [1.75] -  T2 May 20, 2015 [1.68]   AvgDelta: -0.0011  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -647,7 +647,7 @@ May 25, 2015 - GUID
         *** SELL ***   2174.94 USD (fee:   0.00), [264363.51 JPY], investments affected: 2 -->  0 profited, 2 lost
 	C1bal = 98065.55 USD, C2bal = 176242.34 JPY, PV = 99515.51 USD
 
-May 26, 2015 - GUID
+May 26, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  buy   (T1 Mar 22, 2015 [1.96] -  T2 May 21, 2015 [1.95]   AvgDelta: -0.0002  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  buy   (T1 Mar 22, 2015 [1.01] -  T2 May 21, 2015 [0.89]   AvgDelta: -0.0006  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar 22, 2015 [1.74] -  T2 May 21, 2015 [1.72]   AvgDelta: -0.0004  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -672,7 +672,7 @@ May 26, 2015 - GUID
         *** SELL ***    787.56 USD (fee:   0.00), [96933.29 JPY], investments affected: 3 -->  0 profited, 3 lost
 	C1bal = 98853.11 USD, C2bal = 79309.05 JPY, PV = 99497.48 USD
 
-May 27, 2015 - GUID
+May 27, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  sell   (T1 Mar 23, 2015 [1.92] -  T2 May 22, 2015 [1.98]   AvgDelta: 0.0011  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  sell   (T1 Mar 23, 2015 [0.87] -  T2 May 22, 2015 [0.96]   AvgDelta: 0.0017  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 23, 2015 [1.70] -  T2 May 22, 2015 [1.71]   AvgDelta: 0.0002  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -697,7 +697,7 @@ May 27, 2015 - GUID
         *** SELL ***    384.84 USD (fee:   0.00), [47585.43 JPY], investments affected: 4 -->  0 profited, 4 lost
 	C1bal = 99237.95 USD, C2bal = 31723.62 JPY, PV = 99494.51 USD
 
-May 28, 2015 - GUID
+May 28, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  sell   (T1 Mar 24, 2015 [1.94] -  T2 May 23, 2015 [2.23]   AvgDelta: 0.0049  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  buy   (T1 Mar 24, 2015 [0.90] -  T2 May 23, 2015 [0.81]   AvgDelta: 0.0137  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 24, 2015 [1.68] -  T2 May 23, 2015 [1.73]   AvgDelta: 0.0009  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -719,10 +719,10 @@ May 28, 2015 - GUID
 	GCAM_C5_4:  buy   (T1 Mar 24, 2015 [8.00] -  T2 May 23, 2015 [6.73]   AvgDelta: -0.0211  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C5_4_ECON:  buy   (T1 Mar 24, 2015 [0.82] -  T2 May 23, 2015 [0.82]   AvgDelta: -0.0707  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: buy   70%  (buy: 14.00, hold: 0.00, sell: 6.00, abs: 0.00)
-        *** BUY ***       0.00 USD (867580.00 JPY, fee =   0.00)
+        *** BUY ***    7000.00 USD (867580.00 JPY, fee =   0.00)
 	C1bal = 92237.95 USD, C2bal = 899303.62 JPY, PV = 99493.91 USD
 
-May 29, 2015 - GUID
+May 29, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  sell   (T1 Mar 25, 2015 [1.92] -  T2 May 24, 2015 [2.23]   AvgDelta: 0.0052  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  buy   (T1 Mar 25, 2015 [1.08] -  T2 May 24, 2015 [0.83]   AvgDelta: 0.0112  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 25, 2015 [1.69] -  T2 May 24, 2015 [1.78]   AvgDelta: 0.0014  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -744,10 +744,10 @@ May 29, 2015 - GUID
 	GCAM_C5_4:  buy   (T1 Mar 25, 2015 [8.14] -  T2 May 24, 2015 [6.98]   AvgDelta: -0.0192  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C5_4_ECON:  buy   (T1 Mar 25, 2015 [0.91] -  T2 May 24, 2015 [0.86]   AvgDelta: -0.0393  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: buy   55%  (buy: 11.00, hold: 0.00, sell: 9.00, abs: 0.00)
-        *** BUY ***       0.00 USD (682605.00 JPY, fee =   0.00)
+        *** BUY ***    5500.00 USD (682605.00 JPY, fee =   0.00)
 	C1bal = 86737.95 USD, C2bal = 1581908.62 JPY, PV = 99483.97 USD
 
-May 30, 2015 - GUID
+May 30, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  sell   (T1 Mar 26, 2015 [1.93] -  T2 May 25, 2015 [1.98]   AvgDelta: 0.0009  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  buy   (T1 Mar 26, 2015 [0.87] -  T2 May 25, 2015 [0.83]   AvgDelta: 0.0026  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  sell   (T1 Mar 26, 2015 [1.67] -  T2 May 25, 2015 [1.72]   AvgDelta: 0.0009  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -769,10 +769,10 @@ May 30, 2015 - GUID
 	GCAM_C5_4:  buy   (T1 Mar 26, 2015 [8.21] -  T2 May 25, 2015 [7.78]   AvgDelta: -0.0071  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C5_4_ECON:  buy   (T1 Mar 26, 2015 [0.88] -  T2 May 25, 2015 [0.87]   AvgDelta: -0.0616  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: buy   80%  (buy: 16.00, hold: 0.00, sell: 4.00, abs: 0.00)
-        *** BUY ***       0.00 USD (992880.00 JPY, fee =   0.00)
+        *** BUY ***    8000.00 USD (992880.00 JPY, fee =   0.00)
 	C1bal = 78737.95 USD, C2bal = 2574788.62 JPY, PV = 99483.97 USD
 
-May 31, 2015 - GUID
+May 31, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427c230566d7
 	GCAM_C15_137:  buy   (T1 Mar 27, 2015 [1.94] -  T2 May 26, 2015 [1.89]   AvgDelta: -0.0007  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_137_ECON:  buy   (T1 Mar 27, 2015 [0.91] -  T2 May 26, 2015 [0.90]   AvgDelta: 0.0009  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C15_147:  buy   (T1 Mar 27, 2015 [1.69] -  T2 May 26, 2015 [1.69]   AvgDelta: -0.0000  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
@@ -794,7 +794,7 @@ May 31, 2015 - GUID
 	GCAM_C5_4:  buy   (T1 Mar 27, 2015 [8.15] -  T2 May 26, 2015 [8.11]   AvgDelta: -0.0006  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	GCAM_C5_4_ECON:  buy   (T1 Mar 27, 2015 [0.82] -  T2 May 26, 2015 [0.82]   AvgDelta: -0.0633  StdDev: 0.0000,  Factor: 0.1000, Trigger: 0.0000)
 	COA:  Action: buy   65%  (buy: 13.00, hold: 0.00, sell: 7.00, abs: 0.00)
-        *** BUY ***       0.00 USD (806715.00 JPY, fee =   0.00)
+        *** BUY ***    6500.00 USD (806715.00 JPY, fee =   0.00)
 	C1bal = 72237.95 USD, C2bal = 3381503.62 JPY, PV = 99483.97 USD
 
 Completed generation 1, May  1, 2015 - May 31, 2015,  unsettled =   3381503.62 JPY

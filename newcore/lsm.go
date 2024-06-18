@@ -287,7 +287,13 @@ func (p *LSMInfluencer) GetPrediction(t3 time.Time) (*Prediction, error) {
 		}
 		// pred.Val1 = rec1.Fields[pred.Fields[0].FQMetric()].Value / rec1.Fields[pred.Fields[1].FQMetric()].Value
 		// pred.Val2 = rec2.Fields[pred.Fields[1].FQMetric()].Value / rec2.Fields[pred.Fields[1].FQMetric()].Value
+		if valbT1 == 0 {
+			valbT1 = 0.0000001
+		}
 		pred.Val1 = valaT1 / valbT1
+		if valbT2 == 0 {
+			valbT2 = 0.0000001
+		}
 		pred.Val2 = valaT2 / valbT2
 		delta := pred.Val2 - pred.Val1
 

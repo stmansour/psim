@@ -1,0 +1,148 @@
+.TH SIMULATOR 1 "June 2024" "Version 1.0"
+.SH NAME
+simulator \- A genetic algorithm-based investment strategy simulation tool.
+
+.SH SYNOPSIS
+.B simulator
+.RI [ options ]
+
+.SH DESCRIPTION
+
+The simulation settings and controls are specified in a JSON5 configuration
+file, enabling detailed customization of simulations, Investors, and
+Influencers. The simulator runs on the command line, making it highly
+scriptable for configuration, usage, and output analysis.
+
+.SH OPTIONS
+.TP
+.BI \-adir " directory"
+This option is used to specify the base archive directory, the directory where
+simulator writes all 
+its output files. It defaults to using the current directory. This option can
+be used in conjunction with the
+.B -ar
+option.
+.TP
+.BI \-ar
+Create an archive directory for all output files.  The name of the directory is
+the timestamp expressed down to the nanosecond. Here is an example:
+
+.B 2024-06-14T16-57-44.44.807909000
+
+The files that will be written to this directory include the config
+file, finrep.csv, simstats.csv, and all other reports. Also see
+.B -adir\fP.
+.TP
+.BI \-c " filename"
+Use
+.I filename
+as the configuration file.  If this option is not given, simulator will attempt
+to open a file named config.json5 in the current directory.  If config.json5 is
+not found int the current directory, the simulator will load config.json5 from
+the distribution release directory, the same directory in which simulator
+itself is located.
+.TP
+.BI \-C
+Enable Crucible mode.
+.TP
+.BI \-cpuprofile " file"
+Write CPU profile to the specified file.
+.TP
+.BI \-D
+Show prediction debug info. Dumps a lot of data; use on short simulations
+with minimal Influencers.
+.TP
+.BI \-d
+Show day-by-day results.
+.TP
+.BI \-db " database"
+Override CSV database name with this name. For example 
+.B \-db
+.I mydata/newdb.csv
+will open the directory 
+.B mydata
+in the current directory and look for a file
+named
+.I newdb.csv\fP.
+If the simulator successfully opens the database in
+.B mydata\fP,
+it will expect all other database CSV files to be found in 
+.B mydata\fP.
+.TP
+.BI \-dup
+By default,
+.B simulator
+detects and eliminates duplicate Investors within a generation and
+across generations.
+Duplicates are replaced with regenerated untested Investors.  The only
+exception to this behavior is when the Preserve Elite mode is turned
+on, an investor that ran in one generation will be allowed to run
+again in the next generation if it achieves elite status. Note that
+elite status must be earned every generation.
+With large populations, it is quite common for the genetics to produce
+identical Investors, especially as the number of iterations increases. 
+Use the
+.B -dup
+option to allow duplicate investors within a population. This inhibits the
+detection of duplicate Investors allowing the program to run
+approximately 20% faster. However, it reduces the number of unique
+Investors tested during a run. 
+.TP
+.BI \-fit
+Generate a Fitness Report that shows the fitness of all Investors for each
+generation.
+.TP
+.BI \-idist
+Report Influencer Distribution each time a generation completes.
+.TP
+.BI \-inv
+For each generation, write top Investors' Investment List to invrep.csv.
+.TP
+.BI \-memprofile " file"
+Write memory profile to the specified file.
+.TP
+.BI \-notalk
+If true, the simulator does not start up an HTTP listener.
+.TP
+.BI \-r " seed"
+Specify random number seed (e.g., ./simulator \-r 1687802336231490000).
+.TP
+.BI \-trace
+Show details about the decision-making process every day for all Investors.
+.TP
+.BI \-tracetime
+Show timing of simulation phase and the creation of the new generation.
+This output is displayed to the terminal only, it does not go into a report file.
+.TP
+.BI \-v
+Print the program version string.
+
+.SH EXAMPLES
+.TP
+.B simulator
+Run the simulation using all defaults. It will load the config file
+from the current directory if it exists, otherwise it loads
+/user/local/plato/bin/config.json5.
+.TP
+.B simulator \-c myconfig.json5
+Run the simulation using the config file named \fBmyconfig\fP.json5.
+.TP
+.B simulator \-dup
+Run the simulation and allow duplicate Investors. By default, simulator will
+not allow duplicate Investors. A given population of Investors will never
+contain a duplicate by default. Duplicates are not even allowed in different
+generations unless the Preserve Elite option is enabled. This allows any
+Investor that meets the Elite criteria to be moved into the next generation.
+The intent is to keep good DNA in the populations so it will have a positive
+effect on the next generation.  Elites must earn their elite status every
+generation.
+.TP
+.B simulator -c huge.json5 \-ar \-adir /usr/local/simresults
+Run the simulation using the config file \fBhuge.json5\fP and store the
+result files in a timestamp folder which will be placed in
+\fB/usr/local/simresults\fP. The config file, \fBhuge.json5\fP will also
+be copied into the timestamp folder.
+.TP
+.B simulator \-C \-c mybest.json5
+Run the simulation in Crucible mode, showing day-by-day results and all
+Investors in the output.

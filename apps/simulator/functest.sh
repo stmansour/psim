@@ -34,6 +34,8 @@ EOF
 # Function to compare a report file to its gold standard
 # INPUTS
 #    $1 = name of un-normalized output file
+#    $2 = if supplied, it means that there will be more tests where
+#         the output needs to be listed. So use "echo -n" on the output
 #------------------------------------------------------------------------------
 compareToGold() {
     local reportFile=$1
@@ -66,7 +68,7 @@ compareToGold() {
 
     # Compare the normalized report to the gold standard
     if diff "${normalizedFile}" "${goldFile}"; then
-        echo "PASSED"
+        echo  "PASSED"
         rm "${normalizedFile}"
     else
         echo "Differences detected.  meld ${normalizedFile} ${goldFile}"
@@ -174,9 +176,25 @@ if [[ "${SINGLETEST}${TFILES}" = "${TFILES}" || "${SINGLETEST}${TFILES}" = "${TF
     echo -n "Crucible test..."
     RESFILE="${TFILES}${STEP}"
     ./simulator -C -c confcru.json5 -notalk -dup >"${RESFILE}"
-    compareToGold ${RESFILE}
+    compareToGold ${RESFILE} more
     mv crep.csv c1.csv
     compareToGold c1.csv
+    ((TESTCOUNT++))
+fi
+
+#------------------------------------------------------------------------------
+#  TEST d
+#  test trace csv file
+#------------------------------------------------------------------------------
+TFILES="d"
+STEP=0
+if [[ "${SINGLETEST}${TFILES}" = "${TFILES}" || "${SINGLETEST}${TFILES}" = "${TFILES}${TFILES}" ]]; then
+    echo -n "Test ${TFILES} - "
+    echo -n "Crucible test..."
+    RESFILE="${TFILES}${STEP}"
+    ./simulator -c trccfg.json5 -trace -notalk >"${RESFILE}"
+    mv trace-e97c8d22664a5cf769580318885b4c6975e2a7b02d74859259b8e2cb52b2b01d.csv d1.csv
+    compareToGold d1.csv
     ((TESTCOUNT++))
 fi
 
