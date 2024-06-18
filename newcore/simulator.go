@@ -534,7 +534,7 @@ func (s *Simulator) Run() {
 					log.Printf("ERROR: dumpTopInvestorsDetail returned: %s\n", err)
 				}
 			}
-			if s.Cfg.Trace {
+			if s.Cfg.Trace && !s.Cfg.CrucibleMode {
 				for j := 0; j < len(s.Investors); j++ {
 					s.Investors[j].TraceWriteFile()
 				}

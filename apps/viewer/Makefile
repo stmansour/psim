@@ -2,7 +2,7 @@ OS := $(shell uname)
 
 TOP=../..
 BINDIR=${TOP}/dist/plato
-THISDIR="apps/iewer"
+THISDIR="apps/viewer"
 TEST_FAILURE_FILE=fail
 
 clean:

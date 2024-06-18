@@ -509,6 +509,10 @@ func (i *Investor) PortfolioValue(t time.Time) float64 {
 	if err != nil {
 		log.Fatalf("Error getting exchange close rate")
 	}
+	if er == nil {
+		fmt.Printf("Please check your database. EXClose value for %s not found\n", t.Format("1/2/2006"))
+		log.Fatalf("nildata: newdata.EconometricsRecord for %s not found", t.Format("1/2/2006"))
+	}
 	a := s.FQMetric()
 	pv := float64(0.0)
 	if len(a) > 0 {
