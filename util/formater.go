@@ -63,7 +63,7 @@ func NewFormater(cvals []FormatField) *Formater {
 // 	return fmt.Sprintf(fp.Sfmt, fp.Val)
 // }
 
-// FormatHeader formats the header row
+// Header formats the header row
 func (f *Formater) Header() string {
 	l := len(f.Def)
 	flds := make([]string, l) // this is an array with a slot for each column in the row
@@ -78,7 +78,7 @@ func (f *Formater) Header() string {
 	return s
 }
 
-// FormatRow formats a row of data
+// Row formats a row of data
 func (f *Formater) Row(data []ColData) string {
 	l := len(f.Def)
 	flds := make([]string, l) // this is an array with a slot for each column in the row
