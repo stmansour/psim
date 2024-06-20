@@ -43,8 +43,9 @@ db:
 	cp ${TOP}/newdata/data/msm.csv data/
 
 package:
-	mkdir -p ${BINDIR}/
+	mkdir -p ${BINDIR}/man/man1
 	cp simulator ${BINDIR}/
+	cp simulator.1 ${BINDIR}/man/man1
 	@echo "*** ${THISDIR}: completed package ***"
 
 releaseman:
