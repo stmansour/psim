@@ -261,8 +261,6 @@ func (dl *DNALog) WriteHeader() error {
 	dl.filename = "dnalog.xlsx"
 	if err := f.SaveAs(dl.filename); err != nil {
 		fmt.Println(err)
-	} else {
-		fmt.Println("Excel file created successfully.")
 	}
 	return nil
 }
@@ -282,8 +280,6 @@ func (dl *DNALog) WriteRow() {
 	invname := dl.cfg.TopInvestors[dl.parent.idx].Name
 	if len(invname) == 0 {
 		invname = v.ShortID()
-	} else {
-		invname += " (" + v.ShortID() + ")"
 	}
 	f.SetCellValue(dl.sheetName, "A"+row, invname)
 

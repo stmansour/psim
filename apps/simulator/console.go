@@ -12,6 +12,7 @@ import (
 
 func displaySimulationDetails(cfg *util.AppConfig) {
 	fmt.Printf("**************  S I M U L A T I O N   D E T A I L S  **************\n")
+	fmt.Printf("Current Time:        %s\n", time.Now().Format(time.RFC1123))
 	a := time.Time(cfg.DtStart)
 	b := time.Time(cfg.DtStop)
 	c := b.AddDate(0, 0, 1)

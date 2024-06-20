@@ -130,7 +130,10 @@ func (c *Crucible) Run() {
 		}
 	}
 	fmt.Printf("Crucible run completed\n")
-	fmt.Printf("Output file is: %s\n", c.fname)
+	fmt.Printf("Crucible report is: %s\n", c.fname)
+	if c.CreateDLog {
+		fmt.Printf("DNA Log report is: %s\n", c.dlog.filename)
+	}
 }
 
 // SaveInvestorPortfolioValue saves the annualized return value for the day in

@@ -14,7 +14,7 @@ psync: *.go
 
 clean:
 	go clean
-	rm -rf fail psync config.json5 extres.json5 coverage.out
+	rm -rf metricsourcemapping.csv out.txt fail psync config.json5 extres.json5 coverage.out
 	@echo "*** ${THISDIR}: completed clean ***"
 
 coverage:

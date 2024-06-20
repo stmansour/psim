@@ -11,7 +11,7 @@ schema: *.go
 	@echo "*** completed in ${THISDIR} ***"
 
 clean:
-	rm -rf data fail config.json5 "${THISDIR}"
+	rm -rf extres.json5 masterlist.txt gfetch.log urls.txt data fail config.json5 "${THISDIR}"
 	@echo "*** CLEAN completed in ${THISDIR} ***"
 
 config:

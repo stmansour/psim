@@ -1,0 +1,137 @@
+//  PLATO SIMULATOR CONFIGURATION FILE
+//  JSON5 is being used primarily so that we can add comments to this file.
+//
+//  Notes:
+//    floating point numbers cannot begin with ".".  
+//    That is:  
+//       0.1 is valid
+//        .1 is not valid
+//----------------------------------------------------------------------------------
+{
+    //-----------------------------------------------------------------
+    //  SIMULATOR
+    //-----------------------------------------------------------------
+    "DtStart": "yesterday",    // simulation start date for each generation
+    "DtStop": "yesterday",     // simulation stop date for each generation
+    "EnforceStopDate": true,    // stops on DtStop even if there is a C2 Balance, if false and C2 Balance > 0 on StopDate, simulation will continue in sell-only mode until C2 < 1.00
+    "LoopCount": 20,            // How many times to loop over DtStart to DtStop
+    "Generations": 1,           // how many generations should the simulator run. NOTE: This value is only valid if GenDurSpec is commented out.
+    // "GenDurSpec": "1 Y",        // How long is a generation.  EX:  "1 Y",  "6 M",  "8 W", "1 Y 6 M", "90 D"
+    "PopulationSize": 200,      // Total number Investors in the population
+    "C1": "USD",                // main currency  (ISO 4217 code)
+    "C2": "JPY",                // currency that we will invest in (ISO 4217 code)
+    "InitFunds": 100000.00,     // how much each Investor is funded at the start of a simulation cycle
+    "StdInvestment": 10000.00,  // the "standard" investment amount if a decision is made to invest in C2
+    "MutationRate": 1,          // number between 1 and 100, indicating the percentage of mutation
+    "DBSource": "CSV",          // { CSV | SQL }
+    "COAStrategy": "MajorityRules", // course of action strategy.  Choose from (DistributedDecision, MajorityRules)
+    "MinInfluencers": 1,        // An investor cannot have fewer than this many influencers
+    "MaxInfluencers": 10,        // An investor can have no more than this many Influencers
+    "WorkerPoolSize": 0,            // When 0, the program decides the number of cores, when >= 1 the number of cores the simulator will use
+    "HoldWindowStatsLookBack": 365, // how many days make up the rolling window of data used in HoldWindow stats calculations (mean and StdDev)
+    "StdDevVariationFactor": 0.0001,  // variable factor from Std Deviation
+
+    "SingleInvestorMode": false,
+    "SingleInvestorDNA": "{Investor;Strategy=MajorityRules;InvW1=0.9989;InvW2=0.0011;Influencers=[{LSMInfluencer,Delta1=-327,Delta2=-39,Metric=GCAM_C25_11}|{LSMInfluencer,Delta1=-257,Delta2=-42,Metric=GCAM_C7_2}|{LSMInfluencer,Delta1=-193,Delta2=-27,Metric=GCAM_C25_4}|{LSMInfluencer,Delta1=-78,Delta2=-21,Metric=Coal}|{LSMInfluencer,Delta1=-163,Delta2=-54,Metric=UnemploymentRate}|{LSMInfluencer,Delta1=-209,Delta2=-20,Metric=GCAM_V42_3}|{LSMInfluencer,Delta1=-354,Delta2=-25,Metric=GCAM_C5_32}|{LSMInfluencer,Delta1=-345,Delta2=-31,Metric=GCAM_V42_9}|{LSMInfluencer,Delta1=-144,Delta2=-61,Metric=GCAM_C15_148}|{LSMInfluencer,Delta1=-303,Delta2=-38,Metric=GCAM_C4_26}|{LSMInfluencer,Delta1=-187,Delta2=-1,Metric=GCAM_C25_8}|{LSMInfluencer,Delta1=-304,Delta2=-44,Metric=GCAM_C17_13}]}",
+
+    //-----------------------------------------------------------------
+    // Saved DNA of the Top Investors
+    //-----------------------------------------------------------------
+    "TopInvestors": [
+      {
+        "Name": "Fred",
+        "DNA": "{Investor;ID=Investor_13999eaa-bf28-407a-bf0f-1e61244783e1;Strategy=MajorityRules;InvW1=0.2674;InvW2=0.7326;Influencers=[{LSMInfluencer,Delta1=-256,Delta2=-45,Metric=GCAM_C5_4}|{LSMInfluencer,Delta1=-332,Delta2=-40,Metric=GCAM_V42_2}|{LSMInfluencer,Delta1=-90,Delta2=-47,Metric=GCAM_C4_16}|{LSMInfluencer,Delta1=-255,Delta2=-39,Metric=GCAM_C15_147}|{LSMInfluencer,Delta1=-207,Delta2=-18,Metric=GCAM_V42_3}|{LSMInfluencer,Delta1=-347,Delta2=-54,Metric=GCAM_C25_6}|{LSMInfluencer,Delta1=-75,Delta2=-53,Metric=GCAM_C25_2}|{LSMInfluencer,Delta1=-190,Delta2=-31,Metric=GCAM_C15_204}|{LSMInfluencer,Delta1=-632,Delta2=-1,Metric=HeatingOil}|{LSMInfluencer,Delta1=-183,Delta2=-42,Metric=Silver}|{LSMInfluencer,Delta1=-285,Delta2=-48,Metric=GCAM_C4_24}|{LSMInfluencer,Delta1=-136,Delta2=-56,Metric=GCAM_V42_4}]}"
+      },
+      {
+        "DNA": "{Investor;ID=Investor_713a2caf-16c5-4164-8927-b925f4168319;Strategy=MajorityRules;InvW1=0.8455;InvW2=0.1545;Influencers=[{LSMInfluencer,Delta1=-89,Delta2=-19,Metric=GCAM_C4_10}|{LSMInfluencer,Delta1=-329,Delta2=-57,Metric=IronOre}|{LSMInfluencer,Delta1=-118,Delta2=-50,Metric=GCAM_C17_38}|{LSMInfluencer,Delta1=-346,Delta2=-31,Metric=GCAM_V26_1}|{LSMInfluencer,Delta1=-285,Delta2=-48,Metric=GCAM_C4_24}|{LSMInfluencer,Delta1=-645,Delta2=-14,Metric=BrentOil}|{LSMInfluencer,Delta1=-222,Delta2=-31,Metric=GCAM_V42_8}|{LSMInfluencer,Delta1=-332,Delta2=-40,Metric=GCAM_V42_2}|{LSMInfluencer,Delta1=-306,Delta2=-18,Metric=GCAM_C25_9}|{LSMInfluencer,Delta1=-198,Delta2=-59,Metric=GCAM_C15_148}|{LSMInfluencer,Delta1=-219,Delta2=-44,Metric=GCAM_C7_2}]}",
+      },
+      {
+        "DNA": "{Investor;ID=Investor_e690b19b-f8da-4cdc-b771-8553d9f5855f;Strategy=MajorityRules;InvW1=0.3854;InvW2=0.6146;Influencers=[{LSMInfluencer,Delta1=-222,Delta2=-31,Metric=GCAM_V42_8}|{LSMInfluencer,Delta1=-84,Delta2=-49,Metric=Soybeans}|{LSMInfluencer,Delta1=-234,Delta2=-44,Metric=Copper}|{LSMInfluencer,Delta1=-182,Delta2=-17,Metric=GCAM_C15_132}|{LSMInfluencer,Delta1=-347,Delta2=-54,Metric=GCAM_C25_6}|{LSMInfluencer,Delta1=-255,Delta2=-44,Metric=GCAM_C42_1}|{LSMInfluencer,Delta1=-257,Delta2=-39,Metric=GCAM_C5_35}|{LSMInfluencer,Delta1=-198,Delta2=-59,Metric=GCAM_C15_148}|{LSMInfluencer,Delta1=-285,Delta2=-48,Metric=GCAM_C4_24}|{LSMInfluencer,Delta1=-306,Delta2=-18,Metric=GCAM_C25_9}|{LSMInfluencer,Delta1=-64,Delta2=-55,Metric=GCAM_C15_205}|{LSMInfluencer,Delta1=-187,Delta2=-2,Metric=GCAM_C4_25}]}",
+      },
+      {
+        "DNA": "{Investor;ID=Investor_7bec8706-129c-4c3f-8553-4a95b468a734;Strategy=MajorityRules;InvW1=0.6872;InvW2=0.3128;Influencers=[{LSMInfluencer,Delta1=-346,Delta2=-32,Metric=GCAM_V42_11}|{LSMInfluencer,Delta1=-285,Delta2=-48,Metric=GCAM_C4_24}|{LSMInfluencer,Delta1=-256,Delta2=-33,Metric=GCAM_WC}|{LSMInfluencer,Delta1=-632,Delta2=-1,Metric=HeatingOil}|{LSMInfluencer,Delta1=-257,Delta2=-16,Metric=GCAM_C16_60}|{LSMInfluencer,Delta1=-348,Delta2=-25,Metric=GCAM_C5_32}|{LSMInfluencer,Delta1=-318,Delta2=-40,Metric=GCAM_V42_2}|{LSMInfluencer,Delta1=-116,Delta2=-10,Metric=GCAM_C15_147_ECON}|{LSMInfluencer,Delta1=-64,Delta2=-24,Metric=GCAM_C15_205}|{LSMInfluencer,Delta1=-198,Delta2=-59,Metric=GCAM_C15_148}|{LSMInfluencer,Delta1=-190,Delta2=-31,Metric=GCAM_C15_204}]}",
+      },
+      {
+        "DNA": "{Investor;ID=Investor_b6b606f1-85ea-472c-bf02-ad49c42d0406;Strategy=MajorityRules;InvW1=0.3692;InvW2=0.6308;Influencers=[{LSMInfluencer,Delta1=-89,Delta2=-19,Metric=GCAM_C4_10}|{LSMInfluencer,Delta1=-306,Delta2=-18,Metric=GCAM_C25_9}|{LSMInfluencer,Delta1=-202,Delta2=-10,Metric=GCAM_C15_147_ECON}|{LSMInfluencer,Delta1=-207,Delta2=-18,Metric=GCAM_V42_3}|{LSMInfluencer,Delta1=-645,Delta2=-14,Metric=BrentOil}|{LSMInfluencer,Delta1=-329,Delta2=-57,Metric=IronOre}|{LSMInfluencer,Delta1=-234,Delta2=-44,Metric=Copper}|{LSMInfluencer,Delta1=-255,Delta2=-44,Metric=GCAM_C42_1}|{LSMInfluencer,Delta1=-257,Delta2=-39,Metric=GCAM_C5_35}|{LSMInfluencer,Delta1=-64,Delta2=-55,Metric=GCAM_C15_205}]}",
+      },
+    ],
+
+    "CrucibleMode": true,
+    "Recommendation": true,
+    "CrucibleName": "PLATO - Production Crucible", 
+    "CrucibleARThreshold": 0.08, // only count the run if the annualized return is this amount or greater
+
+    "CruciblePeriods": [
+      {"Index":  0, "Duration": "1w", "Ending": "yesterday"},          
+      {"Index":  1, "Duration": "2w", "Ending": "yesterday"},          
+      {"Index":  2, "Duration": "3w", "Ending": "yesterday"},          
+      {"Index":  3, "Duration": "1m", "Ending": "yesterday"},          
+      {"Index":  4, "Duration": "3m", "Ending": "yesterday"},          
+      {"Index":  5, "Duration": "6m", "Ending": "yesterday"},          
+      {"Index":  6, "Duration": "9m", "Ending": "yesterday"},          
+      {"Index":  7, "Duration": "1y", "Ending": "yesterday"},          
+      {"Index":  8, "DtStart": "2024-01-01", "DtStop": "yesterday"},   
+      {"Index":  9, "DtStart": "2023-01-01", "DtStop": "2023-12-31"},  
+      {"Index": 10, "DtStart": "2022-01-01", "DtStop": "2022-12-31"},  
+      {"Index": 11, "DtStart": "2021-01-01", "DtStop": "2021-12-31"},  
+      {"Index": 12, "DtStart": "2020-01-01", "DtStop": "2020-12-31"},  
+      {"Index": 13, "DtStart": "2019-01-01", "DtStop": "2019-12-31"},  
+    ],
+
+    "CustomColumns": [
+      {"Col":  "A", "Val": "ID"},
+      {"Col":  "B", "Val": "stdev(sc[0,1])"},
+      {"Col":  "C", "Val": "stdev(sc[0,1,2])"},
+      {"Col":  "D", "Val": "stdev(sc[3,4])"},
+      {"Col":  "E", "Val": "stdev(sc[3,4,5])"},
+      {"Col":  "F", "Val": "stdev(sc[3,4,5,6])"},
+      {"Col":  "G", "Val": "stdev(sc[8,9])"},
+      {"Col":  "H", "Val": "stdev(sc[8,9,10])"},
+      {"Col":  "I", "Val": "stdev(sc[8,9,10,11])"},
+      {"Col":  "J", "Val": "stdev(sc[8,9,10,11,12])"},
+      {"Col":  "K", "Val": "stdev(sc[8,9,10,11,12,13])"},
+      {"Col":  "L", "Val": "cn[0]"},
+      {"Col":  "M", "Val": "ar[0]"},
+      {"Col":  "N", "Val": "sc[0]"},
+      {"Col":  "O", "Val": "cn[1]"},
+      {"Col":  "P", "Val": "ar[1]"},
+      {"Col":  "Q", "Val": "sc[1]"},
+      {"Col":  "R", "Val": "cn[2]"},
+      {"Col":  "S", "Val": "ar[2]"},
+      {"Col":  "T", "Val": "sc[2]"},
+      {"Col":  "U", "Val": "cn[3]"},
+      {"Col":  "V", "Val": "ar[3]"},
+      {"Col":  "W", "Val": "sc[3]"},
+      {"Col":  "X", "Val": "cn[4]"},
+      {"Col":  "Y", "Val": "ar[4]"},
+      {"Col":  "Z", "Val": "sc[4]"},
+      {"Col": "AA", "Val": "cn[5]"},
+      {"Col": "AB", "Val": "ar[5]"},
+      {"Col": "AC", "Val": "sc[5]"},
+      {"Col": "AD", "Val": "cn[6]"},
+      {"Col": "AE", "Val": "ar[6]"},
+      {"Col": "AF", "Val": "sc[6]"},
+      {"Col": "AG", "Val": "cn[7]"},
+      {"Col": "AH", "Val": "ar[7]"},
+      {"Col": "AI", "Val": "sc[7]"},
+      {"Col": "AJ", "Val": "cn[8]"},
+      {"Col": "AK", "Val": "ar[8]"},
+      {"Col": "AL", "Val": "sc[8]"},
+      {"Col": "AM", "Val": "cn[9]"},
+      {"Col": "AN", "Val": "ar[9]"},
+      {"Col": "AO", "Val": "sc[9]"},
+      {"Col": "AP", "Val": "cn[10]"},
+      {"Col": "AQ", "Val": "ar[10]"},
+      {"Col": "AR", "Val": "sc[10]"},
+      {"Col": "AS", "Val": "cn[11]"},
+      {"Col": "AT", "Val": "ar[11]"},
+      {"Col": "AU", "Val": "sc[11]"},
+      {"Col": "AV", "Val": "cn[12]"},
+      {"Col": "AW", "Val": "ar[12]"},
+      {"Col": "AX", "Val": "sc[12]"},
+      {"Col": "AY", "Val": "cn[13]"},
+      {"Col": "AZ", "Val": "ar[13]"},
+      {"Col": "BA", "Val": "sc[13]"},
+    ],
+
+}
