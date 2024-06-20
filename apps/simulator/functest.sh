@@ -51,6 +51,7 @@ compareToGold() {
     sed -E \
         -e 's/^Version:.*/Version: VERSION_PLACEHOLDER/' \
         -e 's/^Available cores:.*/Version: PLACEHOLDER/' \
+        -e 's/Current Time:.*/Current Time: TIME_PLACEHOLDER/' \
         -e 's/Random number seed:[[:space:]]+[0-9]+/Random number seed: SEED_PLACEHOLDER/' \
         -e 's/Archive directory:.*/Archive directory: PLACEHOLDER/' \
         -e 's/Elapsed time:.*/Archive directory: PLACEHOLDER/' \
