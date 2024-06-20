@@ -55,6 +55,7 @@
         "DNA": "{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-71,Delta2=-20,Metric=GCAM_C3_2}|{LSMInfluencer,Delta1=-200,Delta2=-17,Metric=GCAM_C16_47_ECON}|{LSMInfluencer,Delta1=-95,Delta2=-40,Metric=ManufacturingProduction}|{LSMInfluencer,Delta1=-153,Delta2=-34,Metric=IndustrialProduction}|{LSMInfluencer,Delta1=-166,Delta2=-33,Metric=RetailSalesMoM}]}"
       },
       {
+        "Name": "TopInvestor1",
         "DNA": "{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-360,Delta2=-34,Metric=RetailSalesMoM}|{LSMInfluencer,Delta1=-96,Delta2=-43,Metric=ManufacturingProduction}|{LSMInfluencer,Delta1=-67,Delta2=-11,Metric=GCAM_C16_121_ECON}|{LSMInfluencer,Delta1=-300,Delta2=-10,Metric=GCAM_C16_47}|{LSMInfluencer,Delta1=-73,Delta2=-30,Metric=GCAM_C15_204}]}",
       },
       {
@@ -82,24 +83,29 @@
         "DNA": "{Investor;Strategy=MajorityRules;InvW1=0.6763;InvW2=0.3237;Influencers=[{LSMInfluencer,Delta1=-119,Delta2=-31,Metric=ConsumerConfidence}|{LSMInfluencer,Delta1=-66,Delta2=-5,Metric=GCAM_C15_148_ECON}|{LSMInfluencer,Delta1=-145,Delta2=-39,Metric=ManufacturingProduction}|{LSMInfluencer,Delta1=-154,Delta2=-34,Metric=IndustrialProduction}|{LSMInfluencer,Delta1=-167,Delta2=-53,Metric=InflationExpectations}|{LSMInfluencer,Delta1=-110,Delta2=-31,Metric=RetailSalesMoM}|{LSMInfluencer,Delta1=-77,Delta2=-22,Metric=GCAM_C16_121}|{LSMInfluencer,Delta1=-62,Delta2=-9,Metric=GCAM_C15_147}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BusinessConfidence}|{LSMInfluencer,Delta1=-69,Delta2=-26,Metric=GCAM_C15_204}]}"
       },
       {
+        "Name": "TopInvestor8",
         "DNA": "{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-69,Delta2=-20,Metric=GCAM_C3_2}|{LSMInfluencer,Delta1=-72,Delta2=-1,Metric=InterestRate}|{LSMInfluencer,Delta1=-97,Delta2=-59,Metric=ConsumerConfidence}|{LSMInfluencer,Delta1=-251,Delta2=-7,Metric=GCAM_C3_1_ECON}|{LSMInfluencer,Delta1=-111,Delta2=-42,Metric=MoneySupplyM1}|{LSMInfluencer,Delta1=-94,Delta2=-36,Metric=ManufacturingProduction}|{LSMInfluencer,Delta1=-75,Delta2=-11,Metric=GCAM_C15_147_ECON}]}"
       },
       {
+        "Name": "TopInvestor9",
         "DNA": "{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-66,Delta2=-5,Metric=GCAM_C15_148_ECON}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BusinessConfidence}|{LSMInfluencer,Delta1=-154,Delta2=-34,Metric=IndustrialProduction}|{LSMInfluencer,Delta1=-77,Delta2=-22,Metric=GCAM_C16_121}|{LSMInfluencer,Delta1=-110,Delta2=-33,Metric=RetailSalesMoM}|{LSMInfluencer,Delta1=-167,Delta2=-53,Metric=InflationExpectations}|{LSMInfluencer,Delta1=-65,Delta2=-15,Metric=GCAM_C16_47}|{LSMInfluencer,Delta1=-69,Delta2=-20,Metric=GCAM_C3_2}]}"
       },
       {
+        "Name": "TopInvestor10",
         "DNA": "{Investor;Strategy=MajorityRules;InvW1=0.8959;InvW2=0.1041;Influencers=[{LSMInfluencer,Delta1=-153,Delta2=-34,Metric=IndustrialProduction}|{LSMInfluencer,Delta1=-66,Delta2=-5,Metric=GCAM_C15_148_ECON}|{LSMInfluencer,Delta1=-110,Delta2=-31,Metric=RetailSalesMoM}|{LSMInfluencer,Delta1=-62,Delta2=-9,Metric=GCAM_C15_147}|{LSMInfluencer,Delta1=-200,Delta2=-14,Metric=GCAM_C15_204}|{LSMInfluencer,Delta1=-69,Delta2=-26,Metric=GCAM_C15_204}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BusinessConfidence}|{LSMInfluencer,Delta1=-75,Delta2=-11,Metric=GCAM_C15_147_ECON}|{LSMInfluencer,Delta1=-65,Delta2=-15,Metric=GCAM_C16_47}|{LSMInfluencer,Delta1=-77,Delta2=-22,Metric=GCAM_C16_121}]}"
       },
       {
+        "Name": "TopInvestor11",
         "DNA": "{Investor;Strategy=MajorityRules;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-94,Delta2=-36,Metric=ManufacturingProduction}|{LSMInfluencer,Delta1=-74,Delta2=-14,Metric=GCAM_C16_60_ECON}|{LSMInfluencer,Delta1=-134,Delta2=-6,Metric=GCAM_C5_4_ECON}|{LSMInfluencer,Delta1=-69,Delta2=-16,Metric=GCAM_C3_2}|{LSMInfluencer,Delta1=-143,Delta2=-20,Metric=GCAM_C5_4}|{LSMInfluencer,Delta1=-160,Delta2=-57,Metric=BusinessConfidence}|{LSMInfluencer,Delta1=-97,Delta2=-31,Metric=ConsumerConfidence}|{LSMInfluencer,Delta1=-180,Delta2=-56,Metric=UnemploymentRate}|{LSMInfluencer,Delta1=-144,Delta2=-54,Metric=InflationRate}|{LSMInfluencer,Delta1=-360,Delta2=-41,Metric=MoneySupplyM1}]}"
       },
       {
+        "Name": "TopInvestor12",
         "DNA": "{Investor;Strategy=DistributedDecision;InvW1=0.5000;InvW2=0.5000;Influencers=[{LSMInfluencer,Delta1=-154,Delta2=-34,Metric=IndustrialProduction}|{LSMInfluencer,Delta1=-82,Delta2=-3,Metric=GCAM_C16_60}|{LSMInfluencer,Delta1=-143,Delta2=-20,Metric=GCAM_C5_4}|{LSMInfluencer,Delta1=-360,Delta2=-31,Metric=RetailSalesMoM}|{LSMInfluencer,Delta1=-66,Delta2=-11,Metric=StockMarket}|{LSMInfluencer,Delta1=-97,Delta2=-59,Metric=ConsumerConfidence}|{LSMInfluencer,Delta1=-149,Delta2=-14,Metric=GCAM_C15_204}|{LSMInfluencer,Delta1=-89,Delta2=-4,Metric=InterestRate}]}"
       },
     ],
 
     "CrucibleMode": true,
-    "Recommendation": true,    // if true, provide today's recommendation from all TopInvestors
+    "Recommendation": false,    // if true, provide today's recommendation from all TopInvestors
     "CrucibleName": "Default QA Testing Crucible", 
     "CrucibleARThreshold": 0.15, // only count the run if the annualized return is this amount or greater
 

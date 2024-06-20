@@ -140,7 +140,7 @@ func (s *Simulator) Init(cfg *util.AppConfig, db *newdata.Database, crucible *Cr
 		s.crucible.ReportTopInvestorInvestments = ReportTopInvestorInvestments
 	}
 	s.ir = NewInvestorReport(s)
-	s.factory.Init(s.Cfg, db, s.SqltDB)
+	s.factory.Init(s.Cfg, db, s.SqltDB, s)
 	s.FinRpt = &FinRep{}
 
 	if s.Cfg.PreserveElite {
@@ -411,28 +411,28 @@ func (s *Simulator) Run() {
 				if len(s.Investors) < s.WorkerThreads {
 					s.WorkerThreads = len(s.Investors) // but not more than number of investors
 				}
-				tasks := make(chan int, len(s.Investors))     // Send indices of s.Investors to workers
+				tasks := make(chan int, len(s.Investors))     // Send indices of s.Investors to workers, the channel isbuffered to avoid blocking, enough space for every Investor
 				results := make(chan error, len(s.Investors)) // Collect errors or nil if successful
 
-				// fire them up!
+				// fire up the workers!
 				for w := 0; w < s.WorkerThreads; w++ {
 					go s.worker(tasks, results)
 				}
 
-				//-----------------------------------------------
-				// Dispatch tasks to workers
-				//-----------------------------------------------
+				//---------------------------------------------------------------
+				// Dispatch tasks (the intex of each Investor) to workers
+				//---------------------------------------------------------------
 				s.T3ForThreadPool = T3
 				for j := range s.Investors {
 					tasks <- j
 				}
-				close(tasks)
+				close(tasks) // it can hold all the messages put in the channel, it will close when the last message has been handled
 
 				//-----------------------------------------------
-				// Wait for all tasks to complete
+				// Wait until the last Investor has finished
 				//-----------------------------------------------
 				for a := 0; a < len(s.Investors); a++ {
-					err := <-results
+					err := <-results // each time this returns it means that an Investor has finished
 					if err != nil {
 						fmt.Printf("Investors.DailyRun() returned: %s\n", err.Error())
 					}

@@ -126,6 +126,12 @@ func (i *Investor) EnsureID() {
 	}
 }
 
+// ShortID returns the first 5 characters of the ID
+// --------------------------------------------------------------------------------
+func (i *Investor) ShortID() string {
+	return i.ID[:5]
+}
+
 // SelectNUniqueSubclasses shuffles the indexes to the map of MInfluencerSubclasses
 // then selects the first n, and returns the list
 // ----------------------------------------------------------------------------------
@@ -415,12 +421,32 @@ func (i *Investor) DailyRun(T3 time.Time, winddown bool) error {
 			return err
 		}
 	}
+
+	//----------------------------------
+	// Update report info as needed...
+	//----------------------------------
 	if (i.cfg.Trace && !i.cfg.CrucibleMode) || i.cfg.PredictionMode {
 		fmt.Printf("\t%s\n", i.PortfolioToString(T3))
 		i.SaveTrace()
 	}
+	if i.cfg.CrucibleMode && i.cfg.DNALog {
+		i.SaveCrucibleStats(T3)
+	}
 
 	return nil
+}
+
+// SaveCrucibleStats saves information needed for the cricible to create the
+// dnalog report.  At the moment, this is just the portfolio value on a daily
+// basis
+// ------------------------------------------------------------------------------
+func (i *Investor) SaveCrucibleStats(T3 time.Time) {
+	pv := i.PortfolioValue(T3) // portfolio value for this day
+	ar, err := util.AnnualizedReturn(i.cfg.InitFunds, pv, time.Time(i.factory.cfg.DtStart), T3)
+	if err != nil {
+		log.Fatal(err)
+	}
+	i.factory.sim.crucible.SaveInvestorPortfolioValue(ar) // save this info in the crucible object
 }
 
 // ExecuteBuy does an exchange of C1 for C2 on T3. It will purchase pct*i.cfg.StdInvestment

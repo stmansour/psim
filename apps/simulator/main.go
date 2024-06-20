@@ -38,6 +38,7 @@ type SimApp struct {
 	archiveBaseDir            string  // where archives go
 	archiveMode               bool    // if true it copies the config file to an archive directory, places simstats and finrep there as well
 	CrucibleMode              bool    // normal or crucible
+	DNALog                    bool    // generate dnalog when true and CrucibleMode is true
 	GenInfluencerDistribution bool    // show Influencer distribution for each generation
 	FitnessScores             bool    // save the fitness scores for each generation to dbgFitnessScores.csv
 	dbfilename                string  // override database name with this name
@@ -83,6 +84,7 @@ func readCommandLineArgs() {
 	flag.BoolVar(&app.InfPredDebug, "D", false, "show prediction debug info - dumps a lot of data, use on short simulations, with minimal Influencers")
 	flag.BoolVar(&app.DayByDay, "d", false, "show day-by-day results")
 	flag.StringVar(&app.dbfilename, "db", "", "override CSV datatbase name with this name. All CSV database files are assumed to be in the same directory.")
+	flag.BoolVar(&app.DNALog, "dnalog", false, "generate DNA log, only relevant when CrucibleMode is enabled.")
 	flag.BoolVar(&app.AllowDuplicateInvestors, "dup", false, "Allow duplicate investors within a population.")
 	flag.BoolVar(&app.FitnessScores, "fit", false, "generate a Fitness Report that shows the fitness of all Investors for each generation")
 	//  flag.BoolVar(&app.showAllInvestors, "i", false, "show all investors in the simulation results")
@@ -97,7 +99,7 @@ func readCommandLineArgs() {
 	flag.Parse()
 }
 
-func doSimulation() {
+func initSimulation() {
 	var err error
 	app.randNano = util.Init(app.randNano)
 	// fmt.Printf("cfName = %s\n", app.cfName)
@@ -139,6 +141,12 @@ func doSimulation() {
 		log.Panicf("*** PANIC ERROR ***  db.Init returned error: %s\n", err)
 	}
 
+}
+
+func doSimulation() {
+	var err error
+	initSimulation()
+
 	//---------------------------------------------------------------------------------
 	// OPEN SQLITE Cache DB
 	// This is used to store the hashes of all the Investors we create so that
@@ -150,6 +158,8 @@ func doSimulation() {
 	if app.SQLiteDB, err = sql.Open("sqlite3", app.SQLiteFileName); err != nil {
 		log.Fatal(err)
 	}
+	app.sim.SqltDB = app.SQLiteDB
+	sqlt.CreateSchema(app.SQLiteDB)
 	defer func() {
 		if err := app.SQLiteDB.Close(); err != nil {
 			log.Printf("Error closing database: %s\n", err)
@@ -158,23 +168,22 @@ func doSimulation() {
 			log.Printf("Error deleting database file: %s\n", err)
 		}
 	}()
-	app.sim.SqltDB = app.SQLiteDB
-	sqlt.CreateSchema(app.SQLiteDB)
 
 	//##########################################################################################
 	//  ON WITH THE SIMULATION...
 	//##########################################################################################
 
-	if cfg.CrucibleMode {
+	if app.cfg.CrucibleMode {
 		c := newcore.NewCrucible()
 		c.ReportTopInvestorInvestments = app.ReportTopInvestorInvestments
 		c.DayByDay = app.DayByDay
-		c.Init(cfg, app.db, &app.sim)
+		c.CreateDLog = app.DNALog
+		c.Init(app.cfg, app.db, &app.sim)
 		c.Run()
 		return
 	}
 
-	displaySimulationDetails(cfg)
+	displaySimulationDetails(app.cfg)
 	app.sim.Init(app.cfg, app.db, nil, app.DayByDay, app.ReportTopInvestorInvestments)
 	app.sim.GenInfluencerDistribution = app.GenInfluencerDistribution
 	app.sim.FitnessScores = app.FitnessScores
@@ -182,7 +191,7 @@ func doSimulation() {
 	app.sim.Simtalkport = app.Simtalkport
 	app.sim.Run()
 
-	displaySimulationResults(cfg, app.db)
+	displaySimulationResults(app.cfg, app.db)
 }
 
 func main() {

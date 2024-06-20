@@ -18,6 +18,7 @@ type Factory struct {
 	cfg            *util.AppConfig   // system-wide configuration info
 	db             *newdata.Database // db to provide to investors
 	sqltdb         *sql.DB           // the sqlite3 database used for Investor ids
+	sim            *Simulator        // pointer to the simulator
 	HashDuplicates int64             // number of times an Investor was duplicated
 	MutateCalls    int64             // how many calls were made to Mutate()
 	Mutations      int64             // how many times did mutation happen
@@ -37,10 +38,11 @@ type InfluencerDNA struct {
 // Init - initializes the factory
 //
 // --------------------------------------------------------------------------------
-func (f *Factory) Init(cfg *util.AppConfig, db *newdata.Database, sqltdb *sql.DB) {
+func (f *Factory) Init(cfg *util.AppConfig, db *newdata.Database, sqltdb *sql.DB, sim *Simulator) {
 	f.sqltdb = sqltdb
 	f.cfg = cfg
 	f.db = db
+	f.sim = sim
 }
 
 // NewPopulation creates a new population based on the current population

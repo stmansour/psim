@@ -38,7 +38,7 @@ func createConfigAndFactory() (*Factory, *newdata.Database, *util.AppConfig) {
 		log.Panicf("*** PANIC ERROR ***  db.Init returned error: %s\n", err)
 	}
 
-	f.Init(cfg, db, nil)
+	f.Init(cfg, db, nil, nil)
 	return &f, db, cfg
 }
 

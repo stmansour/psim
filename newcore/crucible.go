@@ -17,11 +17,24 @@ type Crucible struct {
 	cfg                          *util.AppConfig
 	db                           *newdata.Database
 	sim                          *Simulator
-	idx                          int    // index of currently running investor
-	fname                        string // name of the crucible report file
+	CreateDLog                   bool    // if true generate DNAlog
+	dlog                         *DNALog // if DNALog is true
+	idx                          int     // index of currently running investor
+	jdx                          int     // index of current time span
+	fname                        string  // name of the crucible report file
 	ReportTopInvestorInvestments bool
 	DayByDay                     bool
-	AnnualizedReturnList         []float64 // as we list its returns, keep track of each one for computation of success coefficient
+	AnnualizedReturnList         []float64 // annualized for each crucible period
+	// The next field is best explained by example:
+	//     "CruciblePeriods": [
+	//         {"Index":  0, "Duration": "1w", "Ending": "yesterday"},
+	//         {"Index":  1, "Duration": "2w", "Ending": "yesterday"},
+	//         {"Index":  2, "Duration": "1y", "Ending": "yesterday"},
+	//     ]
+	// The list of day-by-day returns for period 0 is InvestorHistory[0].  The
+	// annualized return for the 3rd day of period 0 is InvestorHistory[0][2].
+	// The annualized return for the 7th day of the 1year period is InvestorHistory[2][6].
+	InvestorHistory [][]float64 // history of day-by-day annualized returns indexed by crucible-period index.
 }
 
 // NewCrucible returns a pointer to a new crucible object
@@ -46,8 +59,21 @@ func (c *Crucible) Init(cfg *util.AppConfig, db *newdata.Database, sim *Simulato
 		os.Exit(1)
 	}
 	defer file.Close()
+	//---------------------------------------------------------------------------
+	// crep report header...
+	//---------------------------------------------------------------------------
 	fmt.Fprintf(file, "\"PLATO - Crucible Report\"\n")
 	c.sim.ReportHeader(file, false)
+
+	//---------------------------------------------------------------------------
+	// DNALog create spreadsheet and initialize column headers
+	//---------------------------------------------------------------------------
+	if c.CreateDLog {
+		c.dlog = NewDNALog()
+		c.dlog.Init(c, cfg)
+		c.dlog.WriteHeader()
+		c.InvestorHistory = make([][]float64, len(c.cfg.CrucibleSpans))
+	}
 }
 
 // Run sends the crucible report to a csv file
@@ -59,6 +85,7 @@ func (c *Crucible) Run() {
 		c.idx = i // mark the investor we're testing
 		c.SubHeader()
 		for j := 0; j < len(c.cfg.CrucibleSpans); j++ {
+			c.jdx = j // mark the time span we're testing
 			c.sim.ResetSimulator()
 			c.cfg.DtStart = util.CustomDate(c.cfg.CrucibleSpans[j].DtStart)
 			c.cfg.DtStop = util.CustomDate(c.cfg.CrucibleSpans[j].DtStop)
@@ -69,9 +96,16 @@ func (c *Crucible) Run() {
 			c.cfg.Generations = 1
 			c.sim.Init(c.cfg, c.db, c, c.DayByDay, c.ReportTopInvestorInvestments)
 			c.sim.ir = ir // we need to override the simulators new creation of this with our ongoing report
+			if c.CreateDLog {
+				c.InvestorHistory[c.jdx] = make([]float64, 0)
+				c.cfg.DNALog = true
+			}
 			c.sim.Run()
 		}
 		c.DumpSuccessCoefficient()
+		if c.CreateDLog {
+			c.dlog.WriteRow()
+		}
 	}
 	//--------------------------------------------
 	// Now do todays recommendation if requested...
@@ -97,6 +131,13 @@ func (c *Crucible) Run() {
 	}
 	fmt.Printf("Crucible run completed\n")
 	fmt.Printf("Output file is: %s\n", c.fname)
+}
+
+// SaveInvestorPortfolioValue saves the annualized return value for the day in
+// the current crucible time span
+// --------------------------------------------------------------------------
+func (c *Crucible) SaveInvestorPortfolioValue(ar float64) {
+	c.InvestorHistory[c.jdx] = append(c.InvestorHistory[c.jdx], ar)
 }
 
 // SubHeader is used to identify a new DNA for the crucible.

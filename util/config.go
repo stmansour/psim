@@ -92,6 +92,7 @@ type TopInvestor struct {
 // The CustomDate type is used to force our custome string to date function when it is read in through
 // the csv file
 type CustomCruciblePeriod struct {
+	Index    int
 	DtStart  CustomDate // simulation begins on this date
 	DtStop   CustomDate // simulation ends on this date
 	Duration string     // how long the simulation is
@@ -102,6 +103,12 @@ type CustomCruciblePeriod struct {
 type CruciblePeriod struct {
 	DtStart time.Time // simulation begins on this date
 	DtStop  time.Time // simulation ends on this date
+}
+
+// CustomCell is for custom reporting
+type CustomCell struct {
+	Col string // spreadsheet column
+	Val string // a formula or value
 }
 
 // AppConfig is the struct of config data used throughout the code by the Simulator,
@@ -138,6 +145,7 @@ type AppConfig struct {
 	SingleInvestorDNA       string              // DNA of the single investor
 	TopInvestors            []TopInvestor       // a list of top investors
 	CrucibleSpans           []CruciblePeriod    // list of times to run the simulation
+	CustomRow               []CustomCell        // a list of custom cells to add to the spreadsheet for each Investor over all the CrucibleSpans
 	CrucibleMode            bool                // if true then run all TopInvestor DNA through the CrucibleSpans
 	Recommendation          bool                // if true then show buy/sell/hold recommendation for DtStart
 	CrucibleName            string              // name of the crucible
@@ -161,6 +169,7 @@ type AppConfig struct {
 	StdDevVariationFactor   float64             // how much variance from thethe standard deviation is needed for the hold window.
 	AllowDuplicateInvestors bool                // if false then check for duplicate investors
 	PredictionMode          bool                // true if the code is making a prediction about the next day
+	DNALog                  bool                // if true, generate DNA log report
 }
 
 // CreateTestingCFG is a function that creates a test cfg file with no secrets
@@ -337,11 +346,11 @@ func ProcessCrucibleSettings(cfg *AppConfig, fcfg *FileConfig) error {
 		return nil
 	}
 
-	for i := 0; i < len(cfg.TopInvestors); i++ {
-		if len(cfg.TopInvestors[i].Name) == 0 {
-			cfg.TopInvestors[i].Name = fmt.Sprintf("TopInvestor%d", i)
-		}
-	}
+	// for i := 0; i < len(cfg.TopInvestors); i++ {
+	// 	if len(cfg.TopInvestors[i].Name) == 0 {
+	// 		cfg.TopInvestors[i].Name = fmt.Sprintf("TopInvestor%d", i)
+	// 	}
+	// }
 
 	for i := 0; i < len(fcfg.CruciblePeriods); i++ {
 		cp, err := parseCustomCruciblePeriod(&fcfg.CruciblePeriods[i])
