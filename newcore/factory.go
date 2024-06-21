@@ -674,12 +674,12 @@ func (f *Factory) NewInfluencer(DNA string) (Influencer, error) {
 	switch subclassName {
 	case "LSMInfluencer":
 		x := LSMInfluencer{
-			Delta1:        Delta1,
-			Delta2:        Delta2,
-			HoldWindowNeg: f.db.Mim.MInfluencerSubclasses[metric].HoldWindowNeg,
-			HoldWindowPos: f.db.Mim.MInfluencerSubclasses[metric].HoldWindowPos,
-			Metric:        metric,
-			cfg:           f.cfg,
+			Delta1: Delta1,
+			Delta2: Delta2,
+			// HoldWindowNeg: f.db.Mim.MInfluencerSubclasses[metric].HoldWindowNeg,
+			// HoldWindowPos: f.db.Mim.MInfluencerSubclasses[metric].HoldWindowPos,
+			Metric: metric,
+			cfg:    f.cfg,
 		}
 		minf := f.db.Mim.MInfluencerSubclasses[metric]
 		x.LocaleType = minf.LocaleType

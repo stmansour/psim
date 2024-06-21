@@ -7,6 +7,8 @@ import (
 	"net"
 	"net/http"
 	"time"
+
+	"github.com/stmansour/psim/util"
 )
 
 func startHTTPServer(ctx context.Context) error {
@@ -55,16 +57,50 @@ func findAvailablePort(ctx context.Context) (net.Listener, error) {
 	return nil, fmt.Errorf("could not find an available port between %d and %d", app.basePort, app.maxPort)
 }
 
+func formatDuration(d time.Duration) string {
+	seconds := int(d.Seconds())
+	minutes := int(d.Minutes())
+	hours := int(d.Hours())
+
+	if seconds < 60 {
+		return fmt.Sprintf("%d seconds", seconds)
+	} else if minutes < 60 {
+		return fmt.Sprintf("%d minutes, %d seconds", minutes, seconds%60)
+	} else if hours < 24 {
+		return fmt.Sprintf("%d hours, %d minutes, %d seconds", hours, minutes%60, seconds%60)
+	} else {
+		days := hours / 24
+		return fmt.Sprintf("%d days, %d hours, %d minutes, %d seconds", days, hours%24, minutes%60, seconds%60)
+	}
+}
+
+func strElapsedTime(start, end time.Time) string {
+	return formatDuration(end.Sub(start))
+}
+
 func handleStatus(w http.ResponseWriter, r *http.Request) {
+	timeElapsed := strElapsedTime(app.ProgramStarted, time.Now())
+
+	totalGens := app.cfg.LoopCount * app.cfg.Generations
+	completedGens := (app.sim.LoopsCompleted + 1) * app.sim.GensCompleted
+	gensRemaining := totalGens - completedGens
+
+	timePerGen := app.sim.TrackingGenStop.Sub(app.sim.TrackingGenStart) // Calculate the time taken for the last generation
+	estimatedTimeRemaining := timePerGen * time.Duration(gensRemaining) // Calculate the estimated time remaining
+	estimatedCompletionTime := time.Now().Add(estimatedTimeRemaining)   // Calculate the estimated completion time
+
 	dtStart := time.Time(app.cfg.DtStart)
 	dtStop := time.Time(app.cfg.DtStop)
 	fmt.Fprintf(w, "SIMULATOR STATUS\n")
-	fmt.Fprintf(w, "                 Start, Stop: %s - %s\n", dtStart.Format("Jan 2, 2006"), dtStop.Format("Jan 2, 2006"))
-	fmt.Fprintf(w, "                 Generations: %d\n", app.cfg.Generations)
-	fmt.Fprintf(w, "                   LoopCount: %d\n", app.cfg.LoopCount)
-	fmt.Fprintf(w, "           total Generations: %d\n", app.cfg.Generations*app.cfg.LoopCount)
-	fmt.Fprintf(w, "      Generation in progress: %d\n", app.sim.GensCompleted)
-	fmt.Fprintf(w, "Elapsed time last generation:%s\n", app.sim.GenerationSimTime)
+	fmt.Fprintf(w, "                    Program started: %s\n", app.ProgramStarted.Format(time.RFC1123))
+	fmt.Fprintf(w, "                Run duration so far: %s\n", timeElapsed)
+	fmt.Fprintf(w, "                        Config file: %s\n", app.cfg.ConfigFilename)
+	fmt.Fprintf(w, "              Simulation Date Range: %s - %s\n", dtStart.Format("Jan 2, 2006"), dtStop.Format("Jan 2, 2006"))
+	fmt.Fprintf(w, "LoopCount and Generations requested: loops: %d, generations: %d\n", app.cfg.LoopCount, app.cfg.Generations)
+	fmt.Fprintf(w, "                          completed: loops: %d, generations: %d\n", app.sim.LoopsCompleted, app.sim.GensCompleted)
+	fmt.Fprintf(w, "       Elapsed time last generation: %s\n", util.ElapsedTime(app.sim.TrackingGenStart, app.sim.TrackingGenStop))
+	fmt.Fprintf(w, "           Estimated time remaining: %s\n", formatDuration(estimatedTimeRemaining))
+	fmt.Fprintf(w, "               Estimated completion: %s\n", estimatedCompletionTime.Format(time.RFC1123))
 }
 
 func handleStop(w http.ResponseWriter, r *http.Request) {

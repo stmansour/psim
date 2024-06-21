@@ -3,30 +3,38 @@ GDELT Data Synchronization Overview
 Components
 
 The GDELT data synchronization for the Plato project is managed by
-two primary programs: gfetch.sh and gsync.  gfetch.sh: This Bash
-script orchestrates the entire data synchronization process. It is
-responsible for downloading GDELT 2.0 data files, organizing these
-files into daily CSV formats, and managing the directories and files
-used by gsync to extract and process the data. It logs everything
-it does and saves the log files.  gsync: Implemented in Go, this
-program processes the daily CSV files created by gfetch.sh and
-updates Plato's SQL database with new metrics. A log for each gsync
-run is saved, and gsync is run with the -verbose option to ensure
-detailed logging.  Workflow
+two primary programs: gfetch.sh and gsync.
+
+gfetch.sh
+
+This Bash script orchestrates the entire data synchronization
+process. It is responsible for downloading GDELT 2.0 data files,
+organizing these files into daily CSV formats, and managing the
+directories and files used by gsync to extract and process the data.
+It logs everything it does and saves the log files.
+
+gsync
+
+Implemented in Go, this program processes the daily CSV files created
+by gfetch.sh and updates Plato's SQL database with new metrics. A
+log for each gsync run is saved, and gsync is run with the -verbose
+option to ensure detailed logging.
+
+Workflow
 
 gfetch.sh operates within a specified base directory. If no directory
-is provided, it defaults to creating and using a gdelt directory
-in the current working directory. The script is capable of handling
-multiple days' data; however, it processes downloads one day at a
-time to manage system resources effectively.  Each day's data is
-stored in a dedicated "day directory" named in the YYYYMMDD format
-within the base directory. These directories contain all the GDELT
-files for the respective day in their zipped form. Once all files
-for a day are downloaded, gfetch.sh unzips them, concatenates them
-into a single CSV file, and invokes gsync to process this file and
-upload the metrics to Plato's SQL database.  By default, once gsync
-has processed the data, gfetch.sh cleans up by deleting all the
-original zipped and unzipped files, as well as the concatenated
+is provided, it defaults to creating and using a directory named
+"gdelt" in the current working directory. The script is capable of
+handling multiple days' data; however, it processes downloads one
+day at a time to manage system resources effectively.  Each day's
+data is stored in a dedicated "day directory" named in the YYYYMMDD
+format within the base directory. These directories contain all the
+GDELT files for the respective day in their zipped form. Once all
+files for a day are downloaded, gfetch.sh unzips them, concatenates
+them into a single CSV file, and invokes gsync to process this file
+and write the metric values to Plato's SQL database.  By default, once
+gsync has processed the data, gfetch.sh cleans up by deleting all
+the original zipped and unzipped files, as well as the concatenated
 CSV, leaving only the gsync log file in the day directory. For
 initial operations on the Plato server, the -k option is used to
 retain the zipped files and the CSV for debugging purposes. With
@@ -35,7 +43,7 @@ GB.
 
 Automation
 
-A cron job is set up to run gfetch.sh daily at 2:10 AM in
+A cron job is set up to run gfetch.sh daily at 2:00 AM in
 /home/steve/gsync. This job synchronizes the previous day's data
 and checks the data for the past six days to ensure accuracy and
 consistency. When the cron job completes, it also creates a CSV
@@ -63,8 +71,8 @@ Daily Processing
 
 * Delete all unzipped files, retaining the zipped files if specified.
 
-* Use gsync to update the SQL database with the new metrics from the
-CSV.
+* Use gsync to update the SQL database with the new metrics from
+the CSV.
 
 * Upon successful update, delete the zipped files, leaving the CSV
 and log files.

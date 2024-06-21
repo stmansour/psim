@@ -30,6 +30,9 @@
     "WorkerPoolSize": 0,            // When 0, the program decides the number of cores, when >= 1 the number of cores the simulator will use
     "HoldWindowStatsLookBack": 365, // how many days make up the rolling window of data used in HoldWindow stats calculations (mean and StdDev)
     "StdDevVariationFactor": 0.0001,  // variable factor from Std Deviation
+    "StopLoss": 0.10,               // Expressed as a percentage of the Portfolio Value. That is, 0.12 means 12%.  Sell all C2 immediately if the PV has lost this much of the initial funding.
+    "TxnFeeFactor": 0.0002,         // cost, in C1, per transaction that is multiplied by the amount. .0002 == 2 basis points, 0 if not set
+    "TxnFee": 0,                    // a flat cost, in C1, that is added for each transaction, 0 if not set
 
     "SingleInvestorMode": false,
     "SingleInvestorDNA": "{Investor;Strategy=MajorityRules;InvW1=0.9989;InvW2=0.0011;Influencers=[{LSMInfluencer,Delta1=-327,Delta2=-39,Metric=GCAM_C25_11}|{LSMInfluencer,Delta1=-257,Delta2=-42,Metric=GCAM_C7_2}|{LSMInfluencer,Delta1=-193,Delta2=-27,Metric=GCAM_C25_4}|{LSMInfluencer,Delta1=-78,Delta2=-21,Metric=Coal}|{LSMInfluencer,Delta1=-163,Delta2=-54,Metric=UnemploymentRate}|{LSMInfluencer,Delta1=-209,Delta2=-20,Metric=GCAM_V42_3}|{LSMInfluencer,Delta1=-354,Delta2=-25,Metric=GCAM_C5_32}|{LSMInfluencer,Delta1=-345,Delta2=-31,Metric=GCAM_V42_9}|{LSMInfluencer,Delta1=-144,Delta2=-61,Metric=GCAM_C15_148}|{LSMInfluencer,Delta1=-303,Delta2=-38,Metric=GCAM_C4_26}|{LSMInfluencer,Delta1=-187,Delta2=-1,Metric=GCAM_C25_8}|{LSMInfluencer,Delta1=-304,Delta2=-44,Metric=GCAM_C17_13}]}",

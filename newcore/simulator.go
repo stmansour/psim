@@ -74,7 +74,8 @@ type Simulator struct {
 	T3ForThreadPool              time.Time              // timestamp to be used by thread pool
 	WorkerThreads                int                    // number of worker threads in the thread pool
 	TraceTiming                  bool                   // show the timing of the various parts of the simulation
-	GenerationSimTime            string                 // how long did the last generation take?
+	TrackingGenStart             time.Time              // the start time of the current generation
+	TrackingGenStop              time.Time              // the stop time of the current generation
 	Simtalkport                  int                    // the port on which the simulator is listening for external commands
 	HashDuplicates               int64                  // the count of duplicate Investors encountered
 }
@@ -555,7 +556,8 @@ func (s *Simulator) Run() {
 			}
 			s.WindDownInProgress = false
 			dtGenStopTrace := time.Now()
-			s.GenerationSimTime = util.ElapsedTime(dtGenStartTrace, dtGenStopTrace)
+			s.TrackingGenStart = dtGenStartTrace
+			s.TrackingGenStop = dtGenStopTrace
 		}
 		if !s.Cfg.CrucibleMode {
 			fmt.Printf("loop %d completed.  %s - %s\n", lc, thisGenDtStart.Format("Jan _2, 2006"), thisGenDtEnd.Format("Jan _2, 2006"))

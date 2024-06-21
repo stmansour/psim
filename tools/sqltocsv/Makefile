@@ -42,3 +42,5 @@ package:
 secure:
 	$(DO_CMD)@echo "*** SECURE completed in ${THISDIR} ***"
 
+refmt:
+	fmt sqltocsv.1 > sqltocsv.11 ; mv sqltocsv.11 sqltocsv.1

@@ -17,3 +17,5 @@ package:
 	for dir in $(DIRS); do make -C $$dir package;done
 	@echo "*** ${THISDIR}: completed package ***"
 
+refmt:
+	fmt howto.txt > howto.txt1 ; mv howto.txt1 howto.txt

@@ -13,15 +13,15 @@ import (
 // Influencer interface. LSMInfluencer is derived from Locale Specific Influencer
 // where one of those locales is "none".
 type LSMInfluencer struct {
-	Metric              string   // data type of subclass
-	Blocs               []string // list of associated countries. If associated with C1 & C2, blocs[0] must be associated with C1, blocs[1] with C2
-	LocaleType          int      // how to handle locales
-	Predictor           int      // which predictor to use
-	cfg                 *util.AppConfig
-	Delta1              int
-	Delta2              int
-	HoldWindowNeg       float64 // positive number defining negative hold space:  from 0 to -HoldWindowNeg should be treated as 0
-	HoldWindowPos       float64 // defines positive hold space: from 0 to HoldWindowPos should be treated as 0
+	Metric     string   // data type of subclass
+	Blocs      []string // list of associated countries. If associated with C1 & C2, blocs[0] must be associated with C1, blocs[1] with C2
+	LocaleType int      // how to handle locales
+	Predictor  int      // which predictor to use
+	cfg        *util.AppConfig
+	Delta1     int
+	Delta2     int
+	// HoldWindowNeg       float64 // positive number defining negative hold space:  from 0 to -HoldWindowNeg should be treated as 0
+	// HoldWindowPos       float64 // defines positive hold space: from 0 to HoldWindowPos should be treated as 0
 	ID                  string
 	FitnessIsCalculated bool
 	FitnessIsNormalized bool

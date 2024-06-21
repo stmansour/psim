@@ -67,7 +67,7 @@ func displaySimulationResults(cfg *util.AppConfig, db *newdata.Database) {
 	var arch string
 	var err error
 	if app.archiveMode {
-		arch, err = app.sim.ArchiveResults(cfg.Filename)
+		arch, err = app.sim.ArchiveResults(cfg.ConfigFilename)
 		if err != nil {
 			fmt.Printf("archiveResults returned error: %s\n", err)
 		}

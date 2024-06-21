@@ -70,7 +70,7 @@ func (c *Crucible) Init(cfg *util.AppConfig, db *newdata.Database, sim *Simulato
 	//---------------------------------------------------------------------------
 	if c.CreateDLog {
 		c.dlog = NewDNALog()
-		c.dlog.Init(c, cfg)
+		c.dlog.Init(c, cfg, sim)
 		c.dlog.WriteHeader()
 		c.InvestorHistory = make([][]float64, len(c.cfg.CrucibleSpans))
 	}

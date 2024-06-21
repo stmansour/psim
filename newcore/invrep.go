@@ -104,7 +104,7 @@ func (ir *InvestorReport) dumpInvestmentReportHeader(file *os.File) {
 	// context information
 	//------------------------------------------------------------------------
 	fmt.Fprintf(file, "%q\n", "PLATO Simulator - Top Investor Investment Details")
-	fmt.Fprintf(file, "\"Configuration File:  %s\"\n", ir.s.Cfg.Filename)
+	fmt.Fprintf(file, "\"Configuration File:  %s\"\n", ir.s.Cfg.ConfigFilename)
 	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Start Date: %s\"\n", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Simulation Stop Date: %s\"\n", c.Format("Mon, Jan 2, 2006 - 15:04:05 MST"))

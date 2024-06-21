@@ -35,22 +35,23 @@ type SimApp struct {
 	cfg                       *util.AppConfig
 	extres                    *util.ExternalResources
 	db                        *newdata.Database
-	archiveBaseDir            string  // where archives go
-	archiveMode               bool    // if true it copies the config file to an archive directory, places simstats and finrep there as well
-	CrucibleMode              bool    // normal or crucible
-	DNALog                    bool    // generate dnalog when true and CrucibleMode is true
-	GenInfluencerDistribution bool    // show Influencer distribution for each generation
-	FitnessScores             bool    // save the fitness scores for each generation to dbgFitnessScores.csv
-	dbfilename                string  // override database name with this name
-	CPUProfile                string  // where is time being spent?
-	MemProfile                string  // where is memory being consumed?
-	basePort                  int     // Starting port
-	maxPort                   int     // Upper limit for trying different ports
-	Simtalkport               int     // current port being used
-	notalk                    bool    // if true, the simulator does not start up an HTTP listener
-	SQLiteFileName            string  // where we keep the Investor cache
-	SQLiteDB                  *sql.DB // the sqlite3 database used for Investor ids
-	AllowDuplicateInvestors   bool    // whether to check for duplicate investors or not
+	archiveBaseDir            string    // where archives go
+	archiveMode               bool      // if true it copies the config file to an archive directory, places simstats and finrep there as well
+	CrucibleMode              bool      // normal or crucible
+	DNALog                    bool      // generate dnalog when true and CrucibleMode is true
+	GenInfluencerDistribution bool      // show Influencer distribution for each generation
+	FitnessScores             bool      // save the fitness scores for each generation to dbgFitnessScores.csv
+	dbfilename                string    // override database name with this name
+	CPUProfile                string    // where is time being spent?
+	MemProfile                string    // where is memory being consumed?
+	basePort                  int       // Starting port
+	maxPort                   int       // Upper limit for trying different ports
+	Simtalkport               int       // current port being used
+	notalk                    bool      // if true, the simulator does not start up an HTTP listener
+	SQLiteFileName            string    // where we keep the Investor cache
+	SQLiteDB                  *sql.DB   // the sqlite3 database used for Investor ids
+	AllowDuplicateInvestors   bool      // whether to check for duplicate investors or not
+	ProgramStarted            time.Time // when the program started
 }
 
 var app SimApp
@@ -200,6 +201,7 @@ func main() {
 
 	app.randNano = -1
 	app.cfName = "config.json5"
+	app.ProgramStarted = time.Now()
 
 	readCommandLineArgs()
 	if app.version {

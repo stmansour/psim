@@ -1,0 +1,20 @@
+PLATO PRODUCTION SYSTEM
+
+Overview
+
+This document describes the processes in place to make a
+working Plato system.
+
+Database Synchronization
+    GDELT
+        cron job daily @ 2:00am
+    Trading Economics
+        cron job daily @ 3:00am
+
+Database Backups
+
+Daily Website Updates
+    Database Sync Status indicators
+    Latest CSV Dataset on website
+    Latest CSV Dataset in viewer
+

@@ -178,7 +178,7 @@ func (d *DatabaseCSV) WriteMISubclassesToCSV(subclassesMap map[string]MInfluence
 	header := []string{
 		"MID", "Name", "Metric", "BlocType", "LocaleType", "Predictor", "Subclass",
 		"MinDelta1", "MaxDelta1", "MinDelta2", "MaxDelta2",
-		"FitnessW1", "FitnessW2", "HoldWindowPos", "HoldWindowNeg",
+		"FitnessW1", "FitnessW2", /*"HoldWindowPos", "HoldWindowNeg",*/
 	}
 	if err := writer.Write(header); err != nil {
 		return fmt.Errorf("error writing header to CSV file: %v", err)
@@ -200,8 +200,8 @@ func (d *DatabaseCSV) WriteMISubclassesToCSV(subclassesMap map[string]MInfluence
 			fmt.Sprintf("%d", subclass.MaxDelta2),
 			fmt.Sprintf("%f", subclass.FitnessW1),
 			fmt.Sprintf("%f", subclass.FitnessW2),
-			fmt.Sprintf("%f", subclass.HoldWindowPos),
-			fmt.Sprintf("%f", subclass.HoldWindowNeg),
+			// fmt.Sprintf("%f", subclass.HoldWindowPos),
+			// fmt.Sprintf("%f", subclass.HoldWindowNeg),
 		}
 
 		if err := writer.Write(record); err != nil {

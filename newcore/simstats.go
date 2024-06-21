@@ -331,7 +331,7 @@ func (s *Simulator) ReportHeader(file *os.File, bSim bool) {
 	fmt.Fprintf(file, "\"Available processor cores: %d\"\n", runtime.NumCPU())
 	fmt.Fprintf(file, "\"Worker Threads: %d\"\n", s.WorkerThreads)
 
-	fmt.Fprintf(file, "\"Configuration File:  %s\"\n", s.Cfg.Filename)
+	fmt.Fprintf(file, "\"Configuration File:  %s\"\n", s.Cfg.ConfigFilename)
 	if s.db.Datatype == "CSV" {
 		fmt.Fprintf(file, "\"Database: %s\"\n", s.db.CSVDB.DBFname)
 		fmt.Fprintf(file, "\"Nil data requests: %d\"\n", s.db.CSVDB.Nildata)

@@ -59,8 +59,8 @@ type FileConfig struct {
 	DtStop           CustomDate // simulation ends on this date. Guaranteed that no "buys" happen after this date
 	LoopCount        int        // how many times to loop over DtStart to DtStop
 	TopInvestorCount int        // how many top investors to include in financial report
-	HoldWindowPos    float64    // positive space to consider as "no difference" when subtracting two ratios
-	HoldWindowNeg    float64    // negative space to consider as "no difference" when subtracting two ratios
+	// HoldWindowPos    float64    // positive space to consider as "no difference" when subtracting two ratios
+	// HoldWindowNeg    float64    // negative space to consider as "no difference" when subtracting two ratios
 
 	//--------------------------------------------------------------------------------
 	// The format of the GenDurSpec string is one to four pairs of the the following
@@ -116,7 +116,7 @@ type CustomCell struct {
 // to all areas of code in this project
 // ---------------------------------------------------------------------------
 type AppConfig struct {
-	Filename                string              // filename of the configuration file read
+	ConfigFilename          string              // filename of the configuration file read
 	C1                      string              // Currency1 - the currency that we're trying to maximize
 	C2                      string              // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
 	DtStart                 CustomDate          // simulation begins on this date
@@ -260,7 +260,7 @@ func LoadConfig(cfname string) (*AppConfig, error) {
 		return &cfg, fmt.Errorf("failed to open config file: %v", err)
 	}
 	defer configFile.Close()
-	cfg.Filename = fname
+	cfg.ConfigFilename = fname // This was the file ultimately opened
 	byteValue, err := io.ReadAll(configFile)
 	if err != nil {
 		return &cfg, fmt.Errorf("failed to read config file: %v", err)

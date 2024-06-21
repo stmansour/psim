@@ -77,9 +77,9 @@ func (p *DatabaseSQL) CreateDatabaseTables() error {
 			MinDelta2 INT NOT NULL,
 			MaxDelta2 INT NOT NULL,
 			FitnessW1 DECIMAL(13,6) NOT NULL,
-			FitnessW2 DECIMAL(13,6) NOT NULL,
+			FitnessW2 DECIMAL(13,6) NOT NULL /*,
 			HoldWindowPos DECIMAL(13,6) NOT NULL,
-			HoldWindowNeg DECIMAL(13,6) NOT NULL
+			HoldWindowNeg DECIMAL(13,6) NOT NULL*/
 		);`,
 		`CREATE TABLE IF NOT EXISTS MetricsSources (
 			MSID INT AUTO_INCREMENT PRIMARY KEY,
