@@ -11,6 +11,7 @@
     //-----------------------------------------------------------------
     //  SIMULATOR
     //-----------------------------------------------------------------
+    "SimulationName": "Development Default Simulation",  // Name for this simulation
     "DtStart": "2018-01-01",        // simulation start date for each generation
     "DtStop": "2018-12-31",         // simulation stop date for each generation
     "EnforceStopDate": true,        // stops on DtStop even if there is a C2 Balance, if false and C2 Balance > 0 on StopDate, simulation will continue in sell-only mode until C2 < 1.00

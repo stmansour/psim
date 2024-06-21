@@ -20,14 +20,15 @@ type DNALogResult struct {
 
 // DNALog is the class that creates the DNA log
 type DNALog struct {
-	cfg       *util.AppConfig
-	s         *Simulator
-	filename  string         // name of report file
-	parent    *Crucible      // crucible object containing this
-	row       int            // current row number
-	sheetName string         // current sheet we're working on
-	f         *excelize.File // excel file
-	Results   map[string]*DNALogResult
+	cfg               *util.AppConfig
+	s                 *Simulator
+	filename          string         // name of report file
+	parent            *Crucible      // crucible object containing this
+	row               int            // current row number
+	sheetName         string         // current sheet we're working on
+	f                 *excelize.File // excel file
+	Results           map[string]*DNALogResult
+	stdReportStartRow int
 }
 
 // NewDNALog creates and returns a new DNA log object
@@ -42,6 +43,7 @@ func (dl *DNALog) Init(c *Crucible, cfg *util.AppConfig, sim *Simulator) {
 	dl.cfg = cfg
 	dl.parent = c
 	dl.s = sim
+	dl.stdReportStartRow = 4
 }
 
 // setCellNext - adds a line to the excel file
@@ -55,18 +57,10 @@ func (dl *DNALog) setCellNext(row int, col string, s string) int {
 // finrep, crep, etc
 // -------------------------------------------------------------------------------
 func (dl *DNALog) ReportHeader(row int) int {
-	// et := dl.s.GetSimulationRunTime()
-	// a := time.Time(dl.s.Cfg.DtStart)
-	// b := time.Time(dl.s.Cfg.DtStop)
-	// c := b.AddDate(0, 0, 1)
 
+	row = dl.setCellNext(row, "A", fmt.Sprintf("Crucible Name:  %s", dl.s.Cfg.CrucibleName))
 	row = dl.setCellNext(row, "A", fmt.Sprintf("Program Version:  %s", util.Version()))
-
 	row = dl.setCellNext(row, "A", fmt.Sprintf("Run Date: %s", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST")))
-
-	// row = dl.setCellNext(row, "A", fmt.Sprintf("Available processor cores: %d", runtime.NumCPU()))
-	// row = dl.setCellNext(row, "A", fmt.Sprintf("Worker Threads: %d", dl.s.WorkerThreads))
-
 	row = dl.setCellNext(row, "A", fmt.Sprintf("Configuration File:  %s", dl.s.Cfg.ConfigFilename))
 	if dl.s.db.Datatype == "CSV" {
 		row = dl.setCellNext(row, "A", fmt.Sprintf("Database: %s", dl.s.db.CSVDB.DBFname))
@@ -74,42 +68,15 @@ func (dl *DNALog) ReportHeader(row int) int {
 	} else {
 		row = dl.setCellNext(row, "A", fmt.Sprintf("Database: %s  (SQL)", dl.s.db.SQLDB.Name))
 	}
-	// row = dl.setCellNext(row, "A", fmt.Sprintf("Simulation Start Date: %s", a.Format("Mon, Jan 2, 2006 - 15:04:05 MST")))
-	// row = dl.setCellNext(row, "A", fmt.Sprintf("Simulation Stop Date: %s", b.Format("Mon, Jan 2, 2006 - 15:04:05 MST")))
-	// if dl.s.Cfg.SingleInvestorMode {
-	// 	row = dl.setCellNext(row, "A", "Single Investor Mode")
-	// 	row = dl.setCellNext(row, "A", fmt.Sprintf("DNA: %s", dl.s.Cfg.SingleInvestorDNA))
-	// } else {
-	// 	row = dl.setCellNext(row, "A", fmt.Sprintf("Generations: %d", dl.s.GensCompleted))
-	// 	if len(dl.s.Cfg.GenDurSpec) > 0 {
-	// 		row = dl.setCellNext(row, "A", fmt.Sprintf("Generation Lifetime: %s", util.FormatGenDur(dl.s.Cfg.GenDur)))
-	// 	}
-	// 	row = dl.setCellNext(row, "A", fmt.Sprintf("Simulation Loop Count: %d", dl.s.Cfg.LoopCount))
-	// 	row = dl.setCellNext(row, "A", fmt.Sprintf("Simulation Time Duration: %s", util.DateDiffString(a, c)))
-	// }
 	row = dl.setCellNext(row, "A", fmt.Sprintf("C1: %s", dl.s.Cfg.C1))
 	row = dl.setCellNext(row, "A", fmt.Sprintf("C2: %s", dl.s.Cfg.C2))
-
-	// row = dl.setCellNext(row, "A", fmt.Sprintf("Population: %d", dl.s.Cfg.PopulationSize))
-	// row = dl.setCellNext(row, "A", fmt.Sprintf("Influencers: min %d,  max %d", dl.s.Cfg.MinInfluencers, dl.s.Cfg.MaxInfluencers))
 	row = dl.setCellNext(row, "A", fmt.Sprintf("Initial Funds: %.2f %s", dl.s.Cfg.InitFunds, dl.s.Cfg.C1))
 	row = dl.setCellNext(row, "A", fmt.Sprintf("Standard Investment: %.2f %s", dl.s.Cfg.StdInvestment, dl.s.Cfg.C1))
 	row = dl.setCellNext(row, "A", fmt.Sprintf("Stop Loss: %.2f%%", dl.s.Cfg.StopLoss*100))
-	// row = dl.setCellNext(row, "A", fmt.Sprintf("Preserve Elite: %v  (%5.2f%%)", dl.s.Cfg.PreserveElite, dl.s.Cfg.PreserveElitePct))
 	row = dl.setCellNext(row, "A", fmt.Sprintf("Transaction Fee: %.2f (flat rate)  %5.1f bps", dl.s.Cfg.TxnFee, dl.s.Cfg.TxnFeeFactor*10000))
 	row = dl.setCellNext(row, "A", fmt.Sprintf("Investor Bonus Plan: %v", dl.s.Cfg.InvestorBonusPlan))
-	// row = dl.setCellNext(row, "A", fmt.Sprintf("Gen 0 Elites: %v", dl.s.Cfg.Gen0Elites))
 	row = dl.setCellNext(row, "A", fmt.Sprintf("HoldWindowStatsLookback: %d", dl.s.Cfg.HoldWindowStatsLookBack))
 	row = dl.setCellNext(row, "A", fmt.Sprintf("StdDevVariationFactor: %.4f", dl.s.Cfg.StdDevVariationFactor))
-
-	// omr := float64(0)
-	// if dl.s.factory.MutateCalls > 0 {
-	// 	omr = 100.0 * float64(dl.s.factory.Mutations) / float64(dl.s.factory.MutateCalls)
-	// }
-	// row = dl.setCellNext(row, "A", fmt.Sprintf("Observed Mutation Rate: %6.3f%%", omr))
-	// if !dl.s.Cfg.CrucibleMode {
-	// 	row = dl.setCellNext(row, "A", fmt.Sprintf("Elapsed Run Time: %s", et))
-	// }
 	row++
 
 	return row
@@ -171,8 +138,7 @@ func (dl *DNALog) WriteHeader() error {
 	//===========================================================================
 	// STANDARD REPORT HEADER
 	//===========================================================================
-	stdReportStartRow := 4
-	hdrRow1 := dl.ReportHeader(stdReportStartRow) // start the header info on row 4
+	hdrRow1 := dl.ReportHeader(dl.stdReportStartRow) // start the header info on row 4
 	hdr1 := fmt.Sprintf("%d", hdrRow1)
 	stdReportStopRow := hdrRow1 - 1
 	stdReportHeaderStyle, err := f.NewStyle(&excelize.Style{
@@ -185,7 +151,7 @@ func (dl *DNALog) WriteHeader() error {
 		fmt.Println(err)
 		return err
 	}
-	f.SetCellStyle(dl.sheetName, "A"+strconv.Itoa(stdReportStartRow), "A"+strconv.Itoa(stdReportStopRow), stdReportHeaderStyle)
+	f.SetCellStyle(dl.sheetName, "A"+strconv.Itoa(dl.stdReportStartRow), "A"+strconv.Itoa(stdReportStopRow), stdReportHeaderStyle)
 
 	//===========================================================================
 	// COLUMN HEADERS
@@ -340,22 +306,43 @@ func (dl *DNALog) WriteHeader() error {
 
 	f.SetCellStyle(dl.sheetName, "A"+hdr1, "BC"+hdr2, colHdrStyle)
 
-	// Set column widths - I think the units are
+	//--------------------------------
+	// SET CRUCIBLE TITLE STYLE
+	//--------------------------------
+	crucibleTitleStyle, err := f.NewStyle(&excelize.Style{
+		Font: &excelize.Font{
+			Bold: true,
+			Size: 18,
+		},
+	})
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	hdt := strconv.Itoa(dl.stdReportStartRow)
+	f.SetCellStyle(dl.sheetName, "A"+hdt, "A"+hdt, crucibleTitleStyle)
+
+	//---------------------------------------------------------------------------
+	// Set column widths - I think the units are in 1/20th of a character width
+	//---------------------------------------------------------------------------
 	if err = f.SetColWidth(dl.sheetName, "A", "A", 20); err != nil {
 		fmt.Println(err)
 		return err
 	}
-
 	if err = f.SetColWidth(dl.sheetName, "B", "bc", 15); err != nil {
 		fmt.Println(err)
 		return err
 	}
 
+	//--------------------------------------------
 	// Set the active sheet to the created sheet
+	//--------------------------------------------
 	f.SetActiveSheet(index)
 	dl.row = 1 + hdrRow2
 
-	// Save the Excel file
+	//--------------------------------
+	// Save and return...
+	//--------------------------------
 	dl.filename = "dnalog.xlsx"
 	if err := f.SaveAs(dl.filename); err != nil {
 		fmt.Println(err)

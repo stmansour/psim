@@ -116,6 +116,7 @@ type CustomCell struct {
 // to all areas of code in this project
 // ---------------------------------------------------------------------------
 type AppConfig struct {
+	SimulationName          string              // name for this simulation
 	ConfigFilename          string              // filename of the configuration file read
 	C1                      string              // Currency1 - the currency that we're trying to maximize
 	C2                      string              // Currency2 - the currency that we invest in to sell later and make a profit (or loss)

@@ -12,6 +12,8 @@ OS="$(uname -s)"
 KEEP_ZIPS=0
 GSYNCOPTS=""
 GSYNC=/usr/local/plato/bin/gsync
+MAX_RETRIES=3
+RETRY_DELAY=3
 
 #--------------------------------------------------------------------------
 # Log function for standardized logging
@@ -44,6 +46,34 @@ ZZEOF
 }
 
 #--------------------------------------------------------------------------
+# download_file - downloads with curl, retries based on MAX_RETRIES and
+#                 RETRY_DELAY
+#--------------------------------------------------------------------------
+download_file() {
+    local url="$1"
+    local filepath="$2"
+    local retries=0
+
+    while [ "$retries" -lt "$MAX_RETRIES" ]; do
+        if curl -L "${url}" -o "${filepath}"; then
+            return 0
+        else
+            retries=$((retries + 1))
+            log "Failed to download $url (attempt $retries/$MAX_RETRIES)"
+            echo "Failed to download $url (attempt $retries/$MAX_RETRIES)" >>"${FAILED_DOWNLOADS}"
+            if [ "$retries" -lt "$MAX_RETRIES" ]; then
+                sleep "$RETRY_DELAY"
+            fi
+        fi
+    done
+
+    # If we reach here, all attempts failed
+    log "Failed to download $url after $MAX_RETRIES attempts"
+    echo "Failed to download $url after $MAX_RETRIES attempts" >>"${FAILED_DOWNLOADS}"
+    exit 1
+}
+
+#--------------------------------------------------------------------------
 # Download the master file list if needed
 #--------------------------------------------------------------------------
 GetMasterlist() {
@@ -59,19 +89,13 @@ GetMasterlist() {
         # Compare latest URL date with the end_date directly
         if [[ "$latest_url_date" < "$end_date" ]]; then
             log "Existing masterlist.txt is outdated. Downloading the latest version..."
-            if ! curl -L "${url}" -o "$masterlist_file"; then
-                log "Failed to download $url"
-                exit 1
-            fi
+            download_file "${url}" "$masterlist_file"
         else
             log "Existing masterlist.txt is up-to-date."
         fi
     else
         log "masterlist.txt does not exist. Downloading now..."
-        if ! curl -L "${url}" -o "$masterlist_file"; then
-            log "Failed to download $url"
-            exit 1
-        fi
+        download_file "${url}" "$masterlist_file"
     fi
 }
 
@@ -104,12 +128,8 @@ DownloadFile() {
         return
     fi
 
-    log "Downloading $url..."
-    if ! curl -L "${url}" -o "$filepath"; then
-        log "Failed to download $url"
-        echo "Failed to download $url" >>"${FAILED_DOWNLOADS}"
-        exit 1
-    fi
+    # log "Downloading $url..."
+    download_file "${url}" "${filepath}"
 }
 
 #--------------------------------------------------------------------------
