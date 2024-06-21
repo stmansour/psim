@@ -470,10 +470,11 @@ func (dl *DNALog) WriteRow() {
 		fmt.Println(err)
 		return
 	}
+
 	for i := 0; i < len(dl.parent.cfg.CrucibleSpans); i++ {
-		consistency, sc = dl.ConsistencySC(dl.parent.InvestorHistory[i]) // 1 week
+		consistency, _ = dl.ConsistencySC(dl.parent.InvestorHistory[i]) // 1 week
 		f.SetCellValue(dl.sheetName, dl.getCell(c, r), consistency)
-		f.SetCellValue(dl.sheetName, dl.getCell(c+2, r), sc)
+		f.SetCellValue(dl.sheetName, dl.getCell(c+2, r), consistency*dl.parent.AnnualizedReturnList[i])
 		c += 3
 	}
 
