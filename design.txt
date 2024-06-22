@@ -496,6 +496,30 @@ significantly improved performance. I’ve also done profiling on the
 code and removed several issues that caused the memory allocation
 code to overwork. This also improved performance slightly.
 
+Another big issue for performance was accessing the metric data.
+There are many data suppliers for the econometric data. And the
+values are not the same from supplier to supplier. So, we wanted
+to be able to save multiple values for the same metric, identified
+by the different suppliers. We wanted to be able to run sumulations
+using the data from a specific supplier. Furthermore, we did not
+know what granularity we would need for our time-series.  We started
+with daily. But we assumed it could become much finer... down to
+the minute, or second, or even further.
+
+The initial plan was to run simulations using the SQL database as
+the simulator's source form metrics. We knew the database would
+become very large over time. And so we designed the tables so that
+they would not grow forever. We chose to shard the metrics tables
+in two ways.  First, along its timeline we decided that each table
+would contain no more than 1 decade of data.  Second, we would shard
+based on the metric name by hashing the name.
+
+After this work was completed and we tested the simulations, we
+found that using a CSV-style database that was cached in memory ran
+about 100X faster than using the SQL database. So we continue to
+use the SQL database as the repository for all of our metric data.
+But for simulations we use CSV files which are created specifically
+for simulating with two currencies.
 
 
 Appendix D:  Influencer Prediction Logic

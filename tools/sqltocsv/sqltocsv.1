@@ -1,26 +1,80 @@
 .TH SQLTOCSV 1 "June 2024" "Version 1.0"
 .SH NAME
-sqltocsv \- create a set of CSV files to use as a database for \fBsimulator(1)\fP
+sqltocsv \- create a set of CSV files to use as a database for
+\fBsimulator(1)\fP
 
 .SH SYNOPSIS
 .B sqltocsv
+.RI [ options ]
 
 .SH DESCRIPTION
-This program creates a CSV file set that can be used as a database by the \fBsimulator(1)\fP. 
-The plato simulator runs nearly 100X faster using a CSV file set as a database
-rather than the MySQL plato database. The CSV data is loaded into memory and operates
-more like an in-program cache than a database. The simulator does not need to write data to
-the database. It only reads data, so as long as the CSV files contain the data needed for
-the two currencies and the date range used in the simulator, the CSV database is, by far,
-the best choice for use in simulations.
+This program creates a CSV file set that can be used as a database
+by the \fBsimulator(1)\fP.  The plato simulator runs nearly 100X
+faster using a CSV file set as a database rather than the MySQL
+plato database. The CSV data is loaded into memory and operates
+like an in-program database. The simulator does not need to write
+data to the database. It only reads data, so as long as the CSV
+files contain the data needed for the two currencies and the date
+range used in the simulator, the CSV database is, by far, the best
+choice for use in simulations.
 
-Before using this program make sure that config.json5 is in your current directory.
-\fBsqltocsv\fP uses the information in the config file to determine the currencies for which
-the CSV fileset will be created. The MySQL database can have metric data
-for many currencies. The metric data file produced by this process will only
-contain the data needed for the two currencies identified in the config file. 
+Before using this program make sure that config.json5 is in your
+current directory.  \fBsqltocsv\fP uses the information in the
+config file to determine the currencies for which the CSV fileset
+will be created. The MySQL database can have metric data for many
+currencies. The metric data file produced by this process will only
+contain the data needed for the two currencies identified in the
+config file.
 
+The program is set to copy data from Jan 1, 2014 through the latest
+information it has for the two currencies called out in the config
+file. The GDELT data begins in February of 2015 and those metrics
+are published approximately every 15 minutes. The other econometrics
+exist for many years prior to 2015, but some of those metrics are
+only published yearly. Collecting this information from 2014 ensures
+that we will have all the econometric data for 2015.
+
+A full set of CSV files is produced in a directory named 'data' in
+the current directory, which will be created if necessary.
+
+.SH OPTIONS
+.TP
+.BI \-c " filename"
+Use
+.I filename
+as the configuration file.  If this option is not given, \fBsqltocsv\fP
+will attempt to open a file named config.json5 in the current
+directory.  If config.json5 is not found in the current directory,
+the simulator will load config.json5 from the distribution release
+directory, the same directory in which \fBsqltocsv\fP itself is
+located. As of this writing, that configuration file is set to use
+the US Dollar and the Japanese Yen.
+
+.TP
+.BI \-s " metric"
+This option instructs \fBsqltocsv\fP to print the shard info for
+the supplied metric. That is, the table in which this particular
+metric can be found in the SQL database. The Metrics table is sharded
+in 2 dimensions, by decade and by hashing the metric name. The format
+of the metric table names is \fBMetrics_\fP\fIhash\fP_\fIdecade\fP,
+where \fIhash\fP is the hash of the metric name modulo 7 and \fIdecade\fP
+is the year decade of the time associated with the metric.
 
 .SH EXAMPLES
 .TP
-.B simulator
+.B sqltocsv
+This will produce the CSV files and store them in './data/'.
+
+.B sqltocsv -s Steel
+This will generate the shard info for the metric "Steel". The output
+will look something like this:
+
+            date: January 1, 2023
+          Metric: Steel
+             MID: 60
+    BucketNumber: 2
+           Table: Metrics_2_2020
+
+Note that this command assumes that the date for the metric is January 1, 2023.
+2023 is in the decade of 2020 and that is why the SQL table name is \fBMetrics_2_2020\fP.
+

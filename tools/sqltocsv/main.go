@@ -161,20 +161,15 @@ func PrintShardInfo() {
 	}
 	app.sqldb.SQLDB.FieldSelectorFromCSVColName(app.ShardMetric, &f)
 	app.sqldb.SQLDB.GetShardInfo(dt, &f)
+	app.sqldb.SQLDB.FieldSelectorToSQL(&f)
 
 	fmt.Printf(
 		`            date: %s
           Metric: %s
              MID: %d
-          Locale: %s
-             LID: %d
-         Locale2: %s
-            LID2: %d
-            MSID: %d
-           Table: %s
     BucketNumber: %d
-          FQname: %s
+           Table: %s
 `,
-		dt.Format("January 2, 2006"), f.Metric, f.MID, f.Locale, f.LID, f.Locale2, f.LID2, f.MSID, f.Table, f.BucketNumber, f.FQMetric())
+		dt.Format("January 2, 2006"), f.Metric, f.MID, f.BucketNumber, f.Table)
 
 }

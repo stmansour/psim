@@ -8,8 +8,6 @@ else
 DO_CMD=@echo "SQL not found, skipping target"; exit 0;
 endif
 
-
-
 apps:
 	${DO_CMD}for dir in $(DIRS); do make -C $$dir;done
 	@echo "*** ${THISDIR}: completed compile ***"
@@ -25,4 +23,3 @@ test:
 package:
 	${DO_CMD}for dir in $(DIRS); do make -C $$dir package;done
 	@echo "*** ${THISDIR}: completed package ***"
-

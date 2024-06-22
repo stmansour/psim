@@ -37,6 +37,7 @@ createcsv: config
 
 package:
 	cp sqltocsv ${DIST}/
+	cp sqltocsv.1 ${BINDIR}/man/man1
 	$(DO_CMD)@echo "*** PACKAGE completed in ${THISDIR} ***"
 
 secure:
@@ -44,3 +45,7 @@ secure:
 
 refmt:
 	fmt sqltocsv.1 > sqltocsv.11 ; mv sqltocsv.11 sqltocsv.1
+
+releaseman:
+	if [ -d /usr/local/share/man/man1 ] && [ -w /usr/local/share/man/man1 ]; then cp sqltocsv.1 /usr/local/share/man/man1/ ; fi
+	@echo "*** ${THISDIR}: completed releaseman ***"
