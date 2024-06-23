@@ -79,7 +79,7 @@ func dateIsInDataRange(a time.Time) string {
 func readCommandLineArgs() {
 	flag.StringVar(&app.archiveBaseDir, "adir", "", "base archive directory, default is current directory")
 	flag.BoolVar(&app.archiveMode, "ar", false, "create archive directory for config file, finrep, simstats, and all other reports. Also see -adir.")
-	flag.StringVar(&app.cfName, "c", "config.json5", "configuration file to use (instead of config.json5)")
+	flag.StringVar(&app.cfName, "c", "", "configuration file to use (instead of config.json5)")
 	flag.BoolVar(&app.CrucibleMode, "C", false, "Crucible mode.")
 	flag.StringVar(&app.CPUProfile, "cpuprofile", "", "write cpu profile to file")
 	flag.BoolVar(&app.InfPredDebug, "D", false, "show prediction debug info - dumps a lot of data, use on short simulations, with minimal Influencers")
@@ -113,6 +113,7 @@ func initSimulation() {
 	if err != nil {
 		log.Fatalf("failed to read config file: %v", err)
 	}
+	app.cfName = cfg.ConfigFilename // it may have been set by LoadConfig
 	cfg.InfPredDebug = app.InfPredDebug
 	if err = util.ValidateConfig(cfg); err != nil {
 		fmt.Printf("Please fix errors in the simulator configuration file, config.json5, and try again\n")
@@ -200,7 +201,7 @@ func main() {
 	var err error
 
 	app.randNano = -1
-	app.cfName = "config.json5"
+	// app.cfName = "config.json5"
 	app.ProgramStarted = time.Now()
 
 	readCommandLineArgs()

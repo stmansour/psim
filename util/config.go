@@ -246,6 +246,7 @@ func LoadConfig(cfname string) (*AppConfig, error) {
 			return &cfg, err
 		}
 		fname = exePath + "/" + fname
+		cfg.ConfigFilename = fname
 	}
 
 	// If the config file still wasn't found, return an error
