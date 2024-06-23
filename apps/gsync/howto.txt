@@ -32,9 +32,9 @@ format within the base directory. These directories contain all the
 GDELT files for the respective day in their zipped form. Once all
 files for a day are downloaded, gfetch.sh unzips them, concatenates
 them into a single CSV file, and invokes gsync to process this file
-and write the metric values to Plato's SQL database.  By default, once
-gsync has processed the data, gfetch.sh cleans up by deleting all
-the original zipped and unzipped files, as well as the concatenated
+and write the metric values to Plato's SQL database.  By default,
+once gsync has processed the data, gfetch.sh cleans up by deleting
+all the original zipped and unzipped files, as well as the concatenated
 CSV, leaving only the gsync log file in the day directory. For
 initial operations on the Plato server, the -k option is used to
 retain the zipped files and the CSV for debugging purposes. With

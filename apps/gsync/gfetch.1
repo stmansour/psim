@@ -1,0 +1,66 @@
+.TH GFETCH 1 "June 2024" "Version 1.0"
+.SH NAME
+gfetch \- synchronize Plato's SQL Database with metrics from GDELT
+
+.SH SYNOPSIS
+.B gfetch
+.RI options
+
+.SH DESCRIPTION
+This program orchestrates syncing data from GDELT with the PLATO
+SQL database.
+
+.SH OPTIONS
+.TP
+.BI \-b " begin_date"
+This required parameter sets the begin date for data sync. The date
+format is YYYYMMDD.
+.TP
+.BI \-d "directory"
+Use \fIdirectory\fP as the location for downloading the information
+needed to do the data synchronization. If this option is omitted
+the program will use a directory named \fBgdelt\fP in the current
+directory, creating it if necessary.
+.TP
+.BI \-e " end_date"
+This required parameter sets the end date for the data sync. The
+date format is YYYYMMDD.  To download a single day's worth of updates
+set \fIend_date\fP to the same value as \fIbegin_data\fP.
+.TP
+.BI \-F
+Overwrite miscompares with the computed values from downloaded data.
+\fBgfetch\fP calls uses \fBgsync(1)\fP to update the SQL database.
+If \fBgsync\fP finds that the data it is being asked to update
+already exists in the database it will compare the value in the
+database with the value that it was going to write.  If this option
+is not specified the miscompare will simply be logged. However,
+with this option, any values that miscompare will be overwritten.
+.TP
+.BI \-k
+By default, after the database has been updated with a day's worth
+of GDELT data, the zip files from GDELT are removed as they can
+consume 1 - 2 GB for each day. With this option specified, the zip
+files are kept and not deleted.
+
+.SH EXAMPLES
+.TP
+.B gfetch -b 20240601 -e 20240601
+Sync a single day, June 1, 2024, of GDELT data with the SQL database.
+.TP
+.B gfetch -b 20240601 -e 20240601 -k
+Sync data for June 1, 2024 and keep the zip files in ./gdelt/20240601/
+.TP
+.B gfetch -b 20240601 -e 20240607 -F
+Sync a week's worth of GDELT data with the SQL database. Overwrite
+(and log) any miscompares.
+.TP
+.B nohup gfetch -b 20180301 -e 20180331
+Sync the data from March 1, 2018 through March 31, 2018 with the
+SQL database. Note the use of \fBnohup\fP. \fBgfetch\fP is a script,
+so it requires \fBnohup\fP to be run in this fashion.  A long-running
+script like this is often initiated from a home system to run on a
+server. If the connection to between the home system and the server
+is broken (almost guaranteed to happen on a multi-day run) the
+script would stop running. By running \fBnohup\fP before \fBgfetch\fP,
+the program will ignore SIGHUP and will continue to run even when
+the connection between the home system and the server is terminated.

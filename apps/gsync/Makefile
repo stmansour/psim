@@ -3,11 +3,13 @@ DIST=${TOP}/dist/plato
 THISDIR=gsync
 TEST_FAILURE_FILE=fail
 
-schema: *.go
+gsync: *.go gfetch.sh
 	go vet
 	@golint ./... | grep -v "use underscores in Go names;" | ( ! grep . )
 	staticcheck
 	go build
+	cp gfetch.sh gfetch
+	chmod +x gfetch
 	@echo "*** completed in ${THISDIR} ***"
 
 clean:
@@ -22,7 +24,9 @@ test: config
 	@echo "*** TEST completed in ${THISDIR} ***"
 
 package:
-	cp gsync gfetch.sh ${DIST}/
+	mkdir -p ${DIST}/man/man1
+	cp gfetch.1 ${DIST}/man/man1
+	cp gsync gfetch ${DIST}/
 	@echo "*** PACKAGE completed in ${THISDIR} ***"
 
 secure:
@@ -30,3 +34,7 @@ secure:
 
 refmt:
 	fmt howto.txt > howto.txt1 ; mv howto.txt1 howto.txt
+	fmt gfetch.1 > gfetch.11 ; mv gfetch.11 gfetch.1
+
+releaseman:
+	if [ -d /usr/local/share/man/man1 ] && [ -w /usr/local/share/man/man1 ]; then cp gfetch.1 /usr/local/share/man/man1/ ; fi

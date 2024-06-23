@@ -37,7 +37,7 @@ createcsv: config
 
 package:
 	cp sqltocsv ${DIST}/
-	cp sqltocsv.1 ${BINDIR}/man/man1
+	cp sqltocsv.1 ${DIST}/man/man1
 	$(DO_CMD)@echo "*** PACKAGE completed in ${THISDIR} ***"
 
 secure:

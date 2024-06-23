@@ -51,3 +51,7 @@ package:
 releaseman:
 	if [ -d /usr/local/share/man/man1 ] && [ -w /usr/local/share/man/man1 ]; then cp simulator.1 /usr/local/share/man/man1/ ; fi
 	@echo "*** ${THISDIR}: completed releaseman ***"
+
+refmt:
+	fmt simulator.1 > simulator.11 ; mv simulator.11 simulator.1
+

@@ -31,7 +31,6 @@ usage() {
 Usage: $0 [-d directory] [-f URLList] [-CYYYYMMDD] [-b begin_date -e end_date]
     -b begin_date  Specify start date for processing.
     -d directory   Specify the base directory for downloads. The default is ./gdelt
-    -b begin_date  Specify start date for processing.
     -e end_date    Specify end date for processing.
     -F             Overwrite miscompares with values computed from processing GDELT files.
     -k             Keep zip files
