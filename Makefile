@@ -69,6 +69,7 @@ stats:
 
 release:
 	cp -r dist/plato /usr/local/plato/;cd /usr/local/plato;rm -rf bin;mv plato bin;
+	if [ -d /usr/local/share/man/man1 ] && [ -w /usr/local/share/man/man1 ]; then cp ./dist/plato/man/man1/* /usr/local/share/man/man1/ ; fi
 	@if [ -f ~/.vault/extres.json5 ]; then \
 	    cp ~/.vault/extres.json5 /usr/local/plato/bin/ ; chmod 755 /usr/local/plato/bin/extres.json5 ;\
 	else \

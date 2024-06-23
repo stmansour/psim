@@ -36,6 +36,7 @@ createcsv: config
 	$(DO_CMD)@echo "*** CREATECSV completed in ${THISDIR} ***"
 
 package:
+	mkdir -p ${DIST}/man/man1
 	cp sqltocsv ${DIST}/
 	cp sqltocsv.1 ${DIST}/man/man1
 	$(DO_CMD)@echo "*** PACKAGE completed in ${THISDIR} ***"
