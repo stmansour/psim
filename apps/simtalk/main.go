@@ -19,15 +19,18 @@ type Command struct {
 
 // SimulatorStatus represents the status information of the simulator
 type SimulatorStatus struct {
-	ProgramStarted          string `json:"ProgramStarted"`
-	RunDuration             string `json:"RunDuration"`
-	ConfigFile              string `json:"ConfigFile"`
-	SimulationDateRange     string `json:"SimulationDateRange"`
-	LoopCountGenerationsReq string `json:"LoopCountGenerationsReq"`
-	Completed               string `json:"Completed"`
-	ElapsedTimeLastGen      string `json:"ElapsedTimeLastGen"`
-	EstimatedTimeRemaining  string `json:"EstimatedTimeRemaining"`
-	EstimatedCompletion     string `json:"EstimatedCompletion"`
+	ProgramStarted         string `json:"ProgramStarted"`
+	RunDuration            string `json:"RunDuration"`
+	ConfigFile             string `json:"ConfigFile"`
+	SimulationDateRange    string `json:"SimulationDateRange"`
+	PopulationSize         int    `json:"PopulationSize"`
+	LoopCount              int    `json:"LoopCount"`
+	GenerationsRequested   int    `json:"GenerationsRequested"`
+	CompletedLoops         int    `json:"CompletedLoops"`
+	CompletedGenerations   int    `json:"CompletedGenerations"`
+	ElapsedTimeLastGen     string `json:"ElapsedTimeLastGen"`
+	EstimatedTimeRemaining string `json:"EstimatedTimeRemaining"`
+	EstimatedCompletion    string `json:"EstimatedCompletion"`
 }
 
 // StopResponse represents the response from the stop command
@@ -37,7 +40,7 @@ type StopResponse struct {
 }
 
 func main() {
-	port := 8080
+	port := 8090
 	var err error
 	if len(os.Args) > 1 {
 		port, err = strconv.Atoi(os.Args[1])
@@ -138,8 +141,9 @@ func formatSimulatorStatus(status SimulatorStatus) string {
 			"                Run duration so far: %s\n"+
 			"                        Config file: %s\n"+
 			"              Simulation Date Range: %s\n"+
-			"LoopCount and Generations requested: %s\n"+
-			"                          completed: %s\n"+
+			"                    Population size: %d\n"+
+			"LoopCount and Generations requested: %d loops, %d generations\n"+
+			"                          completed: %d loops, %d generations\n"+
 			"       Elapsed time last generation: %s\n"+
 			"           Estimated time remaining: %s\n"+
 			"               Estimated completion: %s\n",
@@ -147,8 +151,11 @@ func formatSimulatorStatus(status SimulatorStatus) string {
 		status.RunDuration,
 		status.ConfigFile,
 		status.SimulationDateRange,
-		status.LoopCountGenerationsReq,
-		status.Completed,
+		status.PopulationSize,
+		status.LoopCount,
+		status.GenerationsRequested,
+		status.CompletedLoops,
+		status.CompletedGenerations,
 		status.ElapsedTimeLastGen,
 		status.EstimatedTimeRemaining,
 		status.EstimatedCompletion,
