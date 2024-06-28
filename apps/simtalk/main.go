@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -14,6 +15,25 @@ import (
 type Command struct {
 	Name        string
 	Description string
+}
+
+// SimulatorStatus represents the status information of the simulator
+type SimulatorStatus struct {
+	ProgramStarted          string `json:"ProgramStarted"`
+	RunDuration             string `json:"RunDuration"`
+	ConfigFile              string `json:"ConfigFile"`
+	SimulationDateRange     string `json:"SimulationDateRange"`
+	LoopCountGenerationsReq string `json:"LoopCountGenerationsReq"`
+	Completed               string `json:"Completed"`
+	ElapsedTimeLastGen      string `json:"ElapsedTimeLastGen"`
+	EstimatedTimeRemaining  string `json:"EstimatedTimeRemaining"`
+	EstimatedCompletion     string `json:"EstimatedCompletion"`
+}
+
+// StopResponse represents the response from the stop command
+type StopResponse struct {
+	Status  string `json:"Status"`
+	Message string `json:"Message"`
 }
 
 func main() {
@@ -90,6 +110,47 @@ func sendCommand(baseURL, command string) (string, error) {
 		return "", fmt.Errorf("server returned error status: %s", resp.Status)
 	}
 
-	// Convert the response body to a string
-	return string(body), nil
+	switch command {
+	case "status":
+		var status SimulatorStatus
+		err = json.Unmarshal(body, &status)
+		if err != nil {
+			return "", fmt.Errorf("error unmarshaling response body: %v", err)
+		}
+		return formatSimulatorStatus(status), nil
+	case "stop":
+		var stopResp StopResponse
+		err = json.Unmarshal(body, &stopResp)
+		if err != nil {
+			return "", fmt.Errorf("error unmarshaling response body: %v", err)
+		}
+		return fmt.Sprintf("Status: %s\nMessage: %s\n", stopResp.Status, stopResp.Message), nil
+	default:
+		// Convert the response body to a string for non-status and non-stop commands
+		return string(body), nil
+	}
+}
+
+func formatSimulatorStatus(status SimulatorStatus) string {
+	return fmt.Sprintf(
+		"SIMULATOR STATUS\n"+
+			"                    Program started: %s\n"+
+			"                Run duration so far: %s\n"+
+			"                        Config file: %s\n"+
+			"              Simulation Date Range: %s\n"+
+			"LoopCount and Generations requested: %s\n"+
+			"                          completed: %s\n"+
+			"       Elapsed time last generation: %s\n"+
+			"           Estimated time remaining: %s\n"+
+			"               Estimated completion: %s\n",
+		status.ProgramStarted,
+		status.RunDuration,
+		status.ConfigFile,
+		status.SimulationDateRange,
+		status.LoopCountGenerationsReq,
+		status.Completed,
+		status.ElapsedTimeLastGen,
+		status.EstimatedTimeRemaining,
+		status.EstimatedCompletion,
+	)
 }

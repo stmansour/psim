@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net"
@@ -10,6 +11,27 @@ import (
 
 	"github.com/stmansour/psim/util"
 )
+
+// SimulatorStatus represents the status information of the simulator
+type SimulatorStatus struct {
+	ProgramStarted         string `json:"ProgramStarted"`
+	RunDuration            string `json:"RunDuration"`
+	ConfigFile             string `json:"ConfigFile"`
+	SimulationDateRange    string `json:"SimulationDateRange"`
+	LoopCount              int    `json:"LoopCount"`
+	GenerationsRequested   int    `json:"GenerationsRequested"`
+	CompletedLoops         int    `json:"CompletedLoops"`
+	CompletedGenerations   int    `json:"CompletedGenerations"`
+	ElapsedTimeLastGen     string `json:"ElapsedTimeLastGen"`
+	EstimatedTimeRemaining string `json:"EstimatedTimeRemaining"`
+	EstimatedCompletion    string `json:"EstimatedCompletion"`
+}
+
+// StopResponse represents the response from the /stop endpoint
+type StopResponse struct {
+	Status  string `json:"Status"`
+	Message string `json:"Message"`
+}
 
 func startHTTPServer(ctx context.Context) error {
 	mux := http.NewServeMux()
@@ -78,11 +100,36 @@ func strElapsedTime(start, end time.Time) string {
 	return formatDuration(end.Sub(start))
 }
 
+// func handleStatus(w http.ResponseWriter, r *http.Request) {
+// 	timeElapsed := strElapsedTime(app.ProgramStarted, time.Now())
+
+// 	totalGens := app.cfg.LoopCount * app.cfg.Generations
+// 	completedGens := (app.sim.LoopsCompleted + 1) * app.sim.GensCompleted
+// 	gensRemaining := totalGens - completedGens
+
+// 	timePerGen := app.sim.TrackingGenStop.Sub(app.sim.TrackingGenStart) // Calculate the time taken for the last generation
+// 	estimatedTimeRemaining := timePerGen * time.Duration(gensRemaining) // Calculate the estimated time remaining
+// 	estimatedCompletionTime := time.Now().Add(estimatedTimeRemaining)   // Calculate the estimated completion time
+
+// 	dtStart := time.Time(app.cfg.DtStart)
+// 	dtStop := time.Time(app.cfg.DtStop)
+// 	fmt.Fprintf(w, "SIMULATOR STATUS\n")
+// 	fmt.Fprintf(w, "                    Program started: %s\n", app.ProgramStarted.Format(time.RFC1123))
+// 	fmt.Fprintf(w, "                Run duration so far: %s\n", timeElapsed)
+// 	fmt.Fprintf(w, "                        Config file: %s\n", app.cfg.ConfigFilename)
+// 	fmt.Fprintf(w, "              Simulation Date Range: %s - %s\n", dtStart.Format("Jan 2, 2006"), dtStop.Format("Jan 2, 2006"))
+// 	fmt.Fprintf(w, "LoopCount and Generations requested: loops: %d, generations: %d\n", app.cfg.LoopCount, app.cfg.Generations)
+// 	fmt.Fprintf(w, "                          completed: loops: %d, generations: %d\n", app.sim.LoopsCompleted, app.sim.GensCompleted)
+// 	fmt.Fprintf(w, "       Elapsed time last generation: %s\n", util.ElapsedTime(app.sim.TrackingGenStart, app.sim.TrackingGenStop))
+// 	fmt.Fprintf(w, "           Estimated time remaining: %s\n", formatDuration(estimatedTimeRemaining))
+// 	fmt.Fprintf(w, "               Estimated completion: %s\n", estimatedCompletionTime.Format(time.RFC1123))
+// }
+
 func handleStatus(w http.ResponseWriter, r *http.Request) {
 	timeElapsed := strElapsedTime(app.ProgramStarted, time.Now())
 
 	totalGens := app.cfg.LoopCount * app.cfg.Generations
-	completedGens := (app.sim.LoopsCompleted + 1) * app.sim.GensCompleted
+	completedGens := (app.sim.LoopsCompleted * app.cfg.Generations) + app.sim.GensCompleted
 	gensRemaining := totalGens - completedGens
 
 	timePerGen := app.sim.TrackingGenStop.Sub(app.sim.TrackingGenStart) // Calculate the time taken for the last generation
@@ -91,22 +138,39 @@ func handleStatus(w http.ResponseWriter, r *http.Request) {
 
 	dtStart := time.Time(app.cfg.DtStart)
 	dtStop := time.Time(app.cfg.DtStop)
-	fmt.Fprintf(w, "SIMULATOR STATUS\n")
-	fmt.Fprintf(w, "                    Program started: %s\n", app.ProgramStarted.Format(time.RFC1123))
-	fmt.Fprintf(w, "                Run duration so far: %s\n", timeElapsed)
-	fmt.Fprintf(w, "                        Config file: %s\n", app.cfg.ConfigFilename)
-	fmt.Fprintf(w, "              Simulation Date Range: %s - %s\n", dtStart.Format("Jan 2, 2006"), dtStop.Format("Jan 2, 2006"))
-	fmt.Fprintf(w, "LoopCount and Generations requested: loops: %d, generations: %d\n", app.cfg.LoopCount, app.cfg.Generations)
-	fmt.Fprintf(w, "                          completed: loops: %d, generations: %d\n", app.sim.LoopsCompleted, app.sim.GensCompleted)
-	fmt.Fprintf(w, "       Elapsed time last generation: %s\n", util.ElapsedTime(app.sim.TrackingGenStart, app.sim.TrackingGenStop))
-	fmt.Fprintf(w, "           Estimated time remaining: %s\n", formatDuration(estimatedTimeRemaining))
-	fmt.Fprintf(w, "               Estimated completion: %s\n", estimatedCompletionTime.Format(time.RFC1123))
+
+	status := SimulatorStatus{
+		ProgramStarted:         app.ProgramStarted.Format(time.RFC1123),
+		RunDuration:            timeElapsed,
+		ConfigFile:             app.cfg.ConfigFilename,
+		SimulationDateRange:    dtStart.Format("Jan 2, 2006") + " - " + dtStop.Format("Jan 2, 2006"),
+		LoopCount:              app.cfg.LoopCount,
+		GenerationsRequested:   app.cfg.Generations,
+		CompletedLoops:         app.sim.LoopsCompleted,
+		CompletedGenerations:   app.sim.GensCompleted,
+		ElapsedTimeLastGen:     util.ElapsedTime(app.sim.TrackingGenStart, app.sim.TrackingGenStop),
+		EstimatedTimeRemaining: formatDuration(estimatedTimeRemaining),
+		EstimatedCompletion:    estimatedCompletionTime.Format(time.RFC1123),
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(status); err != nil {
+		http.Error(w, "Failed to encode status", http.StatusInternalServerError)
+	}
 }
 
 func handleStop(w http.ResponseWriter, r *http.Request) {
-	// ImpleCurrently running generation: %d of %d\n",app.sim.GensCompleted,app.cfg.Generationson
+	// Implementation
 	app.sim.Cfg.LoopCount = 1
 	app.sim.Cfg.Generations = 1
 
-	fmt.Fprintf(w, "Stopping after current generation...\n")
+	response := StopResponse{
+		Status:  "Success",
+		Message: "Stopping after current generation",
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+	}
 }

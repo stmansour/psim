@@ -811,3 +811,46 @@ trade-offs to achieve this level of uniqueness are worth it. It
 could be argued that the overall time saved by allowing the duplicates
 could allow us to do more simulations, giving us a better chance
 of producing the best Investor ever.
+
+Appendix J: Simtalk
+
+Once we began running long simulations it became clear that we
+needed a way to determine the status of a simulation in an on-demand
+basis. In the past, simulations would run to completion without any
+way to monitor their progress.  Depending on how it is configure,
+a simulation might require a few minutes, a few hours, or a few
+days.  This quickly became an issue. It was difficult to schedule
+software releases as well as analysis of results. We had no idea
+how long the simulations would take. If a simulation ran much longer
+than we expected it to take, we sometimes wondered whether the
+simulator was stuck or looping erroneously, or was experiencing
+some other problem. We did not want to kill running simulations
+after they had run for several days, because we would lose the
+results if we killed the process... we would have nothing to show
+for the days we spent waiting for results, and we would need to run
+the simulation again and wait several more days.  Clearly, we needed
+some sort of solution.
+
+To address this, we created Simtalk - a program that can connect
+to a running simulator listening on an HTTP port and communicate
+with it.  At the moment it supports only two commands: status and
+stop.
+
+The status command asks the simulator for status about its simulation.
+It returns information about how many loops and generations it needs
+to do and how many have been completed, the amount of time required
+to for the most recently completed generation to to complete, and
+an estimate of when it will finish.
+
+The stop command instructs the simulator to halt after finishing
+the current generation, allowing it to generate reports on the
+completed simulation stages.
+
+The simtalk client is used to connect to a running instance of the
+simulator. It just needs to know the IP address and port for a
+running simulator.  Since multiple simulations can run on the same
+server, the simulator can listen on ports in the range of 8080 to
+8100.
+
+We may create other processes in the future that can query it for
+status and control its operation remotely.
