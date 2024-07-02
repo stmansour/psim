@@ -55,3 +55,6 @@ releaseman:
 refmt:
 	fmt simulator.1 > simulator.11 ; mv simulator.11 simulator.1
 
+release: simulator
+	cp simulator /usr/local/plato/bin/
+

@@ -19,24 +19,25 @@ type Command struct {
 
 // SimulatorStatus represents the status information of the simulator
 type SimulatorStatus struct {
-	ProgramStarted         string `json:"ProgramStarted"`
-	RunDuration            string `json:"RunDuration"`
-	ConfigFile             string `json:"ConfigFile"`
-	SimulationDateRange    string `json:"SimulationDateRange"`
-	PopulationSize         int    `json:"PopulationSize"`
-	LoopCount              int    `json:"LoopCount"`
-	GenerationsRequested   int    `json:"GenerationsRequested"`
-	CompletedLoops         int    `json:"CompletedLoops"`
-	CompletedGenerations   int    `json:"CompletedGenerations"`
-	ElapsedTimeLastGen     string `json:"ElapsedTimeLastGen"`
-	EstimatedTimeRemaining string `json:"EstimatedTimeRemaining"`
-	EstimatedCompletion    string `json:"EstimatedCompletion"`
+	ProgramStarted         string
+	RunDuration            string
+	ConfigFile             string
+	SimulationDateRange    string
+	PopulationSize         int
+	LoopCount              int
+	GenerationsRequested   int
+	CompletedLoops         int
+	CompletedGenerations   int
+	ElapsedTimeLastGen     string
+	EstimatedTimeRemaining string
+	EstimatedCompletion    string
+	SID                    int64
 }
 
 // StopResponse represents the response from the stop command
 type StopResponse struct {
-	Status  string `json:"Status"`
-	Message string `json:"Message"`
+	Status  string
+	Message string
 }
 
 func main() {
@@ -54,7 +55,7 @@ func main() {
 
 	commands := []Command{
 		{"status", "Get the current status of the simulator."},
-		{"stop", "Tell the simulator to stop after completing the current generation."},
+		{"stopsim", "Tell the simulator to stop after completing the current generation."},
 	}
 
 	resp, err := http.Get(baseURL + "/status")
@@ -146,7 +147,8 @@ func formatSimulatorStatus(status SimulatorStatus) string {
 			"                          completed: %d loops, %d generations\n"+
 			"       Elapsed time last generation: %s\n"+
 			"           Estimated time remaining: %s\n"+
-			"               Estimated completion: %s\n",
+			"               Estimated completion: %s\n"+
+			"                                SID: %d\n",
 		status.ProgramStarted,
 		status.RunDuration,
 		status.ConfigFile,
@@ -159,5 +161,6 @@ func formatSimulatorStatus(status SimulatorStatus) string {
 		status.ElapsedTimeLastGen,
 		status.EstimatedTimeRemaining,
 		status.EstimatedCompletion,
+		status.SID,
 	)
 }

@@ -27,3 +27,6 @@ package:
 	mkdir -p ${BINDIR}/
 	cp simtalk ${BINDIR}/
 	@echo "*** ${THISDIR}: completed package ***"
+
+release:
+	cp simtalk /usr/local/plato/bin/

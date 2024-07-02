@@ -1,7 +1,6 @@
 package util
 
 import (
-	"fmt"
 	"math/rand"
 	"sync"
 	"time"
@@ -36,7 +35,7 @@ func Init(randNano int64) int64 {
 		now := time.Now()
 		randNano = now.UnixNano()
 	}
-	fmt.Printf("Random number seed:  %d\n", randNano)
+	// fmt.Printf("Random number seed:  %d\n", randNano)
 	UtilData.Rand = rand.New(rand.NewSource(randNano)) // specific seed
 	return randNano
 }

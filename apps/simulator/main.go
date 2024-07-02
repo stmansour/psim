@@ -35,23 +35,30 @@ type SimApp struct {
 	cfg                       *util.AppConfig
 	extres                    *util.ExternalResources
 	db                        *newdata.Database
-	archiveBaseDir            string    // where archives go
-	archiveMode               bool      // if true it copies the config file to an archive directory, places simstats and finrep there as well
-	CrucibleMode              bool      // normal or crucible
-	DNALog                    bool      // generate dnalog when true and CrucibleMode is true
-	GenInfluencerDistribution bool      // show Influencer distribution for each generation
-	FitnessScores             bool      // save the fitness scores for each generation to dbgFitnessScores.csv
-	dbfilename                string    // override database name with this name
-	CPUProfile                string    // where is time being spent?
-	MemProfile                string    // where is memory being consumed?
-	basePort                  int       // Starting port
-	maxPort                   int       // Upper limit for trying different ports
-	Simtalkport               int       // current port being used
-	notalk                    bool      // if true, the simulator does not start up an HTTP listener
-	SQLiteFileName            string    // where we keep the Investor cache
-	SQLiteDB                  *sql.DB   // the sqlite3 database used for Investor ids
-	AllowDuplicateInvestors   bool      // whether to check for duplicate investors or not
-	ProgramStarted            time.Time // when the program started
+	archiveBaseDir            string        // where archives go
+	archiveMode               bool          // if true it copies the config file to an archive directory, places simstats and finrep there as well
+	CrucibleMode              bool          // normal or crucible
+	DNALog                    bool          // generate dnalog when true and CrucibleMode is true
+	GenInfluencerDistribution bool          // show Influencer distribution for each generation
+	FitnessScores             bool          // save the fitness scores for each generation to dbgFitnessScores.csv
+	dbfilename                string        // override database name with this name
+	CPUProfile                string        // where is time being spent?
+	MemProfile                string        // where is memory being consumed?
+	basePort                  int           // Starting port
+	maxPort                   int           // Upper limit for trying different ports
+	Simtalkport               int           // current port being used
+	notalk                    bool          // if true, the simulator does not start up an HTTP listener
+	SQLiteFileName            string        // where we keep the Investor cache
+	SQLiteDB                  *sql.DB       // the sqlite3 database used for Investor ids
+	AllowDuplicateInvestors   bool          // whether to check for duplicate investors or not
+	ProgramStarted            time.Time     // when the program started
+	SID                       int64         // simulation ID, from the dispatcher
+	URL                       string        // URL of the simulator
+	DispatcherStatusChannel   chan struct{} // created only when we're sending status to the dispatcher
+	HTTPHdrsDbg               bool          // print HTTP headers
+	HexASCIIDbg               bool          // print hex and ASCII data from the HTTP request and response
+	DispatcherURL             string        // where to reach dispatcher, simd will supply it
+	MachineID                 string        // unique id for this machine
 }
 
 var app SimApp
@@ -94,8 +101,10 @@ func readCommandLineArgs() {
 	flag.StringVar(&app.MemProfile, "memprofile", "", "write memory profile to this file")
 	flag.BoolVar(&app.notalk, "notalk", false, "if true, the simulator does not start up an HTTP listener")
 	flag.Int64Var(&app.randNano, "r", -1, "random number seed. ex: ./simulator -r 1687802336231490000")
+	flag.Int64Var(&app.SID, "SID", 0, "SID from dispatcher. Should only used by simd or dispatcher")
 	flag.BoolVar(&app.trace, "trace", false, "trace decision-making process every day, all investors")
 	flag.BoolVar(&app.traceTiming, "tracetime", false, "shows timing of simulation phase and next creating a new generation")
+	flag.StringVar(&app.URL, "DISPATCHER", "", "URL to dispatcher. Should only used by simd")
 	flag.BoolVar(&app.version, "v", false, "print the program version string")
 	flag.Parse()
 }
@@ -148,6 +157,10 @@ func initSimulation() {
 func doSimulation() {
 	var err error
 	initSimulation()
+	app.MachineID, err = util.GetMachineUUID()
+	if err != nil {
+		log.Panicf("*** PANIC ERROR ***  GetMachineUUID returned error: %s\n", err)
+	}
 
 	//---------------------------------------------------------------------------------
 	// OPEN SQLITE Cache DB
@@ -227,6 +240,28 @@ func main() {
 		}()
 	}
 
+	//----------------------------------------------------------------------------
+	// If we need to report status to the DISPATCHER, set up the loop that
+	// will perform this task every 5 mins
+	//----------------------------------------------------------------------------
+	if len(app.URL) > 0 && app.SID > 0 {
+		ticker := time.NewTicker(5 * time.Minute)
+		app.DispatcherStatusChannel = make(chan struct{})
+
+		// Start a goroutine that sends status updates every 5 minutes
+		go func() {
+			for {
+				select {
+				case <-ticker.C:
+					SendStatusUpdate(nil)
+				case <-app.DispatcherStatusChannel:
+					ticker.Stop()
+					return
+				}
+			}
+		}()
+	}
+
 	//-------------------------------------------------------------------------
 	// CPU profiling.  Run it like this: ./simulator -cpuprofile cpu.prof
 	// Then profile it like this: go tool pprof ./simulator cpu.prof
@@ -244,6 +279,15 @@ func main() {
 	doSimulation()
 	pprof.StopCPUProfile()
 	f.Close()
+
+	//-------------------------------------------------------------------------
+	// Send completion status to the DISPATCHER
+	//-------------------------------------------------------------------------
+	if app.SID > 0 && len(app.URL) > 0 {
+		now := time.Now()
+		SendStatusUpdate(&now)
+		close(app.DispatcherStatusChannel)
+	}
 
 	//-------------------------------------------------------------------------
 	// Memory profiling:  Run it like this: ./simulator -memprofile mem.prof

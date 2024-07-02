@@ -14,51 +14,83 @@ import (
 
 // SimulatorStatus represents the status information of the simulator
 type SimulatorStatus struct {
-	ProgramStarted         string `json:"ProgramStarted"`
-	RunDuration            string `json:"RunDuration"`
-	ConfigFile             string `json:"ConfigFile"`
-	SimulationDateRange    string `json:"SimulationDateRange"`
-	PopulationSize         int    `json:"PopulationSize"`
-	LoopCount              int    `json:"LoopCount"`
-	GenerationsRequested   int    `json:"GenerationsRequested"`
-	CompletedLoops         int    `json:"CompletedLoops"`
-	CompletedGenerations   int    `json:"CompletedGenerations"`
-	ElapsedTimeLastGen     string `json:"ElapsedTimeLastGen"`
-	EstimatedTimeRemaining string `json:"EstimatedTimeRemaining"`
-	EstimatedCompletion    string `json:"EstimatedCompletion"`
+	ProgramStarted         string
+	RunDuration            string
+	ConfigFile             string
+	SimulationDateRange    string
+	PopulationSize         int
+	LoopCount              int
+	GenerationsRequested   int
+	CompletedLoops         int
+	CompletedGenerations   int
+	ElapsedTimeLastGen     string
+	EstimatedTimeRemaining string
+	EstimatedCompletion    string
+	SID                    int64
+	URL                    string
+	MachineID              string
 }
 
-// StopResponse represents the response from the /stop endpoint
-type StopResponse struct {
-	Status  string `json:"Status"`
-	Message string `json:"Message"`
+// ShortResponse represents the response from the /stop endpoint
+type ShortResponse struct {
+	Status  string
+	Message string
+	ID      int64
 }
 
 func startHTTPServer(ctx context.Context) error {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/status", handleStatus)
-	mux.HandleFunc("/stop", handleStop)
+	mux.HandleFunc("/stopsim", handleStop)
 
 	app.basePort = 8090
 	app.maxPort = 8100
 	server := &http.Server{Handler: mux}
 
-	// Attempt to listen on a range of ports
+	//---------------------------------
+	// FIND A LISTENER PORT...
+	//---------------------------------
 	listener, err := findAvailablePort(ctx)
 	if err != nil {
 		return err
 	}
 
+	//------------------------------------------------------------------------
 	// Start serving in a separate goroutine to allow for graceful shutdown
+	//------------------------------------------------------------------------
 	go func() {
 		if err := server.Serve(listener); err != http.ErrServerClosed {
 			log.Fatalf("HTTP server ListenAndServe: %v", err)
 		}
 	}()
 
-	log.Printf("Listening for commands on http://localhost:%d\n", app.Simtalkport)
+	//------------------------------------------------------------------------
+	// Now that we have our port, get the full id and contact info for this machine
+	//------------------------------------------------------------------------
+	myID, err := util.GetMachineUUID()
+	if err != nil {
+		fmt.Printf("Error getting machine UUID: %v\n", err)
+		myID = "uknown"
+	}
+	app.MachineID = myID
+	addrlist, err := util.GetNetworkInfo()
+	if err != nil || app.SID == 0 {
+		fmt.Printf("Simtalk port: %d\n", app.Simtalkport)
+	} else {
+		for _, addr := range addrlist {
+			if addr.IPAddress == "127.0.0.1" {
+				continue
+			}
+			//-----------------------------------------------------------------------------
+			// this is the URL that we can depend on, the host name may not be resolvable
+			//-----------------------------------------------------------------------------
+			app.URL = fmt.Sprintf("net address: http://%s:%d", addr.IPAddress, app.Simtalkport)
+		}
+	}
 
+	//----------------------------------------------------------------------------------------
 	// Wait for the context to be canceled (simulation done), then shut down the server
+	//----------------------------------------------------------------------------------------
 	<-ctx.Done()
 	shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -101,9 +133,7 @@ func strElapsedTime(start, end time.Time) string {
 	return formatDuration(end.Sub(start))
 }
 
-func handleStatus(w http.ResponseWriter, r *http.Request) {
-	timeElapsed := strElapsedTime(app.ProgramStarted, time.Now())
-
+func estimateFinish() (time.Duration, time.Time) {
 	totalGens := app.cfg.LoopCount * app.cfg.Generations
 	completedGens := (app.sim.LoopsCompleted * app.cfg.Generations) + app.sim.GensCompleted
 	gensRemaining := totalGens - completedGens
@@ -111,6 +141,14 @@ func handleStatus(w http.ResponseWriter, r *http.Request) {
 	timePerGen := app.sim.TrackingGenStop.Sub(app.sim.TrackingGenStart) // Calculate the time taken for the last generation
 	estimatedTimeRemaining := timePerGen * time.Duration(gensRemaining) // Calculate the estimated time remaining
 	estimatedCompletionTime := time.Now().Add(estimatedTimeRemaining)   // Calculate the estimated completion time
+
+	return estimatedTimeRemaining, estimatedCompletionTime
+
+}
+func handleStatus(w http.ResponseWriter, r *http.Request) {
+	timeElapsed := strElapsedTime(app.ProgramStarted, time.Now())
+
+	estimatedTimeRemaining, estimatedCompletionTime := estimateFinish()
 
 	dtStart := time.Time(app.cfg.DtStart)
 	dtStop := time.Time(app.cfg.DtStop)
@@ -128,6 +166,9 @@ func handleStatus(w http.ResponseWriter, r *http.Request) {
 		ElapsedTimeLastGen:     util.ElapsedTime(app.sim.TrackingGenStart, app.sim.TrackingGenStop),
 		EstimatedTimeRemaining: formatDuration(estimatedTimeRemaining),
 		EstimatedCompletion:    estimatedCompletionTime.Format(time.RFC1123),
+		SID:                    app.SID,
+		URL:                    app.URL,
+		MachineID:              app.MachineID,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -141,7 +182,7 @@ func handleStop(w http.ResponseWriter, r *http.Request) {
 	app.sim.Cfg.LoopCount = 1
 	app.sim.Cfg.Generations = 1
 
-	response := StopResponse{
+	response := ShortResponse{
 		Status:  "Success",
 		Message: "Stopping after current generation",
 	}
