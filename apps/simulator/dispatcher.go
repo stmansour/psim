@@ -35,7 +35,7 @@ type Command struct {
 func SendStatusUpdate(completed *time.Time) error {
 	cmd := Command{
 		Command:  "UpdateItem",
-		Username: "test-user",
+		Username: "simulator",
 	}
 
 	cmdDataStruct := struct {
@@ -58,7 +58,10 @@ func SendStatusUpdate(completed *time.Time) error {
 	if completed != nil {
 		cmdDataStruct.DtCompleted = completed.Format(time.RFC822Z)
 	} else {
-		_, estimatedCompletionTime := estimateFinish()
+		completedGens, _, estimatedCompletionTime := estimateFinish()
+		if completedGens == 0 {
+			return nil // nothing to report.  We need at least 1 generation to be completed
+		}
 		cmdDataStruct.DtEstimate = estimatedCompletionTime.Format(time.RFC822Z)
 	}
 

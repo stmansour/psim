@@ -46,6 +46,7 @@ compareToGold() {
     if [[ ${reportFile} =~ \.csv$ ]]; then
         awk 'flag; /^$/ {flag=1}' "${reportFile}" >"${reportFile}.tmp" && mv "${reportFile}.tmp" "${reportFile}"
     fi
+    ((STEP++))
 
     # Normalize the report file
     sed -E \
@@ -179,6 +180,7 @@ if [[ "${SINGLETEST}${TFILES}" = "${TFILES}" || "${SINGLETEST}${TFILES}" = "${TF
     ./simulator -C -c confcru.json5 -notalk -dup >"${RESFILE}"
     compareToGold ${RESFILE} more
     mv crep.csv c1.csv
+    echo -n "         step ${STEP}..."
     compareToGold c1.csv
     ((TESTCOUNT++))
 fi
@@ -191,7 +193,7 @@ TFILES="d"
 STEP=0
 if [[ "${SINGLETEST}${TFILES}" = "${TFILES}" || "${SINGLETEST}${TFILES}" = "${TFILES}${TFILES}" ]]; then
     echo -n "Test ${TFILES} - "
-    echo -n "Crucible test..."
+    echo -n "CSV Trace file test..."
     RESFILE="${TFILES}${STEP}"
     ./simulator -c trccfg.json5 -trace -notalk >"${RESFILE}"
     mv trace-e97c8d22664a5cf769580318885b4c6975e2a7b02d74859259b8e2cb52b2b01d.csv d1.csv

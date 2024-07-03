@@ -104,7 +104,7 @@ func readCommandLineArgs() {
 	flag.Int64Var(&app.SID, "SID", 0, "SID from dispatcher. Should only used by simd or dispatcher")
 	flag.BoolVar(&app.trace, "trace", false, "trace decision-making process every day, all investors")
 	flag.BoolVar(&app.traceTiming, "tracetime", false, "shows timing of simulation phase and next creating a new generation")
-	flag.StringVar(&app.URL, "DISPATCHER", "", "URL to dispatcher. Should only used by simd")
+	flag.StringVar(&app.DispatcherURL, "DISPATCHER", "", "Network address for dispatcher. Should only used by simd")
 	flag.BoolVar(&app.version, "v", false, "print the program version string")
 	flag.Parse()
 }
@@ -214,12 +214,12 @@ func main() {
 	var err error
 
 	app.randNano = -1
-	// app.cfName = "config.json5"
 	app.ProgramStarted = time.Now()
 
 	readCommandLineArgs()
 	if app.version {
 		fmt.Printf("PLATO Simulator version %s\n", util.Version())
+		fmt.Printf("app.DispatcherURL = %s\n", app.DispatcherURL)
 		os.Exit(0)
 	}
 
@@ -244,7 +244,8 @@ func main() {
 	// If we need to report status to the DISPATCHER, set up the loop that
 	// will perform this task every 5 mins
 	//----------------------------------------------------------------------------
-	if len(app.URL) > 0 && app.SID > 0 {
+	if len(app.DispatcherURL) > 0 && app.SID > 0 {
+		// fmt.Printf("app.DispatcherURL = %s\n", app.DispatcherURL)
 		ticker := time.NewTicker(5 * time.Minute)
 		app.DispatcherStatusChannel = make(chan struct{})
 
@@ -253,7 +254,9 @@ func main() {
 			for {
 				select {
 				case <-ticker.C:
-					SendStatusUpdate(nil)
+					if err = SendStatusUpdate(nil); err != nil {
+						log.Printf("Error sending status update: %s\n", err)
+					}
 				case <-app.DispatcherStatusChannel:
 					ticker.Stop()
 					return
@@ -283,9 +286,10 @@ func main() {
 	//-------------------------------------------------------------------------
 	// Send completion status to the DISPATCHER
 	//-------------------------------------------------------------------------
-	if app.SID > 0 && len(app.URL) > 0 {
-		now := time.Now()
-		SendStatusUpdate(&now)
+	if app.SID > 0 && len(app.DispatcherURL) > 0 && app.sim.StopTimeSet {
+		if err = SendStatusUpdate(&app.sim.SimStop); err != nil {
+			fmt.Printf(">>>> Error sending completion status: %s\n", err)
+		}
 		close(app.DispatcherStatusChannel)
 	}
 

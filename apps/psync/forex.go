@@ -77,28 +77,39 @@ func FetchForexRates(startDate, endDate time.Time, forex []PML) ([]ForexRate, er
 
 // doFetchForexRates does the API work of fetching the data
 func doFetchForexRates(currencyPairs string, startDate, endDate time.Time) ([]ForexRate, error) {
+	const maxRetries = 5
+	const retryDelay = 5 * time.Second
+
 	url := fmt.Sprintf("https://api.tradingeconomics.com/markets/historical/%s?c=%s&d1=%s&d2=%s&f=json",
 		currencyPairs, app.APIKey, startDate.Format("2006-01-02"), endDate.Format("2006-01-02"))
 
-	resp, err := http.Get(url)
-	app.HTTPGetCalls++
-	if err != nil {
-		app.HTTPGetErrs++
-		return nil, fmt.Errorf("error making request: %v", err)
-	}
-	defer resp.Body.Close()
+	for i := 0; i < maxRetries; i++ {
+		resp, err := http.Get(url)
+		app.HTTPGetCalls++
+		if err != nil {
+			app.HTTPGetErrs++
+			if i < maxRetries-1 {
+				time.Sleep(retryDelay)
+				continue
+			}
+			return nil, fmt.Errorf("error making request: %v", err)
+		}
+		defer resp.Body.Close()
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("error reading response: %v", err)
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return nil, fmt.Errorf("error reading response: %v", err)
+		}
+
+		var rates []ForexRate
+		if err := json.Unmarshal(body, &rates); err != nil {
+			return nil, fmt.Errorf("error unmarshaling response: %v", err)
+		}
+
+		return rates, nil
 	}
 
-	var rates []ForexRate
-	if err := json.Unmarshal(body, &rates); err != nil {
-		return nil, fmt.Errorf("error unmarshaling response: %v", err)
-	}
-
-	return rates, nil
+	return nil, fmt.Errorf("exceeded maximum number of retries")
 }
 
 // UpdateForex updates the foreign exchange rates in the SQL database

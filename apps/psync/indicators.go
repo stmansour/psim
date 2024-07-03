@@ -102,6 +102,9 @@ func FetchIndicators(startDate, endDate time.Time, ind []PML) ([]Indicator, erro
 //		https://api.tradingeconomics.com/historical/country/Australia,Japan,United%20States/indicator/Government%20Debt%20to%20GDP/2015-03-01/2024-05-03?f=json&c=8dba8cc926874fd:7fgqrflgveh7wfi
 //	    https://api.tradingeconomics.com/historical/country/Australia,Japan,United%20States/indicator/Government%20Debt%20to%20GDP/2015-01-01/2024-05-03?f=json&c=8dba8cc926874fd:7fgqrflgveh7wfi
 func doFetch(allcountries, allindicators string, startDate, endDate time.Time) ([]Indicator, error) {
+	const maxRetries = 5
+	const retryDelay = 5 * time.Second
+
 	prefix := "https://api.tradingeconomics.com/historical/country/"
 	teurl := fmt.Sprintf("%s/indicator/%s/%s/%s?f=json&c=%s", allcountries, allindicators, startDate.Format("2006-01-02"), endDate.Format("2006-01-02"), app.APIKey)
 	teurl = prefix + strings.ReplaceAll(teurl, " ", "%20")
@@ -111,26 +114,34 @@ func doFetch(allcountries, allindicators string, startDate, endDate time.Time) (
 		fmt.Printf("we need to break it up\n")
 	}
 
-	// Send the HTTP request.
-	resp, err := http.Get(teurl)
-	app.HTTPGetCalls++
-	if err != nil {
-		app.HTTPGetErrs++
-		return nil, fmt.Errorf("error making request: %v", err)
-	}
-	defer resp.Body.Close()
+	for i := 0; i < maxRetries; i++ {
+		// Send the HTTP request.
+		resp, err := http.Get(teurl)
+		app.HTTPGetCalls++
+		if err != nil {
+			app.HTTPGetErrs++
+			if i < maxRetries-1 {
+				time.Sleep(retryDelay)
+				continue
+			}
+			return nil, fmt.Errorf("error making request: %v", err)
+		}
+		defer resp.Body.Close()
 
-	// Read the response body.
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("error reading response: %v", err)
+		// Read the response body.
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return nil, fmt.Errorf("error reading response: %v", err)
+		}
+
+		// Parse the JSON data.
+		var indicators []Indicator
+		if err := json.Unmarshal(body, &indicators); err != nil {
+			return nil, fmt.Errorf("error unmarshaling response: %v", err)
+		}
+
+		return indicators, nil
 	}
 
-	// Parse the JSON data.
-	var indicators []Indicator
-	if err := json.Unmarshal(body, &indicators); err != nil {
-		return nil, fmt.Errorf("error unmarshaling response: %v", err)
-	}
-
-	return indicators, nil
+	return nil, fmt.Errorf("exceeded maximum number of retries")
 }

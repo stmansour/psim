@@ -84,7 +84,8 @@ func startHTTPServer(ctx context.Context) error {
 			//-----------------------------------------------------------------------------
 			// this is the URL that we can depend on, the host name may not be resolvable
 			//-----------------------------------------------------------------------------
-			app.URL = fmt.Sprintf("net address: http://%s:%d", addr.IPAddress, app.Simtalkport)
+			app.URL = fmt.Sprintf("http://%s:%d", addr.IPAddress, app.Simtalkport)
+			fmt.Printf("Simtalk address: %s\n", app.URL)
 		}
 	}
 
@@ -133,7 +134,7 @@ func strElapsedTime(start, end time.Time) string {
 	return formatDuration(end.Sub(start))
 }
 
-func estimateFinish() (time.Duration, time.Time) {
+func estimateFinish() (int, time.Duration, time.Time) {
 	totalGens := app.cfg.LoopCount * app.cfg.Generations
 	completedGens := (app.sim.LoopsCompleted * app.cfg.Generations) + app.sim.GensCompleted
 	gensRemaining := totalGens - completedGens
@@ -142,13 +143,13 @@ func estimateFinish() (time.Duration, time.Time) {
 	estimatedTimeRemaining := timePerGen * time.Duration(gensRemaining) // Calculate the estimated time remaining
 	estimatedCompletionTime := time.Now().Add(estimatedTimeRemaining)   // Calculate the estimated completion time
 
-	return estimatedTimeRemaining, estimatedCompletionTime
+	return completedGens, estimatedTimeRemaining, estimatedCompletionTime
 
 }
 func handleStatus(w http.ResponseWriter, r *http.Request) {
 	timeElapsed := strElapsedTime(app.ProgramStarted, time.Now())
 
-	estimatedTimeRemaining, estimatedCompletionTime := estimateFinish()
+	_, estimatedTimeRemaining, estimatedCompletionTime := estimateFinish()
 
 	dtStart := time.Time(app.cfg.DtStart)
 	dtStop := time.Time(app.cfg.DtStop)
