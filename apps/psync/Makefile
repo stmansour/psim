@@ -33,3 +33,6 @@ package:
 	mkdir -p ${BINDIR}/
 	cp psync ${BINDIR}/
 	@echo "*** ${THISDIR}: completed package ***"
+
+release:
+	cp psync /usr/local/plato/bin

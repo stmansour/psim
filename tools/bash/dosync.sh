@@ -44,11 +44,18 @@ LOG="${LOG_DIR}/psync_$(date +'%Y%m%d_%H%M%S').log"
 # Now do the sync...
 #------------------------
 "${SYNC}" -F -verbose > "${LOG}"
-if [ $? -eq 0 ]; then
+
+#-----------------------------------------------------------------
+# Mark the failure if there were errors in any of the fetches...
+#-----------------------------------------------------------------
+ERRS=$(grep "Error fetching" */*.log | wc -l)
+if [ "${ERRS}x" == "x" ]; then
+    ERRS=0
+fi
+if (( ${ERRS} == 0 )); then 
     echo "Success - $(date)" > ${HTTPDOCPATH}/sync/status.txt
 else
-    echo "Failure - $(date)" > ${HTTPDOCPATH}/sync/status.txt
-    exit 1
+    echo "${ERRS} Error(s) - $(date)" > ${HTTPDOCPATH}/sync/status.txt
 fi
 
 #------------------------------------------------------------------------------
