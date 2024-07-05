@@ -9,6 +9,30 @@ LOG_DIR=./logs
 MAX_LOGS=30
 SQLTOCSV=/usr/local/plato/bin/sqltocsv
 HTTPDOCPATH=/var/www/html
+STATUSFILE=${HTTPDOCPATH}/sync/status.txt
+
+# Function to check logs for errors and output a summary with dates and error types
+listErrors() {
+    local log_dir="logs"
+
+    # Grep for errors in the logs and parse the output
+    grep "Error" "$log_dir"/*.log | while read -r line; do
+        # Extract the log file name
+        log_file=$(echo "$line" | cut -d':' -f1)
+        # Extract the error message
+        error_message=$(echo "$line" | cut -d':' -f2-)
+
+        # Extract the date from the log file name
+        log_date=$(basename "$log_file" | cut -d'_' -f2)
+        log_date_formatted="${log_date:0:4}-${log_date:4:2}-${log_date:6:2}"
+
+        # Extract the error type from the error message
+        error_type=$(echo "$error_message" | cut -d':' -f1)
+
+        # Format and append the error summary
+        echo "${log_date_formatted}: ${error_type}" >> "${STATUSFILE}"
+    done
+}
 
 #------------------------------
 # Ensure log directory exists
@@ -44,19 +68,23 @@ LOG="${LOG_DIR}/psync_$(date +'%Y%m%d_%H%M%S').log"
 # Now do the sync...
 #------------------------
 "${SYNC}" -F -verbose > "${LOG}"
-
-#-----------------------------------------------------------------
-# Mark the failure if there were errors in any of the fetches...
-#-----------------------------------------------------------------
 ERRS=$(grep "Error fetching" */*.log | wc -l)
+
 if [ "${ERRS}x" == "x" ]; then
     ERRS=0
 fi
+
 if (( ${ERRS} == 0 )); then 
-    echo "Success - $(date)" > ${HTTPDOCPATH}/sync/status.txt
+    echo "Success - $(date)" > ${STATUSFILE}
 else
-    echo "${ERRS} Error(s) - $(date)" > ${HTTPDOCPATH}/sync/status.txt
+    echo "${ERRS} Error(s) - $(date)" > ${STATUSFILE}
 fi
+
+#------------------------------------------------------------------------------
+# Now scan the logs again and append any errors to the status file...
+#------------------------------------------------------------------------------
+listErrors
+
 
 #------------------------------------------------------------------------------
 # Create new database csv files that include the updates to the sql database...
