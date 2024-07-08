@@ -1,16 +1,19 @@
 package main
 
 import (
-	"bufio"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net"
 	"net/http"
 	"os"
+	"os/user"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/chzyer/readline"
 )
 
 // Command is a struct that holds the command name and its description
@@ -71,6 +74,7 @@ func scanPorts(startPort, endPort int) []int {
 
 func main() {
 	var port int
+
 	//---------------------------------------------------
 	// SEE IF THERE ARE ANY SIMULATOR PROCESSES RUNNING
 	//---------------------------------------------------
@@ -126,19 +130,40 @@ func main() {
 	}
 	fmt.Println("Enter 'help' for a list of commands.")
 
-	scanner := bufio.NewScanner(os.Stdin)
+	usr, err := user.Current()
+	if err != nil {
+		panic(err)
+	}
+	homeDir := usr.HomeDir
+
+	// Construct the path for the history file
+	historyFile := filepath.Join(homeDir, ".simtalk_history")
+
+	rl, err := readline.NewEx(&readline.Config{
+		Prompt:            "simtalk> ",
+		HistoryFile:       historyFile,
+		InterruptPrompt:   "^C",
+		EOFPrompt:         "exit",
+		HistorySearchFold: true,
+	})
+	if err != nil {
+		panic(err)
+	}
+	defer rl.Close()
+
 	for {
 		prompt := "simtalk"
 		if app.pidx >= 0 {
 			prompt += fmt.Sprintf(" simulator@%d", app.ports[app.pidx])
 		}
-		fmt.Printf("%s> ", prompt)
-		scanned := scanner.Scan()
-		if !scanned {
+		rl.SetPrompt(fmt.Sprintf("%s> ", prompt))
+
+		line, err := rl.Readline()
+		if err != nil { // io.EOF, readline.ErrInterrupt
 			break
 		}
 
-		text := scanner.Text()
+		text := line
 		args := strings.Split(text, " ")
 		trimmedText := strings.TrimSpace(text)
 		switch args[0] {
@@ -234,7 +259,6 @@ func main() {
 			continue
 		}
 		fmt.Println(response)
-
 	}
 }
 

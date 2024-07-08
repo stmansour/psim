@@ -7,6 +7,7 @@ toolchain go1.22.1
 require github.com/yosuke-furukawa/json5 v0.1.1
 
 require (
+	github.com/chzyer/readline v1.5.1
 	github.com/go-sql-driver/mysql v1.8.0
 	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/stretchr/testify v1.8.4
@@ -26,6 +27,7 @@ require (
 	golang.org/x/crypto v0.19.0 // indirect
 	golang.org/x/exp v0.0.0-20240416160154-fe59bbe5cc7f // indirect
 	golang.org/x/net v0.21.0 // indirect
+	golang.org/x/sys v0.17.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
