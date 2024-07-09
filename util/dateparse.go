@@ -14,6 +14,8 @@ var AcceptedDateFmts = []string{
 	"2006-01-02",
 	"2006/01/02",
 	"2006-01-02T15:04:05",
+	time.RFC3339,
+	"Tue, 02 Jan 2006 15:04:05 UTC",
 }
 
 // StringToDate tries to convert the supplied string to a time.Time value. It will use the

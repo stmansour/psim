@@ -146,19 +146,18 @@ func estimateFinish() (int, time.Duration, time.Time) {
 	return completedGens, estimatedTimeRemaining, estimatedCompletionTime
 
 }
+
+// handleStatus returns the status of the simulation. Times are in UTC
 func handleStatus(w http.ResponseWriter, r *http.Request) {
 	timeElapsed := strElapsedTime(app.ProgramStarted, time.Now())
 
 	_, estimatedTimeRemaining, estimatedCompletionTime := estimateFinish()
 
-	dtStart := time.Time(app.cfg.DtStart)
-	dtStop := time.Time(app.cfg.DtStop)
-
 	status := SimulatorStatus{
-		ProgramStarted:         app.ProgramStarted.Format(time.RFC1123),
+		ProgramStarted:         app.ProgramStarted.In(time.UTC).Format(time.RFC3339),
 		RunDuration:            timeElapsed,
 		ConfigFile:             app.cfg.ConfigFilename,
-		SimulationDateRange:    dtStart.Format("Jan 2, 2006") + " - " + dtStop.Format("Jan 2, 2006"),
+		SimulationDateRange:    time.Time(app.cfg.DtStart).Format("Jan 2, 2006") + " - " + time.Time(app.cfg.DtStop).Format("Jan 2, 2006"),
 		PopulationSize:         app.cfg.PopulationSize,
 		LoopCount:              app.cfg.LoopCount,
 		GenerationsRequested:   app.cfg.Generations,
@@ -166,7 +165,7 @@ func handleStatus(w http.ResponseWriter, r *http.Request) {
 		CompletedGenerations:   app.sim.GensCompleted,
 		ElapsedTimeLastGen:     util.ElapsedTime(app.sim.TrackingGenStart, app.sim.TrackingGenStop),
 		EstimatedTimeRemaining: formatDuration(estimatedTimeRemaining),
-		EstimatedCompletion:    estimatedCompletionTime.Format(time.RFC1123),
+		EstimatedCompletion:    estimatedCompletionTime.In(time.UTC).Format(time.RFC3339),
 		SID:                    app.SID,
 		URL:                    app.URL,
 		MachineID:              app.MachineID,

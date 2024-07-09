@@ -300,6 +300,17 @@ func sendCommand(baseURL, command string) (string, error) {
 }
 
 func formatSimulatorStatus(status SimulatorStatus) string {
+	ps, err := time.Parse(time.RFC3339, status.ProgramStarted) // reformat to localtime
+	if err != nil {
+		return fmt.Sprintf("Error parsing date: %v\n", err)
+	}
+	ec, err := time.Parse(time.RFC3339, status.EstimatedCompletion) // reformat to localtime
+	if err != nil {
+		return fmt.Sprintf("Error parsing date: %v\n", err)
+	}
+	// fmt.Printf("ps:  %s  -->  %s\n", status.ProgramStarted, ps.In(time.Local).Format("Mon, Jan 2, 2006 03:04:05 PM"))
+	// fmt.Printf("ec:  %s  -->  %s\n", status.EstimatedCompletion, ec.In(time.Local).Format("Mon, Jan 2, 2006 03:04:05 PM"))
+
 	return fmt.Sprintf(
 		"SIMULATOR STATUS\n"+
 			"                    Program started: %s\n"+
@@ -313,7 +324,7 @@ func formatSimulatorStatus(status SimulatorStatus) string {
 			"           Estimated time remaining: %s\n"+
 			"               Estimated completion: %s\n"+
 			"                                SID: %d\n",
-		status.ProgramStarted,
+		ps.In(time.Local).Format("Mon, Jan 2, 2006 03:04:05 PM"),
 		status.RunDuration,
 		status.ConfigFile,
 		status.SimulationDateRange,
@@ -324,7 +335,7 @@ func formatSimulatorStatus(status SimulatorStatus) string {
 		status.CompletedGenerations,
 		status.ElapsedTimeLastGen,
 		status.EstimatedTimeRemaining,
-		status.EstimatedCompletion,
+		ec.In(time.Local).Format("Mon, Jan 2, 2006 03:04:05 PM"),
 		status.SID,
 	)
 }
