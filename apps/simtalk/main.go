@@ -125,7 +125,7 @@ func main() {
 	if len(app.ports) == 0 {
 		noSimulatorsMessage()
 	} else {
-		fmt.Printf("Connected to the simulator on port %d\n", port)
+		fmt.Printf("Connected to the simulator on port %d\n", app.ports[app.pidx])
 		fmt.Printf("Use 'port', or 'next', or 'prev' to select a different simulator.\n")
 	}
 	fmt.Println("Enter 'help' for a list of commands.")
@@ -233,11 +233,17 @@ func main() {
 			for _, cmd := range commands {
 				fmt.Printf("- %s : %s\n", cmd.Name, cmd.Description)
 			}
-
+			continue
 		case "quit":
 			fallthrough
 		case "exit":
 			os.Exit(0)
+
+		case "status":
+		case "stopsim":
+		default:
+			fmt.Printf("Unknown command: %s\n", args[0])
+			continue
 		}
 
 		//-------------------------------------
@@ -308,8 +314,6 @@ func formatSimulatorStatus(status SimulatorStatus) string {
 	if err != nil {
 		return fmt.Sprintf("Error parsing date: %v\n", err)
 	}
-	// fmt.Printf("ps:  %s  -->  %s\n", status.ProgramStarted, ps.In(time.Local).Format("Mon, Jan 2, 2006 03:04:05 PM"))
-	// fmt.Printf("ec:  %s  -->  %s\n", status.EstimatedCompletion, ec.In(time.Local).Format("Mon, Jan 2, 2006 03:04:05 PM"))
 
 	return fmt.Sprintf(
 		"SIMULATOR STATUS\n"+
