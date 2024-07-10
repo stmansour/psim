@@ -353,7 +353,7 @@ func rescan() {
 		return
 	}
 	app.pidx = 0
-	fmt.Printf("Fount %d simulators running on ports these ports:\n", len(app.ports))
+	fmt.Printf("Found %d simulators running on ports these ports:\n", len(app.ports))
 	for i := 0; i < len(app.ports); i++ {
 		fmt.Printf("  %d\n", app.ports[i])
 	}
