@@ -46,8 +46,10 @@ type StopResponse struct {
 }
 
 var app struct {
-	ports []int // list of ports between 8090 and 8100 with listeners
+	ports []int // list of ports between app.MinPort and app.MaxPort with listeners
 	pidx  int   // index into the list of ports
+	MinPort int
+	MaxPort int
 }
 
 // checkPort tries to establish a TCP connection to the given port and returns true if successful
@@ -74,11 +76,13 @@ func scanPorts(startPort, endPort int) []int {
 
 func main() {
 	var port int
+	app.MinPort = 8080
+	app.MaxPort = 8100
 
 	//---------------------------------------------------
 	// SEE IF THERE ARE ANY SIMULATOR PROCESSES RUNNING
 	//---------------------------------------------------
-	app.ports = scanPorts(8090, 8100)
+	app.ports = scanPorts(app.MinPort, app.MaxPort)
 	if len(app.ports) == 0 {
 		app.pidx = -1
 	}
@@ -346,7 +350,7 @@ func formatSimulatorStatus(status SimulatorStatus) string {
 
 func rescan() {
 	app.pidx = -1
-	app.ports = scanPorts(8090, 8100)
+	app.ports = scanPorts(app.MinPort, app.MaxPort)
 	if len(app.ports) == 0 {
 		fmt.Printf("No simulators appear to be running on this computer\n")
 		fmt.Printf("Use 'rescan' to rescan the list of available ports\n")
