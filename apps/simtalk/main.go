@@ -76,7 +76,7 @@ func scanPorts(startPort, endPort int) []int {
 
 func main() {
 	var port int
-	app.MinPort = 8080
+	app.MinPort = 8090
 	app.MaxPort = 8100
 
 	//---------------------------------------------------
