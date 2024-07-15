@@ -171,6 +171,7 @@ type AppConfig struct {
 	AllowDuplicateInvestors bool                // if false then check for duplicate investors
 	PredictionMode          bool                // true if the code is making a prediction about the next day
 	DNALog                  bool                // if true, generate DNA log report
+	SID                     int64               // simulation id if > 0
 }
 
 // CreateTestingCFG is a function that creates a test cfg file with no secrets

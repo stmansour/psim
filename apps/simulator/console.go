@@ -13,6 +13,10 @@ import (
 func displaySimulationDetails(cfg *util.AppConfig) {
 	fmt.Printf("**************  S I M U L A T I O N   D E T A I L S  **************\n")
 	fmt.Printf("Current Time:        %s\n", time.Now().Format(time.RFC1123))
+	fmt.Printf("Simulation Name:     %s\n", cfg.SimulationName)
+	if app.SID > 0 {
+		fmt.Printf("Simulation ID:       %d\n", app.SID)
+	}
 	a := time.Time(cfg.DtStart)
 	b := time.Time(cfg.DtStop)
 	c := b.AddDate(0, 0, 1)

@@ -331,6 +331,9 @@ func (s *Simulator) ReportHeader(file *os.File, bSim bool) {
 	} else if !s.Cfg.CrucibleMode && !s.Cfg.SingleInvestorMode {
 		fmt.Fprintf(file, "\"Simulation Name:  %s\"\n", s.Cfg.SimulationName)
 	}
+	if s.Cfg.SID > 0 {
+		fmt.Fprintf(file, "\"Simulation ID:  %d\"\n", s.Cfg.SID)
+	}
 	fmt.Fprintf(file, "\"Program Version:  %s\"\n", util.Version())
 	fmt.Fprintf(file, "\"Run Date: %s\"\n", time.Now().Format("Mon, Jan 2, 2006 - 15:04:05 MST"))
 	fmt.Fprintf(file, "\"Available processor cores: %d\"\n", runtime.NumCPU())

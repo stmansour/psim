@@ -10,6 +10,7 @@ require (
 	github.com/chzyer/readline v1.5.1
 	github.com/go-sql-driver/mysql v1.8.0
 	github.com/mattn/go-sqlite3 v1.14.22
+	github.com/mitchellh/go-homedir v1.1.0
 	github.com/stretchr/testify v1.8.4
 	github.com/xuri/excelize/v2 v2.8.1
 	gonum.org/v1/gonum v0.15.0

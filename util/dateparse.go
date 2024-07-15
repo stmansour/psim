@@ -50,6 +50,8 @@ func easyDates(s string) (bool, time.Time) {
 		return match, dt
 	case "yesterday":
 		return match, dt.AddDate(0, 0, -1)
+	case "day-before-yesterday":
+		return match, dt.AddDate(0, 0, -2)
 	case "tomorrow":
 		return match, dt.AddDate(0, 0, 1)
 	default:

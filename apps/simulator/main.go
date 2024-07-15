@@ -135,6 +135,7 @@ func initSimulation() {
 	if !cfg.CrucibleMode {
 		cfg.CrucibleMode = app.CrucibleMode
 	}
+	cfg.SID = app.SID
 	app.cfg = cfg
 
 	//--------------------------
