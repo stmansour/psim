@@ -58,8 +58,8 @@ func SendStatusUpdate(completed *time.Time) error {
 	if completed != nil {
 		cmdDataStruct.DtCompleted = completed.Format(time.RFC822Z)
 	} else {
-		completedGens, _, estimatedCompletionTime := estimateFinish()
-		if completedGens == 0 {
+		_, _, _, estimatedCompletionTime := endTimeEstimator()
+		if app.sim.GensCompleted == 0 {
 			return nil // nothing to report.  We need at least 1 generation to be completed
 		}
 		cmdDataStruct.DtEstimate = estimatedCompletionTime.Format(time.RFC822Z)

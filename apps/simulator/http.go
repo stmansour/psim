@@ -134,24 +134,44 @@ func strElapsedTime(start, end time.Time) string {
 	return formatDuration(end.Sub(start))
 }
 
-func estimateFinish() (int, time.Duration, time.Time) {
-	totalGens := app.cfg.LoopCount * app.cfg.Generations
-	completedGens := (app.sim.LoopsCompleted * app.cfg.Generations) + app.sim.GensCompleted
-	gensRemaining := totalGens - completedGens
+// func estimateFinish() (int, time.Duration, time.Time) {
+// 	totalGens := app.cfg.LoopCount * app.cfg.Generations
+// 	completedGens := (app.sim.LoopsCompleted * app.cfg.Generations) + app.sim.GensCompleted
+// 	gensRemaining := totalGens - completedGens
 
-	timePerGen := app.sim.TrackingGenStop.Sub(app.sim.TrackingGenStart) // Calculate the time taken for the last generation
-	estimatedTimeRemaining := timePerGen * time.Duration(gensRemaining) // Calculate the estimated time remaining
-	estimatedCompletionTime := time.Now().Add(estimatedTimeRemaining)   // Calculate the estimated completion time
+// 	timePerGen := app.sim.TrackingGenStop.Sub(app.sim.TrackingGenStart) // Calculate the time taken for the last generation
+// 	estimatedTimeRemaining := timePerGen * time.Duration(gensRemaining) // Calculate the estimated time remaining
+// 	estimatedCompletionTime := time.Now().Add(estimatedTimeRemaining)   // Calculate the estimated completion time
 
-	return completedGens, estimatedTimeRemaining, estimatedCompletionTime
+// 	return completedGens, estimatedTimeRemaining, estimatedCompletionTime
 
+// }
+
+// endTimeEstimator calculates the estimated completion time
+// based on the provided seconds per generation, number of loops, and
+// number of generations per loop.
+// RETURNS:
+//
+//	estimated time.Time of completion
+//	estimated time.Duration of remaining time
+//
+// --------------------------------------------------------------------------
+func endTimeEstimator() (int, time.Duration, time.Duration, time.Time) {
+	timePerGen := app.sim.TrackingGenStop.Sub(app.sim.TrackingGenStart)   //the time taken for the last generation
+	totalGenerations := app.cfg.LoopCount * app.cfg.Generations           // TODO: we need a different formula if GenDur is set
+	remainingGenerations := totalGenerations - app.sim.GensCompleted      // how many generations are left to simulate
+	remainingDuration := timePerGen * time.Duration(remainingGenerations) // estimated time remaining
+	currentTime := time.Now()                                             // what time is it now?
+	estimatedCompletionTime := currentTime.Add(remainingDuration)         // Add the duration to now
+
+	return totalGenerations, timePerGen, remainingDuration, estimatedCompletionTime
 }
 
 // handleStatus returns the status of the simulation. Times are in UTC
 func handleStatus(w http.ResponseWriter, r *http.Request) {
 	timeElapsed := strElapsedTime(app.ProgramStarted, time.Now())
 
-	_, estimatedTimeRemaining, estimatedCompletionTime := estimateFinish()
+	_, timePerGen, estimatedTimeRemaining, estimatedCompletionTime := endTimeEstimator()
 
 	status := SimulatorStatus{
 		ProgramStarted:         app.ProgramStarted.In(time.UTC).Format(time.RFC3339),
@@ -163,7 +183,7 @@ func handleStatus(w http.ResponseWriter, r *http.Request) {
 		GenerationsRequested:   app.cfg.Generations,
 		CompletedLoops:         app.sim.LoopsCompleted,
 		CompletedGenerations:   app.sim.GensCompleted,
-		ElapsedTimeLastGen:     util.ElapsedTime(app.sim.TrackingGenStart, app.sim.TrackingGenStop),
+		ElapsedTimeLastGen:     util.ElapsedDuration(timePerGen),
 		EstimatedTimeRemaining: formatDuration(estimatedTimeRemaining),
 		EstimatedCompletion:    estimatedCompletionTime.In(time.UTC).Format(time.RFC3339),
 		SID:                    app.SID,

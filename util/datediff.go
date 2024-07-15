@@ -79,7 +79,11 @@ func DateDiffString(a, b time.Time) string {
 
 // ElapsedTime returns the elapsed time as a string
 func ElapsedTime(dtStart, dtStop time.Time) string {
-	elapsed := dtStop.Sub(dtStart) // calculate elapsed time
+	return ElapsedDuration(dtStop.Sub(dtStart))
+}
+
+// ElapsedDuration returns the elapsed time as a string
+func ElapsedDuration(elapsed time.Duration) string {
 	s := ""
 	hrs := int(elapsed.Hours())
 	mins := int(elapsed.Minutes()) % 60
