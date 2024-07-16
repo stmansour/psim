@@ -347,18 +347,16 @@ func (s *Simulator) Run() {
 	// ITERATE THROUGH THE LOOP COUNT...
 	//-------------------------------------
 	for lc := 0; lc < s.Cfg.LoopCount; lc++ {
-
 		//---------------------------------
 		// DO WE STILL NEED THIS?
 		//---------------------------------
 		for k, v := range s.Investors {
 			if v.BalanceC1 > s.Cfg.InitFunds || v.BalanceC2 != 0 {
-				fmt.Printf("Investor %d has C1 = %8.2f and C2 = %8.2f\n", k, v.BalanceC1, v.BalanceC2)
+				log.Printf("Investor %d has C1 = %8.2f and C2 = %8.2f\n", k, v.BalanceC1, v.BalanceC2)
 			}
 		}
 
 		dtStop := time.Time(s.Cfg.DtStop)
-		// DateSettled = dtStop
 		isGenDur := len(s.Cfg.GenDurSpec) > 0
 		genStart := time.Time(s.Cfg.DtStart)
 
@@ -389,6 +387,7 @@ func (s *Simulator) Run() {
 			}
 			EndOfDataReached = false
 
+			//-----------------------------------------------
 			// Let Investors now a new generation is starting...
 			//-----------------------------------------------
 			for _, v := range s.Investors {
@@ -415,12 +414,14 @@ func (s *Simulator) Run() {
 				tasks := make(chan int, len(s.Investors))     // Send indices of s.Investors to workers, the channel isbuffered to avoid blocking, enough space for every Investor
 				results := make(chan error, len(s.Investors)) // Collect errors or nil if successful
 
+                //---------------------------------------
 				// fire up the workers!
+                //---------------------------------------
 				for w := 0; w < s.WorkerThreads; w++ {
 					go s.worker(tasks, results)
 				}
 
-				//---------------------------------------------------------------
+    			//---------------------------------------------------------------
 				// Dispatch tasks (the intex of each Investor) to workers
 				//---------------------------------------------------------------
 				s.T3ForThreadPool = T3
@@ -435,7 +436,7 @@ func (s *Simulator) Run() {
 				for a := 0; a < len(s.Investors); a++ {
 					err := <-results // each time this returns it means that an Investor has finished
 					if err != nil {
-						fmt.Printf("Investors.DailyRun() returned: %s\n", err.Error())
+						log.Printf("Investors.DailyRun() returned: %s\n", err.Error())
 					}
 				}
 
@@ -493,9 +494,10 @@ func (s *Simulator) Run() {
 				}
 			}
 
+
 			dtGenerationStop := time.Now()
 			if s.TraceTiming {
-				fmt.Printf("<<<TRACE TIMING>>> generation simulation time: %s\n", util.ElapsedTime(dtGenStartTrace, dtGenerationStop))
+				log.Printf("<<<TRACE TIMING>>> generation simulation time: %s\n", util.ElapsedTime(dtGenStartTrace, dtGenerationStop))
 			}
 
 			T3 = T3.AddDate(0, 0, -1)
@@ -510,7 +512,7 @@ func (s *Simulator) Run() {
 				unsettled += s.Investors[j].BalanceC2
 			}
 			if !s.Cfg.CrucibleMode {
-				fmt.Printf("Completed generation %d, %s - %s,  unsettled = %12.2f %s\n", s.GensCompleted, thisGenDtStart.Format("Jan _2, 2006"), d.Format("Jan _2, 2006"), unsettled, s.Cfg.C2)
+				log.Printf("Completed generation %d, %s - %s,  unsettled = %12.2f %s\n", s.GensCompleted, thisGenDtStart.Format("Jan _2, 2006"), d.Format("Jan _2, 2006"), unsettled, s.Cfg.C2)
 			}
 			if isGenDur {
 				genStart = dtGenEnd // Start next generation from the end of the last
@@ -551,7 +553,7 @@ func (s *Simulator) Run() {
 				s.maxPredictions = make(map[string]int, 0)
 				dtNextGenCompleted := time.Now()
 				if s.TraceTiming {
-					fmt.Printf("<<<TRACE TIMING>>> next generation create time: %s\n", util.ElapsedTime(dtGenerationStop, dtNextGenCompleted))
+					log.Printf("<<<TRACE TIMING>>> next generation create time: %s\n", util.ElapsedTime(dtGenerationStop, dtNextGenCompleted))
 				}
 			}
 			s.WindDownInProgress = false
@@ -560,7 +562,7 @@ func (s *Simulator) Run() {
 			s.TrackingGenStop = dtGenStopTrace
 		}
 		if !s.Cfg.CrucibleMode {
-			fmt.Printf("loop %d completed.  %s - %s\n", lc, thisGenDtStart.Format("Jan _2, 2006"), thisGenDtEnd.Format("Jan _2, 2006"))
+			log.Printf("loop %d completed.  %s - %s\n", lc, thisGenDtStart.Format("Jan _2, 2006"), thisGenDtEnd.Format("Jan _2, 2006"))
 		}
 		s.LoopsCompleted++
 	}
@@ -568,7 +570,6 @@ func (s *Simulator) Run() {
 	//-------------------------------------------------
 	// Finalize any reports that need bottom results
 	//-------------------------------------------------
-
 	s.SimStop = time.Now()
 	s.StopTimeSet = true
 }

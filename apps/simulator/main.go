@@ -246,20 +246,21 @@ func main() {
 	// will perform this task every 5 mins
 	//----------------------------------------------------------------------------
 	if len(app.DispatcherURL) > 0 && app.SID > 0 {
-		// fmt.Printf("app.DispatcherURL = %s\n", app.DispatcherURL)
+		log.Printf("app.DispatcherURL = %s\n", app.DispatcherURL)
 		ticker := time.NewTicker(5 * time.Minute)
 		app.DispatcherStatusChannel = make(chan struct{})
 
 		// Start a goroutine that sends status updates every 5 minutes
 		go func() {
+			log.Printf("*** GO FUNCTION FOR STATUS LOOP ***\n")
 			for {
-                // DEBUG PRINT STATEMENT
-                fmt.Printf("*** STATUS LOOP STARTING OVER ***\n")
+				// DEBUG PRINT STATEMENT
+				log.Printf("*** STATUS LOOP STARTING OVER ***\n")
 				select {
 				case <-ticker.C:
-                    fmt.Printf("SENDING STATUS")
+					log.Printf("SENDING STATUS")
 					if err = SendStatusUpdate(nil); err != nil {
-						fmt.Printf("Error sending status update: %s\n", err)
+						log.Printf("Error sending status update: %s\n", err)
 					}
 				case <-app.DispatcherStatusChannel:
 					ticker.Stop()
@@ -287,12 +288,13 @@ func main() {
 	pprof.StopCPUProfile()
 	f.Close()
 
+	log.Printf("*** SIMULATION COMPLETED, CLOSING DISPATCHER STATUS CHANNEL ***\n")
 	//-------------------------------------------------------------------------
 	// Send completion status to the DISPATCHER
 	//-------------------------------------------------------------------------
 	if app.SID > 0 && len(app.DispatcherURL) > 0 && app.sim.StopTimeSet {
 		if err = SendStatusUpdate(&app.sim.SimStop); err != nil {
-			fmt.Printf(">>>> Error sending completion status: %s\n", err)
+			log.Printf(">>>> Error sending completion status: %s\n", err)
 		}
 		close(app.DispatcherStatusChannel)
 	}
@@ -320,5 +322,5 @@ func main() {
 		cancel()
 		wg.Wait() // Wait for the HTTP server goroutine to finish
 	}
-	fmt.Println("simulation completed.")
+	log.Printf("*** SIMULATION COMPLETED ***\n")
 }

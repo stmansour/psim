@@ -169,7 +169,8 @@ func endTimeEstimator() (int, time.Duration, time.Duration, time.Time) {
 
 // handleStatus returns the status of the simulation. Times are in UTC
 func handleStatus(w http.ResponseWriter, r *http.Request) {
-	timeElapsed := strElapsedTime(app.ProgramStarted, time.Now())
+	    fmt.Printf("**** HTTP STATUS HANDLER has been entered\n")
+	    timeElapsed := strElapsedTime(app.ProgramStarted, time.Now())
 
 	_, timePerGen, estimatedTimeRemaining, estimatedCompletionTime := endTimeEstimator()
 
@@ -198,6 +199,7 @@ func handleStatus(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleStop(w http.ResponseWriter, r *http.Request) {
+	fmt.Printf("**** HTTP STATUS HANDLER has been entered\n")
 	// Implementation
 	app.sim.Cfg.LoopCount = 1
 	app.sim.Cfg.Generations = 1
