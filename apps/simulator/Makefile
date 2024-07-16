@@ -10,6 +10,7 @@ sim: *.go
 	golint
 	staticcheck
 	go build -ldflags "-X 'github.com/stmansour/psim/util.buildID=$(BUILD_TIME)'" -o simulator
+	cp simwrapper.sh simwrapper ; chmod +x simwrapper
 	@echo "*** $(THISDIR): completed $(THISDIR) ***"
 
 clean: cleancsv
@@ -44,7 +45,7 @@ db:
 
 package:
 	mkdir -p ${BINDIR}/man/man1
-	cp simulator ${BINDIR}/
+	cp simulator simwrapper ${BINDIR}/
 	cp simulator.1 ${BINDIR}/man/man1
 	@echo "*** ${THISDIR}: completed package ***"
 
@@ -57,4 +58,5 @@ refmt:
 
 release: simulator
 	cp simulator /usr/local/plato/bin/
+	cp simwrapper /usr/local/plato/bin/
 
