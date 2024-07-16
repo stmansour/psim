@@ -178,10 +178,10 @@ func doSimulation() {
 	sqlt.CreateSchema(app.SQLiteDB)
 	defer func() {
 		if err := app.SQLiteDB.Close(); err != nil {
-			log.Printf("Error closing database: %s\n", err)
+			fmt.Printf("Error closing database: %s\n", err)
 		}
 		if err := os.Remove(app.SQLiteFileName); err != nil {
-			log.Printf("Error deleting database file: %s\n", err)
+			fmt.Printf("Error deleting database file: %s\n", err)
 		}
 	}()
 
@@ -236,7 +236,7 @@ func main() {
 		go func() {
 			defer wg.Done()
 			if err := startHTTPServer(ctx); err != nil {
-				log.Printf("HTTP server stopped with error: %v", err)
+				fmt.Printf("HTTP server stopped with error: %v", err)
 			}
 		}()
 	}
@@ -253,10 +253,13 @@ func main() {
 		// Start a goroutine that sends status updates every 5 minutes
 		go func() {
 			for {
+                // DEBUG PRINT STATEMENT
+                fmt.Printf("*** STATUS LOOP STARTING OVER ***\n")
 				select {
 				case <-ticker.C:
+                    fmt.Printf("SENDING STATUS")
 					if err = SendStatusUpdate(nil); err != nil {
-						log.Printf("Error sending status update: %s\n", err)
+						fmt.Printf("Error sending status update: %s\n", err)
 					}
 				case <-app.DispatcherStatusChannel:
 					ticker.Stop()

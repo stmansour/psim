@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -48,6 +47,8 @@ func SendStatusUpdate(completed *time.Time) error {
 		DtEstimate      string
 		DtCompleted     string
 	}{}
+
+    fmt.Printf("Entered SendStatusUpdate\n")
 
 	var err error
 	cmdDataStruct.SID = app.SID
@@ -130,10 +131,10 @@ func SendStatusUpdate(completed *time.Time) error {
 	var response ShortResponse
 	err = json.Unmarshal(bodyBytes, &response)
 	if err != nil {
-		log.Printf("(SendStatusUpdate) failed to unmarshal response: %v", err)
+		fmt.Printf("(SendStatusUpdate) failed to unmarshal response: %v", err)
 	}
 	if strings.ToLower(response.Status) != "success" {
-		log.Printf("(SendStatusUpdate) unexpected dispatcher response: status: %s, message: %s", response.Status, response.Message)
+		fmt.Printf("(SendStatusUpdate) unexpected dispatcher response: status: %s, message: %s", response.Status, response.Message)
 	}
 	return nil
 }
