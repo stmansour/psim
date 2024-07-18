@@ -59,6 +59,7 @@ type SimApp struct {
 	HexASCIIDbg               bool          // print hex and ASCII data from the HTTP request and response
 	DispatcherURL             string        // where to reach dispatcher, simd will supply it
 	MachineID                 string        // unique id for this machine
+	WorkingDirectory          string        // working directory
 }
 
 var app SimApp
@@ -216,6 +217,13 @@ func main() {
 
 	app.randNano = -1
 	app.ProgramStarted = time.Now()
+
+	//---------------------------------------------
+	// Get application current working directory
+	//---------------------------------------------
+	if app.WorkingDirectory, err = os.Getwd(); err != nil {
+		log.Fatalf("Error getting current working directory: %v", err)
+	}
 
 	readCommandLineArgs()
 	if app.version {

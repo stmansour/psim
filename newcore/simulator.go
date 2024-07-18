@@ -261,8 +261,7 @@ func (s *Simulator) NewPopulation() error {
 		// They may be elite, but they cannot carry their balance forward :-)
 		//---------------------------------------------------------------------
 		for k := 0; k < len(elite); k++ {
-			elite[k].BalanceC1 = s.Cfg.InitFunds
-			elite[k].BalanceC2 = 0
+			elite[k].BalanceC1, elite[k].BalanceC2 = s.factory.InitialFundsSplit()
 			elite[k].PortfolioValueC1 = 0
 		}
 		//--------------------------------------
@@ -414,14 +413,14 @@ func (s *Simulator) Run() {
 				tasks := make(chan int, len(s.Investors))     // Send indices of s.Investors to workers, the channel isbuffered to avoid blocking, enough space for every Investor
 				results := make(chan error, len(s.Investors)) // Collect errors or nil if successful
 
-                //---------------------------------------
+				//---------------------------------------
 				// fire up the workers!
-                //---------------------------------------
+				//---------------------------------------
 				for w := 0; w < s.WorkerThreads; w++ {
 					go s.worker(tasks, results)
 				}
 
-    			//---------------------------------------------------------------
+				//---------------------------------------------------------------
 				// Dispatch tasks (the intex of each Investor) to workers
 				//---------------------------------------------------------------
 				s.T3ForThreadPool = T3
@@ -494,7 +493,6 @@ func (s *Simulator) Run() {
 				}
 			}
 
-
 			dtGenerationStop := time.Now()
 			if s.TraceTiming {
 				log.Printf("<<<TRACE TIMING>>> generation simulation time: %s\n", util.ElapsedTime(dtGenStartTrace, dtGenerationStop))
@@ -512,7 +510,7 @@ func (s *Simulator) Run() {
 				unsettled += s.Investors[j].BalanceC2
 			}
 			if !s.Cfg.CrucibleMode {
-				log.Printf("Completed generation %d, %s - %s,  unsettled = %12.2f %s\n", s.GensCompleted, thisGenDtStart.Format("Jan _2, 2006"), d.Format("Jan _2, 2006"), unsettled, s.Cfg.C2)
+				fmt.Printf("Completed generation %d, %s - %s,  unsettled = %12.2f %s\n", s.GensCompleted, thisGenDtStart.Format("Jan _2, 2006"), d.Format("Jan _2, 2006"), unsettled, s.Cfg.C2)
 			}
 			if isGenDur {
 				genStart = dtGenEnd // Start next generation from the end of the last

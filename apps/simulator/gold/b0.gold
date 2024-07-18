@@ -799,7 +799,6 @@ May 31, 2015 - Investor: 2f83137758cf23527e8f7a44173de0c6d77c31693872bf336def427
 	C1bal = 72237.95 USD, C2bal = 3381503.62 JPY, PV = 99483.97 USD
 
 Completed generation 1, May  1, 2015 - May 31, 2015,  unsettled =   3381503.62 JPY
-loop 0 completed.  May  1, 2015 - May 31, 2015
 
 **************  S I M U L A T I O N   R E S U L T S  **************
 Number of generations: 1
@@ -808,4 +807,3 @@ Duplicate Investors: allowed
 nil data requests: 0
 Archive directory: PLACEHOLDER
 Archive directory: PLACEHOLDER
-simulation completed.

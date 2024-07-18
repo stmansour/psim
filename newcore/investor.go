@@ -160,7 +160,7 @@ func (i *Investor) SelectNUniqueSubclasses(n int) []newdata.MInfluencerSubclass 
 func (i *Investor) Init(cfg *util.AppConfig, f *Factory, db *newdata.Database) {
 	i.cfg = cfg
 
-	i.BalanceC1 = cfg.InitFunds
+	i.BalanceC1, i.BalanceC2 = f.InitialFundsSplit()
 	i.StopLossThreshold = (1 - cfg.StopLoss) * i.BalanceC1
 	i.FitnessCalculated = false
 	i.Fitness = float64(0)
@@ -472,7 +472,7 @@ func (i *Investor) ExecuteBuy(T3 time.Time, pct float64) error {
 		inv.T3C1 = i.BalanceC1
 	}
 	inv.T3 = T3
-	s := i.PrefixMetricC1C2("EXClose")
+	s := i.factory.PrefixMetricC1C2("EXClose")
 	ss := []newdata.FieldSelector{s}
 	er3, err := i.db.Select(inv.T3, ss)
 	if err != nil {
@@ -528,7 +528,7 @@ func (i *Investor) PortfolioValue(t time.Time) float64 {
 	if i.BalanceC2 == 0 {
 		return i.BalanceC1
 	}
-	s := i.PrefixMetricC1C2("EXClose")
+	s := i.factory.PrefixMetricC1C2("EXClose")
 	ss := []newdata.FieldSelector{}
 	ss = append(ss, s)
 	er, err := i.db.Select(t, ss) // exchange rate for C2 at time t
@@ -550,18 +550,6 @@ func (i *Investor) PortfolioValue(t time.Time) float64 {
 		fmt.Printf("*** WARNING **** PortfolioValue: ExchangeRate Record for %s not found\n", t.Format("1/2/2006"))
 	}
 	return pv
-}
-
-// PrefixMetricC1C2 returns the FieldSelector for the supplied metric
-// prefixed with the two associated currencies
-// -----------------------------------------------------------------------------
-func (i *Investor) PrefixMetricC1C2(s string) newdata.FieldSelector {
-	x := newdata.FieldSelector{
-		Metric:  s,
-		Locale:  i.cfg.C1,
-		Locale2: i.cfg.C2,
-	}
-	return x
 }
 
 // settleInvestment - this code was moved to a method as it needed to be done
@@ -589,7 +577,7 @@ func (i *Investor) settleInvestment(t4 time.Time, sellAmount float64) (float64, 
 	//-------------------------------------------------
 	// Save the exchange rate on the day of sale, t4
 	//-------------------------------------------------
-	s := i.PrefixMetricC1C2("EXClose")
+	s := i.factory.PrefixMetricC1C2("EXClose")
 	ss := []newdata.FieldSelector{}
 	ss = append(ss, s)
 	er4, err := i.db.Select(t4, ss)

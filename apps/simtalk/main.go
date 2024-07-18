@@ -37,6 +37,7 @@ type SimulatorStatus struct {
 	EstimatedTimeRemaining string
 	EstimatedCompletion    string
 	SID                    int64
+	WorkingDirectory       string
 }
 
 // StopResponse represents the response from the stop command
@@ -46,8 +47,8 @@ type StopResponse struct {
 }
 
 var app struct {
-	ports []int // list of ports between app.MinPort and app.MaxPort with listeners
-	pidx  int   // index into the list of ports
+	ports   []int // list of ports between app.MinPort and app.MaxPort with listeners
+	pidx    int   // index into the list of ports
 	MinPort int
 	MaxPort int
 }
@@ -324,6 +325,7 @@ func formatSimulatorStatus(status SimulatorStatus) string {
 			"                    Program started: %s\n"+
 			"                Run duration so far: %s\n"+
 			"                        Config file: %s\n"+
+			"          Current working directory: %s\n"+
 			"              Simulation Date Range: %s\n"+
 			"                    Population size: %d\n"+
 			"LoopCount and Generations requested: %d loops, %d generations\n"+
@@ -335,6 +337,7 @@ func formatSimulatorStatus(status SimulatorStatus) string {
 		ps.In(time.Local).Format("Mon, Jan 2, 2006 03:04:05 PM"),
 		status.RunDuration,
 		status.ConfigFile,
+		status.WorkingDirectory,
 		status.SimulationDateRange,
 		status.PopulationSize,
 		status.LoopCount,

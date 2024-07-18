@@ -7,6 +7,7 @@ import (
 	"log"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/stmansour/psim/newdata"
 	"github.com/stmansour/psim/sqlt"
@@ -136,6 +137,42 @@ func (f *Factory) NewPopulation(population []Investor) ([]Investor, error) {
 	return newPopulation, nil
 }
 
+// PrefixMetricC1C2 returns the FieldSelector for the supplied metric
+// prefixed with the two associated currencies
+// -----------------------------------------------------------------------------
+func (f *Factory) PrefixMetricC1C2(s string) newdata.FieldSelector {
+	x := newdata.FieldSelector{
+		Metric:  s,
+		Locale:  f.cfg.C1,
+		Locale2: f.cfg.C2,
+	}
+	return x
+}
+
+// InitialFundsSplit determines how much C1 and C2 the Investor is staked with.
+func (f *Factory) InitialFundsSplit() (float64, float64) {
+	if f.cfg.SplitInitFunds {
+		s := f.PrefixMetricC1C2("EXClose")
+		ss := []newdata.FieldSelector{s}
+		er3, err := f.db.Select(time.Time(f.cfg.DtStart), ss)
+		if err != nil {
+			log.Printf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found. All initial funds go to C1", time.Time(f.cfg.DtStart).Format("1/2/2006"))
+			return f.cfg.InitFunds, 0
+		}
+		if er3 == nil {
+			log.Printf("*** ERROR *** SellConversion: ExchangeRate Record for %s not found. All initial funds go to C1", time.Time(f.cfg.DtStart).Format("1/2/2006"))
+			return f.cfg.InitFunds, 0
+		}
+
+		c1 := f.cfg.InitFunds / 2
+		ERT3 := er3.Fields[s.FQMetric()].Value // exchange rate on T3
+		c2 := c1 * ERT3                        // amount of C2 we purchased on T3
+		return c1, c2
+	}
+
+	return f.cfg.InitFunds, 0
+}
+
 // BreedNewInvestor creates a new Investor by going through the genetic
 // algorithm. It also creates the Investor's Influencers.  Here's how
 // we choose the next generation Influencers for the new Investor.
@@ -160,7 +197,8 @@ func (f *Factory) BreedNewInvestor(population *[]Investor, idxParent1, idxParent
 	newInvestor.Init(f.cfg, f, f.db)
 	newInvestor.FitnessCalculated = false
 	newInvestor.Fitness = 0.0
-	newInvestor.BalanceC1 = f.cfg.InitFunds
+	newInvestor.BalanceC1, newInvestor.BalanceC2 = f.InitialFundsSplit()
+
 	parent1 := (*population)[idxParent1]
 	parent2 := (*population)[idxParent2]
 	parent1.EnsureID()
@@ -561,7 +599,7 @@ func (f *Factory) NewInvestorFromDNA(DNA string) Investor {
 	inv.cfg = f.cfg
 	inv.factory = f
 	inv.db = f.db
-	inv.BalanceC1 = inv.cfg.InitFunds
+	inv.BalanceC1, inv.BalanceC2 = f.InitialFundsSplit()
 	inv.CreatedByDNA = true
 
 	infDNA, ok := m["Influencers"].(string)

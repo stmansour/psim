@@ -218,7 +218,6 @@ May 31, 2022 - Investor: ef3347703fc1b951e7400df33c2a91e879b8dfb1bc501f090e710d1
 	C1bal = 60585.15 USD, C2bal = 5104500.00 JPY, PV = 100253.32 USD
 
 Completed generation 1, May  1, 2022 - May 31, 2022,  unsettled =   5104500.00 JPY
-loop 0 completed.  May  1, 2022 - May 31, 2022
 
 **************  S I M U L A T I O N   R E S U L T S  **************
 Number of generations: 1
@@ -227,4 +226,3 @@ Duplicate Investors: allowed
 nil data requests: 0
 Archive directory: PLACEHOLDER
 Archive directory: PLACEHOLDER
-simulation completed.

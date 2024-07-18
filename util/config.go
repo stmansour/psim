@@ -133,6 +133,7 @@ type AppConfig struct {
 	DtSettle                time.Time           // later of DtStop or date on which the last sale was made
 	PopulationSize          int                 // how many investors are in this population
 	InitFunds               float64             // amount of funds each Investor is "staked" at the outset of the simulation
+	SplitInitFunds          bool                // if true split initial funds evenly between C1 and C2 on DtStart
 	StdInvestment           float64             // standard investment amount
 	TradingDay              int                 // this needs to be completely re-thought -- it's like a recurrence rule
 	TradingTime             time.Time           // time of day when buy/sell is executed
