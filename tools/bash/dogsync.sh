@@ -3,7 +3,7 @@
 #---------------------------------------------------------
 # Run this command from the directory containing gdelt
 #---------------------------------------------------------
-GSYNC=/usr/local/plato/bin/gfetch.sh
+GSYNC=/usr/local/plato/bin/gfetch
 TSF=/usr/local/plato/bin/tsf
 SQLTOCSV=/usr/local/plato/bin/sqltocsv
 HTTPDOCPATH=/var/www/html

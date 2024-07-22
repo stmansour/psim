@@ -34,6 +34,25 @@ listErrors() {
     done
 }
 
+createStatusFile() {
+    LOGTODAY=$(/usr/bin/ls -lt logs/ | grep '^-' | head -n 1 | awk '{print $9}')
+
+    TOTALERRS=$(grep "Error fetching" */*.log | wc -l)
+    if [ "${TOTALERRS}x" == "x" ]; then
+	TOTALERRS=0
+    fi
+
+    ERRS=$(grep "Error fetching" "logs/${LOGTODAY}")
+    if (( ERRS == 0 )); then
+	echo "Success - $(date)" > ${STATUSFILE}
+    else
+	echo "Failure - $(date)" > ${STATUSFILE}
+    fi
+
+    echo "Errors in the last 30 days: ${TOTALERRS}" >> ${STATUSFILE}
+}
+
+
 #------------------------------
 # Ensure log directory exists
 #------------------------------
@@ -68,23 +87,12 @@ LOG="${LOG_DIR}/psync_$(date +'%Y%m%d_%H%M%S').log"
 # Now do the sync...
 #------------------------
 "${SYNC}" -F -verbose > "${LOG}"
-ERRS=$(grep "Error fetching" */*.log | wc -l)
-
-if [ "${ERRS}x" == "x" ]; then
-    ERRS=0
-fi
-
-if (( ${ERRS} == 0 )); then 
-    echo "Success - $(date)" > ${STATUSFILE}
-else
-    echo "${ERRS} Error(s) - $(date)" > ${STATUSFILE}
-fi
+createStatusFile
 
 #------------------------------------------------------------------------------
 # Now scan the logs again and append any errors to the status file...
 #------------------------------------------------------------------------------
 listErrors
-
 
 #------------------------------------------------------------------------------
 # Create new database csv files that include the updates to the sql database...
