@@ -24,8 +24,8 @@ test:
 	@echo "*** ${THISDIR}: completed package ***"
 
 package:
-	mkdir -p ${BINDIR}/
-	cp simtalk ${BINDIR}/
+	mkdir -p ${BINDIR}/bin
+	cp simtalk ${BINDIR}/bin/
 	@echo "*** ${THISDIR}: completed package ***"
 
 release:

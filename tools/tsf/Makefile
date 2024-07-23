@@ -21,7 +21,8 @@ test: config
 	@echo "*** TEST completed in ${THISDIR} ***"
 
 package:
-	cp tsf ${DIST}/
+	mkdir -p ${DIST}/bin
+	cp tsf ${DIST}/bin/
 	@echo "*** PACKAGE completed in ${THISDIR} ***"
 
 secure:

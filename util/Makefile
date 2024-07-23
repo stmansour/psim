@@ -30,6 +30,6 @@ coverage:
 	go tool cover -html=coverage.out
 
 package:
-	mkdir -p ${BINDIR}
-	cp config.json5 ${BINDIR}/
+	mkdir -p ${BINDIR}/bin
+	cp config.json5 ${BINDIR}/bin
 	@echo "*** ${THISDIR}: completed package ***"

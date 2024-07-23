@@ -30,8 +30,8 @@ config:
 	cp ~/.vault/extres.json5 .
 
 package:
-	mkdir -p ${BINDIR}/
-	cp psync ${BINDIR}/
+	mkdir -p ${BINDIR}/bin
+	cp psync ${BINDIR}/bin
 	@echo "*** ${THISDIR}: completed package ***"
 
 release:

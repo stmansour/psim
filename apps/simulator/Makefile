@@ -45,7 +45,8 @@ db:
 
 package:
 	mkdir -p ${BINDIR}/man/man1
-	cp simulator simwrapper ${BINDIR}/
+	mkdir -p ${BINDIR}/bin
+	cp simulator simwrapper ${BINDIR}/bin/
 	cp simulator.1 ${BINDIR}/man/man1
 	@echo "*** ${THISDIR}: completed package ***"
 

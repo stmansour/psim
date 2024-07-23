@@ -4,7 +4,7 @@
 NAME="simq"
 
 # Get the version from the simulator
-VER=$(./dist/plato/simulator -v | awk '{print $4}')
+VER=$(./dist/plato/bin/simulator -v | awk '{print $4}')
 
 # Determine the OS
 UNAME_S=$(uname -s)

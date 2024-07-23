@@ -25,8 +25,9 @@ test: config
 
 package:
 	mkdir -p ${DIST}/man/man1
+	mkdir -p ${DIST}/bin
 	cp gfetch.1 ${DIST}/man/man1
-	cp gsync gfetch ${DIST}/
+	cp gsync gfetch ${DIST}/bin
 	@echo "*** PACKAGE completed in ${THISDIR} ***"
 
 secure:

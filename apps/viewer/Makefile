@@ -16,9 +16,9 @@ db:
 	mkdir -p data;cp ${TOP}/newdata/data/platodb.csv data/
 
 package:
-	mkdir -p ${BINDIR}
-	cp index.html ${BINDIR}/
-	cp app.js ${BINDIR}/
+	mkdir -p ${BINDIR}/html/viewer
+	cp index.html ${BINDIR}/html/viewer
+	cp app.js ${BINDIR}/html/viewer
 	@echo "*** ${THISDIR}: completed package ***"
 
 release: db
