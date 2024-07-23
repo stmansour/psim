@@ -28,7 +28,7 @@ TARFILE="${NAME}.${VER}.${OS}.${CPU}.tar.gz"
 
 # Create the tar file
 echo "Creating tar file: $TARFILE"
-cd ./dist
+cd ./dist || exit 1
 tar -czvf "$TARFILE" plato
 
 # Generate the SHA-256 checksum

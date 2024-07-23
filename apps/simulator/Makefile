@@ -15,7 +15,7 @@ sim: *.go
 
 clean: cleancsv
 	go clean
-	rm -rf *.prof dnalog.xlsx plato_sim*.db trace-*.csv d1.csv *.out fail [a-z][0-9] [a-z][0-9].normalized simulator data config.json5 config.bak coverage.out IList*.csv investorProfile.txt
+	rm -rf *.prof dnalog.xlsx plato_sim*.db trace-*.csv d1.csv *.out fail [a-z][0-9] [a-z][0-9].normalized simulator data config.json5 config.bak coverage.out IList*.csv investorProfile.txt simwrapper
 	@echo "*** ${THISDIR}: completed clean ***"
 
 cleancsv:

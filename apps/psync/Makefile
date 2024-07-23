@@ -3,7 +3,7 @@ BINDIR=${TOP}/dist/plato
 THISDIR="apps/psync"
 TEST_FAILURE_FILE=fail
 THISDIR := $(notdir $(PWD))
-BUILD_TIME := $(shell date "+%Y-%m-%d_%H:%M:%S")
+BUILD_TIME := $(shell date "+%Y%m%dT%H%M%S")
 
 psync: *.go
 	go vet

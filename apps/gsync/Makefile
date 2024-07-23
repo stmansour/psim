@@ -13,7 +13,7 @@ gsync: *.go gfetch.sh
 	@echo "*** completed in ${THISDIR} ***"
 
 clean:
-	rm -rf extres.json5 masterlist.txt gfetch.log urls.txt data fail config.json5 "${THISDIR}"
+	rm -rf extres.json5 masterlist.txt gfetch.log urls.txt data fail config.json5 "${THISDIR}" gfetch
 	@echo "*** CLEAN completed in ${THISDIR} ***"
 
 config:
