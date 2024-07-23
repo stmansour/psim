@@ -374,7 +374,7 @@ func (s *Simulator) ReportHeader(file *os.File, bSim bool) {
 	fmt.Fprintf(file, "\"Investor Bonus Plan: %v\"\n", s.Cfg.InvestorBonusPlan)
 	fmt.Fprintf(file, "\"Gen 0 Elites: %v\"\n", s.Cfg.Gen0Elites)
 	fmt.Fprintf(file, "\"HoldWindowStatsLookback: %d\"\n", s.Cfg.HoldWindowStatsLookBack)
-	fmt.Fprintf(file, "\"StdDevVariationFactor: %.4f\"\n", s.Cfg.StdDevVariationFactor)
+	fmt.Fprintf(file, "\"StdDevVariationFactor: %.6f\"\n", s.Cfg.StdDevVariationFactor)
 
 	omr := float64(0)
 	if s.factory.MutateCalls > 0 {

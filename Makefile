@@ -56,7 +56,7 @@ check_tests:
 package:
 	for dir in $(DIRS); do make -C $$dir package;done
 	if [ -d /usr/local/plato/bin/data ]; then cd dist/plato ; rm -rf data ; cp -r /usr/local/plato/bin/data . ; fi
-	cd dist ; rm -f plato.tar* ; tar cvf plato.tar plato ; gzip plato.tar
+	./mkdist.sh
 
 all: starttimer clean psim package test stoptimer
 	@echo "Completed"

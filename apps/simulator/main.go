@@ -228,7 +228,6 @@ func main() {
 	readCommandLineArgs()
 	if app.version {
 		fmt.Printf("PLATO Simulator version %s\n", util.Version())
-		fmt.Printf("app.DispatcherURL = %s\n", app.DispatcherURL)
 		os.Exit(0)
 	}
 
@@ -296,14 +295,15 @@ func main() {
 	pprof.StopCPUProfile()
 	f.Close()
 
-	log.Printf("*** SIMULATION COMPLETED, CLOSING DISPATCHER STATUS CHANNEL ***\n")
 	//-------------------------------------------------------------------------
 	// Send completion status to the DISPATCHER
 	//-------------------------------------------------------------------------
 	if app.SID > 0 && len(app.DispatcherURL) > 0 && app.sim.StopTimeSet {
+		log.Printf("*** SIMULATION COMPLETED, SENDING COMPLETION STATUS TO DISPATCHER ***\n")
 		if err = SendStatusUpdate(&app.sim.SimStop); err != nil {
 			log.Printf(">>>> Error sending completion status: %s\n", err)
 		}
+		log.Printf("*** SUCCESSFULLY SEND COMPLETION STATUS, CLOSING DISPATCHER STATUS CHANNEL ***\n")
 		close(app.DispatcherStatusChannel)
 	}
 
