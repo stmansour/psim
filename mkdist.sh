@@ -31,10 +31,18 @@ echo "Creating tar file: $TARFILE"
 cd ./dist
 tar -czvf "$TARFILE" plato
 
+# Generate the SHA-256 checksum
+if [ "$OS" == "macos" ]; then
+    CHECKSUM=$(shasum -a 256 "$TARFILE" | awk '{print $1}')
+else
+    CHECKSUM=$(sha256sum "$TARFILE" | awk '{print $1}')
+fi
+
 # Print the result
 if [ $? -eq 0 ]; then
     echo "Tar file created successfully: $TARFILE"
+    echo "SHA-256 checksum: $CHECKSUM"
 else
-    echo "Failed to create tar file: $TARFILE"
+    echo "Failed to generate checksum for tar file: $TARFILE"
     exit 1
 fi
