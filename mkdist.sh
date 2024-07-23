@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the fixed part of the name
-NAME="plato"
+NAME="simq"
 
 # Get the version from the simulator
 VER=$(./dist/plato/simulator -v | awk '{print $4}')

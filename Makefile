@@ -59,7 +59,11 @@ package:
 	./mkdist.sh
 
 post:
-	cp dist/plato*.gz /var/www/html/downloads/
+	@if [ "$$(hostname)" = "plato" ]; then \
+		cp dist/plato*.gz /var/www/html/downloads/; \
+	else \
+		scp -i ~/.ssh/id_platosrv dist/plato*.gz plato:/var/www/html/downloads/; \
+	fi
 
 all: starttimer clean psim package test stoptimer
 	@echo "Completed"
