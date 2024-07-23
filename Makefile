@@ -58,6 +58,9 @@ package:
 	if [ -d /usr/local/plato/bin/data ]; then cd dist/plato ; rm -rf data ; cp -r /usr/local/plato/bin/data . ; fi
 	./mkdist.sh
 
+post:
+	cp dist/plato*.gz /var/www/html/downloads/
+
 all: starttimer clean psim package test stoptimer
 	@echo "Completed"
 
