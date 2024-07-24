@@ -55,7 +55,7 @@ check_tests:
 
 package:
 	for dir in $(DIRS); do make -C $$dir package;done
-	if [ -d /usr/local/plato/bin/data ]; then cd dist/plato ; rm -rf data ; cp -r /usr/local/plato/bin/data . ; fi
+	if [ -d /usr/local/plato/bin/data ]; then cd dist/plato/bin ; rm -rf data ; cp -r /usr/local/plato/bin/data . ; fi
 	./mkdist.sh
 
 post:
