@@ -56,22 +56,15 @@ check_tests:
 package:
 	for dir in $(DIRS); do make -C $$dir package;done
 	if [ -d /usr/local/plato/bin/data ]; then cd dist/plato/bin ; rm -rf data ; cp -r /usr/local/plato/bin/data . ; fi
-	./mkdist.sh
+	./mkdist.sh -c
 
 post:
-	@FL=$$(ls dist/*.gz); \
-	if [ "$$(hostname)" = "plato" ]; then \
-		cp dist/plato*.gz /var/www/html/downloads/; \
-	else \
-		scp -i ~/.ssh/id_platosrv $$FL plato:/var/www/html/downloads/; \
-	fi ; \
-	echo "copied $$FL file to /var/www/html/downloads"
+	./mkdist.sh -p
 
 all: starttimer clean psim package test stoptimer
 	@echo "Completed"
 
 build: starttimer clean psim package stoptimer
-
 
 stats:
 	@find . -name "*.go" | srcstats
