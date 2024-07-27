@@ -148,6 +148,26 @@ func (s *Simulator) Init(cfg *util.AppConfig, db *newdata.Database, crucible *Cr
 		s.Cfg.EliteCount = int(s.Cfg.PreserveElitePct*float64(s.Cfg.PopulationSize)/100 + 0.5)
 	}
 
+	//-------------------------------------------------------------------------
+	// See if the database can handle the date range. Sometimes the end date
+	// is set to "today" or "yesterday". If the database hasn't been updated
+	// recently, it may not have those dates.  We can accommodate a "grace"
+	// period of 5 days.
+	//-------------------------------------------------------------------------
+	if s.db.CSVDB.DtStop.Before(time.Time(s.Cfg.DtStop)) {
+		diff := s.db.CSVDB.DtStop.Sub(time.Time(s.Cfg.DtStop))
+		days := int(diff.Abs().Hours() / 24)
+		fmt.Printf("Database info stops at %s, and this simulation's DtStop is %s.\n", s.db.CSVDB.DtStop.Format("2006-01-02"), time.Time(s.Cfg.DtStop).Format("2006-01-02"))
+		fmt.Printf("The difference is %d days.\n", days)
+		fmt.Printf("The grace period for this run is %d days.\n", s.Cfg.GracePeriodDays)
+		if days > s.Cfg.GracePeriodDays {
+			fmt.Printf("Database the difference of %d days is greater than the grace period of %d days.", days, s.Cfg.GracePeriodDays)
+			log.Fatalf("Please update the database or increase the grace period in the config file.")
+		}
+		s.Cfg.DtStop = util.CustomDate(s.db.CSVDB.DtStop)
+		fmt.Printf("Simulation will continue but the DtStop will be adjusted to %s.\n", s.db.CSVDB.DtStop.Format("2006-01-02"))
+	}
+
 	//------------------------------------------------------------------------
 	// Create an initial population of investors with just 1 investor for now
 	//------------------------------------------------------------------------

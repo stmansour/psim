@@ -173,6 +173,7 @@ type AppConfig struct {
 	PredictionMode          bool                // true if the code is making a prediction about the next day
 	DNALog                  bool                // if true, generate DNA log report
 	SID                     int64               // simulation id if > 0
+	GracePeriodDays         int                 // Grace period in days; max days between DtStop and the last date in the database that is allowed. Can happen when db is not updated and DtStop is a keyword like "yesterday"
 }
 
 // CreateTestingCFG is a function that creates a test cfg file with no secrets
@@ -310,6 +311,9 @@ func LoadConfig(cfname string) (*AppConfig, error) {
 		cfg.StdDevVariationFactor = 0.1 // guarantee a reasonable number
 	}
 
+	if cfg.GracePeriodDays == 0 {
+		cfg.GracePeriodDays = 5 // 5 days of grace period
+	}
 	//-------------------------------------------------------------------
 	// CRUCIBLE processing...
 	//-------------------------------------------------------------------
