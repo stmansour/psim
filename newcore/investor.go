@@ -770,7 +770,8 @@ func (i *Investor) CalculateFitnessScore() float64 {
 	//-----------------------------------------------------------
 	if i.cfg.InvestorBonusPlan {
 		if len(i.cfg.GenDurSpec) > 0 {
-			fmt.Printf("fitness bonus for GenDurSpec: %s needs to be coded\n", i.cfg.GenDurSpec)
+			// TODO: fix fitness bonus for GenDurSpec
+			// fmt.Printf("fitness bonus for GenDurSpec: %s needs to be coded\n", i.cfg.GenDurSpec)
 		} else {
 			dtStart := time.Time(i.cfg.DtStart)
 			dtStop := time.Time(i.cfg.DtStop)
