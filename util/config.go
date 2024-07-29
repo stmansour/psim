@@ -48,17 +48,26 @@ func (t *CustomDate) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// CustomSimulationPeriod is a struct containing a start and end time for the simulation
+type CustomSimulationPeriod struct {
+	DtStart  CustomDate // simulation begins on this date
+	DtStop   CustomDate // simulation ends on this date. Guaranteed that no "buys" happen after this date
+	Duration string     // how long the simulation is
+	Ending   string     // typically a keyword: "today", "yesterday", "lastmonthend", or possibly a CustomDate
+}
+
 // FileConfig contains all the configuration values for the Simulator,
 // Investors, and Influencers. It needs to be in this directory so that
 // it is visible to all areas of code in this project.
 // ---------------------------------------------------------------------------
 type FileConfig struct {
-	C1               string     // Currency1 - the currency that we're trying to maximize
-	C2               string     // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
-	DtStart          CustomDate // simulation begins on this date
-	DtStop           CustomDate // simulation ends on this date. Guaranteed that no "buys" happen after this date
-	LoopCount        int        // how many times to loop over DtStart to DtStop
-	TopInvestorCount int        // how many top investors to include in financial report
+	C1               string                 // Currency1 - the currency that we're trying to maximize
+	C2               string                 // Currency2 - the currency that we invest in to sell later and make a profit (or loss)
+	DtStart          CustomDate             // simulation begins on this date
+	DtStop           CustomDate             // simulation ends on this date. Guaranteed that no "buys" happen after this date
+	SimulationPeriod CustomSimulationPeriod // flexible syntax for simulation period
+	LoopCount        int                    // how many times to loop over DtStart to DtStop
+	TopInvestorCount int                    // how many top investors to include in financial report
 	// HoldWindowPos    float64    // positive space to consider as "no difference" when subtracting two ratios
 	// HoldWindowNeg    float64    // negative space to consider as "no difference" when subtracting two ratios
 
@@ -314,6 +323,13 @@ func LoadConfig(cfname string) (*AppConfig, error) {
 	if cfg.GracePeriodDays == 0 {
 		cfg.GracePeriodDays = 5 // 5 days of grace period
 	}
+
+	//-------------------------------------------------------------------
+	// CRUCIBLE processing...
+	//-------------------------------------------------------------------
+	cfg.DtStart = fcfg.DtStart
+	cfg.DtStop = fcfg.DtStop
+	ProcessCustomSimulationPeriod(&cfg, &fcfg)
 	//-------------------------------------------------------------------
 	// CRUCIBLE processing...
 	//-------------------------------------------------------------------
@@ -321,8 +337,6 @@ func LoadConfig(cfname string) (*AppConfig, error) {
 		return &cfg, err
 	}
 
-	cfg.DtStart = fcfg.DtStart
-	cfg.DtStop = fcfg.DtStop
 	return &cfg, nil
 }
 
@@ -348,18 +362,40 @@ func parseCustomCruciblePeriod(ccp *CustomCruciblePeriod) (CruciblePeriod, error
 	return cp, nil
 }
 
+// ProcessCustomSimulationPeriod handles the date range for the custom simulation mode
+func ProcessCustomSimulationPeriod(cfg *AppConfig, fcfg *FileConfig) bool {
+	found := false
+	now := time.Now()
+	if fcfg.SimulationPeriod.Ending != "" {
+		cfg.DtStop = CustomDate(calculateEndDate(fcfg.SimulationPeriod.Ending, now))
+		found = true
+	} else {
+		if !time.Time(fcfg.SimulationPeriod.DtStop).IsZero() {
+			cfg.DtStop = CustomDate(fcfg.SimulationPeriod.DtStop)
+			found = true
+		}
+	}
+
+	// Calculate start date based on duration if available
+	if fcfg.SimulationPeriod.Duration != "" {
+		cfg.DtStart = CustomDate(calculateStartDate(fcfg.SimulationPeriod.Duration, time.Time(cfg.DtStop)))
+		found = true
+	} else {
+		if !time.Time(fcfg.SimulationPeriod.DtStart).IsZero() {
+			cfg.DtStart = CustomDate(fcfg.SimulationPeriod.DtStart)
+			found = true
+		}
+	}
+
+	return found
+
+}
+
 // ProcessCrucibleSettings handles the date ranges for the Crucible mode
 func ProcessCrucibleSettings(cfg *AppConfig, fcfg *FileConfig) error {
 	if len(fcfg.CruciblePeriods) == 0 {
 		return nil
 	}
-
-	// for i := 0; i < len(cfg.TopInvestors); i++ {
-	// 	if len(cfg.TopInvestors[i].Name) == 0 {
-	// 		cfg.TopInvestors[i].Name = fmt.Sprintf("TopInvestor%d", i)
-	// 	}
-	// }
-
 	for i := 0; i < len(fcfg.CruciblePeriods); i++ {
 		cp, err := parseCustomCruciblePeriod(&fcfg.CruciblePeriods[i])
 		if err != nil {

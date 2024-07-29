@@ -6,33 +6,37 @@
 # It also removes backup files older than 'n' days (default is 14 days).
 # The script reads the database username and password from a JSON file.
 # ---------------------------------------------------------------------------
+LOG="backup.log"
+echo "PLATO Database Backup Log" >${LOG}
 
 # Configuration
 DATABASE="plato"
+DATABASE2="simq"
 BACKUP_DIR="$(dirname "$0")"
 DATE=$(date +"%Y%m%d_%H%M%S")
-BACKUP_FILE="${BACKUP_DIR}/plato_backup_${DATE}.sql"
 DAYS_TO_KEEP=${1:-14}
-CREDENTIALS_FILE="/usr/local/plato/bin/extres.json5"
+MYSQL_CONFIG_FILE="/home/steve/.my.cnf"
 
-# ---------------------------------------------------------------------------
-# Perform the database backup
-# ---------------------------------------------------------------------------
-#mysqldump --user="$DB_USER" --password="$DB_PASS" --databases $DATABASE > $BACKUP_FILE
-mysqldump --databases $DATABASE > $BACKUP_FILE
+#---------------------------------------------------------------------------
+# dobackup
+# $1 = database name
+#---------------------------------------------------------------------------
+dobackup() {
+    local BACKUP_FILE="${BACKUP_DIR}/${1}_backup_${DATE}.sql"
+    mysqldump --defaults-extra-file="$MYSQL_CONFIG_FILE" --databases "${1}" >"$BACKUP_FILE"
+    if [[ $? -eq 0 ]]; then
+        echo "Backup successful: $1" >>${LOG}
+        # ---------------------------------------------------------------------------
+        # Find and remove backup files older than the specified number of days
+        # ---------------------------------------------------------------------------
+        find "${BACKUP_DIR}" -name "${1}_backup_*.sql" -type f -mtime +"$DAYS_TO_KEEP" -exec rm -f {} \;
+        echo "Old backups older than $DAYS_TO_KEEP days have been removed." >>${LOG}
 
-# Check if the mysqldump command was successful
-if [[ $? -eq 0 ]]; then
-    echo "Backup successful: $BACKUP_FILE"
+    else
+        echo "Backup failed." >>${LOG}
+    fi
+}
 
-    # ---------------------------------------------------------------------------
-    # Find and remove backup files older than the specified number of days
-    # ---------------------------------------------------------------------------
-    find $BACKUP_DIR -name "plato_backup_*.sql" -type f -mtime +$DAYS_TO_KEEP -exec rm -f {} \;
-    echo "Old backups older than $DAYS_TO_KEEP days have been removed."
-
-else
-    echo "Backup failed."
-    exit 1
-fi
-
+echo "mysqldump plato" >>${LOG}
+dobackup "${DATABASE}"
+dobackup "${DATABASE2}"
