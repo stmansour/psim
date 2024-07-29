@@ -154,15 +154,21 @@ func (s *Simulator) Init(cfg *util.AppConfig, db *newdata.Database, crucible *Cr
 	// recently, it may not have those dates.  We can accommodate a "grace"
 	// period of 5 days.
 	//-------------------------------------------------------------------------
-	if s.db.CSVDB.DtStop.Before(time.Time(s.Cfg.DtStop)) {
-		diff := s.db.CSVDB.DtStop.Sub(time.Time(s.Cfg.DtStop))
-		days := int(diff.Abs().Hours() / 24)
-		fmt.Printf("Database info stops at %s, and this simulation's DtStop is %s.\n", s.db.CSVDB.DtStop.Format("2006-01-02"), time.Time(s.Cfg.DtStop).Format("2006-01-02"))
-		fmt.Printf("The difference is %d days.\n", days)
-		fmt.Printf("The grace period for this run is %d days.\n", s.Cfg.GracePeriodDays)
-		if days > s.Cfg.GracePeriodDays {
-			fmt.Printf("Database the difference of %d days is greater than the grace period of %d days.", days, s.Cfg.GracePeriodDays)
-			log.Fatalf("Please update the database or increase the grace period in the config file.")
+
+	dtStop := time.Date(s.db.CSVDB.DtStop.Year(), s.db.CSVDB.DtStop.Month(), s.db.CSVDB.DtStop.Day(), 0, 0, 0, 0, time.UTC)
+	cfgDtStop := time.Date(time.Time(s.Cfg.DtStop).Year(), time.Time(s.Cfg.DtStop).Month(), time.Time(s.Cfg.DtStop).Day(), 0, 0, 0, 0, time.UTC)
+	if dtStop.Before(cfgDtStop) {
+		diff := cfgDtStop.Sub(dtStop)
+		diffhrs := diff.Abs().Hours()
+		days := int(diffhrs / 24)
+		if days > 0 {
+			fmt.Printf("Database info stops at %s, and this simulation's DtStop is %s.\n", s.db.CSVDB.DtStop.Format("2006-01-02"), time.Time(s.Cfg.DtStop).Format("2006-01-02"))
+			fmt.Printf("The difference is %d days.\n", days)
+			fmt.Printf("The grace period for this run is %d days.\n", s.Cfg.GracePeriodDays)
+			if days > s.Cfg.GracePeriodDays {
+				fmt.Printf("Database the difference of %d days is greater than the grace period of %d days.", days, s.Cfg.GracePeriodDays)
+				log.Fatalf("Please update the database or increase the grace period in the config file.")
+			}
 		}
 		s.Cfg.DtStop = util.CustomDate(s.db.CSVDB.DtStop)
 		fmt.Printf("Simulation will continue but the DtStop will be adjusted to %s.\n", s.db.CSVDB.DtStop.Format("2006-01-02"))
