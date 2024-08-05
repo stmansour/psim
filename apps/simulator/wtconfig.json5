@@ -14,9 +14,9 @@
     "DtStop": "2015-09-30",     // simulation stop date for each generation
     "EnforceStopDate": true,    // stops on DtStop even if there is a C2 Balance, if false and C2 Balance > 0 on StopDate, simulation will continue in sell-only mode until C2 < 1.00
     "LoopCount": 1,             // How many times to loop over DtStart to DtStop
-    "Generations": 20,          // how many generations should the simulator run. NOTE: This value is only valid if GenDurSpec is commented out.
+    "Generations": 10,          // how many generations should the simulator run. NOTE: This value is only valid if GenDurSpec is commented out.
     // "GenDurSpec": "1 Y",        // How long is a generation.  EX:  "1 Y",  "6 M",  "8 W", "1 Y 6 M", "90 D"
-    "PopulationSize": 200,      // Total number Investors in the population
+    "PopulationSize": 100,      // Total number Investors in the population
     "C1": "USD",                // main currency  (ISO 4217 code)
     "C2": "JPY",                // currency that we will invest in (ISO 4217 code)
     "InitFunds": 100000.00,     // how much each Investor is funded at the start of a simulation cycle

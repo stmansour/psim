@@ -158,6 +158,9 @@ func ProcessGDELTCSV(filename string) error {
 		// Prepare the record to be written
 		//-----------------------------------
 		mean := stat.Mean(v, nil)
+		if app.Verbose {
+			fmt.Printf("Number of values for %s: %d,  mean = %f\n", k, len(v), mean)
+		}
 		mi := newdata.MetricInfo{
 			Value: mean,
 			MSID:  app.MSID,

@@ -83,7 +83,7 @@ func main() {
 	app.APIKey = app.extres.TradingeconomicsAPIKey
 	readCommandLineArgs()
 
-	app.Tolerance = 0.0051 // = $0.0051, just a little over 1/2 cents
+	app.Tolerance = 0.0051 // = $0.0051, just a little over 1/2 the metric unit
 
 	//---------------------------------------
 	// Default date range... last 7 days

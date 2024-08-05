@@ -270,8 +270,6 @@ func (p *LSMInfluencer) GetPrediction(t3 time.Time) (*Prediction, error) {
 			// Data for the given fieldName is not available.
 			return &pred, nil // Return immediately with pred.Action as "abstain".
 		}
-		// pred.Val1 = rec1.Fields[pred.Fields[0].FQMetric()].Value / rec1.Fields[pred.Fields[1].FQMetric()].Value
-		// pred.Val2 = rec2.Fields[pred.Fields[1].FQMetric()].Value / rec2.Fields[pred.Fields[1].FQMetric()].Value
 		if valbT1 == 0 {
 			valbT1 = 0.0000001
 		}
