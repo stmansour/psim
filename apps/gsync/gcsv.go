@@ -117,9 +117,13 @@ func ProcessGDELTCSV(filename string) error {
 			}
 			if _, ok := gvals[metric]; !ok {
 				gvals[metric] = make([]float64, 0)
-				if app.Verbose {
-					fmt.Printf("Found metric: %s\n", metric)
-				}
+				// if app.Verbose {
+				// 	fmt.Printf("Found metric: %s\n", metric)
+				// }
+			}
+
+			if app.Verbose {
+				fmt.Printf("%s : %f\n", metric, val) // DEBUG
 			}
 			gvals[metric] = append(gvals[metric], val)
 

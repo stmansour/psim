@@ -112,6 +112,7 @@ func (ir *InvestorReport) dumpInvestmentReportHeader(file *os.File) {
 	fmt.Fprintf(file, "\"C1: %s\"\n", ir.s.Cfg.C1)
 	fmt.Fprintf(file, "\"C2: %s\"\n", ir.s.Cfg.C2)
 	fmt.Fprintf(file, "\"Initial Funds: %10.2f\"\n", ir.s.Cfg.InitFunds)
+	fmt.Fprintf(file, "\"C1/C2 Initial Fund Split: %v\"\n", ir.s.Cfg.SplitInitFunds)
 
 	// the header row
 	fmt.Fprintf(file, "%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q,%q\n",

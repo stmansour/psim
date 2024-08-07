@@ -24,6 +24,8 @@
     "C2": "JPY",                    // currency that we will invest in (ISO 4217 code)
     "InitFunds": 100000.00,         // how much each Investor is funded at the start of a simulation cycle
     "StdInvestment": 10000.00,      // the "standard" investment amount if a decision is made to invest in C2
+    "StdSellPercent": 0.10,         // 10% by default
+    "SplitInitFunds": false,        // if true start with 50% C1 and 50% C2, otherwise 100% C1
     "MutationRate": 1,              // number between 1 and 100, indicating the percentage of mutation
     "DBSource": "CSV",              // { CSV | SQL }
     "TopInvestorCount": 10,         // used in Financial Report - finrep.csv - shows the top investors for a simulation

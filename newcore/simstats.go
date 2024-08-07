@@ -367,6 +367,7 @@ func (s *Simulator) ReportHeader(file *os.File, bSim bool) {
 	fmt.Fprintf(file, "\"Population: %d\"\n", s.Cfg.PopulationSize)
 	fmt.Fprintf(file, "\"Influencers: min %d,  max %d\"\n", s.Cfg.MinInfluencers, s.Cfg.MaxInfluencers)
 	fmt.Fprintf(file, "\"Initial Funds: %.2f %s\"\n", s.Cfg.InitFunds, s.Cfg.C1)
+	fmt.Fprintf(file, "\"Initial Funds Split: %v\"\n", s.Cfg.SplitInitFunds)
 	fmt.Fprintf(file, "\"Standard Investment: %.2f %s\"\n", s.Cfg.StdInvestment, s.Cfg.C1)
 	fmt.Fprintf(file, "\"Stop Loss: %.2f%%\"\n", s.Cfg.StopLoss*100)
 	fmt.Fprintf(file, "\"Preserve Elite: %v  (%5.2f%%)\"\n", s.Cfg.PreserveElite, s.Cfg.PreserveElitePct)

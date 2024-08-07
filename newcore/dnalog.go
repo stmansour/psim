@@ -71,6 +71,9 @@ func (dl *DNALog) ReportHeader(row int) int {
 	row = dl.setCellNext(row, "A", fmt.Sprintf("C1: %s", dl.s.Cfg.C1))
 	row = dl.setCellNext(row, "A", fmt.Sprintf("C2: %s", dl.s.Cfg.C2))
 	row = dl.setCellNext(row, "A", fmt.Sprintf("Initial Funds: %.2f %s", dl.s.Cfg.InitFunds, dl.s.Cfg.C1))
+	if dl.s.Cfg.SplitInitFunds {
+		row = dl.setCellNext(row, "A", "Initial C1,C2 Split: 50%")
+	}
 	row = dl.setCellNext(row, "A", fmt.Sprintf("Standard Investment: %.2f %s", dl.s.Cfg.StdInvestment, dl.s.Cfg.C1))
 	row = dl.setCellNext(row, "A", fmt.Sprintf("Stop Loss: %.2f%%", dl.s.Cfg.StopLoss*100))
 	row = dl.setCellNext(row, "A", fmt.Sprintf("Transaction Fee: %.2f (flat rate)  %5.1f bps", dl.s.Cfg.TxnFee, dl.s.Cfg.TxnFeeFactor*10000))

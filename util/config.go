@@ -144,6 +144,7 @@ type AppConfig struct {
 	InitFunds               float64             // amount of funds each Investor is "staked" at the outset of the simulation
 	SplitInitFunds          bool                // if true split initial funds evenly between C1 and C2 on DtStart
 	StdInvestment           float64             // standard investment amount
+	StdSellPercent          float64             // standard sell percentage
 	TradingDay              int                 // this needs to be completely re-thought -- it's like a recurrence rule
 	TradingTime             time.Time           // time of day when buy/sell is executed
 	Generations             int                 // current generation in the simulator
@@ -199,6 +200,7 @@ func CreateTestingCFG() *AppConfig {
 		C1:             "USD",   // main currency  (ISO 4217 code)
 		C2:             "JPY",   // currency that we will invest in (ISO 4217 code)
 		InitFunds:      1000.00, // how much each Investor is funded at the start of a simulation cycle
+		SplitInitFunds: false,   // true if the initial funds are split between C1 and C2
 		StdInvestment:  100.00,  // the "standard" investment amount if a decision is made to invest in C2
 		MinInfluencers: 1,       // at least this many per Investor
 		MaxInfluencers: 10,      // no more than this many
