@@ -39,3 +39,6 @@ refmt:
 
 releaseman:
 	if [ -d /usr/local/share/man/man1 ] && [ -w /usr/local/share/man/man1 ]; then cp gfetch.1 /usr/local/share/man/man1/ ; fi
+
+release:
+	cp gsync gfetch /usr/local/plato/bin
