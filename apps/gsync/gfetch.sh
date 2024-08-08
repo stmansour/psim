@@ -118,11 +118,50 @@ GenerateURLList() {
     GetMasterlist # only downloads masterlist.txt if needed
     local start_date=$1
     local end_date=$2
-    log "Generating URL list from $start_date to $end_date"
-    log "scanning masterlist.txt"
-    awk -v s="$start_date" -v e="$end_date" 'BEGIN { FS = "\t" } ; { if ($3 >= s && $3 <= e) print $3, $1 }' masterlist.txt >"${URL_LIST}"
-    log "scanning masterlist-translation.txt"
-    awk -v s="$start_date" -v e="$end_date" 'BEGIN { FS = "\t" } ; { if ($3 >= s && $3 <= e) print $3, $1 }' masterfilelist-translation.txt >>"${URL_LIST}"
+    rm -f "${URL_LIST}"
+    extract_urls $1 $2 "masterlist.txt" "${URL_LIST}"
+    extract_urls $1 $2 "masterfilelist-translation.txt" "${URL_LIST}"
+}
+
+extract_urls() {
+    local start_date="$1"
+    local end_date="$2"
+    local input_file="$3"
+    local url_list="$4"
+
+    # Validate input
+    if [[ ! $start_date =~ ^[0-9]{8}$ ]] || [[ ! $end_date =~ ^[0-9]{8}$ ]]; then
+        echo "Error: start_date and end_date must be in YYYYMMDD format" >&2
+        return 1
+    fi
+
+    if [[ ! -f "$input_file" ]]; then
+        echo "Error: Input file does not exist" >&2
+        return 1
+    fi
+
+    # Process the file
+    awk -v start="$start_date" -v end="$end_date" '
+    function date_in_range(date) {
+        return (date >= start && date <= end)
+    }
+    {
+        if ($3 ~ /\.gkg\.csv\.zip$/) {
+            split($3, parts, "/")
+            date = substr(parts[5], 1, 8)
+            if (date_in_range(date)) {
+                print $3
+            }
+        }
+    }
+    ' "$input_file" >> "$url_list"
+
+    # Check if any URLs were found and appended
+    if [[ ! -s "$url_list" ]]; then
+        echo "Warning: No matching URLs found" >&2
+    else
+        echo "Matching URLs have been appended to $url_list"
+    fi
 }
 
 #--------------------------------------------------------------------------
