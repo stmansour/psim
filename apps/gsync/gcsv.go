@@ -159,6 +159,8 @@ func ProcessGDELTCSV(filename string) error {
 		fmt.Printf("Finished in %s. Total variables found = %d\n", util.ElapsedTime(t0, t1), len(gvals))
 		fmt.Printf("Will now write to database\n")
 	}
+
+	grandtotal := int64(0)
 	//------------------------------------------------------------------------------------------
 	// Now we've got all the numbers... compute the mean and write each metric to the database
 	//------------------------------------------------------------------------------------------
@@ -168,7 +170,9 @@ func ProcessGDELTCSV(filename string) error {
 		//-----------------------------------
 		mean := stat.Mean(v, nil)
 		if app.Verbose {
-			fmt.Printf("Number of values for %s: %d,  mean = %f\n", k, len(v), mean)
+			l := len(v)
+			grandtotal += int64(l)
+			fmt.Printf("Number of values for %s: %d,  mean = %f\n", k, l, mean)
 		}
 		mi := newdata.MetricInfo{
 			Value: mean,
@@ -268,6 +272,10 @@ func ProcessGDELTCSV(filename string) error {
 				fmt.Printf("  || SQL Record not found, adding\n")
 			}
 		}
+	}
+
+	if app.Verbose {
+		fmt.Printf("Total number of values processed: %d\n", grandtotal)
 	}
 
 	//-------------------------------------------------
