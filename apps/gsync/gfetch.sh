@@ -119,7 +119,9 @@ GenerateURLList() {
     local start_date=$1
     local end_date=$2
     log "Generating URL list from $start_date to $end_date"
+    log "load masterlist files..."
     awk -v s="$start_date" -v e="$end_date" 'BEGIN { FS = "\t" } ; { if ($3 >= s && $3 <= e) print $3, $1 }' masterlist.txt >"${URL_LIST}"
+    log "load masterlist-translation files..."
     awk -v s="$start_date" -v e="$end_date" 'BEGIN { FS = "\t" } ; { if ($3 >= s && $3 <= e) print $3, $1 }' masterfilelist-translation.txt >>"${URL_LIST}"
 }
 
