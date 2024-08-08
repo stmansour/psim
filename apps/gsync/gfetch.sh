@@ -8,6 +8,7 @@ FAILED_DOWNLOADS="failed_downloads.log"
 LOGFILE="gfetch.log"
 HEADER=$'DATE\tSourceCollectionIdentifier\tSourceCommonName\tDocumentIdentifier\tCounts\tV2Counts\tThemes\tV2Themes\tLocations\tV2Locations\tPersons\tV2Persons\tOrganizations\tV2Organizations\tV2Tone\tDates\tGCAM\tSharingImage\tRelatedImages\tSocialImageEmbeds\tSocialVideoEmbeds\tQuotations\tAllNames\tAmounts\tTranslationInfo\tExtras'
 URL_LIST="$BASE_DIR/urls.txt"
+TRANSLATED_URL_LIST="$BASE_DIR/translated_urls.txt"
 OS="$(uname -s)"
 KEEP_ZIPS=0
 GSYNCOPTS=""
@@ -39,7 +40,6 @@ Usage: $0 [-d directory] [-f URLList] [-CYYYYMMDD] [-b begin_date -e end_date]
 Examples:
     $0 -b 20190701 -e 20190702
     $0 -b 20190701 -e 20190702 -F
-
 
 ZZEOF
 }
@@ -73,19 +73,18 @@ download_file() {
 }
 
 #--------------------------------------------------------------------------
-# Download the master file list if needed
+# Download the master file lists if needed
 #--------------------------------------------------------------------------
 GetMasterlist() {
     local latest_url_date
     local masterlist_file="masterlist.txt"
+    local translated_masterlist_file="masterfilelist-translation.txt"
     local url="http://data.gdeltproject.org/gdeltv2/masterfilelist.txt"
+    local translated_url="http://data.gdeltproject.org/gdeltv2/masterfilelist-translation.txt"
 
     # Check if the masterlist file exists and read the last URL date
     if [ -f "$masterlist_file" ]; then
-        # Extract the date directly from the last URL in the file
         latest_url_date=$(tail -1 "$masterlist_file" | awk '{print $3}' | grep -oE '[0-9]{8}')
-
-        # Compare latest URL date with the end_date directly
         if [[ "$latest_url_date" < "$end_date" ]]; then
             log "Existing masterlist.txt is outdated. Downloading the latest version..."
             download_file "${url}" "$masterlist_file"
@@ -95,6 +94,20 @@ GetMasterlist() {
     else
         log "masterlist.txt does not exist. Downloading now..."
         download_file "${url}" "$masterlist_file"
+    fi
+
+    # Check if the translated masterlist file exists and read the last URL date
+    if [ -f "$translated_masterlist_file" ]; then
+        latest_url_date=$(tail -1 "$translated_masterlist_file" | awk '{print $3}' | grep -oE '[0-9]{8}')
+        if [[ "$latest_url_date" < "$end_date" ]]; then
+            log "Existing masterfilelist-translation.txt is outdated. Downloading the latest version..."
+            download_file "${translated_url}" "$translated_masterlist_file"
+        else
+            log "Existing masterfilelist-translation.txt is up-to-date."
+        fi
+    else
+        log "masterfilelist-translation.txt does not exist. Downloading now..."
+        download_file "${translated_url}" "$translated_masterlist_file"
     fi
 }
 
@@ -106,7 +119,8 @@ GenerateURLList() {
     local start_date=$1
     local end_date=$2
     log "Generating URL list from $start_date to $end_date"
-    "${GSYNC}" -d1 "${start_date}" -d2 "${end_date}" >"${URL_LIST}"
+    awk -v s="$start_date" -v e="$end_date" 'BEGIN { FS = "\t" } ; { if ($3 >= s && $3 <= e) print $3, $1 }' masterlist.txt >"${URL_LIST}"
+    awk -v s="$start_date" -v e="$end_date" 'BEGIN { FS = "\t" } ; { if ($3 >= s && $3 <= e) print $3, $1 }' masterfilelist-translation.txt >>"${URL_LIST}"
 }
 
 #--------------------------------------------------------------------------
@@ -127,7 +141,6 @@ DownloadFile() {
         return
     fi
 
-    # log "Downloading $url..."
     download_file "${url}" "${filepath}"
 }
 
@@ -167,11 +180,9 @@ ProcessRange() {
     local start_date=$1
     local end_date=$2
     local current_date="$start_date"
-    # local current_year_month_day=""
 
     log "Processing range from $start_date to $end_date"
     while [[ ! "$current_date" > "$end_date" ]]; do
-        # Process URLs for the current day
         log "Processing URLs for $current_date"
         local day_urls
         day_urls=$(awk -v date="$current_date" '$0 ~ date {print $0}' "$URL_LIST")
@@ -181,7 +192,6 @@ ProcessRange() {
         done
         log "ConcatFiles $current_date..."
         ConcatFiles "$current_date"
-        # Increment date
         if [ "$OS" == "Darwin" ]; then
             current_date=$(date -j -v+1d -f "%Y%m%d" "$current_date" +%Y%m%d)
         elif [ "$OS" == "Linux" ]; then
@@ -208,7 +218,7 @@ ShowDuration() {
 #--------------------------------------------------------------------------
 echo "gfetch.sh - GDELT Data Synchronization for Plato" >$LOGFILE
 log "Starting gfetch process..."
-rm -f "${FAILED_DOWNLOADS}" # Remove any previous failed downloads log
+rm -f "${FAILED_DOWNLOADS}"
 
 while getopts "d:f:C:b:e:Fhkm" opt; do
     case "${opt}" in

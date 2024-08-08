@@ -43,7 +43,7 @@ GB.
 
 Automation
 
-A cron job is set up to run gfetch.sh daily at 2:00 AM in
+A cron job is set up to run gfetch.sh daily at 3:00 AM in
 /home/steve/gsync. This job synchronizes the previous day's data
 and checks the data for the past six days to ensure accuracy and
 consistency. When the cron job completes, it also creates a CSV
@@ -90,3 +90,46 @@ ensuring all necessary data from the GDELT project is accurately
 downloaded, processed, published to Plato's SQL database, and
 verified, maintaining an organized structure in the specified
 directory.
+
+Appendix A.  Translated News Articles
+
+We discovered a discrepancy between the daily values that we were
+calculating and the values we get when we use Google's Big Data
+infrastructure, which also has the GDELT data loaded into a SQL
+database.  We tracked down the difference to the fact that GDELT
+publishes its data in 2 parts.  The first part is the one we are
+currently processing and it covers many news articles world-wide.
+GDELT updates a masterfile every 15 minutes:
+
+ http://data.gdeltproject.org/gdeltv2/masterfilelist.txt
+
+ It contains pointers to datafiles it publishes during the past
+ 15 minutes. We are interested in the files ending in gkg.csv.zip.
+ For example, here is an actual file name: 20150327081500.gkg.csv.zip
+ Its format is:  YYYYMMDDHHMMSS.gkg.csv.zip.  So the example file is
+ for the data published in the 15-minute time period ending on
+ May 27, 2015 8:15:00am.  
+ 
+ To briefly summarize how our synchronization works, we download all
+ the .gkgcsv.zip files for a particular day (YYYYMMDD), unzip them, 
+ then concatenate them into a single .csv file. We use gsync to process
+ this single .csv file and it updates our sql database with all the
+ relevant stats for that day (YYYYMMDD).
+
+ As it turns out, GDELT also publishes information about articles that
+ are translated to other languages for consumption... thus, the same
+ articles are exposed to more people in different languages. This
+ will obviously impact sentiment values, and other time-series data
+ that GDELT publishes.  From the perspective of our synchronization 
+ program, it means that we need to include this information as we
+ calculate our values.  So, we need to add the translated file information
+ into our aggregated .csv file that gets processd by gsync.  The masterfile
+ for the translated artiles is here:
+
+ http://data.gdeltproject.org/gdeltv2/masterfilelist-translation.txt
+
+ Its format and contents are just like what we get in the other masterfile.
+ The only difference is that it points to the files with information about
+ the translated articles.  Basically, we just need to download those files
+ in addition to the ones we are already downloading, and unzip them, then they
+ will be concatenated into the single csv file we process with gsync.
